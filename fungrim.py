@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 class Expr(object):
 
     def __new__(self, arg=None, symbol_name=None):
@@ -173,6 +175,8 @@ class Expr(object):
             return "\\left(" + argstr[0] + "\\right)!"
         if head is Element:
             return " \\in ".join(argstr)
+        if head is NotElement:
+            return " \\not\\in ".join(argstr)
         if head is And:
             return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Or:
@@ -198,7 +202,7 @@ inject_builtin("""
 Unknown Undefined
 Set List Tuple
 Union Intersection Not And Or
-Element Subset SubsetEqual
+Element NotElement Subset SubsetEqual
 ZZ QQ RR CC
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
@@ -239,6 +243,10 @@ make_entry(ID("da2fdb"),
 
 make_entry(ID("a01b6e"),
     Formula(Equal(RiemannZeta(2), ConstPi**2 / 6)))
+
+make_entry(ID("e84983"),
+    Formula(NotElement(RiemannZeta(3), QQ)),
+    References("R. Apéry (1979), Irrationalité de ζ(2) et ζ(3), Astérisque, 61: 11-13."))
 
 make_entry(ID("72ccda"),
     Formula(Equal(RiemannZeta(2*n), (-1)**(n+1) * BernoulliB(2*n) * (2*ConstPi)**(2*n) / (2 * Factorial(2*n)))),
