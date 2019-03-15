@@ -286,18 +286,23 @@ if not os.path.exists("build"):
 import pickle
 katex_cache = {}
 
+import subprocess
+
 try:
-    fp = open("build/katex_cache.pickle", "r")
-    katex_cache = pickle.load(fp)
-    fp.close()
+    with open("build/katex_cache.pickle", "rb") as fp:
+        katex_cache = pickle.load(fp)
+except UnicodeDecodeError as e:
+    with open("build/katex_cache.pickle", "rb") as fp:
+        katex_cache = pickle.load(fp, encoding="latin1")
 except IOError:
     print("Unable to read katex_cache")
 
 def katex(string, display=True):
     if (string, display) in katex_cache:
         return katex_cache[(string, display)]
-    import subprocess
-    s = subprocess.check_output(["node", "katex.js", {True:"display",False:"inline"}[display], string])
+    s = subprocess.check_output(["node", "katex.js",
+                                 {True:"display",False:"inline"}[display], string],
+                                universal_newlines=True)
     katex_cache[(string, display)] = s
     return s
 
@@ -469,9 +474,8 @@ for entry in all_entries:
 mainpage.end()
 
 try:
-    fp = open("build/katex_cache.pickle", "w")
-    pickle.dump(katex_cache, fp)
-    fp.close()
+    with open("build/katex_cache.pickle", "wb") as fp:
+        pickle.dump(katex_cache, fp, protocol=pickle.HIGHEST_PROTOCOL)
 except IOError:
     print("Error writing katex_cache")
 
