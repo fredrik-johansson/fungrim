@@ -107,10 +107,17 @@ class Expr(object):
 
     def latex(self):
         if self is ConstPi: return "\\pi"
+        if self is ConstI: return "i"
+        if self is ConstE: return "e"
         if self is RiemannZeta: return "\\zeta"
         if self is Infinity: return "\\infty"
         if self is GammaFunction: return "\\Gamma"
+        if self is DedekindEta: return "\\eta"
+        if self is DedekindEpsilon: return "\\varepsilon"
+        if self is DedekindSum: return "s"
         if self is Sin: return "\\sin"
+        if self is Exp: return "\\exp"
+        if self is GCD: return "\\gcd"
         if self is ZZ: return "\\mathbb{Z}"
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
@@ -128,6 +135,8 @@ class Expr(object):
         head = self._args[0]
         args = self._args[1:]
         argstr = [arg.latex() for arg in args]
+        if head is Where:
+            return argstr[0] + "\; \\text{ where } " + ",\,".join(argstr[1:])
         if head is Pos:
             assert len(args) == 1
             return "+" + args[0].latex()
@@ -150,26 +159,34 @@ class Expr(object):
         if head is Pow:
             assert len(args) == 2
             base = args[0]
+            expo = args[1]
+            if not expo.is_atom() and expo._args[0] is Div:
+                numer = expo._args[1]
+                denom = expo._args[2]
+                numstr = numer.latex()
+                denstr = denom.latex()
+                if numer.need_parens_in_mul():
+                    numstr = "\\left(" + numstr + "\\right)"
+                if denom.need_parens_in_mul():
+                    denstr = "\\left(" + denstr + "\\right)"
+                argstr[1] = numstr + "/" + denstr
             if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] is Abs):
                 return "{" + argstr[0] + "}^{" + argstr[1] + "}"
             else:
                 return "{\\left(" + argstr[0] + "\\right)}^{" + argstr[1] + "}"
-        if head is Sum:
+        if head in (Sum, Integral, Product):
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
             _, var, low, high = args[1]._args
             var = var.latex()
             low = low.latex()
             high = high.latex()
-            return "\\sum_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
-        if head is Integral:
-            assert len(args) == 2
-            assert args[1]._args[0] is Tuple
-            _, var, low, high = args[1]._args
-            var = var.latex()
-            low = low.latex()
-            high = high.latex()
-            return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+            if head is Sum:
+                return "\\sum_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
+            if head is Integral:
+                return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+            if head is Product:
+                return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
         if head is Abs:
             assert len(args) == 1
             return "\\left|" + argstr[0] + "\\right|"
@@ -231,6 +248,7 @@ def inject_vars(string):
 
 inject_builtin("""
 Unknown Undefined
+Where
 Set List Tuple
 Union Intersection Not And Or
 Element NotElement Subset SubsetEqual
@@ -249,7 +267,8 @@ Sinc LambertW
 ConstPi ConstE ConstI ConstGamma
 Binomial Factorial GammaFunction LogGamma RisingFactorial
 BernoulliB EulerE
-RiemannZeta DedekindEta
+RiemannZeta
+DedekindEta DedekindEpsilon DedekindSum GCD
 """)
 
 inject_builtin("""
@@ -316,6 +335,59 @@ make_entry(ID("792f7b"),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
+
+make_entry(ID("ff587a"),
+    Formula(Where(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product((1 - q**k), Tuple(k, 1, Infinity))),
+        Equal(q, Exp(2*ConstPi*ConstI*tau)))),
+    Variables(tau),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+
+make_entry(ID("8f10b0"),
+    Formula(Where(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Sum((-1)**k * q**(k*(3*k-1)/2), Tuple(k, -Infinity, Infinity))),
+        Equal(q, Exp(2*ConstPi*ConstI*tau)))),
+    Variables(tau),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+
+make_entry(ID("9b8c9f"),
+    Formula(Equal(DedekindEta(ConstI), GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4)))))
+
+make_entry(ID("1bae52"),
+    Formula(Equal(DedekindEta(tau+1), Exp(ConstPi*ConstI/12) * DedekindEta(tau))),
+    Variables(tau),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+
+make_entry(ID("3b806f"),
+    Formula(Equal(DedekindEta(-(1/tau)), (-(ConstI*tau))**Div(1,2) * DedekindEta(tau))),
+    Variables(tau),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+
+make_entry(ID("29d9ab"),
+    Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)) ** 24, (c*tau+d)**12 * DedekindEta(tau)**24)),
+    Variables(tau,a,b,c,d),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0),
+        Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1))))
+
+make_entry(ID("9f19c1"),
+    Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)), DedekindEpsilon(a,b,c,d) * (c*tau+d)**Div(1,2) * DedekindEta(tau))),
+    Variables(tau,a,b,c,d),
+    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0),
+        Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Or(Greater(c, 0), And(Equal(c, 0), Equal(d, 1))))))
+
+make_entry(ID("f04e01"),
+    Formula(Equal(DedekindEpsilon(1,b,0,1), Exp((ConstPi*ConstI*b)/12))),
+    Variables(b),
+    Element(b, ZZ))
+
+make_entry(ID("921ef0"),
+    Formula(Equal(DedekindEpsilon(a,b,c,d), Exp((ConstPi*ConstI*((a+d)/(12*c) - DedekindSum(d,c) - Div(1,4)))))),
+    Variables(a,b,c,d),
+    Assumptions(And(Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Greater(c, 0))))
+
+make_entry(ID("23961e"),
+    Formula(Equal(DedekindSum(n,k), Sum((r/k) * ((n*r/k) - Floor(n*r/k) - Div(1,2)), Tuple(r, 1, k-1)))),
+    Variables(n,k),
+    Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
+
 
 import os
 if not os.path.exists("build"):
