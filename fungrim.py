@@ -96,6 +96,15 @@ class Expr(object):
     def __repr__(self):
         return self.str()
 
+    def need_parens_in_mul(self):
+        if self.is_atom():
+            if self.is_integer() and self._integer < 0:
+                return True
+            return False
+        if self._args[0] in (Add, Sub, Neg, Pos):
+            return True
+        return False
+
     def latex(self):
         if self is ConstPi: return "\\pi"
         if self is RiemannZeta: return "\\zeta"
@@ -130,6 +139,9 @@ class Expr(object):
         if head is Sub:
             return " - ".join(argstr)
         if head is Mul:
+            for i in range(len(args)):
+                if args[i].need_parens_in_mul():
+                    argstr[i] = "\\left(" + argstr[i] + "\\right)"
             return " ".join(argstr)
         if head is Div:
             # todo: when to use an inline fraction?
@@ -150,9 +162,23 @@ class Expr(object):
             low = low.latex()
             high = high.latex()
             return "\\sum_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
+        if head is Integral:
+            assert len(args) == 2
+            assert args[1]._args[0] is Tuple
+            _, var, low, high = args[1]._args
+            var = var.latex()
+            low = low.latex()
+            high = high.latex()
+            return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
         if head is Abs:
             assert len(args) == 1
             return "\\left|" + argstr[0] + "\\right|"
+        if head is Floor:
+            assert len(args) == 1
+            return "\\left\\lfloor " + argstr[0] + " \\right\\rfloor"
+        if head is Ceil:
+            assert len(args) == 1
+            return "\\left\\lceil " + argstr[0] + " \\right\\rceil"
         if head is Less:
             return " \\lt ".join(argstr)
         if head is LessEqual:
@@ -168,11 +194,16 @@ class Expr(object):
         if head is Tuple:
             return "\\left(" + ", ".join(argstr) + "\\right)"
         if head is BernoulliB:
-            assert len(args) == 1
-            return "B_{" + argstr[0] + "}" # \\left(" + argstr[1] + "\\right)"
+            if len(args) == 1:
+                return "B_{" + argstr[0] + "}"
+            else:
+                return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             return "\\left(" + argstr[0] + "\\right)!"
+        if head is RisingFactorial:
+            assert len(args) == 2
+            return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
         if head is Element:
             return " \\in ".join(argstr)
         if head is NotElement:
@@ -216,7 +247,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
 ConstPi ConstE ConstI ConstGamma
-Binomial Factorial GammaFunction LogGamma
+Binomial Factorial GammaFunction LogGamma RisingFactorial
 BernoulliB EulerE
 RiemannZeta DedekindEta
 """)
@@ -275,9 +306,16 @@ make_entry(ID("3a5eb6"),
         And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Less(0, eta), LessEqual(eta, Div(1,2)), LessEqual(-eta, Re(s), 1 + eta))),
     References("H. Rademacher, Topics in analytic number theory, Springer, 1973. Equation 43.3."))
 
-
-
-
+# todo: separate bernoulli / polynomial functions?
+make_entry(ID("792f7b"),
+    Formula(Equal(RiemannZeta(s),
+        Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
+            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))) -
+                Integral((BernoulliB(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), Tuple(t, N, Infinity)))),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
+    Variables(s, N, M),
+    References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
+        """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
 
 import os
 if not os.path.exists("build"):
