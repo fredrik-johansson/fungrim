@@ -229,6 +229,9 @@ class Expr(object):
             return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Or:
             return " \\mathbin{\\operatorname{or}} ".join("\\left(%s\\right)" % s for s in argstr)
+        if head is Not:
+            assert len(args) == 1
+            return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
         fstr = self._args[0].latex()
         s = fstr + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
@@ -389,9 +392,16 @@ make_entry(ID("23961e"),
     Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
 
 
+
+
+
 import os
 if not os.path.exists("build"):
     os.makedirs("build")
+if not os.path.exists("build/html"):
+    os.makedirs("build/html")
+if not os.path.exists("build/html/entry"):
+    os.makedirs("build/html/entry")
 
 import pickle
 katex_cache = {}
@@ -430,6 +440,7 @@ html_start = """
 <style type="text/css">
 body { margin:0.5em; font-family: roboto; background-color: #fafafa; color: black; }
 h1 { text-align:center; color:#256; }
+h2, h3 { text-align: center; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
 .entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.5em; background-color: #fff; overflow: hidden; }
@@ -463,7 +474,7 @@ index_text = """
 
 <p style="text-align:center; color:red"><b>Pre-alpha version</b></p>
 
-<p style="margin:1em">Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions. The data is fully symbolic (designed for use by computer algebra software) and the whole library can be browsed online, with a permanent ID and URL for each entry. There are currently %%NUMTOTAL%% entries in Fungrim; some examples are given below. Click "Details" to show an expanded view of an entry, or click the ID to show the expanded view on its own page. You can <a href="https://github.com/fredrik-johansson/fungrim">contribute on GitHub</a>.
+<p style="margin:1em">Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions. The data is fully symbolic (designed for use by computer algebra software) and the whole library can be browsed online, with a permanent ID and URL for each entry. There are currently %%NUMTOTAL%% entries in Fungrim; see one example below. Click "Details" to show an expanded view of an entry, or click the ID to show the expanded view on its own page. You can <a href="https://github.com/fredrik-johansson/fungrim">contribute on GitHub</a>.
 </p>
 """
 
@@ -537,51 +548,103 @@ class EntryObject:
         fp.write("</div>")
         fp.write("</div>\n")
 
+all_entry_objects = [EntryObject(entry) for entry in all_entries]
+entries_dict = {entry.id:entry for entry in all_entry_objects}
+
 
 class Webpage:
 
-    def __init__(self, single_id=None):
-        self.single_id = single_id
-
     def start(self):
-        if not os.path.exists("build/html"):
-            os.makedirs("build/html")
-        if not os.path.exists("build/html/entry"):
-            os.makedirs("build/html/entry")
-
-        if self.single_id is None:
-            self.fp = open("build/html/index.html", "w")
-        else:
-            self.fp = open("build/html/entry/%s.html" % self.single_id, "w")
-
+        self.fp = open(self.filepath, "w")
         self.fp.write(html_start)
 
-        if self.single_id:
-            self.fp.write("""<p style="text-align:center"><a href="../index.html">Fungrim home page</a></p>""")
-            self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.single_id)
-        else:
-            self.fp.write(index_text)
+    def entry(self, id):
+        entries_dict[id].write_html(self.fp, single=False)
 
-    def content(self, entryobj, single=False):
-        entryobj.write_html(self.fp, single=single)
+    def section(self, title):
+        self.fp.write("""<h2>%s</h2>""" % title)
 
     def end(self):
         self.fp.write(html_end)
         self.fp.close()
 
+class FrontPage(Webpage):
 
-mainpage = Webpage()
-mainpage.start()
-for entry in all_entries:
-    entry = EntryObject(entry)
-    mainpage.content(entry)
+    def __init__(self):
+        self.filepath = "build/html/index.html"
 
-    entrypage = Webpage(single_id=entry.id)
-    entrypage.start()
-    entrypage.content(entry, single=True)
-    entrypage.end()
+    def start(self):
+        Webpage.start(self)
+        self.fp.write(index_text)
 
-mainpage.end()
+class EntryPage(Webpage):
+
+    def __init__(self, id):
+        self.id = id
+        self.filepath = "build/html/entry/%s.html" % self.id
+
+    def entry(self, id):
+        entries_dict[id].write_html(self.fp, single=True)
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.id)
+
+    def write(self):
+        self.start()
+        self.entry(self.id)
+        self.end()
+
+class IndexPage(Webpage):
+
+    def __init__(self, url, title, sections_ids):
+        self.filepath = "build/html/%s.html" % url
+        self.title = title
+        self.sections_ids = sections_ids
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center"><a href="index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>%s</h1>""" % self.title)
+
+    def write(self):
+        count = 0
+        self.start()
+        for sect, ids in self.sections_ids:
+            self.section(sect)
+            for id in ids:
+                self.entry(id)
+                count += 1
+        self.end()
+        return count
+
+for entry in all_entry_objects:
+    EntryPage(entry.id).write()
+
+count_RiemannZeta = IndexPage("RiemannZeta", "Riemann zeta function",
+    [("L-series", ["da2fdb"]),
+     ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
+     ("Functional equation", ["9ee8bc"]),
+     ("Bounds and inequalities", ["809bc0","3a5eb6"]),
+     ("Euler-Maclaurin formula", ["792f7b"])]).write()
+
+count_DedekindEta = IndexPage("DedekindEta", "Dedekind eta function",
+    [("Fourier series (q-series)", ["ff587a","8f10b0"]),
+     ("Special values", ["9b8c9f"]),
+     ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
+     ("Dedekind sums", ["23961e"])]).write()
+
+frontpage = FrontPage()
+frontpage.start()
+frontpage.entry("9ee8bc")
+frontpage.section("Browse by function")
+frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
+frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
+frontpage.fp.write("""</ul>""")
+frontpage.end()
+
 
 try:
     with open("build/katex_cache.pickle", "wb") as fp:
