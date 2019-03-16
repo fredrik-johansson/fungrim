@@ -96,6 +96,7 @@ class Expr(object):
     def __repr__(self):
         return self.str()
 
+    # needs work
     def need_parens_in_mul(self):
         if self.is_atom():
             if self.is_integer() and self._integer < 0:
@@ -104,6 +105,20 @@ class Expr(object):
         if self._args[0] in (Add, Sub, Neg, Pos):
             return True
         return False
+
+    # needs work
+    def show_exponential_as_power(self, allow_div=True):
+        if self.is_atom():
+            return True
+        head = self._args[0]
+        if head is Div:
+            allow_div = False
+        if head not in (Pos, Neg, Add, Sub, Mul, Div):
+            return False
+        for arg in self._args[1:]:
+            if not arg.show_exponential_as_power(allow_div=allow_div):
+                return False
+        return True
 
     def latex(self):
         if self is ConstPi: return "\\pi"
@@ -134,6 +149,10 @@ class Expr(object):
                 return str(self._integer)
         head = self._args[0]
         args = self._args[1:]
+        if head is Exp:
+            assert len(args) == 1
+            if args[0].show_exponential_as_power():
+                return Pow(ConstE, args[0]).latex()
         argstr = [arg.latex() for arg in args]
         if head is Where:
             return argstr[0] + "\; \\text{ where } " + ",\,".join(argstr[1:])
@@ -158,8 +177,11 @@ class Expr(object):
             return "\\frac{" + argstr[0] + "}{" + argstr[1] + "}"
         if head is Pow:
             assert len(args) == 2
+            # remove frac to try to keep it on one line
             base = args[0]
             expo = args[1]
+            if not expo.is_atom() and expo._args[0] is Neg:
+                expo = expo._args[1]
             if not expo.is_atom() and expo._args[0] is Div:
                 numer = expo._args[1]
                 denom = expo._args[2]
@@ -353,6 +375,9 @@ make_entry(ID("8f10b0"),
 
 make_entry(ID("9b8c9f"),
     Formula(Equal(DedekindEta(ConstI), GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4)))))
+
+make_entry(ID("204acd"),
+    Formula(Equal(DedekindEta(Exp(2*ConstPi*ConstI/3)), Exp(-(ConstPi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(GammaFunction(Div(1,3)), Div(3,2)) / (2 * ConstPi)))))
 
 make_entry(ID("1bae52"),
     Formula(Equal(DedekindEta(tau+1), Exp(ConstPi*ConstI/12) * DedekindEta(tau))),
@@ -631,7 +656,7 @@ count_RiemannZeta = IndexPage("RiemannZeta", "Riemann zeta function",
 
 count_DedekindEta = IndexPage("DedekindEta", "Dedekind eta function",
     [("Fourier series (q-series)", ["ff587a","8f10b0"]),
-     ("Special values", ["9b8c9f"]),
+     ("Special values", ["9b8c9f", "204acd"]),
      ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
      ("Dedekind sums", ["23961e"])]).write()
 
