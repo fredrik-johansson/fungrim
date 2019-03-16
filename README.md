@@ -18,7 +18,7 @@ Just run `python fungrim.py`, and the grimoire will appear in `build/html/index.
 
 ## What is the Mathematical Functions Grimoire (Fungrim)?
 
-A *grimoire* is a book of magic formulas. Formulas for [special functions](https://en.wikipedia.org/wiki/Special_functions) are magic incantations for mathematicians and mathematical scientists.
+A *grimoire* is a book of magic formulas. Formulas for [special functions](https://en.wikipedia.org/wiki/Special_functions) are essentially magic incantations useful to mathematicians and mathematical scientists.
 
 Fungrim is meant to work both as an encyclopedia for human readers and as a computational tool. Unlike a traditional text-based reference work such as the [DLMF](https://dlmf.nist.gov/), all formulas are available in a semantic, compute-friendly S-expression format.
 
