@@ -96,6 +96,18 @@ class Expr(object):
     def __repr__(self):
         return self.str()
 
+    def all_symbols(self):
+        if self._symbol is not None:
+            return [self]
+        symbols = []
+        if self._args is not None:
+            for arg in self._args:
+                arg_symbols = arg.all_symbols()
+                for s in arg_symbols:
+                    if s not in symbols:
+                        symbols.append(s)
+        return symbols
+
     # needs work
     def need_parens_in_mul(self):
         if self.is_atom():
@@ -124,16 +136,22 @@ class Expr(object):
         if self is ConstPi: return "\\pi"
         if self is ConstI: return "i"
         if self is ConstE: return "e"
+        if self is ConstGamma: return "\\gamma"
         if self is RiemannZeta: return "\\zeta"
         if self is Infinity: return "\\infty"
         if self is GammaFunction: return "\\Gamma"
         if self is DedekindEta: return "\\eta"
-        if self is DedekindEpsilon: return "\\varepsilon"
+        if self is DedekindEtaEpsilon: return "\\varepsilon"
         if self is DedekindSum: return "s"
+        if self is EulerQSeries: return "\\phi"
         if self is Sin: return "\\sin"
         if self is Exp: return "\\exp"
         if self is GCD: return "\\gcd"
         if self is ZZ: return "\\mathbb{Z}"
+        if self is ZZGreaterEqualZero: return "\\mathbb{Z}_{\ge 0}"
+        if self is ZZGreaterZero: return "\\mathbb{Z}_{> 0}"
+        if self is ZZLessEqualZero: return "\\mathbb{Z}_{\le 0}"
+        if self is ZZLessZero: return "\\mathbb{Z}_{< 0}"
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
         if self is CC: return "\\mathbb{C}"
@@ -232,14 +250,20 @@ class Expr(object):
             return " \\ne ".join(argstr)
         if head is Tuple:
             return "\\left(" + ", ".join(argstr) + "\\right)"
+        if head is Set:
+            return "\\left\{" + ", ".join(argstr) + "\\right\}"
         if head is BernoulliB:
-            if len(args) == 1:
-                return "B_{" + argstr[0] + "}"
-            else:
-                return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+            assert len(args) == 1
+            return "B_{" + argstr[0] + "}"
+        if head is BernoulliPolynomial:
+            assert len(args) == 2
+            return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
         if head is Factorial:
             assert len(args) == 1
-            return "\\left(" + argstr[0] + "\\right)!"
+            if args[0].is_symbol():
+                return argstr[0] + " !"
+            else:
+                return "\\left(" + argstr[0] + "\\right)!"
         if head is RisingFactorial:
             assert len(args) == 2
             return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
@@ -247,6 +271,8 @@ class Expr(object):
             return " \\in ".join(argstr)
         if head is NotElement:
             return " \\not\\in ".join(argstr)
+        if head is SetMinus:
+            return " \\setminus ".join(argstr)
         if head is And:
             return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Or:
@@ -254,8 +280,11 @@ class Expr(object):
         if head is Not:
             assert len(args) == 1
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
+        if head is DomainCodomain:
+            assert len(args) == 2
+            return "%s \\rightarrow %s" % (argstr[0], argstr[1])
         fstr = self._args[0].latex()
-        s = fstr + "\\left(" + ", ".join(argstr) + "\\right)"
+        s = fstr + "\!\\left(" + ", ".join(argstr) + "\\right)"
         return s
 
 
@@ -275,9 +304,10 @@ inject_builtin("""
 Unknown Undefined
 Where
 Set List Tuple
-Union Intersection Not And Or
+Union Intersection SetMinus Not And Or
 Element NotElement Subset SubsetEqual
 ZZ QQ RR CC
+ZZGreaterEqualZero ZZGreaterZero ZZLessZero ZZLessEqualZero
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im
@@ -289,21 +319,45 @@ Asin Acos Atan Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
-ConstPi ConstE ConstI ConstGamma
+ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma RisingFactorial
-BernoulliB EulerE
+BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 RiemannZeta
-DedekindEta DedekindEpsilon DedekindSum GCD
+DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
+GCD
 """)
 
 inject_builtin("""
-Entry Formula ID Assumptions References Variables
+Entry Formula ID Assumptions References Variables DomainCodomain
 """)
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
 inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa mu nu xi pi rho sigma tau phi chi psi omega""")
 inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Mu Nu Xi Pi Rho Sigma Tau Phi Chi Psi Omega""")
+
+described_symbols = []
+descriptions = {}
+
+def describe(symbol, example, domain, codomain, description):
+    described_symbols.append(symbol)
+    descriptions[symbol] = (example, domain, codomain, description)
+
+describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
+describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
+describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
+describe(ConstI, ConstI, [], CC, "Imaginary unit")
+describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
+describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqualZero))], CC, "Gamma function")
+describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessZero))], CC, "Factorial")
+describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqualZero)], CC, "Rising factorial")
+describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqualZero)], QQ, "Bernoulli number")
+describe(BernoulliPolynomial, BernoulliPolynomial(n, z), [Element(n, ZZGreaterEqualZero), Element(z, CC)], CC, "Bernoulli polynomial")
+describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
+describe(DedekindEta, DedekindEta(tau), [Element(tau, CC), Greater(Im(tau), 0)], CC, "Dedekind eta function")
+describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
+describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterZero), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
+describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
 
 all_entries = []
 
@@ -350,26 +404,41 @@ make_entry(ID("3a5eb6"),
         And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Less(0, eta), LessEqual(eta, Div(1,2)), LessEqual(-eta, Re(s), 1 + eta))),
     References("H. Rademacher, Topics in analytic number theory, Springer, 1973. Equation 43.3."))
 
-# todo: separate bernoulli / polynomial functions?
 make_entry(ID("792f7b"),
     Formula(Equal(RiemannZeta(s),
         Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))) -
-                Integral((BernoulliB(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), Tuple(t, N, Infinity)))),
+                Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), Tuple(t, N, Infinity)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
 
+index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
+    [("L-series", ["da2fdb"]),
+     ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
+     ("Functional equation", ["9ee8bc"]),
+     ("Bounds and inequalities", ["809bc0","3a5eb6"]),
+     ("Euler-Maclaurin formula", ["792f7b"])])
+
+
+make_entry(ID("2e7fdb"),
+    Formula(Equal(EulerQSeries(q), Product((1 - q**k), Tuple(k, 1, Infinity)))),
+    Variables(q),
+    Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
+
+make_entry(ID("8f10b0"),
+    Formula(Equal(EulerQSeries(q), Sum((-1)**k * q**(k*(3*k-1)/2), Tuple(k, -Infinity, Infinity)))),
+    Variables(q),
+    Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
+
 make_entry(ID("ff587a"),
-    Formula(Where(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product((1 - q**k), Tuple(k, 1, Infinity))),
-        Equal(q, Exp(2*ConstPi*ConstI*tau)))),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * EulerQSeries(Exp(2*ConstPi*ConstI*tau)))),
     Variables(tau),
     Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
 
-make_entry(ID("8f10b0"),
-    Formula(Where(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Sum((-1)**k * q**(k*(3*k-1)/2), Tuple(k, -Infinity, Infinity))),
-        Equal(q, Exp(2*ConstPi*ConstI*tau)))),
+make_entry(ID("1dc520"),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product((1 - Exp(2*ConstPi*ConstI*k*tau)), Tuple(k, 1, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
 
@@ -396,18 +465,18 @@ make_entry(ID("29d9ab"),
         Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1))))
 
 make_entry(ID("9f19c1"),
-    Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)), DedekindEpsilon(a,b,c,d) * (c*tau+d)**Div(1,2) * DedekindEta(tau))),
+    Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)), DedekindEtaEpsilon(a,b,c,d) * (c*tau+d)**Div(1,2) * DedekindEta(tau))),
     Variables(tau,a,b,c,d),
     Assumptions(And(Element(tau, CC), Greater(Im(tau), 0),
         Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Or(Greater(c, 0), And(Equal(c, 0), Equal(d, 1))))))
 
 make_entry(ID("f04e01"),
-    Formula(Equal(DedekindEpsilon(1,b,0,1), Exp((ConstPi*ConstI*b)/12))),
+    Formula(Equal(DedekindEtaEpsilon(1,b,0,1), Exp((ConstPi*ConstI*b)/12))),
     Variables(b),
     Element(b, ZZ))
 
 make_entry(ID("921ef0"),
-    Formula(Equal(DedekindEpsilon(a,b,c,d), Exp((ConstPi*ConstI*((a+d)/(12*c) - DedekindSum(d,c) - Div(1,4)))))),
+    Formula(Equal(DedekindEtaEpsilon(a,b,c,d), Exp((ConstPi*ConstI*((a+d)/(12*c) - DedekindSum(d,c) - Div(1,4)))))),
     Variables(a,b,c,d),
     Assumptions(And(Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Greater(c, 0))))
 
@@ -416,6 +485,11 @@ make_entry(ID("23961e"),
     Variables(n,k),
     Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
 
+index_DedekindEta = ("DedekindEta", "Dedekind eta function",
+    [("Fourier series (q-series)", ["1dc520","ff587a","2e7fdb","8f10b0"]),
+     ("Special values", ["9b8c9f", "204acd"]),
+     ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
+     ("Dedekind sums", ["23961e"])])
 
 
 
@@ -470,6 +544,9 @@ p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
 .entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.5em; background-color: #fff; overflow: hidden; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
+table { border-collapse:collapse; }
+table, th, td { border: 1px solid #aaa; }
+th, td { padding:0.2em; }
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
@@ -508,10 +585,28 @@ index_text = index_text.replace("%%NUMTOTAL%%", str(len(all_entries)))
 def makeurl(id):
     return "fungrim/entry/%s" % id
 
+def write_definitions_table(fp, symbols, center=False):
+    if center:
+        fp.write("""<table style="margin: 0 auto">""")
+    else:
+        fp.write("""<table>""")
+    fp.write("""<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Domain</th> <th>Codomain</th> <th>Description</th></tr>""")
+    for symbol in symbols:
+        if symbol in descriptions:
+            example, domain, codomain, description = descriptions[symbol]
+            fp.write("""<tr><td><tt>%s</tt>""" % symbol.str())
+            fp.write("""<td>%s</td>""" % katex(example.latex(), False))
+            domstr = ",\, ".join(dom.latex() for dom in domain)
+            fp.write("""<td>%s</td>""" % katex(domstr, False))
+            fp.write("""<td>%s</td>""" % katex(codomain.latex(), False))
+            fp.write("""<td>%s</td></tr>""" % description)
+    fp.write("""</table>""")
+
 class EntryObject:
     def __init__(self, entry):
         self.entry = entry
         self.source = self.entry.str()
+        self.symbols = None
         self.formula = None
         self.assumptions = None
         self.variables = None
@@ -529,6 +624,7 @@ class EntryObject:
                 self.references = arg._args[1:]
         if self.formula is not None:
             self.formula_tex = self.formula.latex()
+            self.symbols = self.formula.all_symbols()
         if self.assumptions is not None:
             self.assumptions_tex = self.assumptions.latex()
 
@@ -560,6 +656,9 @@ class EntryObject:
             fp.write("\n\n")
             fp.write(self.assumptions_tex)
         fp.write("</pre>")
+        if self.symbols:
+            fp.write("""<div class="entrysubhead">Definitions:</div>""")
+            write_definitions_table(fp, self.symbols)
         if self.references is not None:
             fp.write("""<div class="entrysubhead">References:</div>""")
             fp.write("<ul>")
@@ -644,21 +743,29 @@ class IndexPage(Webpage):
         self.end()
         return count
 
+class DefinitionsPage(Webpage):
+
+    def __init__(self):
+        self.filepath = "build/html/definitions.html"
+        self.title = "All symbol definitions"
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center"><a href="index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>%s</h1>""" % self.title)
+
+    def write(self):
+        self.start()
+        write_definitions_table(self.fp, described_symbols, center=True)
+        self.end()
+
 for entry in all_entry_objects:
     EntryPage(entry.id).write()
 
-count_RiemannZeta = IndexPage("RiemannZeta", "Riemann zeta function",
-    [("L-series", ["da2fdb"]),
-     ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
-     ("Functional equation", ["9ee8bc"]),
-     ("Bounds and inequalities", ["809bc0","3a5eb6"]),
-     ("Euler-Maclaurin formula", ["792f7b"])]).write()
 
-count_DedekindEta = IndexPage("DedekindEta", "Dedekind eta function",
-    [("Fourier series (q-series)", ["ff587a","8f10b0"]),
-     ("Special values", ["9b8c9f", "204acd"]),
-     ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
-     ("Dedekind sums", ["23961e"])]).write()
+count_RiemannZeta = IndexPage(*index_RiemannZeta).write()
+count_DedekindEta = IndexPage(*index_DedekindEta).write()
+DefinitionsPage().write()
 
 frontpage = FrontPage()
 frontpage.start()
@@ -667,6 +774,10 @@ frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
 frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
+frontpage.fp.write("""</ul>""")
+frontpage.section("General")
+frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="definitions.html">All symbol definitions</a> &nbsp;(%i total entries)</li>""" % len(described_symbols))
 frontpage.fp.write("""</ul>""")
 frontpage.end()
 
