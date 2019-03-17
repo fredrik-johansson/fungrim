@@ -180,6 +180,8 @@ class Expr(object):
             if in_small:
                 numstr = num.latex(in_small=True)
                 denstr = den.latex(in_small=True)
+                if num.need_parens_in_mul():  # fixme!
+                    numstr = "\\left( %s \\right)" % numstr
                 if den.need_parens_in_mul():  # fixme!
                     denstr = "\\left( %s \\right)" % denstr
                 return numstr + " / " + denstr
@@ -888,7 +890,6 @@ class EntryObject:
 
 all_entry_objects = [EntryObject(entry) for entry in all_entries]
 entries_dict = {entry.id:entry for entry in all_entry_objects}
-
 
 class Webpage:
 
