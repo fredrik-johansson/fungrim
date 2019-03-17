@@ -139,6 +139,7 @@ class Expr(object):
         if self is ConstGamma: return "\\gamma"
         if self is RiemannZeta: return "\\zeta"
         if self is Infinity: return "\\infty"
+        if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
         if self is DedekindEta: return "\\eta"
         if self is DedekindEtaEpsilon: return "\\varepsilon"
@@ -260,6 +261,9 @@ class Expr(object):
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
+        if head is RiemannZetaZero:
+            assert len(args) == 1
+            return "\\rho_{" + argstr[0] + "}"
         if head is BernoulliPolynomial:
             assert len(args) == 2
             return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
@@ -289,6 +293,10 @@ class Expr(object):
             return " \\not\\in ".join(argstr)
         if head is SetMinus:
             return " \\setminus ".join(argstr)
+        if head is Union:
+            return " \\cup ".join(argstr)
+        if head is Intersection:
+            return " \\cap ".join(argstr)
         if head is And:
             return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Or:
@@ -332,6 +340,12 @@ class Expr(object):
         if head is DomainCodomain:
             assert len(args) == 2
             #return "%s \\rightarrow %s" % (argstr[0], argstr[1])
+        if head is Conjugate:
+            assert len(args) == 1
+            return "\\overline{%s}" % argstr[0]
+        if head is SetBuilder:
+            assert len(args) == 2
+            return "\\{ %s : %s \\}" % tuple(argstr)
         fstr = self._args[0].latex()
         if in_small:
             spacer = ""
@@ -357,6 +371,7 @@ inject_builtin("""
 Unknown Undefined
 Where
 Set List Tuple
+SetBuilder
 Union Intersection SetMinus Not And Or
 Element NotElement Subset SubsetEqual
 ZZ QQ RR CC
@@ -364,9 +379,10 @@ ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
-Max Min Sign Abs Floor Ceil Arg Re Im
+Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 Sum Product Limit Integral Derivative
 AsymptoticTo
+Poles BranchPoints BranchCuts EssentialSingularities Zeros
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
@@ -377,7 +393,7 @@ Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma RisingFactorial
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
-RiemannZeta
+RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 GCD DivisorSigma
@@ -422,6 +438,7 @@ describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors f
 describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqual(0), "Integer partition function")
 describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
+describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 
 all_entries = []
 
@@ -478,8 +495,43 @@ make_entry(ID("792f7b"),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
 
+make_entry(ID("69348a"),
+    Formula(Equal(RiemannZeta(Conjugate(s)), Conjugate(RiemannZeta(s)))),
+    Assumptions(And(Element(s, CC), Unequal(s, 1))))
+
+make_entry(ID("52c4ab"),
+    Formula(Equal(Poles(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set(1))))
+
+make_entry(ID("fdb94b"),
+    Formula(Equal(EssentialSingularities(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))
+
+make_entry(ID("36a095"),
+    Formula(Equal(BranchPoints(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("9a258f"),
+    Formula(Equal(BranchCuts(RiemannZeta(s), s, Union(CC)), Set())))
+
+make_entry(ID("2e1ff3"),
+    Formula(Equal(Zeros(RiemannZeta(s), s, RR), SetBuilder(-(2*n), Element(n, ZZGreaterEqual(1))))))
+
+make_entry(ID("692e42"),
+    Formula(Equal(Zeros(RiemannZeta(s), s, CC), Union(SetBuilder(-(2*n), Element(n, ZZGreaterEqual(1))),
+        SetBuilder(RiemannZetaZero(n), And(Element(n, ZZ), Unequal(n, 0)))))))
+
+make_entry(ID("cbbf16"),
+    Formula(Less(0, Re(RiemannZetaZero(n)), 1)),
+    Variables(n),
+    Assumptions(And(Element(n, ZZ), Unequal(n, 0))))
+
+make_entry(ID("e6ff64"),
+    Formula(Equal(Re(RiemannZetaZero(n)), Div(1,2))),
+    Variables(n),
+    Assumptions(And(Element(n, ZZ), Unequal(n, 0), Less(Abs(n), 103800788359))),
+    References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
+
 index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
     [("L-series", ["da2fdb"]),
+     ("Analytic properties", ["69348a","52c4ab","fdb94b","36a095","9a258f","2e1ff3","692e42","cbbf16","e6ff64"]),
      ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
      ("Functional equation", ["9ee8bc"]),
      ("Bounds and inequalities", ["809bc0","3a5eb6"]),
@@ -706,7 +758,7 @@ p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
 .entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.5em; background-color: #fff; overflow: hidden; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
-table { border-collapse:collapse; }
+table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }
 th, td { padding:0.2em; }
 </style>
@@ -820,7 +872,7 @@ class EntryObject:
         fp.write("</pre>")
         if self.symbols:
             fp.write("""<div class="entrysubhead">Definitions:</div>""")
-            write_definitions_table(fp, self.symbols)
+            write_definitions_table(fp, self.symbols, center=True)
         if self.references is not None:
             fp.write("""<div class="entrysubhead">References:</div>""")
             fp.write("<ul>")
