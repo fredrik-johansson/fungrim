@@ -132,7 +132,7 @@ class Expr(object):
                 return False
         return True
 
-    def latex(self):
+    def latex(self, in_small=False):
         if self is ConstPi: return "\\pi"
         if self is ConstI: return "i"
         if self is ConstE: return "e"
@@ -148,13 +148,10 @@ class Expr(object):
         if self is DivisorSigma: return "\\sigma"
         if self is HardyRamanujanA: return "A"
         if self is Sin: return "\\sin"
+        if self is Sinh: return "\\sinh"
         if self is Exp: return "\\exp"
         if self is GCD: return "\\gcd"
         if self is ZZ: return "\\mathbb{Z}"
-        if self is ZZGreaterEqualZero: return "\\mathbb{Z}_{\ge 0}"
-        if self is ZZGreaterZero: return "\\mathbb{Z}_{> 0}"
-        if self is ZZLessEqualZero: return "\\mathbb{Z}_{\le 0}"
-        if self is ZZLessZero: return "\\mathbb{Z}_{< 0}"
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
         if self is CC: return "\\mathbb{C}"
@@ -170,19 +167,35 @@ class Expr(object):
                 return str(self._integer)
         head = self._args[0]
         args = self._args[1:]
+
         if head is Exp:
             assert len(args) == 1
             if args[0].show_exponential_as_power():
-                return Pow(ConstE, args[0]).latex()
-        argstr = [arg.latex() for arg in args]
+                return Pow(ConstE, args[0]).latex(in_small=in_small)
+
+        if head is Div:
+            assert len(args) == 2
+            num, den = args
+            if in_small:
+                numstr = num.latex(in_small=True)
+                denstr = den.latex(in_small=True)
+                if den.need_parens_in_mul():  # fixme!
+                    denstr = "\\left( %s \\right)" % denstr
+                return numstr + " / " + denstr
+            else:
+                numstr = num.latex()
+                denstr = den.latex()
+                return "\\frac{" + numstr + "}{" + denstr + "}"
+
+        argstr = [arg.latex(in_small=in_small) for arg in args]
         if head is Where:
             return argstr[0] + "\; \\text{ where } " + ",\,".join(argstr[1:])
         if head is Pos:
             assert len(args) == 1
-            return "+" + args[0].latex()
+            return "+" + argstr[0]
         if head is Neg:
             assert len(args) == 1
-            return "-" + args[0].latex()
+            return "-" + argstr[0]
         if head is Add:
             return " + ".join(argstr)
         if head is Sub:
@@ -192,38 +205,24 @@ class Expr(object):
                 if args[i].need_parens_in_mul():
                     argstr[i] = "\\left(" + argstr[i] + "\\right)"
             return " ".join(argstr)
-        if head is Div:
-            # todo: when to use an inline fraction?
-            assert len(args) == 2
-            return "\\frac{" + argstr[0] + "}{" + argstr[1] + "}"
         if head is Pow:
             assert len(args) == 2
             # remove frac to try to keep it on one line
             base = args[0]
             expo = args[1]
-            if not expo.is_atom() and expo._args[0] is Neg:
-                expo = expo._args[1]
-            if not expo.is_atom() and expo._args[0] is Div:
-                numer = expo._args[1]
-                denom = expo._args[2]
-                numstr = numer.latex()
-                denstr = denom.latex()
-                if numer.need_parens_in_mul():
-                    numstr = "\\left(" + numstr + "\\right)"
-                if denom.need_parens_in_mul():
-                    denstr = "\\left(" + denstr + "\\right)"
-                argstr[1] = numstr + "/" + denstr
+            basestr = base.latex(in_small=in_small)
+            expostr = expo.latex(in_small=True)
             if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] is Abs):
-                return "{" + argstr[0] + "}^{" + argstr[1] + "}"
+                return "{" + basestr + "}^{" + expostr + "}"
             else:
-                return "{\\left(" + argstr[0] + "\\right)}^{" + argstr[1] + "}"
+                return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
         if head in (Sum, Integral, Product):
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
             _, var, low, high = args[1]._args
             var = var.latex()
-            low = low.latex()
-            high = high.latex()
+            low = low.latex(in_small=True)
+            high = high.latex(in_small=True)
             if head is Sum:
                 return "\\sum_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
             if head is Integral:
@@ -266,7 +265,10 @@ class Expr(object):
             return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
         if head is BesselI:
             assert len(args) == 2
-            return "I_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+            n, z = args
+            nstr = n.latex(in_small=True)
+            zstr = z.latex(in_small)
+            return "I_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol():
@@ -296,13 +298,45 @@ class Expr(object):
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
         if head is KroneckerDelta:
             assert len(args) == 2
-            return "\delta_{(%s,%s)}" % tuple(argstr)
+            xstr = args[0].latex(in_small=True)
+            ystr = args[1].latex(in_small=True)
+            return "\delta_{(%s,%s)}" % (xstr, ystr)
+        if head is ZZGreaterEqual:
+            assert len(args) == 1
+            # if args[0].is_integer():
+            #    return "\{%s, %s, \ldots\}" % (args[0]._integer, args[0]._integer + 1)
+            return "\\mathbb{Z}_{\ge %s}" % argstr[0]
+        if head is ZZLessEqual:
+            assert len(args) == 1
+            if args[0].is_integer():
+                return "\{%s, %s, \ldots\}" % (args[0]._integer, args[0]._integer - 1)
+            return "\\mathbb{Z}_{\le %s}" % argstr[0]
+        if head is ZZBetween:
+            assert len(args) == 2
+            if args[0].is_integer():
+                return "\{%s, %s, \ldots %s\}" % (argstr[0], args[0]._integer + 1, argstr[1])
+            else:
+                return "\{%s, %s + 1, \ldots %s\}" % (argstr[0], args[0], argstr[1])
+        if head is ClosedInterval:
+            assert len(args) == 2
+            return "\\left[%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+        if head is OpenInterval:
+            assert len(args) == 2
+            return "\\left(%s, %s\\right)" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+        if head is ClosedOpenInterval:
+            assert len(args) == 2
+            return "\\left[%s, %s\\right)" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+        if head is OpenClosedInterval:
+            assert len(args) == 2
+            return "\\left(%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
         if head is DomainCodomain:
             assert len(args) == 2
-            return "%s \\rightarrow %s" % (argstr[0], argstr[1])
+            #return "%s \\rightarrow %s" % (argstr[0], argstr[1])
         fstr = self._args[0].latex()
-        # todo: omit inside subscript/superscript?
-        spacer = "\\!"
+        if in_small:
+            spacer = ""
+        else:
+            spacer = "\\!"
         s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
 
@@ -326,7 +360,8 @@ Set List Tuple
 Union Intersection SetMinus Not And Or
 Element NotElement Subset SubsetEqual
 ZZ QQ RR CC
-ZZGreaterEqualZero ZZGreaterZero ZZLessZero ZZLessEqualZero
+ZZGreaterEqual ZZLessEqual ZZBetween
+ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im
@@ -366,23 +401,25 @@ def describe(symbol, example, domain, codomain, description):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, domain, codomain, description)
 
+
+
 describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
-describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqualZero))], CC, "Gamma function")
-describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessZero))], CC, "Factorial")
-describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqualZero)], CC, "Rising factorial")
-describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqualZero)], QQ, "Bernoulli number")
-describe(BernoulliPolynomial, BernoulliPolynomial(n, z), [Element(n, ZZGreaterEqualZero), Element(z, CC)], CC, "Bernoulli polynomial")
+describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqual(0)))], CC, "Gamma function")
+describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
+describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
+describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqual(0))], QQ, "Bernoulli number")
+describe(BernoulliPolynomial, BernoulliPolynomial(n, z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Bernoulli polynomial")
 describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
 describe(DedekindEta, DedekindEta(tau), [Element(tau, CC), Greater(Im(tau), 0)], CC, "Dedekind eta function")
 describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
-describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterZero), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
+describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
 describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
 describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
-describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqualZero, "Integer partition function")
+describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqual(0), "Integer partition function")
 describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 
@@ -417,7 +454,7 @@ make_entry(ID("51fd98"),
 make_entry(ID("9ee8bc"),
     Formula(Equal(RiemannZeta(s), 2 * (2*ConstPi)**(s-1) * Sin(ConstPi*s/2) * GammaFunction(1-s) * RiemannZeta(1-s))),
     Variables(s),
-    Assumptions(And(Element(s, CC), NotElement(s, ZZGreaterZero))))
+    Assumptions(And(Element(s, CC), NotElement(s, ZZGreaterEqual(1)))))
 
 make_entry(ID("809bc0"),
     Formula(LessEqual(Abs(RiemannZeta(s)), RiemannZeta(Re(s)))),
@@ -428,7 +465,7 @@ make_entry(ID("3a5eb6"),
     Formula(Less(Abs(RiemannZeta(s)), 3 * Abs((1+s)/(1-s)) * Abs((1+s)/(2*ConstPi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
     Variables(s, eta),
     Assumptions(
-        And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Less(0, eta), LessEqual(eta, Div(1,2)), LessEqual(-eta, Re(s), 1 + eta))),
+        And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Element(eta, OpenClosedInterval(0, Div(1,2))), LessEqual(-eta, Re(s), 1 + eta))),
     References("H. Rademacher, Topics in analytic number theory, Springer, 1973. Equation 43.3."))
 
 make_entry(ID("792f7b"),
@@ -533,7 +570,7 @@ make_entry(ID("7ef291"),
 make_entry(ID("cd3013"),
     Formula(Equal(PartitionsP(n), 0)),
     Variables(n),
-    Assumptions(Element(n, ZZLessZero)))
+    Assumptions(Element(n, ZZLessEqual(-1))))
 
 make_entry(ID("599417"),
     Formula(Equal(Sum(PartitionsP(n) * q**n, Tuple(n, 0, Infinity)),
@@ -549,7 +586,7 @@ make_entry(ID("acdce8"),
 make_entry(ID("4d2e45"),
     Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(n-k) * PartitionsP(k), Tuple(k, 0, n-1)))),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterZero)))
+    Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("d8e37d"),
     Formula(Equal(Mod(PartitionsP(5*n+4), 5), 0)),
@@ -574,7 +611,7 @@ make_entry(ID("f7407a"),
 make_entry(ID("df3c07"),
     Formula(Less(PartitionsP(n), PartitionsP(n+1))),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterZero)))
+    Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("d72123"),
     Formula(GreaterEqual(PartitionsP(n), n)),
@@ -584,7 +621,7 @@ make_entry(ID("d72123"),
 make_entry(ID("e1f15b"),
     Formula(LessEqual(PartitionsP(n), 2**n)),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterEqualZero)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("7697af"),
     Formula(AsymptoticTo(PartitionsP(n), Exp(ConstPi*Sqrt(2*n/3)) / (4 * n * Sqrt(3)), n, Infinity)),
@@ -592,16 +629,23 @@ make_entry(ID("7697af"),
     Assumptions(Element(n, ZZ)))
 
 # todo: fix bessel subscript printing
+hrr_term = Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (ConstPi/k) * Sqrt(Div(2,3) * (n - Div(1,24))))
+
 make_entry(ID("fb7a63"),
-    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * \
-        Sum(Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (ConstPi/k) * Sqrt(Div(2,3) * (n - Div(1,24)))), Tuple(k, 1, Infinity)))),
+    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, Tuple(k, 1, Infinity)))),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterZero)))
+    Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("5adbc3"),
     Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(ConstPi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), Tuple(r, 0, k-1)))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterZero), Element(k, ZZGreaterZero))))
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZGreaterEqual(1)))))
+
+make_entry(ID("afd27a"),
+    Formula(LessEqual(Abs(PartitionsP(n) - ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, Tuple(k, 1, N))),
+        (44*ConstPi**2/(225*Sqrt(3*N))) + (ConstPi * Sqrt(2) / 75) * Sqrt(N / (n - 1)) * Sinh((ConstPi/N) * Sqrt(2*n/3)))),
+    Variables(n, N),
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(N, ZZGreaterEqual(1)))))
 
 index_PartitionsP = ("PartitionsP", "Integer partition function",
     [("Specific values", ["cebe1b","e84642","b2583f","7ef291","cd3013"]),
@@ -610,7 +654,7 @@ index_PartitionsP = ("PartitionsP", "Integer partition function",
      ("Congruences", ["d8e37d","89260d","dacd74"]),
      ("Inequalities", ["f7407a","df3c07","d72123","e1f15b"]),
      ("Asymptotic expansions", ["7697af"]),
-     ("Hardy-Ramanujan-Rademacher formula", ["fb7a63", "5adbc3"])])
+     ("Hardy-Ramanujan-Rademacher formula", ["fb7a63", "5adbc3", "afd27a"])])
 
 import os
 if not os.path.exists("build"):
