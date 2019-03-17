@@ -144,6 +144,9 @@ class Expr(object):
         if self is DedekindEtaEpsilon: return "\\varepsilon"
         if self is DedekindSum: return "s"
         if self is EulerQSeries: return "\\phi"
+        if self is PartitionsP: return "p"
+        if self is DivisorSigma: return "\\sigma"
+        if self is HardyRamanujanA: return "A"
         if self is Sin: return "\\sin"
         if self is Exp: return "\\exp"
         if self is GCD: return "\\gcd"
@@ -227,6 +230,9 @@ class Expr(object):
                 return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
             if head is Product:
                 return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
+        if head is Sqrt:
+            assert len(args) == 1
+            return "\\sqrt{" + argstr[0] + "}"
         if head is Abs:
             assert len(args) == 1
             return "\\left|" + argstr[0] + "\\right|"
@@ -258,6 +264,9 @@ class Expr(object):
         if head is BernoulliPolynomial:
             assert len(args) == 2
             return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+        if head is BesselI:
+            assert len(args) == 2
+            return "I_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol():
@@ -267,6 +276,11 @@ class Expr(object):
         if head is RisingFactorial:
             assert len(args) == 2
             return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
+        if head is AsymptoticTo:
+            assert len(argstr) == 4
+            return "%s \\sim %s, \; %s \\to %s" % tuple(argstr)
+        if head is Mod:
+            return " \\bmod ".join(argstr)
         if head is Element:
             return " \\in ".join(argstr)
         if head is NotElement:
@@ -280,11 +294,16 @@ class Expr(object):
         if head is Not:
             assert len(args) == 1
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
+        if head is KroneckerDelta:
+            assert len(args) == 2
+            return "\delta_{(%s,%s)}" % tuple(argstr)
         if head is DomainCodomain:
             assert len(args) == 2
             return "%s \\rightarrow %s" % (argstr[0], argstr[1])
         fstr = self._args[0].latex()
-        s = fstr + "\!\\left(" + ", ".join(argstr) + "\\right)"
+        # todo: omit inside subscript/superscript?
+        spacer = "\\!"
+        s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
 
 
@@ -312,6 +331,7 @@ Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im
 Sum Product Limit Integral Derivative
+AsymptoticTo
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
@@ -323,8 +343,11 @@ ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma RisingFactorial
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 RiemannZeta
+BesselJ BesselI BesselY BesselK
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
-GCD
+GCD DivisorSigma
+PartitionsP HardyRamanujanA
+KroneckerDelta
 """)
 
 inject_builtin("""
@@ -358,6 +381,10 @@ describe(DedekindEta, DedekindEta(tau), [Element(tau, CC), Greater(Im(tau), 0)],
 describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
 describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterZero), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
 describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
+describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
+describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqualZero, "Integer partition function")
+describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
+describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 
 all_entries = []
 
@@ -390,7 +417,7 @@ make_entry(ID("51fd98"),
 make_entry(ID("9ee8bc"),
     Formula(Equal(RiemannZeta(s), 2 * (2*ConstPi)**(s-1) * Sin(ConstPi*s/2) * GammaFunction(1-s) * RiemannZeta(1-s))),
     Variables(s),
-    Assumptions(And(Element(s, CC), Not(And(Element(s, ZZ), GreaterEqual(s, 1))))))
+    Assumptions(And(Element(s, CC), NotElement(s, ZZGreaterZero))))
 
 make_entry(ID("809bc0"),
     Formula(LessEqual(Abs(RiemannZeta(s)), RiemannZeta(Re(s)))),
@@ -491,8 +518,99 @@ index_DedekindEta = ("DedekindEta", "Dedekind eta function",
      ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
      ("Dedekind sums", ["23961e"])])
 
+make_entry(ID("cebe1b"),
+    Formula(Equal(PartitionsP(0), 1)))
 
+make_entry(ID("e84642"),
+    Formula(Equal(PartitionsP(1), 1)))
 
+make_entry(ID("b2583f"),
+    Formula(Equal(PartitionsP(10), 42)))
+
+make_entry(ID("7ef291"),
+    Formula(Equal(PartitionsP(100), 190569292)))
+
+make_entry(ID("cd3013"),
+    Formula(Equal(PartitionsP(n), 0)),
+    Variables(n),
+    Assumptions(Element(n, ZZLessZero)))
+
+make_entry(ID("599417"),
+    Formula(Equal(Sum(PartitionsP(n) * q**n, Tuple(n, 0, Infinity)),
+        1/EulerQSeries(q))),
+    Variables(q),
+    Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
+
+make_entry(ID("acdce8"),
+    Formula(Equal(PartitionsP(n), Sum((-1)**(k+1) * (PartitionsP(n - k*(3*k-1)/2) + PartitionsP(n - k*(3*k+1)/2)), Tuple(k, 1, n+1)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("4d2e45"),
+    Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(n-k) * PartitionsP(k), Tuple(k, 0, n-1)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterZero)))
+
+make_entry(ID("d8e37d"),
+    Formula(Equal(Mod(PartitionsP(5*n+4), 5), 0)),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("89260d"),
+    Formula(Equal(Mod(PartitionsP(7*n+5), 7), 0)),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("dacd74"),
+    Formula(Equal(Mod(PartitionsP(11*n+6), 11), 0)),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("f7407a"),
+    Formula(LessEqual(PartitionsP(n), PartitionsP(n+1))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("df3c07"),
+    Formula(Less(PartitionsP(n), PartitionsP(n+1))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterZero)))
+
+make_entry(ID("d72123"),
+    Formula(GreaterEqual(PartitionsP(n), n)),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("e1f15b"),
+    Formula(LessEqual(PartitionsP(n), 2**n)),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqualZero)))
+
+make_entry(ID("7697af"),
+    Formula(AsymptoticTo(PartitionsP(n), Exp(ConstPi*Sqrt(2*n/3)) / (4 * n * Sqrt(3)), n, Infinity)),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+# todo: fix bessel subscript printing
+make_entry(ID("fb7a63"),
+    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * \
+        Sum(Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (ConstPi/k) * Sqrt(Div(2,3) * (n - Div(1,24)))), Tuple(k, 1, Infinity)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterZero)))
+
+make_entry(ID("5adbc3"),
+    Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(ConstPi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), Tuple(r, 0, k-1)))),
+    Variables(n, k),
+    Assumptions(And(Element(n, ZZGreaterZero), Element(k, ZZGreaterZero))))
+
+index_PartitionsP = ("PartitionsP", "Integer partition function",
+    [("Specific values", ["cebe1b","e84642","b2583f","7ef291","cd3013"]),
+     ("Generating functions", ["599417"]),
+     ("Sums and recurrence relations", ["acdce8","4d2e45"]),
+     ("Congruences", ["d8e37d","89260d","dacd74"]),
+     ("Inequalities", ["f7407a","df3c07","d72123","e1f15b"]),
+     ("Asymptotic expansions", ["7697af"]),
+     ("Hardy-Ramanujan-Rademacher formula", ["fb7a63", "5adbc3"])])
 
 import os
 if not os.path.exists("build"):
@@ -765,6 +883,7 @@ for entry in all_entry_objects:
 
 count_RiemannZeta = IndexPage(*index_RiemannZeta).write()
 count_DedekindEta = IndexPage(*index_DedekindEta).write()
+count_PartitionsP = IndexPage(*index_PartitionsP).write()
 DefinitionsPage().write()
 
 frontpage = FrontPage()
@@ -774,6 +893,7 @@ frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
 frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
+frontpage.fp.write("""<li><a href="PartitionsP.html">Integer partition function</a> &nbsp;(%i total entries)</li>""" % count_PartitionsP)
 frontpage.fp.write("""</ul>""")
 frontpage.section("General")
 frontpage.fp.write("""<ul>""")
