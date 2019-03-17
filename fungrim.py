@@ -150,8 +150,12 @@ class Expr(object):
         if self is HardyRamanujanA: return "A"
         if self is Sin: return "\\sin"
         if self is Sinh: return "\\sinh"
+        if self is Cos: return "\\cos"
+        if self is Cosh: return "\\cosh"
         if self is Exp: return "\\exp"
         if self is GCD: return "\\gcd"
+        if self is Sign: return "\\operatorname{sgn}"
+        if self is Arg: return "\\arg"
         if self is ZZ: return "\\mathbb{Z}"
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
@@ -232,6 +236,17 @@ class Expr(object):
                 return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
             if head is Product:
                 return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
+        if head is Derivative:
+            assert len(args) == 2
+            assert args[1]._args[0] is Tuple
+            _, var, point, order = args[1]._args
+            var = var.latex()
+            point = point.latex(in_small=True)
+            orderstr = order.latex()
+            if order.is_integer() and order._integer == 1:
+                return "\\left[ \\frac{d}{d %s}\, %s \\right]_{%s = %s}" % (var, argstr[0], var, point)
+            else:
+                return "\\left[ \\left(\\frac{d}{d %s}\\right)^{%s} %s \\right]_{%s = %s}" % (var, orderstr, argstr[0], var, point)
         if head is Sqrt:
             assert len(args) == 1
             return "\\sqrt{" + argstr[0] + "}"
@@ -425,6 +440,7 @@ describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
+describe(Exp, Exp(z), [Element(z, CC)], CC, "Exponential function")
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
 describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqual(0)))], CC, "Gamma function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
@@ -447,6 +463,142 @@ all_entries = []
 def make_entry(*args):
     entry = Entry(*args)
     all_entries.append(entry)
+
+make_entry(ID("27ca8d"),
+    Formula(Equal(Exp(0), 1)))
+
+make_entry(ID("9a944c"),
+    Formula(Equal(Exp(1), ConstE)))
+
+make_entry(ID("54aaf1"),
+    Formula(Equal(Exp(ConstPi*ConstI), -1)))
+
+make_entry(ID("a90f35"),
+    Formula(Equal(Exp(ConstPi*ConstI/2), ConstI)))
+
+make_entry(ID("812707"),
+    Formula(Equal(Exp(a+b), Exp(a) * Exp(b))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("e51ec3"),
+    Formula(Equal(Exp(z)**n, Exp(n*z))),
+    Variables(z, n),
+    Assumptions(And(Element(z, CC), Element(n, ZZ))))
+
+make_entry(ID("2f4f74"),
+    Formula(Equal(Exp(-z), 1 / Exp(z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("77d6bf"),
+    Formula(Equal(Exp(a+b*ConstI), Exp(a) * (Cos(b) + Sin(b)*ConstI))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("97ba8d"),
+    Formula(Equal(Exp(z+n*ConstPi*ConstI), (-1)**n * Exp(z)),
+    Variables(z, n),
+    Assumptions(And(Element(a, CC), Element(n, ZZ)))))
+
+make_entry(ID("1fa6b7"),
+    Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z)),
+    Variables(z, n),
+    Assumptions(And(Element(a, CC), Element(n, ZZ)))))
+
+make_entry(ID("52d827"),
+    Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("0901a1"),
+    Formula(Equal(Poles(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("be4b28"),
+    Formula(Equal(EssentialSingularities(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))
+
+make_entry(ID("184c11"),
+    Formula(Equal(BranchPoints(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("b62d05"),
+    Formula(Equal(BranchCuts(Exp(z), z, CC), Set())))
+
+make_entry(ID("bceb84"),
+    Formula(Equal(Zeros(Exp(z), z, CC), Set())))
+
+make_entry(ID("1635f5"),
+    Formula(Equal(Exp(z), Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("bad502"),
+    Formula(Equal(Exp(c+z), Exp(c) * Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),
+    Variables(c, z),
+    Assumptions(And(Element(c, CC), Element(z, CC))))
+
+make_entry(ID("935b2f"),
+    Formula(Equal(Integral(Exp(z), Tuple(z, a, b)), Exp(b) - Exp(a))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("96af56"),
+    Formula(Equal(Derivative(Exp(t), Tuple(t, z, 1)), Exp(z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("4491b8"),
+    Formula(Equal(Derivative(Exp(t), Tuple(t, z, n)), Exp(z))),
+    Variables(z, n),
+    Assumptions(And(Element(z, CC)), Element(n, ZZGreaterEqual(0))))
+
+
+make_entry(ID("1568e1"),
+    Formula(Equal(Exp(z), Cosh(z) + Sinh(z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("e103e7"),
+    Formula(Equal(Exp(ConstI*z), Cos(z) + ConstI*Sin(z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+
+make_entry(ID("1b3014"),
+    Formula(Equal(Abs(Exp(z)), Exp(Re(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("caf706"),
+    Formula(Equal(Sign(Exp(z)), Exp(Im(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("b7d62b"),
+    Formula(Equal(Re(Exp(z)), Exp(Re(z))*Cos(Im(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("e2fac7"),
+    Formula(Equal(Im(Exp(z)), Exp(Re(z))*Sin(Im(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("a0d93c"),
+    Formula(Equal(Arg(Exp(z)), Im(z))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
+
+
+
+index_Exp = ("Exp", "Exponential function",
+    [
+        ("Particular values", ["27ca8d","9a944c","54aaf1","a90f35"]),
+        ("Functional equations and connection formulas", ["812707","e51ec3","2f4f74","77d6bf","97ba8d","1fa6b7","1568e1", "e103e7"]),
+        ("Analytic properties", ["0901a1","be4b28","184c11","b62d05","bceb84"]),
+        ("Complex parts", ["1b3014","caf706","b7d62b","e2fac7","a0d93c","52d827"]),
+        ("Taylor series", ["1635f5","bad502"]),
+        ("Integrals and derivatives", ["935b2f","96af56","4491b8"]),
+    ])
 
 make_entry(ID("da2fdb"),
     Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),
@@ -499,6 +651,7 @@ make_entry(ID("792f7b"),
 
 make_entry(ID("69348a"),
     Formula(Equal(RiemannZeta(Conjugate(s)), Conjugate(RiemannZeta(s)))),
+    Variables(s),
     Assumptions(And(Element(s, CC), Unequal(s, 1))))
 
 make_entry(ID("52c4ab"),
@@ -533,7 +686,8 @@ make_entry(ID("e6ff64"),
 
 index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
     [("L-series", ["da2fdb"]),
-     ("Analytic properties", ["69348a","52c4ab","fdb94b","36a095","9a258f","2e1ff3","692e42","cbbf16","e6ff64"]),
+     ("Analytic properties", ["52c4ab","fdb94b","36a095","9a258f","2e1ff3","692e42","cbbf16","e6ff64"]),
+     ("Complex parts", ["69348a"]),
      ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
      ("Functional equation", ["9ee8bc"]),
      ("Bounds and inequalities", ["809bc0","3a5eb6"]),
@@ -978,6 +1132,7 @@ for entry in all_entry_objects:
     EntryPage(entry.id).write()
 
 
+count_Exp = IndexPage(*index_Exp).write()
 count_RiemannZeta = IndexPage(*index_RiemannZeta).write()
 count_DedekindEta = IndexPage(*index_DedekindEta).write()
 count_PartitionsP = IndexPage(*index_PartitionsP).write()
@@ -988,6 +1143,7 @@ frontpage.start()
 frontpage.entry("9ee8bc")
 frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="Exp.html">Exponential function</a> &nbsp;(%i total entries)</li>""" % count_Exp)
 frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
 frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
 frontpage.fp.write("""<li><a href="PartitionsP.html">Integer partition function</a> &nbsp;(%i total entries)</li>""" % count_PartitionsP)
