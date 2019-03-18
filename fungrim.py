@@ -153,6 +153,7 @@ class Expr(object):
         if self is Cos: return "\\cos"
         if self is Cosh: return "\\cosh"
         if self is Exp: return "\\exp"
+        if self is Log: return "\\log"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
@@ -441,6 +442,7 @@ describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
 describe(Exp, Exp(z), [Element(z, CC)], CC, "Exponential function")
+describe(Log, Log(z), [Element(z, SetMinus(CC, Set(0)))], CC, "Natural logarithm")
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
 describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqual(0)))], CC, "Gamma function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
@@ -505,11 +507,6 @@ make_entry(ID("1fa6b7"),
     Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z)),
     Variables(z, n),
     Assumptions(And(Element(a, CC), Element(n, ZZ)))))
-
-make_entry(ID("52d827"),
-    Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
-    Variables(z),
-    Assumptions(Element(z, CC)))
 
 make_entry(ID("0901a1"),
     Formula(Equal(Poles(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
@@ -588,7 +585,10 @@ make_entry(ID("a0d93c"),
     Variables(z),
     Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
 
-
+make_entry(ID("52d827"),
+    Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
 
 index_Exp = ("Exp", "Exponential function",
     [
@@ -599,6 +599,104 @@ index_Exp = ("Exp", "Exponential function",
         ("Taylor series", ["1635f5","bad502"]),
         ("Integrals and derivatives", ["935b2f","96af56","4491b8"]),
     ])
+
+
+make_entry(ID("07731b"),
+    Formula(Equal(Log(1), 0)))
+
+make_entry(ID("699c83"),
+    Formula(Equal(Log(ConstE), 1)))
+
+make_entry(ID("c331da"),
+    Formula(Equal(Log(ConstI), ConstPi*ConstI/2)))
+
+make_entry(ID("2f1f7b"),
+    Formula(Equal(Log(-1), ConstPi*ConstI)))
+
+make_entry(ID("c464e3"),
+    Formula(Equal(Poles(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("ddc8a1"),
+    Formula(Equal(EssentialSingularities(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("940c48"),
+    Formula(Equal(BranchPoints(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity, 0))))
+
+Log_branch_cut = OpenClosedInterval(-Infinity, 0)
+
+make_entry(ID("b5ded1"),
+    Formula(Equal(BranchCuts(Log(z), z, CC), Set(Log_branch_cut))))
+
+make_entry(ID("1d447b"),
+    Formula(Equal(Zeros(Log(z), z, CC), Set(1))))
+
+make_entry(ID("13895b"),
+    Formula(Equal(Log(Conjugate(z)), Conjugate(Log(z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Log_branch_cut))))
+
+make_entry(ID("099b19"),
+    Formula(Equal(Re(Log(z)), Log(Abs(z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("fbfb81"),
+    Formula(Equal(Im(Log(z)), Arg(z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("dcc1e5"),
+    Formula(Equal(Abs(Log(z)), Sqrt(Log(Abs(z))**2 + Arg(z)**2))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("4986ed"),
+    Formula(LessEqual(Abs(Log(x)), x-1)),
+    Variables(x),
+    Assumptions(Element(x, OpenInterval(0,Infinity))))
+
+make_entry(ID("792c76"),
+    Formula(LessEqual(Abs(Log(z)), Abs(Log(Abs(z))) + ConstPi)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("d87f6e"),
+    Formula(Equal(Exp(Log(z)), z)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("4c1e1e"),
+    Formula(Equal(Log(Exp(z)), z)),
+    Variables(z),
+    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-ConstPi, ConstPi)))))
+
+make_entry(ID("c43533"),
+    Formula(Equal(Log(z), Log(Abs(z)) + Arg(z)*ConstI)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("f67fa2"),
+    Formula(Equal(Log(c*z), Log(c) + Log(z))),
+    Variables(c, z),
+    Assumptions(And(Element(c, OpenInterval(0, Infinity)), Element(z, SetMinus(CC, Set(0))))))
+
+make_entry(ID("0ba9b2"),
+    Formula(Equal(Log(z), Integral(1/t, Tuple(t, 1, z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Log_branch_cut))))
+
+
+index_Log = ("Log", "Natural logarithm",
+    [
+        ("Particular values", ["07731b","699c83","c331da","2f1f7b"]),
+        ("Functional equations and connection formulas", ["d87f6e","4c1e1e","c43533","f67fa2"]),
+        ("Analytic properties", ["c464e3","ddc8a1","940c48","b5ded1","1d447b"]),
+        ("Complex parts", ["13895b","099b19","fbfb81","dcc1e5"]),
+        ("Bounds and inequalities", ["4986ed","792c76"]),
+        ("Integral representations", ["0ba9b2"]),
+    ])
+
+
 
 make_entry(ID("da2fdb"),
     Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),
@@ -1137,6 +1235,7 @@ for entry in all_entry_objects:
 
 
 count_Exp = IndexPage(*index_Exp).write()
+count_Log = IndexPage(*index_Log).write()
 count_RiemannZeta = IndexPage(*index_RiemannZeta).write()
 count_DedekindEta = IndexPage(*index_DedekindEta).write()
 count_PartitionsP = IndexPage(*index_PartitionsP).write()
@@ -1148,6 +1247,7 @@ frontpage.entry("9ee8bc")
 frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="Exp.html">Exponential function</a> &nbsp;(%i total entries)</li>""" % count_Exp)
+frontpage.fp.write("""<li><a href="Log.html">Natural logarithm</a> &nbsp;(%i total entries)</li>""" % count_Log)
 frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
 frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
 frontpage.fp.write("""<li><a href="PartitionsP.html">Integer partition function</a> &nbsp;(%i total entries)</li>""" % count_PartitionsP)
