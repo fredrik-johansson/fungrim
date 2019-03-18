@@ -696,6 +696,96 @@ index_Log = ("Log", "Natural logarithm",
         ("Integral representations", ["0ba9b2"]),
     ])
 
+GammaFunction_domain = SetMinus(CC, ZZLessEqual(0))
+GammaFunction_sub1_domain = SetMinus(CC, ZZLessEqual(1))
+
+make_entry(ID("f1d31a"),
+    Formula(Equal(GammaFunction(n), Factorial(n-1))),
+    Variables(n),
+    Assumptions(Element(n, GammaFunction_domain)))
+
+make_entry(ID("e68d11"),
+    Formula(Equal(GammaFunction(1), 1)))
+
+make_entry(ID("19d480"),
+    Formula(Equal(GammaFunction(2), 1)))
+
+make_entry(ID("f826a6"),
+    Formula(Equal(GammaFunction(Div(1,2)), Sqrt(ConstPi))))
+
+make_entry(ID("48ac55"),
+    Formula(Equal(GammaFunction(Div(3,2)), Sqrt(ConstPi)/2)))
+
+make_entry(ID("78f1f4"),
+    Formula(Equal(GammaFunction(z+1), z * GammaFunction(z))),
+    Variables(z),
+    Assumptions(Element(z, GammaFunction_domain)))
+
+make_entry(ID("639d91"),
+    Formula(Equal(GammaFunction(z), (z-1) * GammaFunction(z-1))),
+    Variables(z),
+    Assumptions(Element(z, GammaFunction_sub1_domain)))
+
+make_entry(ID("14af98"),
+    Formula(Equal(GammaFunction(z-1), GammaFunction(z) / (z-1))),
+    Variables(z),
+    Assumptions(Element(z, GammaFunction_sub1_domain)))
+
+make_entry(ID("56d710"),
+    Formula(Equal(GammaFunction(z+n), RisingFactorial(z, n) * GammaFunction(z))),
+    Variables(z, n),
+    Assumptions(And(Element(z, GammaFunction_domain), Element(n, ZZGreaterEqual(0)))))
+
+
+
+make_entry(ID("b510b6"),
+    Formula(Equal(GammaFunction(z), (ConstPi/Sin(ConstPi*z)) * (1/GammaFunction(1-z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, ZZ))))
+
+make_entry(ID("a787eb"),
+    Formula(Equal(GammaFunction(z) * GammaFunction(z+Div(1,2)), 2**(1-2*z) * Sqrt(ConstPi) * GammaFunction(2*z))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), NotElement(2*z, ZZLessEqual(0)))))
+
+make_entry(ID("90a1e1"),
+    Formula(Equal(Product(GammaFunction(z+Div(k,m)), Tuple(k, 0, m-1)), (2*pi)**((m-1)/2) * m**(Div(1,2)-m*z) * Gamma(m*z))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), Element(m, ZZGreaterEqual(1)), NotElement(m*z, ZZLessEqual(0)))))
+
+make_entry(ID("4e4e0f"),
+    Formula(Equal(GammaFunction(z), Integral(t**(z-1) * Exp(-t), Tuple(t, 0, Infinity)))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
+
+make_entry(ID("2870f0"),
+    Formula(Equal(Poles(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), ZZLessEqual(0))))
+
+make_entry(ID("34d6ae"),
+    Formula(Equal(EssentialSingularities(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))
+
+make_entry(ID("d086bd"),
+    Formula(Equal(BranchPoints(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("9a44c5"),
+    Formula(Equal(BranchCuts(GammaFunction(z), z, CC), Set())))
+
+make_entry(ID("a76328"),
+    Formula(Equal(Zeros(GammaFunction(z), z, CC), Set())))
+
+make_entry(ID("d7d2a0"),
+    Formula(Equal(GammaFunction(Conjugate(z)), Conjugate(GammaFunction(z)))),
+    Variables(z),
+    Assumptions(Element(z, GammaFunction_domain)))
+
+index_GammaFunction = ("GammaFunction", "Gamma function",
+    [
+        ("Particular values", ["f1d31a","e68d11","19d480","f826a6","48ac55"]),
+        ("Functional equations", ["78f1f4","639d91","14af98","56d710","b510b6","a787eb","90a1e1"]),
+        ("Integral representations", ["4e4e0f"]),
+        ("Analytic properties", ["2870f0","34d6ae","d086bd","9a44c5","a76328"]),
+        ("Complex parts", ["d7d2a0"]),
+    ])
 
 
 make_entry(ID("da2fdb"),
@@ -1236,6 +1326,7 @@ for entry in all_entry_objects:
 
 count_Exp = IndexPage(*index_Exp).write()
 count_Log = IndexPage(*index_Log).write()
+count_GammaFunction = IndexPage(*index_GammaFunction).write()
 count_RiemannZeta = IndexPage(*index_RiemannZeta).write()
 count_DedekindEta = IndexPage(*index_DedekindEta).write()
 count_PartitionsP = IndexPage(*index_PartitionsP).write()
@@ -1248,6 +1339,7 @@ frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="Exp.html">Exponential function</a> &nbsp;(%i total entries)</li>""" % count_Exp)
 frontpage.fp.write("""<li><a href="Log.html">Natural logarithm</a> &nbsp;(%i total entries)</li>""" % count_Log)
+frontpage.fp.write("""<li><a href="GammaFunction.html">Gamma function</a> &nbsp;(%i total entries)</li>""" % count_GammaFunction)
 frontpage.fp.write("""<li><a href="RiemannZeta.html">Riemann zeta function</a> &nbsp;(%i total entries)</li>""" % count_RiemannZeta)
 frontpage.fp.write("""<li><a href="DedekindEta.html">Dedekind eta function</a> &nbsp;(%i total entries)</li>""" % count_DedekindEta)
 frontpage.fp.write("""<li><a href="PartitionsP.html">Integer partition function</a> &nbsp;(%i total entries)</li>""" % count_PartitionsP)
