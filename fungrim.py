@@ -569,7 +569,7 @@ make_entry(ID("1b3014"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("caf706"),
-    Formula(Equal(Sign(Exp(z)), Exp(Im(z)))),
+    Formula(Equal(Sign(Exp(z)), Exp(Im(z)*ConstI))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -1043,7 +1043,11 @@ class EntryObject:
         fp.write("</div>\n")
 
 all_entry_objects = [EntryObject(entry) for entry in all_entries]
-entries_dict = {entry.id:entry for entry in all_entry_objects}
+entries_dict = {}
+for entry in all_entry_objects:
+    if entry.id in entries_dict:
+        raise ValueError("duplicated ID %s" % entry.id)
+    entries_dict[entry.id] = entry
 
 class Webpage:
 
@@ -1154,6 +1158,7 @@ frontpage.fp.write("""<li><a href="definitions.html">All symbol definitions</a> 
 frontpage.fp.write("""</ul>""")
 frontpage.end()
 
+print("The grimoire was built successfully!")
 
 try:
     with open("build/katex_cache.pickle", "wb") as fp:
