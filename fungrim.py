@@ -1494,7 +1494,7 @@ class EntryPage(Webpage):
     def __init__(self, id):
         self.id = id
         self.filepath = "build/html/entry/%s.html" % self.id
-        self.title = "Entry %s"
+        self.title = "Entry %s - Fungrim" % self.id
 
     def entry(self, id):
         entries_dict[id].write_html(self.fp, single=True)
