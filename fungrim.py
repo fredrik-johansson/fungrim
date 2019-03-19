@@ -1002,6 +1002,26 @@ make_entry(ID("792f7b"),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
 
+make_entry(ID("d31b04"),
+    Formula(LessEqual(Abs(RiemannZeta(s) -
+        Parenthesis(Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
+            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))))),
+        (4 * Abs(RisingFactorial(s, 2*M)) / (2*ConstPi)**(2*M)) * (N**(-Parenthesis(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
+    Variables(s, N, M),
+    References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
+        """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
+
+make_entry(ID("e37535"),
+    Formula(Where(
+        LessEqual(Abs((1-2**(1-s))*RiemannZeta(s) - Div(1,d(n)) * Sum(((-1)**k*(d(n)-d(k)))/(k+1)**s, Tuple(k, 0, n-1))),
+            (3*(1 + 2*Abs(Im(s)))/(3+Sqrt(8))**n) * Exp(Abs(Im(s))*ConstPi/2)),
+            Equal(d(k), n*Sum(Factorial(n+i-1)*4**i/(Factorial(n-i)*Factorial(2*i)), Tuple(i, 0, k))))),
+    Variables(s, n),
+    Assumptions(And(Element(s, CC), GreaterEqual(Re(s), Div(1,2)), Unequal(s, 1), Element(n, ZZGreaterEqual(1)))),
+    References("P. Borwein. An efficient algorithm for the Riemann zeta function. Canadian Mathematical Society Conference Proceedings, vol. 27, pp. 29-34. 2000.")
+    )
+
 make_entry(ID("69348a"),
     Formula(Equal(RiemannZeta(Conjugate(s)), Conjugate(RiemannZeta(s)))),
     Variables(s),
@@ -1052,7 +1072,9 @@ index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
      ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
      ("Functional equation", ["9ee8bc"]),
      ("Bounds and inequalities", ["809bc0","3a5eb6"]),
-     ("Euler-Maclaurin formula", ["792f7b"])])
+     ("Euler-Maclaurin formula", ["792f7b"]),
+     ("Approximations", ["d31b04","e37535"]),
+    ])
 
 
 make_entry(ID("2e7fdb"),
