@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+int_types = (int, type(1<<128))
+
 class Expr(object):
 
     def __new__(self, arg=None, symbol_name=None):
@@ -14,7 +16,7 @@ class Expr(object):
             self._symbol = symbol_name
         elif isinstance(arg, str):
             self._text = arg
-        elif isinstance(arg, int):
+        elif isinstance(arg, int_types):
             self._integer = arg
         return self
 
@@ -141,6 +143,7 @@ class Expr(object):
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
+        if self is DigammaFunction: return "\\psi"
         if self is DedekindEta: return "\\eta"
         if self is DedekindEtaEpsilon: return "\\varepsilon"
         if self is DedekindSum: return "s"
@@ -171,6 +174,9 @@ class Expr(object):
                 return "\\operatorname{" + self._symbol + "}"
             if self._integer is not None:
                 return str(self._integer)
+            if self._text is not None:
+                return "\\text{``" + str(self._text) + "''}"
+
         head = self._args[0]
         args = self._args[1:]
 
@@ -207,6 +213,9 @@ class Expr(object):
         if head is Add:
             return " + ".join(argstr)
         if head is Sub:
+            for i in range(1, len(args)):
+                if not args[i].is_atom() and args[i]._args[0] in (Neg, Sub):
+                    argstr[i] = "\\left(" + argstr[i] + "\\right)"
             return " - ".join(argstr)
         if head is Mul:
             for i in range(len(args)):
@@ -237,6 +246,13 @@ class Expr(object):
                 return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
             if head is Product:
                 return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
+        if head is Limit:
+            assert len(args) == 3
+            formula, var, point = args
+            var = var.latex()
+            point = point.latex(in_small=True)
+            formula = formula.latex()
+            return "\\lim_{%s \\to %s} \\left[ %s \\right]" % (var, point, formula)
         if head is Derivative:
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
@@ -279,6 +295,9 @@ class Expr(object):
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
+        if head is HarmonicNumber:
+            assert len(args) == 1
+            return "H_{" + argstr[0] + "}"
         if head is RiemannZetaZero:
             assert len(args) == 1
             return "\\rho_{" + argstr[0] + "}"
@@ -322,6 +341,8 @@ class Expr(object):
         if head is Not:
             assert len(args) == 1
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
+        if head is Implies:
+            return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
         if head is KroneckerDelta:
             assert len(args) == 2
             xstr = args[0].latex(in_small=True)
@@ -355,6 +376,9 @@ class Expr(object):
         if head is OpenClosedInterval:
             assert len(args) == 2
             return "\\left(%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+        if head is RealBall:
+            assert len(args) == 2
+            return "\\left[%s \\pm %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
         if head is DomainCodomain:
             assert len(args) == 2
             #return "%s \\rightarrow %s" % (argstr[0], argstr[1])
@@ -363,7 +387,16 @@ class Expr(object):
             return "\\overline{%s}" % argstr[0]
         if head is SetBuilder:
             assert len(args) == 2
-            return "\\{ %s : %s \\}" % tuple(argstr)
+            return "\\left\\{ %s : %s \\right\\}" % tuple(argstr)
+        if head is Decimal:
+            assert len(args) == 1
+            text = args[0]._text
+            if "e" in text:
+                mant, expo = text.split("e")
+                expo.lstrip("+")
+                text = mant + " \\cdot 10^{" + expo + "}"
+            return text
+
         fstr = self._args[0].latex()
         if in_small:
             spacer = ""
@@ -390,11 +423,13 @@ Unknown Undefined
 Where
 Set List Tuple
 SetBuilder
-Union Intersection SetMinus Not And Or
+Union Intersection SetMinus Not And Or Equivalent Implies
 Element NotElement Subset SubsetEqual
 ZZ QQ RR CC
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
+RealBall
+Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
@@ -409,7 +444,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
-Binomial Factorial GammaFunction LogGamma RisingFactorial
+Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
@@ -434,8 +469,6 @@ descriptions = {}
 def describe(symbol, example, domain, codomain, description):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, domain, codomain, description)
-
-
 
 describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
@@ -465,6 +498,53 @@ all_entries = []
 def make_entry(*args):
     entry = Entry(*args)
     all_entries.append(entry)
+
+make_entry(ID("e876e8"),
+    Formula(Element(ConstGamma,
+        RealBall(Decimal("0.57721566490153286060651209008240243104215933593992"), Decimal("3.60e-51")))))
+
+make_entry(ID("4644c0"),
+    Formula(Equal(ConstGamma, Limit(Sum(1/k, Tuple(k, 1, n)) - Log(n), n, Infinity))))
+
+make_entry(ID("28bf9a"),
+    #Formula(Implies(And(Equal(ConstGamma, p/q), Element(p, ZZ), Element(q, ZZGreaterEqual(1))), Greater(q, Pow(10,242080)))))
+    Formula(NotElement(ConstGamma, SetBuilder(p/q, And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
+    References("J. Havil (2003): Exploring Euler's Constant. Princeton University Press. Page 97."))
+
+make_entry(ID("a1f1ec"),
+    Formula(Equal(ConstGamma, Limit(RiemannZeta(s) - 1/(s-1), s, 1))))
+
+make_entry(ID("cf3977"),
+    Formula(Equal(ConstGamma, -Derivative(Gamma(z), Tuple(z, 1, 1)))))
+
+make_entry(ID("d17d0b"),
+    Formula(Equal(ConstGamma, -DigammaFunction(1))))
+
+make_entry(ID("818008"),
+    Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, Tuple(k, 2, Infinity)))))
+
+make_entry(ID("39fe5f"),
+    Formula(Equal(ConstGamma, -Integral(Exp(-x)*Log(x), Tuple(x, 0, Infinity)))))
+
+make_entry(ID("a1ca3e"),
+    Formula(Equal(ConstGamma, -Integral(Log(Log(1/x)), Tuple(x, 0, 1)))))
+
+make_entry(ID("014c4e"),
+    Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
+        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(N, ZZ), GreaterEqual(N, Div(497063,100000)*n + 1))),
+    References("R. Brent and F. Johansson. A bound for the error term in the Brent-McMillan algorithm. Mathematics of Computation 2015, 84(295). DOI: 10.1090/S0025-5718-2015-02931-7"))
+
+index_ConstGamma = ("ConstGamma", "The constant gamma (0.577...)",
+    [
+        ("Numerical value", ["e876e8","28bf9a"]),
+        ("Limit representations", ["4644c0"]),
+        ("Special function representations", ["a1f1ec","cf3977","d17d0b","818008"]),
+        ("Integral representations", ["39fe5f","a1ca3e"]),
+        ("Approximations", ["014c4e"]),
+    ])
 
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))
@@ -1324,6 +1404,7 @@ for entry in all_entry_objects:
     EntryPage(entry.id).write()
 
 
+count_ConstGamma = IndexPage(*index_ConstGamma).write()
 count_Exp = IndexPage(*index_Exp).write()
 count_Log = IndexPage(*index_Log).write()
 count_GammaFunction = IndexPage(*index_GammaFunction).write()
@@ -1337,6 +1418,7 @@ frontpage.start()
 frontpage.entry("9ee8bc")
 frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="ConstGamma.html">The constant gamma (0.577...)</a> &nbsp;(%i total entries)</li>""" % count_ConstGamma)
 frontpage.fp.write("""<li><a href="Exp.html">Exponential function</a> &nbsp;(%i total entries)</li>""" % count_Exp)
 frontpage.fp.write("""<li><a href="Log.html">Natural logarithm</a> &nbsp;(%i total entries)</li>""" % count_Log)
 frontpage.fp.write("""<li><a href="GammaFunction.html">Gamma function</a> &nbsp;(%i total entries)</li>""" % count_GammaFunction)
