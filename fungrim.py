@@ -157,6 +157,8 @@ class Expr(object):
         if self is Cosh: return "\\cosh"
         if self is Exp: return "\\exp"
         if self is Log: return "\\log"
+        if self is Atan: return "\\operatorname{atan}"
+        if self is Acot: return "\\operatorname{acot}"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
@@ -230,7 +232,7 @@ class Expr(object):
             expo = args[1]
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
-            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] is Abs):
+            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial)):
                 return "{" + basestr + "}^{" + expostr + "}"
             else:
                 return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
@@ -320,6 +322,9 @@ class Expr(object):
         if head is RisingFactorial:
             assert len(args) == 2
             return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
+        if head is Binomial:
+            assert len(args) == 2
+            return "{" + argstr[0] + " \\choose " + argstr[1] + "}"
         if head is AsymptoticTo:
             assert len(argstr) == 4
             return "%s \\sim %s, \; %s \\to %s" % tuple(argstr)
@@ -507,6 +512,62 @@ all_entries = []
 def make_entry(*args):
     entry = Entry(*args)
     all_entries.append(entry)
+
+make_entry(ID("6505a9"),
+    Formula(Element(ConstPi,
+        RealBall(Decimal("3.1415926535897932384626433832795028841971693993751"), Decimal("5.83e-51")))))
+
+make_entry(ID("0c838a"),
+    Formula(NotElement(ConstPi, QQ)))
+
+make_entry(ID("0c9939"),
+    Formula(Equal(ConstPi, 4*Atan(1))))
+
+make_entry(ID("f8d280"),
+    Formula(Equal(ConstPi, 16*Acot(5) - 4*Acot(239))))
+
+make_entry(ID("590136"),
+    Formula(Equal(ConstPi, -(ConstI * Log(-1)))))
+
+make_entry(ID("464961"),
+    Formula(Equal(ConstPi, 2 * Integral(Sqrt(1-x**2), Tuple(x, -1, 1)))))
+
+make_entry(ID("04cd99"),
+    Formula(Equal(ConstPi, Integral(1/(x**2+1), Tuple(x, -Infinity, Infinity)))))
+
+make_entry(ID("dae4a7"),
+    Formula(Equal(ConstPi, Integral(Exp(-x**2), Tuple(x, -Infinity, Infinity))**2)))
+
+make_entry(ID("f617c0"),
+    Formula(Equal(ConstPi, 4*Sum((-1)**k / (2*k+1), Tuple(k, 0, Infinity)))))
+
+make_entry(ID("fddfe6"),
+    Formula(Equal(ConstPi, Sum((1 / 16**k) * (4/(8*k+1)-2/(8*k+4)-1/(8*k+5)-1/(8*k+6)), Tuple(k, 0, Infinity)))))
+
+make_entry(ID("69fe63"),
+    Formula(Equal(ConstPi, 2*Product((4*k**2)/(4*k**2-1), Tuple(k, 1, Infinity)))))
+
+make_entry(ID("e1e106"),
+    Formula(Equal(ConstPi, Limit(16**k/(k*Binomial(2*k,k)**2), k, Infinity))))
+
+make_entry(ID("4c0698"),
+    Formula(Element(1/ConstPi, RealBall(
+        Parenthesis(12*Sum((-1)**k*Factorial(6*k)*(13591409+545140134*k)/(Factorial(3*k)*Factorial(k)**3*640320**(3*k+Div(3,2))),
+            Tuple(k, 0, N-1))), Parenthesis(Div(1,151931373056000**N))))),
+    Assumptions(Element(N, ZZGreaterEqual(0))))
+
+index_ConstPi = ("ConstPi", "The constant pi (3.14...)",
+    [
+        ("Numerical value", ["6505a9","0c838a"]),
+        ("Elementary function representations", ["0c9939","f8d280","590136"]),
+        ("Integral representations", ["464961","04cd99","dae4a7"]),
+        ("Series representations", ["f617c0","fddfe6"]),
+        ("Product representations", ["69fe63"]),
+        ("Limit representations", ["e1e106"]),
+        ("Approximations", ["4c0698"]),
+    ])
+
+
 
 make_entry(ID("e876e8"),
     Formula(Element(ConstGamma,
@@ -1224,7 +1285,7 @@ html_start = """
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fungrim: the Mathematical Functions Grimoire</title>
+<title>%%PAGETITLE%%</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <style type="text/css">
 body { margin:0.5em; font-family: roboto; background-color: #fafafa; color: black; }
@@ -1383,7 +1444,7 @@ class Webpage:
 
     def start(self):
         self.fp = open(self.filepath, "w")
-        self.fp.write(html_start)
+        self.fp.write(html_start.replace("%%PAGETITLE%%", self.title))
 
     def entry(self, id):
         entries_dict[id].write_html(self.fp, single=False)
@@ -1399,6 +1460,7 @@ class FrontPage(Webpage):
 
     def __init__(self):
         self.filepath = "build/html/index.html"
+        self.title = "Fungrim: the Mathematical Functions Grimoire"
 
     def start(self):
         Webpage.start(self)
@@ -1409,6 +1471,7 @@ class EntryPage(Webpage):
     def __init__(self, id):
         self.id = id
         self.filepath = "build/html/entry/%s.html" % self.id
+        self.title = "Entry %s"
 
     def entry(self, id):
         entries_dict[id].write_html(self.fp, single=True)
@@ -1451,6 +1514,7 @@ class DefinitionsPage(Webpage):
     def __init__(self):
         self.filepath = "build/html/definitions.html"
         self.title = "All symbol definitions"
+        self.pagetitle = "All symbol definitions"
 
     def start(self):
         Webpage.start(self)
@@ -1466,6 +1530,7 @@ for entry in all_entry_objects:
     EntryPage(entry.id).write()
 
 
+count_ConstPi = IndexPage(*index_ConstPi).write()
 count_ConstGamma = IndexPage(*index_ConstGamma).write()
 count_Exp = IndexPage(*index_Exp).write()
 count_Log = IndexPage(*index_Log).write()
@@ -1480,6 +1545,7 @@ frontpage.start()
 frontpage.entry("9ee8bc")
 frontpage.section("Browse by function")
 frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="ConstPi.html">The constant pi (3.14...)</a> &nbsp;(%i total entries)</li>""" % count_ConstPi)
 frontpage.fp.write("""<li><a href="ConstGamma.html">The constant gamma (0.577...)</a> &nbsp;(%i total entries)</li>""" % count_ConstGamma)
 frontpage.fp.write("""<li><a href="Exp.html">Exponential function</a> &nbsp;(%i total entries)</li>""" % count_Exp)
 frontpage.fp.write("""<li><a href="Log.html">Natural logarithm</a> &nbsp;(%i total entries)</li>""" % count_Log)
