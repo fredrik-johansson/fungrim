@@ -164,6 +164,7 @@ class Expr(object):
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
         if self is CC: return "\\mathbb{C}"
+        if self is HH: return "\\mathbb{H}"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -396,7 +397,9 @@ class Expr(object):
                 expo.lstrip("+")
                 text = mant + " \\cdot 10^{" + expo + "}"
             return text
-
+        if head is Parenthesis:
+            assert len(args) == 1
+            return "\\left(" + args[0].latex() + "\\right)"
         fstr = self._args[0].latex()
         if in_small:
             spacer = ""
@@ -419,13 +422,14 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
+Parenthesis
 Unknown Undefined
 Where
 Set List Tuple
 SetBuilder
 Union Intersection SetMinus Not And Or Equivalent Implies
 Element NotElement Subset SubsetEqual
-ZZ QQ RR CC
+ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
@@ -435,7 +439,7 @@ Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 Sum Product Limit Integral Derivative
 AsymptoticTo
-Poles BranchPoints BranchCuts EssentialSingularities Zeros
+HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
@@ -470,6 +474,11 @@ def describe(symbol, example, domain, codomain, description):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, domain, codomain, description)
 
+describe(ZZ, ZZ, [], None, "Integers")
+describe(QQ, QQ, [], None, "Rational numbers")
+describe(RR, RR, [], None, "Real numbers")
+describe(CC, CC, [], None, "Complex numbers")
+describe(HH, HH, [], None, "Upper complex half-plane")
 describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
@@ -530,7 +539,11 @@ make_entry(ID("a1ca3e"),
     Formula(Equal(ConstGamma, -Integral(Log(Log(1/x)), Tuple(x, 0, 1)))))
 
 make_entry(ID("014c4e"),
-    Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
+#    Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
+#        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+#                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+#                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
+    Formula(Where(Element(ConstGamma, RealBall(Parenthesis(S/I - T/I**2 - Log(n)), 24*Exp(-(8*n)))),
         Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
@@ -588,6 +601,9 @@ make_entry(ID("1fa6b7"),
     Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z)),
     Variables(z, n),
     Assumptions(And(Element(a, CC), Element(n, ZZ)))))
+
+make_entry(ID("28d158"),
+    Formula(Equal(HolomorphicDomain(Exp(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
 
 make_entry(ID("0901a1"),
     Formula(Equal(Poles(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
@@ -675,12 +691,14 @@ index_Exp = ("Exp", "Exponential function",
     [
         ("Particular values", ["27ca8d","9a944c","54aaf1","a90f35"]),
         ("Functional equations and connection formulas", ["812707","e51ec3","2f4f74","77d6bf","97ba8d","1fa6b7","1568e1", "e103e7"]),
-        ("Analytic properties", ["0901a1","be4b28","184c11","b62d05","bceb84"]),
+        ("Analytic properties", ["28d158","0901a1","be4b28","184c11","b62d05","bceb84"]),
         ("Complex parts", ["1b3014","caf706","b7d62b","e2fac7","a0d93c","52d827"]),
         ("Taylor series", ["1635f5","bad502"]),
         ("Integrals and derivatives", ["935b2f","96af56","4491b8"]),
     ])
 
+Log_branch_cut = OpenClosedInterval(-Infinity, 0)
+Log_holomorphic_domain = SetMinus(CC, Log_branch_cut)
 
 make_entry(ID("07731b"),
     Formula(Equal(Log(1), 0)))
@@ -694,6 +712,9 @@ make_entry(ID("c331da"),
 make_entry(ID("2f1f7b"),
     Formula(Equal(Log(-1), ConstPi*ConstI)))
 
+make_entry(ID("4538ba"),
+    Formula(Equal(HolomorphicDomain(Log(z), z, Union(CC, Set(UnsignedInfinity))), Log_holomorphic_domain)))
+
 make_entry(ID("c464e3"),
     Formula(Equal(Poles(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
 
@@ -702,8 +723,6 @@ make_entry(ID("ddc8a1"),
 
 make_entry(ID("940c48"),
     Formula(Equal(BranchPoints(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity, 0))))
-
-Log_branch_cut = OpenClosedInterval(-Infinity, 0)
 
 make_entry(ID("b5ded1"),
     Formula(Equal(BranchCuts(Log(z), z, CC), Set(Log_branch_cut))))
@@ -771,7 +790,7 @@ index_Log = ("Log", "Natural logarithm",
     [
         ("Particular values", ["07731b","699c83","c331da","2f1f7b"]),
         ("Functional equations and connection formulas", ["d87f6e","4c1e1e","c43533","f67fa2"]),
-        ("Analytic properties", ["c464e3","ddc8a1","940c48","b5ded1","1d447b"]),
+        ("Analytic properties", ["4538ba","c464e3","ddc8a1","940c48","b5ded1","1d447b"]),
         ("Complex parts", ["13895b","099b19","fbfb81","dcc1e5"]),
         ("Bounds and inequalities", ["4986ed","792c76"]),
         ("Integral representations", ["0ba9b2"]),
@@ -839,6 +858,9 @@ make_entry(ID("4e4e0f"),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
+make_entry(ID("798c5d"),
+    Formula(Equal(HolomorphicDomain(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), GammaFunction_domain)))
+
 make_entry(ID("2870f0"),
     Formula(Equal(Poles(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), ZZLessEqual(0))))
 
@@ -864,7 +886,7 @@ index_GammaFunction = ("GammaFunction", "Gamma function",
         ("Particular values", ["f1d31a","e68d11","19d480","f826a6","48ac55"]),
         ("Functional equations", ["78f1f4","639d91","14af98","56d710","b510b6","a787eb","90a1e1"]),
         ("Integral representations", ["4e4e0f"]),
-        ("Analytic properties", ["2870f0","34d6ae","d086bd","9a44c5","a76328"]),
+        ("Analytic properties", ["798c5d","2870f0","34d6ae","d086bd","9a44c5","a76328"]),
         ("Complex parts", ["d7d2a0"]),
     ])
 
@@ -923,6 +945,9 @@ make_entry(ID("69348a"),
     Variables(s),
     Assumptions(And(Element(s, CC), Unequal(s, 1))))
 
+make_entry(ID("8b5ddb"),
+    Formula(Equal(HolomorphicDomain(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), SetMinus(CC, Set(1)))))
+
 make_entry(ID("52c4ab"),
     Formula(Equal(Poles(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set(1))))
 
@@ -947,6 +972,11 @@ make_entry(ID("cbbf16"),
     Variables(n),
     Assumptions(And(Element(n, ZZ), Unequal(n, 0))))
 
+make_entry(ID("60c2ec"),
+    Formula(Equal(RiemannZetaZero(-n), Conjugate(RiemannZetaZero(n)))),
+    Variables(n),
+    Assumptions(And(Element(n, ZZ), Unequal(n, 0))))
+
 make_entry(ID("e6ff64"),
     Formula(Equal(Re(RiemannZetaZero(n)), Div(1,2))),
     Variables(n),
@@ -955,7 +985,7 @@ make_entry(ID("e6ff64"),
 
 index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
     [("L-series", ["da2fdb"]),
-     ("Analytic properties", ["52c4ab","fdb94b","36a095","9a258f","2e1ff3","692e42","cbbf16","e6ff64"]),
+     ("Analytic properties", ["8b5ddb","52c4ab","fdb94b","36a095","9a258f","2e1ff3","692e42","cbbf16","e6ff64","60c2ec"]),
      ("Complex parts", ["69348a"]),
      ("Special values", ["a01b6e","e84983","72ccda","51fd98"]),
      ("Functional equation", ["9ee8bc"]),
@@ -976,12 +1006,12 @@ make_entry(ID("8f10b0"),
 make_entry(ID("ff587a"),
     Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * EulerQSeries(Exp(2*ConstPi*ConstI*tau)))),
     Variables(tau),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("1dc520"),
     Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product((1 - Exp(2*ConstPi*ConstI*k*tau)), Tuple(k, 1, Infinity)))),
     Variables(tau),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("9b8c9f"),
     Formula(Equal(DedekindEta(ConstI), GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4)))))
@@ -992,23 +1022,28 @@ make_entry(ID("204acd"),
 make_entry(ID("1bae52"),
     Formula(Equal(DedekindEta(tau+1), Exp(ConstPi*ConstI/12) * DedekindEta(tau))),
     Variables(tau),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("acee1a"),
+    Formula(Equal(DedekindEta(tau+24), DedekindEta(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("3b806f"),
     Formula(Equal(DedekindEta(-(1/tau)), (-(ConstI*tau))**Div(1,2) * DedekindEta(tau))),
     Variables(tau),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0))))
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("29d9ab"),
     Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)) ** 24, (c*tau+d)**12 * DedekindEta(tau)**24)),
     Variables(tau,a,b,c,d),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0),
+    Assumptions(And(Element(tau, HH),
         Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1))))
 
 make_entry(ID("9f19c1"),
     Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)), DedekindEtaEpsilon(a,b,c,d) * (c*tau+d)**Div(1,2) * DedekindEta(tau))),
     Variables(tau,a,b,c,d),
-    Assumptions(And(Element(tau, CC), Greater(Im(tau), 0),
+    Assumptions(And(Element(tau, HH),
         Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Or(Greater(c, 0), And(Equal(c, 0), Equal(d, 1))))))
 
 make_entry(ID("f04e01"),
@@ -1026,10 +1061,26 @@ make_entry(ID("23961e"),
     Variables(n,k),
     Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
 
+make_entry(ID("e06d87"),
+    Formula(Equal(HolomorphicDomain(DedekindEta(tau), tau, HH), HH)))
+
+make_entry(ID("04f4a0"),
+    Formula(Equal(Poles(DedekindEta(tau), tau, Union(HH, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("f2e2c2"),
+    Formula(Equal(BranchPoints(DedekindEta(tau), tau, Union(HH, Set(UnsignedInfinity))), Set())))
+
+make_entry(ID("6d7668"),
+    Formula(Equal(BranchCuts(DedekindEta(tau), tau, HH), Set())))
+
+make_entry(ID("39fb36"),
+    Formula(Equal(Zeros(DedekindEta(tau), tau, HH), Set())))
+
 index_DedekindEta = ("DedekindEta", "Dedekind eta function",
     [("Fourier series (q-series)", ["1dc520","ff587a","2e7fdb","8f10b0"]),
      ("Special values", ["9b8c9f", "204acd"]),
-     ("Modular transformations", ["1bae52","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
+     ("Modular transformations", ["1bae52","acee1a","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
+     ("Analytic properties", ["e06d87","04f4a0","f2e2c2","6d7668","39fb36"]),
      ("Dedekind sums", ["23961e"])])
 
 make_entry(ID("cebe1b"),
@@ -1203,7 +1254,13 @@ function toggleVisible(id) {
 """
 
 html_end = """
-<div style="margin-bottom:2em"><p style="text-align:center">%%TIMESTAMP%%</p></div>
+<div style="margin:2em">
+<p style="text-align:center">Copyright (C) <a href="http://fredrikj.net">Fredrik Johansson</a> and <a href="https://github.com/fredrik-johansson/fungrim/graphs/contributors">contributors</a>.
+Fungrim is provided under the
+<a href="https://github.com/fredrik-johansson/fungrim/blob/master/LICENSE">MIT license</a>.
+The <a href="https://github.com/fredrik-johansson/fungrim">source code is on GitHub</a>.
+</p></div>
+<p style="text-align:center">%%TIMESTAMP%%</p></div>
 </body>
 </html>
 """
@@ -1237,7 +1294,10 @@ def write_definitions_table(fp, symbols, center=False):
             fp.write("""<td>%s</td>""" % katex(example.latex(), False))
             domstr = ",\, ".join(dom.latex() for dom in domain)
             fp.write("""<td>%s</td>""" % katex(domstr, False))
-            fp.write("""<td>%s</td>""" % katex(codomain.latex(), False))
+            if codomain is None:
+                fp.write("""<td></td>""")
+            else:
+                fp.write("""<td>%s</td>""" % katex(codomain.latex(), False))
             fp.write("""<td>%s</td></tr>""" % description)
     fp.write("""</table>""")
 
@@ -1245,7 +1305,7 @@ class EntryObject:
     def __init__(self, entry):
         self.entry = entry
         self.source = self.entry.str()
-        self.symbols = None
+        self.symbols = []
         self.formula = None
         self.assumptions = None
         self.variables = None
@@ -1266,6 +1326,7 @@ class EntryObject:
             self.symbols = self.formula.all_symbols()
         if self.assumptions is not None:
             self.assumptions_tex = self.assumptions.latex()
+            self.symbols += [s for s in self.assumptions.all_symbols() if s not in self.symbols]
 
     def write_html(self, fp, single=False):
         fp.write("""<div class="entry">""")
