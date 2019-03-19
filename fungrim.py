@@ -484,7 +484,7 @@ describe(QQ, QQ, [], None, "Rational numbers")
 describe(RR, RR, [], None, "Real numbers")
 describe(CC, CC, [], None, "Complex numbers")
 describe(HH, HH, [], None, "Upper complex half-plane")
-describe(ConstPi, ConstPi, [], RR, "The constant pi (3.141...)")
+describe(ConstPi, ConstPi, [], RR, "The constant pi (3.14...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
@@ -554,6 +554,7 @@ make_entry(ID("4c0698"),
     Formula(Element(1/ConstPi, RealBall(
         Parenthesis(12*Sum((-1)**k*Factorial(6*k)*(13591409+545140134*k)/(Factorial(3*k)*Factorial(k)**3*640320**(3*k+Div(3,2))),
             Tuple(k, 0, N-1))), Parenthesis(Div(1,151931373056000**N))))),
+    Variables(N),
     Assumptions(Element(N, ZZGreaterEqual(0))))
 
 index_ConstPi = ("ConstPi", "The constant pi (3.14...)",
