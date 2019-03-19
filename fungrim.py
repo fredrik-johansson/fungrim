@@ -813,7 +813,7 @@ make_entry(ID("dcc1e5"),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("4986ed"),
-    Formula(LessEqual(Abs(Log(x)), x-1)),
+    Formula(LessEqual(Log(x), x-1)),
     Variables(x),
     Assumptions(Element(x, OpenInterval(0,Infinity))))
 
