@@ -534,7 +534,8 @@ make_entry(ID("014c4e"),
         Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(N, ZZ), GreaterEqual(N, Div(497063,100000)*n + 1))),
+    Variables(n, N),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(N, ZZ), GreaterEqual(N, Div(497063,100000)*n + 1))),
     References("R. Brent and F. Johansson. A bound for the error term in the Brent-McMillan algorithm. Mathematics of Computation 2015, 84(295). DOI: 10.1090/S0025-5718-2015-02931-7"))
 
 index_ConstGamma = ("ConstGamma", "The constant gamma (0.577...)",
