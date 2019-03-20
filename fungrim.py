@@ -32,6 +32,12 @@ class Expr(object):
     def is_text(self):
         return self._text is not None
 
+    def head(self):
+        return self._args[0]
+
+    def args(self):
+        return self._args[1:]
+
     def __call__(self, *args):
         v = Expr()
         v._args = (self,) + tuple(Expr(arg) for arg in args)
@@ -412,6 +418,104 @@ class Expr(object):
             spacer = "\\!"
         s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
+
+    def html(self, display=False):
+        #if self.head() is Table:
+        #    return self.html_Table()
+        if self.head() is Formula:
+            return katex(self._args[1].latex())
+        if self.head() is References:
+            return self.html_References()
+        if self.head() is Assumptions:
+            return self.html_Assumptions()
+        return katex(self.latex(), display=display)
+
+    def html_Table(self):
+        pass
+
+    def html_References(self):
+        s = ""
+        s += """<div class="entrysubhead">References:</div>"""
+        s += "<ul>"
+        for ref in self._args[1:]:
+            s += "<li>%s</li>" % ref._text
+        s += "</ul>"
+        return s
+
+    def html_Assumptions(self):
+        s = ""
+        s += """<div class="entrysubhead">Assumptions:</div>"""
+        for arg in self.args():
+            s += arg.html(display=True)
+        s += "</ul>"
+        return s
+
+    def get_arg_with_head(self, head):
+        for arg in self.args():
+            if not arg.is_atom() and (arg.head() is head):
+                return arg
+        return None
+
+    def id(self):
+        id = self.get_arg_with_head(ID)
+        return id._args[1]._text
+
+    def entry_html(self, single=False):
+        id = self.id()
+        all_tex = []
+        s = ""
+        s += """<div class="entry">"""
+        if single:
+            s += """<div>"""
+        else:
+            s += """<div style="float:left; margin-top:0.5em;">"""
+            s += """<a href="entry/%s.html" style="margin-left:3pt">%s</a><br/>""" % (id, id)
+            s += """<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
+            s += """</div>"""
+            s += """<div style="margin-left:50pt">"""
+
+        args = self.args()
+        args = [arg for arg in args if arg.head() not in (ID, Variables)]
+
+        # First item is always visible
+        s += args[0].html(display=True)
+        s += "</div>"
+
+        # Remaining items may be hidden beneath the fold
+        if single:
+            s += """<div id="%s:info" style="padding: 1em; clear:both">""" % id
+        else:
+            s += """<div id="%s:info" style="display:none; padding: 1em; clear:both">""" % id
+
+        # Remaining items
+        for arg in args[1:]:
+            s += arg.html(display=True)
+            s += "\n\n"
+
+        # Generate TeX listing
+        for arg in self.args():
+            if arg.head() in (Formula, Assumptions):
+                all_tex.append(arg.args()[0].latex())
+
+        s += """<div class="entrysubhead">TeX:</div>"""
+        s += "<pre>"
+        s += "\n\n".join(all_tex)
+        s += "</pre>"
+
+        # Generate symbol table
+        symbols = self.all_symbols()
+        s += """<div class="entrysubhead">Definitions:</div>"""
+        s += definitions_table(symbols, center=True)
+
+        s += """<div class="entrysubhead">Source code for this entry:</div>"""
+        s += "<pre>"
+        s += self.str()
+        s += "</pre>"
+
+        s += "</div></div>\n"
+
+        return s
+
 
 
 def inject_builtin(string):
@@ -1365,103 +1469,36 @@ index_text = index_text.replace("%%NUMTOTAL%%", str(len(all_entries)))
 def makeurl(id):
     return "fungrim/entry/%s" % id
 
-def write_definitions_table(fp, symbols, center=False):
+def definitions_table(symbols, center=False):
+    s = ""
     if center:
-        fp.write("""<table style="margin: 0 auto">""")
+        s += """<table style="margin: 0 auto">"""
     else:
-        fp.write("""<table>""")
-    fp.write("""<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Domain</th> <th>Codomain</th> <th>Description</th></tr>""")
+        s += """<table>"""
+    s += """<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Domain</th> <th>Codomain</th> <th>Description</th></tr>"""
     for symbol in symbols:
         if symbol in descriptions:
             example, domain, codomain, description = descriptions[symbol]
-            fp.write("""<tr><td><tt>%s</tt>""" % symbol.str())
-            fp.write("""<td>%s</td>""" % katex(example.latex(), False))
+            s += """<tr><td><tt>%s</tt>""" % symbol.str()
+            s += """<td>%s</td>""" % katex(example.latex(), False)
             domstr = ",\, ".join(dom.latex() for dom in domain)
-            fp.write("""<td>%s</td>""" % katex(domstr, False))
+            s += """<td>%s</td>""" % katex(domstr, False)
             if codomain is None:
-                fp.write("""<td></td>""")
+                s += """<td></td>"""
             else:
-                fp.write("""<td>%s</td>""" % katex(codomain.latex(), False))
-            fp.write("""<td>%s</td></tr>""" % description)
-    fp.write("""</table>""")
+                s += """<td>%s</td>""" % katex(codomain.latex(), False)
+            s += """<td>%s</td></tr>""" % description
+    s += """</table>"""
+    return s
 
-class EntryObject:
-    def __init__(self, entry):
-        self.entry = entry
-        self.source = self.entry.str()
-        self.symbols = []
-        self.formula = None
-        self.assumptions = None
-        self.variables = None
-        self.references = None
-        for arg in entry._args[1:]:
-            if arg._args[0] is ID:
-                self.id = arg._args[1]._text
-            if arg._args[0] is Formula:
-                self.formula = arg._args[1]
-            if arg._args[0] is Assumptions:
-                self.assumptions = arg._args[1]
-            if arg._args[0] is Variables:
-                self.variables = arg._args[1]
-            if arg._args[0] is References:
-                self.references = arg._args[1:]
-        if self.formula is not None:
-            self.formula_tex = self.formula.latex()
-            self.symbols = self.formula.all_symbols()
-        if self.assumptions is not None:
-            self.assumptions_tex = self.assumptions.latex()
-            self.symbols += [s for s in self.assumptions.all_symbols() if s not in self.symbols]
+def write_definitions_table(fp, symbols, center=False):
+    fp.write(definitions_table(symbols, center))
 
-    def write_html(self, fp, single=False):
-        fp.write("""<div class="entry">""")
-        if single:
-            fp.write("""<div>""")
-            fp.write(katex(self.formula_tex))
-            fp.write("""</div>""")
-        else:
-            fp.write("""<div style="float:left; margin-top:0.5em;">""")
-            fp.write("""<a href="entry/%s.html" style="margin-left:3pt">%s</a><br/>""" % (self.id, self.id))
-            fp.write("""<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % self.id)
-            fp.write("""</div>""")
-            fp.write("""<div style="margin-left:50pt">""")
-            fp.write(katex(self.formula_tex))
-            fp.write("""</div>""")
-        if single:
-            fp.write('<div id="%s:info" style="padding: 1em; clear:both">' % self.id)
-        else:
-            fp.write('<div id="%s:info" style="display:none; padding: 1em; clear:both">' % self.id)
-        if self.assumptions is not None:
-            fp.write("""<div class="entrysubhead">Assumptions:</div>""")
-            fp.write(katex(self.assumptions_tex))
-        fp.write("""<div class="entrysubhead">TeX:</div>""")
-        fp.write("<pre>")
-        fp.write(self.formula_tex)
-        if self.assumptions is not None:
-            fp.write("\n\n")
-            fp.write(self.assumptions_tex)
-        fp.write("</pre>")
-        if self.symbols:
-            fp.write("""<div class="entrysubhead">Definitions:</div>""")
-            write_definitions_table(fp, self.symbols, center=True)
-        if self.references is not None:
-            fp.write("""<div class="entrysubhead">References:</div>""")
-            fp.write("<ul>")
-            for ref in self.references:
-                fp.write("<li>%s</li>" % ref._text)
-            fp.write("</ul>")
-        fp.write("""<div class="entrysubhead">Source code for this entry:</div>""")
-        fp.write("<pre>")
-        fp.write(self.source)
-        fp.write("</pre>")
-        fp.write("</div>")
-        fp.write("</div>\n")
-
-all_entry_objects = [EntryObject(entry) for entry in all_entries]
 entries_dict = {}
-for entry in all_entry_objects:
-    if entry.id in entries_dict:
-        raise ValueError("duplicated ID %s" % entry.id)
-    entries_dict[entry.id] = entry
+for entry in all_entries:
+    if entry.id() in entries_dict:
+        raise ValueError("duplicated ID %s" % entry.id())
+    entries_dict[entry.id()] = entry
 
 class Webpage:
 
@@ -1470,7 +1507,8 @@ class Webpage:
         self.fp.write(html_start.replace("%%PAGETITLE%%", self.title))
 
     def entry(self, id):
-        entries_dict[id].write_html(self.fp, single=False)
+        html = entries_dict[id].entry_html(single=False)
+        self.fp.write(html)
 
     def section(self, title):
         self.fp.write("""<h2>%s</h2>""" % title)
@@ -1497,7 +1535,8 @@ class EntryPage(Webpage):
         self.title = "Entry %s - Fungrim" % self.id
 
     def entry(self, id):
-        entries_dict[id].write_html(self.fp, single=True)
+        html = entries_dict[id].entry_html(single=True)
+        self.fp.write(html)
 
     def start(self):
         Webpage.start(self)
@@ -1549,8 +1588,9 @@ class DefinitionsPage(Webpage):
         write_definitions_table(self.fp, described_symbols, center=True)
         self.end()
 
-for entry in all_entry_objects:
-    EntryPage(entry.id).write()
+for entry in all_entries:
+    print "processing", entry.id()
+    EntryPage(entry.id()).write()
 
 
 count_ConstPi = IndexPage(*index_ConstPi).write()
