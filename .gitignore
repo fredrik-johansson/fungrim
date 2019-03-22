@@ -1,1 +1,4 @@
 build/*
+formulas/__pycache__
+*.pyc
+formulas/*.pyc
