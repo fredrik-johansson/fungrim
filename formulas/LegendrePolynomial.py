@@ -105,7 +105,7 @@ make_entry(ID("7a85b7"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("9395fc"),
-    Formula(Equal(LegendrePolynomial(n, z), Hypergeometric2F1(-n, n+1, 1, (1-x)/2))),
+    Formula(Equal(LegendrePolynomial(n, z), Hypergeometric2F1(-n, n+1, 1, (1-z)/2))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
