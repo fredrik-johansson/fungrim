@@ -6,7 +6,7 @@ index_Log = ("Log", "Natural logarithm",
     [
         ("Particular values", ["07731b","699c83","c331da","2f1f7b"]),
         ("Functional equations and connection formulas", ["d87f6e","4c1e1e","c43533","f67fa2"]),
-        ("Analytic properties", ["4538ba","c464e3","ddc8a1","940c48","b5ded1","1d447b"]),
+        ("Analytic properties", ["4538ba","c464e3","ddc8a1","940c48","b5ded1","ed6590","c1bee1","1d447b"]),
         ("Complex parts", ["13895b","099b19","fbfb81","dcc1e5"]),
         ("Bounds and inequalities", ["4986ed","792c76"]),
         ("Integral representations", ["0ba9b2"]),
@@ -41,6 +41,16 @@ make_entry(ID("940c48"),
 
 make_entry(ID("b5ded1"),
     Formula(Equal(BranchCuts(Log(z), z, CC), Set(Log_branch_cut))))
+
+make_entry(ID("ed6590"),
+    Formula(Equal(AnalyticContinuation(Log(z), z, a, b), Log(-z) + ConstPi*ConstI)),
+    Variables(a,b),
+    Assumptions(And(Element(a, CC), Element(b, CC), Greater(Im(a), 0), Less(Im(b), 0), Greater(Re(a)*Im(b)-Re(b)*Im(a), 0))))
+
+make_entry(ID("c1bee1"),
+    Formula(Equal(AnalyticContinuation(Log(z), z, a, b), Log(-z) - ConstPi*ConstI)),
+    Variables(a,b),
+    Assumptions(And(Element(a, CC), Element(b, CC), Less(Im(a), 0), Greater(Im(b), 0), Less(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
 make_entry(ID("1d447b"),
     Formula(Equal(Zeros(Log(z), z, CC), Set(1))))

@@ -640,7 +640,7 @@ Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Sum Product Limit Integral Derivative
 AsymptoticTo
-HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros
+HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
