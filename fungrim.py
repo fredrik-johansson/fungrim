@@ -434,6 +434,7 @@ class Expr(object):
         s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
 
+
     def html(self, display=False, avoid_latex=False):
         if self.is_atom():
             if avoid_latex and self.is_integer():
@@ -715,9 +716,9 @@ make_entry(ID("e1e106"),
     Formula(Equal(ConstPi, Limit(16**k/(k*Binomial(2*k,k)**2), k, Infinity))))
 
 make_entry(ID("4c0698"),
-    Formula(Element(1/ConstPi, RealBall(
+    Formula(Less(Abs(1/ConstPi - 
         Parenthesis(12*Sum((-1)**k*Factorial(6*k)*(13591409+545140134*k)/(Factorial(3*k)*Factorial(k)**3*640320**(3*k+Div(3,2))),
-            Tuple(k, 0, N-1))), Parenthesis(Div(1,151931373056000**N))))),
+            Tuple(k, 0, N-1)))), Div(1,151931373056000**N))),
     Variables(N),
     Assumptions(Element(N, ZZGreaterEqual(0))))
 
@@ -765,14 +766,14 @@ make_entry(ID("a1ca3e"),
     Formula(Equal(ConstGamma, -Integral(Log(Log(1/x)), Tuple(x, 0, 1)))))
 
 make_entry(ID("014c4e"),
-#    Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
-#        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
-#                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
-#                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
-    Formula(Where(Element(ConstGamma, RealBall(Parenthesis(S/I - T/I**2 - Log(n)), 24*Exp(-(8*n)))),
+    Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
         Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
                 Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
+#    Formula(Where(Element(ConstGamma, RealBall(Parenthesis(S/I - T/I**2 - Log(n)), 24*Exp(-(8*n)))),
+#        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+#                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+#                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
     Variables(n, N),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(N, ZZ), GreaterEqual(N, Div(497063,100000)*n + 1))),
     References("R. Brent and F. Johansson. A bound for the error term in the Brent-McMillan algorithm. Mathematics of Computation 2015, 84(295). DOI: 10.1090/S0025-5718-2015-02931-7"))
@@ -1349,6 +1350,13 @@ make_entry(ID("e6ff64"),
     References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
 
 
+make_entry(ID("945fa5"),
+    Formula(Element(RiemannZetaZero(1),
+        Div(1,2) + RealBall(Decimal("14.134725141734693790457251983562470270784257115699"), Decimal("2.44e-49")) * ConstI)))
+
+make_entry(ID("c0ae99"),
+    Formula(Element(RiemannZetaZero(2),
+        Div(1,2) + RealBall(Decimal("21.022039638771554992628479593896902777334340524903"), Decimal("2.19e-49")) * ConstI)))
 
 make_entry(ID("dc558b"),
     Description("Table of", Im(RiemannZetaZero(n)), "to 10 digits for", LessEqual(1, n, 500)),
@@ -1941,7 +1949,7 @@ make_entry(ID("71d9d9"),
 index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
     [("L-series", ["da2fdb"]),
      ("Analytic properties", ["8b5ddb","52c4ab","fdb94b","36a095","9a258f"]),
-     ("Zeros", ["2e1ff3","692e42","cbbf16","e6ff64","60c2ec","71d9d9","dc558b","2e1cc7"]),
+     ("Zeros", ["2e1ff3","692e42","cbbf16","e6ff64","60c2ec","945fa5","c0ae99","71d9d9","dc558b","2e1cc7"]),
      ("Complex parts", ["69348a"]),
      ("Values at integers", ["a01b6e","e84983","72ccda","51fd98","7cb17f","e50a56","e93ca8"]),
      ("Functional equation", ["9ee8bc"]),
@@ -2090,7 +2098,7 @@ Tuple(200, 3972999029388),
     )))
 
 make_entry(ID("9933df"),
-    Description("Table of", PartitionsP(10**n), "for", LessEqual(0, n, 30)),
+    Description("Table of", PartitionsP(10**n), "to 50 digits for", LessEqual(0, n, 30)),
     Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(PartitionsP(10**n), 50), y)),
       TableHeadings(n, PartitionsP(10**n)), TableSplit(1),
       List(
@@ -2453,7 +2461,7 @@ class DefinitionsPage(Webpage):
         self.end()
 
 for entry in all_entries:
-    print "processing", entry.id()
+    print("processing " + str(entry.id()))
     EntryPage(entry.id()).write()
 
 
