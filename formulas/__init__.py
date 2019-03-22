@@ -7,6 +7,7 @@ from .ConstPi import *
 from .DedekindEta import *
 from .Exp import *
 from .GammaFunction import *
+from .LegendrePolynomial import *
 from .Log import *
 from .PartitionsP import *
 from .RiemannZeta import *

@@ -167,6 +167,7 @@ class Expr(object):
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
         if self is Acot: return "\\operatorname{acot}"
+        if self is Hypergeometric2F1: return "{}_2F_1"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
@@ -274,7 +275,7 @@ class Expr(object):
             if order.is_integer() and order._integer == 1:
                 return "\\left[ \\frac{d}{d %s}\, %s \\right]_{%s = %s}" % (var, argstr[0], var, point)
             else:
-                return "\\left[ \\left(\\frac{d}{d %s}\\right)^{%s} %s \\right]_{%s = %s}" % (var, orderstr, argstr[0], var, point)
+                return "\\left[ \\frac{d^{%s}}{{d %s}^{%s}} %s \\right]_{%s = %s}" % (orderstr, var, orderstr, argstr[0], var, point)
         if head is Sqrt:
             assert len(args) == 1
             return "\\sqrt{" + argstr[0] + "}"
@@ -299,6 +300,8 @@ class Expr(object):
             return " = ".join(argstr)
         if head is Unequal:
             return " \\ne ".join(argstr)
+        if head is Subset:
+            return " \\subset ".join(argstr)
         if head is Tuple:
             return "\\left(" + ", ".join(argstr) + "\\right)"
         if head is Set:
@@ -317,6 +320,9 @@ class Expr(object):
         if head is BernoulliPolynomial:
             assert len(args) == 2
             return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+        if head is LegendrePolynomial:
+            assert len(args) == 2
+            return "P_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
         if head is BesselI:
             assert len(args) == 2
             n, z = args
@@ -647,6 +653,8 @@ Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial Harmon
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
+Hypergeometric2F1
+LegendrePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
@@ -697,6 +705,7 @@ describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqual(0), "Inte
 describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
+describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
 
 all_entries = []
 
