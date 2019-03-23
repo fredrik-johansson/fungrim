@@ -5,11 +5,12 @@ from .expr import *
 index_LegendrePolynomial = ("LegendrePolynomial", "Legendre polynomial",
     [
         ("Particular values", ["9bdf22","217521","d77f0a","9b7f05","a17386","13f971","a7ac51","3df748","674afa","85eebc"]),
-        ("Recurrence and functional equations", ["0010f3","367ac2"]),
+        ("Recurrence and functional equations", ["0010f3","367ac2","27688e","925fdf"]),
+        ("Generating functions", ["d84519"]),
         ("Rodrigues' formula", ["4cfeac"]),
         ("Integrals", ["e36542"]),
         ("Sum representations", ["c5dd9b","f0569a","7a85b7"]),
-        ("Hypergeometric representations", ["9395fc","f55f0a","3c87b9"]),
+        ("Hypergeometric representations", ["9395fc","f55f0a","3c87b9","6cd4a1","859445"]),
         ("Bounds and inequalities", ["1ba9a5","155343","ef4b53","b786ad","60ac50","59e5df","3b175b","6476bd"]),
         ("Analytic properties", ["40fa59","d36fd7","99e62f","7680d3","22a42f","415911","df439e","b2d723"]),
     ])
@@ -24,6 +25,15 @@ make_entry(ID("367ac2"),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(1))), Element(z, CC)))
 
+make_entry(ID("27688e"),
+    Formula(Equal((1-z**2)*Derivative(LegendrePolynomial(n,t), Tuple(t,z,2)) - 2*z*Derivative(LegendrePolynomial(n,t), Tuple(t,z,1)) + n*(n+1)*LegendrePolynomial(n,z), 0)),
+    Variables(n, z),
+    Assumptions(And(Element(n, ZZGreaterEqual(0))), Element(z, CC)))
+
+make_entry(ID("925fdf"),
+    Formula(Equal((1-z**2)*Derivative(LegendrePolynomial(n,t), Tuple(t,z,1)) + n*z*LegendrePolynomial(n,z) - n*LegendrePolynomial(n-1,z), 0)),
+    Variables(n, z),
+    Assumptions(And(Element(n, ZZGreaterEqual(1))), Element(z, CC)))
 
 make_entry(ID("9bdf22"),
     Formula(Equal(LegendrePolynomial(0,z), 1)),
@@ -75,6 +85,11 @@ make_entry(ID("85eebc"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
+make_entry(ID("d84519"),
+    Formula(Equal(Sum(LegendrePolynomial(n,x) * z**n, Tuple(n, 0, Infinity)),
+        1 / Sqrt(1 - 2*x*z + z**2))),
+    Variables(x, z),
+    Assumptions(And(Element(x, ClosedInterval(-1,1)), Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("4cfeac"),
     Formula(Equal(LegendrePolynomial(n,z),
@@ -119,7 +134,15 @@ make_entry(ID("3c87b9"),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, SetMinus(CC, Set(1))))))
 
+make_entry(ID("6cd4a1"),
+    Formula(Equal(LegendrePolynomial(2*n, z), Div((-1)**n, 4**n) * Binomial(2*n,n) * Hypergeometric2F1(-n, n+Div(1,2), Div(1,2), z**2))),
+    Variables(n, z),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, SetMinus(CC)))))
 
+make_entry(ID("859445"),
+    Formula(Equal(LegendrePolynomial(2*n+1, z), Div((-1)**n, 4**n) * (2*n+1) * Binomial(2*n,n) * z * Hypergeometric2F1(-n, n+Div(3,2), Div(3,2), z**2))),
+    Variables(n, z),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, SetMinus(CC)))))
 
 make_entry(ID("1ba9a5"),
     Formula(LessEqual(Abs(LegendrePolynomial(n,x)), 1)),
