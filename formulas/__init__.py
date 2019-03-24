@@ -12,6 +12,7 @@ from .Log import *
 from .PartitionsP import *
 from .RiemannZeta import *
 from .integrals import *
+from .airy import *
 
 entries_dict = {}
 for entry in all_entries:

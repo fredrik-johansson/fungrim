@@ -167,7 +167,13 @@ class Expr(object):
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
         if self is Acot: return "\\operatorname{acot}"
+        if self is Hypergeometric0F1: return "{}_0F_1"
+        if self is Hypergeometric1F1: return "{}_1F_1"
         if self is Hypergeometric2F1: return "{}_2F_1"
+        if self is AiryAi: return "\\operatorname{Ai}"
+        if self is AiryBi: return "\\operatorname{Bi}"
+        if self is AiryAiPrime: return "\\operatorname{Ai}'"
+        if self is AiryBiPrime: return "\\operatorname{Bi}'"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
@@ -664,7 +670,8 @@ Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial Harmon
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
-Hypergeometric2F1
+Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1
+AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 GCD DivisorSigma

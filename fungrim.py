@@ -76,7 +76,7 @@ function toggleVisible(id) {
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
 <body>
-<div style="margin:0; padding:0.5em; background-color: #fafafa;">
+<div style="margin:0; padding:0.1em 0.5em 0.5em 0.5em; background-color: #fafafa;">
 """
 
 html_end = """
@@ -162,7 +162,7 @@ class EntryPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.id)
 
     def write(self):
@@ -179,7 +179,7 @@ class IndexPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center"><a href="index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>%s</h1>""" % self.title)
 
     def write(self):
@@ -208,7 +208,7 @@ class TopicPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>%s</h1>""" % self.title)
 
     def write(self):
@@ -279,6 +279,7 @@ writetopic("Exponential function")
 writetopic("Natural logarithm")
 writetopic("Gamma function")
 writetopic("Legendre polynomials")
+writetopic("Airy functions")
 writetopic("Riemann zeta function")
 writetopic("Zeros of the Riemann zeta function")
 writetopic("Dedekind eta function")
