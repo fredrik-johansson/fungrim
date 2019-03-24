@@ -13,6 +13,7 @@ from .PartitionsP import *
 from .RiemannZeta import *
 from .integrals import *
 from .airy import *
+from .stirling_numbers import *
 
 entries_dict = {}
 for entry in all_entries:

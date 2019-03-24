@@ -323,6 +323,9 @@ class Expr(object):
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
+        if head is BellNumber:
+            assert len(args) == 1
+            return "B_{" + argstr[0] + "}"
         if head is HarmonicNumber:
             assert len(args) == 1
             return "H_{" + argstr[0] + "}"
@@ -353,6 +356,15 @@ class Expr(object):
         if head is Binomial:
             assert len(args) == 2
             return "{" + argstr[0] + " \\choose " + argstr[1] + "}"
+        if head is StirlingCycle:
+            assert len(args) == 2
+            return "\\left[{%s \\atop %s}\\right]" % (argstr[0], argstr[1])
+        if head is StirlingS1:
+            assert len(args) == 2
+            return "s\!\\left(%s, %s\\right)" % (argstr[0], argstr[1])
+        if head is StirlingS2:
+            assert len(args) == 2
+            return "\\left\\{{%s \\atop %s}\\right\\}" % (argstr[0], argstr[1])
         if head is AsymptoticTo:
             assert len(argstr) == 4
             return "%s \\sim %s, \; %s \\to %s" % tuple(argstr)
@@ -668,6 +680,7 @@ Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
+StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1
@@ -726,6 +739,10 @@ describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponen
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
+describe(StirlingCycle, StirlingCycle(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Unsigned Stirling number of the first kind")
+describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZ, "Signed Stirling number of the first kind")
+describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Stirling number of the second kind")
+describe(BellNumber, BellNumber(n), [Element(n, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Bell number")
 
 
 all_entries = []
