@@ -81,7 +81,7 @@ function toggleVisible(id) {
 
 html_end = """
 </div>
-<div style="margin:0; padding: 1em; background-color:#eee; font-size:85%">
+<div style="margin-top:2em; margin-bottom: 0; margin-left: 0; margin-right: 0; padding: 0.5em; background-color:#eee; font-size:85%">
 <div style="margin:0;">
 <p style="text-align:center">Copyright (C) <a href="http://fredrikj.net">Fredrik Johansson</a> and <a href="https://github.com/fredrik-johansson/fungrim/graphs/contributors">contributors</a>.
 Fungrim is provided under the
@@ -153,7 +153,7 @@ class EntryPage(Webpage):
 
     def __init__(self, id):
         self.id = id
-        self.filepath = "build/html/entry/%s" % self.id
+        self.filepath = "build/html/entry/%s.html" % self.id
         self.title = "Entry %s - Fungrim" % self.id
 
     def entry(self, id):
@@ -202,7 +202,7 @@ def escape_title(name):
 class TopicPage(Webpage):
 
     def __init__(self, title):
-        self.filepath = "build/html/topic/" + escape_title(title)
+        self.filepath = "build/html/topic/" + escape_title(title) + ".html"
         self.title = title
         self.pagetitle = title
 
@@ -227,7 +227,7 @@ class TopicPage(Webpage):
                 for rel in arg.args():
                     if rel._text not in topics_dict:
                         print("WARNING: linked topic page '%s' missing" % rel._text)
-                rel_strs = ["""<a href="%s">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
+                rel_strs = ["""<a href="%s.html">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
                 self.fp.write("""<p style="text-align:center">See: %s</p>""" % ", ".join(rel_strs))
         self.end()
 
@@ -270,7 +270,7 @@ frontpage.fp.write("""<p style="margin: 1em">Click "Details" to show an expanded
 frontpage.section("Browse by topic")
 
 def writetopic(s):
-    frontpage.fp.write("""<li><a href="topic/%s">%s</a></li>""" % (escape_title(s), s))
+    frontpage.fp.write("""<li><a href="topic/%s.html">%s</a></li>""" % (escape_title(s), s))
 
 frontpage.fp.write("""<ul>""")
 writetopic("Pi")

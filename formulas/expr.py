@@ -539,7 +539,7 @@ class Expr(object):
             s += """<div>"""
         else:
             s += """<div style="float:left; margin-top:0.5em;">"""
-            s += """<a href="%s%s" style="margin-left:3pt">%s</a><br/>""" % (entrydir, id, id)
+            s += """<a href="%s%s.html" style="margin-left:3pt">%s</a><br/>""" % (entrydir, id, id)
             s += """<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
