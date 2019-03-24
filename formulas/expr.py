@@ -269,13 +269,19 @@ class Expr(object):
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
             _, var, point, order = args[1]._args
-            var = var.latex()
-            point = point.latex(in_small=True)
+            varstr = var.latex()
+            pointstr = point.latex(in_small=True)
             orderstr = order.latex()
-            if order.is_integer() and order._integer == 1:
-                return "\\left[ \\frac{d}{d %s}\, %s \\right]_{%s = %s}" % (var, argstr[0], var, point)
+            if var is point:
+                if order.is_integer() and order._integer == 1:
+                    return "\\frac{d}{d %s}\, %s" % (varstr, argstr[0])
+                else:
+                    return "\\frac{d^{%s}}{{d %s}^{%s}} %s" % (orderstr, varstr, orderstr, argstr[0])
             else:
-                return "\\left[ \\frac{d^{%s}}{{d %s}^{%s}} %s \\right]_{%s = %s}" % (orderstr, var, orderstr, argstr[0], var, point)
+                if order.is_integer() and order._integer == 1:
+                    return "\\left[ \\frac{d}{d %s}\, %s \\right]_{%s = %s}" % (varstr, argstr[0], varstr, pointstr)
+                else:
+                    return "\\left[ \\frac{d^{%s}}{{d %s}^{%s}} %s \\right]_{%s = %s}" % (orderstr, varstr, orderstr, argstr[0], varstr, pointstr)
         if head is Sqrt:
             assert len(args) == 1
             return "\\sqrt{" + argstr[0] + "}"

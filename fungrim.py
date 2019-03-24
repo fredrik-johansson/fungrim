@@ -49,7 +49,7 @@ html_start = """
 <title>%%PAGETITLE%%</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <style type="text/css">
-body { margin: 0; padding: 0; font-family: roboto; background-color: #fafafa; color: black; }
+body { margin: 0; padding: 0; font-family: roboto; background-color:#eee; color: black; }
 h1 { text-align:center; color:#256; }
 h2, h3 { text-align: center; }
 p { line-height:1.5em; }
@@ -76,12 +76,12 @@ function toggleVisible(id) {
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
 <body>
-<div style="margin:0.5em;">
+<div style="margin:0; padding:0.5em; background-color: #fafafa;">
 """
 
 html_end = """
 </div>
-<div style="margin-top:2em; margin-bottom: 0; margin-left: 0; margin-right: 0; padding: 0.5em; background-color:#eee; font-size:85%">
+<div style="margin: 0; padding: 0.5em; border-top: 1px solid #ddd; font-size:85%">
 <div style="margin:0;">
 <p style="text-align:center">Copyright (C) <a href="http://fredrikj.net">Fredrik Johansson</a> and <a href="https://github.com/fredrik-johansson/fungrim/graphs/contributors">contributors</a>.
 Fungrim is provided under the
