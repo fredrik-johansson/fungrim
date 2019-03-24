@@ -52,17 +52,14 @@ Unlike most computer algebra systems, there is no notion of automatic simplifica
 ## Todo
 
 * More formulas!
-* Website up and running
-* Content pages to browse the formulas in a structured way (e.g. function category -> function -> formula type...) -- maybe want a combination of hand-compiled pages and automatically generated index pages
 * Definition entries for all builtin functions and symbols
 * Domain and codomain definitions for functions (may be multiple)
-* Other basic function properties: symmetries, holomorphicity, zeros and poles, branch points and branch cuts
 * Complete and improve the TeX output
 * Hyperlinked function definitions in the detailed view
 * Review and freeze the core language / builtin function names (after adding many more formulas to get a feel for what looks good)
 * Print S-expressions as a(b, c) or (a, b, c)?
 * Improve look and usability of the pages
-* Table (and plot?) entries in addition to regular formula entries
+* Plot entries?
 * More metadata for entries?
 * Change database from Python code to a purely declarative format (for formula development, have a function that converts Python-built expression -> database entry source code)
 * Partial rebuilds
@@ -74,3 +71,4 @@ Unlike most computer algebra systems, there is no notion of automatic simplifica
 * Applications using the library for simplification, code generation, ...
 * Automatic numerical testing
 * More ideas for this list
+
