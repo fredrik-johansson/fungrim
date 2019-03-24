@@ -2,14 +2,52 @@
 
 from .expr import *
 
-index_PartitionsP = ("PartitionsP", "Integer partition function",
-    [("Specific values", ["856db2","cebe1b","e84642","b2583f","7ef291","6018a4","cd3013","9933df"]),
-     ("Generating functions", ["599417"]),
-     ("Sums and recurrence relations", ["acdce8","4d2e45"]),
-     ("Congruences", ["d8e37d","89260d","dacd74"]),
-     ("Inequalities", ["f7407a","df3c07","d72123","e1f15b"]),
-     ("Asymptotic expansions", ["7697af"]),
-     ("Hardy-Ramanujan-Rademacher formula", ["fb7a63", "5adbc3", "afd27a"])])
+def_Topic(
+    Title("Partition function"),
+    Section("Specific values"),
+    Entries(
+        "856db2",
+        "cebe1b",
+        "e84642",
+        "b2583f",
+        "7ef291",
+        "6018a4",
+        "cd3013",
+        "9933df",
+    ),
+    Section("Generating functions"),
+    Entries(
+        "599417",
+    ),
+    Section("Sums and recurrence relations"),
+    Entries(
+        "acdce8",
+        "4d2e45",
+    ),
+    Section("Congruences"),
+    Entries(
+        "d8e37d",
+        "89260d",
+        "dacd74",
+    ),
+    Section("Inequalities"),
+    Entries(
+        "f7407a",
+        "df3c07",
+        "d72123",
+        "e1f15b",
+    ),
+    Section("Asymptotic expansions"),
+    Entries(
+        "7697af",
+    ),
+    Section("Hardy-Ramanujan-Rademacher formula"),
+    Entries(
+        "fb7a63",
+        "5adbc3",
+        "afd27a",
+    ),
+)
 
 make_entry(ID("856db2"),
     Description("Table of", PartitionsP(n), "for", LessEqual(0, n, 200)),

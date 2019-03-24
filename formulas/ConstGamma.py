@@ -2,6 +2,37 @@
 
 from .expr import *
 
+def_Topic(
+    Title("Euler's constant"),
+    Section("Numerical value"),
+    Entries(
+        "e876e8",
+        "28bf9a",
+    ),
+    Section("Limit representations"),
+    Entries(
+        "4644c0",
+    ),
+    Section("Special function representations"),
+    Entries(
+        "a1f1ec",
+        "cf3977",
+        "d17d0b",
+        "818008",
+    ),
+    Section("Integral representations"),
+    Entries(
+        "39fe5f",
+        "a1ca3e",
+    ),
+    Section("Approximations"),
+    Entries(
+        "014c4e",
+    ),
+    Section("Related topics"),
+    SeeTopics("Gamma function", "Riemann zeta function"),
+)
+
 index_ConstGamma = ("ConstGamma", "The constant gamma (0.577...)",
     [
         ("Numerical value", ["e876e8","28bf9a"]),
@@ -43,14 +74,14 @@ make_entry(ID("a1ca3e"),
 
 make_entry(ID("014c4e"),
     Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
-        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
-                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
+        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, 5*n)),
+                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, 5*n)),
                 Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
 #    Formula(Where(Element(ConstGamma, RealBall(Parenthesis(S/I - T/I**2 - Log(n)), 24*Exp(-(8*n)))),
 #        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
 #                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
 #                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
-    Variables(n, N),
-    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(N, ZZ), GreaterEqual(N, Div(497063,100000)*n + 1))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(1))),
     References("R. Brent and F. Johansson. A bound for the error term in the Brent-McMillan algorithm. Mathematics of Computation 2015, 84(295). DOI: 10.1090/S0025-5718-2015-02931-7"))
 

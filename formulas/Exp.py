@@ -2,15 +2,56 @@
 
 from .expr import *
 
-index_Exp = ("Exp", "Exponential function",
-    [
-        ("Particular values", ["27ca8d","9a944c","54aaf1","a90f35"]),
-        ("Functional equations and connection formulas", ["812707","e51ec3","2f4f74","77d6bf","97ba8d","1fa6b7","1568e1", "e103e7"]),
-        ("Analytic properties", ["28d158","0901a1","be4b28","184c11","b62d05","bceb84"]),
-        ("Complex parts", ["1b3014","caf706","b7d62b","e2fac7","a0d93c","52d827"]),
-        ("Taylor series", ["1635f5","bad502"]),
-        ("Integrals and derivatives", ["935b2f","96af56","4491b8"]),
-    ])
+def_Topic(
+    Title("Exponential function"),
+    Section("Particular values"),
+    Entries(
+        "27ca8d",
+        "9a944c",
+        "54aaf1",
+        "a90f35",
+    ),
+    Section("Functional equations and connection formulas"),
+    Entries(
+        "812707",
+        "e51ec3",
+        "2f4f74",
+        "77d6bf",
+        "97ba8d",
+        "1fa6b7",
+        "1568e1",
+        "e103e7",
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "28d158",
+        "0901a1",
+        "be4b28",
+        "184c11",
+        "b62d05",
+        "bceb84",
+    ),
+    Section("Complex parts"),
+    Entries(
+        "1b3014",
+        "caf706",
+        "b7d62b",
+        "e2fac7",
+        "a0d93c",
+        "52d827",
+    ),
+    Section("Taylor series"),
+    Entries(
+        "1635f5",
+        "bad502",
+    ),
+    Section("Integrals and derivatives"),
+    Entries(
+        "935b2f",
+        "96af56",
+        "4491b8",
+    ),
+)
 
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))

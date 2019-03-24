@@ -2,18 +2,77 @@
 
 from .expr import *
 
-index_LegendrePolynomial = ("LegendrePolynomial", "Legendre polynomial",
-    [
-        ("Particular values", ["9bdf22","217521","d77f0a","9b7f05","a17386","13f971","a7ac51","3df748","674afa","85eebc"]),
-        ("Recurrence and functional equations", ["0010f3","367ac2","27688e","925fdf"]),
-        ("Generating functions", ["d84519"]),
-        ("Rodrigues' formula", ["4cfeac"]),
-        ("Integrals", ["e36542"]),
-        ("Sum representations", ["c5dd9b","f0569a","7a85b7"]),
-        ("Hypergeometric representations", ["9395fc","f55f0a","3c87b9","6cd4a1","859445"]),
-        ("Bounds and inequalities", ["1ba9a5","155343","ef4b53","b786ad","60ac50","59e5df","3b175b","6476bd"]),
-        ("Analytic properties", ["40fa59","d36fd7","99e62f","7680d3","22a42f","415911","df439e","b2d723"]),
-    ])
+def_Topic(
+    Title("Legendre polynomials"),
+    Section("Particular values"),
+    Entries(
+        "9bdf22",
+        "217521",
+        "d77f0a",
+        "9b7f05",
+        "a17386",
+        "13f971",
+        "a7ac51",
+        "3df748",
+        "674afa",
+        "85eebc",
+    ),
+    Section("Recurrence and functional equations"),
+    Entries(
+        "0010f3",
+        "367ac2",
+        "27688e",
+        "925fdf",
+    ),
+    Section("Generating functions"),
+    Entries(
+        "d84519",
+    ),
+    Section("Rodrigues' formula"),
+    Entries(
+        "4cfeac",
+    ),
+    Section("Integrals"),
+    Entries(
+        "e36542",
+    ),
+    Section("Sum representations"),
+    Entries(
+        "c5dd9b",
+        "f0569a",
+        "7a85b7",
+    ),
+    Section("Hypergeometric representations"),
+    Entries(
+        "9395fc",
+        "f55f0a",
+        "3c87b9",
+        "6cd4a1",
+        "859445",
+    ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "1ba9a5",
+        "155343",
+        "ef4b53",
+        "b786ad",
+        "60ac50",
+        "59e5df",
+        "3b175b",
+        "6476bd",
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "40fa59",
+        "d36fd7",
+        "99e62f",
+        "7680d3",
+        "22a42f",
+        "415911",
+        "df439e",
+        "b2d723",
+    ),
+)
 
 make_entry(ID("0010f3"),
     Formula(Equal(LegendrePolynomial(n,-z), (-1)**n * LegendrePolynomial(n,z))),

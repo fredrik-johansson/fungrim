@@ -2,6 +2,91 @@
 
 from .expr import *
 
+def_Topic(
+    Title("Riemann zeta function"),
+    DefinitionsTable(RiemannZeta, RiemannZetaZero),
+    Section("L-series"),
+    Entries(
+        "da2fdb"   # L-series
+    ),
+    Section("Special values"),
+    Entries(
+        "a01b6e",  # zeta(2)
+        "e84983",  # zeta(3) irrational
+        "72ccda",  # zeta(2n)
+        "51fd98",  # zeta(-n)
+        "7cb17f",  # table of zeta(2n)
+        "e50a56",  # table of zeta(-n)
+        "e93ca8",  # table of zeta(n) to 50 digits
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "8b5ddb",  # holomorphic domain
+        "52c4ab",  # poles
+        "fdb94b",  # essential singularities
+        "36a095",  # branch points
+        "9a258f",  # branch cuts
+    ),
+    Section("Zeros"),
+    SeeTopics("Zeros of the Riemann zeta function"),
+    Entries(
+        "2e1ff3",  # real zeros
+        "692e42",  # complex zeros
+        "cbbf16",  # 0 < re < 1
+        "e6ff64",  # re = 1/2
+        "60c2ec",  # conjugate symmetry
+        "71d9d9",  # table of rho_n to 50 digits
+    ),
+    Section("Complex parts"),
+    Entries(
+        "69348a",  # conjugate
+    ),
+    Section("Functional equation"),
+    Entries(
+        "9ee8bc",  # functional equation
+    ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "809bc0",  # bound in right plane
+        "3a5eb6",  # bound in critical strip
+    ),
+    Section("Euler-Maclaurin formula"),
+    Entries(
+        "792f7b",  # Euler-Maclaurin formula
+    ),
+    Section("Approximations"),
+    Entries(
+        "d31b04",  # Euler-Maclaurin formula
+        "e37535",  # Borwein
+    ),
+    #Section("Related topics"),
+    #SeeTopics("Gamma function", "Bernoulli number"),
+)
+
+def_Topic(
+    Title("Zeros of the Riemann zeta function"),
+    DefinitionsTable(RiemannZeta, RiemannZetaZero),
+    Section("Main properties"),
+    Entries(
+        "2e1ff3",  # real zeros
+        "692e42",  # complex zeros
+        "cbbf16",  # 0 < re < 1
+        "e6ff64",  # re = 1/2
+        "60c2ec",  # conjugate symmetry
+    ),
+    Section("Numerical values"),
+    Entries(
+        "945fa5",  # rho_1 to 50 digits
+        "c0ae99",  # rho_2 to 50 digits
+        "71d9d9",  # table of rho_n to 50 digits
+        "dc558b",  # table of rho_n to 10 digits
+        "2e1cc7"   # table of rho_10^n to 50 digits
+    ),
+    Section("Related topics"),
+    SeeTopics("Riemann zeta function"),
+)
+
+
 index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
     [("L-series", ["da2fdb"]),
      ("Analytic properties", ["8b5ddb","52c4ab","fdb94b","36a095","9a258f"]),

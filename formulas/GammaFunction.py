@@ -2,14 +2,44 @@
 
 from .expr import *
 
-index_GammaFunction = ("GammaFunction", "Gamma function",
-    [
-        ("Particular values", ["f1d31a","e68d11","19d480","f826a6","48ac55"]),
-        ("Functional equations", ["78f1f4","639d91","14af98","56d710","b510b6","a787eb","90a1e1"]),
-        ("Integral representations", ["4e4e0f"]),
-        ("Analytic properties", ["798c5d","2870f0","34d6ae","d086bd","9a44c5","a76328"]),
-        ("Complex parts", ["d7d2a0"]),
-    ])
+def_Topic(
+    Title("Gamma function"),
+    Section("Particular values"),
+    Entries(
+        "f1d31a",
+        "e68d11",
+        "19d480",
+        "f826a6",
+        "48ac55",
+    ),
+    Section("Functional equations"),
+    Entries(
+        "78f1f4",
+        "639d91",
+        "14af98",
+        "56d710",
+        "b510b6",
+        "a787eb",
+        "90a1e1",
+    ),
+    Section("Integral representations"),
+    Entries(
+        "4e4e0f",
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "798c5d",
+        "2870f0",
+        "34d6ae",
+        "d086bd",
+        "9a44c5",
+        "a76328",
+    ),
+    Section("Complex parts"),
+    Entries(
+        "d7d2a0",
+    ),
+)
 
 GammaFunction_domain = SetMinus(CC, ZZLessEqual(0))
 GammaFunction_sub1_domain = SetMinus(CC, ZZLessEqual(1))

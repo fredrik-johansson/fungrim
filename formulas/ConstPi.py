@@ -2,6 +2,47 @@
 
 from .expr import *
 
+def_Topic(
+    Title("Pi"),
+    Section("Numerical value"),
+    Entries(
+        "6505a9",
+        "0c838a",
+    ),
+    Section("Elementary function representations"),
+    Entries(
+        "0c9939",
+        "f8d280",
+        "590136",
+    ),
+    Section("Integral representations"),
+    Entries(
+        "464961",
+        "04cd99",
+        "dae4a7",
+    ),
+    Section("Series representations"),
+    Entries(
+        "f617c0",
+        "fddfe6",
+    ),
+    Section("Product representations"),
+    Entries(
+        "69fe63",
+    ),
+    Section("Limit representations"),
+    Entries(
+        "e1e106",
+    ),
+    Section("Approximations"),
+    Entries(
+        "2516c2",
+        "1e3a25",
+        "fdc3a3",
+        "4c0698",
+    ),
+)
+
 index_ConstPi = ("ConstPi", "The constant pi (3.14...)",
     [
         ("Numerical value", ["6505a9","0c838a"]),
@@ -10,7 +51,7 @@ index_ConstPi = ("ConstPi", "The constant pi (3.14...)",
         ("Series representations", ["f617c0","fddfe6"]),
         ("Product representations", ["69fe63"]),
         ("Limit representations", ["e1e106"]),
-        ("Approximations", ["4c0698"]),
+        ("Approximations", ["2516c2","1e3a25","fdc3a3","4c0698"]),
     ])
 
 make_entry(ID("6505a9"),
@@ -49,6 +90,15 @@ make_entry(ID("69fe63"),
 
 make_entry(ID("e1e106"),
     Formula(Equal(ConstPi, Limit(16**k/(k*Binomial(2*k,k)**2), k, Infinity))))
+
+make_entry(ID("2516c2"),
+    Formula(Less(Abs(ConstPi - Div(22,7)), Decimal("0.00127"))))
+
+make_entry(ID("1e3a25"),
+    Formula(Less(Abs(ConstPi - Div(355,113)), Decimal("2.67e-7"))))
+
+make_entry(ID("fdc3a3"),
+    Formula(Less(Abs(ConstPi - Log(Pow(640320,3)+744)/Sqrt(163)), Decimal("2.24e-31"))))
 
 make_entry(ID("4c0698"),
     Formula(Less(Abs(1/ConstPi - 

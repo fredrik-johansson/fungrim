@@ -2,12 +2,45 @@
 
 from .expr import *
 
-index_DedekindEta = ("DedekindEta", "Dedekind eta function",
-    [("Fourier series (q-series)", ["1dc520","ff587a","2e7fdb","8f10b0"]),
-     ("Special values", ["9b8c9f", "204acd"]),
-     ("Modular transformations", ["1bae52","acee1a","3b806f","29d9ab","9f19c1","f04e01","921ef0"]),
-     ("Analytic properties", ["e06d87","04f4a0","f2e2c2","6d7668","39fb36"]),
-     ("Dedekind sums", ["23961e"])])
+def_Topic(
+    Title("Dedekind eta function"),
+    Section("Fourier series (q-series)"),
+    Entries(
+        "1dc520",
+        "ff587a",
+        "2e7fdb",
+        "8f10b0",
+    ),
+    Section("Special values"),
+    Entries(
+        "9b8c9f",
+        "204acd",
+    ),
+    Section("Modular transformations"),
+    Entries(
+        "1bae52",
+        "acee1a",
+        "3b806f",
+        "29d9ab",
+        "9f19c1",
+        "f04e01",
+        "921ef0",
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "e06d87",
+        "04f4a0",
+        "f2e2c2",
+        "6d7668",
+        "39fb36",
+    ),
+    Section("Dedekind sums"),
+    Entries(
+        "23961e",
+    ),
+    Section("Related topics"),
+    SeeTopics("Partition function"),
+)
 
 make_entry(ID("2e7fdb"),
     Formula(Equal(EulerQSeries(q), Product((1 - q**k), Tuple(k, 1, Infinity)))),

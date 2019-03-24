@@ -499,7 +499,6 @@ class Expr(object):
         s += Description("Table data:", rel.args()[0], " such that ", rel.args()[1]).html(display=True)
         return s
 
-
     def html_References(self):
         s = ""
         s += """<div class="entrysubhead">References:</div>"""
@@ -527,7 +526,11 @@ class Expr(object):
         id = self.get_arg_with_head(ID)
         return id._args[1]._text
 
-    def entry_html(self, single=False):
+    def title(self):
+        title = self.get_arg_with_head(Title)
+        return title._args[1]._text
+
+    def entry_html(self, single=False, entrydir="../entry/"):
         id = self.id()
         all_tex = []
         s = ""
@@ -536,7 +539,7 @@ class Expr(object):
             s += """<div>"""
         else:
             s += """<div style="float:left; margin-top:0.5em;">"""
-            s += """<a href="entry/%s.html" style="margin-left:3pt">%s</a><br/>""" % (id, id)
+            s += """<a href="%s%s" style="margin-left:3pt">%s</a><br/>""" % (entrydir, id, id)
             s += """<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
@@ -607,10 +610,12 @@ class Expr(object):
         s += """</table>"""
         return s
 
+all_builtins = []
 
 def inject_builtin(string):
     for sym in string.split():
         globals()[sym] = Expr(symbol_name=sym)
+        all_builtins.append(sym)
 
 variable_names = set()
 
@@ -664,6 +669,7 @@ KroneckerDelta
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableHeadings TableSplit
+Topic Title DefinitionsTable Section SeeTopics Entries
 """)
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
@@ -677,6 +683,7 @@ descriptions = {}
 def describe(symbol, example, domain, codomain, description):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, domain, codomain, description)
+
 
 describe(ZZ, ZZ, [], None, "Integers")
 describe(QQ, QQ, [], None, "Rational numbers")
@@ -707,7 +714,13 @@ describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], 
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
 
+
 all_entries = []
+all_topics = []
+
+def def_Topic(*args):
+    topic = Topic(*args)
+    all_topics.append(topic)
 
 def make_entry(*args):
     entry = Entry(*args)
