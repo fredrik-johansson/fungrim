@@ -59,28 +59,28 @@ make_entry(ID("071a94"),
 
 make_entry(ID("21241f"),
     Formula(Equal(RisingFactorial(x, n), Sum(StirlingCycle(n, k) * x**k, Tuple(k, 0, n)))),
-    Variables(x, n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)), Element(x, CC))))
+    Variables(x, n),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("f46e0e"),
     Formula(Equal(RisingFactorial(x-n+1, n), Sum(StirlingS1(n, k) * x**k, Tuple(k, 0, n)))),
-    Variables(x, n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)), Element(x, CC))))
+    Variables(x, n),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("b823b0"),
     Formula(Equal(x**n, Sum(StirlingS2(n, k) * RisingFactorial(x-n+1, n), Tuple(k, 0, n)))),
-    Variables(x, n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)), Element(x, CC))))
+    Variables(x, n),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("b01280"),
     Formula(Equal(Div((Log(1+x))**k, Factorial(k)), Sum((-1)**(n-k) * StirlingCycle(n,k) * Div(x**n, Factorial(n)), Tuple(n, k, Infinity)))),
-    Variables(x, n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)), Element(x, CC), Less(Abs(x), 1))))
+    Variables(x, k),
+    Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(x, CC), Less(Abs(x), 1))))
 
 make_entry(ID("a9a610"),
     Formula(Equal(Div((Exp(x)-1)**k, Factorial(k)), Sum(StirlingS2(n,k) * Div(x**n, Factorial(n)), Tuple(n, k, Infinity)))),
-    Variables(x, n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)), Element(x, CC))))
+    Variables(x, k),
+    Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(x, CC))))
 
 
 make_entry(ID("6189b9"),
