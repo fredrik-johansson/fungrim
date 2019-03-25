@@ -51,6 +51,10 @@ def_Topic(
         "96af56",
         "4491b8",
     ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "3ac8a5",
+    ),
 )
 
 make_entry(ID("27ca8d"),
@@ -179,4 +183,10 @@ make_entry(ID("52d827"),
     Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
+
+make_entry(ID("3ac8a5"),
+    Formula(LessEqual(Abs(Exp(x+a)-Exp(x)), Exp(x)*(Exp(Abs(a))-1))),
+    Variables(x, a),
+    Assumptions(And(Element(x, RR), Element(a, RR))))
+
 

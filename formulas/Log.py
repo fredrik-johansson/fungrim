@@ -41,6 +41,7 @@ def_Topic(
     Entries(
         "4986ed",
         "792c76",
+        "77aa12",
     ),
     Section("Integral representations"),
     Entries(
@@ -201,4 +202,10 @@ make_entry(ID("0ba9b2"),
     Formula(Equal(Log(z), Integral(1/t, Tuple(t, 1, z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Log_branch_cut))))
+
+make_entry(ID("77aa12"),
+    Formula(LessEqual(Abs(Log(x+a)-Log(x)), Log(1+Abs(a)/(x-Abs(a))))),
+    Variables(x, a),
+    Assumptions(And(Element(x, RR), Element(a, RR), GreaterEqual(a, 0), Less(Abs(a), x))))
+
 
