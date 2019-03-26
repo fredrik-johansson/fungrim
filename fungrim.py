@@ -285,6 +285,7 @@ writetopic("Zeros of the Riemann zeta function")
 writetopic("Dedekind eta function")
 writetopic("Partition function")
 writetopic("Stirling numbers")
+writetopic("General analytic functions")
 writetopic("Definite integrals")
 frontpage.fp.write("""</ul>""")
 

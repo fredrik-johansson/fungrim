@@ -271,10 +271,29 @@ class Expr(object):
             point = point.latex(in_small=True)
             formula = formula.latex()
             return "\\lim_{%s \\to %s} \\left[ %s \\right]" % (var, point, formula)
+        if head is Supremum:
+            assert len(args) == 3
+            formula, var, condition = args
+            condition = condition.latex(in_small=True)
+            formula = formula.latex()
+            return "\\sup_{%s} %s" % (condition, formula)
         if head is Derivative:
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
             _, var, point, order = args[1]._args
+            if not args[0].is_atom():
+                f = args[0].head()
+                if f.is_symbol() and f is not Exp and args[0].args() == (var,):
+                    fstr = args[0].head().latex()
+                    if order.is_integer() and order._integer == 0:
+                        return "%s(%s)" % (fstr, var._symbol)
+                    if order.is_integer() and order._integer == 1:
+                        return "%s'(%s)" % (fstr, var._symbol)
+                    if order.is_integer() and order._integer == 2:
+                        return "%s''(%s)" % (fstr, var._symbol)
+                    if order.is_integer() and order._integer == 3:
+                        return "%s'''(%s)" % (fstr, var._symbol)
+                    return "{%s}^{(%s)}(%s)" % (args[0].head()._symbol, order.latex(), var._symbol)
             varstr = var.latex()
             pointstr = point.latex(in_small=True)
             orderstr = order.latex()
@@ -662,6 +681,7 @@ ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
+OpenDisk ClosedDisk
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
@@ -669,6 +689,7 @@ Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Sum Product Limit Integral Derivative
 AsymptoticTo
+Supremum
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
