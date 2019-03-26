@@ -284,16 +284,17 @@ class Expr(object):
             if not args[0].is_atom():
                 f = args[0].head()
                 if f.is_symbol() and f is not Exp and args[0].args() == (var,):
+                    pointstr = point.latex(in_small=True)
                     fstr = args[0].head().latex()
                     if order.is_integer() and order._integer == 0:
-                        return "%s(%s)" % (fstr, var._symbol)
+                        return "%s(%s)" % (fstr, pointstr)
                     if order.is_integer() and order._integer == 1:
-                        return "%s'(%s)" % (fstr, var._symbol)
+                        return "%s'(%s)" % (fstr, pointstr)
                     if order.is_integer() and order._integer == 2:
-                        return "%s''(%s)" % (fstr, var._symbol)
+                        return "%s''(%s)" % (fstr, pointstr)
                     if order.is_integer() and order._integer == 3:
-                        return "%s'''(%s)" % (fstr, var._symbol)
-                    return "{%s}^{(%s)}(%s)" % (args[0].head()._symbol, order.latex(), var._symbol)
+                        return "%s'''(%s)" % (fstr, pointstr)
+                    return "{%s}^{(%s)}(%s)" % (args[0].head()._symbol, order.latex(), pointstr)
             varstr = var.latex()
             pointstr = point.latex(in_small=True)
             orderstr = order.latex()
