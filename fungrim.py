@@ -286,6 +286,7 @@ writetopic("Dedekind eta function")
 writetopic("Partition function")
 writetopic("Stirling numbers")
 writetopic("General analytic functions")
+writetopic("Gaussian quadrature")
 writetopic("Definite integrals")
 frontpage.fp.write("""</ul>""")
 

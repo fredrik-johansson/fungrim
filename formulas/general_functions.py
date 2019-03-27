@@ -8,6 +8,11 @@ def_Topic(
         "b6582a",
         "78bb08",
     ),
+    Section("Quadrature"),
+    SeeTopics("Gaussian quadrature"),
+    Entries(
+        "545987",
+    ),
     Section("Euler-Maclaurin formula"),
     Entries(
         "ce2272",

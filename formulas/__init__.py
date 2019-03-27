@@ -14,6 +14,7 @@ from .RiemannZeta import *
 from .integrals import *
 from .airy import *
 from .stirling_numbers import *
+from .gaussian_quadrature import *
 from .general_functions import *
 
 entries_dict = {}

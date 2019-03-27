@@ -358,6 +358,12 @@ class Expr(object):
         if head is LegendrePolynomial:
             assert len(args) == 2
             return "P_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+        if head is LegendrePolynomialZero:
+            assert len(args) == 2
+            return "x_{%s,%s}" % (argstr[0], argstr[1])
+        if head is GaussLegendreWeight:
+            assert len(args) == 2
+            return "w_{%s,%s}" % (argstr[0], argstr[1])
         if head is BesselI:
             assert len(args) == 2
             n, z = args
@@ -445,6 +451,9 @@ class Expr(object):
         if head is RealBall:
             assert len(args) == 2
             return "\\left[%s \\pm %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+        if head is BernsteinEllipse:
+            assert len(args) == 1
+            return "\\mathcal{E}_{" + argstr[0] + "}"
         if head is DomainCodomain:
             assert len(args) == 2
             #return "%s \\rightarrow %s" % (argstr[0], argstr[1])
@@ -675,6 +684,7 @@ Unknown Undefined
 Where
 Set List Tuple
 SetBuilder
+PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element NotElement Subset SubsetEqual
@@ -682,7 +692,8 @@ ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
-OpenDisk ClosedDisk
+OpenDisk ClosedDisk BernsteinEllipse
+InteriorClosure
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
@@ -707,7 +718,7 @@ RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1
 AiryAi AiryBi AiryAiPrime AiryBiPrime
-LegendrePolynomial
+LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
@@ -760,11 +771,14 @@ describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqual(0), "Inte
 describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
-describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
+describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], RR, "Legendre polynomial")
+describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
+describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], CC, "Gauss-Legendre quadrature weight")
 describe(StirlingCycle, StirlingCycle(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Unsigned Stirling number of the first kind")
 describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZ, "Signed Stirling number of the first kind")
 describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Stirling number of the second kind")
 describe(BellNumber, BellNumber(n), [Element(n, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Bell number")
+describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 
 
 all_entries = []

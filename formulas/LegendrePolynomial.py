@@ -70,7 +70,14 @@ def_Topic(
         "22a42f",
         "415911",
         "df439e",
+        "0745ee",
         "b2d723",
+    ),
+    Section("Gauss-Legendre quadrature"),
+    SeeTopics("Gaussian quadrature"),
+    Entries(
+        "ea4754",
+        "47b181",
     ),
 )
 
@@ -276,6 +283,11 @@ make_entry(ID("415911"),
 
 make_entry(ID("df439e"),
     Formula(Subset(Zeros(LegendrePolynomial(n,z), z, CC), OpenInterval(-1,1))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
+make_entry(ID("0745ee"),
+    Formula(Equal(Zeros(LegendrePolynomial(n,z), z, CC), SetBuilder(LegendrePolynomialZero(n,k), Element(k, ZZBetween(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
