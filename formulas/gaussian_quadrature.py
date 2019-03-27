@@ -23,7 +23,7 @@ make_entry(ID("47b181"),
     Variables(f, n, rho),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n)), Element(rho, RR), Greater(rho, 1),
         Subset(InteriorClosure(BernsteinEllipse(rho)), HolomorphicDomain(f(z), z, CC)))),
-    References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67–87. DOI:10.1137/060659831"))
+    References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67-87. DOI:10.1137/060659831"))
 
 make_entry(ID("545987"),
     Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, a, b)) - (b-a)/2 * Sum(GaussLegendreWeight(n,k) * f((b-a)/2 * LegendrePolynomialZero(n,k) + (a+b)/2), Tuple(k, 1, n))),
@@ -31,5 +31,5 @@ make_entry(ID("545987"),
     Variables(f, a, b, n, rho),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n)), Element(rho, RR), Greater(rho, 1),
         Subset(InteriorClosure(BernsteinEllipse(rho)), HolomorphicDomain(f(z), z, CC)))),
-    References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67–87. DOI:10.1137/060659831"))
+    References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67-87. DOI:10.1137/060659831"))
 
