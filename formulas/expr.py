@@ -182,6 +182,7 @@ class Expr(object):
         if self is RR: return "\\mathbb{R}"
         if self is CC: return "\\mathbb{C}"
         if self is HH: return "\\mathbb{H}"
+        if self is UnitCircle: return "\\mathbb{T}"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -692,6 +693,7 @@ ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
+UnitCircle
 OpenDisk ClosedDisk BernsteinEllipse
 InteriorClosure
 Decimal
@@ -779,6 +781,7 @@ describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k
 describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Stirling number of the second kind")
 describe(BellNumber, BellNumber(n), [Element(n, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Bell number")
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
+describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
 
 
 all_entries = []

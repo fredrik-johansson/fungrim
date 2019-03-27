@@ -288,6 +288,7 @@ writetopic("Stirling numbers")
 writetopic("General analytic functions")
 writetopic("Gaussian quadrature")
 writetopic("Definite integrals")
+writetopic("Complex plane")
 frontpage.fp.write("""</ul>""")
 
 frontpage.section("General")

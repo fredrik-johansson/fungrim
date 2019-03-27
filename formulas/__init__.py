@@ -16,6 +16,7 @@ from .airy import *
 from .stirling_numbers import *
 from .gaussian_quadrature import *
 from .general_functions import *
+from .complex_plane import *
 
 entries_dict = {}
 for entry in all_entries:
