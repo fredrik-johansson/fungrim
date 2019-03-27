@@ -151,6 +151,10 @@ class Expr(object):
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
+        if self is UpperGamma: return "\\Gamma"
+        if self is Erf: return "\\operatorname{erf}"
+        if self is Erfc: return "\\operatorname{erfc}"
+        if self is Erfi: return "\\operatorname{erfi}"
         if self is DigammaFunction: return "\\psi"
         if self is DedekindEta: return "\\eta"
         if self is DedekindEtaEpsilon: return "\\varepsilon"
@@ -714,6 +718,8 @@ Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber
+Erf Erfc Erfi
+UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
