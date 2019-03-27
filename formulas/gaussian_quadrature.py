@@ -27,7 +27,7 @@ make_entry(ID("47b181"),
 
 make_entry(ID("545987"),
     Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, a, b)) - (b-a)/2 * Sum(GaussLegendreWeight(n,k) * f((b-a)/2 * LegendrePolynomialZero(n,k) + (a+b)/2), Tuple(k, 1, n))),
-        (Abs(b-a)/2) * (64*M/(15*(1-rho**-2)*rho**(2*n)))), Equal(M, Supremum(Abs(f((b-a)/2 * t + (b+a)/2)), t, Element(t, BernsteinEllipse(rho)))))),
+        (Abs(b-a)/2) * (64*M/(15*(1-rho**-2)*rho**(2*n)))), Equal(M, Supremum(Abs(f((b-a)/2 * t + (a+b)/2)), t, Element(t, BernsteinEllipse(rho)))))),
     Variables(f, a, b, n, rho),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n)), Element(rho, RR), Greater(rho, 1),
         Subset(InteriorClosure(BernsteinEllipse(rho)), HolomorphicDomain(f(z), z, CC)))),
