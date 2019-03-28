@@ -2,6 +2,7 @@
 
 from formulas import *
 
+topics_referencing_entry = {}
 entries_referencing_symbol = {}
 all_used_symbols = set()
 
@@ -21,6 +22,10 @@ for topic in all_topics:
         if arg.head() is Entries:
             for id in arg.args():
                 entry = entries_dict[id._text]
+                if id._text in topics_referencing_entry:
+                    topics_referencing_entry[id._text].append(title)
+                else:
+                    topics_referencing_entry[id._text] = [title]
                 for symbol in entry.all_symbols():
                     if symbol not in topics_referencing_symbol:
                         topics_referencing_symbol[symbol] = {title:0}
@@ -118,9 +123,7 @@ Fungrim is provided under the
 <a href="https://github.com/fredrik-johansson/fungrim/blob/master/LICENSE">MIT license</a>.
 The <a href="https://github.com/fredrik-johansson/fungrim">source code is on GitHub</a>.
 </p></div>
-<p style="text-align:center">%%TIMESTAMP%%</p></div>
-</div>
-</div>
+<p style="text-align:center">%%TIMESTAMP%%</p>
 </body>
 </html>
 """
@@ -189,6 +192,11 @@ class EntryPage(Webpage):
     def entry(self, id):
         html = entries_dict[id].entry_html(single=True)
         self.fp.write(html)
+        self.fp.write("<h2>Topics using this entry</h2>")
+        self.fp.write("<ul>")
+        for title in topics_referencing_entry[id]:
+            self.fp.write("""<li><a href="../topic/%s.html">%s</a></li>""" % (escape_title(title), title))
+        self.fp.write("</ul>")
 
     def start(self):
         Webpage.start(self)
