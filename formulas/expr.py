@@ -376,18 +376,13 @@ class Expr(object):
         if head is GaussLegendreWeight:
             assert len(args) == 2
             return "w_{%s,%s}" % (argstr[0], argstr[1])
-        if head is BesselI:
+        if head in (BesselJ, BesselY, BesselI, BesselK):
             assert len(args) == 2
             n, z = args
             nstr = n.latex(in_small=True)
             zstr = z.latex(in_small)
-            return "I_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
-        if head is BesselJ:
-            assert len(args) == 2
-            n, z = args
-            nstr = n.latex(in_small=True)
-            zstr = z.latex(in_small)
-            return "J_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
+            fsym = {BesselJ:"J", BesselI:"I", BesselY:"Y", BesselK:"K"}[head]
+            return fsym + "_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol():
@@ -803,6 +798,24 @@ describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k
 describe(BellNumber, BellNumber(n), [Element(n, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Bell number")
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
+
+describe(BesselJ, BesselJ(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel function of the first kind")
+describe(BesselY, BesselY(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel function of the second kind")
+describe(BesselI, BesselI(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the first kind")
+describe(BesselK, BesselK(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the second kind")
+
+describe(Hypergeometric0F1, Hypergeometric0F1(a,z), [Element(a,CC),Element(z,CC)], CC, "Confluent hypergeometric limit function")
+describe(Hypergeometric0F1Regularized, Hypergeometric0F1Regularized(a,z), [Element(a,CC),Element(z,CC)], CC, "Regularized confluent hypergeometric limit function")
+
+describe(Hypergeometric1F1, Hypergeometric1F1(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Kummer confluent hypergeometric function")
+describe(Hypergeometric1F1Regularized, Hypergeometric1F1Regularized(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Regularized Kummer confluent hypergeometric function")
+
+describe(HypergeometricU, HypergeometricU(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Tricomi confluent hypergeometric function")
+describe(HypergeometricUStar, HypergeometricUStar(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
+describe(Hypergeometric2F0, Hypergeometric2F0(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
+
+describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
+describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
 
 
 all_entries = []
