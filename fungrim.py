@@ -2,6 +2,33 @@
 
 from formulas import *
 
+entries_referencing_symbol = {}
+all_used_symbols = set()
+
+for entry in all_entries:
+    for symbol in entry.all_symbols():
+        all_used_symbols.add(symbol)
+        if symbol in entries_referencing_symbol:
+            entries_referencing_symbol[symbol].add(entry.id())
+        else:
+            entries_referencing_symbol[symbol] = set([entry.id()])
+
+topics_referencing_symbol = {}
+
+for topic in all_topics:
+    title = topic.title()
+    for arg in topic.args():
+        if arg.head() is Entries:
+            for id in arg.args():
+                entry = entries_dict[id._text]
+                for symbol in entry.all_symbols():
+                    if symbol not in topics_referencing_symbol:
+                        topics_referencing_symbol[symbol] = {title:1}
+                    if title not in topics_referencing_symbol[symbol]:
+                        topics_referencing_symbol[symbol][title] = 1
+                    else:
+                        topics_referencing_symbol[symbol][title] += 1
+
 import os
 if not os.path.exists("build"):
     os.makedirs("build")
@@ -11,6 +38,8 @@ if not os.path.exists("build/html/entry"):
     os.makedirs("build/html/entry")
 if not os.path.exists("build/html/topic"):
     os.makedirs("build/html/topic")
+if not os.path.exists("build/html/symbol"):
+    os.makedirs("build/html/symbol")
 
 import pickle
 katex_cache = {}
@@ -62,6 +91,7 @@ th, td { padding:0.2em; }
 td { min-width: 30px; }
 th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
+.topiclist { columns: 1 300px; }
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
@@ -104,8 +134,8 @@ index_text = """
 
 <p style="margin:1em">
 Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of mathematical functions.
-Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries and related topics).
-All data in Fungrim is represented in symbolic, semantic form (usable by computer algebra software) and also viewable online, with a permanent ID and URL for each entry, symbol or topic.
+Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
+All data in Fungrim is represented in symbolic, semantic form (usable by computer algebra software) and also viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one entry:
 </p>
 """
 
@@ -115,17 +145,17 @@ index_text = index_text.replace("%%NUMSYMBOLS%%", str(len(all_builtins)))
 index_text = index_text.replace("%%NUMENTRIES%%", str(len(all_entries)))
 index_text = index_text.replace("%%NUMTOPICS%%", str(len(all_topics)))
 
-def write_definitions_table(fp, symbols, center=False):
-    fp.write(Expr.definitions_table_html(symbols, center))
+def write_definitions_table(fp, symbols, **kwargs):
+    fp.write(Expr.definitions_table_html(symbols, **kwargs))
 
 class Webpage:
 
     def start(self):
         self.fp = open(self.filepath, "w")
-        self.fp.write(html_start.replace("%%PAGETITLE%%", self.title))
+        self.fp.write(html_start.replace("%%PAGETITLE%%", self.pagetitle))
 
     def entry(self, id):
-        html = entries_dict[id].entry_html(single=False, entrydir="../entry/")
+        html = entries_dict[id].entry_html(single=False)
         self.fp.write(html)
 
     def section(self, title):
@@ -139,10 +169,10 @@ class FrontPage(Webpage):
 
     def __init__(self):
         self.filepath = "build/html/index.html"
-        self.title = "Fungrim: the Mathematical Functions Grimoire"
+        self.pagetitle = "Fungrim: the Mathematical Functions Grimoire"
 
     def entry(self, id):
-        html = entries_dict[id].entry_html(single=False, entrydir="entry/")
+        html = entries_dict[id].entry_html(single=False, entry_dir="entry/", symbol_dir="symbol/")
         self.fp.write(html)
 
     def start(self):
@@ -154,7 +184,7 @@ class EntryPage(Webpage):
     def __init__(self, id):
         self.id = id
         self.filepath = "build/html/entry/%s.html" % self.id
-        self.title = "Entry %s - Fungrim" % self.id
+        self.pagetitle = "Entry %s - Fungrim: the Mathematical Functions Grimoire" % self.id
 
     def entry(self, id):
         html = entries_dict[id].entry_html(single=True)
@@ -170,29 +200,6 @@ class EntryPage(Webpage):
         self.entry(self.id)
         self.end()
 
-class IndexPage(Webpage):
-
-    def __init__(self, url, title, sections_ids):
-        self.filepath = "build/html/%s.html" % url
-        self.title = title
-        self.sections_ids = sections_ids
-
-    def start(self):
-        Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="index.html">Fungrim home page</a></p>""")
-        self.fp.write("""<h1>%s</h1>""" % self.title)
-
-    def write(self):
-        count = 0
-        self.start()
-        for sect, ids in self.sections_ids:
-            self.section(sect)
-            for id in ids:
-                self.entry(id)
-                count += 1
-        self.end()
-        return count
-
 def escape_title(name):
     # paren = name.find("(")
     # if paren >= 0:
@@ -204,7 +211,7 @@ class TopicPage(Webpage):
     def __init__(self, title):
         self.filepath = "build/html/topic/" + escape_title(title) + ".html"
         self.title = title
-        self.pagetitle = title
+        self.pagetitle = title + " - Fungrim: the Mathematical Functions Grimoire"
 
     def start(self):
         Webpage.start(self)
@@ -245,9 +252,54 @@ class DefinitionsPage(Webpage):
 
     def write(self):
         self.start()
-        write_definitions_table(self.fp, described_symbols, center=True)
+        write_definitions_table(self.fp, described_symbols, center=True, symbol_dir="symbol/")
         self.end()
 
+class SymbolPage(Webpage):
+
+    def __init__(self, symbol):
+        self.symbol = symbol
+        self.filepath = "build/html/symbol/%s.html" % self.symbol
+        self.pagetitle = "Symbol %s - Fungrim: the Mathematical Functions Grimoire" % self.symbol
+
+    def content(self, symbol):
+        self.fp.write("""<h2>Short description</h2>""")
+        write_definitions_table(self.fp, [symbol], center=True)
+
+        self.fp.write("""<h2>Full definition</h2>""")
+        self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text. Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
+
+        self.fp.write("""<h2>Topics using this symbol</h2>""")
+        topics = topics_referencing_symbol[symbol]
+        topics = list(topics.items())
+        topics.sort(key=lambda top_count: (top_count[1], top_count[0]), reverse=True)
+        num = len(topics)
+        cols = min(max(1, num // 8), 3)
+        self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> appears in %i topics:</p>""" % (symbol, num))
+        self.fp.write("""<div style="columns: %i"><ul>""" % cols)
+        for topic, count in topics:
+            self.fp.write("""<li><a href="../topic/%s.html">%s</a> (in %i entries)</li>""" % (escape_title(topic), topic, count))
+        self.fp.write("""</div>""")
+
+        self.fp.write("""<h2>Entries using this symbol</h2>""")
+        num = len(entries_referencing_symbol[symbol])
+        self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> appears in %i entries:</p>""" % (symbol, num))
+        cols = min(max(1, num // 8), 5)
+        self.fp.write("""<div style="columns: %i"><ul>""" % cols)
+        for entry in entries_referencing_symbol[symbol]:
+            id = entry
+            self.fp.write("""<li><a href="../entry/%s.html">%s</a></li>""" % (id, id))
+        self.fp.write("""</ul></div>""")
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>Fungrim symbol: %s</h1>""" % self.symbol)
+
+    def write(self):
+        self.start()
+        self.content(self.symbol)
+        self.end()
 
 for entry in all_entries:
     print("entry " + str(entry.id()))
@@ -257,6 +309,9 @@ for topic in all_topics:
     print("topic " + str(topic.title()))
     TopicPage(topic.title()).write()
 
+for symbol in all_used_symbols:
+    print("symbol " + str(symbol))
+    SymbolPage(symbol).write()
 
 DefinitionsPage().write()
 
@@ -272,29 +327,56 @@ frontpage.section("Browse by topic")
 def writetopic(s):
     frontpage.fp.write("""<li><a href="topic/%s.html">%s</a></li>""" % (escape_title(s), s))
 
-frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<div class="topiclist"><ul>""")
+
+frontpage.fp.write("""<li>Analysis</li><ul>""")
+writetopic("Complex plane")
+writetopic("General analytic functions")
+writetopic("Gaussian quadrature")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Constants</li><ul>""")
 writetopic("Pi")
 writetopic("Euler's constant")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Elementary functions</li><ul>""")
 writetopic("Exponential function")
 writetopic("Natural logarithm")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Hypergeometric functions</li><ul>""")
 writetopic("Gamma function")
 writetopic("Legendre polynomials")
 writetopic("Airy functions")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>L-functions</li><ul>""")
 writetopic("Riemann zeta function")
 writetopic("Zeros of the Riemann zeta function")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Modular and elliptic functions</li><ul>""")
 writetopic("Dedekind eta function")
+frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Combinatorial and integer functions</li><ul>""")
 writetopic("Partition function")
 writetopic("Stirling numbers")
-writetopic("General analytic functions")
-writetopic("Gaussian quadrature")
-writetopic("Definite integrals")
-writetopic("Complex plane")
 frontpage.fp.write("""</ul>""")
+
+frontpage.fp.write("""<li>Operations</li><ul>""")
+writetopic("Definite integrals")
+frontpage.fp.write("""</ul>""")
+
+
+frontpage.fp.write("""</ul></div>""")
 
 frontpage.section("General")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="definitions.html">All symbol definitions</a> &nbsp;(%i total entries)</li>""" % len(described_symbols))
 frontpage.fp.write("""</ul>""")
+
 frontpage.end()
 
 print("The grimoire was built successfully!")

@@ -359,10 +359,10 @@ class Expr(object):
             return "\\rho_{" + argstr[0] + "}"
         if head is BernoulliPolynomial:
             assert len(args) == 2
-            return "B_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+            return "B_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is LegendrePolynomial:
             assert len(args) == 2
-            return "P_{" + argstr[0] + "}" + "\\left(" + argstr[1] + "\\right)"
+            return "P_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is LegendrePolynomialZero:
             assert len(args) == 2
             return "x_{%s,%s}" % (argstr[0], argstr[1])
@@ -588,7 +588,7 @@ class Expr(object):
         title = self.get_arg_with_head(Title)
         return title._args[1]._text
 
-    def entry_html(self, single=False, entrydir="../entry/"):
+    def entry_html(self, single=False, entry_dir="../entry/", symbol_dir="../symbol/"):
         id = self.id()
         all_tex = []
         s = ""
@@ -597,7 +597,7 @@ class Expr(object):
             s += """<div>"""
         else:
             s += """<div style="float:left; margin-top:0.5em;">"""
-            s += """<a href="%s%s.html" style="margin-left:3pt">%s</a><br/>""" % (entrydir, id, id)
+            s += """<a href="%s%s.html" style="margin-left:3pt">%s</a><br/>""" % (entry_dir, id, id)
             s += """<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
@@ -633,7 +633,7 @@ class Expr(object):
         # Generate symbol table
         symbols = self.all_symbols()
         s += """<div class="entrysubhead">Definitions:</div>"""
-        s += Expr.definitions_table_html(symbols, center=True)
+        s += Expr.definitions_table_html(symbols, center=True, symbol_dir=symbol_dir)
 
         s += """<div class="entrysubhead">Source code for this entry:</div>"""
         s += "<pre>"
@@ -645,7 +645,7 @@ class Expr(object):
         return s
 
     @staticmethod
-    def definitions_table_html(symbols, center=False):
+    def definitions_table_html(symbols, center=False, entry_dir="../entry/", symbol_dir="../symbol/"):
         katex = katex_function[0]
         s = ""
         if center:
@@ -656,7 +656,7 @@ class Expr(object):
         for symbol in symbols:
             if symbol in descriptions:
                 example, domain, codomain, description = descriptions[symbol]
-                s += """<tr><td><tt>%s</tt>""" % symbol.str()
+                s += """<tr><td><tt><a href="%s%s.html">%s</a></tt>""" % (symbol_dir, symbol.str(), symbol.str())
                 s += """<td>%s</td>""" % katex(example.latex(), False)
                 domstr = ",\, ".join(dom.latex() for dom in domain)
                 s += """<td>%s</td>""" % katex(domstr, False)
