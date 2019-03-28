@@ -174,6 +174,13 @@ class Expr(object):
         if self is Hypergeometric0F1: return "{}_0F_1"
         if self is Hypergeometric1F1: return "{}_1F_1"
         if self is Hypergeometric2F1: return "{}_2F_1"
+        if self is Hypergeometric2F0: return "{}_2F_0"
+        if self is HypergeometricU: return "U"
+        if self is HypergeometricUStar: return "U^{*}"
+        if self is Hypergeometric0F1Regularized: return "{}_0{\\tilde F}_1"
+        if self is Hypergeometric1F1Regularized: return "{}_1{\\tilde F}_1"
+        if self is Hypergeometric2F1Regularized: return "{}_2{\\tilde F}_1"
+        if self is Hypergeometric2F0Regularized: return "{}_2{\\tilde F}_0"
         if self is AiryAi: return "\\operatorname{Ai}"
         if self is AiryBi: return "\\operatorname{Bi}"
         if self is AiryAiPrime: return "\\operatorname{Ai}'"
@@ -375,6 +382,12 @@ class Expr(object):
             nstr = n.latex(in_small=True)
             zstr = z.latex(in_small)
             return "I_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
+        if head is BesselJ:
+            assert len(args) == 2
+            n, z = args
+            nstr = n.latex(in_small=True)
+            zstr = z.latex(in_small)
+            return "J_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol():
@@ -724,7 +737,9 @@ BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK
-Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1
+Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
+HypergeometricU HypergeometricUStar
+Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
 AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum

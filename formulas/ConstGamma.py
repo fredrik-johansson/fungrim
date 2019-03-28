@@ -58,7 +58,7 @@ make_entry(ID("a1f1ec"),
     Formula(Equal(ConstGamma, Limit(RiemannZeta(s) - 1/(s-1), s, 1))))
 
 make_entry(ID("cf3977"),
-    Formula(Equal(ConstGamma, -Derivative(Gamma(z), Tuple(z, 1, 1)))))
+    Formula(Equal(ConstGamma, -Derivative(GammaFunction(z), Tuple(z, 1, 1)))))
 
 make_entry(ID("d17d0b"),
     Formula(Equal(ConstGamma, -DigammaFunction(1))))

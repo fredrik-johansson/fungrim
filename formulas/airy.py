@@ -52,16 +52,16 @@ make_entry(ID("de9800"),
     Element(z, CC))
 
 make_entry(ID("693cfe"),
-    Formula(Equal(AiryAi(0), Div(1, Pow(3,Div(2,3))*Gamma(Div(2,3))))))
+    Formula(Equal(AiryAi(0), Div(1, Pow(3,Div(2,3))*GammaFunction(Div(2,3))))))
 
 make_entry(ID("807917"),
-    Formula(Equal(AiryAiPrime(0), -Div(1, Pow(3,Div(1,3))*Gamma(Div(1,3))))))
+    Formula(Equal(AiryAiPrime(0), -Div(1, Pow(3,Div(1,3))*GammaFunction(Div(1,3))))))
 
 make_entry(ID("9a8d4d"),
-    Formula(Equal(AiryBi(0), Div(1, Pow(3,Div(1,6))*Gamma(Div(2,3))))))
+    Formula(Equal(AiryBi(0), Div(1, Pow(3,Div(1,6))*GammaFunction(Div(2,3))))))
 
 make_entry(ID("fba07c"),
-    Formula(Equal(AiryBiPrime(0), Div(Pow(3,Div(1,6)), Gamma(Div(1,3))))))
+    Formula(Equal(AiryBiPrime(0), Div(Pow(3,Div(1,6)), GammaFunction(Div(1,3))))))
 
 make_entry(ID("b2e9d0"),
     Formula(Equal(Derivative(AiryAi(z), Tuple(z, z, 2)), z*AiryAi(z))),

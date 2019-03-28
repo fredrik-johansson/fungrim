@@ -17,6 +17,7 @@ from .stirling_numbers import *
 from .gaussian_quadrature import *
 from .general_functions import *
 from .complex_plane import *
+from .confluent_hypergeometric import *
 
 entries_dict = {}
 for entry in all_entries:

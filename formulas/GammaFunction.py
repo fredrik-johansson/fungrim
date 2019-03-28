@@ -94,7 +94,7 @@ make_entry(ID("a787eb"),
     Assumptions(And(Element(z, CC), NotElement(2*z, ZZLessEqual(0)))))
 
 make_entry(ID("90a1e1"),
-    Formula(Equal(Product(GammaFunction(z+Div(k,m)), Tuple(k, 0, m-1)), (2*pi)**((m-1)/2) * m**(Div(1,2)-m*z) * Gamma(m*z))),
+    Formula(Equal(Product(GammaFunction(z+Div(k,m)), Tuple(k, 0, m-1)), (2*pi)**((m-1)/2) * m**(Div(1,2)-m*z) * GammaFunction(m*z))),
     Variables(z),
     Assumptions(And(Element(z, CC), Element(m, ZZGreaterEqual(1)), NotElement(m*z, ZZLessEqual(0)))))
 

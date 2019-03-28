@@ -347,6 +347,7 @@ frontpage.fp.write("""</ul>""")
 
 frontpage.fp.write("""<li>Hypergeometric functions</li><ul>""")
 writetopic("Gamma function")
+writetopic("Confluent hypergeometric functions")
 writetopic("Legendre polynomials")
 writetopic("Airy functions")
 frontpage.fp.write("""</ul>""")
