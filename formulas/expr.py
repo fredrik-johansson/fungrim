@@ -582,7 +582,6 @@ class Expr(object):
         s += """<div class="entrysubhead">Assumptions:</div>"""
         for arg in self.args():
             s += arg.html(display=True)
-        s += "</ul>"
         return s
 
     def get_arg_with_head(self, head):

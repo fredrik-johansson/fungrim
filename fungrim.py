@@ -124,6 +124,7 @@ Fungrim is provided under the
 The <a href="https://github.com/fredrik-johansson/fungrim">source code is on GitHub</a>.
 </p></div>
 <p style="text-align:center">%%TIMESTAMP%%</p>
+</div>
 </body>
 </html>
 """
@@ -337,48 +338,47 @@ def writetopic(s):
 
 frontpage.fp.write("""<div class="topiclist"><ul>""")
 
-frontpage.fp.write("""<li>Analysis</li><ul>""")
+frontpage.fp.write("""<li>Analysis<ul>""")
 writetopic("Complex plane")
 writetopic("General analytic functions")
 writetopic("Gaussian quadrature")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Constants</li><ul>""")
+frontpage.fp.write("""<li>Constants<ul>""")
 writetopic("Pi")
 writetopic("Euler's constant")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Elementary functions</li><ul>""")
+frontpage.fp.write("""<li>Elementary functions<ul>""")
 writetopic("Exponential function")
 writetopic("Natural logarithm")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Hypergeometric functions</li><ul>""")
+frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
 writetopic("Gamma function")
 writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")
 writetopic("Airy functions")
 writetopic("Legendre polynomials")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Zeta and L-functions</li><ul>""")
+frontpage.fp.write("""<li>Zeta and L-functions<ul>""")
 writetopic("Riemann zeta function")
 writetopic("Zeros of the Riemann zeta function")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Modular and elliptic functions</li><ul>""")
+frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")
 writetopic("Dedekind eta function")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Combinatorial and integer functions</li><ul>""")
+frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
 writetopic("Partition function")
 writetopic("Stirling numbers")
-frontpage.fp.write("""</ul>""")
+frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Operations</li><ul>""")
+frontpage.fp.write("""<li>Operations<ul>""")
 writetopic("Definite integrals")
-frontpage.fp.write("""</ul>""")
-
+frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""</ul></div>""")
 
