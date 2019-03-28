@@ -23,7 +23,7 @@ for topic in all_topics:
                 entry = entries_dict[id._text]
                 for symbol in entry.all_symbols():
                     if symbol not in topics_referencing_symbol:
-                        topics_referencing_symbol[symbol] = {title:1}
+                        topics_referencing_symbol[symbol] = {title:0}
                     if title not in topics_referencing_symbol[symbol]:
                         topics_referencing_symbol[symbol][title] = 1
                     else:
