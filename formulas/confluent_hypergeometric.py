@@ -2,6 +2,16 @@ from .expr import *
 
 def_Topic(
     Title("Confluent hypergeometric functions"),
+    Section("Differential equations"),
+    Entries(
+        "06f229",
+        "bb5d67",
+    ),
+    Section("Kummer's transformation"),
+    Entries(
+        "a047eb",
+        "9d3147",
+    ),
     Section("Connection formulas"),
     Entries(
         "c8fcc7",  # ustar as u
@@ -14,6 +24,30 @@ def_Topic(
         "00dfd1",  # 0f1 as I
     ),
 )
+
+make_entry(ID("a047eb"),
+    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Exp(z) * Hypergeometric1F1Regularized(b-a, b, -z))),
+    Variables(a, b, z),
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC))))
+
+make_entry(ID("9d3147"),
+    Formula(Equal(HypergeometricU(a,b,z), z**(1-b) * HypergeometricU(1+a-b, 2-b, z))),
+    Variables(a, b, z),
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
+
+make_entry(ID("06f229"),
+    Formula(Where(Equal(z * Derivative(y(z), Tuple(z, z, 2)) + (b-z) * Derivative(y(z), Tuple(z, z, 1)) - a*y(z), 0), Equal(y(z),
+        C*Hypergeometric1F1Regularized(a,b,z) + D*HypergeometricU(a,b,z)))),
+    Variables(z, a, b, C, D),
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Element(C, CC), Element(D, CC),
+        Or(Equal(D, 0), Unequal(z, 0), Element(-a, ZZGreaterEqual(0))))))
+
+make_entry(ID("bb5d67"),
+    Formula(Where(Equal(z * Derivative(y(z), Tuple(z, z, 2)) + a * Derivative(y(z), Tuple(z, z, 1)) - y(z), 0), Equal(y(z),
+        C*Hypergeometric0F1Regularized(a,z) + D*z**(1-a)*Hypergeometric0F1Regularized(2-a,z)))),
+    Variables(z, a, C, D),
+    Assumptions(And(Element(a, CC), Element(z, CC), Element(C, CC), Element(D, CC),
+        Or(Equal(D, 0), Unequal(z, 0), Element(1-a, ZZGreaterEqual(0))))))
 
 make_entry(ID("c8fcc7"),
     Formula(Equal(HypergeometricUStar(a,b,z), z**a * HypergeometricU(a,b,z))),
