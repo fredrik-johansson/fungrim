@@ -96,7 +96,7 @@ th, td { padding:0.2em; }
 td { min-width: 30px; }
 th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
-.topiclist { columns: 1 300px; }
+.topiclist { columns: 2 300px; }
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
@@ -356,11 +356,12 @@ frontpage.fp.write("""</ul>""")
 frontpage.fp.write("""<li>Hypergeometric functions</li><ul>""")
 writetopic("Gamma function")
 writetopic("Confluent hypergeometric functions")
-writetopic("Legendre polynomials")
+writetopic("Error functions")
 writetopic("Airy functions")
+writetopic("Legendre polynomials")
 frontpage.fp.write("""</ul>""")
 
-frontpage.fp.write("""<li>L-functions</li><ul>""")
+frontpage.fp.write("""<li>Zeta and L-functions</li><ul>""")
 writetopic("Riemann zeta function")
 writetopic("Zeros of the Riemann zeta function")
 frontpage.fp.write("""</ul>""")

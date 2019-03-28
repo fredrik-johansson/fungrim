@@ -306,7 +306,7 @@ class Expr(object):
                         return "%s''(%s)" % (fstr, pointstr)
                     if order.is_integer() and order._integer == 3:
                         return "%s'''(%s)" % (fstr, pointstr)
-                    return "{%s}^{(%s)}(%s)" % (args[0].head()._symbol, order.latex(), pointstr)
+                    return "{%s}^{(%s)}(%s)" % (fstr, order.latex(), pointstr)
             varstr = var.latex()
             pointstr = point.latex(in_small=True)
             orderstr = order.latex()
@@ -376,6 +376,9 @@ class Expr(object):
         if head is GaussLegendreWeight:
             assert len(args) == 2
             return "w_{%s,%s}" % (argstr[0], argstr[1])
+        if head is HermitePolynomial:
+            assert len(args) == 2
+            return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head in (BesselJ, BesselY, BesselI, BesselK):
             assert len(args) == 2
             n, z = args
@@ -737,6 +740,7 @@ HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
 AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
+HermitePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
@@ -792,6 +796,7 @@ describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))]
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], RR, "Legendre polynomial")
 describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
 describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], CC, "Gauss-Legendre quadrature weight")
+describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], RR, "Hermite polynomial")
 describe(StirlingCycle, StirlingCycle(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Unsigned Stirling number of the first kind")
 describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZ, "Signed Stirling number of the first kind")
 describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Stirling number of the second kind")
@@ -816,6 +821,10 @@ describe(Hypergeometric2F0, Hypergeometric2F0(a,b,z), [Element(a,CC),Element(b,C
 
 describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
 describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
+
+describe(Erf, Erf(z), [Element(z, CC)], CC, "Error function")
+describe(Erfc, Erfc(z), [Element(z, CC)], CC, "Complementary error function")
+describe(Erfi, Erfi(z), [Element(z, CC)], CC, "Imaginary error function")
 
 
 all_entries = []
