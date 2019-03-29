@@ -2,15 +2,15 @@
 
 from .expr import *
 
-from .ConstGamma import *
-from .ConstPi import *
-from .DedekindEta import *
-from .Exp import *
-from .GammaFunction import *
-from .LegendrePolynomial import *
-from .Log import *
-from .PartitionsP import *
-from .RiemannZeta import *
+from .const_gamma import *
+from .pi import *
+from .dedekind_eta import *
+from .exp import *
+from .gamma import *
+from .legendre_polynomial import *
+from .log import *
+from .partitions import *
+from .riemann_zeta import *
 from .integrals import *
 from .airy import *
 from .stirling_numbers import *
