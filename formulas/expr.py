@@ -197,6 +197,7 @@ class Expr(object):
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
+        if self is PP: return "\\mathbb{P}"
         if self is ZZ: return "\\mathbb{Z}"
         if self is QQ: return "\\mathbb{Q}"
         if self is RR: return "\\mathbb{R}"
@@ -725,7 +726,7 @@ PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element NotElement Subset SubsetEqual
-ZZ QQ RR CC HH
+PP ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
@@ -792,6 +793,7 @@ def describe(symbol, example, domain, codomain, description):
     descriptions[symbol] = (example, domain, codomain, description)
 
 
+describe(PP, PP, [], None, "Prime numbers")
 describe(ZZ, ZZ, [], None, "Integers")
 describe(QQ, QQ, [], None, "Rational numbers")
 describe(RR, RR, [], None, "Real numbers")
@@ -821,7 +823,7 @@ describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], 
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], RR, "Legendre polynomial")
 describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
-describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], CC, "Gauss-Legendre quadrature weight")
+describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Gauss-Legendre quadrature weight")
 describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], RR, "Hermite polynomial")
 describe(StirlingCycle, StirlingCycle(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Unsigned Stirling number of the first kind")
 describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZ, "Signed Stirling number of the first kind")

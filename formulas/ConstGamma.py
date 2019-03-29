@@ -33,15 +33,6 @@ def_Topic(
     SeeTopics("Gamma function", "Riemann zeta function"),
 )
 
-index_ConstGamma = ("ConstGamma", "The constant gamma (0.577...)",
-    [
-        ("Numerical value", ["e876e8","28bf9a"]),
-        ("Limit representations", ["4644c0"]),
-        ("Special function representations", ["a1f1ec","cf3977","d17d0b","818008"]),
-        ("Integral representations", ["39fe5f","a1ca3e"]),
-        ("Approximations", ["014c4e"]),
-    ])
-
 make_entry(ID("e876e8"),
     Formula(Element(ConstGamma,
         RealBall(Decimal("0.57721566490153286060651209008240243104215933593992"), Decimal("3.60e-51")))))

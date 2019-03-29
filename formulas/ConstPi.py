@@ -43,17 +43,6 @@ def_Topic(
     ),
 )
 
-index_ConstPi = ("ConstPi", "The constant pi (3.14...)",
-    [
-        ("Numerical value", ["6505a9","0c838a"]),
-        ("Elementary function representations", ["0c9939","f8d280","590136"]),
-        ("Integral representations", ["464961","04cd99","dae4a7"]),
-        ("Series representations", ["f617c0","fddfe6"]),
-        ("Product representations", ["69fe63"]),
-        ("Limit representations", ["e1e106"]),
-        ("Approximations", ["2516c2","1e3a25","fdc3a3","4c0698"]),
-    ])
-
 make_entry(ID("6505a9"),
     Formula(Element(ConstPi,
         RealBall(Decimal("3.1415926535897932384626433832795028841971693993751"), Decimal("5.83e-51")))))

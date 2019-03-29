@@ -5,9 +5,13 @@ from .expr import *
 def_Topic(
     Title("Riemann zeta function"),
     DefinitionsTable(RiemannZeta, RiemannZetaZero),
-    Section("L-series"),
+    Section("Dirichlet series"),
     Entries(
-        "da2fdb"   # L-series
+        "da2fdb"   # Dirichlet series
+    ),
+    Section("Euler product"),
+    Entries(
+        "8f5e66",  # Euler product
     ),
     Section("Special values"),
     Entries(
@@ -86,21 +90,13 @@ def_Topic(
     SeeTopics("Riemann zeta function"),
 )
 
-
-index_RiemannZeta = ("RiemannZeta", "Riemann zeta function",
-    [("L-series", ["da2fdb"]),
-     ("Analytic properties", ["8b5ddb","52c4ab","fdb94b","36a095","9a258f"]),
-     ("Zeros", ["2e1ff3","692e42","cbbf16","e6ff64","60c2ec","945fa5","c0ae99","71d9d9","dc558b","2e1cc7"]),
-     ("Complex parts", ["69348a"]),
-     ("Values at integers", ["a01b6e","e84983","72ccda","51fd98","7cb17f","e50a56","e93ca8"]),
-     ("Functional equation", ["9ee8bc"]),
-     ("Bounds and inequalities", ["809bc0","3a5eb6"]),
-     ("Euler-Maclaurin formula", ["792f7b"]),
-     ("Approximations", ["d31b04","e37535"]),
-    ])
-
 make_entry(ID("da2fdb"),
     Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
+
+make_entry(ID("8f5e66"),
+    Formula(Equal(RiemannZeta(s), ProductCondition(1/(1-1/p**s), p, Element(p, PP)))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
