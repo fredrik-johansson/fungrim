@@ -134,6 +134,8 @@ class Expr(object):
             return True
         head = self._args[0]
         if head is Div:
+            if not self._args[-1].is_atom():
+                return False
             allow_div = False
         if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt):
             return False
@@ -163,6 +165,9 @@ class Expr(object):
         if self is JacobiTheta2: return "\\theta_2"
         if self is JacobiTheta3: return "\\theta_3"
         if self is JacobiTheta4: return "\\theta_4"
+        if self is WeierstrassP: return "\\wp"
+        if self is WeierstrassSigma: return "\\sigma"
+        if self is WeierstrassZeta: return "\\zeta"
         if self is EulerQSeries: return "\\phi"
         if self is PartitionsP: return "p"
         if self is DivisorSigma: return "\\sigma"
@@ -283,6 +288,14 @@ class Expr(object):
                 return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
             if head is Product:
                 return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
+        if head in (SumCondition, ProductCondition):
+            assert len(args) == 3
+            func, var, cond = args
+            cond = cond.latex(in_small=True)
+            if head is SumCondition:
+                return "\\sum_{%s} %s" % (cond, argstr[0])
+            if head is ProductCondition:
+                return "\\prod_{%s} \\left( %s \\right)" % (cond, argstr[0])
         if head is Limit:
             assert len(args) == 3
             formula, var, point = args
@@ -477,6 +490,8 @@ class Expr(object):
         if head is BernsteinEllipse:
             assert len(args) == 1
             return "\\mathcal{E}_{" + argstr[0] + "}"
+        if head is Lattice:
+            return "\\Lambda_{(%s)}" % (", ".join(argstr))
         if head is DomainCodomain:
             assert len(args) == 2
             #return "%s \\rightarrow %s" % (argstr[0], argstr[1])
@@ -723,6 +738,8 @@ Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Sum Product Limit Integral Derivative
+SumCondition ProductCondition
+SumSet ProductSet
 AsymptoticTo
 Supremum
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
@@ -752,6 +769,8 @@ JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
 KroneckerDelta
+Lattice
+WeierstrassP WeierstrassZeta WeierstrassSigma
 """)
 
 inject_builtin("""
@@ -837,6 +856,12 @@ describe(JacobiTheta1, JacobiTheta1(z,tau), [Element(z, CC), Element(tau, HH)], 
 describe(JacobiTheta2, JacobiTheta2(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 describe(JacobiTheta3, JacobiTheta3(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 describe(JacobiTheta4, JacobiTheta4(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
+
+describe(WeierstrassP, WeierstrassP(z,tau), [Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)], CC, "Weierstrass elliptic function")
+describe(WeierstrassZeta, WeierstrassZeta(z,tau), [Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)], CC, "Weierstrass zeta function")
+describe(WeierstrassSigma, WeierstrassSigma(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Weierstrass sigma function")
+
+describe(Lattice, Lattice(a,b), [Element(a, CC), Element(b, CC)], PowerSet(CC), "Complex lattice with periods a, b")
 
 
 all_entries = []

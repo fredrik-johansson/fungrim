@@ -370,6 +370,7 @@ frontpage.fp.write("""</ul></li>""")
 frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")
 writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
+writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
