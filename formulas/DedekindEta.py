@@ -16,6 +16,10 @@ def_Topic(
         "9b8c9f",
         "204acd",
     ),
+    Section("Connection formulas"),
+    Entries(
+        "737805",
+    ),
     Section("Modular transformations"),
     Entries(
         "1bae52",
@@ -67,6 +71,11 @@ make_entry(ID("9b8c9f"),
 
 make_entry(ID("204acd"),
     Formula(Equal(DedekindEta(Exp(2*ConstPi*ConstI/3)), Exp(-(ConstPi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(GammaFunction(Div(1,3)), Div(3,2)) / (2 * ConstPi)))))
+
+make_entry(ID("737805"),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * JacobiTheta3((tau+1)/2, 3*tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("1bae52"),
     Formula(Equal(DedekindEta(tau+1), Exp(ConstPi*ConstI/12) * DedekindEta(tau))),

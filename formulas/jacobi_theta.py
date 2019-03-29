@@ -171,19 +171,3 @@ make_entry(ID("8d6a1d"),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
 
 
-"""
-def theta1(z,t):
-    return (-1j)*nsum(lambda n: (-1)**n*expjpi((n+0.5)**2*t+(2*n+1)*z), [-inf,inf])
-
-def theta2(z,t):
-    return nsum(lambda n: expjpi((n+0.5)**2*t+(2*n+1)*z), [-inf,inf])
-
-def theta3(z,t):
-    return nsum(lambda n: expjpi(n**2*t+2*n*z), [-inf,inf])
-
-def theta4(z,t):
-    return nsum(lambda n: (-1)**n*expjpi(n**2*t+2*n*z), [-inf,inf])
-
-
-
-"""
