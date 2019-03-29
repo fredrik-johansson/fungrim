@@ -109,7 +109,7 @@ make_entry(ID("b5bd5d"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("fae9d3"),
-    Formula(Equal(Derivative(Erf(z), Tuple(z, z, n)), 2/Sqrt(ConstPi) * (-1)**(k+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
+    Formula(Equal(Derivative(Erf(z), Tuple(z, z, n)), 2/Sqrt(ConstPi) * (-1)**(n+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(1)))))
 

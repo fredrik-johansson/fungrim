@@ -135,7 +135,7 @@ class Expr(object):
         head = self._args[0]
         if head is Div:
             allow_div = False
-        if head not in (Pos, Neg, Add, Sub, Mul, Div):
+        if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt):
             return False
         for arg in self._args[1:]:
             if not arg.show_exponential_as_power(allow_div=allow_div):
@@ -159,6 +159,10 @@ class Expr(object):
         if self is DedekindEta: return "\\eta"
         if self is DedekindEtaEpsilon: return "\\varepsilon"
         if self is DedekindSum: return "s"
+        if self is JacobiTheta1: return "\\theta_1"
+        if self is JacobiTheta2: return "\\theta_2"
+        if self is JacobiTheta3: return "\\theta_3"
+        if self is JacobiTheta4: return "\\theta_4"
         if self is EulerQSeries: return "\\phi"
         if self is PartitionsP: return "p"
         if self is DivisorSigma: return "\\sigma"
@@ -229,6 +233,9 @@ class Expr(object):
             else:
                 numstr = num.latex()
                 denstr = den.latex()
+                #if num.is_integer() and den.is_integer():
+                #    return "\\frac{" + numstr + "}{" + denstr + "}"
+                #else:
                 return "\\frac{" + numstr + "}{" + denstr + "}"
 
         argstr = [arg.latex(in_small=in_small) for arg in args]
@@ -741,6 +748,7 @@ AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
+JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
 KroneckerDelta
@@ -824,6 +832,11 @@ describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [E
 describe(Erf, Erf(z), [Element(z, CC)], CC, "Error function")
 describe(Erfc, Erfc(z), [Element(z, CC)], CC, "Complementary error function")
 describe(Erfi, Erfi(z), [Element(z, CC)], CC, "Imaginary error function")
+
+describe(JacobiTheta1, JacobiTheta1(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
+describe(JacobiTheta2, JacobiTheta2(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
+describe(JacobiTheta3, JacobiTheta3(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
+describe(JacobiTheta4, JacobiTheta4(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 
 
 all_entries = []
