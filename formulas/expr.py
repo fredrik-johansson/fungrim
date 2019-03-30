@@ -194,6 +194,7 @@ class Expr(object):
         if self is AiryBi: return "\\operatorname{Bi}"
         if self is AiryAiPrime: return "\\operatorname{Ai}'"
         if self is AiryBiPrime: return "\\operatorname{Bi}'"
+        if self is LogIntegral: return "\\operatorname{li}"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Arg: return "\\arg"
@@ -204,6 +205,7 @@ class Expr(object):
         if self is CC: return "\\mathbb{C}"
         if self is HH: return "\\mathbb{H}"
         if self is UnitCircle: return "\\mathbb{T}"
+        if self is PrimePi: return "\\pi"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -382,6 +384,9 @@ class Expr(object):
         if head is HarmonicNumber:
             assert len(args) == 1
             return "H_{" + argstr[0] + "}"
+        if head is PrimeNumber:
+            assert len(args) == 1
+            return "p_{" + argstr[0] + "}"
         if head is RiemannZetaZero:
             assert len(args) == 1
             return "\\rho_{" + argstr[0] + "}"
@@ -772,6 +777,9 @@ PartitionsP HardyRamanujanA
 KroneckerDelta
 Lattice
 WeierstrassP WeierstrassZeta WeierstrassSigma
+PrimeNumber PrimePi
+RiemannHypothesis
+LogIntegral
 """)
 
 inject_builtin("""
@@ -864,6 +872,12 @@ describe(WeierstrassZeta, WeierstrassZeta(z,tau), [Element(z, SetMinus(CC, Latti
 describe(WeierstrassSigma, WeierstrassSigma(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Weierstrass sigma function")
 
 describe(Lattice, Lattice(a,b), [Element(a, CC), Element(b, CC)], PowerSet(CC), "Complex lattice with periods a, b")
+
+describe(PrimeNumber, PrimeNumber(n), [Element(n, ZZGreaterEqual(1))], PP, "Nth prime number")
+describe(PrimePi, PrimePi(x), [Element(x, RR)], ZZGreaterEqual(0), "Prime counting function")
+describe(RiemannHypothesis, RiemannHypothesis, [], None, "Truth of the Riemann hypothesis")
+
+describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
 
 
 all_entries = []

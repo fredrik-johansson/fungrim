@@ -323,7 +323,7 @@ make_entry(ID("60c2ec"),
 make_entry(ID("e6ff64"),
     Formula(Equal(Re(RiemannZetaZero(n)), Div(1,2))),
     Variables(n),
-    Assumptions(And(Element(n, ZZ), Unequal(n, 0), Less(Abs(n), 103800788359))),
+    Assumptions(And(Element(n, ZZ), Unequal(n, 0), Or(Less(Abs(n), 103800788359), RiemannHypothesis))),
     References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
 
 

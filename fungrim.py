@@ -374,6 +374,7 @@ writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
+writetopic("Prime numbers")
 writetopic("Partition function")
 writetopic("Stirling numbers")
 frontpage.fp.write("""</ul></li>""")
