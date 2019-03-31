@@ -368,6 +368,7 @@ writetopic("Zeros of the Riemann zeta function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")
+writetopic("Modular transformations")
 writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
 writetopic("Weierstrass elliptic functions")

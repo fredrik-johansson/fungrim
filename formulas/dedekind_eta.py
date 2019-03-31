@@ -21,6 +21,7 @@ def_Topic(
         "737805",
     ),
     Section("Modular transformations"),
+    SeeTopics("Modular transformations"),
     Entries(
         "1bae52",
         "acee1a",
@@ -95,14 +96,12 @@ make_entry(ID("3b806f"),
 make_entry(ID("29d9ab"),
     Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)) ** 24, (c*tau+d)**12 * DedekindEta(tau)**24)),
     Variables(tau,a,b,c,d),
-    Assumptions(And(Element(tau, HH),
-        Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1))))
+    Assumptions(And(Element(tau, HH), Element(Matrix2x2(a, b, c, d), SL2Z))))
 
 make_entry(ID("9f19c1"),
     Formula(Equal(DedekindEta((a*tau+b)/(c*tau+d)), DedekindEtaEpsilon(a,b,c,d) * (c*tau+d)**Div(1,2) * DedekindEta(tau))),
     Variables(tau,a,b,c,d),
-    Assumptions(And(Element(tau, HH),
-        Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Or(Greater(c, 0), And(Equal(c, 0), Equal(d, 1))))))
+    Assumptions(And(Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))))
 
 make_entry(ID("f04e01"),
     Formula(Equal(DedekindEtaEpsilon(1,b,0,1), Exp((ConstPi*ConstI*b)/12))),

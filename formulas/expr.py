@@ -161,6 +161,7 @@ class Expr(object):
         if self is DedekindEta: return "\\eta"
         if self is DedekindEtaEpsilon: return "\\varepsilon"
         if self is DedekindSum: return "s"
+        if self is ModularJ: return "j"
         if self is JacobiTheta1: return "\\theta_1"
         if self is JacobiTheta2: return "\\theta_2"
         if self is JacobiTheta3: return "\\theta_3"
@@ -206,6 +207,9 @@ class Expr(object):
         if self is HH: return "\\mathbb{H}"
         if self is UnitCircle: return "\\mathbb{T}"
         if self is PrimePi: return "\\pi"
+        if self is SL2Z: return "\\operatorname{SL}_2(\\mathbb{Z})"
+        if self is PSL2Z: return "\\operatorname{PSL}_2(\\mathbb{Z})"
+        if self is ModularGroupFundamentalDomain: return "\\mathcal{F}"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -523,6 +527,12 @@ class Expr(object):
                 expo = expo.lstrip("+")
                 text = mant + " \\cdot 10^{" + expo + "}"
             return text
+        if head is Matrix2x2:
+            assert len(args) == 4
+            return r"\begin{pmatrix} %s & %s \\ %s & %s \end{pmatrix}" % tuple(argstr)
+        if head is ModularGroupAction:
+            assert len(args) == 2
+            return "%s \\circ %s" % tuple(argstr)
         if head is Parenthesis:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
@@ -784,6 +794,9 @@ WeierstrassP WeierstrassZeta WeierstrassSigma
 PrimeNumber PrimePi
 RiemannHypothesis
 LogIntegral
+Matrix2x2
+SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
+ModularJ
 """)
 
 inject_builtin("""
@@ -876,6 +889,12 @@ describe(WeierstrassZeta, WeierstrassZeta(z,tau), [Element(z, SetMinus(CC, Latti
 describe(WeierstrassSigma, WeierstrassSigma(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Weierstrass sigma function")
 
 describe(Lattice, Lattice(a,b), [Element(a, CC), Element(b, CC)], PowerSet(CC), "Complex lattice with periods a, b")
+
+describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
+describe(SL2Z, SL2Z, [], None, "Modular group")
+describe(PSL2Z, PSL2Z, [], None, "Modular group (canonical representatives)")
+describe(ModularGroupAction, ModularGroupAction(gamma, tau), [Element(gamma, SL2Z), Element(tau, HH)], HH, "Action of modular group")
+describe(ModularGroupFundamentalDomain, ModularGroupFundamentalDomain, [], PowerSet(HH), "Fundamental domain for action of the modular group")
 
 describe(PrimeNumber, PrimeNumber(n), [Element(n, ZZGreaterEqual(1))], PP, "Nth prime number")
 describe(PrimePi, PrimePi(x), [Element(x, RR)], ZZGreaterEqual(0), "Prime counting function")

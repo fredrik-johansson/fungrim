@@ -22,6 +22,7 @@ from .error_functions import *
 from .jacobi_theta import *
 from .weierstrass_elliptic import *
 from .prime_numbers import *
+from .modular_transformations import *
 
 entries_dict = {}
 for entry in all_entries:
