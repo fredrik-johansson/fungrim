@@ -457,6 +457,9 @@ class Expr(object):
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
         if head is Implies:
             return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
+        if head is EqualAndElement:
+            assert len(args) == 3
+            return "%s = %s \\in %s" % (argstr[0], argstr[1], argstr[2])
         if head is KroneckerDelta:
             assert len(args) == 2
             xstr = args[0].latex(in_small=True)
@@ -731,6 +734,7 @@ PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element NotElement Subset SubsetEqual
+EqualAndElement
 PP ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval

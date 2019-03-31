@@ -26,6 +26,8 @@ def_Topic(
     Entries(
         "01bbb6",
         "bd319e",
+        "20e530",
+        "4d65e5",
     ),
     Section("Analytic properties"),
     Entries(
@@ -52,16 +54,16 @@ make_entry(ID("de9800"),
     Element(z, CC))
 
 make_entry(ID("693cfe"),
-    Formula(Equal(AiryAi(0), Div(1, Pow(3,Div(2,3))*GammaFunction(Div(2,3))))))
+    Formula(EqualAndElement(AiryAi(0), Div(1, Pow(3,Div(2,3))*GammaFunction(Div(2,3))), RealBall(Decimal("0.355028053887817239260063186004"), Decimal("1.84e-31")))))
 
 make_entry(ID("807917"),
-    Formula(Equal(AiryAiPrime(0), -Div(1, Pow(3,Div(1,3))*GammaFunction(Div(1,3))))))
+    Formula(EqualAndElement(AiryAiPrime(0), -Div(1, Pow(3,Div(1,3))*GammaFunction(Div(1,3))), RealBall(Decimal("-0.258819403792806798405183560189"), Decimal("2.04e-31")))))
 
 make_entry(ID("9a8d4d"),
-    Formula(Equal(AiryBi(0), Div(1, Pow(3,Div(1,6))*GammaFunction(Div(2,3))))))
+    Formula(EqualAndElement(AiryBi(0), Div(1, Pow(3,Div(1,6))*GammaFunction(Div(2,3))), RealBall(Decimal("0.614926627446000735150922369094"), Decimal("3.87e-31")))))
 
 make_entry(ID("fba07c"),
-    Formula(Equal(AiryBiPrime(0), Div(Pow(3,Div(1,6)), GammaFunction(Div(1,3))))))
+    Formula(EqualAndElement(AiryBiPrime(0), Div(Pow(3,Div(1,6)), GammaFunction(Div(1,3))), RealBall(Decimal("0.448288357353826357914823710399"), Decimal("1.72e-31")))))
 
 make_entry(ID("b2e9d0"),
     Formula(Equal(Derivative(AiryAi(z), Tuple(z, z, 2)), z*AiryAi(z))),
@@ -89,7 +91,15 @@ make_entry(ID("bd319e"),
     Variables(z),
     Assumptions(Element(z, CC)))
 
+make_entry(ID("20e530"),
+    Formula(Equal(AiryAiPrime(z), AiryAiPrime(0)*Hypergeometric0F1(Div(1,3),z**3/9) + (z**2/2)*AiryAi(0)*Hypergeometric0F1(Div(5,3),z**3/9))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
 
+make_entry(ID("4d65e5"),
+    Formula(Equal(AiryBiPrime(z), AiryBiPrime(0)*Hypergeometric0F1(Div(1,3),z**3/9) + (z**2/2)*AiryBi(0)*Hypergeometric0F1(Div(5,3),z**3/9))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
 
 make_entry(ID("def37e"),
     Formula(Equal(HolomorphicDomain(C*AiryAi(z) + D*AiryBi(z), z, Union(CC, Set(UnsignedInfinity))), CC)),
