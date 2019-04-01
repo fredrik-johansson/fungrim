@@ -47,7 +47,7 @@ make_entry(ID("1d1028"),
     Formula(Element(ConstI, ModularGroupFundamentalDomain)))
 
 make_entry(ID("21b67f"),
-    Formula(Element(Exp(ConstPi*ConstI/3), ModularGroupFundamentalDomain)))
+    Formula(EqualAndElement(Exp(ConstPi*ConstI/3), (1+Sqrt(3)*ConstI)/2, ModularGroupFundamentalDomain)))
 
 make_entry(ID("e28209"),
     Formula(Less(Abs(Exp(2*ConstPi*ConstI*tau)), Decimal("0.004334"))),   # exp(-pi sqrt(3)) ...
@@ -57,15 +57,3 @@ make_entry(ID("e28209"),
 make_entry(ID("fd53ab"),
     Formula(Equal(SetBuilder(ModularGroupAction(gamma, tau), And(Element(tau, ModularGroupFundamentalDomain), Element(gamma, PSL2Z))), HH)))
 
-"""
-
-
-
-
-
-
-
-
-1af2a3
-
-"""

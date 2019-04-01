@@ -837,7 +837,7 @@ describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZG
 describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqual(0))], QQ, "Bernoulli number")
 describe(BernoulliPolynomial, BernoulliPolynomial(n, z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Bernoulli polynomial")
 describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
-describe(DedekindEta, DedekindEta(tau), [Element(tau, CC), Greater(Im(tau), 0)], CC, "Dedekind eta function")
+describe(DedekindEta, DedekindEta(tau), [Element(tau, HH)], CC, "Dedekind eta function")
 describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
 describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
 describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
@@ -901,6 +901,9 @@ describe(PrimePi, PrimePi(x), [Element(x, RR)], ZZGreaterEqual(0), "Prime counti
 describe(RiemannHypothesis, RiemannHypothesis, [], None, "Truth of the Riemann hypothesis")
 
 describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
+
+describe(ModularJ, ModularJ(tau), [Element(tau, HH)], CC, "Modular j-invariant")
+
 
 
 all_entries = []

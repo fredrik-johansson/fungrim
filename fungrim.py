@@ -97,6 +97,7 @@ td { min-width: 30px; }
 th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
+// .katex { font-size: 1.1em; }
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
@@ -137,9 +138,10 @@ index_text = """
 <p style="text-align:center; color:red"><b>Pre-alpha version</b></p>
 
 <p style="margin:1em">
-Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of mathematical functions.
+Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.
 Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
-All data in Fungrim is represented in symbolic, semantic form (usable by computer algebra software) and also viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one entry:
+All data in Fungrim is represented in symbolic, semantic form usable by computer algebra software.
+Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one entry:
 </p>
 """
 
@@ -371,6 +373,7 @@ frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")
 writetopic("Modular transformations")
 writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
+writetopic("Modular j-invariant")
 writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 
