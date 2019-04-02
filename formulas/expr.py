@@ -294,7 +294,8 @@ class Expr(object):
             if head is Integral:
                 return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
             if head is Product:
-                return "\\prod_{%s=%s}^{%s} \\left( %s \\right)" % (var, low, high, argstr[0])
+                # todo: auto-parenthesis for Add/...?
+                return "\\prod_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
         if head in (SumCondition, ProductCondition):
             assert len(args) == 3
             func, var, cond = args
@@ -302,7 +303,8 @@ class Expr(object):
             if head is SumCondition:
                 return "\\sum_{%s} %s" % (cond, argstr[0])
             if head is ProductCondition:
-                return "\\prod_{%s} \\left( %s \\right)" % (cond, argstr[0])
+                # todo: auto-parenthesis for Add/...?
+                return "\\prod_{%s} %s" % (cond, argstr[0])
         if head is Limit:
             assert len(args) == 3
             formula, var, point = args
@@ -379,6 +381,8 @@ class Expr(object):
             return "\\left\{" + ", ".join(argstr) + "\\right\}"
         if head is List:
             return "\\left[" + ", ".join(argstr) + "\\right]"
+        if head is Divides:
+            return " | ".join(argstr)
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
@@ -453,7 +457,11 @@ class Expr(object):
         if head is Intersection:
             return " \\cap ".join(argstr)
         if head is And:
-            return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
+            if in_small:
+                # see ff190c
+                return "\\text{ and }".join("\\left(%s\\right)" % s for s in argstr)
+            else:
+                return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Or:
             return " \\mathbin{\\operatorname{or}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Not:
@@ -786,6 +794,7 @@ LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
+Divides
 GCD DivisorSigma
 PartitionsP HardyRamanujanA
 KroneckerDelta

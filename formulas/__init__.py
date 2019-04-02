@@ -13,6 +13,7 @@ from .partitions import *
 from .riemann_zeta import *
 from .integrals import *
 from .airy import *
+from .bernoulli_numbers import *
 from .stirling_numbers import *
 from .gaussian_quadrature import *
 from .general_functions import *

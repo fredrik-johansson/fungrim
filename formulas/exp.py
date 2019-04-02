@@ -177,7 +177,7 @@ make_entry(ID("e2fac7"),
 make_entry(ID("a0d93c"),
     Formula(Equal(Arg(Exp(z)), Im(z))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
+    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-ConstPi, ConstPi)))))
 
 make_entry(ID("52d827"),
     Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
