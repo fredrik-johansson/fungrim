@@ -23,6 +23,14 @@ def_Topic(
         "325a0e",  # 0f1 as J
         "00dfd1",  # 0f1 as I
     ),
+    Section("Asymptotic expansions"),
+    Entries(
+        "d1b3b5",
+        "876844",
+        "279e4f",
+        "461a54",
+        "7b91b4",
+    ),
 )
 
 make_entry(ID("a047eb"),
@@ -95,4 +103,48 @@ make_entry(ID("00dfd1"),
     Variables(a, z),
     Assumptions(And(Element(a, CC), Element(z, CC), Unequal(z, 0))))
 
+make_entry(ID("d1b3b5"),
+    Formula(Equal(HypergeometricUStar(a,b,z),
+        Sum(RisingFactorial(a,k) * RisingFactorial(a-b+1,k) / (Factorial(k) * (-z)**k), Tuple(k, 0, n-1))
+        + HypergeometricUStarRemainder(n,a,b,z))),
+    Variables(a,b,z,n),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)))))
+
+make_entry(ID("876844"),
+    Formula(Equal(Limit(Abs(HypergeometricUStarRemainder(n,a,b, Exp(ConstI*theta) * z)), z, Infinity), 0)),
+    Variables(a,b,theta,n),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(theta, RR), Element(n,ZZGreaterEqual(1)))))
+
+make_entry(ID("279e4f"),
+    Formula(Where(LessEqual(Abs(HypergeometricUStarRemainder(n,a,b,z)), 
+        Abs((RisingFactorial(a,n) * RisingFactorial(a-b+1,n)) / (Factorial(n) * z**n)) *
+        (2 / (1 - sigma)) * Exp((2 * rho) / ((1 - sigma) * Abs(z)))),
+        Equal(sigma, Abs(b-2*a)/Abs(z)),
+        Equal(rho, Abs(a**2-a*b+b/2) + sigma*(1+sigma/4)/(1-sigma)**(2)))),
+    Variables(a,b,z,n),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Greater(Re(z), Abs(b-2*a)))),
+    References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
+
+make_entry(ID("461a54"),
+    Formula(Where(LessEqual(Abs(HypergeometricUStarRemainder(n,a,b,z)),
+        Abs((RisingFactorial(a,n) * RisingFactorial(a-b+1,n)) / (Factorial(n) * z**n)) *
+        (2 * Sqrt(1 + Div(1,2)*ConstPi*n) / (1 - sigma)) * Exp((ConstPi * rho) / ((1 - sigma) * Abs(z)))),
+        Equal(sigma, Abs(b-2*a)/Abs(z)),
+        Equal(rho, Abs(a**2-a*b+b/2) + sigma*(1+sigma/4)/(1-sigma)**(2)))),
+    Variables(a,b,z,n),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Or(Greater(Abs(Im(z)), Abs(b-2*a)), Greater(Re(z), Abs(b-2*a))))),
+    References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
+
+make_entry(ID("7b91b4"),
+    Formula(Where(LessEqual(Abs(HypergeometricUStarRemainder(n,a,b,z)),
+        Abs((RisingFactorial(a,n) * RisingFactorial(a-b+1,n)) / (Factorial(n) * z**n)) *
+        ((2 * C(n)) / (1 - tau) * Exp(2 * C(1) * rho / ((1 - tau) * Abs(z))))),
+        Equal(sigma, Abs(b-2*a)/Abs(z)),
+        Equal(nu, 1+2*sigma**2),
+        Equal(tau, nu * sigma),
+        Equal(rho, Abs(a**2-a*b+b/2) + tau*(1+tau/4)/(1-tau)**(2)),
+        Equal(C(m), (Sqrt(1+ConstPi*m/2) + sigma*nu**2*m) * nu**m))),
+    Variables(a,b,z,n),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Greater(Abs(z), 2*Abs(b-2*a)))),
+    References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
 

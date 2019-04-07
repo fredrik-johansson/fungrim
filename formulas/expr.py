@@ -216,6 +216,8 @@ class Expr(object):
                     if len(self._symbol) == 1:
                         return self._symbol
                     else:
+                        if self._symbol == "epsilon":
+                            return "\\varepsilon"
                         return "\\" + self._symbol
                 return "\\operatorname{" + self._symbol + "}"
             if self._integer is not None:
@@ -311,7 +313,9 @@ class Expr(object):
             var = var.latex()
             point = point.latex(in_small=True)
             formula = formula.latex()
-            return "\\lim_{%s \\to %s} \\left[ %s \\right]" % (var, point, formula)
+            if (not args[2].is_atom() and args[2].head() not in [Abs]):
+                formula = "\\left[ %s \\right]" % formula
+            return "\\lim_{%s \\to %s} %s" % (var, point, formula)
         if head is Supremum:
             assert len(args) == 3
             formula, var, condition = args
@@ -541,6 +545,9 @@ class Expr(object):
         if head is ModularGroupAction:
             assert len(args) == 2
             return "%s \\circ %s" % tuple(argstr)
+        if head is HypergeometricUStarRemainder:
+            assert len(args) == 4
+            return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
         if head is Parenthesis:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
@@ -789,6 +796,7 @@ BesselJ BesselI BesselY BesselK
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
 HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
+HypergeometricUStarRemainder
 AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
@@ -880,6 +888,8 @@ describe(Hypergeometric1F1Regularized, Hypergeometric1F1Regularized(a,b,z), [Ele
 describe(HypergeometricU, HypergeometricU(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Tricomi confluent hypergeometric function")
 describe(HypergeometricUStar, HypergeometricUStar(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
 describe(Hypergeometric2F0, Hypergeometric2F0(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
+
+describe(HypergeometricUStarRemainder, HypergeometricUStarRemainder(n,a,b,z), [Element(n,ZZGreaterEqual(0)),Element(a,CC),Element(b,CC),Element(z,SetMinus(CC,Set(0)))], CC, "Error term in asymptotic expansion of Tricomi confluent hypergeometric function")
 
 describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
 describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")

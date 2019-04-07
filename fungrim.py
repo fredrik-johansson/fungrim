@@ -98,6 +98,10 @@ th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
 // .katex { font-size: 1.1em; }
+// .katex-display {
+//   overflow-x: visible;
+//   overflow-y: hidden;
+// }
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
