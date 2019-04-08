@@ -662,8 +662,10 @@ class Expr(object):
             s += """<div style="text-align:center; margin:1em">"""
         for arg in self.args():
             if arg.is_text():
+                if arg._text and arg._text[0] in (",", ".", ";"):
+                    s = s.rstrip()
                 s += arg._text
-            elif arg.head() is EntryReference:
+            elif (not arg.is_atom()) and arg.head() is EntryReference:
                 id = arg.args()[0]._text
                 s += """<a href="../entry/%s.html">%s</a>""" % (id, id)
             else:
@@ -878,8 +880,10 @@ def describe(symbol, example, domain, codomain, description):
 def describe2(symbol, example, description, domain_table=None, long_description=None):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, None, None, description)
-    long_descriptions[symbol] = long_description
-    domain_tables[symbol] = domain_table
+    if long_description is not None:
+        long_descriptions[symbol] = long_description
+    if domain_table is not None:
+        domain_tables[symbol] = domain_table
 
 describe(PP, PP, [], None, "Prime numbers")
 describe(ZZ, ZZ, [], None, "Integers")
@@ -968,6 +972,15 @@ describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "L
 
 describe(ModularJ, ModularJ(tau), [Element(tau, HH)], CC, "Modular j-invariant")
 
+describe2(FormalPowerSeries, FormalPowerSeries(K,x), "Formal power series", None,
+    Description("Represents the set of formal power series in the (formal) symbol", x,
+    "and with coefficients in the set", K, ", equivalently infinite series",
+    Sum(c(k) * x**k, Tuple(k, 0, Infinity)), "where", Element(c(k), K), "."))
+
+describe2(FormalLaurentSeries, FormalLaurentSeries(K,x), "Formal Laurent series", None,
+    Description("Represents the set of formal Laurent series in the (formal) symbol", x,
+    "and with coefficients in the set", K, ", equivalently infinite series",
+    Sum(c(k) * x**k, Tuple(k, n, Infinity)), "where", Element(c(k), K), "and", Element(n, ZZ), " may be negative."))
 
 
 all_entries = []
