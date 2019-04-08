@@ -120,7 +120,10 @@ make_entry(ID("51fd98"),
 make_entry(ID("9ee8bc"),
     Formula(Equal(RiemannZeta(s), 2 * (2*ConstPi)**(s-1) * Sin(ConstPi*s/2) * GammaFunction(1-s) * RiemannZeta(1-s))),
     Variables(s),
-    Assumptions(And(Element(s, CC), NotElement(s, ZZGreaterEqual(1)))))
+    Assumptions(
+        And(Element(s, CC), NotElement(s, ZZGreaterEqual(1))),
+        And(Element(s, FormalLaurentSeries(CC, x)), NotElement(s, ZZGreaterEqual(1))),
+    ))
 
 make_entry(ID("7cb17f"),
     Description("Table of", RiemannZeta(2*n), "for", LessEqual(1, n, 20)),

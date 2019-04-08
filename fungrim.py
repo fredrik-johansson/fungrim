@@ -164,8 +164,8 @@ class Webpage:
         self.fp = open(self.filepath, "w")
         self.fp.write(html_start.replace("%%PAGETITLE%%", self.pagetitle))
 
-    def entry(self, id):
-        html = entries_dict[id].entry_html(single=False)
+    def entry(self, id, default_visible=False):
+        html = entries_dict[id].entry_html(single=False, default_visible=default_visible)
         self.fp.write(html)
 
     def section(self, title):
@@ -278,11 +278,21 @@ class SymbolPage(Webpage):
         self.pagetitle = "Symbol %s - Fungrim: the Mathematical Functions Grimoire" % self.symbol
 
     def content(self, symbol):
-        self.fp.write("""<h2>Short description</h2>""")
         write_definitions_table(self.fp, [symbol], center=True)
 
-        self.fp.write("""<h2>Full definition</h2>""")
-        self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text. Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
+        self.fp.write("""<h2>Long description</h2>""")
+
+        if symbol in long_descriptions:
+            self.fp.write("""<p style="margin-left:1em">""")
+            self.fp.write(long_descriptions[symbol].html())
+            self.fp.write("""</p>""")
+        else:
+            self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text."
+                "Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
+
+        if symbol in domain_tables:
+            self.fp.write("""<h2>Domain and codomain</h2>""")
+            self.entry(domain_tables[symbol]) #, default_visible=True)
 
         self.fp.write("""<h2>Topics using this symbol</h2>""")
         topics = topics_referencing_symbol[symbol]

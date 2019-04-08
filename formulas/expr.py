@@ -548,6 +548,15 @@ class Expr(object):
         if head is HypergeometricUStarRemainder:
             assert len(args) == 4
             return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
+        if head is FormalPowerSeries:
+            assert len(args) == 2
+            return "%s[[%s]]" % tuple(argstr)
+        if head is FormalLaurentSeries:
+            assert len(args) == 2
+            return "%s(\!(%s)\!)" % tuple(argstr)
+        if head is SeriesCoefficient:
+            assert len(args) == 3
+            return "[{%s}^{%s}] %s" % (argstr[1], argstr[2], argstr[0])
         if head is Parenthesis:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
@@ -589,6 +598,8 @@ class Expr(object):
             return self.html_References()
         if self.head() is Assumptions:
             return self.html_Assumptions()
+        if self.head() is Description:
+            return self.html_Description(display=display)
         return katex(self.latex(), display=display)
 
     def html_Table(self):
@@ -615,13 +626,18 @@ class Expr(object):
                 end = innum*(outer+1)
             for row in data.args()[innum*outer : end]:
                 s += "<tr>"
-                for col in row.args():
-                    s += "<td>" + col.html(display=False, avoid_latex=True) + "</td>"
+                if row.head() is TableSection:
+                    s += """<td colspan="%i" style="text-align:center; font-weight: bold">%s</td>""" % (cols, row.args()[0]._text)
+                else:
+                    for col in row.args():
+                        s += "<td>" + col.html(display=False, avoid_latex=True) + "</td>"
                 s += "</tr>"
             s += """</table>"""
             s += "</td>"
         s += "</tr></table>"
+        s += """<div style="text-align:center; margin-top: 0.5em">"""
         s += Description("Table data:", rel.args()[0], " such that ", rel.args()[1]).html(display=True)
+        s += """</div>"""
         return s
 
     def html_References(self):
@@ -640,6 +656,23 @@ class Expr(object):
             s += arg.html(display=True)
         return s
 
+    def html_Description(self, display=False):
+        s = ""
+        if display:
+            s += """<div style="text-align:center; margin:1em">"""
+        for arg in self.args():
+            if arg.is_text():
+                s += arg._text
+            elif arg.head() is EntryReference:
+                id = arg.args()[0]._text
+                s += """<a href="../entry/%s.html">%s</a>""" % (id, id)
+            else:
+                s += arg.html(avoid_latex=True)
+            s += " "
+        if display:
+            s += """</div>"""
+        return s
+
     def get_arg_with_head(self, head):
         for arg in self.args():
             if not arg.is_atom() and (arg.head() is head):
@@ -654,7 +687,7 @@ class Expr(object):
         title = self.get_arg_with_head(Title)
         return title._args[1]._text
 
-    def entry_html(self, single=False, entry_dir="../entry/", symbol_dir="../symbol/"):
+    def entry_html(self, single=False, entry_dir="../entry/", symbol_dir="../symbol/", default_visible=False):
         id = self.id()
         all_tex = []
         s = ""
@@ -679,7 +712,10 @@ class Expr(object):
         if single:
             s += """<div id="%s:info" style="padding: 1em; clear:both">""" % id
         else:
-            s += """<div id="%s:info" style="display:none; padding: 1em; clear:both">""" % id
+            if default_visible:
+                s += """<div id="%s:info" style="display:visible; padding: 1em; clear:both">""" % id
+            else:
+                s += """<div id="%s:info" style="display:none; padding: 1em; clear:both">""" % id
 
         # Remaining items
         for arg in args[1:]:
@@ -689,7 +725,8 @@ class Expr(object):
         # Generate TeX listing
         for arg in self.args():
             if arg.head() in (Formula, Assumptions):
-                all_tex.append(arg.args()[0].latex())
+                for arg2 in arg.args():
+                    all_tex.append(arg2.latex())
 
         s += """<div class="entrysubhead">TeX:</div>"""
         s += "<pre>"
@@ -718,18 +755,19 @@ class Expr(object):
             s += """<table style="margin: 0 auto">"""
         else:
             s += """<table>"""
-        s += """<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Domain</th> <th>Codomain</th> <th>Description</th></tr>"""
+        # s += """<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Domain</th> <th>Codomain</th> <th>Description</th></tr>"""
+        s += """<tr><th>Fungrim symbol</th> <th>Notation</th> <th>Short description</th></tr>"""
         for symbol in symbols:
             if symbol in descriptions:
                 example, domain, codomain, description = descriptions[symbol]
                 s += """<tr><td><tt><a href="%s%s.html">%s</a></tt>""" % (symbol_dir, symbol.str(), symbol.str())
                 s += """<td>%s</td>""" % katex(example.latex(), False)
-                domstr = ",\, ".join(dom.latex() for dom in domain)
-                s += """<td>%s</td>""" % katex(domstr, False)
-                if codomain is None:
-                    s += """<td></td>"""
-                else:
-                    s += """<td>%s</td>""" % katex(codomain.latex(), False)
+                # domstr = ",\, ".join(dom.latex() for dom in domain)
+                # s += """<td>%s</td>""" % katex(domstr, False)
+                # if codomain is None:
+                #     s += """<td></td>"""
+                # else:
+                #     s += """<td>%s</td>""" % katex(codomain.latex(), False)
                 s += """<td>%s</td></tr>""" % description
         s += """</table>"""
         return s
@@ -777,6 +815,7 @@ SumCondition ProductCondition
 SumSet ProductSet
 AsymptoticTo
 Supremum
+FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
@@ -818,8 +857,8 @@ ModularJ
 
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
-Description Table TableRelation TableHeadings TableSplit
-Topic Title DefinitionsTable Section SeeTopics Entries
+Description Table TableRelation TableHeadings TableSplit TableSection
+Topic Title DefinitionsTable Section SeeTopics Entries EntryReference
 """)
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
@@ -829,11 +868,18 @@ inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Mu Nu Xi
 
 described_symbols = []
 descriptions = {}
+long_descriptions = {}
+domain_tables = {}
 
 def describe(symbol, example, domain, codomain, description):
     described_symbols.append(symbol)
     descriptions[symbol] = (example, domain, codomain, description)
 
+def describe2(symbol, example, description, domain_table=None, long_description=None):
+    described_symbols.append(symbol)
+    descriptions[symbol] = (example, None, None, description)
+    long_descriptions[symbol] = long_description
+    domain_tables[symbol] = domain_table
 
 describe(PP, PP, [], None, "Prime numbers")
 describe(ZZ, ZZ, [], None, "Integers")
@@ -848,7 +894,6 @@ describe(ConstI, ConstI, [], CC, "Imaginary unit")
 describe(Exp, Exp(z), [Element(z, CC)], CC, "Exponential function")
 describe(Log, Log(z), [Element(z, SetMinus(CC, Set(0)))], CC, "Natural logarithm")
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
-describe(GammaFunction, GammaFunction(z), [Element(z, SetMinus(CC, ZZLessEqual(0)))], CC, "Gamma function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
 describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
 describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqual(0))], QQ, "Bernoulli number")

@@ -4,6 +4,10 @@ from .expr import *
 
 def_Topic(
     Title("Gamma function"),
+    Section("Domain"),
+    Entries(
+        "09e2ed",
+    ),
     Section("Particular values"),
     Entries(
         "f1d31a",
@@ -40,6 +44,43 @@ def_Topic(
         "d7d2a0",
     ),
 )
+
+
+describe2(GammaFunction,
+    GammaFunction(z),
+    "Gamma function",
+    "09e2ed",  # domain table
+    Description("The gamma function is a function of one variable.",
+        "It is a meromorphic function on the complex plane with simple poles at the nonpositive integers and no zeros.",
+        "It can be defined in the right half-plane by the integral representation", EntryReference("4e4e0f"),
+        "together with the functional equation", EntryReference("78f1f4"), "for analytic continuation."))
+
+make_entry(ID("09e2ed"),
+    Description("Domain and codomain definitions for", GammaFunction(z)),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")), TableSplit(1),
+      List(
+        TableSection("Numbers"),
+        Tuple(Element(z, ZZGreaterEqual(1)), Element(GammaFunction(z), ZZGreaterEqual(1))),
+        Tuple(Element(z, OpenInterval(0, Infinity)), Element(GammaFunction(z), OpenInterval(Decimal("0.8856"), Infinity))),
+        Tuple(Element(z, SetMinus(RR, ZZLessEqual(0))), Element(GammaFunction(z), SetMinus(RR, Set(0)))),
+        Tuple(Element(z, SetMinus(CC, ZZLessEqual(0))), Element(GammaFunction(z), SetMinus(CC, Set(0)))),
+        TableSection("Infinities"),
+        Tuple(Element(z, ZZLessEqual(0)), Element(GammaFunction(z), Set(UnsignedInfinity))),
+        Tuple(Element(z, Set(Infinity)), Element(GammaFunction(z), Set(Infinity))),
+        Tuple(Element(z, Set(ConstI*Infinity, -(ConstI*Infinity))), Element(GammaFunction(z), Set(0))),
+        TableSection("Formal power and Laurent series"),
+        Tuple(And(Element(z, FormalPowerSeries(RR, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
+            And(Element(GammaFunction(z), FormalPowerSeries(RR, x)), Unequal(SeriesCoefficient(GammaFunction(z), x, 0), 0))),
+        Tuple(And(Element(z, FormalPowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
+            And(Element(GammaFunction(z), FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(GammaFunction(z), x, 0), 0))),
+        Tuple(And(Element(z, FormalLaurentSeries(RR, x)), NotElement(z, ZZLessEqual(0))),
+            Element(GammaFunction(z), FormalLaurentSeries(RR, x))),
+        Tuple(And(Element(z, FormalLaurentSeries(CC, x)), NotElement(z, ZZLessEqual(0))),
+            Element(GammaFunction(z), FormalLaurentSeries(CC, x))),
+      )),
+    )
+
 
 GammaFunction_domain = SetMinus(CC, ZZLessEqual(0))
 GammaFunction_sub1_domain = SetMinus(CC, ZZLessEqual(1))
