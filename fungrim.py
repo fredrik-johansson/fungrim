@@ -287,8 +287,8 @@ class SymbolPage(Webpage):
             self.fp.write(long_descriptions[symbol].html())
             self.fp.write("""</p>""")
         else:
-            self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text."
-                "Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
+            self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text. """
+                """Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
 
         if symbol in domain_tables:
             self.fp.write("""<h2>Domain and codomain</h2>""")
