@@ -153,6 +153,7 @@ class Expr(object):
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
+        if self is LogGamma: return "\\log \\Gamma"
         if self is UpperGamma: return "\\Gamma"
         if self is Erf: return "\\operatorname{erf}"
         if self is Erfc: return "\\operatorname{erfc}"
@@ -548,6 +549,9 @@ class Expr(object):
         if head is HypergeometricUStarRemainder:
             assert len(args) == 4
             return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
+        if head is StirlingSeriesRemainder:
+            assert len(args) == 2
+            return "R_{%s}\!\\left(%s\\right)" % tuple(argstr)
         if head is FormalPowerSeries:
             assert len(args) == 2
             return "%s[[%s]]" % tuple(argstr)
@@ -827,7 +831,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
-Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber
+Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial

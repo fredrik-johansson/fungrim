@@ -7,6 +7,7 @@ def_Topic(
     Section("Domain"),
     Entries(
         "09e2ed",
+        "c6038c",
     ),
     Section("Particular values"),
     Entries(
@@ -25,10 +26,18 @@ def_Topic(
         "b510b6",
         "a787eb",
         "90a1e1",
+        "a26ac7",
+        "774d37",
     ),
     Section("Integral representations"),
     Entries(
         "4e4e0f",
+    ),
+    Section("Series expansions"),
+    Entries(
+        "661054",
+        "37a95a",
+        "53a2a1",
     ),
     Section("Analytic properties"),
     Entries(
@@ -55,6 +64,19 @@ describe2(GammaFunction,
         "It can be defined in the right half-plane by the integral representation", EntryReference("4e4e0f"),
         "together with the functional equation", EntryReference("78f1f4"), "for analytic continuation."))
 
+describe2(LogGamma,
+    LogGamma(z),
+    "Logarithmic gamma function",
+    "c6038c",  # domain table
+    Description("The logarithmic gamma function is a function of one variable.",
+        "The principal branch extends the relation", Equal(LogGamma(x), Log(Gamma(x))), "valid for real", Greater(x, 0),
+        "to a continuous function on the complex plane except for branch cuts on",
+        OpenInterval(-Infinity, 0), ". In general, ", Unequal(LogGamma(z), Log(Gamma(z))), "."))
+
+describe2(StirlingSeriesRemainder,
+    StirlingSeriesRemainder(n, z),
+    "Remainder term in the Stirling series for the logarithmic gamma function")
+
 make_entry(ID("09e2ed"),
     Description("Domain and codomain definitions for", GammaFunction(z)),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
@@ -69,7 +91,7 @@ make_entry(ID("09e2ed"),
         Tuple(Element(z, ZZLessEqual(0)), Element(GammaFunction(z), Set(UnsignedInfinity))),
         Tuple(Element(z, Set(Infinity)), Element(GammaFunction(z), Set(Infinity))),
         Tuple(Element(z, Set(ConstI*Infinity, -(ConstI*Infinity))), Element(GammaFunction(z), Set(0))),
-        TableSection("Formal power and Laurent series"),
+        TableSection("Formal power series"),
         Tuple(And(Element(z, FormalPowerSeries(RR, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
             And(Element(GammaFunction(z), FormalPowerSeries(RR, x)), Unequal(SeriesCoefficient(GammaFunction(z), x, 0), 0))),
         Tuple(And(Element(z, FormalPowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
@@ -81,9 +103,29 @@ make_entry(ID("09e2ed"),
       )),
     )
 
+make_entry(ID("c6038c"),
+    Description("Domain and codomain definitions for", LogGamma(z)),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")), TableSplit(1),
+      List(
+        TableSection("Numbers"),
+        Tuple(Element(z, OpenInterval(0, Infinity)), Element(LogGamma(z), OpenInterval(Decimal("-0.1215"), Infinity))),
+        Tuple(Element(z, SetMinus(CC, ZZLessEqual(0))), Element(LogGamma(z), SetMinus(CC, Set(0)))),
+        TableSection("Infinities"),
+        Tuple(Element(z, Set(Infinity)), Element(LogGamma(z), Set(Infinity))),
+        TableSection("Formal power series"),
+        Tuple(And(Element(z, FormalPowerSeries(RR, x)), Greater(SeriesCoefficient(z, x, 0), 0)),
+            And(Element(LogGamma(z), FormalPowerSeries(RR, x)))),
+        Tuple(And(Element(z, FormalPowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
+            And(Element(LogGamma(z), FormalPowerSeries(CC, x)))),
+      )),
+    )
+
 
 GammaFunction_domain = SetMinus(CC, ZZLessEqual(0))
 GammaFunction_sub1_domain = SetMinus(CC, ZZLessEqual(1))
+
+
 
 make_entry(ID("f1d31a"),
     Formula(Equal(GammaFunction(n), Factorial(n-1))),
@@ -139,10 +181,38 @@ make_entry(ID("90a1e1"),
     Variables(z),
     Assumptions(And(Element(z, CC), Element(m, ZZGreaterEqual(1)), NotElement(m*z, ZZLessEqual(0)))))
 
+
+make_entry(ID("a26ac7"),
+    Formula(Equal(GammaFunction(z), Exp(LogGamma(z)))),
+    Variables(z),
+    Assumptions(And(Element(z, GammaFunction_domain))))
+
+make_entry(ID("774d37"),
+    Formula(Equal(LogGamma(z+1), LogGamma(z) + Log(z))),
+    Variables(z),
+    Assumptions(And(Element(z, GammaFunction_domain))))
+
+
 make_entry(ID("4e4e0f"),
     Formula(Equal(GammaFunction(z), Integral(t**(z-1) * Exp(-t), Tuple(t, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
+
+make_entry(ID("661054"),
+    Formula(Equal(LogGamma(1+z), -(ConstGamma*z) + Sum(RiemannZeta(k)/k * (-z)**k, Tuple(k, 2, Infinity)))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), Less(Abs(z), 1))))
+
+make_entry(ID("37a95a"),
+    Formula(Equal(LogGamma(z), (z-Div(1,2))*Log(z) - z + Log(2*ConstPi)/2
+        + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*z**(2*k-1)), Tuple(k, 1, Infinity)) + StirlingSeriesRemainder(n, z))),
+    Variables(z, n),
+    Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
+
+make_entry(ID("53a2a1"),
+    Formula(Equal(StirlingSeriesRemainder(n, z), Integral((BernoulliB(2*n) - BernoulliPolynomial(2*n, t-Floor(t)))/(2*n*(z+t)**(2*n)), Tuple(t, 0, Infinity)))),
+    Variables(z, n),
+    Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
 
 make_entry(ID("798c5d"),
     Formula(Equal(HolomorphicDomain(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), GammaFunction_domain)))
