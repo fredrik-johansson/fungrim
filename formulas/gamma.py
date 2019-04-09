@@ -110,7 +110,7 @@ make_entry(ID("c6038c"),
       List(
         TableSection("Numbers"),
         Tuple(Element(z, OpenInterval(0, Infinity)), Element(LogGamma(z), OpenInterval(Decimal("-0.1215"), Infinity))),
-        Tuple(Element(z, SetMinus(CC, ZZLessEqual(0))), Element(LogGamma(z), SetMinus(CC, Set(0)))),
+        Tuple(Element(z, SetMinus(CC, ZZLessEqual(0))), Element(LogGamma(z), CC)),
         TableSection("Infinities"),
         Tuple(Element(z, Set(Infinity)), Element(LogGamma(z), Set(Infinity))),
         TableSection("Formal power series"),
