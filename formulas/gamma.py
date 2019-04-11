@@ -4,7 +4,8 @@ from .expr import *
 
 def_Topic(
     Title("Gamma function"),
-    Section("Domain"),
+#    DefinitionsTable(GammaFunction, LogGamma),
+#    Section("Definitions"),
     Entries(
         "09e2ed",
         "c6038c",
@@ -37,6 +38,7 @@ def_Topic(
     Entries(
         "661054",
         "37a95a",
+        "8cf1fd",
         "53a2a1",
     ),
     Section("Analytic properties"),
@@ -55,32 +57,15 @@ def_Topic(
 )
 
 
-describe2(GammaFunction,
-    GammaFunction(z),
-    "Gamma function",
-    "09e2ed",  # domain table
-    Description("The gamma function is a function of one variable.",
-        "It is a meromorphic function on the complex plane with simple poles at the nonpositive integers and no zeros.",
-        "It can be defined in the right half-plane by the integral representation", EntryReference("4e4e0f"),
-        "together with the functional equation", EntryReference("78f1f4"), "for analytic continuation."))
-
-describe2(LogGamma,
-    LogGamma(z),
-    "Logarithmic gamma function",
-    "c6038c",  # domain table
-    Description("The logarithmic gamma function is a function of one variable.",
-        "The principal branch extends the relation", Equal(LogGamma(x), Log(Gamma(x))), "valid for real", Greater(x, 0),
-        "to a continuous function on the complex plane except for branch cuts on",
-        OpenInterval(-Infinity, 0), ". In general, ", Unequal(LogGamma(z), Log(Gamma(z))), "."))
-
-describe2(StirlingSeriesRemainder,
-    StirlingSeriesRemainder(n, z),
-    "Remainder term in the Stirling series for the logarithmic gamma function")
-
 make_entry(ID("09e2ed"),
-    Description("Domain and codomain definitions for", GammaFunction(z)),
+    SymbolDefinition(GammaFunction, GammaFunction(z), "Gamma function"),
+    Description("The gamma function", GammaFunction(z), "is a function of one complex variable", z,
+        ". It is a meromorphic function with simple poles at the nonpositive integers and no zeros.",
+        "It can be defined by the integral representation", EntryReference("4e4e0f"),
+        "in the right half-plane, together with the functional equation", EntryReference("78f1f4"), "for analytic continuation.",
+        "The following table lists all conditions such that", SourceForm(GammaFunction(z)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
-      TableHeadings(Description("Domain"), Description("Codomain")), TableSplit(1),
+      TableHeadings(Description("Domain"), Description("Codomain")),
       List(
         TableSection("Numbers"),
         Tuple(Element(z, ZZGreaterEqual(1)), Element(GammaFunction(z), ZZGreaterEqual(1))),
@@ -104,9 +89,15 @@ make_entry(ID("09e2ed"),
     )
 
 make_entry(ID("c6038c"),
-    Description("Domain and codomain definitions for", LogGamma(z)),
+    SymbolDefinition(LogGamma, LogGamma(z), "Logarithmic gamma function"),
+    Description("The logarithmic gamma function", LogGamma(z), "is a function of one complex variable", z, ".",
+        "It satisfies", Equal(LogGamma(x), Log(GammaFunction(x))), "for real", Greater(x, 0), "and is defined on the complex plane",
+        "through analytic continuation, with branch cuts on", OpenClosedInterval(-Infinity, 0), ".",
+        "An explicit construction uses", EntryReference("37a95a"), "combined with", EntryReference("774d37"), "for analytic continuation.",
+        "In general,", Unequal(LogGamma(z), Log(GammaFunction(z))), " as the latter has an infinite set of branch cuts off the real line.",
+        "The following table lists all conditions such that", SourceForm(LogGamma(z)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
-      TableHeadings(Description("Domain"), Description("Codomain")), TableSplit(1),
+      TableHeadings(Description("Domain"), Description("Codomain")),
       List(
         TableSection("Numbers"),
         Tuple(Element(z, OpenInterval(0, Infinity)), Element(LogGamma(z), OpenInterval(Decimal("-0.1215"), Infinity))),
@@ -205,9 +196,12 @@ make_entry(ID("661054"),
 
 make_entry(ID("37a95a"),
     Formula(Equal(LogGamma(z), (z-Div(1,2))*Log(z) - z + Log(2*ConstPi)/2
-        + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*z**(2*k-1)), Tuple(k, 1, Infinity)) + StirlingSeriesRemainder(n, z))),
+        + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*z**(2*k-1)), Tuple(k, 1, n-1)) + StirlingSeriesRemainder(n, z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
+
+make_entry(ID("8cf1fd"),
+    SymbolDefinition(StirlingSeriesRemainder, StirlingSeriesRemainder(n, z), "Remainder term in the Stirling series for the logarithmic gamma function"))
 
 make_entry(ID("53a2a1"),
     Formula(Equal(StirlingSeriesRemainder(n, z), Integral((BernoulliB(2*n) - BernoulliPolynomial(2*n, t-Floor(t)))/(2*n*(z+t)**(2*n)), Tuple(t, 0, Infinity)))),

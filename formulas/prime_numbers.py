@@ -4,6 +4,7 @@ from .expr import *
 
 def_Topic(
     Title("Prime numbers"),
+#    DefinitionsTable(PP, PrimeNumber, PrimePi),
     Section("Basic formulas"),
     Entries(
         "3fc797",

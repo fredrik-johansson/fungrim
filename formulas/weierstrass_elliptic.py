@@ -2,8 +2,14 @@ from .expr import *
 
 def_Topic(
     Title("Weierstrass elliptic functions"),
+    Entries(
+        "f7a534",
+        "69be32",
+        "5f3210",
+    ),
     Section("Complex lattices"),
     Entries(
+        "3c1659",
         "d530b1",
     ),
     Section("Series and product representations"),
@@ -48,6 +54,43 @@ def_Topic(
         "881aee",
     ),
 )
+
+# todo: should the lattice parameter be tau, the lattice, or either?
+
+make_entry(ID("f7a534"),
+    SymbolDefinition(WeierstrassP, WeierstrassP(z,tau), "Weierstrass elliptic function"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)), Element(WeierstrassP(z,tau), CC)),
+        Tuple(And(Element(z, Lattice(1, tau)), Element(tau, HH)), Element(WeierstrassP(z,tau), Set(UnsignedInfinity))),
+      )),
+    )
+
+make_entry(ID("69be32"),
+    SymbolDefinition(WeierstrassZeta, WeierstrassZeta(z,tau), "Weierstrass zeta function"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)), Element(WeierstrassZeta(z,tau), CC)),
+        Tuple(And(Element(z, Lattice(1, tau)), Element(tau, HH)), Element(WeierstrassZeta(z,tau), Set(UnsignedInfinity))),
+      )),
+    )
+
+make_entry(ID("5f3210"),
+    SymbolDefinition(WeierstrassSigma, WeierstrassSigma(z,tau), "Weierstrass sigma function"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(z, CC), Element(tau, HH)), Element(WeierstrassSigma(z,tau), CC)),
+      )),
+    )
+
+make_entry(ID("3c1659"),
+    SymbolDefinition(Lattice, Lattice(a,b), "Complex lattice with periods a, b"))
 
 make_entry(ID("d530b1"),
     Formula(Equal(Lattice(a,b), SetBuilder(a*m+b*n, And(Element(m,ZZ), Element(n,ZZ))))),

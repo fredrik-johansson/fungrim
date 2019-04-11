@@ -84,11 +84,11 @@ html_start = """
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <style type="text/css">
 body { margin: 0; padding: 0; font-family: roboto; background-color:#eee; color: black; }
-h1 { text-align:center; color:#256; }
-h2, h3 { text-align: center; }
+h1 { text-align:center; color:#256; margin-top: 0; }
+h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
-.entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.5em; background-color: #fff; overflow: hidden; }
+.entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
 table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }
@@ -97,11 +97,39 @@ td { min-width: 30px; }
 th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
-// .katex { font-size: 1.1em; }
+.katex { font-size: 1.1em; }
+
 // .katex-display {
 //   overflow-x: visible;
 //   overflow-y: hidden;
 // }
+
+button {
+  border: none;
+  color: #000;
+  padding: 0.2em 0.6em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  background-image: linear-gradient(#fff, #eee);
+}
+button::-moz-focus-inner {
+  border: 0;
+}
+button:active {
+  background-image: linear-gradient(#ccc, #888);
+  color: #fff;
+  padding: 0.2em 0.5em 0.2em 0.7em;
+}
+button:focus {
+  box-shadow: 0px 0px 2px green;
+}
+
+@media print { button { display: none !important; } }
+}
 </style>
 <script type='text/javascript'>
 function toggleVisible(id) {
@@ -137,7 +165,7 @@ The <a href="https://github.com/fredrik-johansson/fungrim">source code is on Git
 html_end = html_end.replace("%%TIMESTAMP%%", timestamp)
 
 index_text = """
-<h1>The Mathematical Functions Grimoire</h1>
+<h1 style="margin-top: 0.5em">The Mathematical Functions Grimoire</h1>
 
 <p style="text-align:center; color:red"><b>Pre-alpha version</b></p>
 
@@ -207,7 +235,7 @@ class EntryPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.4em;"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.id)
 
     def write(self):
@@ -230,16 +258,18 @@ class TopicPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.4em;"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>%s</h1>""" % self.title)
 
     def write(self):
         self.start()
         topic = topics_dict[self.title]
         for arg in topic.args():
-            #if arg.head() is DefinitionsTable:
-            #    self.fp.write("""<h2>Main symbols</h2>""")
-            #    write_definitions_table(self.fp, arg.args(), center=True)
+            if arg.head() is DefinitionsTable:
+                # self.fp.write("""<h2>Main symbols</h2>""")
+                self.fp.write("""<div style="margin-bottom:1em">""")
+                write_definitions_table(self.fp, arg.args(), center=True)
+                self.fp.write("""</div>""")
             if arg.head() is Section:
                 self.fp.write("""<h2>%s</h2>""" % arg.args()[0]._text)
             if arg.head() is Entries:
@@ -278,21 +308,12 @@ class SymbolPage(Webpage):
         self.pagetitle = "Symbol %s - Fungrim: the Mathematical Functions Grimoire" % self.symbol
 
     def content(self, symbol):
-        write_definitions_table(self.fp, [symbol], center=True)
-
-        self.fp.write("""<h2>Long description</h2>""")
-
-        if symbol in long_descriptions:
-            self.fp.write("""<p style="margin-left:1em">""")
-            self.fp.write(long_descriptions[symbol].html())
-            self.fp.write("""</p>""")
+        if symbol in domain_tables:
+            self.entry(domain_tables[symbol]) #, default_visible=True)
         else:
+            write_definitions_table(self.fp, [symbol], center=True)
             self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> does not yet have a definition text. """
                 """Please send an angry email to the author and ask for an explanation, or open an issue on GitHub.</p>""" % symbol)
-
-        if symbol in domain_tables:
-            self.fp.write("""<h2>Domain and codomain</h2>""")
-            self.entry(domain_tables[symbol]) #, default_visible=True)
 
         self.fp.write("""<h2>Topics using this symbol</h2>""")
         topics = topics_referencing_symbol[symbol]

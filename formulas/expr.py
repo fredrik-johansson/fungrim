@@ -211,6 +211,7 @@ class Expr(object):
         if self is SL2Z: return "\\operatorname{SL}_2(\\mathbb{Z})"
         if self is PSL2Z: return "\\operatorname{PSL}_2(\\mathbb{Z})"
         if self is ModularGroupFundamentalDomain: return "\\mathcal{F}"
+        if self is Ellipsis: return "\\ldots"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -604,14 +605,23 @@ class Expr(object):
             return self.html_Assumptions()
         if self.head() is Description:
             return self.html_Description(display=display)
+        if self.head() is SymbolDefinition:
+            return self.html_SymbolDefinition()
         return katex(self.latex(), display=display)
 
     def html_Table(self):
         rel = self.get_arg_with_head(TableRelation)
         heads = self.get_arg_with_head(TableHeadings)
         data = self.get_arg_with_head(List)
-        split = self.get_arg_with_head(TableSplit).args()[0]._integer
-        cols = len(heads.args())
+        split = self.get_arg_with_head(TableSplit)
+        if split is None:
+            split = 1
+        else:
+            split = split.args()[0]._integer
+        if heads is None:
+            cols = len(data.args()[0].args())
+        else:
+            cols = len(heads.args())
         num = len(data.args())
         innum = num // split
         s = ""
@@ -620,10 +630,11 @@ class Expr(object):
         for outer in range(split):
             s += """<td style="border:0; background-color:#fff; vertical-align:top">"""
             s += """<table style="float: left; margin-right: 1em">"""
-            s += "<tr>"
-            for col in heads.args():
-                s += "<th>" + col.html(display=False) + "</th>"
-            s += "</tr>"
+            if heads is not None:
+                s += "<tr>"
+                for col in heads.args():
+                    s += "<th>" + col.html(display=False) + "</th>"
+                s += "</tr>"
             if outer == split-1:
                 end = num
             else:
@@ -639,9 +650,10 @@ class Expr(object):
             s += """</table>"""
             s += "</td>"
         s += "</tr></table>"
-        s += """<div style="text-align:center; margin-top: 0.5em">"""
-        s += Description("Table data:", rel.args()[0], " such that ", rel.args()[1]).html(display=True)
-        s += """</div>"""
+        if rel is not None:
+            s += """<div style="text-align:center; margin-top: 0.5em">"""
+            s += Description("Table data:", rel.args()[0], " such that ", rel.args()[1]).html(display=True)
+            s += """</div>"""
         return s
 
     def html_References(self):
@@ -669,6 +681,8 @@ class Expr(object):
                 if arg._text and arg._text[0] in (",", ".", ";"):
                     s = s.rstrip()
                 s += arg._text
+            elif (not arg.is_atom()) and arg.head() is SourceForm:
+                s += "<tt>%s</tt>" % str(arg.args()[0])
             elif (not arg.is_atom()) and arg.head() is EntryReference:
                 id = arg.args()[0]._text
                 s += """<a href="../entry/%s.html">%s</a>""" % (id, id)
@@ -677,6 +691,19 @@ class Expr(object):
             s += " "
         if display:
             s += """</div>"""
+        return s
+
+    def html_SymbolDefinition(self):
+        symbol, example, description = self.args()
+        s = ""
+        s += """<div style="text-align:center; margin:1em">"""
+        s += """<span style="font-size:85%; color:#888">Symbol:</span> """
+        s += """<tt><a href="../symbol/%s.html">%s</a></tt>""" % (symbol._symbol, symbol._symbol)
+        s += """ <span style="color:#888">&mdash;</span> """
+        s += example.html()
+        s += """ <span style="color:#888">&mdash;</span> """
+        s += description._text
+        s += """</div>"""
         return s
 
     def get_arg_with_head(self, head):
@@ -701,9 +728,9 @@ class Expr(object):
         if single:
             s += """<div>"""
         else:
-            s += """<div style="float:left; margin-top:0.5em;">"""
-            s += """<a href="%s%s.html" style="margin-left:3pt">%s</a><br/>""" % (entry_dir, id, id)
-            s += """<button style="margin-top:0.5em; margin-bottom: 0.5em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
+            s += """<div style="float:left; margin-top:0.3em;">"""
+            s += """<a href="%s%s.html" style="margin-left:3pt;">%s</a><br/>""" % (entry_dir, id, id)
+            s += """<button style="margin-top:0.4em; margin-bottom: 0.4em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
 
@@ -734,13 +761,15 @@ class Expr(object):
                 for arg2 in arg.args():
                     all_tex.append(arg2.latex())
 
-        s += """<div class="entrysubhead">TeX:</div>"""
-        s += "<pre>"
-        s += "\n\n".join(all_tex)
-        s += "</pre>"
+        if all_tex:
+            s += """<div class="entrysubhead">TeX:</div>"""
+            s += "<pre>"
+            s += "\n\n".join(all_tex)
+            s += "</pre>"
 
         # Generate symbol table
         symbols = self.all_symbols()
+        symbols = [sym for sym in symbols if sym not in exclude_symbols]
         s += """<div class="entrysubhead">Definitions:</div>"""
         s += Expr.definitions_table_html(symbols, center=True, symbol_dir=symbol_dir)
 
@@ -794,7 +823,7 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
-Parenthesis
+Parenthesis Ellipsis
 Unknown Undefined
 Where
 Set List Tuple
@@ -865,7 +894,11 @@ inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section SeeTopics Entries EntryReference
+SourceForm SymbolDefinition
 """)
+
+# symbols we don't want to show in entry definition listings
+exclude_symbols = [Set, List, Tuple]
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
@@ -956,12 +989,6 @@ describe(JacobiTheta2, JacobiTheta2(z,tau), [Element(z, CC), Element(tau, HH)], 
 describe(JacobiTheta3, JacobiTheta3(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 describe(JacobiTheta4, JacobiTheta4(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 
-describe(WeierstrassP, WeierstrassP(z,tau), [Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)], CC, "Weierstrass elliptic function")
-describe(WeierstrassZeta, WeierstrassZeta(z,tau), [Element(z, SetMinus(CC, Lattice(1, tau))), Element(tau, HH)], CC, "Weierstrass zeta function")
-describe(WeierstrassSigma, WeierstrassSigma(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Weierstrass sigma function")
-
-describe(Lattice, Lattice(a,b), [Element(a, CC), Element(b, CC)], PowerSet(CC), "Complex lattice with periods a, b")
-
 describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
 describe(SL2Z, SL2Z, [], None, "Modular group")
 describe(PSL2Z, PSL2Z, [], None, "Modular group (canonical representatives)")
@@ -986,6 +1013,21 @@ describe2(FormalLaurentSeries, FormalLaurentSeries(K,x), "Formal Laurent series"
     "and with coefficients in the set", K, ", equivalently infinite series",
     Sum(c(k) * x**k, Tuple(k, n, Infinity)), "where", Element(c(k), K), "and", Element(n, ZZ), " may be negative."))
 
+describe2(Set, Set(Ellipsis), "Finite set with given elements", None,
+    Description("Called with a finite number of arguments, represents the mathematical set with those arguments as elements. Use",
+    SetBuilder, "instead to construct finite and infinite sets without explicitly listing each element."))
+
+describe2(List, List(Ellipsis), "List with given elements", None,
+    Description("Called with a finite number of arguments, represents the list with those arguments as elements.",
+    "The difference between a", List, "and a", Tuple, "is mainly notational (square brackets or parentheses).",
+    "A ", List, "is sometimes more natural for a homogeneous collection while a", Tuple,
+    "is more natural for a heterogeneous collection."))
+
+describe2(Tuple, Tuple(Ellipsis), "Tuple with given elements", None,
+    Description("Called with a finite number of arguments, represents the tuple with those arguments as elements.",
+    "The difference between a", List, "and a", Tuple, "is mainly notational (square brackets or parentheses).",
+    "A ", List, "is sometimes more natural for a homogeneous collection while a", Tuple,
+    "is more natural for a heterogeneous collection."))
 
 all_entries = []
 all_topics = []
@@ -996,5 +1038,12 @@ def def_Topic(*args):
 
 def make_entry(*args):
     entry = Entry(*args)
+    symd = entry.get_arg_with_head(SymbolDefinition)
+    if symd is not None:
+        id = entry.get_arg_with_head(ID)
+        symbol, example, description = symd.args()
+        described_symbols.append(symbol)
+        descriptions[symbol] = (example, None, None, description._text)
+        domain_tables[symbol] = id.args()[0]._text
     all_entries.append(entry)
 

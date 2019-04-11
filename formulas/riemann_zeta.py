@@ -4,7 +4,7 @@ from .expr import *
 
 def_Topic(
     Title("Riemann zeta function"),
-    DefinitionsTable(RiemannZeta, RiemannZetaZero),
+#    DefinitionsTable(RiemannZeta, RiemannZetaZero),
     Section("Dirichlet series"),
     Entries(
         "da2fdb"   # Dirichlet series

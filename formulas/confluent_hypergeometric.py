@@ -2,6 +2,8 @@ from .expr import *
 
 def_Topic(
     Title("Confluent hypergeometric functions"),
+#    DefinitionsTable(Hypergeometric0F1, Hypergeometric0F1Regularized, Hypergeometric1F1, Hypergeometric1F1Regularized,
+#        HypergeometricU, HypergeometricUStar, Hypergeometric2F0),
     Section("Differential equations"),
     Entries(
         "06f229",
