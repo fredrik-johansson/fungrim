@@ -4,7 +4,12 @@ from .expr import *
 
 def_Topic(
     Title("Prime numbers"),
-#    DefinitionsTable(PP, PrimeNumber, PrimePi),
+    Entries(
+        "38f111",
+        "0b643d",
+        "6c22c8",
+        "c03de4",
+    ),
     Section("Basic formulas"),
     Entries(
         "3fc797",
@@ -25,6 +30,31 @@ def_Topic(
         "375afe",
     ),
 )
+
+make_entry(ID("38f111"),
+    SymbolDefinition(PP, PP, "Prime numbers"),
+    Description("The set of prime numbers."))
+
+make_entry(ID("0b643d"),
+    SymbolDefinition(PrimeNumber, PrimeNumber(n), "nth prime number"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, ZZGreaterEqual(1)), Element(PrimeNumber(n), PP)),
+      )))
+
+make_entry(ID("6c22c8"),
+    SymbolDefinition(PrimePi, PrimePi(x), "Prime counting function"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(x, RR), Element(PrimePi(x), ZZGreaterEqual(0))),
+        Tuple(Element(x, Set(Infinity)), Element(PrimePi(x), Set(Infinity))))
+      ))
+
+make_entry(ID("c03de4"),
+    SymbolDefinition(RiemannHypothesis, RiemannHypothesis, "Riemann hypothesis"),
+    Description("Used as a symbol in logical formulas, represents the assertion that the Riemann hypothesis is true."))
 
 make_entry(ID("3fc797"),
     Formula(Equal(PP, SetBuilder(PrimeNumber(n), Element(n, ZZGreaterEqual(1))))))

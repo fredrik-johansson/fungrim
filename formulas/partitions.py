@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Partition function"),
+    Entries(
+        "f5e153",
+    ),
     Section("Specific values"),
     Entries(
         "856db2",
@@ -44,10 +47,31 @@ def_Topic(
     Section("Hardy-Ramanujan-Rademacher formula"),
     Entries(
         "fb7a63",
+        "3eae25",
         "5adbc3",
         "afd27a",
     ),
 )
+
+make_entry(ID("f5e153"),
+    SymbolDefinition(PartitionsP, PartitionsP(n), "Integer partition function"),
+    Description(PartitionsP(n), "denotes the number of ways the integer", n, "can be written as a sum of positive integers."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, ZZ), Element(PartitionsP(n), ZZGreaterEqual(0))),
+        Tuple(Element(n, ZZGreaterEqual(0)), Element(PartitionsP(n), ZZGreaterEqual(1))),
+      )),
+    )
+
+make_entry(ID("3eae25"),
+    SymbolDefinition(HardyRamanujanA, HardyRamanujanA(n,k), "Exponential sum in the Hardy-Ramanujan-Rademacher formula"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(1))), Element(HardyRamanujanA(n,k), RR)),
+      )),
+    )
 
 make_entry(ID("856db2"),
     Description("Table of", PartitionsP(n), "for", LessEqual(0, n, 200)),

@@ -729,7 +729,7 @@ class Expr(object):
             s += """<div>"""
         else:
             s += """<div style="float:left; margin-top:0.3em;">"""
-            s += """<a href="%s%s.html" style="margin-left:3pt;">%s</a><br/>""" % (entry_dir, id, id)
+            s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
             s += """<button style="margin-top:0.4em; margin-bottom: 0.4em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
@@ -945,8 +945,6 @@ describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Eleme
 describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
 describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
 describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
-describe(PartitionsP, PartitionsP(n), [Element(n, ZZ)], ZZGreaterEqual(0), "Integer partition function")
-describe(HardyRamanujanA, A(n,k), [Element(n, ZZ), Element(k, ZZ)], CC, "Exponential sum in the Hardy-Ramanujan-Rademacher formula")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
@@ -994,10 +992,6 @@ describe(SL2Z, SL2Z, [], None, "Modular group")
 describe(PSL2Z, PSL2Z, [], None, "Modular group (canonical representatives)")
 describe(ModularGroupAction, ModularGroupAction(gamma, tau), [Element(gamma, SL2Z), Element(tau, HH)], HH, "Action of modular group")
 describe(ModularGroupFundamentalDomain, ModularGroupFundamentalDomain, [], PowerSet(HH), "Fundamental domain for action of the modular group")
-
-describe(PrimeNumber, PrimeNumber(n), [Element(n, ZZGreaterEqual(1))], PP, "Nth prime number")
-describe(PrimePi, PrimePi(x), [Element(x, RR)], ZZGreaterEqual(0), "Prime counting function")
-describe(RiemannHypothesis, RiemannHypothesis, [], None, "Truth of the Riemann hypothesis")
 
 describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
 
