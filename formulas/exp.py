@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Exponential function"),
+    Entries(
+        "dfbcd9",
+    ),
     Section("Particular values"),
     Entries(
         "27ca8d",
@@ -56,6 +59,31 @@ def_Topic(
         "3ac8a5",
     ),
 )
+
+make_entry(ID("dfbcd9"),
+    SymbolDefinition(Exp, Exp(z), "Exponential function"),
+    Description("The exponential function", Exp(z), "is a function of one complex variable", z, ".",
+        "It can be defined by the Taylor series", EntryReference("1635f5"), "."),
+    Description("In rendered formulas,", SourceForm(Exp(z)), "is shown as", Exp(z), "or as", Call(Exp, z), "depending on the typographical requirements; no semantic difference is implied."),
+    Description("The following table lists all conditions such that", SourceForm(Exp(z)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(Element(z, Set(0)), Element(Exp(z), Set(1))),
+        Tuple(Element(z, RR), Element(Exp(z), OpenInterval(0,Infinity))),
+        Tuple(Element(z, CC), Element(Exp(z), SetMinus(CC, Set(0)))),
+        TableSection("Infinities"),
+        Tuple(Element(z, Set(Infinity)), Element(Exp(z), Set(Infinity))),
+        Tuple(Element(z, Set(-Infinity)), Element(Exp(z), Set(0))),
+        TableSection("Formal power series"),
+        Tuple(And(Element(z, FormalPowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 0)),
+            And(Element(Exp(z), FormalPowerSeries(QQ, x)), Equal(SeriesCoefficient(Exp(z), x, 0), 1))),
+        Tuple(Element(z, FormalPowerSeries(RR, x)),
+            And(Element(Exp(z), FormalPowerSeries(RR, x)), Unequal(SeriesCoefficient(Exp(z), x, 0), 0))),
+        Tuple(Element(z, FormalPowerSeries(CC, x)),
+            And(Element(Exp(z), FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(Exp(z), x, 0), 0))),
+      )))
 
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))

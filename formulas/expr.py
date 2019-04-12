@@ -565,6 +565,8 @@ class Expr(object):
         if head is Parenthesis:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
+        if head is Call:
+            return argstr[0] + "\!\\left(" + ", ".join(argstr[1:]) + "\\right)"
         if head is Description:
             s = ""
             for arg in args:
@@ -823,7 +825,7 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
-Parenthesis Ellipsis
+Parenthesis Ellipsis Call
 Unknown Undefined
 Where
 Set List Tuple
@@ -922,7 +924,6 @@ def describe2(symbol, example, description, domain_table=None, long_description=
     if domain_table is not None:
         domain_tables[symbol] = domain_table
 
-describe(PP, PP, [], None, "Prime numbers")
 describe(ZZ, ZZ, [], None, "Integers")
 describe(QQ, QQ, [], None, "Rational numbers")
 describe(RR, RR, [], None, "Real numbers")
@@ -932,8 +933,7 @@ describe(ConstPi, ConstPi, [], RR, "The constant pi (3.14...)")
 describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
-describe(Exp, Exp(z), [Element(z, CC)], CC, "Exponential function")
-describe(Log, Log(z), [Element(z, SetMinus(CC, Set(0)))], CC, "Natural logarithm")
+
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
 describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")

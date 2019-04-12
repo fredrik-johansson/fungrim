@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Natural logarithm"),
+    Entries(
+        "ed210c",
+    ),
     Section("Particular values"),
     Entries(
         "07731b",
@@ -51,6 +54,31 @@ def_Topic(
 
 Log_branch_cut = OpenClosedInterval(-Infinity, 0)
 Log_holomorphic_domain = SetMinus(CC, Log_branch_cut)
+
+make_entry(ID("ed210c"),
+    SymbolDefinition(Log, Log(z), "Natural logarithm"),
+    Description("The principal branch of the natural logarithm", Log(z), "is a function of one complex variable", z, ".",),
+    Description("It has a branch point singularity at", Equal(z, 0),
+        "and a branch cut on", OpenClosedInterval(-Infinity, 0), "where the value on",
+            OpenInterval(-Infinity, 0), "is taken to be continuous with the upper half plane."),
+    Description("The following table lists all conditions such that", SourceForm(Log(z)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(Element(z, Set(1)), Element(Log(z), Set(0))),
+        Tuple(Element(z, OpenInterval(0,Infinity)), Element(Log(z), RR)),
+        Tuple(Element(z, SetMinus(CC, Set(0))), Element(Log(z), CC)),
+        TableSection("Infinities"),
+        Tuple(Element(z, Set(Infinity)), Element(Log(z), Set(Infinity))),
+        TableSection("Formal power series"),
+        Tuple(And(Element(z, FormalPowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 1)),
+            And(Element(Log(z), FormalPowerSeries(QQ, x)), Equal(SeriesCoefficient(Log(z), x, 0), 0))),
+        Tuple(And(Element(z, FormalPowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
+            And(Element(Log(z), FormalPowerSeries(RR, x)))),
+        Tuple(And(Element(z, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
+            And(Element(Log(z), FormalPowerSeries(CC, x)))),
+      )))
 
 make_entry(ID("07731b"),
     Formula(Equal(Log(1), 0)))
