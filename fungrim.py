@@ -88,7 +88,7 @@ h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
-.entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; }
+.entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
 table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }

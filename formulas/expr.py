@@ -989,14 +989,8 @@ describe(JacobiTheta3, JacobiTheta3(z,tau), [Element(z, CC), Element(tau, HH)], 
 describe(JacobiTheta4, JacobiTheta4(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 
 describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
-describe(SL2Z, SL2Z, [], None, "Modular group")
-describe(PSL2Z, PSL2Z, [], None, "Modular group (canonical representatives)")
-describe(ModularGroupAction, ModularGroupAction(gamma, tau), [Element(gamma, SL2Z), Element(tau, HH)], HH, "Action of modular group")
-describe(ModularGroupFundamentalDomain, ModularGroupFundamentalDomain, [], PowerSet(HH), "Fundamental domain for action of the modular group")
 
 describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
-
-describe(ModularJ, ModularJ(tau), [Element(tau, HH)], CC, "Modular j-invariant")
 
 describe2(FormalPowerSeries, FormalPowerSeries(K,x), "Formal power series", None,
     Description("Represents the set of formal power series in the (formal) symbol", x,

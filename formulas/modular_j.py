@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Modular j-invariant"),
+    Entries(
+        "70eb98",
+    ),
     Section("Modular transformations"),
     Entries(
         "a997f2",
@@ -39,6 +42,15 @@ def_Topic(
         "441301",
     )
 )
+
+make_entry(ID("70eb98"),
+    SymbolDefinition(ModularJ, ModularJ(tau), "Modular j-invariant"),
+    Description("The modular j-invariant", ModularJ(tau), "is a function of one variable", tau, "in the upper half-plane."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(tau, HH), Element(ModularJ(tau), CC)),
+      )))
 
 make_entry(ID("a997f2"),
     Formula(Equal(ModularJ(tau+1), ModularJ(tau))),
@@ -115,10 +127,10 @@ make_entry(ID("27f9d2"),
     Formula(Equal(HolomorphicDomain(ModularJ(tau), tau, HH), HH)))
 
 make_entry(ID("ea3e3c"),
-    Formula(Equal(Zeros(ModularJ(tau), tau, ModularGroupFundamentalDomain), Set(Exp(ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(ModularJ(tau), tau, ModularGroupFundamentalDomain), Set(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("1b2d8a"),
-    Formula(Equal(Zeros(ModularJ(tau), tau, HH), SetBuilder(ModularGroupAction(gamma, Exp(ConstPi*ConstI/3)), Element(gamma, PSL2Z)))))
+    Formula(Equal(Zeros(ModularJ(tau), tau, HH), SetBuilder(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), Element(gamma, PSL2Z)))))
 
 make_entry(ID("dcc8b1"),
     Formula(Equal(SetBuilder(ModularJ(tau), Element(tau, ModularGroupFundamentalDomain)), CC)))
