@@ -182,6 +182,7 @@ class Expr(object):
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
         if self is Acot: return "\\operatorname{acot}"
+        if self is Atan2: return "\\operatorname{atan2}"
         if self is Hypergeometric0F1: return "{}_0F_1"
         if self is Hypergeometric1F1: return "{}_1F_1"
         if self is Hypergeometric2F1: return "{}_2F_1"
@@ -857,7 +858,7 @@ HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros Ana
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
-Asin Acos Atan Asec Acot Acsc
+Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW

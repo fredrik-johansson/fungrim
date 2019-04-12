@@ -377,6 +377,7 @@ frontpage.fp.write("""<div class="topiclist"><ul>""")
 
 frontpage.fp.write("""<li>Analysis<ul>""")
 writetopic("Complex plane")
+writetopic("Complex parts")
 writetopic("General analytic functions")
 writetopic("Gaussian quadrature")
 frontpage.fp.write("""</ul></li>""")

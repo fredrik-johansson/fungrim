@@ -2,6 +2,7 @@
 
 from .expr import *
 
+from .complex_parts import *
 from .const_gamma import *
 from .pi import *
 from .dedekind_eta import *
