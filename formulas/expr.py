@@ -173,6 +173,7 @@ class Expr(object):
         if self is EulerQSeries: return "\\phi"
         if self is PartitionsP: return "p"
         if self is DivisorSigma: return "\\sigma"
+        if self is MoebiusMu: return "\\mu"
         if self is HardyRamanujanA: return "A"
         if self is Sin: return "\\sin"
         if self is Sinh: return "\\sinh"
@@ -883,7 +884,7 @@ HermitePolynomial
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 Divides
-GCD DivisorSigma
+GCD DivisorSigma MoebiusMu
 PartitionsP HardyRamanujanA
 KroneckerDelta
 Lattice
@@ -938,7 +939,6 @@ describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
 describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
 describe(ConstI, ConstI, [], CC, "Imaginary unit")
 
-describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
 describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
 describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
@@ -947,8 +947,8 @@ describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Eleme
 describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
 describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
 describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
+describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
-describe(RiemannZetaZero, RiemannZetaZero(n), [Element(n, SetMinus(ZZ, Set(0)))], CC, "Nontrivial zero of the Riemann zeta function")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
 describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
 describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Gauss-Legendre quadrature weight")

@@ -4,10 +4,14 @@ from .expr import *
 
 def_Topic(
     Title("Riemann zeta function"),
-#    DefinitionsTable(RiemannZeta, RiemannZetaZero),
+    Entries(
+        "e0a6a2",
+        "669509",
+    ),
     Section("Dirichlet series"),
     Entries(
-        "da2fdb"   # Dirichlet series
+        "da2fdb",   # Dirichlet series
+        "1d46d4",
     ),
     Section("Euler product"),
     Entries(
@@ -69,7 +73,10 @@ def_Topic(
 
 def_Topic(
     Title("Zeros of the Riemann zeta function"),
-    DefinitionsTable(RiemannZeta, RiemannZetaZero),
+    Entries(
+        "e0a6a2",
+        "669509",
+    ),
     Section("Main properties"),
     Entries(
         "2e1ff3",  # real zeros
@@ -90,8 +97,48 @@ def_Topic(
     SeeTopics("Riemann zeta function"),
 )
 
+make_entry(ID("e0a6a2"),
+    SymbolDefinition(RiemannZeta, RiemannZeta(s), "Riemann zeta function"),
+    Description("The Riemann zeta function", RiemannZeta(s), "is a function of one complex variable", s,
+        ". It is a meromorphic function with a pole at", Equal(s, 1), ".",
+        "The following table lists all conditions such that", SourceForm(RiemannZeta(s)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(Element(s, OpenInterval(1, Infinity)), Element(RiemannZeta(s), OpenInterval(1, Infinity))),
+        Tuple(Element(s, SetMinus(RR, Set(1))), Element(RiemannZeta(s), RR)),
+        Tuple(Element(s, SetMinus(CC, Set(1))), Element(RiemannZeta(s), CC)),
+        TableSection("Infinities"),
+        Tuple(Element(s, Set(1)), Element(RiemannZeta(s), Set(UnsignedInfinity))),
+        Tuple(Element(s, Set(Infinity)), Element(RiemannZeta(s), Set(1))),
+        TableSection("Formal power series"),
+        Tuple(And(Element(s, FormalPowerSeries(RR, x)), Unequal(SeriesCoefficient(s, x, 0), 1)),
+            Element(RiemannZeta(s), FormalPowerSeries(RR, x))),
+        Tuple(And(Element(s, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(s, x, 0), 1)),
+            Element(RiemannZeta(s), FormalPowerSeries(CC, x))),
+        Tuple(And(Element(s, FormalPowerSeries(RR, x)), Unequal(s, 1)),
+            Element(RiemannZeta(s), FormalLaurentSeries(RR, x))),
+        Tuple(And(Element(s, FormalPowerSeries(CC, x)), Unequal(s, 1)),
+            Element(RiemannZeta(s), FormalLaurentSeries(CC, x))),
+      )),
+    )
+
+make_entry(ID("669509"),
+    SymbolDefinition(RiemannZetaZero, RiemannZetaZero(n), "Nontrivial zero of the Riemann zeta function"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, SetMinus(ZZ, Set(0))), Element(RiemannZetaZero(n), CC))
+    )))
+
 make_entry(ID("da2fdb"),
     Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
+
+make_entry(ID("1d46d4"),
+    Formula(Equal(1/RiemannZeta(s), Sum(MoebiusMu(k)/k**s, Tuple(k, 1, Infinity)))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
@@ -122,7 +169,7 @@ make_entry(ID("9ee8bc"),
     Variables(s),
     Assumptions(
         And(Element(s, CC), NotElement(s, ZZGreaterEqual(1))),
-        And(Element(s, FormalLaurentSeries(CC, x)), NotElement(s, ZZGreaterEqual(1))),
+        And(Element(s, FormalPowerSeries(CC, x)), NotElement(s, ZZGreaterEqual(1))),
     ))
 
 make_entry(ID("7cb17f"),
