@@ -2,8 +2,23 @@ from .expr import *
 
 def_Topic(
     Title("Confluent hypergeometric functions"),
-#    DefinitionsTable(Hypergeometric0F1, Hypergeometric0F1Regularized, Hypergeometric1F1, Hypergeometric1F1Regularized,
-#        HypergeometricU, HypergeometricUStar, Hypergeometric2F0),
+    Entries(
+        "316533",
+        "f565f5",
+        "512bea",
+        "cee331",
+        "d6add6",
+        "1b9cc5",
+        "b9cc75",
+    ),
+    Section("Hypergeometric series"),
+    Entries(
+        "4c41ad",
+        "0a0aec",
+        "a61f01",
+        "dec042",
+        "70111e",
+    ),
     Section("Differential equations"),
     Entries(
         "06f229",
@@ -28,12 +43,64 @@ def_Topic(
     Section("Asymptotic expansions"),
     Entries(
         "d1b3b5",
+        "99f69c",
         "876844",
         "279e4f",
         "461a54",
         "7b91b4",
     ),
 )
+
+
+make_entry(ID("316533"),
+    SymbolDefinition(Hypergeometric0F1, Hypergeometric0F1(a,z), "Confluent hypergeometric limit function"))
+
+make_entry(ID("f565f5"),
+    SymbolDefinition(Hypergeometric0F1Regularized, Hypergeometric0F1Regularized(a,z), "Regularized confluent hypergeometric limit function"))
+
+make_entry(ID("512bea"),
+    SymbolDefinition(Hypergeometric1F1, Hypergeometric1F1(a,b,z), "Kummer confluent hypergeometric function"))
+
+make_entry(ID("cee331"),
+    SymbolDefinition(Hypergeometric1F1Regularized, Hypergeometric1F1Regularized(a,b,z), "Regularized Kummer confluent hypergeometric function"))
+
+make_entry(ID("d6add6"),
+    SymbolDefinition(HypergeometricU, HypergeometricU(a,b,z), "Tricomi confluent hypergeometric function"))
+
+make_entry(ID("1b9cc5"),
+    SymbolDefinition(HypergeometricUStar, HypergeometricUStar(a,b,z), "Scaled Tricomi confluent hypergeometric function"))
+
+make_entry(ID("b9cc75"),
+    SymbolDefinition(Hypergeometric2F0, Hypergeometric2F0(a,b,z), "Tricomi confluent hypergeometric function, alternative notation"))
+
+
+make_entry(ID("4c41ad"),
+    Formula(Equal(Hypergeometric0F1(a,z), Sum(1/RisingFactorial(a,k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,z),
+    Assumptions(And(Element(a,SetMinus(CC,ZZLessEqual(0))), Element(z,CC))))
+
+make_entry(ID("0a0aec"),
+    Formula(Equal(Hypergeometric0F1Regularized(a,z), Sum(1/Gamma(a+k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,z),
+    Assumptions(And(Element(a,CC), Element(z,CC))))
+
+make_entry(ID("a61f01"),
+    Formula(Equal(Hypergeometric1F1(a,b,z), Sum(RisingFactorial(a,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,b,z),
+    Assumptions(And(Element(a,CC), Element(b, SetMinus(CC, ZZLessEqual(0))), Element(z,CC))))
+
+make_entry(ID("dec042"),
+    Formula(Equal(Hypergeometric1F1(-n,b,z), Sum(RisingFactorial(-n,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), Tuple(k, 0, n)))),
+    Variables(n,b,z),
+    #Assumptions(And(Element(a,CC), Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, ZZBetween(-n+1, 0))), Element(z,CC))))
+    Assumptions(And(Element(a,CC), Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
+
+make_entry(ID("70111e"),
+    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/Gamma(b+k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,b,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(z,CC))))
+
+
 
 make_entry(ID("a047eb"),
     Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Exp(z) * Hypergeometric1F1Regularized(b-a, b, -z))),
@@ -111,6 +178,9 @@ make_entry(ID("d1b3b5"),
         + HypergeometricUStarRemainder(n,a,b,z))),
     Variables(a,b,z,n),
     Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)))))
+
+make_entry(ID("99f69c"),
+    SymbolDefinition(HypergeometricUStarRemainder, HypergeometricUStarRemainder(n,a,b,z), "Error term in asymptotic expansion of Tricomi confluent hypergeometric function"))
 
 make_entry(ID("876844"),
     Formula(Equal(Limit(Abs(HypergeometricUStarRemainder(n,a,b, Exp(ConstI*theta) * z)), z, Infinity), 0)),

@@ -502,7 +502,7 @@ class Expr(object):
             if args[0].is_integer():
                 return "\{%s, %s, \ldots %s\}" % (argstr[0], args[0]._integer + 1, argstr[1])
             else:
-                return "\{%s, %s + 1, \ldots %s\}" % (argstr[0], args[0], argstr[1])
+                return "\{%s, %s + 1, \ldots %s\}" % (argstr[0], argstr[0], argstr[1])
         if head is ClosedInterval:
             assert len(args) == 2
             return "\\left[%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
@@ -961,18 +961,6 @@ describe(BesselJ, BesselJ(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel fun
 describe(BesselY, BesselY(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel function of the second kind")
 describe(BesselI, BesselI(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the first kind")
 describe(BesselK, BesselK(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the second kind")
-
-describe(Hypergeometric0F1, Hypergeometric0F1(a,z), [Element(a,CC),Element(z,CC)], CC, "Confluent hypergeometric limit function")
-describe(Hypergeometric0F1Regularized, Hypergeometric0F1Regularized(a,z), [Element(a,CC),Element(z,CC)], CC, "Regularized confluent hypergeometric limit function")
-
-describe(Hypergeometric1F1, Hypergeometric1F1(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Kummer confluent hypergeometric function")
-describe(Hypergeometric1F1Regularized, Hypergeometric1F1Regularized(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Regularized Kummer confluent hypergeometric function")
-
-describe(HypergeometricU, HypergeometricU(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Tricomi confluent hypergeometric function")
-describe(HypergeometricUStar, HypergeometricUStar(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
-describe(Hypergeometric2F0, Hypergeometric2F0(a,b,z), [Element(a,CC),Element(b,CC),Element(z,CC)], CC, "Scaled Tricomi confluent hypergeometric function")
-
-describe(HypergeometricUStarRemainder, HypergeometricUStarRemainder(n,a,b,z), [Element(n,ZZGreaterEqual(0)),Element(a,CC),Element(b,CC),Element(z,SetMinus(CC,Set(0)))], CC, "Error term in asymptotic expansion of Tricomi confluent hypergeometric function")
 
 describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
 describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
