@@ -382,6 +382,8 @@ class Expr(object):
             return " \\ne ".join(argstr)
         if head is Subset:
             return " \\subset ".join(argstr)
+        if head is SubsetEqual:
+            return " \\subseteq ".join(argstr)
         if head is Tuple:
             return "\\left(" + ", ".join(argstr) + "\\right)"
         if head is Set:
@@ -836,6 +838,7 @@ Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element NotElement Subset SubsetEqual
 EqualAndElement
+Rings CommutativeRings Fields
 PP ZZ QQ RR CC HH
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
@@ -938,8 +941,6 @@ describe(ConstI, ConstI, [], CC, "Imaginary unit")
 describe(RiemannZeta, RiemannZeta(s), [Element(s, SetMinus(CC, Set(1)))], CC, "Riemann zeta function")
 describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
 describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
-describe(BernoulliB, BernoulliB(n), [Element(n, ZZGreaterEqual(0))], QQ, "Bernoulli number")
-describe(BernoulliPolynomial, BernoulliPolynomial(n, z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Bernoulli polynomial")
 describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
 describe(DedekindEta, DedekindEta(tau), [Element(tau, HH)], CC, "Dedekind eta function")
 describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
@@ -952,10 +953,7 @@ describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual
 describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
 describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Gauss-Legendre quadrature weight")
 describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Hermite polynomial")
-describe(StirlingCycle, StirlingCycle(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Unsigned Stirling number of the first kind")
-describe(StirlingS1, StirlingS1(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZ, "Signed Stirling number of the first kind")
-describe(StirlingS2, StirlingS2(n, k), [Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Stirling number of the second kind")
-describe(BellNumber, BellNumber(n), [Element(n, ZZGreaterEqual(0))], ZZGreaterEqual(0), "Bell number")
+
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
 

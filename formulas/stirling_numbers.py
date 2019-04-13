@@ -2,6 +2,12 @@ from .expr import *
 
 def_Topic(
     Title("Stirling numbers"),
+    Entries(
+        "778fa2",
+        "2e9d0c",
+        "4c6c43",
+        "1706bb",
+    ),
     Section("Recurrence relations"),
     Entries(
         "f0d72c",
@@ -34,6 +40,39 @@ def_Topic(
         "7774a3",
     ),
 )
+
+make_entry(ID("778fa2"),
+    SymbolDefinition(StirlingCycle, StirlingCycle(n, k), "Unsigned Stirling number of the first kind"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))), Element(StirlingCycle(n, k), ZZGreaterEqual(0))),
+      )))
+
+make_entry(ID("2e9d0c"),
+    SymbolDefinition(StirlingS1, StirlingS1(n, k), "Signed Stirling number of the first kind"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))), Element(StirlingS1(n, k), ZZ)),
+      )))
+
+make_entry(ID("4c6c43"),
+    SymbolDefinition(StirlingS2, StirlingS2(n, k), "Stirling number of the second kind"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0))), Element(StirlingS2(n, k), ZZGreaterEqual(0))),
+      )))
+
+make_entry(ID("1706bb"),
+    SymbolDefinition(BellNumber, BellNumber(n), "Bell number"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, ZZGreaterEqual(0)), Element(BellNumber(n), ZZGreaterEqual(1))),
+      )))
+
 
 make_entry(ID("f0d72c"),
     Formula(Equal(StirlingCycle(n+1, k), n*StirlingCycle(n,k) + StirlingCycle(n, k-1))),

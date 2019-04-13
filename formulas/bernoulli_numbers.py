@@ -2,6 +2,10 @@ from .expr import *
 
 def_Topic(
     Title("Bernoulli numbers and polynomials"),
+    Entries(
+        "ac8eca",
+        "1f88a4",
+    ),
     Section("Tables"),
     Entries(
         "aed6bd",
@@ -60,6 +64,23 @@ def_Topic(
     ),
 )
 
+make_entry(ID("ac8eca"),
+    SymbolDefinition(BernoulliB, BernoulliB(n), "Bernoulli number"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, ZZGreaterEqual(0)), Element(BernoulliB(n), QQ)),
+      )))
+
+make_entry(ID("1f88a4"),
+    SymbolDefinition(BernoulliPolynomial, BernoulliPolynomial(n, z), "Bernoulli polynomial"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(z, RR)), Element(BernoulliPolynomial(n, z), RR)),
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(z, CC)), Element(BernoulliPolynomial(n, z), CC)),
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(z, R), Element(R, Rings), SubsetEqual(QQ, R)), Element(BernoulliPolynomial(n, z), R)),
+      )))
 
 make_entry(ID("aed6bd"),
     Description("Table of", BernoulliB(n), "for", LessEqual(0, n, 50)),
