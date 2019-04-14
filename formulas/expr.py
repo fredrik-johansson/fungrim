@@ -969,8 +969,8 @@ describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
 
-describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
-describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
+describe(Hypergeometric2F1, Hypergeometric2F1(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
+describe(Hypergeometric2F1Regularized, Hypergeometric2F1Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
 
 describe(Erf, Erf(z), [Element(z, CC)], CC, "Error function")
 describe(Erfc, Erfc(z), [Element(z, CC)], CC, "Complementary error function")
