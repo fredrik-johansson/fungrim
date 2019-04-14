@@ -10,6 +10,43 @@ def_Topic(
         "8ac81d",
         "ff93d0",
     ),
+    Section("Differential equations"),
+    Entries(
+        "0fea28",
+        "727f67",
+        "ad9caa",
+        "62f23c",
+        "522c1a",
+        "ddfb97",
+        "95e561",
+        "fd9add",
+    ),
+    Section("Derivatives and recurrence relations"),
+    Entries(
+        "f1afc0",
+        "8b6264",
+        "5aceb9",
+        "40aeb6",
+        "2488bb",
+        "68cc2f",
+        "d56914",
+        "b6d600",
+        "15ac84",
+        "9b2f38",
+        "e85dee",
+
+        "c0247f",
+        "81ffcd",
+        "58d91f",
+        "a0ff0b",
+        "e284d7",
+        "807f3f",
+        "4fb391",
+        "9d98f8",
+        "f303c9",
+        "e233b0",
+        "7377c8",
+    ),
     Section("Hypergeometric representations"),
     Entries(
         "ecd36f",
@@ -100,6 +137,269 @@ make_entry(ID("ff93d0"),
         Tuple(And(Element(nu, SetMinus(CC, Set(0))), Element(z, CC)), Element(BesselK(nu, z), CC)),
       )),
     )
+
+make_entry(ID("0fea28"),
+    SymbolDefinition(BesselJDerivative, BesselJDerivative(nu, z, r), "Differentiated Bessel function of the first kind"),
+    Description("The following table lists all conditions such that", SourceForm(BesselJDerivative(nu, z, r)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(nu, ZZ), Element(z, RR), Element(r, ZZGreaterEqual(0))), Element(BesselJDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, RR), Element(z, OpenInterval(0, Infinity)), Element(r, ZZGreaterEqual(0))), Element(BesselJDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))), Element(BesselJDerivative(nu, z, r), CC)),
+        Tuple(And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))), Element(BesselJDerivative(nu, z, r), CC)),
+      )),
+    )
+
+make_entry(ID("727f67"),
+    SymbolDefinition(BesselYDerivative, BesselYDerivative(nu, z, r), "Differentiated Bessel function of the second kind"),
+    Description("The following table lists all conditions such that", SourceForm(BesselYDerivative(nu, z, r)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(nu, RR), Element(z, OpenInterval(0, Infinity)), Element(r, ZZGreaterEqual(0))), Element(BesselYDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, SetMinus(CC, Set(0))), Element(z, CC), Element(r, ZZGreaterEqual(0))), Element(BesselYDerivative(nu, z, r), CC)),
+      )),
+    )
+
+make_entry(ID("ad9caa"),
+    Formula(Equal(z**2 * BesselJDerivative(nu,z,2) + z * BesselJDerivative(nu,z,1) + (z**2 - nu**2) * BesselJ(nu,z), 0)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC)),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("62f23c"),
+    Formula(Equal(z**2 * BesselYDerivative(nu,z,2) + z * BesselYDerivative(nu,z,1) + (z**2 - nu**2) * BesselY(nu,z), 0)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("522c1a"),
+    SymbolDefinition(BesselIDerivative, BesselIDerivative(nu, z, r), "Differentiated modified Bessel function of the first kind"),
+    Description("The following table lists all conditions such that", SourceForm(BesselIDerivative(nu, z, r)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(nu, ZZ), Element(z, RR), Element(r, ZZGreaterEqual(0))), Element(BesselIDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, RR), Element(z, OpenInterval(0, Infinity)), Element(r, ZZGreaterEqual(0))), Element(BesselIDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))), Element(BesselIDerivative(nu, z, r), CC)),
+        Tuple(And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))), Element(BesselIDerivative(nu, z, r), CC)),
+      )),
+    )
+
+make_entry(ID("ddfb97"),
+    SymbolDefinition(BesselKDerivative, BesselKDerivative(nu, z, r), "Differentiated modified Bessel function of the second kind"),
+    Description("The following table lists all conditions such that", SourceForm(BesselKDerivative(nu, z, r)), "is defined in Fungrim."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        TableSection("Numbers"),
+        Tuple(And(Element(nu, RR), Element(z, OpenInterval(0, Infinity)), Element(r, ZZGreaterEqual(0))), Element(BesselKDerivative(nu, z, r), RR)),
+        Tuple(And(Element(nu, SetMinus(CC, Set(0))), Element(z, CC), Element(r, ZZGreaterEqual(0))), Element(BesselKDerivative(nu, z, r), CC)),
+      )),
+    )
+
+make_entry(ID("95e561"),
+    Formula(Equal(z**2 * BesselIDerivative(nu,z,2) + z * BesselIDerivative(nu,z,1) - (z**2 + nu**2) * BesselI(nu,z), 0)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC)),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("fd9add"),
+    Formula(Equal(z**2 * BesselKDerivative(nu,z,2) + z * BesselKDerivative(nu,z,1) - (z**2 + nu**2) * BesselK(nu,z), 0)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+
+
+make_entry(ID("f1afc0"),
+    Formula(Equal(BesselJDerivative(0,z,1), -BesselJ(1,z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("8b6264"),
+    Formula(Equal(BesselYDerivative(0,z,1), -BesselY(1,z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("5aceb9"),
+    Formula(Equal(BesselJDerivative(nu,z,1), (BesselJ(nu-1,z) - BesselJ(nu+1,z))/2)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC)),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("40aeb6"),
+    Formula(Equal(BesselYDerivative(nu,z,1), (BesselY(nu-1,z) - BesselY(nu+1,z))/2)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("2488bb"),
+    Formula(Equal(BesselJDerivative(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselJ(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Variables(nu,z,r),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),
+    ))
+
+make_entry(ID("68cc2f"),
+    Formula(Equal(BesselYDerivative(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselY(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Variables(nu,z,r),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),
+    ))
+
+make_entry(ID("d56914"),
+    Formula(Equal(BesselJ(nu,z), (z/(2*nu))*(BesselJ(nu-1,z) + BesselJ(nu+1,z)))),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, SetMinus(ZZ, Set(0))), Element(z, CC)),
+        And(Element(nu, SetMinus(CC, Set(0))), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("b6d600"),
+    Formula(Equal(BesselY(nu,z), (z/(2*nu))*(BesselY(nu-1,z) + BesselY(nu+1,z)))),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, SetMinus(ZZ, Set(0))), Element(z, CC)),
+        And(Element(nu, SetMinus(CC, Set(0))), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+
+
+
+make_entry(ID("15ac84"),
+    Formula(Equal((r**2+4*r-n**2+4)*BesselJDerivative(n,0,r+2) + (r+1)*(r+2)*BesselJDerivative(n,0,r), 0)),
+    Variables(nu,r),
+    Assumptions(And(Element(n,ZZ), Element(r, ZZGreaterEqual(0))))) 
+
+make_entry(ID("9b2f38"),
+    Formula(Equal(
+        z**2*(r**2 + 7*r + 12) * (BesselJDerivative(nu,z,r+4) / Factorial(r+4)) +
+        z*(2*r**2+11*r+15) * (BesselJDerivative(nu,z,r+3) / Factorial(r+3)) +
+        (r*(r+4) + z**2 - nu**2 + 4) * (BesselJDerivative(nu,z,r+2) / Factorial(r+2)) +
+        2*z * (BesselJDerivative(nu,z,r+1) / Factorial(r+1)) +
+        (BesselJDerivative(nu,z,r) / Factorial(r)), 0)),
+    Variables(nu, z, r),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0)))
+    ))
+
+make_entry(ID("e85dee"),
+    Formula(Equal(
+        z**2*(r**2 + 7*r + 12) * (BesselYDerivative(nu,z,r+4) / Factorial(r+4)) +
+        z*(2*r**2+11*r+15) * (BesselYDerivative(nu,z,r+3) / Factorial(r+3)) +
+        (r*(r+4) + z**2 - nu**2 + 4) * (BesselYDerivative(nu,z,r+2) / Factorial(r+2)) +
+        2*z * (BesselYDerivative(nu,z,r+1) / Factorial(r+1)) +
+        (BesselYDerivative(nu,z,r) / Factorial(r)), 0)),
+    Variables(nu, z, r),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0)))
+    ))
+
+
+make_entry(ID("c0247f"),
+    Formula(Equal(BesselIDerivative(0,z,1), BesselI(1,z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("81ffcd"),
+    Formula(Equal(BesselKDerivative(0,z,1), -BesselK(1,z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("58d91f"),
+    Formula(Equal(BesselIDerivative(nu,z,1), (BesselI(nu-1,z) + BesselI(nu+1,z))/2)),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC)),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("a0ff0b"),
+    Formula(Equal(BesselKDerivative(nu,z,1), -((BesselK(nu-1,z) + BesselK(nu+1,z))/2))),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("e284d7"),
+    Formula(Equal(BesselIDerivative(nu,z,r), Div(1,2**r) * Sum(Binomial(r,k) * BesselI(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Variables(nu,z,r),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),
+    ))
+
+make_entry(ID("807f3f"),
+    Formula(Equal(BesselKDerivative(nu,z,r), Div((-1)**r,2**r) * Sum(Binomial(r,k) * BesselK(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Variables(nu,z,r),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),
+    ))
+
+make_entry(ID("4fb391"),
+    Formula(Equal(BesselI(nu,z), (z/(2*nu))*(BesselI(nu-1,z) - BesselI(nu+1,z)))),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, SetMinus(ZZ, Set(0))), Element(z, CC)),
+        And(Element(nu, SetMinus(CC, Set(0))), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("9d98f8"),
+    Formula(Equal(BesselK(nu,z), (z/(2*nu))*(BesselK(nu+1,z) - BesselK(nu-1,z)))),
+    Variables(nu,z),
+    Assumptions(
+        And(Element(nu, SetMinus(ZZ, Set(0))), Element(z, CC)),
+        And(Element(nu, SetMinus(CC, Set(0))), Element(z, SetMinus(CC, Set(0))))
+    ))
+
+make_entry(ID("f303c9"),
+    Formula(Equal((r**2+4*r-n**2+4)*BesselIDerivative(n,0,r+2) - (r+1)*(r+2)*BesselIDerivative(n,0,r), 0)),
+    Variables(nu,r),
+    Assumptions(And(Element(n,ZZ), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("e233b0"),
+    Formula(Equal(
+        z**2*(r**2 + 7*r + 12) * (BesselIDerivative(nu,z,r+4) / Factorial(r+4)) +
+        z*(2*r**2+11*r+15) * (BesselIDerivative(nu,z,r+3) / Factorial(r+3)) +
+        (r*(r+4) - z**2 - nu**2 + 4) * (BesselIDerivative(nu,z,r+2) / Factorial(r+2)) -
+        2*z * (BesselIDerivative(nu,z,r+1) / Factorial(r+1)) -
+        (BesselIDerivative(nu,z,r) / Factorial(r)), 0)),
+    Variables(nu, z, r),
+    Assumptions(
+        And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0)))
+    ))
+
+make_entry(ID("7377c8"),
+    Formula(Equal(
+        z**2*(r**2 + 7*r + 12) * (BesselKDerivative(nu,z,r+4) / Factorial(r+4)) +
+        z*(2*r**2+11*r+15) * (BesselKDerivative(nu,z,r+3) / Factorial(r+3)) +
+        (r*(r+4) - z**2 - nu**2 + 4) * (BesselKDerivative(nu,z,r+2) / Factorial(r+2)) -
+        2*z * (BesselKDerivative(nu,z,r+1) / Factorial(r+1)) -
+        (BesselKDerivative(nu,z,r) / Factorial(r)), 0)),
+    Variables(nu, z, r),
+    Assumptions(
+        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0)))
+    ))
+
+
+
 
 make_entry(ID("ecd36f"),
     Formula(Equal(BesselJ(nu, z), (z/2)**nu * Hypergeometric0F1Regularized(nu+1, -(z**2/4)))),

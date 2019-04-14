@@ -429,7 +429,18 @@ class Expr(object):
             nstr = n.latex(in_small=True)
             zstr = z.latex(in_small)
             fsym = {BesselJ:"J", BesselI:"I", BesselY:"Y", BesselK:"K", HankelH1:"H^{(1)}", HankelH2:"H^{(2)}"}[head]
-            return fsym + "_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
+            return fsym + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+        if head in (BesselJDerivative, BesselYDerivative, BesselIDerivative, BesselKDerivative):
+            assert len(args) == 3
+            n, z, r = args
+            nstr = n.latex(in_small=True)
+            zstr = z.latex(in_small)
+            rstr = r.latex(in_small)
+            fsym = {BesselJDerivative:"J", BesselIDerivative:"I", BesselYDerivative:"Y", BesselKDerivative:"K", HankelH1:"H^{(1)}", HankelH2:"H^{(2)}"}[head]
+            if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+                return fsym + ("'" * r._integer) + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+            else:
+                return fsym + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol():
@@ -874,6 +885,7 @@ BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK HankelH1 HankelH2
+BesselJDerivative BesselIDerivative BesselYDerivative BesselKDerivative
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
 HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
