@@ -396,6 +396,7 @@ writetopic("Gamma function")
 writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")
 writetopic("Airy functions")
+writetopic("Bessel functions")
 writetopic("Legendre polynomials")
 frontpage.fp.write("""</ul></li>""")
 

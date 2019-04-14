@@ -14,6 +14,7 @@ from .partitions import *
 from .riemann_zeta import *
 from .integrals import *
 from .airy import *
+from .bessel import *
 from .bernoulli_numbers import *
 from .stirling_numbers import *
 from .gaussian_quadrature import *

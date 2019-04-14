@@ -423,12 +423,12 @@ class Expr(object):
         if head is HermitePolynomial:
             assert len(args) == 2
             return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
-        if head in (BesselJ, BesselY, BesselI, BesselK):
+        if head in (BesselJ, BesselY, BesselI, BesselK, HankelH1, HankelH2):
             assert len(args) == 2
             n, z = args
             nstr = n.latex(in_small=True)
             zstr = z.latex(in_small)
-            fsym = {BesselJ:"J", BesselI:"I", BesselY:"Y", BesselK:"K"}[head]
+            fsym = {BesselJ:"J", BesselI:"I", BesselY:"Y", BesselK:"K", HankelH1:"H^{(1)}", HankelH2:"H^{(2)}"}[head]
             return fsym + "_{" + nstr + "}" + "\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
@@ -873,7 +873,7 @@ UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
-BesselJ BesselI BesselY BesselK
+BesselJ BesselI BesselY BesselK HankelH1 HankelH2
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
 HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
@@ -956,11 +956,6 @@ describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0
 
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
-
-describe(BesselJ, BesselJ(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel function of the first kind")
-describe(BesselY, BesselY(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Bessel function of the second kind")
-describe(BesselI, BesselI(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the first kind")
-describe(BesselK, BesselK(nu,z), [Element(nu,CC),Element(z,CC)], CC, "Modified Bessel function of the second kind")
 
 describe(Hypergeometric2F1, Hypergeometric2F0(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
 describe(Hypergeometric2F1Regularized, Hypergeometric2F0Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
