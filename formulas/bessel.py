@@ -63,6 +63,14 @@ def_Topic(
         "7ae3ed",
         "c29d6f",
     ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "3bffa9",
+        "e7b5be",
+        "7f3485",
+        "0836b4",
+        "cc4572",
+    ),
 )
 
 def_Topic(
@@ -127,6 +135,7 @@ make_entry(ID("b4165c"),
         Tuple(And(Element(nu, RR), Element(z, OpenInterval(0, Infinity))), Element(BesselJ(nu, z), RR)),
         Tuple(And(Element(nu, ZZ), Element(z, CC)), Element(BesselJ(nu, z), CC)),
         Tuple(And(Element(nu, CC), Element(z, SetMinus(CC, Set(0)))), Element(BesselJ(nu, z), CC)),
+        Tuple(And(Element(nu, ClosedOpenInterval(0, Infinity)), Element(z, CC)), Element(BesselJ(nu, z), CC)),
       )),
     )
 
@@ -611,4 +620,33 @@ make_entry(ID("c29d6f"),
     Assumptions(
         And(Element(nu, CC), Element(z, CC), Greater(Re(z), 0)),
     ))
+
+_landau_ref = "L. Landau. Monotonicity and bounds on Bessel functions. Proceedings of the Symposium on Mathematical Physics and Quantum Field Theory. Vol. 4. Southwest Texas State Univ. San Marcos, TX, 2000. http://emis.ams.org/journals/EJDE/conf-proc/04/l1/landau.pdf"
+
+make_entry(ID("3bffa9"),
+    Formula(LessEqual(Abs(BesselJ(nu,x)), 1)),
+    Variables(nu, x),
+    Assumptions(And(Element(nu, ClosedOpenInterval(0, Infinity)), Element(x, RR))))
+
+make_entry(ID("e7b5be"),
+    Formula(LessEqual(Abs(BesselJ(nu,x)), Decimal("0.6749") * Pow(nu, -Div(1,3)))),
+    Variables(nu, x),
+    Assumptions(And(Element(nu, OpenInterval(0, Infinity)), Element(x, ClosedOpenInterval(0, Infinity)))),
+    References(_landau_ref))
+
+make_entry(ID("7f3485"),
+    Formula(LessEqual(Abs(BesselJ(nu,x)), Decimal("0.7858") * Pow(x, -Div(1,3)))),
+    Variables(nu, x),
+    Assumptions(And(Element(nu, ClosedOpenInterval(0, Infinity)), Element(x, OpenInterval(0, Infinity)))),
+    References(_landau_ref))
+
+make_entry(ID("0836b4"),
+    Formula(LessEqual(Abs(BesselJ(n,z)), Exp(Abs(Im(z))))),
+    Variables(n, z),
+    Assumptions(And(Element(n, ZZ), Element(z, CC))))
+
+make_entry(ID("cc4572"),
+    Formula(LessEqual(Abs(BesselJ(nu,z)), (1/Gamma(nu+1)) * Abs(z/2)**nu * Exp(Abs(Im(z))))),
+    Variables(nu, z),
+    Assumptions(And(Element(nu, ClosedOpenInterval(-Div(1,2), Infinity)), Element(z, SetMinus(CC, Set(0))))))
 
