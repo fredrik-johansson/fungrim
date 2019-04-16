@@ -680,6 +680,16 @@ def_Topic(
         "d1f5c5",
         "0c09cc",
     ),
+    Section("Airy function cases"),
+    SeeTopics("Airy functions"),
+    Entries(
+        "685892",
+        "d39c46",
+        "e72e96",
+        "fda595",
+        "49d754",
+        "c362e8",
+    ),
 )
 
 
@@ -744,54 +754,33 @@ make_entry(ID("0c09cc"),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
-"""
-f361e8
-80ab52
-49d754
-82bc9d
-fda595
-e72e96
-685892
-d39c46
+make_entry(ID("685892"),
+    Formula(Equal(BesselJ(-Div(1,3),z), Where((1/(2*omega)) * (3 * AiryAi(-omega**2) + Sqrt(3) * AiryBi(-omega**2)), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
+make_entry(ID("d39c46"),
+    Formula(Equal(BesselJ(Div(1,3),z), Where((1/(2*omega)) * (3 * AiryAi(-omega**2) - Sqrt(3) * AiryBi(-omega**2)), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
-BesselK(-1/2,z) = sqrt(2/(piz)) exp(-z)
-BesselK(+1/2,z) = sqrt(2/(piz)) exp(-z)
-BesselK(+3/2,z) = sqrt(2/(pi)) z^(-3/2) exp(-z) (1+z)
+make_entry(ID("e72e96"),
+    Formula(Equal(BesselJ(Div(2,3),z), Where((1/(2*omega**2)) * (3 * AiryAiPrime(-omega**2) + Sqrt(3) * AiryBiPrime(-w**2)), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
+make_entry(ID("fda595"),
+    Formula(Equal(BesselK(-Div(1,3),z), Where((Sqrt(3)*ConstPi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
+make_entry(ID("49d754"),
+    Formula(Equal(BesselK(Div(1,3),z), Where((Sqrt(3)*ConstPi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
-def F13(z):
-    w = (3*z/2.)**(2/3.)
-    return root(3,6) * (sqrt(3)*airyai(-w) - airybi(-w)) / (root(4*z,3))
+make_entry(ID("c362e8"),
+    Formula(Equal(BesselK(Div(2,3),z), Where(-((Sqrt(3)*ConstPi/omega**2) * AiryAiPrime(omega**2)), Equal(omega, (3*z/2)**Div(1,3))))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
-cplot(lambda z: besselj(1/3.,z)-F13(z))
-
-def F13m(z):
-    w = (3*z/2.)**(2/3.)
-    return root(3,6) * (sqrt(3)*airyai(-w) + airybi(-w)) / (root(4*z,3))
-
-cplot(lambda z: besselj(-1/3.,z)-F13(z))
-
-def F23(z):
-    w = (3*z/2.)**(2/3.)
-    return (3*airyai(-w,1) + sqrt(3)*airybi(-w,1)) / (2.0**(1/3.) * (3*z)**(2/3.))
-
-cplot(lambda z: besselj(2/3.,z)-F23(z))
-
-todo: besselk as aitury!
-
-
-
-besselj(0,2); nsum(lambda k: (-1)**k/fac(k)**2, [0,inf])
-besselj(0,1); nsum(lambda k: (-1)**k/fac(k)**2/4**k, [0,inf])
-
->>> besseli(0,2); nsum(lambda k: 1/fac(k)**2, [0,inf])
-mpf('2.2795853023360673')
-mpf('2.2795853023360673')
->>> besseli(0,1); nsum(lambda k: 1/fac(k)**2/4**k, [0,inf])
-mpf('1.2660658777520084')
-mpf('1.2660658777520084')
-
-
-"""
