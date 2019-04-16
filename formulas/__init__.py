@@ -7,6 +7,7 @@ from .const_gamma import *
 from .pi import *
 from .dedekind_eta import *
 from .exp import *
+from .powers import *
 from .gamma import *
 from .legendre_polynomial import *
 from .log import *

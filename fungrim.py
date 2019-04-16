@@ -390,6 +390,7 @@ frontpage.fp.write("""</ul></li>""")
 frontpage.fp.write("""<li>Elementary functions<ul>""")
 writetopic("Exponential function")
 writetopic("Natural logarithm")
+writetopic("Powers")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
