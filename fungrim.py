@@ -98,6 +98,7 @@ th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
 .katex { font-size: 1.1em; }
+.katex-display { margin-top:0.8em; margin-bottom:0.8em; }
 // .katex-display {
 //   overflow-x: visible;
 //   overflow-y: hidden;
@@ -106,7 +107,7 @@ tr:nth-child(odd) { background-color: #fafafa; }
 button {
   border: none;
   color: #000;
-  padding: 0.2em 0.6em;
+  padding: 0.1em 0.5em;
   text-align: center;
   text-decoration: none;
   display: inline-block;

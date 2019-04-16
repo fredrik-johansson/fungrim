@@ -713,7 +713,7 @@ class Expr(object):
     def html_SymbolDefinition(self):
         symbol, example, description = self.args()
         s = ""
-        s += """<div style="text-align:center; margin:1em">"""
+        s += """<div style="text-align:center; margin:0.8em">"""
         s += """<span style="font-size:85%; color:#888">Symbol:</span> """
         s += """<tt><a href="../symbol/%s.html">%s</a></tt>""" % (symbol._symbol, symbol._symbol)
         s += """ <span style="color:#888">&mdash;</span> """
@@ -745,9 +745,9 @@ class Expr(object):
         if single:
             s += """<div>"""
         else:
-            s += """<div style="float:left; margin-top:0.3em;">"""
+            s += """<div style="float:left; margin-top:0.1em;">"""
             s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
-            s += """<button style="margin-top:0.4em; margin-bottom: 0.4em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
+            s += """<button style="margin-top:0.3em; margin-bottom: 0.2em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div style="margin-left:50pt">"""
 

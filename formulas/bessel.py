@@ -49,6 +49,12 @@ def_Topic(
         "2a4195",
         "d5b7e8",
     ),
+    Section("Specific values"),
+    SeeTopics("Specific values of Bessel functions"),
+    Entries(
+        "121b21",
+        "d1f5c5",
+    ),
     Section("Hankel functions"),
     Entries(
         "24d383",
@@ -650,3 +656,142 @@ make_entry(ID("cc4572"),
     Variables(nu, z),
     Assumptions(And(Element(nu, ClosedOpenInterval(-Div(1,2), Infinity)), Element(z, SetMinus(CC, Set(0))))))
 
+
+
+
+def_Topic(
+    Title("Specific values of Bessel functions"),
+    SeeTopics("Bessel functions"),
+    Section("Trigonometric cases"),
+    Entries(
+        "621a9b",
+        "121b21",
+        "a2a294",
+        "5679f2",
+        "4dfd41",
+        "8472cc",
+    ),
+    Section("Hyperbolic cases"),
+    Entries(
+        "5d9c43",
+        "a59981",
+        "65647f",
+        "7ac286",
+        "d1f5c5",
+        "0c09cc",
+    ),
+)
+
+
+make_entry(ID("621a9b"),
+    Formula(Equal(BesselJ(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("121b21"),
+    Formula(Equal(BesselJ(Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sin(z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("a2a294"),
+    Formula(Equal(BesselJ(Div(3,2),z), Pow((2*z)/ConstPi, Div(1,2)) * ((Sin(z)/z**2 - Cos(z)/z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("5679f2"),
+    Formula(Equal(BesselY(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sin(z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("4dfd41"),
+    Formula(Equal(BesselY(Div(1,2),z), -(Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z) / z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("8472cc"),
+    Formula(Equal(BesselY(Div(3,2),z), -(Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z)/z**2 + Sin(z)/z)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+
+make_entry(ID("5d9c43"),
+    Formula(Equal(BesselI(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Cosh(z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("a59981"),
+    Formula(Equal(BesselI(Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sinh(z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("65647f"),
+    Formula(Equal(BesselI(Div(3,2),z), Pow((2*z)/ConstPi, Div(1,2)) * ((Cosh(z)/z - Sinh(z)/z**2)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("7ac286"),
+    Formula(Equal(BesselK(-Div(1,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("d1f5c5"),
+    Formula(Equal(BesselK(Div(1,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) / z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+make_entry(ID("0c09cc"),
+    Formula(Equal(BesselK(Div(3,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) * (1/z + 1/z**2)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
+
+"""
+f361e8
+80ab52
+49d754
+82bc9d
+fda595
+e72e96
+685892
+d39c46
+
+
+BesselK(-1/2,z) = sqrt(2/(piz)) exp(-z)
+BesselK(+1/2,z) = sqrt(2/(piz)) exp(-z)
+BesselK(+3/2,z) = sqrt(2/(pi)) z^(-3/2) exp(-z) (1+z)
+
+
+
+def F13(z):
+    w = (3*z/2.)**(2/3.)
+    return root(3,6) * (sqrt(3)*airyai(-w) - airybi(-w)) / (root(4*z,3))
+
+cplot(lambda z: besselj(1/3.,z)-F13(z))
+
+def F13m(z):
+    w = (3*z/2.)**(2/3.)
+    return root(3,6) * (sqrt(3)*airyai(-w) + airybi(-w)) / (root(4*z,3))
+
+cplot(lambda z: besselj(-1/3.,z)-F13(z))
+
+def F23(z):
+    w = (3*z/2.)**(2/3.)
+    return (3*airyai(-w,1) + sqrt(3)*airybi(-w,1)) / (2.0**(1/3.) * (3*z)**(2/3.))
+
+cplot(lambda z: besselj(2/3.,z)-F23(z))
+
+todo: besselk as aitury!
+
+
+
+besselj(0,2); nsum(lambda k: (-1)**k/fac(k)**2, [0,inf])
+besselj(0,1); nsum(lambda k: (-1)**k/fac(k)**2/4**k, [0,inf])
+
+>>> besseli(0,2); nsum(lambda k: 1/fac(k)**2, [0,inf])
+mpf('2.2795853023360673')
+mpf('2.2795853023360673')
+>>> besseli(0,1); nsum(lambda k: 1/fac(k)**2/4**k, [0,inf])
+mpf('1.2660658777520084')
+mpf('1.2660658777520084')
+
+
+"""
