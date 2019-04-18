@@ -313,12 +313,12 @@ make_entry(ID("99a9c6"),
     References("H. Alzer, On some inequalities for the gamma and psi functions, Math. Comp. 66(217), pp. 373-389. Theorem 8."))
 
 make_entry(ID("f50ec9"),
-    Formula(Greater(Abs(Gamma(z)), 0)),
+    Formula(Greater(Abs(GammaFunction(z)), 0)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("143002"),
-    Formula(Less(Abs(1/Gamma(z)), Infinity)),
+    Formula(Less(Abs(1/GammaFunction(z)), Infinity)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
