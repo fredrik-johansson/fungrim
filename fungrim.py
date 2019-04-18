@@ -375,10 +375,14 @@ def writetopic(s):
 
 frontpage.fp.write("""<div class="topiclist"><ul>""")
 
-frontpage.fp.write("""<li>Analysis<ul>""")
+frontpage.fp.write("""<li>Fundamentals<ul>""")
+writetopic("Operators")
 writetopic("Complex plane")
 writetopic("Complex parts")
 writetopic("General analytic functions")
+frontpage.fp.write("""</ul></li>""")
+
+frontpage.fp.write("""<li>Numerical analysis<ul>""")
 writetopic("Gaussian quadrature")
 frontpage.fp.write("""</ul></li>""")
 

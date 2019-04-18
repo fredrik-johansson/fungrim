@@ -4,8 +4,6 @@ from .expr import *
 
 def_Topic(
     Title("Gamma function"),
-#    DefinitionsTable(GammaFunction, LogGamma),
-#    Section("Definitions"),
     Entries(
         "09e2ed",
         "c6038c",
@@ -40,6 +38,7 @@ def_Topic(
         "37a95a",
         "8cf1fd",
         "53a2a1",
+        "6d0a95",
     ),
     Section("Analytic properties"),
     Entries(
@@ -53,6 +52,12 @@ def_Topic(
     Section("Complex parts"),
     Entries(
         "d7d2a0",
+    ),
+    Section("Bounds and inequalities"),
+    SeeTopics("Bounds and inequalities for the gamma function"),
+    Entries(
+        "a0ca3e",
+        "b7fec0",
     ),
 )
 
@@ -208,6 +213,13 @@ make_entry(ID("53a2a1"),
     Variables(z, n),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
 
+make_entry(ID("6d0a95"),
+    Formula(Equal(GammaFunction(z), (2*ConstPi)**Div(1,2) * z**(z-Div(1,2)) * Exp(-z) * Exp(Sum((z+n-Div(1,2))*Log((z+n)/(z+n-1))-1, Tuple(n, 1, Infinity))))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)))),
+    References("B. C. Carlson (1977), Special functions of applied mathematics, Academic Press. Proposition 3.8-1."))
+
+
 make_entry(ID("798c5d"),
     Formula(Equal(HolomorphicDomain(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), GammaFunction_domain)))
 
@@ -230,4 +242,157 @@ make_entry(ID("d7d2a0"),
     Formula(Equal(GammaFunction(Conjugate(z)), Conjugate(GammaFunction(z)))),
     Variables(z),
     Assumptions(Element(z, GammaFunction_domain)))
+
+
+
+def_Topic(
+    Title("Bounds and inequalities for the gamma function"),
+    SeeTopics("Gamma function"),
+    Section("Real argument"),
+    Entries(
+        "1bbbc7",
+        "e010c9",
+        "b05f2b",
+        "2a47d7",
+        "a0ca3e",
+        "2398a1",
+        "99a9c6",
+    ),
+    Section("Complex argument"),
+    Entries(
+        "f50ec9",
+        "143002",
+        "b7fec0",
+        "80f7dc",
+        "931d89",
+        "1976db",
+        "c7b921",
+        "94db60",
+        "513a30",
+        "4a2ac8",
+        "dd5e3a",
+        "e0b322",
+        "7af1b9",
+        "06260c",
+    ),
+    Section("Derivatives"),
+    Entries(
+        "cb5071",
+    ),
+),
+
+make_entry(ID("1bbbc7"),
+    Formula(Element(ArgMinUnique(GammaFunction(x), x, OpenInterval(0, Infinity)), RealBall(Decimal("1.46163214496836234126265954233"), Decimal("4.28e-30")))))
+
+make_entry(ID("e010c9"),
+    Formula(Element(Minimum(GammaFunction(x), x, OpenInterval(0, Infinity)), RealBall(Decimal("0.885603194410888700278815900583"), Decimal("4.12e-31")))))
+
+make_entry(ID("b05f2b"),
+    Formula(Element(Minimum(LogGamma(x), x, OpenInterval(0, Infinity)), RealBall(Decimal("-0.121486290535849608095514557178"), Decimal("3.09e-31")))))
+
+make_entry(ID("2a47d7"),
+    Formula(Greater(GammaFunction(x), (2*ConstPi)**Div(1,2) * x**(x-Div(1,2)) * Exp(-x))),
+    Variables(x),
+    Assumptions(Element(x, OpenInterval(0, Infinity))))
+
+make_entry(ID("a0ca3e"),
+    Formula(Less(GammaFunction(x), (2*ConstPi)**Div(1,2) * x**(x-Div(1,2)) * Exp(-x) * Exp(1/(12*x)))),
+    Variables(x),
+    Assumptions(Element(x, OpenInterval(0, Infinity))))
+
+make_entry(ID("2398a1"),
+    Formula(Greater(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), Tuple(k, 1, 2*n)))),
+    Variables(x, n),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, ZZGreaterEqual(0)))),
+    References("H. Alzer, On some inequalities for the gamma and psi functions, Math. Comp. 66(217), pp. 373-389. Theorem 8."))
+
+make_entry(ID("99a9c6"),
+    Formula(Less(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), Tuple(k, 1, 2*n+1)))),
+    Variables(x, n),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, ZZGreaterEqual(0)))),
+    References("H. Alzer, On some inequalities for the gamma and psi functions, Math. Comp. 66(217), pp. 373-389. Theorem 8."))
+
+make_entry(ID("f50ec9"),
+    Formula(Greater(Abs(Gamma(z)), 0)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("143002"),
+    Formula(Less(Abs(1/Gamma(z)), Infinity)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("b7fec0"),
+    Formula(Where(LessEqual(Abs(GammaFunction(z)), (2*ConstPi)**Div(1,2) * Abs(z)**(x-Div(1,2)) * Exp(-(ConstPi*Abs(y)/2)) * Exp(Div(1,6*Abs(z)))), Equal(z, x+y*ConstI))),
+    Variables(x, y),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, RR), Unequal(x+y*ConstI, 0))),
+    References("R. B. Paris and D. Kaminski (2001), Asymptotics of Mellin-Barnes integrals, Cambridge University Press. (2.1.19), p. 34."))
+
+make_entry(ID("80f7dc"),
+    Formula(LessEqual(Abs(GammaFunction(z)), (2*ConstPi)**Div(1,2) * Abs(z**(z-Div(1,2)) * Exp(-z)) * Exp(Div(1,6*Abs(z))))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), Unequal(z, 0))),
+    References("R. B. Paris and D. Kaminski (2001), Asymptotics of Mellin-Barnes integrals, Cambridge University Press. (2.1.18), p. 34."))
+
+make_entry(ID("931d89"),
+    Formula(GreaterEqual(Abs(GammaFunction(z)), (2*ConstPi)**Div(1,2) * Abs(z**(z-Div(1,2)) * Exp(-z)) * Exp(-Div(1,6*Abs(z))))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), Unequal(z, 0))))
+
+
+make_entry(ID("1976db"),
+    Formula(Equal(Abs(GammaFunction(y*ConstI)), Sqrt(ConstPi/(y*Sinh(ConstPi*y))))),
+    Variables(y),
+    Assumptions(Element(y, SetMinus(RR, Set(0)))))
+
+make_entry(ID("c7b921"),
+    Formula(Equal(Abs(GammaFunction(Div(1,2)+y*ConstI)), Sqrt(ConstPi/(Cosh(ConstPi*y))))),
+    Variables(y),
+    Assumptions(Element(y, RR)))
+
+make_entry(ID("94db60"),
+    Formula(Equal(Abs(GammaFunction(1+y*ConstI)), Sqrt((ConstPi*y/(Sinh(ConstPi*y)))))),
+    Variables(y),
+    Assumptions(Element(y, SetMinus(RR, Set(0)))))
+
+make_entry(ID("513a30"),
+    Formula(Equal(Abs(GammaFunction(x+y*ConstI)), Abs(GammaFunction(x)) * Product((1+y**2/(x+k)**2)**(-Div(1,2)), Tuple(k, 0, Infinity)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, RR), Element(y, RR), NotElement(x+y*ConstI, ZZLessEqual(0)))),
+    References("Abramowitz & Stegun 6.1.25"))
+
+make_entry(ID("4a2ac8"),
+    Formula(LessEqual(Abs(GammaFunction(x+y*ConstI)), Abs(GammaFunction(x)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, RR), Element(y, RR))),
+    References("B. C. Carlson (1977), Special functions of applied mathematics, Academic Press. Inequality 3.10-3."))
+
+make_entry(ID("dd5e3a"),
+    Formula(Less(Abs(GammaFunction(x+y*ConstI)), Abs(GammaFunction(x+t*ConstI)))),
+    Variables(x, y, t),
+    Assumptions(And(Element(x, RR), Element(y, RR), Element(t, RR), Greater(Abs(y), Abs(t)))))
+
+make_entry(ID("e0b322"),
+    Formula(GreaterEqual(Abs(GammaFunction(x+y*ConstI)), GammaFunction(x) / Sqrt(Cosh(ConstPi*y)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, ClosedOpenInterval(Div(1,2),Infinity)), Element(y, RR))),
+    References("B. C. Carlson (1977), Special functions of applied mathematics, Academic Press. Inequality 3.10-4."))
+
+make_entry(ID("7af1b9"),
+    Formula(GreaterEqual(Abs(GammaFunction(x+y*ConstI)), GammaFunction(x) * Exp(-(ConstPi*Abs(y)/2)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, ClosedOpenInterval(Div(1,2),Infinity)), Element(y, RR))),
+    References("B. C. Carlson (1977), Special functions of applied mathematics, Academic Press. Inequality 3.10-4."))
+
+make_entry(ID("06260c"),
+    Formula(LessEqual(Abs(1/GammaFunction(z)), Where(Exp(ConstPi*R/2) * R**(R+Div(1,2)), Equal(R, Abs(z))))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("cb5071"),
+    Formula(LessEqual(Abs((1/Factorial(n)) * Derivative(1/GammaFunction(x), Tuple(x, 0, n))), 2/Sqrt(Factorial(n)))),
+    #Formula(Where(LessEqual(Abs(SeriesCoefficient(1/GammaFunction(x), x, n)), 2/Sqrt(Factorial(n))), Equal(x, Gen(FormalPowerSeries(RR, x))))),
+    Variables(n),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)))),
+    References("L. Fekih-Ahmed, On the Power Series Expansion of the Reciprocal Gamma Function, https://arxiv.org/abs/1407.5983 (simplified version of (1.5))"))
 

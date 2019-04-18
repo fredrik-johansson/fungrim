@@ -320,6 +320,18 @@ class Expr(object):
             if (not args[2].is_atom() and args[2].head() not in [Abs]):
                 formula = "\\left[ %s \\right]" % formula
             return "\\lim_{%s \\to %s} %s" % (var, point, formula)
+        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique):
+            assert len(args) == 3
+            formula, var, domain = args
+            var = var.latex()
+            domain = domain.latex(in_small=True)
+            formula = formula.latex()
+            if (not args[2].is_atom() and args[2].head() not in [Abs]):
+                formula = "\\left[ %s \\right]" % formula
+            opname = {Minimum:"\\min", Maximum:"\\max",
+                      ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
+                      ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}"}[head]
+            return "\\mathop{%s}\\limits_{%s \\in %s} %s" % (opname, var, domain, formula)
         if head is Supremum:
             assert len(args) == 3
             formula, var, condition = args
@@ -863,6 +875,7 @@ Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
+Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
 Sum Product Limit Integral Derivative
 SumCondition ProductCondition
 SumSet ProductSet
