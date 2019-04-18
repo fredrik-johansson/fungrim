@@ -326,8 +326,8 @@ class Expr(object):
             var = var.latex()
             domain = domain.latex(in_small=True)
             formula = formula.latex()
-            if (not args[2].is_atom() and args[2].head() not in [Abs]):
-                formula = "\\left[ %s \\right]" % formula
+            #if (not args[2].is_atom() and args[2].head() not in [Abs]):
+            #    formula = "\\left[ %s \\right]" % formula
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
                       ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}"}[head]
