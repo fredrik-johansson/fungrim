@@ -216,6 +216,7 @@ class Expr(object):
         if self is SL2Z: return "\\operatorname{SL}_2(\\mathbb{Z})"
         if self is PSL2Z: return "\\operatorname{PSL}_2(\\mathbb{Z})"
         if self is ModularGroupFundamentalDomain: return "\\mathcal{F}"
+        if self is PowerSet: return "\\mathscr{P}"
         if self is Ellipsis: return "\\ldots"
         if self.is_atom():
             if self._symbol is not None:
@@ -484,7 +485,7 @@ class Expr(object):
         if head is Element:
             return " \\in ".join(argstr)
         if head is NotElement:
-            return " \\not\\in ".join(argstr)
+            return " \\notin ".join(argstr)
         if head is SetMinus:
             return " \\setminus ".join(argstr)
         if head is Union:
@@ -492,7 +493,6 @@ class Expr(object):
         if head is Intersection:
             return " \\cap ".join(argstr)
         if head is And:
-            argstrs = []
             for i in range(len(args)):
                 if (not args[i].is_atom()) and args[i].head() in (And, Or):
                     argstr[i] = "\\left(%s\\right)" % argstr[i]
@@ -503,12 +503,17 @@ class Expr(object):
             else:
                 return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
         if head is Or:
-            return " \\mathbin{\\operatorname{or}} ".join("\\left(%s\\right)" % s for s in argstr)
+            for i in range(len(args)):
+                if (not args[i].is_atom()) and args[i].head() in (And, Or, Not):
+                    argstr[i] = "\\left(%s\\right)" % argstr[i]
+            return " \\,\\mathbin{\\operatorname{or}}\\, ".join(argstr)
         if head is Not:
             assert len(args) == 1
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
         if head is Implies:
             return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
+        if head is Equivalent:
+            return " \\iff ".join("\\left(%s\\right)" % s for s in argstr)
         if head is EqualAndElement:
             assert len(args) == 3
             return "%s = %s \\in %s" % (argstr[0], argstr[1], argstr[2])
@@ -710,8 +715,20 @@ class Expr(object):
     def html_Assumptions(self):
         s = ""
         s += """<div class="entrysubhead">Assumptions:</div>"""
+        #for arg in self.args():
+        #    s += arg.html(display=True)
+        #return s
+        num = 1
         for arg in self.args():
-            s += arg.html(display=True)
+            s += """<div style="text-align:center; margin:0.8em">"""
+            if num == 1:
+                strcond = "Condition"
+            else:
+                strcond = "Alt. condition"
+            s += """<span style="font-size:85%; color:#888; margin-right:0.8em">""" + strcond + """:</span>"""
+            s += arg.html(display=False)
+            s += """</div>"""
+            num += 1
         return s
 
     def html_Description(self, display=False):
@@ -944,7 +961,7 @@ SourceForm SymbolDefinition
 """)
 
 # symbols we don't want to show in entry definition listings
-exclude_symbols = [Set, List, Tuple]
+exclude_symbols = [Set, List, Tuple, And, Or, Not, Element, NotElement, Union, Intersection, SetMinus]
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
@@ -1021,10 +1038,6 @@ describe2(FormalLaurentSeries, FormalLaurentSeries(K,x), "Formal Laurent series"
     Description("Represents the set of formal Laurent series in the (formal) symbol", x,
     "and with coefficients in the set", K, ", equivalently infinite series",
     Sum(c(k) * x**k, Tuple(k, n, Infinity)), "where", Element(c(k), K), "and", Element(n, ZZ), " may be negative."))
-
-describe2(Set, Set(Ellipsis), "Finite set with given elements", None,
-    Description("Called with a finite number of arguments, represents the mathematical set with those arguments as elements. Use",
-    SetBuilder, "instead to construct finite and infinite sets without explicitly listing each element."))
 
 describe2(List, List(Ellipsis), "List with given elements", None,
     Description("Called with a finite number of arguments, represents the list with those arguments as elements.",
