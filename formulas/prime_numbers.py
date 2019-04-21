@@ -57,10 +57,10 @@ make_entry(ID("c03de4"),
     Description("Used as a symbol in logical formulas, represents the assertion that the Riemann hypothesis is true."))
 
 make_entry(ID("3fc797"),
-    Formula(Equal(PP, SetBuilder(PrimeNumber(n), Element(n, ZZGreaterEqual(1))))))
+    Formula(Equal(PP, SetBuilder(PrimeNumber(n), n, Element(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("04427b"),
-    Formula(Equal(PrimePi(x), Cardinality(SetBuilder(p, And(Element(p, PP), LessEqual(p, x)))))),
+    Formula(Equal(PrimePi(x), Cardinality(SetBuilder(p, p, And(Element(p, PP), LessEqual(p, x)))))),
     Variables(x),
     Assumptions(Element(x, RR)))
 

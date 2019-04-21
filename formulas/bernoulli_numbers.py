@@ -276,12 +276,12 @@ make_entry(ID("4246ae"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, OpenInterval(0, 1)))))
 
 make_entry(ID("ff190c"),
-    Formula(Element(Parenthesis(BernoulliB(2*n) + SumCondition(1/p, p, And(Element(p, PP), Divides(Parenthesis(p-1), 2*n)))), ZZ)),
+    Formula(Element(Parentheses(BernoulliB(2*n) + SumCondition(1/p, p, And(Element(p, PP), Divides(Parentheses(p-1), 2*n)))), ZZ)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("c33e2b"),
-    Formula(Element(Parenthesis(BernoulliB(2*n) * ProductCondition(1/p, p, And(Element(p, PP), Divides(Parenthesis(p-1), 2*n)))), ZZ)),
+    Formula(Element(Parentheses(BernoulliB(2*n) * ProductCondition(1/p, p, And(Element(p, PP), Divides(Parentheses(p-1), 2*n)))), ZZ)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

@@ -315,9 +315,9 @@ make_entry(ID("792f7b"),
 
 make_entry(ID("d31b04"),
     Formula(LessEqual(Abs(RiemannZeta(s) -
-        Parenthesis(Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
+        Parentheses(Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))))),
-        (4 * Abs(RisingFactorial(s, 2*M)) / (2*ConstPi)**(2*M)) * (N**(-Parenthesis(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
+        (4 * Abs(RisingFactorial(s, 2*M)) / (2*ConstPi)**(2*M)) * (N**(-Parentheses(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
@@ -354,11 +354,11 @@ make_entry(ID("9a258f"),
     Formula(Equal(BranchCuts(RiemannZeta(s), s, Union(CC)), Set())))
 
 make_entry(ID("2e1ff3"),
-    Formula(Equal(Zeros(RiemannZeta(s), s, RR), SetBuilder(-(2*n), Element(n, ZZGreaterEqual(1))))))
+    Formula(Equal(Zeros(RiemannZeta(s), s, RR), SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("692e42"),
-    Formula(Equal(Zeros(RiemannZeta(s), s, CC), Union(SetBuilder(-(2*n), Element(n, ZZGreaterEqual(1))),
-        SetBuilder(RiemannZetaZero(n), And(Element(n, ZZ), Unequal(n, 0)))))))
+    Formula(Equal(Zeros(RiemannZeta(s), s, CC), Union(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))),
+        SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0)))))))
 
 make_entry(ID("cbbf16"),
     Formula(Less(0, Re(RiemannZetaZero(n)), 1)),

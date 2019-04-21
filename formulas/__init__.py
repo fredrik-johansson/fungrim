@@ -2,6 +2,7 @@
 
 from .expr import *
 
+from .logic import *
 from .operators import *
 from .complex_parts import *
 from .const_gamma import *

@@ -91,7 +91,7 @@ make_entry(ID("fdc3a3"),
 
 make_entry(ID("4c0698"),
     Formula(Less(Abs(1/ConstPi - 
-        Parenthesis(12*Sum((-1)**k*Factorial(6*k)*(13591409+545140134*k)/(Factorial(3*k)*Factorial(k)**3*640320**(3*k+Div(3,2))),
+        Parentheses(12*Sum((-1)**k*Factorial(6*k)*(13591409+545140134*k)/(Factorial(3*k)*Factorial(k)**3*640320**(3*k+Div(3,2))),
             Tuple(k, 0, N-1)))), Div(1,151931373056000**N))),
     Variables(N),
     Assumptions(Element(N, ZZGreaterEqual(0))))

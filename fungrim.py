@@ -171,9 +171,9 @@ index_text = """
 
 <p style="margin:1em">
 Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.
-Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
+Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (definitions, formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
 All data in Fungrim is represented in symbolic, semantic form usable by computer algebra software.
-Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one entry:
+Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one formula entry:
 </p>
 """
 
@@ -376,14 +376,10 @@ def writetopic(s):
 frontpage.fp.write("""<div class="topiclist"><ul>""")
 
 frontpage.fp.write("""<li>Fundamentals<ul>""")
+writetopic("Elementary logic and set theory")
 writetopic("Operators")
 writetopic("Complex plane")
-writetopic("Complex parts")
 writetopic("General analytic functions")
-frontpage.fp.write("""</ul></li>""")
-
-frontpage.fp.write("""<li>Numerical analysis<ul>""")
-writetopic("Gaussian quadrature")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Constants<ul>""")
@@ -392,6 +388,7 @@ writetopic("Euler's constant")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Elementary functions<ul>""")
+writetopic("Complex parts")
 writetopic("Exponential function")
 writetopic("Natural logarithm")
 writetopic("Powers")
@@ -430,11 +427,15 @@ frontpage.fp.write("""<li>Operations<ul>""")
 writetopic("Definite integrals")
 frontpage.fp.write("""</ul></li>""")
 
+frontpage.fp.write("""<li>Numerical analysis<ul>""")
+writetopic("Gaussian quadrature")
+frontpage.fp.write("""</ul></li>""")
+
 frontpage.fp.write("""</ul></div>""")
 
 frontpage.section("General")
 frontpage.fp.write("""<ul>""")
-frontpage.fp.write("""<li><a href="definitions.html">All symbol definitions</a> &nbsp;(%i total entries)</li>""" % len(described_symbols))
+frontpage.fp.write("""<li><a href="definitions.html">Table of defined symbols</a> &nbsp;(%i total entries)</li>""" % len(described_symbols))
 frontpage.fp.write("""</ul>""")
 
 frontpage.end()

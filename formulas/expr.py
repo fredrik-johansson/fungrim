@@ -35,6 +35,9 @@ class Expr(object):
         return self._text is not None
 
     def head(self):
+        # todo ...
+        if self._args is None:
+            return None
         return self._args[0]
 
     def args(self):
@@ -320,24 +323,23 @@ class Expr(object):
             if (not args[2].is_atom() and args[2].head() not in [Abs]):
                 formula = "\\left[ %s \\right]" % formula
             return "\\lim_{%s \\to %s} %s" % (var, point, formula)
-        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique):
-            assert len(args) == 3
-            formula, var, domain = args
-            var = var.latex()
-            domain = domain.latex(in_small=True)
-            formula = formula.latex()
-            #if (not args[2].is_atom() and args[2].head() not in [Abs]):
-            #    formula = "\\left[ %s \\right]" % formula
+        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum):
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
-                      ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}"}[head]
-            return "\\mathop{%s}\\limits_{%s \\in %s} %s" % (opname, var, domain, formula)
-        if head is Supremum:
+                      ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}",
+                      Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}"}[head]
+            if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
+                return "%s\\left(%s\\right)" % (opname, argstr[0])
             assert len(args) == 3
-            formula, var, condition = args
-            condition = condition.latex(in_small=True)
+            formula, var, predicate = args
+            #var = var.latex()
+            if 0 and predicate.head() is And and len(predicate.args()) > 1:
+                # katex does not support substack
+                predicate = "\\begin{matrix}" + "\\\\".join("\\scriptstyle %s " % s.latex(in_small=True) for s in predicate.args()) + "\\end{matrix}"
+            else:
+                predicate = predicate.latex(in_small=True)
             formula = formula.latex()
-            return "\\sup_{%s} %s" % (condition, formula)
+            return "\\mathop{%s}\\limits_{%s} %s" % (opname, predicate, formula)
         if head is Derivative:
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
@@ -490,11 +492,16 @@ class Expr(object):
         if head is Intersection:
             return " \\cap ".join(argstr)
         if head is And:
+            argstrs = []
+            for i in range(len(args)):
+                if (not args[i].is_atom()) and args[i].head() in (And, Or):
+                    argstr[i] = "\\left(%s\\right)" % argstr[i]
             if in_small:
                 # see ff190c
-                return "\\text{ and }".join("\\left(%s\\right)" % s for s in argstr)
+                #return "\\text{ and }".join(argstr)
+                return ",\\,".join(argstr)
             else:
-                return " \\mathbin{\\operatorname{and}} ".join("\\left(%s\\right)" % s for s in argstr)
+                return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
         if head is Or:
             return " \\mathbin{\\operatorname{or}} ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Not:
@@ -553,8 +560,8 @@ class Expr(object):
             assert len(args) == 1
             return "\\overline{%s}" % argstr[0]
         if head is SetBuilder:
-            assert len(args) == 2
-            return "\\left\\{ %s : %s \\right\\}" % tuple(argstr)
+            assert len(args) == 3
+            return "\\left\\{ %s \\mid %s \\right\\}" % (argstr[0], argstr[2])
         if head is Cardinality:
             assert len(args) == 1
             #return "\\text{card }" + argstr[0]
@@ -589,9 +596,15 @@ class Expr(object):
         if head is SeriesCoefficient:
             assert len(args) == 3
             return "[{%s}^{%s}] %s" % (argstr[1], argstr[2], argstr[0])
-        if head is Parenthesis:
+        if head is Parentheses:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
+        if head is Brackets:
+            assert len(args) == 1
+            return "\\left[" + args[0].latex() + "\\right]"
+        if head is Braces:
+            assert len(args) == 1
+            return "\\left\\{" + args[0].latex() + "\\right\\}"
         if head is Call:
             return argstr[0] + "\!\\left(" + ", ".join(argstr[1:]) + "\\right)"
         if head is Description:
@@ -852,7 +865,8 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
-Parenthesis Ellipsis Call
+Parentheses Brackets Braces
+Ellipsis Call
 Unknown Undefined
 Where
 Set List Tuple
@@ -876,11 +890,11 @@ Pos Neg Add Sub Mul Div Mod Inv Pow
 Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
+Supremum Infimum
 Sum Product Limit Integral Derivative
 SumCondition ProductCondition
 SumSet ProductSet
 AsymptoticTo
-Supremum
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
 Infinity UnsignedInfinity
@@ -1023,6 +1037,12 @@ describe2(Tuple, Tuple(Ellipsis), "Tuple with given elements", None,
     "The difference between a", List, "and a", Tuple, "is mainly notational (square brackets or parentheses).",
     "A ", List, "is sometimes more natural for a homogeneous collection while a", Tuple,
     "is more natural for a heterogeneous collection."))
+
+description_x_predicate = Description("The argument", SourceForm(x), "to this operator defines a locally bound variable.",
+    "The corresponding predicate", P(x), "must define the domain of", x, "unambiguously; that is, it must include a statement such as",
+    Element(x, S), "where", S, "is a known set.",
+    "More generally,", SourceForm(x), "can be a collection of variables", Tuple(x, y, Ellipsis),
+    "all of which become locally bound, with a corresponding predicate", P(x, y, Ellipsis), ".")
 
 all_entries = []
 all_topics = []

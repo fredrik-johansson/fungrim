@@ -48,7 +48,7 @@ def_Topic(
 )
 
 make_entry(ID("2e7fdb"),
-    Formula(Equal(EulerQSeries(q), Product(Parenthesis(1 - q**k), Tuple(k, 1, Infinity)))),
+    Formula(Equal(EulerQSeries(q), Product(Parentheses(1 - q**k), Tuple(k, 1, Infinity)))),
     Variables(q),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
@@ -63,7 +63,7 @@ make_entry(ID("ff587a"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1dc520"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product(Parenthesis(1 - Exp(2*ConstPi*ConstI*k*tau)), Tuple(k, 1, Infinity)))),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product(Parentheses(1 - Exp(2*ConstPi*ConstI*k*tau)), Tuple(k, 1, Infinity)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

@@ -28,7 +28,7 @@ make_entry(ID("1b1ec5"),
 
 make_entry(ID("b6582a"),
     Formula(Where(LessEqual(Abs(Derivative(f(z), Tuple(z, z, k)) / Factorial(k)), C / R**k),
-        Equal(C, Supremum(Abs(f(t)), t, Equal(Abs(t-z), R))))),
+        Equal(C, Supremum(Abs(f(t)), t, And(Element(t, CC), Equal(Abs(t-z), R)))))),
     Variables(f, z, k, R),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)),
         Element(R, RR), Greater(R, 0),
@@ -36,7 +36,7 @@ make_entry(ID("b6582a"),
 
 make_entry(ID("78bb08"),
     Formula(Where(LessEqual(Abs(f(z+x) - Sum(Derivative(f(z), Tuple(z, z, k)) / Factorial(k) * x**k, Tuple(k, 0, N - 1))), C * D**N / (1 - D)),
-        Equal(C, Supremum(Abs(f(t)), t, Equal(Abs(t-z), R))), Equal(D, Abs(x)/R))),
+        Equal(C, Supremum(Abs(f(t)), t, And(Element(t, CC), Equal(Abs(t-z), R)))), Equal(D, Abs(x)/R))),
     Variables(f, z, x, N, R),
     Assumptions(And(Element(z, CC), Element(x, CC), Element(N, ZZGreaterEqual(1)),
         Element(R, RR), Less(Abs(x), R),
@@ -52,7 +52,7 @@ make_entry(ID("ce2272"),
     Assumptions(EM_assumptions))
 
 make_entry(ID("af2d4b"),
-    Formula(LessEqual(Abs(Sum(f(k), Tuple(k, N, U)) - Parenthesis(Integral(f(t), Tuple(t, N, U)) + EM_rem)),
+    Formula(LessEqual(Abs(Sum(f(k), Tuple(k, N, U)) - Parentheses(Integral(f(t), Tuple(t, N, U)) + EM_rem)),
             Div(4, (2*ConstPi)**(2*M)) * Integral(Abs(Derivative(f(t), Tuple(t, t, 2 * M))), Tuple(t, N, U)))),
     Variables(f, N, U, M),
     Assumptions(EM_assumptions))
