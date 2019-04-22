@@ -607,6 +607,9 @@ class Expr(object):
         if head is SeriesCoefficient:
             assert len(args) == 3
             return "[{%s}^{%s}] %s" % (argstr[1], argstr[2], argstr[0])
+        if head is FormalGenerator:
+            assert len(args) == 2
+            return "%s \\text{ is the generator of } %s" % (argstr[0], argstr[1])
         if head is Parentheses:
             assert len(args) == 1
             return "\\left(" + args[0].latex() + "\\right)"
@@ -618,6 +621,9 @@ class Expr(object):
             return "\\left\\{" + args[0].latex() + "\\right\\}"
         if head is Call:
             return argstr[0] + "\!\\left(" + ", ".join(argstr[1:]) + "\\right)"
+        if head is Subscript:
+            assert len(args) == 2
+            return "{" + argstr[0] + "}_{" + args[1].latex(in_small=True) + "}"
         if head is Description:
             s = ""
             for arg in args:
@@ -889,7 +895,7 @@ def inject_vars(string):
 
 inject_builtin("""
 Parentheses Brackets Braces
-Ellipsis Call
+Ellipsis Call Subscript
 Unknown Undefined
 Where
 Set List Tuple
@@ -918,6 +924,7 @@ Sum Product Limit Integral Derivative
 SumCondition ProductCondition
 SumSet ProductSet
 AsymptoticTo
+FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
 Infinity UnsignedInfinity
