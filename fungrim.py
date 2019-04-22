@@ -377,9 +377,9 @@ frontpage.fp.write("""<div class="topiclist"><ul>""")
 
 frontpage.fp.write("""<li>Fundamentals<ul>""")
 writetopic("Elementary logic and set theory")
+writetopic("Numbers and infinities")
 writetopic("Operators")
 writetopic("Complex plane")
-writetopic("General analytic functions")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Constants<ul>""")
@@ -391,6 +391,7 @@ frontpage.fp.write("""<li>Elementary functions<ul>""")
 writetopic("Complex parts")
 writetopic("Exponential function")
 writetopic("Natural logarithm")
+writetopic("Square roots")
 writetopic("Powers")
 frontpage.fp.write("""</ul></li>""")
 
@@ -423,11 +424,12 @@ writetopic("Bernoulli numbers and polynomials")
 writetopic("Stirling numbers")
 frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Operations<ul>""")
+frontpage.fp.write("""<li>Tables of sums, products, integrals...<ul>""")
 writetopic("Definite integrals")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Numerical analysis<ul>""")
+writetopic("General analytic functions")
 writetopic("Gaussian quadrature")
 frontpage.fp.write("""</ul></li>""")
 

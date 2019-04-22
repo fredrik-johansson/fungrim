@@ -127,7 +127,9 @@ class Expr(object):
             if self.is_integer() and self._integer < 0:
                 return True
             return False
-        if self._args[0] in (Add, Sub, Neg, Pos):
+        # if self._args[0] in (Pos, Neg):
+        #     return True
+        if self._args[0] in (Add, Sub):
             return True
         return False
 
@@ -324,11 +326,12 @@ class Expr(object):
             if (not args[2].is_atom() and args[2].head() not in [Abs]):
                 formula = "\\left[ %s \\right]" % formula
             return "\\lim_{%s \\to %s} %s" % (var, point, formula)
-        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum):
+        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros):
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
                       ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}",
-                      Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}"}[head]
+                      Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}",
+                      Zeros:"\\operatorname{zeros}\\,"}[head]
             if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
                 return "%s\\left(%s\\right)" % (opname, argstr[0])
             assert len(args) == 3
@@ -339,7 +342,10 @@ class Expr(object):
                 predicate = "\\begin{matrix}" + "\\\\".join("\\scriptstyle %s " % s.latex(in_small=True) for s in predicate.args()) + "\\end{matrix}"
             else:
                 predicate = predicate.latex(in_small=True)
-            formula = formula.latex()
+            if formula.head() in (Add, Sub):
+                formula = "\\left(" + formula.latex() + "\\right)"
+            else:
+                formula = formula.latex()
             return "\\mathop{%s}\\limits_{%s} %s" % (opname, predicate, formula)
         if head is Derivative:
             assert len(args) == 2
@@ -722,9 +728,9 @@ class Expr(object):
         for arg in self.args():
             s += """<div style="text-align:center; margin:0.8em">"""
             if num == 1:
-                strcond = "Condition"
+                strcond = "Valid when"
             else:
-                strcond = "Alt. condition"
+                strcond = "Also valid when"
             s += """<span style="font-size:85%; color:#888; margin-right:0.8em">""" + strcond + """:</span>"""
             s += arg.html(display=False)
             s += """</div>"""
@@ -961,7 +967,7 @@ SourceForm SymbolDefinition
 """)
 
 # symbols we don't want to show in entry definition listings
-exclude_symbols = [Set, List, Tuple, And, Or, Not, Element, NotElement, Union, Intersection, SetMinus]
+exclude_symbols = [Set, List, Tuple, And, Or, Implies, Equivalent, Not, Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual]
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
@@ -985,71 +991,7 @@ def describe2(symbol, example, description, domain_table=None, long_description=
     if domain_table is not None:
         domain_tables[symbol] = domain_table
 
-describe(ZZ, ZZ, [], None, "Integers")
-describe(QQ, QQ, [], None, "Rational numbers")
-describe(RR, RR, [], None, "Real numbers")
-describe(CC, CC, [], None, "Complex numbers")
-describe(HH, HH, [], None, "Upper complex half-plane")
-describe(ConstPi, ConstPi, [], RR, "The constant pi (3.14...)")
-describe(ConstE, ConstE, [], RR, "The constant e (2.718...)")
-describe(ConstGamma, ConstGamma, [], RR, "The constant gamma (0.577...)")
-describe(ConstI, ConstI, [], CC, "Imaginary unit")
 
-describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
-describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
-describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
-describe(DedekindEta, DedekindEta(tau), [Element(tau, HH)], CC, "Dedekind eta function")
-describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
-describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
-describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
-describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
-describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
-describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
-describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")
-describe(LegendrePolynomialZero, LegendrePolynomialZero(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Legendre polynomial zero")
-describe(GaussLegendreWeight, GaussLegendreWeight(n,k), [Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n))], RR, "Gauss-Legendre quadrature weight")
-describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Hermite polynomial")
-
-describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
-describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
-
-describe(Hypergeometric2F1, Hypergeometric2F1(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
-describe(Hypergeometric2F1Regularized, Hypergeometric2F1Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
-
-describe(Erf, Erf(z), [Element(z, CC)], CC, "Error function")
-describe(Erfc, Erfc(z), [Element(z, CC)], CC, "Complementary error function")
-describe(Erfi, Erfi(z), [Element(z, CC)], CC, "Imaginary error function")
-
-describe(JacobiTheta1, JacobiTheta1(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
-describe(JacobiTheta2, JacobiTheta2(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
-describe(JacobiTheta3, JacobiTheta3(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
-describe(JacobiTheta4, JacobiTheta4(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
-
-describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
-
-describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
-
-describe2(FormalPowerSeries, FormalPowerSeries(K,x), "Formal power series", None,
-    Description("Represents the set of formal power series in the (formal) symbol", x,
-    "and with coefficients in the set", K, ", equivalently infinite series",
-    Sum(c(k) * x**k, Tuple(k, 0, Infinity)), "where", Element(c(k), K), "."))
-
-describe2(FormalLaurentSeries, FormalLaurentSeries(K,x), "Formal Laurent series", None,
-    Description("Represents the set of formal Laurent series in the (formal) symbol", x,
-    "and with coefficients in the set", K, ", equivalently infinite series",
-    Sum(c(k) * x**k, Tuple(k, n, Infinity)), "where", Element(c(k), K), "and", Element(n, ZZ), " may be negative."))
-
-describe2(List, List(Ellipsis), "List with given elements", None,
-    Description("Called with a finite number of arguments, represents the list with those arguments as elements.",
-    "The difference between a", List, "and a", Tuple, "is mainly notational (square brackets or parentheses).",
-    "A ", List, "is sometimes more natural for a homogeneous collection while a", Tuple,
-    "is more natural for a heterogeneous collection."))
-
-describe2(Tuple, Tuple(Ellipsis), "Tuple with given elements", None,
-    Description("Called with a finite number of arguments, represents the tuple with those arguments as elements.",
-    "The difference between a", List, "and a", Tuple, "is mainly notational (square brackets or parentheses).",
-    "A ", List, "is sometimes more natural for a homogeneous collection while a", Tuple,
-    "is more natural for a heterogeneous collection."))
 
 description_x_predicate = Description("The argument", SourceForm(x), "to this operator defines a locally bound variable.",
     "The corresponding predicate", P(x), "must define the domain of", x, "unambiguously; that is, it must include a statement such as",

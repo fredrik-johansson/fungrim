@@ -7,6 +7,7 @@ def_Topic(
     Section("Main regions"),
     Entries(
         "77ef0c",
+        "a65a14",   # HH symbol
         "d7962e",   # HH
         "fc0d55",
         "912ff9",
@@ -32,6 +33,10 @@ def_Topic(
 
 make_entry(ID("77ef0c"),
     Formula(Equal(CC, SetBuilder(x+y*ConstI, Tuple(x, y), And(Element(x, RR), Element(y, RR))))))
+
+make_entry(ID("a65a14"),
+    SymbolDefinition(HH, HH, "Upper complex half-plane"),
+    Description("Represents the set of complex numbers with strictly positive imaginary part."))
 
 make_entry(ID("d7962e"),
     Formula(Equal(HH, SetBuilder(tau, tau, And(Element(tau, CC), Greater(Im(tau), 0))))))

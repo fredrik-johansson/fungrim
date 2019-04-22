@@ -277,17 +277,17 @@ make_entry(ID("22a42f"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("415911"),
-    Formula(Equal(Cardinality(Zeros(LegendrePolynomial(n,z), z, CC)), n)),
+    Formula(Equal(Cardinality(Zeros(LegendrePolynomial(n,z), z, Element(z, CC))), n)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("df439e"),
-    Formula(Subset(Zeros(LegendrePolynomial(n,z), z, CC), OpenInterval(-1,1))),
+    Formula(Subset(Zeros(LegendrePolynomial(n,z), z, Element(z, CC)), OpenInterval(-1,1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("0745ee"),
-    Formula(Equal(Zeros(LegendrePolynomial(n,z), z, CC), SetBuilder(LegendrePolynomialZero(n,k), k, Element(k, ZZBetween(1, n))))),
+    Formula(Equal(Zeros(LegendrePolynomial(n,z), z, Element(z, CC)), SetBuilder(LegendrePolynomialZero(n,k), k, Element(k, ZZBetween(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

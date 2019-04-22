@@ -174,7 +174,7 @@ make_entry(ID("c1bee1"),
     Assumptions(And(Element(a, CC), Element(b, CC), Less(Im(a), 0), Greater(Im(b), 0), Less(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
 make_entry(ID("1d447b"),
-    Formula(Equal(Zeros(Log(z), z, CC), Set(1))))
+    Formula(Equal(Zeros(Log(z), z, Element(z, CC)), Set(1))))
 
 make_entry(ID("13895b"),
     Formula(Equal(Log(Conjugate(z)), Conjugate(Log(z)))),

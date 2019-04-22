@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Euler's constant"),
+    Entries(
+        "39e0cb",
+    ),
     Section("Numerical value"),
     Entries(
         "e876e8",
@@ -32,6 +35,10 @@ def_Topic(
     Section("Related topics"),
     SeeTopics("Gamma function", "Riemann zeta function"),
 )
+
+make_entry(ID("39e0cb"),
+    SymbolDefinition(ConstGamma, ConstGamma, "The constant gamma (0.577...)"),
+    Description("The real number giving the limiting difference between the harmonic series and the natural logarithm, also known as Euler's constant or the Euler-Mascheroni constant."))
 
 make_entry(ID("e876e8"),
     Formula(Element(ConstGamma,

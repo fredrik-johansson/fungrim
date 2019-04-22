@@ -127,16 +127,16 @@ make_entry(ID("27f9d2"),
     Formula(Equal(HolomorphicDomain(ModularJ(tau), tau, HH), HH)))
 
 make_entry(ID("ea3e3c"),
-    Formula(Equal(Zeros(ModularJ(tau), tau, ModularGroupFundamentalDomain), Set(Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(ModularJ(tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("1b2d8a"),
-    Formula(Equal(Zeros(ModularJ(tau), tau, HH), SetBuilder(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), gamma, Element(gamma, PSL2Z)))))
+    Formula(Equal(Zeros(ModularJ(tau), tau, Element(tau, HH)), SetBuilder(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), gamma, Element(gamma, PSL2Z)))))
 
 make_entry(ID("dcc8b1"),
     Formula(Equal(SetBuilder(ModularJ(tau), tau, Element(tau, ModularGroupFundamentalDomain)), CC)))
 
 make_entry(ID("441301"),
-    Formula(Equal(Cardinality(Zeros(ModularJ(tau) - z, tau, ModularGroupFundamentalDomain)), 1)),
+    Formula(Equal(Cardinality(Zeros(ModularJ(tau) - z, tau, Element(tau, ModularGroupFundamentalDomain))), 1)),
     Variables(z),
     Assumptions(Element(z, CC)))
 

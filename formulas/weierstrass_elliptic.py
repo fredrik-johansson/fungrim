@@ -202,12 +202,12 @@ make_entry(ID("6021ba"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1da705"),
-    Formula(Equal(Zeros(WeierstrassSigma(z,tau),z,CC), Lattice(1, tau))),
+    Formula(Equal(Zeros(WeierstrassSigma(z,tau),z,Element(z, CC)), Lattice(1, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c6234b"),
-    Formula(Equal(Zeros(WeierstrassP(z,ConstI),z,CC), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))))
+    Formula(Equal(Zeros(WeierstrassP(z,ConstI),z,Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))))
 
 make_entry(ID("69eb9b"),
     Formula(Equal(HolomorphicDomain(WeierstrassP(z,tau),z,CC), SetMinus(CC, Lattice(1, tau)))),

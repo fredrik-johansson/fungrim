@@ -236,7 +236,7 @@ make_entry(ID("9a44c5"),
     Formula(Equal(BranchCuts(GammaFunction(z), z, CC), Set())))
 
 make_entry(ID("a76328"),
-    Formula(Equal(Zeros(GammaFunction(z), z, CC), Set())))
+    Formula(Equal(Zeros(GammaFunction(z), z, Element(z, CC)), Set())))
 
 make_entry(ID("d7d2a0"),
     Formula(Equal(GammaFunction(Conjugate(z)), Conjugate(GammaFunction(z)))),

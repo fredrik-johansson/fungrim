@@ -131,5 +131,5 @@ make_entry(ID("6d7668"),
     Formula(Equal(BranchCuts(DedekindEta(tau), tau, HH), Set())))
 
 make_entry(ID("39fb36"),
-    Formula(Equal(Zeros(DedekindEta(tau), tau, HH), Set())))
+    Formula(Equal(Zeros(DedekindEta(tau), tau, Element(tau, HH)), Set())))
 

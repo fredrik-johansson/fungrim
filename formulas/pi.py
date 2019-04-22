@@ -4,6 +4,9 @@ from .expr import *
 
 def_Topic(
     Title("Pi"),
+    Entries(
+        "b5d706",
+    ),
     Section("Numerical value"),
     Entries(
         "6505a9",
@@ -42,6 +45,10 @@ def_Topic(
         "4c0698",
     ),
 )
+
+make_entry(ID("b5d706"),
+    SymbolDefinition(ConstPi, ConstPi, "The constant pi (3.14...)"),
+    Description("The real number giving the ratio of a circle's circumference to its diameter."))
 
 make_entry(ID("6505a9"),
     Formula(Element(ConstPi,

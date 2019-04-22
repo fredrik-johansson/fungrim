@@ -6,6 +6,7 @@ def_Topic(
     Title("Exponential function"),
     Entries(
         "dfbcd9",
+        "f758c6",
     ),
     Section("Particular values"),
     Entries(
@@ -85,6 +86,10 @@ make_entry(ID("dfbcd9"),
             And(Element(Exp(z), FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(Exp(z), x, 0), 0))),
       )))
 
+make_entry(ID("f758c6"),
+    SymbolDefinition(ConstE, ConstE, "The constant e (2.718...)"),
+    Description("The real number giving the base of the natural logarithm, also known as Euler's number."))
+
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))
 
@@ -143,7 +148,7 @@ make_entry(ID("b62d05"),
     Formula(Equal(BranchCuts(Exp(z), z, CC), Set())))
 
 make_entry(ID("bceb84"),
-    Formula(Equal(Zeros(Exp(z), z, CC), Set())))
+    Formula(Equal(Zeros(Exp(z), z, Element(z, CC)), Set())))
 
 make_entry(ID("1635f5"),
     Formula(Equal(Exp(z), Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),

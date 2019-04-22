@@ -109,24 +109,24 @@ make_entry(ID("4f939e"),
 
 
 make_entry(ID("154c44"),
-    Formula(Equal(Zeros(JacobiTheta1(z,tau), z, CC), SetBuilder(m+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Formula(Equal(Zeros(JacobiTheta1(z,tau), z, Element(z, CC)), SetBuilder(m+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("ad1eaf"),
-    Formula(Equal(Zeros(JacobiTheta2(z,tau), z, CC), SetBuilder(Parentheses(m+Div(1,2))+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Formula(Equal(Zeros(JacobiTheta2(z,tau), z, Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("caf10a"),
-    Formula(Equal(Zeros(JacobiTheta3(z,tau), z, CC), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Formula(Equal(Zeros(JacobiTheta3(z,tau), z, Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("926b2c"),
-    Formula(Equal(Zeros(JacobiTheta4(z,tau), z, CC), SetBuilder(m+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Formula(Equal(Zeros(JacobiTheta4(z,tau), z, Element(z, CC)), SetBuilder(m+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 
 make_entry(ID("2faeb9"),

@@ -354,10 +354,10 @@ make_entry(ID("9a258f"),
     Formula(Equal(BranchCuts(RiemannZeta(s), s, Union(CC)), Set())))
 
 make_entry(ID("2e1ff3"),
-    Formula(Equal(Zeros(RiemannZeta(s), s, RR), SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))))))
+    Formula(Equal(Zeros(RiemannZeta(s), s, Element(s, RR)), SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("692e42"),
-    Formula(Equal(Zeros(RiemannZeta(s), s, CC), Union(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))),
+    Formula(Equal(Zeros(RiemannZeta(s), s, Element(s, CC)), Union(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))),
         SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0)))))))
 
 make_entry(ID("cbbf16"),
