@@ -673,6 +673,8 @@ class Expr(object):
         heads = self.get_arg_with_head(TableHeadings)
         data = self.get_arg_with_head(List)
         split = self.get_arg_with_head(TableSplit)
+        colheads = self.get_arg_with_head(TableColumnHeadings)
+        headrows = []
         if split is None:
             split = 1
         else:
@@ -686,13 +688,14 @@ class Expr(object):
         s = ""
         s += """<table align="center" style="border:0; background-color:#fff">"""
         s += """<tr style="border:0; background-color:#fff">"""
+        j = 0
         for outer in range(split):
             s += """<td style="border:0; background-color:#fff; vertical-align:top">"""
             s += """<table style="float: left; margin-right: 1em">"""
             if heads is not None:
                 s += "<tr>"
                 for col in heads.args():
-                    s += "<th>" + col.html(display=False) + "</th>"
+                    s += "<th>" + col.html(display=False, avoid_latex=True) + "</th>"
                 s += "</tr>"
             if outer == split-1:
                 end = num
@@ -703,9 +706,13 @@ class Expr(object):
                 if row.head() is TableSection:
                     s += """<td colspan="%i" style="text-align:center; font-weight: bold">%s</td>""" % (cols, row.args()[0]._text)
                 else:
-                    for col in row.args():
+                    if colheads is not None:
+                        col = colheads.args()[j]
+                        s += "<th>" + col.html(display=False, avoid_latex=True) + "</th>"
+                    for i, col in enumerate(row.args()):
                         s += "<td>" + col.html(display=False, avoid_latex=True) + "</td>"
                 s += "</tr>"
+                j += 1
             s += """</table>"""
             s += "</td>"
         s += "</tr></table>"
@@ -968,7 +975,7 @@ ModularJ
 
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
-Description Table TableRelation TableHeadings TableSplit TableSection
+Description Table TableRelation TableHeadings TableColumnHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section SeeTopics Entries EntryReference
 SourceForm SymbolDefinition
 """)
