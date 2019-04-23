@@ -353,7 +353,7 @@ class Expr(object):
             _, var, point, order = args[1]._args
             if not args[0].is_atom():
                 f = args[0].head()
-                if f.is_symbol() and f is not Exp and args[0].args() == (var,):
+                if f.is_symbol() and f not in (Exp, Sqrt) and args[0].args() == (var,):
                     pointstr = point.latex(in_small=True)
                     fstr = args[0].head().latex()
                     if order.is_integer() and order._integer == 0:

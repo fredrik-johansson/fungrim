@@ -49,7 +49,7 @@ def_Topic(
         "1635f5",
         "bad502",
     ),
-    Section("Integrals and derivatives"),
+    Section("Derivatives and integrals"),
     Entries(
         "935b2f",
         "96af56",
@@ -123,14 +123,14 @@ make_entry(ID("77d6bf"),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("97ba8d"),
-    Formula(Equal(Exp(z+n*ConstPi*ConstI), (-1)**n * Exp(z)),
+    Formula(Equal(Exp(z+n*ConstPi*ConstI), (-1)**n * Exp(z))),
     Variables(z, n),
-    Assumptions(And(Element(a, CC), Element(n, ZZ)))))
+    Assumptions(And(Element(z, CC), Element(n, ZZ))))
 
 make_entry(ID("1fa6b7"),
-    Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z)),
+    Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z))),
     Variables(z, n),
-    Assumptions(And(Element(a, CC), Element(n, ZZ)))))
+    Assumptions(And(Element(z, CC), Element(n, ZZ))))
 
 make_entry(ID("28d158"),
     Formula(Equal(HolomorphicDomain(Exp(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
