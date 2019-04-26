@@ -187,6 +187,8 @@ class Expr(object):
         if self is Exp: return "\\exp"
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
+        if self is Acos: return "\\operatorname{acos}"
+        if self is Asin: return "\\operatorname{asin}"
         if self is Acot: return "\\operatorname{acot}"
         if self is Atan2: return "\\operatorname{atan2}"
         if self is Hypergeometric0F1: return "{}_0F_1"
@@ -464,13 +466,16 @@ class Expr(object):
                 return fsym + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
         if head is Factorial:
             assert len(args) == 1
-            if args[0].is_symbol():
+            if args[0].is_symbol() or (args[0].is_integer() and args[0]._integer >= 0):
                 return argstr[0] + " !"
             else:
                 return "\\left(" + argstr[0] + "\\right)!"
         if head is RisingFactorial:
             assert len(args) == 2
             return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
+        if head is FallingFactorial:
+            assert len(args) == 2
+            return "\\left(" + argstr[0] + "\\right)^{\\underline{" + argstr[1] + "}}"
         if head is Binomial:
             assert len(args) == 2
             return "{" + argstr[0] + " \\choose " + argstr[1] + "}"
@@ -733,7 +738,8 @@ class Expr(object):
 
     def html_Assumptions(self):
         s = ""
-        s += """<div class="entrysubhead">Assumptions:</div>"""
+        #s += """<div class="entrysubhead">Assumptions:</div>"""
+
         #for arg in self.args():
         #    s += arg.html(display=True)
         #return s
@@ -741,9 +747,9 @@ class Expr(object):
         for arg in self.args():
             s += """<div style="text-align:center; margin:0.8em">"""
             if num == 1:
-                strcond = "Valid when"
+                strcond = "Assumptions"
             else:
-                strcond = "Also valid when"
+                strcond = "Alternative assumptions"
             s += """<span style="font-size:85%; color:#888; margin-right:0.8em">""" + strcond + """:</span>"""
             s += arg.html(display=False)
             s += """</div>"""
@@ -942,7 +948,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW
 ConstPi ConstE ConstGamma ConstI
-Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial HarmonicNumber StirlingSeriesRemainder
+Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial

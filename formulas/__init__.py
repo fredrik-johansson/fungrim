@@ -12,6 +12,7 @@ from .dedekind_eta import *
 from .exp import *
 from .powers import *
 from .sqrt import *
+from .factorials import *
 from .gamma import *
 from .legendre_polynomial import *
 from .log import *
@@ -35,8 +36,6 @@ from .modular_j import *
 
 # todo: move to the right places
 
-describe(Factorial, Factorial(n), [Element(n, SetMinus(CC, ZZLessEqual(-1)))], CC, "Factorial")
-describe(RisingFactorial, RisingFactorial(z, k), [Element(z, CC), Element(k, ZZGreaterEqual(0))], CC, "Rising factorial")
 describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
 describe(DedekindEta, DedekindEta(tau), [Element(tau, HH)], CC, "Dedekind eta function")
 describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")

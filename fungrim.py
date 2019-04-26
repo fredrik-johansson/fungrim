@@ -172,7 +172,7 @@ index_text = """
 <p style="margin:1em">
 Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.
 Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (definitions, formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
-All data in Fungrim is represented in symbolic, semantic form usable by computer algebra software.
+All data in Fungrim is represented in symbolic, semantic form designed to be usable by computer algebra software.
 Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one formula entry:
 </p>
 """
@@ -395,6 +395,14 @@ writetopic("Square roots")
 writetopic("Powers")
 frontpage.fp.write("""</ul></li>""")
 
+frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
+writetopic("Factorials and binomial coefficients")
+writetopic("Prime numbers")
+writetopic("Partition function")
+writetopic("Bernoulli numbers and polynomials")
+writetopic("Stirling numbers")
+frontpage.fp.write("""</ul></li>""")
+
 frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
 writetopic("Gamma function")
 writetopic("Confluent hypergeometric functions")
@@ -415,13 +423,6 @@ writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
 writetopic("Modular j-invariant")
 writetopic("Weierstrass elliptic functions")
-frontpage.fp.write("""</ul></li>""")
-
-frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
-writetopic("Prime numbers")
-writetopic("Partition function")
-writetopic("Bernoulli numbers and polynomials")
-writetopic("Stirling numbers")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Tables of sums, products, integrals...<ul>""")
