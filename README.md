@@ -5,7 +5,7 @@ Possible taglines:
 * Is it a reference book? Is it a computer algebra system? No, it's the Mathematical Functions Grimoire! 
 * Enabling open sourcery in mathematics
 
-Early view at https://fungrim.org/
+Early view at http://fungrim.org/
 
 ## Dependencies
 
