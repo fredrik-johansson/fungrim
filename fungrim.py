@@ -88,7 +88,7 @@ h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
-.entry { border:1px solid #bbb; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
+.entry { border:1px solid #ccc; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
 table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }
@@ -207,7 +207,7 @@ class FrontPage(Webpage):
 
     def __init__(self):
         self.filepath = "build/html/index.html"
-        self.pagetitle = "Fungrim: the Mathematical Functions Grimoire"
+        self.pagetitle = "Fungrim: The Mathematical Functions Grimoire"
 
     def entry(self, id):
         html = entries_dict[id].entry_html(single=False, entry_dir="entry/", symbol_dir="symbol/")
@@ -222,7 +222,7 @@ class EntryPage(Webpage):
     def __init__(self, id):
         self.id = id
         self.filepath = "build/html/entry/%s.html" % self.id
-        self.pagetitle = "Entry %s - Fungrim: the Mathematical Functions Grimoire" % self.id
+        self.pagetitle = "Entry %s - Fungrim: The Mathematical Functions Grimoire" % self.id
 
     def entry(self, id):
         html = entries_dict[id].entry_html(single=True)
@@ -254,7 +254,7 @@ class TopicPage(Webpage):
     def __init__(self, title):
         self.filepath = "build/html/topic/" + escape_title(title) + ".html"
         self.title = title
-        self.pagetitle = title + " - Fungrim: the Mathematical Functions Grimoire"
+        self.pagetitle = title + " - Fungrim: The Mathematical Functions Grimoire"
 
     def start(self):
         Webpage.start(self)
@@ -305,7 +305,7 @@ class SymbolPage(Webpage):
     def __init__(self, symbol):
         self.symbol = symbol
         self.filepath = "build/html/symbol/%s.html" % self.symbol
-        self.pagetitle = "Symbol %s - Fungrim: the Mathematical Functions Grimoire" % self.symbol
+        self.pagetitle = "Symbol %s - Fungrim: The Mathematical Functions Grimoire" % self.symbol
 
     def content(self, symbol):
         if symbol in domain_tables:
@@ -393,6 +393,7 @@ writetopic("Exponential function")
 writetopic("Natural logarithm")
 writetopic("Square roots")
 writetopic("Powers")
+writetopic("Sine")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")

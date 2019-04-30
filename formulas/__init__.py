@@ -12,6 +12,7 @@ from .dedekind_eta import *
 from .exp import *
 from .powers import *
 from .sqrt import *
+from .sine import *
 from .factorials import *
 from .gamma import *
 from .legendre_polynomial import *

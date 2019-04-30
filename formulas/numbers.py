@@ -16,6 +16,11 @@ def_Topic(
         "77ef0c",  # construction of C, see complex_plane (move here?)
         "4fd123",
     ),
+    Section("Algebraic numbers"),
+    Entries(
+        "be9c83",
+        "e5a04c",
+    ),
     Section("Infinities"),
     Entries(
         "b738b1",
@@ -63,6 +68,14 @@ make_entry(ID("4fd123"),
     Formula(Subset(ZZ, QQ, RR, CC)))
 
 
+make_entry(ID("be9c83"),
+    SymbolDefinition(AlgebraicNumbers, AlgebraicNumbers, "Algebraic numbers"),
+    Description("Represents the set of algebraic numbers."))
+
+make_entry(ID("e5a04c"),
+    Formula(Subset(ZZ, QQ, AlgebraicNumbers, CC)))
+
+
 make_entry(ID("b738b1"),
     SymbolDefinition(Infinity, Infinity, "Positive infinity"),
     Description("This formal symbol represents a quantity larger than any real number. We define", Equal(+Infinity, Infinity), "."),
@@ -75,8 +88,6 @@ make_entry(ID("486ab2"),
     Description("This formal symbol represents a quantity with infinite magnitude and undefined sign."),
     Description("It is typically used to represent the value of meromorphic functions at poles."),
     Description("The set", Union(CC, Set(UnsignedInfinity)), "represents the complex Riemann sphere."))
-
-
 
 
 make_entry(ID("03fbae"),

@@ -184,6 +184,7 @@ class Expr(object):
         if self is Sinh: return "\\sinh"
         if self is Cos: return "\\cos"
         if self is Cosh: return "\\cosh"
+        if self is Tan: return "\\tan"
         if self is Exp: return "\\exp"
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
@@ -191,16 +192,16 @@ class Expr(object):
         if self is Asin: return "\\operatorname{asin}"
         if self is Acot: return "\\operatorname{acot}"
         if self is Atan2: return "\\operatorname{atan2}"
-        if self is Hypergeometric0F1: return "{}_0F_1"
-        if self is Hypergeometric1F1: return "{}_1F_1"
-        if self is Hypergeometric2F1: return "{}_2F_1"
-        if self is Hypergeometric2F0: return "{}_2F_0"
+        if self is Hypergeometric0F1: return "\,{}_0F_1"
+        if self is Hypergeometric1F1: return "\,{}_1F_1"
+        if self is Hypergeometric2F1: return "\,{}_2F_1"
+        if self is Hypergeometric2F0: return "\,{}_2F_0"
         if self is HypergeometricU: return "U"
         if self is HypergeometricUStar: return "U^{*}"
-        if self is Hypergeometric0F1Regularized: return "{}_0{\\tilde F}_1"
-        if self is Hypergeometric1F1Regularized: return "{}_1{\\tilde F}_1"
-        if self is Hypergeometric2F1Regularized: return "{}_2{\\tilde F}_1"
-        if self is Hypergeometric2F0Regularized: return "{}_2{\\tilde F}_0"
+        if self is Hypergeometric0F1Regularized: return "\,{}_0{\\tilde F}_1"
+        if self is Hypergeometric1F1Regularized: return "\,{}_1{\\tilde F}_1"
+        if self is Hypergeometric2F1Regularized: return "\,{}_2{\\tilde F}_1"
+        if self is Hypergeometric2F0Regularized: return "\,{}_2{\\tilde F}_0"
         if self is AiryAi: return "\\operatorname{Ai}"
         if self is AiryBi: return "\\operatorname{Bi}"
         if self is AiryAiPrime: return "\\operatorname{Ai}'"
@@ -215,6 +216,7 @@ class Expr(object):
         if self is RR: return "\\mathbb{R}"
         if self is CC: return "\\mathbb{C}"
         if self is HH: return "\\mathbb{H}"
+        if self is AlgebraicNumbers: return "\\overline{\\mathbb{Q}}"
         if self is UnitCircle: return "\\mathbb{T}"
         if self is PrimePi: return "\\pi"
         if self is SL2Z: return "\\operatorname{SL}_2(\\mathbb{Z})"
@@ -290,6 +292,9 @@ class Expr(object):
             # remove frac to try to keep it on one line
             base = args[0]
             expo = args[1]
+            if not base.is_atom() and base.head() in (Sin, Cos, Tan, Sinh, Cosh, Tanh):
+                return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
+
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
             if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial)):
@@ -919,7 +924,7 @@ Cardinality
 Element NotElement Subset SubsetEqual
 EqualAndElement
 Rings CommutativeRings Fields
-PP ZZ QQ RR CC HH
+PP ZZ QQ RR CC HH AlgebraicNumbers
 ZZGreaterEqual ZZLessEqual ZZBetween
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
