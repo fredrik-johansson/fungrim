@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import sys
+if len(sys.argv) > 1 and sys.argv[1] == "ids":
+    import random
+    for n in range(15):
+        print("".join(random.choice("0123456789abcdef") for i in range(6)))
+    sys.exit(0)
+
 from formulas import *
 
 topics_referencing_entry = {}
@@ -90,7 +97,7 @@ h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
 h3 { font-size: 1em; font-weight: bold; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
-.entry { border:1px solid #ccc; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
+.entry { border:1px solid #ccc; padding-left:0.2em; padding-right:0.2em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
 table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }
@@ -114,7 +121,7 @@ tr:nth-child(odd) { background-color: #fafafa; }
 button {
   border: none;
   color: #000;
-  padding: 0.1em 0.5em;
+  padding: 0.1em 0.3em;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -129,7 +136,7 @@ button::-moz-focus-inner {
 button:active {
   background-image: linear-gradient(#ccc, #888);
   color: #fff;
-  padding: 0.2em 0.5em 0.2em 0.7em;
+  padding: 0.1em 0.3em 0.2em 0.3em;
 }
 button:focus {
   box-shadow: 0px 0px 2px green;

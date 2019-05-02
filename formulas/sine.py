@@ -129,6 +129,8 @@ def_Topic(
     Entries(
         "4039ec",
         "c47a86",
+        "22c4f6",
+        "d38739",
     ),
     Subsection("Complex arguments"),
     Entries(
@@ -572,6 +574,16 @@ make_entry(ID("c47a86"),
     Formula(LessEqual(Abs(Sin(x)), Abs(x))),
     Variables(x),
     Assumptions(Element(x, RR)))
+
+make_entry(ID("22c4f6"),
+    Formula(LessEqual(Sin(x), (4*x*(ConstPi-x))/(ConstPi**2))),
+    Variables(x),
+    Assumptions(Element(x, ClosedInterval(0, ConstPi))))
+
+make_entry(ID("d38739"),
+    Formula(GreaterEqual(Sin(x), (x*(ConstPi-x))/(ConstPi))),
+    Variables(x),
+    Assumptions(Element(x, ClosedInterval(0, ConstPi))))
 
 make_entry(ID("f77752"),
     Formula(LessEqual(Abs(Sin(x+y*ConstI)), Cosh(y))),
