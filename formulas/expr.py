@@ -987,7 +987,7 @@ ModularJ
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableHeadings TableColumnHeadings TableSplit TableSection
-Topic Title DefinitionsTable Section SeeTopics Entries EntryReference
+Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference
 SourceForm SymbolDefinition
 """)
 

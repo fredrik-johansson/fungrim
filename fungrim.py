@@ -87,6 +87,7 @@ html_start = """
 body { margin: 0; padding: 0; font-family: roboto; background-color:#eee; color: black; }
 h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
+h3 { font-size: 1em; font-weight: bold; }
 p { line-height:1.5em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
 .entry { border:1px solid #ccc; padding-left:0.4em; padding-right:0.4em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
@@ -100,10 +101,15 @@ tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
 .katex { font-size: 1.1em; }
 .katex-display { margin-top:0.8em; margin-bottom:0.8em; }
-// .katex-display {
-//   overflow-x: visible;
-//   overflow-y: hidden;
-// }
+
+@media only screen and (max-width: 500px) {
+    .katex { font-size: 1.0em; }
+}
+
+.katex-display {
+   overflow-x: visible;
+   overflow-y: hidden;
+}
 
 button {
   border: none;
@@ -287,6 +293,9 @@ class TopicPage(Webpage):
                 s = arg.args()[0]._text
                 self.fp.write("""<h2 id="%s">%s</h2>""" % (escape_title(s), s))
                 sect_i += 1
+            if arg.head() is Subsection:
+                s = arg.args()[0]._text
+                self.fp.write("""<h3>%s</h3>""" % s)
             if arg.head() is Entries:
                 for id in arg.args():
                     self.entry(id._text)
