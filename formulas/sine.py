@@ -60,6 +60,9 @@ def_Topic(
         "1b11be",
         "729215",
         "e3f8a4",
+    ),
+    Section("Sums and products"),
+    Entries(
         "d59bd9",
         "e69cf6",
         "ad6c1c",
@@ -67,6 +70,8 @@ def_Topic(
         "f183d0",
         "6c3ba9",
         "adbc1a",
+        "b8ab9c",
+        "906569",
     ),
     Section("Powers"),
     Entries(
@@ -81,11 +86,6 @@ def_Topic(
         "d0505f",
         "2392f5",
         "f6d0c6",
-    ),
-    Section("Sums and products"),
-    Entries(
-        "b8ab9c",
-        "906569",
     ),
     Section("Representations through other functions"),
     Subsection("Elementary functions"),
@@ -150,6 +150,13 @@ def_Topic(
 
 make_entry(ID("b63dce"),
     SymbolDefinition(Sin, Sin(z), "Sine"),
+    Description("The sine function", Sin(z),
+        "(denoted by", SourceForm(Sin(z)), "in the Fungrim formula language)",
+         "is a function of a single variable.",
+        "It can be defined for real and complex arguments by the series",
+        EntryReference("f340cb"), "or by the differential equation",
+        EntryReference("21f156"), "with appropriate initial values.",
+        "The following table lists conditions such that", SourceForm(Sin(z)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(

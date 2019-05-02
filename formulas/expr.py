@@ -817,11 +817,11 @@ class Expr(object):
         if single:
             s += """<div>"""
         else:
-            s += """<div style="float:left; margin-top:0.1em;">"""
+            s += """<div style="float:left; margin-top:0.1em; margin-right:0.5em">"""
             s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
             s += """<button style="margin-top:0.3em; margin-bottom: 0.2em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
-            s += """<div style="margin-left:0pt">"""
+            s += """<div>"""
 
         args = self.args()
         args = [arg for arg in args if arg.head() not in (ID, Variables)]

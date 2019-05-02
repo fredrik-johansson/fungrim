@@ -398,7 +398,7 @@ DefinitionsPage().write()
 frontpage = FrontPage()
 frontpage.start()
 frontpage.entry("9ee8bc")
-frontpage.fp.write("""<p style="margin: 1em">Click "Details" to show an expanded view of an entry, or click the ID to show the expanded view on its own page.</p>""")
+frontpage.fp.write("""<p style="margin: 1em">Click "Details" to show an expanded view of an entry, or click the ID (9ee8bc) to show the expanded view on its own page.</p>""")
 frontpage.section("Browse by topic")
 
 def writetopic(s):
