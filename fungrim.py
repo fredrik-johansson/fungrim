@@ -82,6 +82,7 @@ html_start = """
 <meta charset="UTF-8">
 <title>%%PAGETITLE%%</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
 body { margin: 0; padding: 0; font-family: roboto; background-color:#eee; color: black; }
 h1 { text-align:center; color:#256; margin-top: 0; }
@@ -264,6 +265,18 @@ class TopicPage(Webpage):
     def write(self):
         self.start()
         topic = topics_dict[self.title]
+        sections = []
+        for arg in topic.args():
+            if arg.head() is Section:
+                sections.append(arg.args()[0]._text)
+        if sections:
+            self.fp.write("""<p style="text-align:center;">Table of contents: """)
+            for i, s in enumerate(sections):
+                self.fp.write("""<a href="#%s">%s</a> """ % (escape_title(s), s))
+                if i < len(sections) - 1:
+                    self.fp.write(""" - """)
+            self.fp.write("""</p>""")
+        sect_i = 0
         for arg in topic.args():
             if arg.head() is DefinitionsTable:
                 # self.fp.write("""<h2>Main symbols</h2>""")
@@ -271,7 +284,9 @@ class TopicPage(Webpage):
                 write_definitions_table(self.fp, arg.args(), center=True)
                 self.fp.write("""</div>""")
             if arg.head() is Section:
-                self.fp.write("""<h2>%s</h2>""" % arg.args()[0]._text)
+                s = arg.args()[0]._text
+                self.fp.write("""<h2 id="%s">%s</h2>""" % (escape_title(s), s))
+                sect_i += 1
             if arg.head() is Entries:
                 for id in arg.args():
                     self.entry(id._text)
@@ -280,7 +295,7 @@ class TopicPage(Webpage):
                     if rel._text not in topics_dict:
                         print("WARNING: linked topic page '%s' missing" % rel._text)
                 rel_strs = ["""<a href="%s.html">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
-                self.fp.write("""<p style="text-align:center">See: %s</p>""" % ", ".join(rel_strs))
+                self.fp.write("""<p style="text-align:center">Related topics: %s</p>""" % ", ".join(rel_strs))
         self.end()
 
 class DefinitionsPage(Webpage):

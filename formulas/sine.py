@@ -2,6 +2,7 @@ from .expr import *
 
 def_Topic(
     Title("Sine"),
+    Section("Definition"),
     Entries(
         "b63dce",
     ),

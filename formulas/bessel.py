@@ -652,7 +652,7 @@ make_entry(ID("0836b4"),
     Assumptions(And(Element(n, ZZ), Element(z, CC))))
 
 make_entry(ID("cc4572"),
-    Formula(LessEqual(Abs(BesselJ(nu,z)), (1/Gamma(nu+1)) * Abs(z/2)**nu * Exp(Abs(Im(z))))),
+    Formula(LessEqual(Abs(BesselJ(nu,z)), (1/GammaFunction(nu+1)) * Abs(z/2)**nu * Exp(Abs(Im(z))))),
     Variables(nu, z),
     Assumptions(And(Element(nu, ClosedOpenInterval(-Div(1,2), Infinity)), Element(z, SetMinus(CC, Set(0))))))
 
