@@ -13,6 +13,7 @@ from .exp import *
 from .powers import *
 from .sqrt import *
 from .sine import *
+from .atan import *
 from .factorials import *
 from .gamma import *
 from .legendre_polynomial import *

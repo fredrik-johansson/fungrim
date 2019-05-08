@@ -185,12 +185,17 @@ class Expr(object):
         if self is Cos: return "\\cos"
         if self is Cosh: return "\\cosh"
         if self is Tan: return "\\tan"
+        if self is Tanh: return "\\tanh"
         if self is Exp: return "\\exp"
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
         if self is Acos: return "\\operatorname{acos}"
         if self is Asin: return "\\operatorname{asin}"
         if self is Acot: return "\\operatorname{acot}"
+        if self is Atanh: return "\\operatorname{atanh}"
+        if self is Acosh: return "\\operatorname{acosh}"
+        if self is Asinh: return "\\operatorname{asinh}"
+        if self is Acoth: return "\\operatorname{acoth}"
         if self is Atan2: return "\\operatorname{atan2}"
         if self is Hypergeometric0F1: return "\,{}_0F_1"
         if self is Hypergeometric1F1: return "\,{}_1F_1"
@@ -209,7 +214,10 @@ class Expr(object):
         if self is LogIntegral: return "\\operatorname{li}"
         if self is GCD: return "\\gcd"
         if self is Sign: return "\\operatorname{sgn}"
+        if self is Csgn: return "\\operatorname{csgn}"
         if self is Arg: return "\\arg"
+        if self is Min: return "\\min"
+        if self is Max: return "\\max"
         if self is PP: return "\\mathbb{P}"
         if self is ZZ: return "\\mathbb{Z}"
         if self is QQ: return "\\mathbb{Q}"
@@ -333,12 +341,13 @@ class Expr(object):
             if (not args[2].is_atom() and args[2].head() not in [Abs]):
                 formula = "\\left[ %s \\right]" % formula
             return "\\lim_{%s \\to %s} %s" % (var, point, formula)
-        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros):
+        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, Solutions, UniqueSolution):
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
                       ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}",
                       Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}",
-                      Zeros:"\\operatorname{zeros}\\,"}[head]
+                      Zeros:"\\operatorname{zeros}\\,",
+                      Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution}\\,"}[head]
             if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
                 return "%s\\left(%s\\right)" % (opname, argstr[0])
             assert len(args) == 3
@@ -442,6 +451,12 @@ class Expr(object):
         if head is LegendrePolynomial:
             assert len(args) == 2
             return "P_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
+        if head is ChebyshevT:
+            assert len(args) == 2
+            return "T_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
+        if head is ChebyshevU:
+            assert len(args) == 2
+            return "U_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is LegendrePolynomialZero:
             assert len(args) == 2
             return "x_{%s,%s}" % (argstr[0], argstr[1])
@@ -815,11 +830,11 @@ class Expr(object):
         s = ""
         s += """<div class="entry">"""
         if single:
-            s += """<div>"""
+            s += """<div style="padding-top:0.4em">"""
         else:
-            s += """<div style="float:left; margin-top:0.1em; margin-right:0.5em">"""
+            s += """<div style="float:left; margin-top:0.0em; margin-right:0.3em">"""
             s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
-            s += """<button style="margin-top:0.3em; margin-bottom: 0.2em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
+            s += """<button style="margin-top:0.2em; margin-bottom: 0.1em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div>"""
 
@@ -934,9 +949,10 @@ InteriorClosure
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
-Max Min Sign Abs Floor Ceil Arg Re Im Conjugate
+Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
+Solutions UniqueSolution
 Supremum Infimum
 Sum Product Limit Integral Derivative
 SumCondition ProductCondition
@@ -968,6 +984,7 @@ HypergeometricUStarRemainder
 AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
+ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 Divides

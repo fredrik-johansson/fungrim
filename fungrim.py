@@ -3,8 +3,14 @@
 import sys
 if len(sys.argv) > 1 and sys.argv[1] == "ids":
     import random
+    prev, prev2 = "x", "y"
     for n in range(15):
-        print("".join(random.choice("0123456789abcdef") for i in range(6)))
+        while 1:
+            s = "".join(random.choice("0123456789abcdef") for i in range(6))
+            if s[0] not in (prev[0], prev2[0]):
+                print(s)
+                prev, prev2 = s, prev
+                break
     sys.exit(0)
 
 from formulas import *
@@ -80,7 +86,7 @@ katex_function.append(katex)
 
 import datetime
 datestamp = str(datetime.date.today())
-timestamp = str(datetime.datetime.now())
+timestamp = str(datetime.datetime.utcnow())
 
 html_start = """
 <!DOCTYPE html>
@@ -91,13 +97,17 @@ html_start = """
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
-body { margin: 0; padding: 0; font-family: roboto; background-color:#eee; color: black; }
+body { margin: 0; padding: 0; font-family: roboto, arial, sans-serif; background-color:#eee; color:#111; }
 h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
-h3 { font-size: 1em; font-weight: bold; }
-p { line-height:1.5em; }
+h3 { font-size: 1em; font-weight: bold; color:#633; }
+// a:link { text-decoration: none; }
+// a:visited { text-decoration: none; }
+// a:hover { text-decoration: underline; }
+// a:active { color:#f60; text-decoration: underline; }
+p { line-height:1.3em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
-.entry { border:1px solid #ccc; padding-left:0.2em; padding-right:0.2em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.4em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #ddd; }
+.entry { border:1px solid #ccc; padding-left:0.2em; padding-right:0.2em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.3em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #eee; }
 .entrysubhead { font-weight: bold; padding-bottom: 0.1em; padding-top: 0.6em; }
 table { border-collapse:collapse; background-color:#fff; }
 table, th, td { border: 1px solid #aaa; }
@@ -106,8 +116,8 @@ td { min-width: 30px; }
 th { background-color: #f0f0f0; }
 tr:nth-child(odd) { background-color: #fafafa; }
 .topiclist { columns: 2 300px; }
-.katex { font-size: 1.1em; }
-.katex-display { margin-top:0.8em; margin-bottom:0.8em; }
+.katex { font-size: 1.1em; color: black; }
+.katex-display { margin-top:0.0em; margin-bottom:0.0em; padding-top:0.5em; padding-bottom:0.4em; }
 
 @media only screen and (max-width: 500px) {
     .katex { font-size: 1.0em; }
@@ -158,7 +168,7 @@ function toggleVisible(id) {
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
 <body>
-<div style="margin:0; padding:0.1em 0.5em 0.5em 0.5em; background-color: #fafafa;">
+<div style="margin:0; padding:0.1em 0.5em 0.5em 0.5em; background-color: #fcfcfc;">
 """
 
 html_end = """
@@ -170,7 +180,7 @@ Fungrim is provided under the
 <a href="https://github.com/fredrik-johansson/fungrim/blob/master/LICENSE">MIT license</a>.
 The <a href="https://github.com/fredrik-johansson/fungrim">source code is on GitHub</a>.
 </p></div>
-<p style="text-align:center">%%TIMESTAMP%%</p>
+<p style="text-align:center">%%TIMESTAMP%% UTC</p>
 </div>
 </body>
 </html>
@@ -249,7 +259,7 @@ class EntryPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.4em;"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.id)
 
     def write(self):
@@ -272,7 +282,7 @@ class TopicPage(Webpage):
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.4em;"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../index.html">Fungrim home page</a></p>""")
         self.fp.write("""<h1>%s</h1>""" % self.title)
 
     def write(self):
@@ -425,6 +435,7 @@ writetopic("Natural logarithm")
 writetopic("Square roots")
 writetopic("Powers")
 writetopic("Sine")
+writetopic("Inverse tangent")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
