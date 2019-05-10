@@ -2,7 +2,7 @@ from .expr import *
 
 def_Topic(
     Title("Inverse tangent"),
-    Section("Definition"),
+    Section("Definitions"),
     Entries(
         "b120b9",
         "ce3a8e",
@@ -337,7 +337,7 @@ make_entry(ID("268c9e"),
 make_entry(ID("14f8c2"),
     Formula(Equal(Atan(2*z), Atan(z) + Atan(z/(1+2*z**2)))),
     Variables(z),
-    Assumptions(Element(z, SetMinus(CC, Set(-ConstI, ConstI)))))
+    Assumptions(And(Element(z, CC), Not(And(Equal(Re(z), 0), Element(Abs(Im(z)), ClosedInterval(Sqrt(2)/2, 1)))))))
 
 # Algebraic transformations
 
