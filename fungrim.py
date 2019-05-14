@@ -436,6 +436,7 @@ writetopic("Square roots")
 writetopic("Powers")
 writetopic("Sine")
 writetopic("Inverse tangent")
+writetopic("Lambert W-function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")

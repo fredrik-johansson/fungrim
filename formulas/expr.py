@@ -186,6 +186,8 @@ class Expr(object):
         if self is Cosh: return "\\cosh"
         if self is Tan: return "\\tan"
         if self is Tanh: return "\\tanh"
+        if self is Cot: return "\\cot"
+        if self is Coth: return "\\coth"
         if self is Exp: return "\\exp"
         if self is Log: return "\\log"
         if self is Atan: return "\\operatorname{atan}"
@@ -197,6 +199,7 @@ class Expr(object):
         if self is Asinh: return "\\operatorname{asinh}"
         if self is Acoth: return "\\operatorname{acoth}"
         if self is Atan2: return "\\operatorname{atan2}"
+        if self is Sinc: return "\\operatorname{sinc}"
         if self is Hypergeometric0F1: return "\,{}_0F_1"
         if self is Hypergeometric1F1: return "\,{}_1F_1"
         if self is Hypergeometric2F1: return "\,{}_2F_1"
@@ -508,6 +511,25 @@ class Expr(object):
         if head is StirlingS2:
             assert len(args) == 2
             return "\\left\\{{%s \\atop %s}\\right\\}" % (argstr[0], argstr[1])
+        if head is LambertW:
+            assert len(args) in (2,3)
+            if len(args) == 2:
+                n, z = args
+                nstr = n.latex(in_small=True)
+                zstr = z.latex(in_small)
+                return "W_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+            else:
+                n, z, r = args
+                nstr = n.latex(in_small=True)
+                zstr = z.latex(in_small)
+                rstr = r.latex(in_small)
+                if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+                    return "W" + ("'" * r._integer) + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+                else:
+                    return "W" + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+        if head is LambertWPuiseuxCoefficient:
+            assert len(args) == 1
+            return "{\\mu}_{" + argstr[0] + "}"
         if head is AsymptoticTo:
             assert len(argstr) == 4
             return "%s \\sim %s, \; %s \\to %s" % tuple(argstr)
@@ -533,14 +555,17 @@ class Expr(object):
                 return ",\\,".join(argstr)
             else:
                 return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
+                #return " \\,\\land\\, ".join(argstr)
         if head is Or:
             for i in range(len(args)):
                 if (not args[i].is_atom()) and args[i].head() in (And, Or, Not):
                     argstr[i] = "\\left(%s\\right)" % argstr[i]
             return " \\,\\mathbin{\\operatorname{or}}\\, ".join(argstr)
+            #return " \\,\\lor\\, ".join(argstr)
         if head is Not:
             assert len(args) == 1
             return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
+            #return " \\neg \\left(%s\\right)" % argstr[0]
         if head is Implies:
             return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
         if head is Equivalent:
@@ -569,18 +594,20 @@ class Expr(object):
                 return "\{%s, %s, \ldots %s\}" % (argstr[0], args[0]._integer + 1, argstr[1])
             else:
                 return "\{%s, %s + 1, \ldots %s\}" % (argstr[0], argstr[0], argstr[1])
-        if head is ClosedInterval:
+        if head in (ClosedInterval, OpenInterval, ClosedOpenInterval, OpenClosedInterval):
             assert len(args) == 2
-            return "\\left[%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
-        if head is OpenInterval:
-            assert len(args) == 2
-            return "\\left(%s, %s\\right)" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
-        if head is ClosedOpenInterval:
-            assert len(args) == 2
-            return "\\left[%s, %s\\right)" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
-        if head is OpenClosedInterval:
-            assert len(args) == 2
-            return "\\left(%s, %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
+            #arg0 = args[0].latex(in_small=True)
+            #arg1 = args[1].latex(in_small=True)
+            arg0 = args[0].latex(in_small=in_small)
+            arg1 = args[1].latex(in_small=in_small)
+            if head is ClosedInterval:
+                return "\\left[%s, %s\\right]" % (arg0, arg1)
+            if head is OpenInterval:
+                return "\\left(%s, %s\\right)" % (arg0, arg1)
+            if head is ClosedOpenInterval:
+                return "\\left[%s, %s\\right)" % (arg0, arg1)
+            if head is OpenClosedInterval:
+                return "\\left(%s, %s\\right]" % (arg0, arg1)
         if head is RealBall:
             assert len(args) == 2
             return "\\left[%s \\pm %s\\right]" % (args[0].latex(in_small=True), args[1].latex(in_small=True))
@@ -665,6 +692,13 @@ class Expr(object):
         s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
         return s
 
+    def _can_render_html(self):
+        if self.is_atom():
+            return True
+        if self.head() is Decimal:
+            return True
+        if self.head() is Div and self.args()[0].is_integer() and self.args()[1].is_integer():
+            return True
 
     def html(self, display=False, avoid_latex=False):
         katex = katex_function[0]
@@ -679,6 +713,11 @@ class Expr(object):
                 expo = expo.lstrip("+")
                 text = mant + " &middot; 10<sup>" + expo + "</sup>"
             return text
+        if self.head() is Div and avoid_latex and self.args()[0].is_integer() and self.args()[1].is_integer():
+            p, q = self.args()
+            return "%s/%s" % (str(self.args()[0]._integer), str(self.args()[1]._integer))
+        if self.head() is Neg and avoid_latex and self.args()[0]._can_render_html():
+            return "-" + self.args()[0].html(display=display, avoid_latex=True)
         if self.head() is Table:
             return self.html_Table()
         if self.head() is Formula:
@@ -967,7 +1006,7 @@ Sin Cos Tan Sec Cot Csc
 Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
-Sinc LambertW
+Sinc LambertW LambertWPuiseuxCoefficient
 ConstPi ConstE ConstGamma ConstI
 Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
