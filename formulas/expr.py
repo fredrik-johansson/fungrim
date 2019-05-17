@@ -216,6 +216,9 @@ class Expr(object):
         if self is AiryBiPrime: return "\\operatorname{Bi}'"
         if self is LogIntegral: return "\\operatorname{li}"
         if self is GCD: return "\\gcd"
+        if self is LCM: return "\\operatorname{lcm}"
+        if self is XGCD: return "\\operatorname{xgcd}"
+        if self is Totient: return "\\varphi"
         if self is Sign: return "\\operatorname{sgn}"
         if self is Csgn: return "\\operatorname{csgn}"
         if self is Arg: return "\\arg"
@@ -308,7 +311,7 @@ class Expr(object):
 
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
-            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial)):
+            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber)):
                 return "{" + basestr + "}^{" + expostr + "}"
             else:
                 return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
@@ -432,10 +435,13 @@ class Expr(object):
         if head is List:
             return "\\left[" + ", ".join(argstr) + "\\right]"
         if head is Divides:
-            return " | ".join(argstr)
+            return " \\mid ".join(argstr)
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
+        if head is Fibonacci:
+            assert len(args) == 1
+            return "F_{" + argstr[0] + "}"
         if head is BellNumber:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
@@ -624,7 +630,7 @@ class Expr(object):
             return "\\overline{%s}" % argstr[0]
         if head is SetBuilder:
             assert len(args) == 3
-            return "\\left\\{ %s \\mid %s \\right\\}" % (argstr[0], argstr[2])
+            return "\\left\\{ %s : %s \\right\\}" % (argstr[0], argstr[2])
         if head is Cardinality:
             assert len(args) == 1
             #return "\\text{card }" + argstr[0]
@@ -818,7 +824,7 @@ class Expr(object):
     def html_Description(self, display=False):
         s = ""
         if display:
-            s += """<div style="text-align:center; margin:1em">"""
+            s += """<div style="text-align:center; margin:0.6em">"""
         for arg in self.args():
             if arg.is_text():
                 if arg._text and arg._text[0] in (",", ".", ";"):
@@ -1027,7 +1033,8 @@ ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 Divides
-GCD DivisorSigma MoebiusMu
+GCD LCM XGCD DivisorSigma MoebiusMu Totient
+Fibonacci
 PartitionsP HardyRamanujanA
 KroneckerDelta
 Lattice

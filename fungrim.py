@@ -101,10 +101,10 @@ body { margin: 0; padding: 0; font-family: roboto, arial, sans-serif; background
 h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
 h3 { font-size: 1em; font-weight: bold; color:#633; }
-// a:link { text-decoration: none; }
-// a:visited { text-decoration: none; }
-// a:hover { text-decoration: underline; }
-// a:active { color:#f60; text-decoration: underline; }
+ a:link { text-decoration: none; }
+ a:visited { text-decoration: none; }
+ a:hover { text-decoration: underline; }
+ a:active { color:#f60; text-decoration: underline; }
 p { line-height:1.3em; }
 pre { white-space: pre-wrap; background-color: #ffffff; border: 1px solid #cccccc; padding: 0.5em; margin: 0.1em; }
 .entry { border:1px solid #ccc; padding-left:0.2em; padding-right:0.2em; padding-top:0em; padding-bottom:0em; margin-left:0; margin-right:0; margin-bottom:0.3em; background-color: #fff; overflow: hidden; border-radius: 3px; box-shadow: 0px 1px 1px #eee; }
@@ -440,6 +440,7 @@ writetopic("Lambert W-function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
+writetopic("Greatest common divisor")
 writetopic("Factorials and binomial coefficients")
 writetopic("Prime numbers")
 writetopic("Partition function")

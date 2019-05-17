@@ -15,6 +15,7 @@ from .sqrt import *
 from .sine import *
 from .atan import *
 from .lambertw import *
+from .gcd import *
 from .factorials import *
 from .gamma import *
 from .legendre_polynomial import *
