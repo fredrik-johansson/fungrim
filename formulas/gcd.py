@@ -94,6 +94,7 @@ def_Topic(
         "e65763",
         "b36dba",
         "07ac4a",
+        "959a25",
         "d4852c",
         "9500d3",
         "5781de",
@@ -112,10 +113,13 @@ def_Topic(
         "7009cc",
     ),
     Section("Factorization"),
-    Subsection("Coprime arguments"),
+    Subsection("Coprime factors"),
     Entries(
         "8621f6",
         "fbe121",
+    ),
+    Subsection("Coprime arguments"),
+    Entries(
         "5aad5c",
         "250a45",
     ),
@@ -131,8 +135,10 @@ def_Topic(
         "fdae67",
         "da45c0",
     ),
-    Section("Summation"),
+    Section("Summation and counting"),
     Entries(
+        "7b27cd",
+        "4099d2",
         "aaef97",
         "c24323",
     ),
@@ -511,12 +517,7 @@ make_entry(ID("dc0823"),
     Variables(a, b),
     Assumptions(And(Element(a, ZZ), Element(b, ZZ))))
 
-"""
-
-
-
-
-"""
+# Addition and multiplication formulas
 
 make_entry(ID("e65763"),
     Formula(Equal(GCD(a+b, b), GCD(a, b))),
@@ -532,6 +533,11 @@ make_entry(ID("07ac4a"),
     Formula(Equal(GCD(a+n*b, b), GCD(a, b))),
     Variables(a, b, n),
     Assumptions(And(Element(a, ZZ), Element(b, ZZ), Element(n, ZZ))))
+
+make_entry(ID("959a25"),
+    Formula(Equal(GCD(Mod(a,b), b), GCD(a, b))),
+    Variables(a, b),
+    Assumptions(And(Element(a, ZZ), Element(b, ZZ), Unequal(b, 0))))
 
 make_entry(ID("d4852c"),
     Formula(Equal(GCD(n*a, n*b), Abs(n)*GCD(a, b))),
@@ -666,7 +672,20 @@ make_entry(ID("da45c0"),
     Variables(m, n),
     Assumptions(And(Element(m, ZZ), Element(n, ZZ))))
 
-# Summation
+# Summation and counting
+
+make_entry(ID("7b27cd"),
+    Formula(Equal(Cardinality(SetBuilder(n, n, And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(1))))
+
+# fixme: should be CartesianPower, not Pow
+make_entry(ID("4099d2"),
+    Formula(Equal(Limit(
+        (1/N**n) * Cardinality(SetBuilder(T, T, And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
+        N, Infinity), 1/RiemannZeta(n))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(2))))
 
 # todo: more formulas? generating functions?
 make_entry(ID("aaef97"),

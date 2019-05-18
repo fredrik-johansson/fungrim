@@ -436,12 +436,13 @@ class Expr(object):
             return "\\left[" + ", ".join(argstr) + "\\right]"
         if head is Divides:
             return " \\mid ".join(argstr)
+        # todo: unify subscript cases
         if head is BernoulliB:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
         if head is Fibonacci:
             assert len(args) == 1
-            return "F_{" + argstr[0] + "}"
+            return "F_{" + args[0].latex(in_small=True) + "}"
         if head is BellNumber:
             assert len(args) == 1
             return "B_{" + argstr[0] + "}"
