@@ -675,7 +675,7 @@ make_entry(ID("da45c0"),
 # Summation and counting
 
 make_entry(ID("7b27cd"),
-    Formula(Equal(Cardinality(SetBuilder(n, n, And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
+    Formula(Equal(Cardinality(SetBuilder(k, k, And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
