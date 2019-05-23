@@ -79,7 +79,8 @@ make_entry(ID("f617c0"),
     Formula(Equal(ConstPi, 4*Sum((-1)**k / (2*k+1), Tuple(k, 0, Infinity)))))
 
 make_entry(ID("fddfe6"),
-    Formula(Equal(ConstPi, Sum((1 / 16**k) * (4/(8*k+1)-2/(8*k+4)-1/(8*k+5)-1/(8*k+6)), Tuple(k, 0, Infinity)))))
+    Formula(Equal(ConstPi, Sum((1 / 16**k) * (4/(8*k+1)-2/(8*k+4)-1/(8*k+5)-1/(8*k+6)), Tuple(k, 0, Infinity)))),
+    References("D. H. Bailey and P. B. Borwein and S. Plouffe (1997). On the Rapid Computation of Various Polylogarithmic Constants. Mathematics of Computation. 66 (218): 903–913. DOI:10.1090/S0025-5718-97-00856-9"))
 
 make_entry(ID("69fe63"),
     Formula(Equal(ConstPi, 2*Product((4*k**2)/(4*k**2-1), Tuple(k, 1, Infinity)))))
