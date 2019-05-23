@@ -26,6 +26,7 @@ def_Topic(
     ),
     Section("Kummer's transformation"),
     Entries(
+        "be533c",
         "a047eb",
         "9d3147",
     ),
@@ -92,15 +93,18 @@ make_entry(ID("a61f01"),
 make_entry(ID("dec042"),
     Formula(Equal(Hypergeometric1F1(-n,b,z), Sum(RisingFactorial(-n,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), Tuple(k, 0, n)))),
     Variables(n,b,z),
-    #Assumptions(And(Element(a,CC), Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, ZZBetween(-n+1, 0))), Element(z,CC))))
-    Assumptions(And(Element(a,CC), Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
+    #Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, ZZBetween(-n+1, 0))), Element(z,CC))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
 
 make_entry(ID("70111e"),
     Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/GammaFunction(b+k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
     Variables(a,b,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(z,CC))))
 
-
+make_entry(ID("be533c"),
+    Formula(Equal(Hypergeometric1F1(a,b,z), Exp(z) * Hypergeometric1F1(b-a, b, -z))),
+    Variables(a, b, z),
+    Assumptions(And(Element(a, CC), Element(b, SetMinus(CC, ZZLessEqual(0))), Element(z, CC))))
 
 make_entry(ID("a047eb"),
     Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Exp(z) * Hypergeometric1F1Regularized(b-a, b, -z))),

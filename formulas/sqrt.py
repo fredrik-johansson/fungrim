@@ -365,8 +365,8 @@ no_crossing2 = Equal(Intersection(OpenInterval(a, b), OpenInterval(-Infinity, 0)
 make_entry(ID("6ddbf4"),
     Formula(Equal(Integral(Sqrt(z), Tuple(z, a, b)), Div(2,3) * (b**Div(3,2) - a**Div(3,2)))),
     Variables(a, b),
-    Assumptions(And(Element(A, CC), Element(b, CC), no_crossing),
-                And(Element(A, CC), Element(b, CC), no_crossing2)))
+    Assumptions(And(Element(a, CC), Element(b, CC), no_crossing),
+                And(Element(a, CC), Element(b, CC), no_crossing2)))
 
 make_entry(ID("b14da0"),
     Formula(Equal(Sqrt(z+x), Sqrt(z) * Sum(((-1)**k * RisingFactorial(-Div(1,2),k)) / (z**k * Factorial(k)) * x**k, Tuple(k, 0, Infinity)))),

@@ -756,17 +756,18 @@ class Expr(object):
             cols = len(heads.args())
         num = len(data.args())
         innum = num // split
-        s = ""
-        s += """<table align="center" style="border:0; background-color:#fff">"""
+        s = """<div style="overflow-x:auto;">"""
+        s += """<table align="center" style="border:0; background-color:#fff;">"""
         s += """<tr style="border:0; background-color:#fff">"""
         j = 0
         for outer in range(split):
-            s += """<td style="border:0; background-color:#fff; vertical-align:top">"""
-            s += """<table style="float: left; margin-right: 1em">"""
+            s += """<td style="border:0; background-color:#fff; vertical-align:top;">"""
+            s += """<table style="float: left; margin-right: 1em;">"""
             if heads is not None:
                 s += "<tr>"
                 for col in heads.args():
-                    s += "<th>" + col.html(display=False, avoid_latex=True) + "</th>"
+                    # the nowrap is a hack to avoid "n \ k" breaking
+                    s += """<th style="white-space:nowrap;">""" + col.html(display=False, avoid_latex=True) + "</th>"
                 s += "</tr>"
             if outer == split-1:
                 end = num
@@ -786,7 +787,7 @@ class Expr(object):
                 j += 1
             s += """</table>"""
             s += "</td>"
-        s += "</tr></table>"
+        s += "</tr></table></div>"
         if rel is not None:
             s += """<div style="text-align:center; margin-top: 0.5em">"""
             s += Description("Table data:", rel.args()[0], " such that ", rel.args()[1]).html(display=True)
