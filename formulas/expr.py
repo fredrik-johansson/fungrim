@@ -706,6 +706,9 @@ class Expr(object):
             return True
         if self.head() is Div and self.args()[0].is_integer() and self.args()[1].is_integer():
             return True
+        if self.head() is Tuple:
+            return all(arg._can_render_html() for arg in self.args())
+        return False
 
     def html(self, display=False, avoid_latex=False):
         katex = katex_function[0]
@@ -725,6 +728,8 @@ class Expr(object):
             return "%s/%s" % (str(self.args()[0]._integer), str(self.args()[1]._integer))
         if self.head() is Neg and avoid_latex and self.args()[0]._can_render_html():
             return "-" + self.args()[0].html(display=display, avoid_latex=True)
+        if self.head() is Tuple and avoid_latex and self._can_render_html():
+            return "(" + ", ".join(a.html(display=display, avoid_latex=True) for a in self.args()) + ")"
         if self.head() is Table:
             return self.html_Table()
         if self.head() is Formula:

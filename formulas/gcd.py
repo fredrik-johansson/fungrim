@@ -14,6 +14,7 @@ def_Topic(
     Entries(
         "8b2743",
         "a0d13f",
+        "99dc4a",
     ),
     Section("Divisibility"),
     Entries(
@@ -233,6 +234,25 @@ make_entry(ID("a0d13f"),
         Tuple(0, 13, 26, 39, 52, 65, 78, 91, 104, 117, 130, 143, 156, 13, 182, 195),
         Tuple(0, 14, 14, 42, 28, 70, 42, 14, 56, 126, 70, 154, 84, 182, 14, 210),
         Tuple(0, 15, 30, 15, 60, 15, 30, 105, 120, 45, 30, 165, 60, 195, 210, 15),
+    )))
+
+make_entry(ID("99dc4a"),
+    Description("Table of", XGCD(n, k), "for", LessEqual(0, n, 10), "and", LessEqual(0, k, 10)),
+    Table(TableRelation(Tuple(n, k, Tuple(d, u, v)), Equal(XGCD(n, k), Tuple(d, u, v))),
+        TableHeadings(Description(n, "\\", k), 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+        TableColumnHeadings(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+        List(
+    Tuple(Tuple(0,0,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(3,0,1), Tuple(4,0,1), Tuple(5,0,1), Tuple(6,0,1), Tuple(7,0,1), Tuple(8,0,1), Tuple(9,0,1), Tuple(10,0,1)),
+    Tuple(Tuple(1,1,0), Tuple(1,0,1), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0), Tuple(1,1,0)),
+    Tuple(Tuple(2,1,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(1,-1,1), Tuple(2,1,0), Tuple(1,-2,1), Tuple(2,1,0), Tuple(1,-3,1), Tuple(2,1,0), Tuple(1,-4,1), Tuple(2,1,0)),
+    Tuple(Tuple(3,1,0), Tuple(1,0,1), Tuple(1,1,-1), Tuple(3,0,1), Tuple(1,-1,1), Tuple(1,2,-1), Tuple(3,1,0), Tuple(1,-2,1), Tuple(1,3,-1), Tuple(3,1,0), Tuple(1,-3,1)),
+    Tuple(Tuple(4,1,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(1,1,-1), Tuple(4,0,1), Tuple(1,-1,1), Tuple(2,-1,1), Tuple(1,2,-1), Tuple(4,1,0), Tuple(1,-2,1), Tuple(2,-2,1)),
+    Tuple(Tuple(5,1,0), Tuple(1,0,1), Tuple(1,1,-2), Tuple(1,-1,2), Tuple(1,1,-1), Tuple(5,0,1), Tuple(1,-1,1), Tuple(1,3,-2), Tuple(1,-3,2), Tuple(1,2,-1), Tuple(5,1,0)),
+    Tuple(Tuple(6,1,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(3,0,1), Tuple(2,1,-1), Tuple(1,1,-1), Tuple(6,0,1), Tuple(1,-1,1), Tuple(2,-1,1), Tuple(3,-1,1), Tuple(2,2,-1)),
+    Tuple(Tuple(7,1,0), Tuple(1,0,1), Tuple(1,1,-3), Tuple(1,1,-2), Tuple(1,-1,2), Tuple(1,-2,3), Tuple(1,1,-1), Tuple(7,0,1), Tuple(1,-1,1), Tuple(1,4,-3), Tuple(1,3,-2)),
+    Tuple(Tuple(8,1,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(1,-1,3), Tuple(4,0,1), Tuple(1,2,-3), Tuple(2,1,-1), Tuple(1,1,-1), Tuple(8,0,1), Tuple(1,-1,1), Tuple(2,-1,1)),
+    Tuple(Tuple(9,1,0), Tuple(1,0,1), Tuple(1,1,-4), Tuple(3,0,1), Tuple(1,1,-2), Tuple(1,-1,2), Tuple(3,1,-1), Tuple(1,-3,4), Tuple(1,1,-1), Tuple(9,0,1), Tuple(1,-1,1)),
+    Tuple(Tuple(10,1,0), Tuple(1,0,1), Tuple(2,0,1), Tuple(1,1,-3), Tuple(2,1,-2), Tuple(5,0,1), Tuple(2,-1,2), Tuple(1,-2,3), Tuple(2,1,-1), Tuple(1,1,-1), Tuple(10,0,1)),
     )))
 
 # Divisibility
