@@ -55,8 +55,13 @@ def_Topic(
         "96af56",
         "4491b8",
     ),
+    Section("Approximations"),
+    Entries(
+        "3c4480",
+    ),
     Section("Bounds and inequalities"),
     Entries(
+        "2f57ad",
         "3ac8a5",
     ),
 )
@@ -214,6 +219,21 @@ make_entry(ID("a0d93c"),
 
 make_entry(ID("52d827"),
     Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+# Approximations
+
+make_entry(ID("3c4480"),
+    Formula(LessEqual(Abs(Exp(z) - Sum(z**k/Factorial(k), Tuple(k, 0, N-1))),
+        Abs(z)**N/(Factorial(N)*(1-Abs(z)/N)))),
+    Variables(z, N),
+    Assumptions(And(Element(z, CC), Element(N, ZZ), Greater(N, Abs(z)))))
+
+# Bounds and inequalities
+
+make_entry(ID("2f57ad"),
+    Formula(LessEqual(Abs(Exp(z)), Exp(Abs(z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
