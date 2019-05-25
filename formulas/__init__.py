@@ -19,6 +19,7 @@ from .gcd import *
 from .factorials import *
 from .gamma import *
 from .legendre_polynomial import *
+from .chebyshev import *
 from .log import *
 from .partitions import *
 from .riemann_zeta import *

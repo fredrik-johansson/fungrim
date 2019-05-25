@@ -454,7 +454,11 @@ writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")
 writetopic("Airy functions")
 writetopic("Bessel functions")
+frontpage.fp.write("""</ul></li>""")
+
+frontpage.fp.write("""<li>Orthogonal polynomials<ul>""")
 writetopic("Legendre polynomials")
+writetopic("Chebyshev polynomials")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Zeta and L-functions<ul>""")
