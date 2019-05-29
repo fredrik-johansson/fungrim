@@ -13,6 +13,15 @@ if len(sys.argv) > 1 and sys.argv[1] == "ids":
                 break
     sys.exit(0)
 
+if len(sys.argv) > 1 and sys.argv[1] == "img":
+    import os
+    if not os.path.exists("build/html/img"):
+        os.makedirs("build/html/img")
+    import source_scripts.xray
+    source_scripts.xray.plots("build/html/img")
+    sys.exit(0)
+
+
 from formulas import *
 
 topics_referencing_entry = {}
@@ -129,13 +138,14 @@ tr:nth-child(odd) { background-color: #fafafa; }
 }
 
 button {
+  cursor:pointer;
   border: none;
   color: #000;
   padding: 0.1em 0.3em;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  margin: 4px 2px;
+  margin: 2px 2px;
   border: 1px solid #999;
   border-radius: 2px;
   background-image: linear-gradient(#fff, #eee);
@@ -164,6 +174,21 @@ function toggleVisible(id) {
     x.style.display = "none";
   }
 } 
+function toggleBig(id, smallurl, bigurl) {
+  var x = document.getElementById(id);
+  if (x.style.height == "140px")
+  {
+    x.src = bigurl;
+    x.style.height = "500px";
+    x.style.width = "auto";
+  }
+  else
+  {
+    x.src = smallurl;
+    x.style.height = "140px";
+    x.style.width = "auto";
+  }
+}
 </script>
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
@@ -195,7 +220,7 @@ index_text = """
 
 <p style="margin:1em">
 Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.
-Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (definitions, formulas or tables), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
+Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (definitions, formulas, tables, plots), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
 All data in Fungrim is represented in symbolic, semantic form designed to be usable by computer algebra software.
 Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one formula entry:
 </p>

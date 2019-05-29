@@ -251,7 +251,8 @@ class Expr(object):
             if self._integer is not None:
                 return str(self._integer)
             if self._text is not None:
-                return "\\text{``" + str(self._text) + "''}"
+                return "\\text{``" + str(self._text).replace("_","\\_") + "''}"
+            raise NotImplementedError
 
         head = self._args[0]
         args = self._args[1:]
@@ -710,7 +711,7 @@ class Expr(object):
             return all(arg._can_render_html() for arg in self.args())
         return False
 
-    def html(self, display=False, avoid_latex=False):
+    def html(self, display=False, avoid_latex=False, single=False):
         katex = katex_function[0]
         if self.is_atom():
             if avoid_latex and self.is_integer():
@@ -742,7 +743,37 @@ class Expr(object):
             return self.html_Description(display=display)
         if self.head() is SymbolDefinition:
             return self.html_SymbolDefinition()
+        if self.head() is Image:
+            return self.html_Image(single=single)
         return katex(self.latex(), display=display)
+
+    def html_Image(self, single=False):
+        description, image = self.args()
+        path = image.args()[0]._text
+        s = ""
+        s += """<div style="text-align:center; margin:0.6em 0.4em 0.0em 0.2em">"""
+        s += """<span style="font-size:85%; color:#888">Image:</span> """
+        s += description.html()
+
+        imgid = path
+
+        thumb_size = "140px"
+        full_size = "500px"
+
+        if single and 0:
+            s += """<div style="text-align:center; padding-right:1em">"""
+            s += """<img id="%s", src="../img/%s.svg" style="height:%s; width:auto; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
+            s += """</div>"""
+        else:
+            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../img/%s_small.png', '../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
+            # hack: duplicated constants in html head
+            s += """<div style="text-align:center; padding-right:1em">"""
+            s += """<img id="%s", src="../img/%s_small.png" style="height:%s; width:auto; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
+            s += """</div>"""
+
+        s += """</div>"""
+        return s
+
 
     def html_Table(self):
         rel = self.get_arg_with_head(TableRelation)
@@ -852,7 +883,7 @@ class Expr(object):
     def html_SymbolDefinition(self):
         symbol, example, description = self.args()
         s = ""
-        s += """<div style="text-align:center; margin:0.8em">"""
+        s += """<div style="text-align:center; margin:0.6em">"""
         s += """<span style="font-size:85%; color:#888">Symbol:</span> """
         s += """<tt><a href="../symbol/%s.html">%s</a></tt>""" % (symbol._symbol, symbol._symbol)
         s += """ <span style="color:#888">&mdash;</span> """
@@ -879,6 +910,7 @@ class Expr(object):
     def entry_html(self, single=False, entry_dir="../entry/", symbol_dir="../symbol/", default_visible=False):
         id = self.id()
         all_tex = []
+        image_downloads = []
         s = ""
         s += """<div class="entry">"""
         if single:
@@ -886,15 +918,20 @@ class Expr(object):
         else:
             s += """<div style="float:left; margin-top:0.0em; margin-right:0.3em">"""
             s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
-            s += """<button style="margin-top:0.2em; margin-bottom: 0.1em; cursor:pointer;" onclick="toggleVisible('%s:info')">Details</button>""" % id
+            s += """<button style="margin-top:0.2em; margin-bottom: 0.1em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div>"""
 
         args = self.args()
         args = [arg for arg in args if arg.head() not in (ID, Variables)]
 
+        for arg in args:
+            if arg.head() is Image:
+                src = arg.get_arg_with_head(ImageSource).args()[0]._text
+                image_downloads.append(src)
+
         # First item is always visible
-        s += args[0].html(display=True)
+        s += args[0].html(display=True, single=single)
         s += "</div>"
 
         # Remaining items may be hidden beneath the fold
@@ -905,6 +942,21 @@ class Expr(object):
                 s += """<div id="%s:info" style="display:visible; padding: 1em; clear:both">""" % id
             else:
                 s += """<div id="%s:info" style="display:none; padding: 1em; clear:both">""" % id
+
+        if image_downloads:
+            src = image_downloads[0]
+            s += """<div style="text-align:center; margin-top:0; margin-bottom:1.1em">"""
+            s += """<span style="font-size:85%; color:#888">Download:</span> """
+            s += """<a href="../img/%s_small.png">png (small)</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s_medium.png">png (medium)</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s_large.png">png (large)</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s.pdf">pdf</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s.svg">svg</a>""" % src
+            s += """</div>"""
 
         # Remaining items
         for arg in args[1:]:
@@ -1059,6 +1111,7 @@ Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableHeadings TableColumnHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference
 SourceForm SymbolDefinition
+Image ImageSource
 """)
 
 # symbols we don't want to show in entry definition listings
@@ -1093,6 +1146,16 @@ description_x_predicate = Description("The argument", SourceForm(x), "to this op
     Element(x, S), "where", S, "is a known set.",
     "More generally,", SourceForm(x), "can be a collection of variables", Tuple(x, y, Ellipsis),
     "all of which become locally bound, with a corresponding predicate", P(x, y, Ellipsis), ".")
+
+description_xray = Description("An X-ray plot illustrates the geometry of a complex analytic function", f(z), ".",
+    "Thick black curves show where", Equal(Im(f(z)), 0), "(the function is pure real).",
+    "Thick red curves show where", Equal(Re(f(z)), 0), "(the function is pure imaginary).",
+    "Points where black and red curves intersect are zeros or poles.",
+    "Magnitude level curves", Equal(Abs(f(z)), C), "are rendered as thin gray curves, with brighter shades corresponding to larger", C, ".",
+    "Blue lines show branch cuts.",
+    "The value of the function is continuous with the branch cut on the side indicated with a solid line, and discontinuous on the side indicated with a dashed line.",
+    "Yellow is used to highlight important regions.")
+
 
 all_entries = []
 all_topics = []

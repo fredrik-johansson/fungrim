@@ -2,10 +2,17 @@ from .expr import *
 
 def_Topic(
     Title("Weierstrass elliptic functions"),
+    Section("Definitions"),
     Entries(
         "f7a534",
         "69be32",
         "5f3210",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "ff0c9f",
+        "0c8084",
+        "3009a8",
     ),
     Section("Complex lattices"),
     Entries(
@@ -88,6 +95,27 @@ make_entry(ID("5f3210"),
         Tuple(And(Element(z, CC), Element(tau, HH)), Element(WeierstrassSigma(z,tau), CC)),
       )),
     )
+
+intv = ClosedInterval(Decimal("-1.5"),Decimal("1.5"))
+
+make_entry(ID("ff0c9f"),
+    Image(Description("X-ray of", WeierstrassP(z,ConstI), "on", Element(intv + intv*ConstI), "with lattice cell highlighted"),
+        ImageSource("xray_elliptic_p")),
+    description_xray,
+    )
+
+make_entry(ID("0c8084"),
+    Image(Description("X-ray of", WeierstrassP(z,Exp(ConstPi*ConstI/3)), "on", Element(z, intv + intv*ConstI), "with lattice cell highlighted"),
+        ImageSource("xray_elliptic_p_2")),
+    description_xray,
+    )
+
+make_entry(ID("3009a8"),
+    Image(Description("X-ray of", WeierstrassP(z,Decimal("-0.8")+Decimal("0.7")*ConstI), "on", Element(z, intv + intv*ConstI), "with lattice cell highlighted"),
+        ImageSource("xray_elliptic_p_3")),
+    description_xray,
+    )
+
 
 make_entry(ID("3c1659"),
     SymbolDefinition(Lattice, Lattice(a,b), "Complex lattice with periods a, b"))

@@ -4,6 +4,16 @@ from .expr import *
 
 def_Topic(
     Title("Airy functions"),
+    Section("Definitions"),
+    Entries(
+        "9ac289",
+        "5a9d3f",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "b4c968",
+        "fa65f3",
+    ),
     Section("Differential equation"),
     Entries(
         "51b241",
@@ -41,6 +51,23 @@ def_Topic(
     ),        
 )
 
+make_entry(ID("9ac289"),
+    SymbolDefinition(AiryAi, AiryAi(z), "Airy function of the first kind"))
+
+make_entry(ID("5a9d3f"),
+    SymbolDefinition(AiryBi, AiryBi(z), "Airy function of the second kind"))
+
+make_entry(ID("b4c968"),
+    Image(Description("X-ray of", AiryAi(z), "on", Element(z, ClosedInterval(-6,6) + ClosedInterval(-6,6)*ConstI)),
+        ImageSource("xray_airy_ai")),
+    description_xray,
+    )
+
+make_entry(ID("fa65f3"),
+    Image(Description("X-ray of", AiryBi(z), "on", Element(z, ClosedInterval(-6,6) + ClosedInterval(-6,6)*ConstI)),
+        ImageSource("xray_airy_bi")),
+    description_xray,
+    )
 
 
 make_entry(ID("51b241"),

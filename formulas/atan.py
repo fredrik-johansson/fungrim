@@ -7,6 +7,10 @@ def_Topic(
         "b120b9",
         "ce3a8e",
     ),
+    Section("Illustrations"),
+    Entries(
+        "8bb3d8",
+    ),
     Section("Transcendental equations"),
     Entries(
         "1f026d",
@@ -175,6 +179,12 @@ make_entry(ID("ce3a8e"),
         TableSection("Numbers"),
         Tuple(And(Element(y, RR), Element(x, RR)), Element(Atan2(y, x), OpenClosedInterval(-ConstPi, ConstPi))),
       )))
+
+make_entry(ID("8bb3d8"),
+    Image(Description("X-ray of", Atan(z), "on", Element(z, ClosedInterval(-2,2) + ClosedInterval(-2,2)*ConstI)),
+        ImageSource("xray_atan")),
+    description_xray,
+    )
 
 # Transcendental equations
 

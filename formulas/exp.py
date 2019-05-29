@@ -4,9 +4,14 @@ from .expr import *
 
 def_Topic(
     Title("Exponential function"),
+    Section("Definitions"),
     Entries(
         "dfbcd9",
         "f758c6",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "6ef3d1",
     ),
     Section("Particular values"),
     Entries(
@@ -94,6 +99,12 @@ make_entry(ID("dfbcd9"),
 make_entry(ID("f758c6"),
     SymbolDefinition(ConstE, ConstE, "The constant e (2.718...)"),
     Description("The real number giving the base of the natural logarithm, also known as Euler's number."))
+
+make_entry(ID("6ef3d1"),
+    Image(Description("X-ray of", Exp(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+        ImageSource("xray_exp")),
+    description_xray,
+    )
 
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))

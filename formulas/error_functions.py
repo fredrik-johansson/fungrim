@@ -2,6 +2,16 @@ from .expr import *
 
 def_Topic(
     Title("Error functions"),
+    Section("Definitions"),
+    Entries(
+        "e46223",
+        "7375c0",
+        "d2914b",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "3be335",
+    ),
     Section("Integral representations"),
     Entries(
         "2aaba8",
@@ -33,6 +43,21 @@ def_Topic(
         "fae9d3",
     ),
 )
+
+make_entry(ID("e46223"),
+    SymbolDefinition(Erf, Erf(z), "Error function"))
+
+make_entry(ID("7375c0"),
+    SymbolDefinition(Erfc, Erfc(z), "Complementary error function"))
+
+make_entry(ID("d2914b"),
+    SymbolDefinition(Erfi, Erfi(z), "Imaginary error function"))
+
+make_entry(ID("3be335"),
+    Image(Description("X-ray of", Erf(z), "on", Element(z, ClosedInterval(-4,4) + ClosedInterval(-4,4)*ConstI)),
+        ImageSource("xray_erf")),
+    description_xray,
+    )
 
 make_entry(ID("2aaba8"),
     Formula(Equal(Erf(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), Tuple(t, 0, z)))),

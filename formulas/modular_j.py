@@ -4,8 +4,13 @@ from .expr import *
 
 def_Topic(
     Title("Modular j-invariant"),
+    Section("Definitions"),
     Entries(
         "70eb98",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "8c2862",
     ),
     Section("Modular transformations"),
     Entries(
@@ -51,6 +56,12 @@ make_entry(ID("70eb98"),
       List(
         Tuple(Element(tau, HH), Element(ModularJ(tau), CC)),
       )))
+
+make_entry(ID("8c2862"),
+    Image(Description("X-ray of", ModularJ(tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_modular_j")),
+    description_xray,
+    )
 
 make_entry(ID("a997f2"),
     Formula(Equal(ModularJ(tau+1), ModularJ(tau))),

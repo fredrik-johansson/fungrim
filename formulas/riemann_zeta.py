@@ -4,9 +4,14 @@ from .expr import *
 
 def_Topic(
     Title("Riemann zeta function"),
+    Section("Definitions"),
     Entries(
         "e0a6a2",
         "669509",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "3131df",
     ),
     Section("Dirichlet series"),
     Entries(
@@ -131,6 +136,12 @@ make_entry(ID("669509"),
       List(
         Tuple(Element(n, SetMinus(ZZ, Set(0))), Element(RiemannZetaZero(n), CC))
     )))
+
+make_entry(ID("3131df"),
+    Image(Description("X-ray of", RiemannZeta(s), "on", Element(s, ClosedInterval(-20,20) + ClosedInterval(-30,30)*ConstI), "with the critical strip highlighted"),
+        ImageSource("xray_zeta")),
+    description_xray,
+    )
 
 make_entry(ID("da2fdb"),
     Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),

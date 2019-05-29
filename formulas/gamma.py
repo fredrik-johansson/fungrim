@@ -4,9 +4,15 @@ from .expr import *
 
 def_Topic(
     Title("Gamma function"),
+    Section("Definitions"),
     Entries(
         "09e2ed",
         "c6038c",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "b0f293",
+        "c7d4c2",
     ),
     Section("Particular values"),
     Entries(
@@ -115,6 +121,19 @@ make_entry(ID("c6038c"),
         Tuple(And(Element(z, FormalPowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
             And(Element(LogGamma(z), FormalPowerSeries(CC, x)))),
       )),
+    )
+
+
+make_entry(ID("b0f293"),
+    Image(Description("X-ray of", Gamma(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+        ImageSource("xray_gamma")),
+    description_xray,
+    )
+
+make_entry(ID("c7d4c2"),
+    Image(Description("X-ray of", LogGamma(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+        ImageSource("xray_log_gamma")),
+    description_xray,
     )
 
 

@@ -4,8 +4,13 @@ from .expr import *
 
 def_Topic(
     Title("Natural logarithm"),
+    Section("Definitions"),
     Entries(
         "ed210c",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "4fe0ff",
     ),
     Section("Particular values"),
     Entries(
@@ -79,6 +84,12 @@ make_entry(ID("ed210c"),
         Tuple(And(Element(z, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
             And(Element(Log(z), FormalPowerSeries(CC, x)))),
       )))
+
+make_entry(ID("4fe0ff"),
+    Image(Description("X-ray of", Log(z), "on", Element(z, ClosedInterval(-3,3) + ClosedInterval(-3,3)*ConstI)),
+        ImageSource("xray_log")),
+    description_xray,
+    )
 
 make_entry(ID("07731b"),
     Formula(Equal(Log(1), 0)))

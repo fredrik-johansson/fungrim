@@ -8,6 +8,10 @@ def_Topic(
     Entries(
         "6da738",
     ),
+    Section("Illustrations"),
+    Entries(
+        "cb0a9b",
+    ),
     Section("Transcendental equations"),
     Entries(
         "88168b",
@@ -131,6 +135,12 @@ make_entry(ID("6da738"),
         Tuple(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0, -Exp(-1)))), Element(r, ZZGreaterEqual(0))), Element(LambertW(k,z,r), CC)),
         Tuple(Element(r, ZZGreaterEqual(0)), Element(LambertW(0,0,r), QQ)),
       )),
+    )
+
+make_entry(ID("cb0a9b"),
+    Image(Description("X-ray of", LambertW(0,z), "on", Element(z, ClosedInterval(-3,3) + ClosedInterval(-3,3)*ConstI)),
+        ImageSource("xray_lambertw")),
+    description_xray,
     )
 
 # Transcendental equations

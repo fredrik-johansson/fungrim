@@ -10,8 +10,16 @@ from .expr import *
 
 def_Topic(
     Title("Square roots"),
+    Section("Definitions"),
     Entries(
         "21d9b8",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "af984e",
+    ),
+    Section("Elementary functions"),
+    Entries(
         "627c9c",
         "97b736",
     ),
@@ -106,6 +114,12 @@ make_entry(ID("21d9b8"),
         Tuple(And(Element(z, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
             And(Element(Sqrt(z), FormalPowerSeries(CC, x)))),
       )))
+
+make_entry(ID("af984e"),
+    Image(Description("X-ray of", Sqrt(z), "on", Element(z, ClosedInterval(-3,3) + ClosedInterval(-3,3)*ConstI)),
+        ImageSource("xray_sqrt")),
+    description_xray,
+    )
 
 
 # note could be valid at 0 if log(0) = -inf ...

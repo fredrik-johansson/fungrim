@@ -2,9 +2,13 @@ from .expr import *
 
 def_Topic(
     Title("Sine"),
-    Section("Definition"),
+    Section("Definitions"),
     Entries(
         "b63dce",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "31fef8",
     ),
     Section("Differential equations"),
     Entries(
@@ -167,6 +171,13 @@ make_entry(ID("b63dce"),
         Tuple(Element(z, FormalPowerSeries(RR, x)), Element(Sin(z), FormalPowerSeries(RR, x))),
         Tuple(Element(z, FormalPowerSeries(CC, x)), Element(Sin(z), FormalPowerSeries(CC, x))),
       )))
+
+make_entry(ID("31fef8"),
+    Image(Description("X-ray of", Sin(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+        ImageSource("xray_sin")),
+    description_xray,
+    )
+
 
 # Differential equations
 
