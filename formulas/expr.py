@@ -757,18 +757,18 @@ class Expr(object):
 
         imgid = path
 
+        # hack: duplicated constants in html head
         thumb_size = "140px"
-        full_size = "500px"
+        full_size = "400px"
 
         if single and 0:
             s += """<div style="text-align:center; padding-right:1em">"""
-            s += """<img id="%s", src="../img/%s.svg" style="height:%s; width:auto; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
+            s += """<img id="%s", src="../img/%s.svg" style="height:%s; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
             s += """</div>"""
         else:
             s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../img/%s_small.png', '../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
-            # hack: duplicated constants in html head
-            s += """<div style="text-align:center; padding-right:1em">"""
-            s += """<img id="%s", src="../img/%s_small.png" style="height:%s; width:auto; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
+            s += """<div style="text-align:center; padding-right:1em;">"""
+            s += """<img id="%s", src="../img/%s_small.png" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
             s += """</div>"""
 
         s += """</div>"""

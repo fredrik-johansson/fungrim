@@ -176,17 +176,15 @@ function toggleVisible(id) {
 } 
 function toggleBig(id, smallurl, bigurl) {
   var x = document.getElementById(id);
-  if (x.style.height == "140px")
+  if (x.style.width == "140px")
   {
     x.src = bigurl;
-    x.style.height = "500px";
-    x.style.width = "auto";
+    x.style.width = "500px";
   }
   else
   {
     x.src = smallurl;
-    x.style.height = "140px";
-    x.style.width = "auto";
+    x.style.width = "140px";
   }
 }
 </script>
