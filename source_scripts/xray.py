@@ -112,6 +112,8 @@ def xrayplot(func, xaxb, yayb, N, filename, decorations=None, xtks=None, ytks=No
             savefig(prefix + filename + "_medium.png", bbox_inches="tight", dpi=1*savedpi, pad_inches=0.02)
         else:
             savefig(prefix + filename + "_small.png", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + filename + "_small.svg", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + filename + "_small.pdf", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
 
     # os.system("convert " + "img/" + "xray_" + filename + "_large.png " + " -resize x120 " +"img/" + "xray_" + filename + "_thumb2.png")
 
@@ -147,6 +149,13 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    def zeta_decorations():
+        axvspan(0, 1, alpha=0.5, color=highlightcolor)
+        axvline(0, alpha=0.5, color=highlightbordercolor, linewidth=0.5)
+        axvline(1, alpha=0.5, color=highlightbordercolor, linewidth=0.5)
+
+    xrayplot(lambda z: complex(acb(z).zeta()), (-22,22), (-27,27), 400, "zeta", zeta_decorations, xout=0.1, yout=0.1)
 
     def plot_elliptic(tau, filename):
         xrayplot(lambda z: complex(acb(z).elliptic_p(tau)), (-1.5,1.5), (-1.5,1.5), 400, filename, xout=0.1, yout=0.1,
@@ -194,13 +203,6 @@ def plots(outdir):
     xrayplot(lambda z: complex(acb(z).exp()), (-5,5), (-5,5), 400, "exp", xout=0.1, yout=0.1)
 
     xrayplot(lambda z: complex(acb(z).sin()), (-5,5), (-5,5), 400, "sin", xout=0.1, yout=0.1)
-
-    def zeta_decorations():
-        axvspan(0, 1, alpha=0.5, color=highlightcolor)
-        axvline(0, alpha=0.5, color=highlightbordercolor, linewidth=0.5)
-        axvline(1, alpha=0.5, color=highlightbordercolor, linewidth=0.5)
-
-    xrayplot(lambda z: complex(acb(z).zeta()), (-20,20), (-30,30), 400, "zeta", zeta_decorations, xout=0.1, yout=0.1)
 
     xrayplot(lambda z: complex(acb(z).gamma()), (-5,5), (-5,5), 400, "gamma", xout=0.1, yout=0.1)
 

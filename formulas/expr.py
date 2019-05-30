@@ -766,9 +766,9 @@ class Expr(object):
             s += """<img id="%s", src="../img/%s.svg" style="height:%s; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
             s += """</div>"""
         else:
-            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../img/%s_small.png', '../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
+            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../img/%s_small.svg', '../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
             s += """<div style="text-align:center; padding-right:1em;">"""
-            s += """<img id="%s", src="../img/%s_small.png" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
+            s += """<img id="%s", src="../img/%s_small.svg" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
             s += """</div>"""
 
         s += """</div>"""
@@ -953,9 +953,13 @@ class Expr(object):
             s += """ <span style="color:#888">&mdash;</span> """
             s += """<a href="../img/%s_large.png">png (large)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s.pdf">pdf</a>""" % src
+            s += """<a href="../img/%s_small.pdf">pdf (small)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s.svg">svg</a>""" % src
+            s += """<a href="../img/%s.pdf">pdf (medium/large)</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s_small.svg">svg (small)</a>""" % src
+            s += """ <span style="color:#888">&mdash;</span> """
+            s += """<a href="../img/%s.svg">svg (medium/large)</a>""" % src
             s += """</div>"""
 
         # Remaining items

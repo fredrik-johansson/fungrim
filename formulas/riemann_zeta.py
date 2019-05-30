@@ -138,7 +138,7 @@ make_entry(ID("669509"),
     )))
 
 make_entry(ID("3131df"),
-    Image(Description("X-ray of", RiemannZeta(s), "on", Element(s, ClosedInterval(-20,20) + ClosedInterval(-30,30)*ConstI), "with the critical strip highlighted"),
+    Image(Description("X-ray of", RiemannZeta(s), "on", Element(s, ClosedInterval(-22,22) + ClosedInterval(-27,27)*ConstI), "with the critical strip highlighted"),
         ImageSource("xray_zeta")),
     description_xray,
     )
