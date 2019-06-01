@@ -28,6 +28,10 @@ def_Topic(
         "caf8cf",
         "18873d",
     ),
+    Section("Expansion"),
+    Entries(
+        "2090c3",
+    ),
 )
 
 make_entry(ID("ef9f8a"),
@@ -113,6 +117,22 @@ make_entry(ID("18873d"),
         Where(M**c * Exp(-(d*theta)) * Sin(c*theta + d*Log(M)), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
     Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+
+
+make_entry(ID("2090c3"),
+    Formula(Equal(
+        Pow(Mul(x, y), a),
+        Mul(Mul(Pow(x, a), Pow(y, a)), Exp(2*ConstPi*ConstI*a \
+            * Floor((ConstPi-Arg(x)-Arg(y))/(2*ConstPi))
+        ))
+    )),
+    Variables(x, y, a),
+    Assumptions(And(
+        Element(x, SetMinus(CC, Set(0))),
+        Element(y, SetMinus(CC, Set(0))),
+        Element(a, CC)
+    ))
+)
 
 
 """
