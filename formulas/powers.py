@@ -90,9 +90,9 @@ make_entry(ID("634687"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("2e0d99"),
-    Formula(Equal(Pow(z, -Div(1,2)), 1/Sqrt(z)),
+    Formula(Equal(Pow(z, -Div(1,2)), 1/Sqrt(z))),
     Variables(z),
-    Assumptions(Element(z, SetMinus(CC, Set(0))))))
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("0aac97"),
     Formula(Equal(Pow(a+b*ConstI, c+d*ConstI),
@@ -134,43 +134,3 @@ make_entry(ID("2090c3"),
     ))
 )
 
-
-"""
-
-
-
-
-
-
-
-c8ea9b
-13fb19
-2f71c6
-136b6d
-491a81
-f98618
-ad3212
-5577be
-3946bb
-5d2dad
-f9b0ad
-2c339c
-949b2e
-e8ca0d
-6b88f2
-d89e66
-eeeb19
-666b07
-87c84a
-361a2a
-d8f3a2
-b25c37
-144775
-38b8c7
-d3630a
-f1eab0
-8ef4b8
-9913cb
-99e492
-c9283f
-"""
