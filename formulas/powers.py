@@ -119,8 +119,8 @@ make_entry(ID("18873d"),
 make_entry(ID("2090c3"),
     Formula(Equal(
         Pow(Mul(x, y), a),
-        Mul(Mul(Pow(x, a), Pow(y, a)), Exp(2*pi*ConstI*a \
-            * Floor((pi-Arg(x)-Arg(y))/(2*pi))
+        Mul(Mul(Pow(x, a), Pow(y, a)), Exp(2*ConstPi*ConstI*a \
+            * Floor((ConstPi-Arg(x)-Arg(y))/(2*ConstPi))
         ))
     )),
     Variables(x, y, a),
