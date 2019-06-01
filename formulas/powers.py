@@ -125,9 +125,9 @@ make_entry(ID("2090c3"),
     )),
     Variables(x, y, a),
     Assumptions(And(
-        Element(x, CC),
-        Element(y, CC),
-        Element(a, SetMinus(CC, Set(0)))
+        Element(x, SetMinus(CC, Set(0))),
+        Element(y, SetMinus(CC, Set(0))),
+        Element(a, CC)
     ))
 )
 
