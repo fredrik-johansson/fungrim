@@ -6,7 +6,7 @@ def_Topic(
     Title("Powers"),
     Entries(
         "ef9f8a",
-        "XX1111",
+        "2090c3",
     ),
     Section("Integer exponents"),
     Entries(
@@ -116,7 +116,7 @@ make_entry(ID("18873d"),
     Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
 
 
-make_entry(ID("XX1111"),
+make_entry(ID("2090c3"),
     Formula(Equal(
         Pow(Mul(x, y), a),
         Mul(Mul(Pow(x, a), Pow(y, a)), Exp(2*pi*ConstI*a \
