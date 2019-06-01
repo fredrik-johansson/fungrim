@@ -6,6 +6,7 @@ def_Topic(
     Title("Powers"),
     Entries(
         "ef9f8a",
+        "XX1111",
     ),
     Section("Integer exponents"),
     Entries(
@@ -113,6 +114,22 @@ make_entry(ID("18873d"),
         Where(M**c * Exp(-(d*theta)) * Sin(c*theta + d*Log(M)), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
     Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+
+
+make_entry(ID("XX1111"),
+    Formula(Equal(
+        Pow(Mul(x, y), a),
+        Mul(Mul(Pow(x, a), Pow(y, a)), Exp(2*pi*ConstI*a \
+            * Floor((pi-Arg(x)-Arg(y))/(2*pi))
+        ))
+    )),
+    Variables(x, y, a),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(a, SetMinus(CC, Set(0)))
+    ))
+)
 
 
 """
