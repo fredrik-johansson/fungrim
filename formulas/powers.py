@@ -6,7 +6,6 @@ def_Topic(
     Title("Powers"),
     Entries(
         "ef9f8a",
-        "2090c3",
     ),
     Section("Integer exponents"),
     Entries(
@@ -28,6 +27,10 @@ def_Topic(
         "bc4d0a",
         "caf8cf",
         "18873d",
+    ),
+    Section("Expansion"),
+    Entries(
+        "2090c3",
     ),
 )
 
