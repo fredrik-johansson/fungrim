@@ -154,6 +154,7 @@ class Expr(object):
         if self is ConstI: return "i"
         if self is ConstE: return "e"
         if self is ConstGamma: return "\\gamma"
+        if self is GoldenRatio: return "\\varphi"
         if self is RiemannZeta: return "\\zeta"
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
@@ -238,6 +239,8 @@ class Expr(object):
         if self is ModularGroupFundamentalDomain: return "\\mathcal{F}"
         if self is PowerSet: return "\\mathscr{P}"
         if self is Ellipsis: return "\\ldots"
+        if self is Spectrum: return "\\operatorname{spec}"
+        if self is Det: return "\\operatorname{det}"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -684,6 +687,12 @@ class Expr(object):
         if head is Subscript:
             assert len(args) == 2
             return "{" + argstr[0] + "}_{" + args[1].latex(in_small=True) + "}"
+        if head is Spectrum and args[0].head() is Matrix2x2:
+            assert len(args) == 1
+            return "\\operatorname{spec}" + argstr[0]
+        if head is Det and args[0].head() is Matrix2x2:
+            assert len(args) == 1
+            return "\\operatorname{det}" + argstr[0]
         if head is Description:
             s = ""
             for arg in args:
@@ -1076,7 +1085,7 @@ Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
-ConstPi ConstE ConstGamma ConstI
+ConstPi ConstE ConstGamma ConstI GoldenRatio
 Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
@@ -1106,6 +1115,7 @@ PrimeNumber PrimePi
 RiemannHypothesis
 LogIntegral
 Matrix2x2
+Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularJ
 """)

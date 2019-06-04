@@ -8,6 +8,7 @@ from .operators import *
 from .complex_parts import *
 from .const_gamma import *
 from .pi import *
+from .golden_ratio import *
 from .dedekind_eta import *
 from .exp import *
 from .powers import *
