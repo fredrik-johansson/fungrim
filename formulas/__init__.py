@@ -31,6 +31,7 @@ from .stirling_numbers import *
 from .gaussian_quadrature import *
 from .general_functions import *
 from .complex_plane import *
+from .gauss_hypergeometric import *
 from .confluent_hypergeometric import *
 from .error_functions import *
 from .jacobi_theta import *

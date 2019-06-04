@@ -473,6 +473,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
 writetopic("Gamma function")
+writetopic("Gauss hypergeometric function")
 writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")
 writetopic("Airy functions")

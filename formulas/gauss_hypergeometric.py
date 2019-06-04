@@ -1,0 +1,160 @@
+from .expr import *
+
+def_Topic(
+    Title("Gauss hypergeometric function"),
+    Entries(
+        "e03016",
+        "c43abd",
+    ),
+    Section("Hypergeometric series"),
+    Entries(
+        "ad8db2",
+        "306ef7",
+        "fe6e74",
+    ),
+    Section("Differential equations"),
+    Entries(
+        "f1bd89",
+    ),
+    Section("Specific values"),
+    Entries(
+        "18d955",
+        "659ce8",
+        "a85994",
+        "20bf69",
+    ),
+    Section("Symmetries"),
+    Entries(
+        "0e0393",
+        "3d6d7e",
+    ),
+    Section("Linear fractional transformations"),
+    Entries(
+        "651a4a",
+        "b25089",
+        "504717",
+        "90ac58",
+        "27bc34",
+        "db3eb9",
+        "ca9123",
+    ),
+)
+
+# Definitions
+
+make_entry(ID("e03016"),
+    SymbolDefinition(Hypergeometric2F1, Hypergeometric2F1(a,b,c,z), "Gauss hypergeometric function"))
+
+make_entry(ID("c43abd"),
+    SymbolDefinition(Hypergeometric2F1Regularized, Hypergeometric2F1Regularized(a,b,c,z), "Regularized Gauss hypergeometric function"))
+
+# Hypergeometric series
+
+make_entry(ID("ad8db2"),
+    Formula(Equal(Hypergeometric2F1(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC), Or(Less(Abs(z), 1), Element(a, ZZLessEqual(0)), Element(b, ZZLessEqual(0))))))
+
+make_entry(ID("306ef7"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / GammaFunction(c+k)) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Or(Less(Abs(z), 1), Element(a, ZZLessEqual(0)), Element(b, ZZLessEqual(0)), Element(c, ZZLessEqual(0))))))
+
+make_entry(ID("fe6e74"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z), Hypergeometric2F1(a,b,c,z) / GammaFunction(c))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC))))
+
+
+# Differential equations
+
+make_entry(ID("f1bd89"),
+    Formula(Where(Equal(z*(1-z) * Derivative(y(z), Tuple(z, z, 2)) + (c - (a+b+1)*z)*Derivative(y(z), Tuple(z, z, 1)) - a*b*y(z), 0),
+        Equal(y(z), Hypergeometric2F1(a,b,c,z)))),
+    Variables(a, b, c, z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z, SetMinus(CC, ClosedOpenInterval(1, Infinity))))))
+
+# Specific values
+
+make_entry(ID("18d955"),
+    Formula(Equal(Hypergeometric2F1(a,b,c,0), 1)),
+    Variables(a,b,c),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))))))
+
+make_entry(ID("659ce8"),
+    Formula(Equal(Hypergeometric2F1(a,b,c,1), (GammaFunction(c)*GammaFunction(c-a-b))/(GammaFunction(c-a)*GammaFunction(c-b)))),
+    Variables(a,b,c),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Greater(Re(c-a-b), 0))))
+
+make_entry(ID("a85994"),
+    Formula(Equal(Hypergeometric2F1(1,1,2,z), -(Log(1-z)/z))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0, 1)))))
+
+# todo: relax assumptions
+make_entry(ID("20bf69"),
+    Formula(Equal(Hypergeometric2F1(a,b,b,z), (1-z)**(-a))),
+    Variables(a, b, z),
+    Assumptions(And(Element(a, CC), Element(b, SetMinus(CC, ZZLessEqual(0))), Element(z, SetMinus(CC, Set(0, 1))))))
+
+# Symmetries
+
+make_entry(ID("0e0393"),
+    Formula(Equal(Hypergeometric2F1(a,b,c,z), Hypergeometric2F1(b,a,c,z))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z, CC))))
+
+make_entry(ID("3d6d7e"),
+    Formula(Equal(Hypergeometric2F1(a,b,c,z), Conjugate(Hypergeometric2F1(Conjugate(a),Conjugate(b),Conjugate(c),Conjugate(z))))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z, SetMinus(CC, ClosedOpenInterval(1, Infinity))))))
+
+
+# Linear fractional transformations
+
+make_entry(ID("651a4a"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
+        (1-z)**(c-a-b) * Hypergeometric2F1Regularized(c-a, c-b, c, z))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+
+make_entry(ID("b25089"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
+        (1-z)**(-a) * Hypergeometric2F1Regularized(a, c-b, c, z/(z-1)))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+
+make_entry(ID("504717"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
+        (1-z)**(-b) * Hypergeometric2F1Regularized(c-a, b, c, z/(z-1)))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+
+make_entry(ID("90ac58"),
+    Formula(Equal((Sin(ConstPi * (b-a)) / ConstPi) * Hypergeometric2F1Regularized(a,b,c,z),
+        ((-z)**(-a) / (GammaFunction(b) * GammaFunction(c-a))) * Hypergeometric2F1Regularized(a, a-c+1, a-b+1, 1/z) - 
+        ((-z)**(-b) / (GammaFunction(a) * GammaFunction(c-b))) * Hypergeometric2F1Regularized(b, b-c+1, b-a+1, 1/z))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+
+make_entry(ID("27bc34"),
+    Formula(Equal((Sin(ConstPi * (b-a)) / ConstPi) * Hypergeometric2F1Regularized(a,b,c,z),
+        ((1-z)**(-a) / (GammaFunction(b) * GammaFunction(c-a))) * Hypergeometric2F1Regularized(a, c-b, a-b+1, 1/(1-z)) - 
+        ((1-z)**(-b) / (GammaFunction(a) * GammaFunction(c-b))) * Hypergeometric2F1Regularized(b, c-a, b-a+1, 1/(1-z)))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+
+make_entry(ID("db3eb9"),
+    Formula(Equal((Sin(ConstPi * (c-a-b)) / ConstPi) * Hypergeometric2F1Regularized(a,b,c,z),
+        (1 / (GammaFunction(c-a) * GammaFunction(c-b))) * Hypergeometric2F1Regularized(a, b, a+b-c+1, 1-z) - 
+        ((1-z)**(c-a-b) / (GammaFunction(a) * GammaFunction(b))) * Hypergeometric2F1Regularized(c-a, c-b, c-a-b+1, 1-z))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+
+make_entry(ID("ca9123"),
+    Formula(Equal((Sin(ConstPi * (c-a-b)) / ConstPi) * Hypergeometric2F1Regularized(a,b,c,z),
+        (z**(-a) / (GammaFunction(c-a) * GammaFunction(c-b))) * Hypergeometric2F1Regularized(a, a-c+1, a+b-c+1, 1-1/z) - 
+        ((z**(a-c) * (1-z)**(c-a-b)) / (GammaFunction(a) * GammaFunction(b))) * Hypergeometric2F1Regularized(c-a, 1-a, c-a-b+1, 1-1/z))),
+    Variables(a,b,c,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+
