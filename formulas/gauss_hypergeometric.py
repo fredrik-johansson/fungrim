@@ -11,6 +11,7 @@ def_Topic(
         "ad8db2",
         "306ef7",
         "fe6e74",
+        "65693e",
     ),
     Section("Differential equations"),
     Entries(
@@ -69,6 +70,13 @@ make_entry(ID("fe6e74"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z), Hypergeometric2F1(a,b,c,z) / GammaFunction(c))),
     Variables(a,b,c,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC))))
+
+# todo: when is z = 1 allowed?
+make_entry(ID("65693e"),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,-n,z),
+        (RisingFactorial(a,n+1) * RisingFactorial(b,n+1) * z**(n+1) / Factorial(n+1)) * Hypergeometric2F1(a+n+1,b+n+1,n+2,z))),
+    Variables(a,b,n,z),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(n, ZZGreaterEqual(0)), Element(z,SetMinus(CC, Set(1))))))
 
 
 # Differential equations
