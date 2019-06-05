@@ -38,6 +38,11 @@ def_Topic(
         "db3eb9",
         "ca9123",
     ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "c60679",
+        "853a62",
+    ),
 )
 
 # Definitions
@@ -157,4 +162,30 @@ make_entry(ID("ca9123"),
         ((z**(a-c) * (1-z)**(c-a-b)) / (GammaFunction(a) * GammaFunction(b))) * Hypergeometric2F1Regularized(c-a, 1-a, c-a-b+1, 1-1/z))),
     Variables(a,b,c,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+
+# Bounds and inequalities
+
+# todo: the assumption refers to D which is defined inside the formula; can the markup be improved?
+make_entry(ID("c60679"),
+    Formula(Where(LessEqual(Abs(Hypergeometric2F1(a,b,c,z) - Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), Tuple(k, 0, N-1))),
+        Abs((RisingFactorial(a,N) * RisingFactorial(b,N) / RisingFactorial(c,N)) * (z**N / Factorial(N))) * (1/(1-D))),
+            Equal(D, Abs(z) * (1 + Abs(a-c)/Abs(c+N)) * (1 + Abs(b-1)/Abs(1+N)))
+            )),
+    Variables(a,b,c,z,N),
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC), Less(Abs(z), 1), Element(N, ZZGreaterEqual(0)),
+        Greater(Re(c)+N, 0), Less(D, 1))))
+
+
+make_entry(ID("853a62"),
+    Formula(Where(LessEqual(Abs(Derivative(f(z), Tuple(z, z, k)) / Factorial(k)), A * Binomial(N+k, k) * nu**k),
+        Equal(f(z), Hypergeometric2F1Regularized(a,b,c,z)), Equal(nu, Max(1/Abs(z-1),1/Abs(z))),
+            Equal(N, 2*Max(Sqrt(nu**(-1)*Abs(a*b)), (Abs(a+b+1)+2*Abs(c)))),
+            Equal(A, Max(Abs(f(z)), Abs(Derivative(f(z), Tuple(z, z, 1)))/(nu*(N+1)))))),
+    # todo: consider formalizing the generalization
+    Description("Actually valid when", f(z), "is any branch of any solution of the hypergeometric ODE, away from the branch points", Equal(z, 0), "and", Equal(z, 1), ".",
+        "The variables", nu, ",", N, ", and", A, "can be replaced by any upper bounds."),
+    Variables(a, b, c, z, k),
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(c, CC), Element(z, SetMinus(CC, Union(Set(0), ClosedOpenInterval(1, Infinity)))), Element(k, ZZGreaterEqual(0)))),
+    References("F. Johansson, Computing hypergeometric functions rigorously, https://arxiv.org/abs/1606.06977"))
+
 
