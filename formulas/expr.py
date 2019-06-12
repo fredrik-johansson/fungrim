@@ -498,6 +498,37 @@ class Expr(object):
                 return fsym + ("'" * r._integer) + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
             else:
                 return fsym + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+        if head in (CoulombF, CoulombG):
+            assert len(args) == 3
+            l, eta, z = args
+            lstr = l.latex(in_small=True)
+            etastr = eta.latex(in_small=True)
+            zstr = z.latex()
+            F = {CoulombF:"F", CoulombG:"G"}[head]
+            return F + ("_{%s,%s}\!\\left(" % (lstr, etastr)) + zstr + "\\right)"
+        if head is CoulombH:
+            assert len(args) == 4
+            omega, l, eta, z = args
+            if omega.is_integer():
+                omegastr = "+"
+                if omega._integer == -1:
+                    omegastr = "-"
+            else:
+                omegastr = omega.latex(in_small=True)
+            lstr = l.latex(in_small=True)
+            etastr = eta.latex(in_small=True)
+            zstr = z.latex()
+            return "H" + ("^{%s}_{%s,%s}\!\\left(" % (omegastr, lstr, etastr)) + zstr + "\\right)"
+        if head is CoulombC:
+            l, eta = args
+            lstr = l.latex(in_small=True)
+            etastr = eta.latex()
+            return "C_{%s}\!\\left(%s\\right)" % (lstr, etastr)
+        if head is CoulombSigma:
+            l, eta = args
+            lstr = l.latex(in_small=True)
+            etastr = eta.latex()
+            return "\\sigma_{%s}\!\\left(%s\\right)" % (lstr, etastr)
         if head is Factorial:
             assert len(args) == 1
             if args[0].is_symbol() or (args[0].is_integer() and args[0]._integer >= 0):
@@ -1094,6 +1125,7 @@ StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK HankelH1 HankelH2
 BesselJDerivative BesselIDerivative BesselYDerivative BesselKDerivative
+CoulombF CoulombG CoulombH CoulombC CoulombSigma
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
 HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
@@ -1133,7 +1165,7 @@ exclude_symbols = [Set, List, Tuple, And, Or, Implies, Equivalent, Not, Element,
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
-inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa mu nu xi pi rho sigma tau phi chi psi omega""")
+inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa mu nu xi pi rho sigma tau phi chi psi omega ell""")
 inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Mu Nu Xi Pi Rho Sigma Tau Phi Chi Psi Omega""")
 
 described_symbols = []

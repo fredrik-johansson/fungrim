@@ -479,6 +479,7 @@ writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")
 writetopic("Airy functions")
 writetopic("Bessel functions")
+writetopic("Coulomb wave functions")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Orthogonal polynomials<ul>""")
