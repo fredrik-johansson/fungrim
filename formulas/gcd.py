@@ -701,7 +701,7 @@ make_entry(ID("7b27cd"),
 
 # fixme: should be CartesianPower, not Pow
 make_entry(ID("4099d2"),
-    Formula(Equal(Limit(
+    Formula(Equal(SequenceLimit(
         (1/N**n) * Cardinality(SetBuilder(T, T, And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
         N, Infinity), 1/RiemannZeta(n))),
     Variables(n),

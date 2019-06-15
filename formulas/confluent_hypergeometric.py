@@ -155,7 +155,7 @@ make_entry(ID("6cf802"),
 
 make_entry(ID("18ef23"),
     Formula(Equal(HypergeometricU(a,n,z),
-        Limit(
+        ComplexLimit(
         GammaFunction(1-b) / GammaFunction(a-b+1) * Hypergeometric1F1(a,b,z) + GammaFunction(b-1)/GammaFunction(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z),
             b, n))),
     Variables(a, n, z),
@@ -187,7 +187,7 @@ make_entry(ID("99f69c"),
     SymbolDefinition(HypergeometricUStarRemainder, HypergeometricUStarRemainder(n,a,b,z), "Error term in asymptotic expansion of Tricomi confluent hypergeometric function"))
 
 make_entry(ID("876844"),
-    Formula(Equal(Limit(Abs(HypergeometricUStarRemainder(n,a,b, Exp(ConstI*theta) * z)), z, Infinity), 0)),
+    Formula(Equal(ComplexLimit(Abs(HypergeometricUStarRemainder(n,a,b, Exp(ConstI*theta) * z)), z, Infinity), 0)),
     Variables(a,b,theta,n),
     Assumptions(And(Element(a,CC), Element(b,CC), Element(theta, RR), Element(n,ZZGreaterEqual(1)))))
 

@@ -45,14 +45,14 @@ make_entry(ID("e876e8"),
         RealBall(Decimal("0.57721566490153286060651209008240243104215933593992"), Decimal("3.60e-51")))))
 
 make_entry(ID("4644c0"),
-    Formula(Equal(ConstGamma, Limit(Sum(1/k, Tuple(k, 1, n)) - Log(n), n, Infinity))))
+    Formula(Equal(ConstGamma, SequenceLimit(Sum(1/k, Tuple(k, 1, n)) - Log(n), n, Infinity))))
 
 make_entry(ID("28bf9a"),
     Formula(NotElement(ConstGamma, SetBuilder(p/q, Tuple(p, q), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
     References("J. Havil (2003): Exploring Euler's Constant. Princeton University Press. Page 97."))
 
 make_entry(ID("a1f1ec"),
-    Formula(Equal(ConstGamma, Limit(RiemannZeta(s) - 1/(s-1), s, 1))))
+    Formula(Equal(ConstGamma, ComplexLimit(RiemannZeta(s) - 1/(s-1), s, 1))))
 
 make_entry(ID("cf3977"),
     Formula(Equal(ConstGamma, -Derivative(GammaFunction(z), Tuple(z, 1, 1)))))

@@ -342,15 +342,27 @@ class Expr(object):
             if head is ProductCondition:
                 # todo: auto-parenthesis for Add/...?
                 return "\\prod_{%s} %s" % (cond, argstr[0])
-        if head is Limit:
-            assert len(args) == 3
-            formula, var, point = args
+        if head in (Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit):
+            if len(args) == 3:
+                formula, var, point = args
+                cond = ""
+            elif len(args) == 4:
+                formula, var, point, cond = args
+                cond = ", " + cond.latex(in_small=True)
+            else:
+                raise ValueError
             var = var.latex()
             point = point.latex(in_small=True)
             formula = formula.latex()
             if (not args[2].is_atom() and args[2].head() not in [Abs]):
                 formula = "\\left[ %s \\right]" % formula
-            return "\\lim_{%s \\to %s} %s" % (var, point, formula)
+            if head is LeftLimit:
+                s = "\\lim_{%s \\to {%s}^{-}%s} %s" % (var, point, cond, formula)
+            elif head is RightLimit:
+                s = "\\lim_{%s \\to {%s}^{+}%s} %s" % (var, point, cond, formula)
+            else:
+                s = "\\lim_{%s \\to %s%s} %s" % (var, point, cond, formula)
+            return s
         if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, Solutions, UniqueSolution):
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
@@ -1102,7 +1114,8 @@ NearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
 Solutions UniqueSolution
 Supremum Infimum
-Sum Product Limit Integral Derivative
+Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
+Sum Product Integral Derivative
 SumCondition ProductCondition
 SumSet ProductSet
 AsymptoticTo

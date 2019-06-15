@@ -15,9 +15,19 @@ def_Topic(
         "f4fbb8",
         "be4926",
     ),
-
+    Section("Limits"),
+    Entries(
+        "26ea9f",
+        "1d2ee5",
+        "6fe5c1",
+        "c8a5f0",
+        "afd5ca",
+        "05a3ee",
+        "2be0b5",
+    ),
 )
 
+# Extreme values
 
 make_entry(ID("6ec976"),
     SymbolDefinition(Supremum, Supremum(f(x), x, P(x)), "Supremum of a set or function"),
@@ -88,4 +98,56 @@ make_entry(ID("be4926"),
         "satisfying", P(r),
         "such that", Equal(f(r), Maximum(f(x), x, P(x))), ". This operation is only defined if such a unique point exists."),
     description_x_predicate)
+
+# Limits
+
+make_entry(ID("26ea9f"),
+    SymbolDefinition(Limit, Limit(f(x), x, a), "Limiting value"),
+    Description(SourceForm(Limit(f(x), x, a, P(x))), "rendered as", Limit(f(x), x, a, P(x)), "represents the limiting value of", f(x),
+        "for every sequence of", x, "satisfying", P(x), "and approaching the limit point", a, "."),
+    Description("If the predicate", P(x), "is omitted, the expression renders correctly to LaTeX, ",
+        "but this form should be avoided since it is ambiguous whether it denotes a sequence limit, ",
+        "real limit or complex limit (or some other kind of limit). It is better to use",
+        SourceForm(SequenceLimit), ",", SourceForm(RealLimit), ",", SourceForm(LeftLimit), ",", SourceForm(RightLimit), "or", SourceForm(ComplexLimit), "."),
+    Description("The limit is always a deleted limit. That is, the value of", f(a), "does not need to be equal to the limit and does not even need to be defined."),
+    Description("The expression", SourceForm(f(x)), "is not required to be defined for all", x, "satisfying", P(x), ".",
+        "It only needs to be defined for all", x, "in some neighborhood of the limit point and also satisfying", P(x), "."))
+
+make_entry(ID("1d2ee5"),
+    SymbolDefinition(SequenceLimit, SequenceLimit(f(n), n, a), "Limiting value of sequence"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(SequenceLimit(f(n), n, a)), ", rendered as", SequenceLimit(f(n), n, a), ", is equivalent to", SourceForm(Limit(f(n), n, a, Element(n, ZZ))),
+        "but renders to LaTeX without displaying the predicate", Element(n, ZZ), " which readers will typically understand from context."),
+    Description(SourceForm(SequenceLimit(f(n), n, a, P(n))), ", rendered as", SequenceLimit(f(n), n, a, P(n)), ", is equivalent to", SourceForm(Limit(f(n), n, a, And(Element(n, ZZ), P(n)))), "."))
+
+make_entry(ID("6fe5c1"),
+    SymbolDefinition(RealLimit, RealLimit(f(x), x, a), "Limiting value, real variable"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(RealLimit(f(x), x, a)), ", rendered as", RealLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, RR))),
+        "but renders to LaTeX without displaying the predicate", Element(x, RR), " which readers will typically understand from context."),
+    Description(SourceForm(RealLimit(f(x), x, a, P(x))), ", rendered as", RealLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, RR), P(x)))), "."))
+
+make_entry(ID("c8a5f0"),
+    SymbolDefinition(LeftLimit, LeftLimit(f(x), x, a), "Limiting value, from the left"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(LeftLimit(f(x), x, a)), ", rendered as", LeftLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, OpenInterval(-Infinity,a)))), "."),
+    Description(SourceForm(LeftLimit(f(x), x, a, P(x))), ", rendered as", LeftLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, OpenInterval(-Infinity,a)), P(x)))), "."))
+
+make_entry(ID("afd5ca"),
+    SymbolDefinition(RightLimit, RightLimit(f(x), x, a), "Limiting value, from the right"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(RightLimit(f(x), x, a)), ", rendered as", RightLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, OpenInterval(a,Infinity)))), "."),
+    Description(SourceForm(RightLimit(f(x), x, a, P(x))), ", rendered as", RightLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, OpenInterval(a,Infinity)), P(x)))), "."))
+
+make_entry(ID("05a3ee"),
+    SymbolDefinition(ComplexLimit, ComplexLimit(f(z), z, a), "Limiting value, complex variable"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(ComplexLimit(f(z), z, a)), ", rendered as", ComplexLimit(f(z), z, a), ", is equivalent to", SourceForm(Limit(f(z), z, a, Element(z, CC))),
+        "but renders to LaTeX without displaying the predicate", Element(z, CC), " which readers will typically understand from context."),
+    Description(SourceForm(ComplexLimit(f(z), z, a, P(z))), ", rendered as", ComplexLimit(f(z), z, a, P(z)), ", is equivalent to", SourceForm(Limit(f(z), z, a, And(Element(z, CC), P(z)))), "."))
+
+make_entry(ID("2be0b5"),
+    SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), z, a), "Limiting value, meromorphic completion"),
+    Description("This operator is equivalent to", SourceForm(ComplexLimit), "except that whereas", SourceForm(ComplexLimit),
+        "in general is undefined when", a, "is a pole (because the direction of the resulting infinity depends on the direction of approach),", SourceForm(MeromorphicLimit), "is taken to give", SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "when", a, "is a pole."))
 
