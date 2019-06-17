@@ -25,6 +25,14 @@ def_Topic(
         "05a3ee",
         "2be0b5",
     ),
+    Section("Derivatives"),
+    Entries(
+        "1b6a57",
+        "452407",
+        "b4b319",
+        "96f695",
+        "4c6780",
+    ),
 )
 
 # Extreme values
@@ -147,7 +155,51 @@ make_entry(ID("05a3ee"),
     Description(SourceForm(ComplexLimit(f(z), z, a, P(z))), ", rendered as", ComplexLimit(f(z), z, a, P(z)), ", is equivalent to", SourceForm(Limit(f(z), z, a, And(Element(z, CC), P(z)))), "."))
 
 make_entry(ID("2be0b5"),
-    SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), z, a), "Limiting value, meromorphic completion"),
+    SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), z, a), "Limiting value, allowing poles"),
     Description("This operator is equivalent to", SourceForm(ComplexLimit), "except that whereas", SourceForm(ComplexLimit),
         "in general is undefined when", a, "is a pole (because the direction of the resulting infinity depends on the direction of approach),", SourceForm(MeromorphicLimit), "is taken to give", SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "when", a, "is a pole."))
+
+# Derivatives
+
+make_entry(ID("1b6a57"),
+    SymbolDefinition(Derivative, Derivative(Call(f, z), z, z), "Derivative"),
+    Description("This operator can be called with three or four arguments."),
+    Description(SourceForm(Derivative(f(z), z, a)), ", rendered as ",
+        Derivative(Call(f, z), z, a), "or", Derivative(f(z), z, a), ", represents the derivative of", f(z), "evaluated at", Equal(z, a), "."),
+    Description(SourceForm(Derivative(f(z), z, a, n)), ", rendered as ",
+        Derivative(Call(f, z), z, a, n), "or", Derivative(f(z), z, a, n), ", represents the order", n, "derivative of", f(z), "evaluated at", Equal(z, a), "."),
+    Description("The second argument", z, "defines a locally bound variable for the expression in the first argument. With the evaluation point set to", Equal(a, z), ",", SourceForm(Derivative(f(z), z, z)),
+        "may render more simply as", Derivative(Call(f, z), z, z), "."),
+    Description("This operator is ambiguous since the intended meaning could be a real derivative, a complex derivative, or some other form of derivative.",
+        "It is better to use", SourceForm(RealDerivative), ",", SourceForm(ComplexDerivative), ",", SourceForm(ComplexBranchDerivative), ", or", SourceForm(MeromorphicDerivative), "."))
+
+make_entry(ID("452407"),
+    SymbolDefinition(RealDerivative, RealDerivative(Call(f, x), x, x), "Real derivative"),
+    Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
+    Description("The result is defined as", Equal(RealDerivative(f(x), x, x), RealLimit((f(x+h)-f(x))/h, h, 0)),
+        "where the limit is taken with respect to a real variable", h, "(", SourceForm(RealLimit), ")."),
+    Description("Note that", x,
+        """can be complex and that the "real derivative" can be complex-valued; the "real" qualifier just refers to the direction in which the limit is computed."""))
+
+make_entry(ID("b4b319"),
+    SymbolDefinition(ComplexDerivative, ComplexDerivative(Call(f, z), z, z), "Complex derivative"),
+    Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
+    Description("The result is defined as", Equal(ComplexDerivative(f(z), z, z), ComplexLimit((f(z+h)-f(z))/h, h, 0)),
+        "where the limit is taken with respect to a complex variable", h, "(", SourceForm(ComplexLimit), ")."),
+    Description("If this limit exists (and is finite), then", f, "is holomorphic at", z, "."))
+
+make_entry(ID("96f695"),
+    SymbolDefinition(ComplexBranchDerivative, ComplexBranchDerivative(Call(f, z), z, z), "Complex derivative, allowing branch cuts"),
+    Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
+    Description("This operator is equivalent to", SourceForm(ComplexDerivative),
+        "except that whereas", SourceForm(ComplexDerivative), "is undefined on a branch cut (where the function is not complex differentiable),",
+        SourceForm(ComplexBranchDerivative), "gives the complex derivative of the analytically continued function across the branch cut."))
+
+make_entry(ID("4c6780"),
+    SymbolDefinition(MeromorphicDerivative, MeromorphicDerivative(Call(f, z), z, z), "Complex derivative, allowing poles"),
+    Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
+    Description("This operator is equivalent to", SourceForm(ComplexDerivative),
+        "except that whereas", SourceForm(ComplexDerivative), "is undefined at a pole,",
+        SourceForm(MeromorphicDerivative), "gives",
+        SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "at a pole."))
 

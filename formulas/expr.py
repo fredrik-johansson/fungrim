@@ -385,10 +385,15 @@ class Expr(object):
             else:
                 formula = formula.latex()
             return "\\mathop{%s}\\limits_{%s} %s" % (opname, predicate, formula)
-        if head is Derivative:
-            assert len(args) == 2
-            assert args[1]._args[0] is Tuple
-            _, var, point, order = args[1]._args
+        if head in (Derivative, RealDerivative, ComplexDerivative, ComplexBranchDerivative, MeromorphicDerivative):
+            if len(args) == 2:
+                assert args[1]._args[0] is Tuple
+                _, var, point, order = args[1]._args
+            elif len(args) == 3:
+                _, var, point = args
+                order = Expr(1)
+            elif len(args) == 4:
+                _, var, point, order = args
             if not args[0].is_atom():
                 f = args[0].head()
                 if f.is_symbol() and f not in (Exp, Sqrt) and args[0].args() == (var,):
@@ -1115,7 +1120,8 @@ Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
 Solutions UniqueSolution
 Supremum Infimum
 Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
-Sum Product Integral Derivative
+Derivative RealDerivative ComplexDerivative ComplexBranchDerivative MeromorphicDerivative
+Sum Product Integral
 SumCondition ProductCondition
 SumSet ProductSet
 AsymptoticTo
