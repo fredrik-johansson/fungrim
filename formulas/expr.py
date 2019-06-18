@@ -703,6 +703,12 @@ class Expr(object):
         if head is ModularGroupAction:
             assert len(args) == 2
             return "%s \\circ %s" % tuple(argstr)
+        if head is PrimitiveReducedPositiveIntegralBinaryQuadraticForms:
+            assert len(args) == 1
+            return "\\mathcal{Q}^{*}_{%s}" % argstr[0]
+        if head is HilbertClassPolynomial:
+            assert len(args) == 2
+            return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is HypergeometricUStarRemainder:
             assert len(args) == 4
             return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
@@ -1169,6 +1175,8 @@ Matrix2x2
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularJ
+PrimitiveReducedPositiveIntegralBinaryQuadraticForms
+HilbertClassPolynomial
 """)
 
 inject_builtin("""

@@ -45,7 +45,15 @@ def_Topic(
         "1b2d8a",
         "dcc8b1",
         "441301",
-    )
+    ),
+    Section("Hilbert class polynomials"),
+    Entries(
+        "36eb82",
+        "0b4d4b",
+        "fd72e0",
+        "dd5681",
+        "20b6d2",
+    ),
 )
 
 make_entry(ID("70eb98"),
@@ -147,7 +155,76 @@ make_entry(ID("dcc8b1"),
     Formula(Equal(SetBuilder(ModularJ(tau), tau, Element(tau, ModularGroupFundamentalDomain)), CC)))
 
 make_entry(ID("441301"),
-    Formula(Equal(Cardinality(Zeros(ModularJ(tau) - z, tau, Element(tau, ModularGroupFundamentalDomain))), 1)),
+    Formula(Equal(Cardinality(Solutions(Brackets(Equal(ModularJ(tau), z)), tau, Element(tau, ModularGroupFundamentalDomain))), 1)),
     Variables(z),
     Assumptions(Element(z, CC)))
+
+# Hilbert class polynomials
+
+make_entry(ID("36eb82"),
+    SymbolDefinition(PrimitiveReducedPositiveIntegralBinaryQuadraticForms,
+        PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D), "Primitive reduced positive integral binary quadratic forms"))
+
+make_entry(ID("0b4d4b"),
+    Formula(Equal(PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D),
+        SetBuilder(Tuple(a,b,c), Tuple(a,b,c), And(Element(a, ZZGreaterEqual(1)), Element(b, ZZ), Element(c, ZZ),
+            Equal(b**2 - 4*a*c, D),
+            LessEqual(Abs(b), a, c), Parentheses(Implies(Or(Equal(Abs(b), a), Equal(a, c)), GreaterEqual(b, 0))),
+            Equal(GCD(a,b,c), 1))))),
+    Variables(D),
+    Assumptions(And(Element(D, ZZLessEqual(-1)), Element(Mod(-D, 4), Set(0,3)))),
+    References("H. Cohen, A Course in Computational Algebraic Number Theory, Springer, 1993, Definition 5.3.2"))
+
+make_entry(ID("fd72e0"),
+    SymbolDefinition(HilbertClassPolynomial,
+        HilbertClassPolynomial(D, x), "Hilbert class polynomial"))
+
+make_entry(ID("dd5681"),
+    Formula(Equal(HilbertClassPolynomial(D, x),
+        ProductCondition(Parentheses(x - ModularJ((-b+Sqrt(D))/(2*a))), Tuple(a,b,c), Element(Tuple(a,b,c),
+            PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D))))),
+    Variables(D, x),
+    Assumptions(And(Element(D, ZZLessEqual(-1)), Element(Mod(-D, 4), Set(0,3)), Element(x, CC))))
+
+make_entry(ID("20b6d2"),
+    Description("Table of", HilbertClassPolynomial(D,x), "for", LessEqual(-D, 68)),
+    Table(TableRelation(Tuple(D, p), Equal(HilbertClassPolynomial(D,x), p)),
+      TableHeadings(D, HilbertClassPolynomial(D,x)), TableSplit(1),
+      List(
+    Tuple(-3, x),
+    Tuple(-4, x - 1728),
+    Tuple(-7, x + 3375),
+    Tuple(-8, x - 8000),
+    Tuple(-11, x + 32768),
+    Tuple(-12, x - 54000),
+    Tuple(-15, x**2 + 191025*x - 121287375),
+    Tuple(-16, x - 287496),
+    Tuple(-19, x + 884736),
+    Tuple(-20, x**2 - 1264000*x - 681472000),
+    Tuple(-23, x**3 + 3491750*x**2 - 5151296875*x + 12771880859375),
+    Tuple(-24, x**2 - 4834944*x + 14670139392),
+    Tuple(-27, x + 12288000),
+    Tuple(-28, x - 16581375),
+    Tuple(-31, x**3 + 39491307*x**2 - 58682638134*x + 1566028350940383),
+    Tuple(-32, x**2 - 52250000*x + 12167000000),
+    Tuple(-35, x**2 + 117964800*x - 134217728000),
+    Tuple(-36, x**2 - 153542016*x - 1790957481984),
+    Tuple(-39, x**4 + 331531596*x**3 - 429878960946*x**2 + 109873509788637459*x + 20919104368024767633),
+    Tuple(-40, x**2 - 425692800*x + 9103145472000),
+    Tuple(-43, x + 884736000),
+    Tuple(-44, x**3 - 1122662608*x**2 + 270413882112*x - 653249011576832),
+    Tuple(-47, x**5 + 2257834125*x**4 - 9987963828125*x**3 + 5115161850595703125*x**2 - 14982472850828613281250*x + 16042929600623870849609375),
+    Tuple(-48, x**2 - 2835810000*x + 6549518250000),
+    Tuple(-51, x**2 + 5541101568*x + 6262062317568),
+    Tuple(-52, x**2 - 6896880000*x - 567663552000000),
+    Tuple(-55, x**4 + 13136684625*x**3 - 20948398473375*x**2 + 172576736359017890625*x - 18577989025032784359375),
+    Tuple(-56, x**4 - 16220384512*x**3 + 2059647197077504*x**2 + 2257767342088912896*x + 10064086044321563803648),
+    Tuple(-59, x**3 + 30197678080*x**2 - 140811576541184*x + 374643194001883136),
+    Tuple(-60, x**2 - 37018076625*x + 153173312762625),
+    Tuple(-63, x**4 + 67515199875*x**3 - 193068841781250*x**2 + 4558451243295023437500*x - 6256903954262253662109375),
+    Tuple(-64, x**2 - 82226316240*x - 7367066619912),
+    Tuple(-67, x + 147197952000),
+    Tuple(-68, x**4 - 178211040000*x**3 - 75843692160000000*x**2 - 318507038720000000000*x - 2089297506304000000000000))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
 
