@@ -826,12 +826,12 @@ class Expr(object):
 
         if single and 0:
             s += """<div style="text-align:center; padding-right:1em">"""
-            s += """<img id="%s", src="../img/%s.svg" style="height:%s; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
+            s += """<img id="%s", src="../../img/%s.svg" style="height:%s; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
             s += """</div>"""
         else:
-            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../img/%s_small.svg', '../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
+            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../../img/%s_small.svg', '../../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
             s += """<div style="text-align:center; padding-right:1em;">"""
-            s += """<img id="%s", src="../img/%s_small.svg" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
+            s += """<img id="%s", src="../../img/%s_small.svg" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
             s += """</div>"""
 
         s += """</div>"""
@@ -935,7 +935,7 @@ class Expr(object):
                 s += "<tt>%s</tt>" % str(arg.args()[0])
             elif (not arg.is_atom()) and arg.head() is EntryReference:
                 id = arg.args()[0]._text
-                s += """<a href="../entry/%s.html">%s</a>""" % (id, id)
+                s += """<a href="../../entry/%s/">%s</a>""" % (id, id)
             else:
                 s += arg.html(avoid_latex=True)
             s += " "
@@ -948,7 +948,7 @@ class Expr(object):
         s = ""
         s += """<div style="text-align:center; margin:0.6em">"""
         s += """<span style="font-size:85%; color:#888">Symbol:</span> """
-        s += """<tt><a href="../symbol/%s.html">%s</a></tt>""" % (symbol._symbol, symbol._symbol)
+        s += """<tt><a href="../../symbol/%s/">%s</a></tt>""" % (symbol._symbol, symbol._symbol)
         s += """ <span style="color:#888">&mdash;</span> """
         s += example.html()
         s += """ <span style="color:#888">&mdash;</span> """
@@ -970,7 +970,7 @@ class Expr(object):
         title = self.get_arg_with_head(Title)
         return title._args[1]._text
 
-    def entry_html(self, single=False, entry_dir="../entry/", symbol_dir="../symbol/", default_visible=False):
+    def entry_html(self, single=False, entry_dir="../../entry/", symbol_dir="../../symbol/", default_visible=False):
         id = self.id()
         all_tex = []
         image_downloads = []
@@ -980,7 +980,7 @@ class Expr(object):
             s += """<div style="padding-top:0.4em">"""
         else:
             s += """<div style="float:left; margin-top:0.0em; margin-right:0.3em">"""
-            s += """<a href="%s%s.html" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
+            s += """<a href="%s%s/" style="margin-left:3pt; font-size:85%%">%s</a> <span></span><br/>""" % (entry_dir, id, id)
             s += """<button style="margin-top:0.2em; margin-bottom: 0.1em;" onclick="toggleVisible('%s:info')">Details</button>""" % id
             s += """</div>"""
             s += """<div>"""
@@ -1010,19 +1010,19 @@ class Expr(object):
             src = image_downloads[0]
             s += """<div style="text-align:center; margin-top:0; margin-bottom:1.1em">"""
             s += """<span style="font-size:85%; color:#888">Download:</span> """
-            s += """<a href="../img/%s_small.png">png (small)</a>""" % src
+            s += """<a href="../../img/%s_small.png">png (small)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s_medium.png">png (medium)</a>""" % src
+            s += """<a href="../../img/%s_medium.png">png (medium)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s_large.png">png (large)</a>""" % src
+            s += """<a href="../../img/%s_large.png">png (large)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s_small.pdf">pdf (small)</a>""" % src
+            s += """<a href="../../img/%s_small.pdf">pdf (small)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s.pdf">pdf (medium/large)</a>""" % src
+            s += """<a href="../../img/%s.pdf">pdf (medium/large)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s_small.svg">svg (small)</a>""" % src
+            s += """<a href="../../img/%s_small.svg">svg (small)</a>""" % src
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../img/%s.svg">svg (medium/large)</a>""" % src
+            s += """<a href="../../img/%s.svg">svg (medium/large)</a>""" % src
             s += """</div>"""
 
         # Remaining items
@@ -1058,7 +1058,7 @@ class Expr(object):
         return s
 
     @staticmethod
-    def definitions_table_html(symbols, center=False, entry_dir="../entry/", symbol_dir="../symbol/"):
+    def definitions_table_html(symbols, center=False, entry_dir="../../entry/", symbol_dir="../../symbol/"):
         katex = katex_function[0]
         s = ""
         if center:
@@ -1070,7 +1070,7 @@ class Expr(object):
         for symbol in symbols:
             if symbol in descriptions:
                 example, domain, codomain, description = descriptions[symbol]
-                s += """<tr><td><tt><a href="%s%s.html">%s</a></tt>""" % (symbol_dir, symbol.str(), symbol.str())
+                s += """<tr><td><tt><a href="%s%s/">%s</a></tt>""" % (symbol_dir, symbol.str(), symbol.str())
                 s += """<td>%s</td>""" % katex(example.latex(), False)
                 # domstr = ",\, ".join(dom.latex() for dom in domain)
                 # s += """<td>%s</td>""" % katex(domstr, False)

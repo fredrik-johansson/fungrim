@@ -172,7 +172,7 @@ make_entry(ID("0b4d4b"),
             LessEqual(Abs(b), a, c), Parentheses(Implies(Or(Equal(Abs(b), a), Equal(a, c)), GreaterEqual(b, 0))),
             Equal(GCD(a,b,c), 1))))),
     Variables(D),
-    Assumptions(And(Element(D, ZZLessEqual(-1)), Element(Mod(-D, 4), Set(0,3)))),
+    Assumptions(And(Element(D, ZZLessEqual(-3)), Element(Mod(-D, 4), Set(0,3)))),
     References("H. Cohen, A Course in Computational Algebraic Number Theory, Springer, 1993, Definition 5.3.2"))
 
 make_entry(ID("fd72e0"),
@@ -184,7 +184,7 @@ make_entry(ID("dd5681"),
         ProductCondition(Parentheses(x - ModularJ((-b+Sqrt(D))/(2*a))), Tuple(a,b,c), Element(Tuple(a,b,c),
             PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D))))),
     Variables(D, x),
-    Assumptions(And(Element(D, ZZLessEqual(-1)), Element(Mod(-D, 4), Set(0,3)), Element(x, CC))))
+    Assumptions(And(Element(D, ZZLessEqual(-3)), Element(Mod(-D, 4), Set(0,3)), Element(x, CC))))
 
 make_entry(ID("20b6d2"),
     Description("Table of", HilbertClassPolynomial(D,x), "for", LessEqual(-D, 68)),

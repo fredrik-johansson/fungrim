@@ -236,6 +236,8 @@ def write_definitions_table(fp, symbols, **kwargs):
 class Webpage:
 
     def start(self):
+        if not os.path.exists(os.path.dirname(self.filepath)):
+            os.makedirs(os.path.dirname(self.filepath))
         self.fp = open(self.filepath, "w")
         self.fp.write(html_start.replace("%%PAGETITLE%%", self.pagetitle))
 
@@ -268,7 +270,7 @@ class EntryPage(Webpage):
 
     def __init__(self, id):
         self.id = id
-        self.filepath = "build/html/entry/%s.html" % self.id
+        self.filepath = "build/html/entry/%s/index.html" % self.id
         self.pagetitle = "Entry %s - Fungrim: The Mathematical Functions Grimoire" % self.id
 
     def entry(self, id):
@@ -277,12 +279,12 @@ class EntryPage(Webpage):
         self.fp.write("<h2>Topics using this entry</h2>")
         self.fp.write("<ul>")
         for title in topics_referencing_entry[id]:
-            self.fp.write("""<li><a href="../topic/%s.html">%s</a></li>""" % (escape_title(title), title))
+            self.fp.write("""<li><a href="../../topic/%s/">%s</a></li>""" % (escape_title(title), title))
         self.fp.write("</ul>")
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;"><a href="../../">Fungrim home page</a></p>""")
         self.fp.write("""<h1>Fungrim entry: %s</h1>""" % self.id)
 
     def write(self):
@@ -299,13 +301,13 @@ def escape_title(name):
 class TopicPage(Webpage):
 
     def __init__(self, title):
-        self.filepath = "build/html/topic/" + escape_title(title) + ".html"
+        self.filepath = "build/html/topic/" + escape_title(title) + "/index.html"
         self.title = title
         self.pagetitle = title + " - Fungrim: The Mathematical Functions Grimoire"
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../../">Fungrim home page</a></p>""")
         self.fp.write("""<h1>%s</h1>""" % self.title)
 
     def write(self):
@@ -343,7 +345,7 @@ class TopicPage(Webpage):
                 for rel in arg.args():
                     if rel._text not in topics_dict:
                         print("WARNING: linked topic page '%s' missing" % rel._text)
-                rel_strs = ["""<a href="%s.html">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
+                rel_strs = ["""<a href="../%s/">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
                 self.fp.write("""<p style="text-align:center">Related topics: %s</p>""" % ", ".join(rel_strs))
         self.end()
 
@@ -368,7 +370,7 @@ class SymbolPage(Webpage):
 
     def __init__(self, symbol):
         self.symbol = symbol
-        self.filepath = "build/html/symbol/%s.html" % self.symbol
+        self.filepath = "build/html/symbol/%s/index.html" % self.symbol
         self.pagetitle = "Symbol %s - Fungrim: The Mathematical Functions Grimoire" % self.symbol
 
     def content(self, symbol):
@@ -388,7 +390,7 @@ class SymbolPage(Webpage):
         self.fp.write("""<p style="margin-left:1em">The symbol <tt>%s</tt> appears in %i topics:</p>""" % (symbol, num))
         self.fp.write("""<div style="columns: %i"><ul>""" % cols)
         for topic, count in topics:
-            self.fp.write("""<li><a href="../topic/%s.html">%s</a> (in %i entries)</li>""" % (escape_title(topic), topic, count))
+            self.fp.write("""<li><a href="../../topic/%s/">%s</a> (in %i entries)</li>""" % (escape_title(topic), topic, count))
         self.fp.write("""</div>""")
 
         self.fp.write("""<h2>Entries using this symbol</h2>""")
@@ -398,12 +400,12 @@ class SymbolPage(Webpage):
         self.fp.write("""<div style="columns: %i"><ul>""" % cols)
         for entry in entries_referencing_symbol[symbol]:
             id = entry
-            self.fp.write("""<li><a href="../entry/%s.html">%s</a></li>""" % (id, id))
+            self.fp.write("""<li><a href="../../entry/%s/">%s</a></li>""" % (id, id))
         self.fp.write("""</ul></div>""")
 
     def start(self):
         Webpage.start(self)
-        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../index.html">Fungrim home page</a></p>""")
+        self.fp.write("""<p style="text-align:center; font-size:85%"><a href="../../">Fungrim home page</a></p>""")
         self.fp.write("""<h1>Fungrim symbol: %s</h1>""" % self.symbol)
 
     def write(self):
@@ -435,7 +437,7 @@ frontpage.fp.write("""<p style="margin: 1em">Click "Details" to show an expanded
 frontpage.section("Browse by topic")
 
 def writetopic(s):
-    frontpage.fp.write("""<li><a href="topic/%s.html">%s</a></li>""" % (escape_title(s), s))
+    frontpage.fp.write("""<li><a href="topic/%s/">%s</a></li>""" % (escape_title(s), s))
 
 frontpage.fp.write("""<div class="topiclist"><ul>""")
 
