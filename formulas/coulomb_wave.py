@@ -137,12 +137,12 @@ make_entry(ID("304559"),
 # Normalization functions
 
 make_entry(ID("4a4739"),
-    Formula(Equal(CoulombC(ell, eta), (2**ell / GammaFunction(2*ell+2)) * Exp((LogGamma(1+ell+ConstI*eta) + LogGamma(1+l-ConstI*eta) - ConstPi*eta)/2))),
+    Formula(Equal(CoulombC(ell, eta), (2**ell / GammaFunction(2*ell+2)) * Exp((LogGamma(1+ell+ConstI*eta) + LogGamma(1+ell-ConstI*eta) - ConstPi*eta)/2))),
     Variables(ell, eta),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition)))
 
 make_entry(ID("ed2bf6"),
-    Formula(Equal(CoulombSigma(ell, eta), (LogGamma(1+ell+ConstI*eta) - LogGamma(1+l-ConstI*eta))/(2*ConstI))),
+    Formula(Equal(CoulombSigma(ell, eta), (LogGamma(1+ell+ConstI*eta) - LogGamma(1+ell-ConstI*eta))/(2*ConstI))),
     Variables(ell, eta),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition)))
 
@@ -194,7 +194,7 @@ make_entry(ID("d280c5"),
     Assumptions(And(Element(omega, Set(-1,1)), Element(ell, CC), Element(eta, CC), coulomb_param_condition, NotElement(2*ell+2, ZZLessEqual(0)), Element(z, SetMinus(CC, Set(0))))))
 
 make_entry(ID("2a2f18"),
-    Formula(Equal(CoulombF(ell, eta, z), 2**ell * Exp((LogGamma(1+ell+ConstI*eta) + LogGamma(1+l-ConstI*eta) - ConstPi*eta)/2) * z**(ell+1) * Exp(omega*ConstI*z) * Hypergeometric1F1Regularized(1+ell+omega*ConstI*eta, 2*ell+2, -(2*omega*ConstI*z)))),
+    Formula(Equal(CoulombF(ell, eta, z), 2**ell * Exp((LogGamma(1+ell+ConstI*eta) + LogGamma(1+ell-ConstI*eta) - ConstPi*eta)/2) * z**(ell+1) * Exp(omega*ConstI*z) * Hypergeometric1F1Regularized(1+ell+omega*ConstI*eta, 2*ell+2, -(2*omega*ConstI*z)))),
     Variables(omega, ell, eta, z),
     Assumptions(And(Element(omega, Set(-1,1)), Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))))))
 
