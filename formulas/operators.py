@@ -4,6 +4,15 @@ from .expr import *
 
 def_Topic(
     Title("Operators"),
+    Section("Sums and products"),
+    Entries(
+        "044e42",
+        "1e2755",
+        "9f703a",
+        "2a896d",
+        "8baf79",
+        "5830eb",
+    ),
     Section("Extreme values"),
     Entries(
         "6ec976",
@@ -34,6 +43,58 @@ def_Topic(
         "4c6780",
     ),
 )
+
+# Sums and products
+
+make_entry(ID("044e42"),
+    SymbolDefinition(Sum, Sum(f(n), n), "Sum"),
+    Description(SourceForm(Sum(f(n), n, P(n))), ", rendered as ",
+        Sum(f(n), n, P(n)), ", represents the sum of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
+    Description("The argument", n, "defines a locally bound variable."),
+    Description("As a special syntax", SourceForm(Sum(f(n), Tuple(n, a, b))), ", rendered as ",
+        Sum(f(n), Tuple(n, a, b)), ", represents the sum taken over all integers", LessEqual(a, n, b), "."),
+    Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
+
+make_entry(ID("1e2755"),
+    SymbolDefinition(Product, Product(f(n), n), "Product"),
+    Description(SourceForm(Product(f(n), n, P(n))), ", rendered as ",
+        Product(f(n), n, P(n)), ", represents the product of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
+    Description("The argument", n, "defines a locally bound variable."),
+    Description("As a special syntax", SourceForm(Product(f(n), Tuple(n, a, b))), ", rendered as ",
+        Product(f(n), Tuple(n, a, b)), ", represents the product taken over all integers", LessEqual(a, n, b), "."),
+    Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
+
+make_entry(ID("9f703a"),
+    SymbolDefinition(PrimeSum, PrimeSum(f(p), p), "Sum over primes"),
+    Description(SourceForm(PrimeSum(f(p), p)), ", rendered as ",
+        PrimeSum(f(p), p), ", represents the sum of", f(p), "taken over all prime numbers", p, "."),
+    Description(SourceForm(PrimeSum(f(p), p, P(p))), ", rendered as ",
+        PrimeSum(f(p), p, P(p)), ", represents the sum of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
+    Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
+
+make_entry(ID("2a896d"),
+    SymbolDefinition(PrimeProduct, PrimeProduct(f(p), p), "Product over primes"),
+    Description(SourceForm(PrimeProduct(f(p), p)), ", rendered as ",
+        PrimeProduct(f(p), p), ", represents the product of", f(p), "taken over all prime numbers", p, "."),
+    Description(SourceForm(PrimeProduct(f(p), p, P(p))), ", rendered as ",
+        PrimeProduct(f(p), p, P(p)), ", represents the product of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
+    Description("The empty product is equal to one. Products taken over an infinite number of terms are required to be absolutely convergent."))
+
+make_entry(ID("8baf79"),
+    SymbolDefinition(DivisorSum, DivisorSum(f(k), k, n), "Sum over divisors"),
+    Description(SourceForm(DivisorSum(f(k), k, n)), ", rendered as ",
+        DivisorSum(f(k), k, n), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
+    Description(SourceForm(DivisorSum(f(k), k, n, P(k))), ", rendered as ",
+        DivisorSum(f(k), k, n, P(k)), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The empty sum is equal to zero."))
+
+make_entry(ID("5830eb"),
+    SymbolDefinition(DivisorProduct, DivisorProduct(f(k), k, n), "Product over divisors"),
+    Description(SourceForm(DivisorProduct(f(k), k, n)), ", rendered as ",
+        DivisorProduct(f(k), k, n), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
+    Description(SourceForm(DivisorProduct(f(k), k, n, P(k))), ", rendered as ",
+        DivisorProduct(f(k), k, n, P(k)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The empty product is equal to one."))
 
 # Extreme values
 

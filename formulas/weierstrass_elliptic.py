@@ -125,20 +125,23 @@ make_entry(ID("d530b1"),
     Variables(a,b),
     Assumptions(And(Element(a, SetMinus(CC, Set(0))), Element(b, SetMinus(CC, Set(0))), Greater(Im(b/a), 0))))
 
+# fixme: should be cartesian power
+_mn_cond = Element(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0))))
+
 make_entry(ID("58d67b"),
-    Formula(Equal(WeierstrassP(z,tau), 1/z**2 + SumCondition(1/(z+m+n*tau)**2-1/(m+n*tau)**2, Tuple(m, n), Unequal(m**2+n**2, 0)))),
+    Formula(Equal(WeierstrassP(z,tau), 1/z**2 + Sum(1/(z+m+n*tau)**2-1/(m+n*tau)**2, Tuple(m, n), _mn_cond))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("b10ca7"),
     Formula(Equal(WeierstrassZeta(z,tau),
-        1/z + SumCondition(1/(z-m-n*tau)+1/(m+n*tau)+z/(m+n*tau)**2, Tuple(m, n), Unequal(m**2+n**2, 0)))),
+        1/z + Sum(1/(z-m-n*tau)+1/(m+n*tau)+z/(m+n*tau)**2, Tuple(m, n), _mn_cond))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("7c4457"),
     Formula(Equal(WeierstrassSigma(z,tau),
-        z * ProductCondition((1-z/(m+n*tau)) * Exp(z/(m+n*tau) + z**2/(2*(m+n*tau)**2)), Tuple(m, n), Unequal(m**2+n**2, 0)))),
+        z * Product((1-z/(m+n*tau)) * Exp(z/(m+n*tau) + z**2/(2*(m+n*tau)**2)), Tuple(m, n), _mn_cond))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 

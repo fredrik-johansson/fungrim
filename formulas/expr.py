@@ -319,29 +319,77 @@ class Expr(object):
                 return "{" + basestr + "}^{" + expostr + "}"
             else:
                 return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
-        if head in (Sum, Integral, Product):
+        if head is Integral:
             assert len(args) == 2
             assert args[1]._args[0] is Tuple
             _, var, low, high = args[1]._args
             var = var.latex()
             low = low.latex(in_small=True)
             high = high.latex(in_small=True)
+            return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+        if head in (Sum, Product):
+            # Sum(f(n), Tuple(n, a, b))
+            # Sum(f(n), Tuple(n, a, b), P(n)) ???
+            # Sum(f(n), n, P(n))
             if head is Sum:
-                return "\\sum_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
-            if head is Integral:
-                return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
-            if head is Product:
-                # todo: auto-parenthesis for Add/...?
-                return "\\prod_{%s=%s}^{%s} %s" % (var, low, high, argstr[0])
-        if head in (SumCondition, ProductCondition):
-            assert len(args) == 3
-            func, var, cond = args
-            cond = cond.latex(in_small=True)
-            if head is SumCondition:
-                return "\\sum_{%s} %s" % (cond, argstr[0])
-            if head is ProductCondition:
-                # todo: auto-parenthesis for Add/...?
-                return "\\prod_{%s} %s" % (cond, argstr[0])
+                ss = "\\sum"
+            else:
+                ss = "\\prod"
+            # todo: auto-parenthesis for Add/...?
+            if len(args) == 2 and not args[1].is_atom() and args[1]._args[0] is Tuple:
+                _, var, low, high = args[1]._args
+                var = var.latex()
+                low = low.latex(in_small=True)
+                high = high.latex(in_small=True)
+                return ss + ("_{%s=%s}^{%s} %s" % (var, low, high, argstr[0]))
+            elif len(args) == 2:
+                func, var = args
+                return ss + ("_{%s} %s" % (var, argstr[0]))
+            elif len(args) == 3:
+                func, var, cond = args
+                cond = cond.latex(in_small=True)
+                return ss + ("_{%s} %s" % (cond, argstr[0]))
+            else:
+                raise ValueError
+        if head in (DivisorSum, DivisorProduct):
+            if len(args) == 3:
+                formula, var, number = args
+                formula = argstr[0]
+                var = var.latex()
+                number = number.latex(in_small=True)
+                ss = "_{%s \\mid %s} %s" % (var, number, formula)
+            elif len(args) == 4:
+                formula, var, number, cond = args
+                formula = argstr[0]
+                var = var.latex()
+                number = number.latex(in_small=True)
+                cond = cond.latex(in_small=True)
+                #ss = "_{\\begin{matrix} {\\scriptstyle %s \\mid %s} \\\\ {\\scriptstyle %s} \\end{matrix}} %s" % (var, number, cond, formula)
+                ss = "_{%s \\mid %s,\\, %s} %s" % (var, number, cond, formula)
+            else:
+                raise ValueError
+            if head is DivisorSum:
+                return "\\sum" + ss
+            else:
+                return "\\prod" + ss
+        if head in (PrimeSum, PrimeProduct):
+            if len(args) == 2:
+                formula, var = args
+                formula = argstr[0]
+                var = var.latex()
+                ss = "_{%s} %s" % (var, formula)
+            elif len(args) == 3:
+                formula, var, cond = args
+                formula = argstr[0]
+                var = var.latex()
+                cond = cond.latex(in_small=True)
+                ss = "_{%s} %s" % (cond, formula)
+            else:
+                raise ValueError
+            if head is PrimeSum:
+                return "\\sum" + ss
+            else:
+                return "\\prod" + ss
         if head in (Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit):
             if len(args) == 3:
                 formula, var, point = args
@@ -687,8 +735,8 @@ class Expr(object):
         if head is Cardinality:
             assert len(args) == 1
             #return "\\text{card }" + argstr[0]
-            #return "\\# " + argstr[0]
-            return "\\left|" + argstr[0] + "\\right|"
+            return "\\# " + argstr[0]
+            #return "\\left|" + argstr[0] + "\\right|"
         if head is Decimal:
             assert len(args) == 1
             text = args[0]._text
@@ -1128,8 +1176,7 @@ Supremum Infimum
 Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
 Derivative RealDerivative ComplexDerivative ComplexBranchDerivative MeromorphicDerivative
 Sum Product Integral
-SumCondition ProductCondition
-SumSet ProductSet
+PrimeSum DivisorSum PrimeProduct DivisorProduct
 AsymptoticTo
 FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient

@@ -154,7 +154,7 @@ make_entry(ID("1d46d4"),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("8f5e66"),
-    Formula(Equal(RiemannZeta(s), ProductCondition(1/(1-1/p**s), p, Element(p, PP)))),
+    Formula(Equal(RiemannZeta(s), PrimeProduct(1/(1-1/p**s), p))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
