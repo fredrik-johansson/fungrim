@@ -327,6 +327,25 @@ class Expr(object):
             low = low.latex(in_small=True)
             high = high.latex(in_small=True)
             return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+        if head in (IndefiniteIntegralEqual, RealIndefiniteIntegralEqual, ComplexIndefiniteIntegralEqual):
+            # IndefiniteIntegralEqual(f(z), g(z), z, c)
+            if len(args) == 3:
+                fx, gx, x = args
+                fx = argstr[0]
+                gx = argstr[1]
+                x = argstr[2]
+                return "\\int %s \, d%s = %s + \\mathcal{C}" % (fx, x, gx)
+            elif len(args) == 4:
+                fx, gx, x, c = args
+                fx = argstr[0]
+                gx = argstr[1]
+                x = argstr[2]
+                if x == c:
+                    return "\\int %s \, d%s = %s + \\mathcal{C}" % (fx, x, gx)
+                else:
+                    return "\\int %s \, d%s = %s + \\mathcal{C}, %s = %s" % (fx, x, gx, x, c)
+            else:
+                raise ValueError
         if head in (Sum, Product):
             # Sum(f(n), Tuple(n, a, b))
             # Sum(f(n), Tuple(n, a, b), P(n)) ???
@@ -1175,8 +1194,10 @@ Solutions UniqueSolution
 Supremum Infimum
 Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
 Derivative RealDerivative ComplexDerivative ComplexBranchDerivative MeromorphicDerivative
-Sum Product Integral
+Sum Product
 PrimeSum DivisorSum PrimeProduct DivisorProduct
+Integral
+IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqual
 AsymptoticTo
 FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient

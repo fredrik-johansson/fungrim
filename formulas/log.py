@@ -53,7 +53,10 @@ def_Topic(
     ),
     Section("Integral representations"),
     Entries(
-        "0ba9b2"
+        "0ba9b2",
+        "c77f9a",
+        "e4f73a",
+        "a4ac32",
     ),
 )
 
@@ -153,6 +156,8 @@ make_entry(ID("d496b8"),
     Tuple(49, Decimal("3.8918202981106266102107054868863594592741694591637")),
     Tuple(50, Decimal("3.9120230054281460586187507879105518471267028428973")))))
 
+
+
 make_entry(ID("c331da"),
     Formula(Equal(Log(ConstI), ConstPi*ConstI/2)))
 
@@ -246,5 +251,20 @@ make_entry(ID("77aa12"),
     Formula(LessEqual(Abs(Log(x+a)-Log(x)), Log(1+Abs(a)/(x-Abs(a))))),
     Variables(x, a),
     Assumptions(And(Element(x, RR), Element(a, RR), GreaterEqual(a, 0), Less(Abs(a), x))))
+
+make_entry(ID("c77f9a"),
+    Formula(ComplexIndefiniteIntegralEqual(1/z, Log(z), z)),
+    Variables(z),
+    Assumptions(Element(z, Log_holomorphic_domain)))
+
+make_entry(ID("e4f73a"),
+    Formula(ComplexIndefiniteIntegralEqual(1/z, Log(-z), z)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("a4ac32"),
+    Formula(RealIndefiniteIntegralEqual(1/x, Log(Abs(x)), x)),
+    Variables(x),
+    Assumptions(Element(x, SetMinus(RR, Set(0)))))
 
 

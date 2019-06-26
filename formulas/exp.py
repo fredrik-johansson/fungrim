@@ -189,7 +189,7 @@ make_entry(ID("96af56"),
 make_entry(ID("4491b8"),
     Formula(Equal(Derivative(Exp(z), Tuple(z, z, n)), Exp(z))),
     Variables(z, n),
-    Assumptions(And(Element(z, CC)), Element(n, ZZGreaterEqual(0))))
+    Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 
 
 make_entry(ID("1568e1"),

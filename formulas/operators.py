@@ -42,7 +42,18 @@ def_Topic(
         "96f695",
         "4c6780",
     ),
+    Section("Integrals"),
+    Entries(
+        "c285c7",
+    ),
+    Section("Indefinite integrals"),
+    Entries(
+        "2e4fbc",
+        "0be77d",
+        "fb2790",
+    ),
 )
+
 
 # Sums and products
 
@@ -50,7 +61,7 @@ make_entry(ID("044e42"),
     SymbolDefinition(Sum, Sum(f(n), n), "Sum"),
     Description(SourceForm(Sum(f(n), n, P(n))), ", rendered as ",
         Sum(f(n), n, P(n)), ", represents the sum of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-    Description("The argument", n, "defines a locally bound variable."),
+    Description("The argument", SourceForm(n), "defines a locally bound variable."),
     Description("As a special syntax", SourceForm(Sum(f(n), Tuple(n, a, b))), ", rendered as ",
         Sum(f(n), Tuple(n, a, b)), ", represents the sum taken over all integers", LessEqual(a, n, b), "."),
     Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
@@ -59,7 +70,7 @@ make_entry(ID("1e2755"),
     SymbolDefinition(Product, Product(f(n), n), "Product"),
     Description(SourceForm(Product(f(n), n, P(n))), ", rendered as ",
         Product(f(n), n, P(n)), ", represents the product of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-    Description("The argument", n, "defines a locally bound variable."),
+    Description("The argument", SourceForm(n), "defines a locally bound variable."),
     Description("As a special syntax", SourceForm(Product(f(n), Tuple(n, a, b))), ", rendered as ",
         Product(f(n), Tuple(n, a, b)), ", represents the product taken over all integers", LessEqual(a, n, b), "."),
     Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
@@ -70,6 +81,7 @@ make_entry(ID("9f703a"),
         PrimeSum(f(p), p), ", represents the sum of", f(p), "taken over all prime numbers", p, "."),
     Description(SourceForm(PrimeSum(f(p), p, P(p))), ", rendered as ",
         PrimeSum(f(p), p, P(p)), ", represents the sum of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
+    Description("The argument", SourceForm(p), "defines a locally bound variable."),
     Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
 
 make_entry(ID("2a896d"),
@@ -78,7 +90,8 @@ make_entry(ID("2a896d"),
         PrimeProduct(f(p), p), ", represents the product of", f(p), "taken over all prime numbers", p, "."),
     Description(SourceForm(PrimeProduct(f(p), p, P(p))), ", rendered as ",
         PrimeProduct(f(p), p, P(p)), ", represents the product of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
-    Description("The empty product is equal to one. Products taken over an infinite number of terms are required to be absolutely convergent."))
+    Description("The argument", SourceForm(p), "defines a locally bound variable."),
+    Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
 
 make_entry(ID("8baf79"),
     SymbolDefinition(DivisorSum, DivisorSum(f(k), k, n), "Sum over divisors"),
@@ -86,6 +99,7 @@ make_entry(ID("8baf79"),
         DivisorSum(f(k), k, n), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
     Description(SourceForm(DivisorSum(f(k), k, n, P(k))), ", rendered as ",
         DivisorSum(f(k), k, n, P(k)), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The argument", SourceForm(k), "defines a locally bound variable."),
     Description("The empty sum is equal to zero."))
 
 make_entry(ID("5830eb"),
@@ -94,6 +108,7 @@ make_entry(ID("5830eb"),
         DivisorProduct(f(k), k, n), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
     Description(SourceForm(DivisorProduct(f(k), k, n, P(k))), ", rendered as ",
         DivisorProduct(f(k), k, n, P(k)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The argument", SourceForm(k), "defines a locally bound variable."),
     Description("The empty product is equal to one."))
 
 # Extreme values
@@ -263,4 +278,56 @@ make_entry(ID("4c6780"),
         "except that whereas", SourceForm(ComplexDerivative), "is undefined at a pole,",
         SourceForm(MeromorphicDerivative), "gives",
         SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "at a pole."))
+
+# Integrals
+
+make_entry(ID("c285c7"),
+    SymbolDefinition(Integral, Integral(f(x), Tuple(x, a, b)), "Integral"),
+    Description(SourceForm(Integral(f(x), Tuple(x, a, b))), ", rendered as ",
+        Integral(f(x), Tuple(x, a, b)), ", represents the integral of", f(x), "from", a, "to", b, "."),
+    Description("The argument", SourceForm(x), "defines a locally bound variable."),
+    Description("The precise class of integrals allowed by this operator is yet to be defined, but should normally encompass Lebesgue integrals."))
+
+# Indefinite integrals
+
+make_entry(ID("2e4fbc"),
+    SymbolDefinition(IndefiniteIntegralEqual, IndefiniteIntegralEqual(f(x), g(x), x), "Indefinite integral"),
+    Description(SourceForm(IndefiniteIntegralEqual(f(x), g(x), x, c)), ", rendered as ",
+        IndefiniteIntegralEqual(f(x), g(x), x, c), ", expresses that", g(x), "is an antiderivative of", f(x), "at the point", c,
+        ", or formally that", Equal(Derivative(g(x), x, c), f(c)), ".",
+        "In other words,", g(x), "belongs to the equivalence class of antiderivatives of", f(x),
+        "at the point", c, ". This is rendered as a statement of equality (with an arbitrary constant of integration) to follow the conventional notation for indefinite integrals."),
+    Description("This operator is ambiguous since the intended meaning could be a real derivative, a complex derivative, or some other form of derivative.",
+        "It is better to use", SourceForm(RealIndefiniteIntegralEqual), "or", SourceForm(ComplexIndefiniteIntegralEqual), "."),
+    Description("The argument", SourceForm(x), "defines a locally bound variable used in the expressions", f(x), "and", g(x), ". ",
+        "If this operator is called more simply as", SourceForm(IndefiniteIntegralEqual(f(x), g(x), x)), ", ",
+            "the meaning is the same as", SourceForm(IndefiniteIntegralEqual(f(x), g(x), x, x)), ", where the", SourceForm(x),
+            "appearing in",  f(x), "and", g(x), "is understood as a new dummy variable. This dummy variable is evaluated at the value",
+            SourceForm(x), "defined in the surrounding context only after the functions have been constructed."))
+
+make_entry(ID("0be77d"),
+    SymbolDefinition(RealIndefiniteIntegralEqual, RealIndefiniteIntegralEqual(f(x), g(x), x), "Indefinite integral, real derivative"),
+    Description(SourceForm(RealIndefiniteIntegralEqual(f(x), g(x), x, c)), ", rendered as ",
+        RealIndefiniteIntegralEqual(f(x), g(x), x, c), ", expresses that", g(x), "is an antiderivative of", f(x), "at the point", c,
+        ", or formally that", Equal(RealDerivative(g(x), x, c), f(c)), ".",
+        "In other words,", g(x), "belongs to the equivalence class of antiderivatives of", f(x),
+        "at the point", c, ". This is rendered as a statement of equality (with an arbitrary constant of integration) to follow the conventional notation for indefinite integrals."),
+    Description("The argument", SourceForm(x), "defines a locally bound variable used in the expressions", f(x), "and", g(x), ". ",
+        "If this operator is called more simply as", SourceForm(RealIndefiniteIntegralEqual(f(x), g(x), x)), ", ",
+            "the meaning is the same as", SourceForm(RealIndefiniteIntegralEqual(f(x), g(x), x, x)), ", where the", SourceForm(x),
+            "appearing in",  f(x), "and", g(x), "is understood as a new dummy variable. This dummy variable is evaluated at the value",
+            SourceForm(x), "defined in the surrounding context only after the functions have been constructed."))
+
+make_entry(ID("fb2790"),
+    SymbolDefinition(ComplexIndefiniteIntegralEqual, ComplexIndefiniteIntegralEqual(f(x), g(x), x), "Indefinite integral, complex derivative"),
+    Description(SourceForm(ComplexIndefiniteIntegralEqual(f(x), g(x), x, c)), ", rendered as ",
+        ComplexIndefiniteIntegralEqual(f(x), g(x), x, c), ", expresses that", g(x), "is an antiderivative of", f(x), "at the point", c,
+        ", or formally that", Equal(ComplexDerivative(g(x), x, c), f(c)), ".",
+        "In other words,", g(x), "belongs to the equivalence class of antiderivatives of", f(x),
+        "at the point", c, ". This is rendered as a statement of equality (with an arbitrary constant of integration) to follow the conventional notation for indefinite integrals."),
+    Description("The argument", SourceForm(x), "defines a locally bound variable used in the expressions", f(x), "and", g(x), ". ",
+        "If this operator is called more simply as", SourceForm(ComplexIndefiniteIntegralEqual(f(x), g(x), x)), ", ",
+            "the meaning is the same as", SourceForm(ComplexIndefiniteIntegralEqual(f(x), g(x), x, x)), ", where the", SourceForm(x),
+            "appearing in",  f(x), "and", g(x), "is understood as a new dummy variable. This dummy variable is evaluated at the value",
+            SourceForm(x), "defined in the surrounding context only after the functions have been constructed."))
 
