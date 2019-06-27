@@ -241,7 +241,7 @@ make_entry(ID("b506ad"),
     )))
 
 make_entry(ID("5818e3"),
-    Description("Table of", Fibonacci(10**n), "to 50 digits for", LessEqual(0, n, 30)),
+    Description("Table of", Fibonacci(10**n), "to 50 digits for", LessEqual(0, n, 20)),
     Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(Fibonacci(10**n), 50), y)),
       TableHeadings(n, Fibonacci(10**n)), TableSplit(1),
       List(
