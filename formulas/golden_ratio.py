@@ -33,6 +33,7 @@ def_Topic(
     Section("Recurrence relations"),
     Entries(
         "0cd1a4",
+        "6a11ce",
     ),
     Section("Limit representations"),
     Entries(
@@ -97,6 +98,11 @@ make_entry(ID("0cd1a4"),
     Formula(Equal(GoldenRatio**(n+1), GoldenRatio**n + GoldenRatio**(n-1))),
     Variables(n),
     Assumptions(Element(n, CC)))
+
+make_entry(ID("6a11ce"),
+    Formula(Equal(GoldenRatio**n, Fibonacci(n) * GoldenRatio + Fibonacci(n-1))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
 
 # Limit representations
 

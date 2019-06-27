@@ -310,12 +310,16 @@ class Expr(object):
             # remove frac to try to keep it on one line
             base = args[0]
             expo = args[1]
+            # todo: more systematic solutions
             if not base.is_atom() and base.head() in (Sin, Cos, Tan, Sinh, Cosh, Tanh):
                 return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
-
+            if not base.is_atom() and base.head() is Fibonacci:
+                return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
+            if not base.is_atom() and base.head() in (JacobiTheta1, JacobiTheta2, JacobiTheta3, JacobiTheta4) and len(base.args()) == 2:
+                return base.head().latex() + "^{%s}\\!\\left(%s, %s\\right)" % (expo.latex(in_small=True), base.args()[0].latex(), base.args()[1].latex())
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
-            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber)):
+            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber, Matrix2x2)):
                 return "{" + basestr + "}^{" + expostr + "}"
             else:
                 return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
@@ -704,6 +708,13 @@ class Expr(object):
             xstr = args[0].latex(in_small=True)
             ystr = args[1].latex(in_small=True)
             return "\delta_{(%s,%s)}" % (xstr, ystr)
+        if head in (LegendreSymbol, JacobiSymbol, KroneckerSymbol):
+            if 0 and in_small:
+                return "(%s \\mid %s)" % (argstr[0], argstr[1])
+            else:
+                return "\\left( \\frac{%s}{%s} \\right)" % (argstr[0], argstr[1])
+        if head is CongruentMod:
+            return "%s \\equiv %s \\pmod {%s}" % (argstr[0], argstr[1], argstr[2])
         if head is ZZGreaterEqual:
             assert len(args) == 1
             # if args[0].is_integer():
@@ -767,6 +778,9 @@ class Expr(object):
         if head is Matrix2x2:
             assert len(args) == 4
             return r"\begin{pmatrix} %s & %s \\ %s & %s \end{pmatrix}" % tuple(argstr)
+        if head is Matrix2x1:
+            assert len(args) == 2
+            return r"\begin{pmatrix} %s \\ %s \end{pmatrix}" % tuple(argstr)
         if head is ModularGroupAction:
             assert len(args) == 2
             return "%s \\circ %s" % tuple(argstr)
@@ -1187,6 +1201,7 @@ InteriorClosure
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
+CongruentMod
 Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
@@ -1231,6 +1246,7 @@ DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
 Divides
 GCD LCM XGCD DivisorSigma MoebiusMu Totient
+LegendreSymbol JacobiSymbol KroneckerSymbol
 Fibonacci
 PartitionsP HardyRamanujanA
 KroneckerDelta
@@ -1239,7 +1255,7 @@ WeierstrassP WeierstrassZeta WeierstrassSigma
 PrimeNumber PrimePi
 RiemannHypothesis
 LogIntegral
-Matrix2x2
+Matrix2x2 Matrix2x1
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularJ

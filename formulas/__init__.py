@@ -18,6 +18,7 @@ from .atan import *
 from .lambertw import *
 from .gcd import *
 from .factorials import *
+from .fibonacci import *
 from .gamma import *
 from .legendre_polynomial import *
 from .chebyshev import *
