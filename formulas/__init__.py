@@ -42,6 +42,7 @@ from .weierstrass_elliptic import *
 from .prime_numbers import *
 from .modular_transformations import *
 from .modular_j import *
+from .dirichlet import *
 
 # todo: move to the right places
 

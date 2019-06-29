@@ -493,6 +493,7 @@ frontpage.fp.write("""</ul></li>""")
 frontpage.fp.write("""<li>Zeta and L-functions<ul>""")
 writetopic("Riemann zeta function")
 writetopic("Zeros of the Riemann zeta function")
+writetopic("Dirichlet characters")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")

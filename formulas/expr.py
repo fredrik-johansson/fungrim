@@ -793,6 +793,16 @@ class Expr(object):
         if head is HypergeometricUStarRemainder:
             assert len(args) == 4
             return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
+        if head is DirichletCharacter:
+            if len(args) == 2:
+                return "\\chi_{%s}(%s, \\cdot)" % tuple(argstr)
+            elif len(args) == 3:
+                return "\\chi_{%s}(%s, %s)" % tuple(argstr)
+            else:
+                raise ValueError
+        if head is DirichletGroup:
+            #return "\\{\\chi_{%s}\\}" % argstr[0]
+            return "G_{%s}" % argstr[0]
         if head is StirlingSeriesRemainder:
             assert len(args) == 2
             return "R_{%s}\!\\left(%s\\right)" % tuple(argstr)
@@ -828,6 +838,25 @@ class Expr(object):
         if head is Det and args[0].head() is Matrix2x2:
             assert len(args) == 1
             return "\\operatorname{det}" + argstr[0]
+        if head is Cases:
+            s = "\\begin{cases} "
+            for arg in args:
+                assert arg.head() is Tuple
+                v, c = arg.args()
+                v = v.latex(in_small=True)
+                if c is Otherwise:
+                    c = "\\text{otherwise}"
+                else:
+                    c = c.latex(in_small=True)
+                s += "%s, & %s\\\\" % (v, c)
+            s += " \\end{cases}"
+            return s
+        if head is DiscreteLog:
+            n, b, p = args
+            n, b, p = argstr[0], b.latex(in_small=True), argstr[2]
+            return "\\log_{%s}\!\\left(%s\\right) \\bmod %s" % (b, n, p)
+        if head is ConreyGenerator:
+            return "g_{%s}" % argstr[0]
         if head is Description:
             s = ""
             for arg in args:
@@ -1261,6 +1290,11 @@ SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularJ
 PrimitiveReducedPositiveIntegralBinaryQuadraticForms
 HilbertClassPolynomial
+DirichletCharacter
+DirichletGroup
+ConreyGenerator
+DiscreteLog
+Cases Otherwise
 """)
 
 inject_builtin("""
