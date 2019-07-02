@@ -75,6 +75,8 @@ def_Topic(
     Entries(
         "e6deb7",
     ),
+    Section("Related topics"),
+    SeeTopics("Dirichlet L-functions"),
 )
 
 make_entry(ID("e810d8"),
@@ -381,7 +383,7 @@ make_entry(ID("5e1d3b"),
         TableColumnHeadings(1, 5, 7, 11),
         List(
     Tuple(0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1),
-    Tuple(0, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 1),
+    Tuple(0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, -1),
     Tuple(0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1),
     Tuple(0, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 1),
     )))
@@ -392,4 +394,115 @@ make_entry(ID("e6deb7"),
     Formula(LessEqual(Abs(Sum(chi(n), Tuple(n, 0, N))), Totient(q))),
     Variables(N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+
+
+
+def_Topic(
+    Title("Dirichlet L-functions"),
+    Section("Definitions"),
+    Entries(
+        "d5a598",
+    ),
+    Section("L-series"),
+    Entries(
+        "604c7c",
+        "291569",
+    ),
+    Section("Euler product"),
+    Entries(
+        "d088ea",
+        "0f96c3",
+    ),
+    Section("Hurwitz zeta representation"),
+    Entries(
+        "04217b",
+        "c31c10",
+        "4c3678",
+    ),
+    Section("Specific values"),
+    Subsection("Generalized Bernoulli numbers"),
+    Entries(
+        "cb5d51",
+        "e44796",
+        "3e0817",
+        "f7a866",
+        "d69b41",
+        "f5c3c5",
+    ),
+    Section("Related topics"),
+    SeeTopics("Dirichlet characters", "Riemann zeta function", "Bernoulli numbers and polynomials"),
+)
+
+make_entry(ID("d5a598"),
+    SymbolDefinition(DirichletL, DirichletL(s, chi), "Dirichlet L-function"))
+
+# L-series
+
+make_entry(ID("604c7c"),
+    Formula(Equal(DirichletL(s, chi), Sum(chi(n)/n**s, Tuple(n, 1, Infinity)))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
+
+make_entry(ID("291569"),
+    Formula(Equal(1/DirichletL(s, chi), Sum((MoebiusMu(n) * chi(n))/n**s, Tuple(n, 1, Infinity)))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
+
+# Euler product
+
+make_entry(ID("d088ea"),
+    Formula(Equal(DirichletL(s, chi), PrimeProduct(1/(1-chi(p)*p**(-s)), p))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
+
+make_entry(ID("0f96c3"),
+    Formula(Equal(1/DirichletL(s, chi), PrimeProduct(Parentheses(1-chi(p)/p**s), p))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
+
+# Hurwitz zeta representation
+
+make_entry(ID("04217b"),
+    SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"))
+
+make_entry(ID("c31c10"),
+    Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), Tuple(k, 1, q)))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, SetMinus(CC, Set(1))))))
+
+make_entry(ID("4c3678"),
+    Formula(Equal(HurwitzZeta(s, k/q), (q**s / Totient(q)) * Sum(Conjugate(chi(k)) * DirichletL(s, chi), chi, Element(chi, DirichletGroup(q))))),
+    Variables(q, k, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, ZZBetween(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
+
+# Specific values
+
+make_entry(ID("cb5d51"),
+    SymbolDefinition(GeneralizedBernoulliB, GeneralizedBernoulliB(n, chi), "Generalized Bernoulli number"))
+
+make_entry(ID("e44796"),
+    Formula(Equal(GeneralizedBernoulliB(n, chi), Sum(chi(a) * Sum(Binomial(n,k) * BernoulliB(k) * a**(n-k) * q**(k-1), Tuple(k, 0, n)), Tuple(a, 1, q)))),
+    Variables(q, chi, n),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
+
+make_entry(ID("3e0817"),
+    Formula(Equal(GeneralizedBernoulliB(n, chi), q**(n-1) * Sum(chi(a) * BernoulliPolynomial(n, a/q), Tuple(a, 1, q)))),
+    Variables(q, chi, n),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
+
+make_entry(ID("f7a866"),
+    Formula(Equal(GeneralizedBernoulliB(0, chi), Cases(Tuple(Totient(q)/q, Equal(chi, DirichletCharacter(q, 1))), Tuple(0, Otherwise)))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("d69b41"),
+    Formula(Equal(Sum(chi(a)* (z*Exp(a*z)/(Exp(q*z)-1)), Tuple(a, 1, q)),
+        Sum(GeneralizedBernoulliB(n, chi) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)))),
+    Variables(q, chi, z),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), Unequal(z, 0), Less(Abs(z), 2*ConstPi / q))))
+
+make_entry(ID("f5c3c5"),
+    Formula(Equal(DirichletL(-n, chi), -(GeneralizedBernoulliB(n+1,chi)/(n+1)))),
+    Variables(q, chi, n),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
 

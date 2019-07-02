@@ -156,6 +156,8 @@ class Expr(object):
         if self is ConstGamma: return "\\gamma"
         if self is GoldenRatio: return "\\varphi"
         if self is RiemannZeta: return "\\zeta"
+        if self is HurwitzZeta: return "\\zeta"
+        if self is DirichletL: return "L"
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
@@ -568,6 +570,9 @@ class Expr(object):
         if head is HermitePolynomial:
             assert len(args) == 2
             return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
+        if head is GeneralizedBernoulliB:
+            assert len(args) == 2
+            return "B_{%s,%s}" % (argstr[0], argstr[1])
         if head in (BesselJ, BesselY, BesselI, BesselK, HankelH1, HankelH2):
             assert len(args) == 2
             n, z = args
@@ -1295,6 +1300,7 @@ DirichletGroup
 ConreyGenerator
 DiscreteLog
 Cases Otherwise
+HurwitzZeta DirichletL GeneralizedBernoulliB
 """)
 
 inject_builtin("""
