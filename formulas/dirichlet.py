@@ -74,6 +74,7 @@ def_Topic(
     Section("Bounds and inequalities"),
     Entries(
         "e6deb7",
+        "5df909",
     ),
     Section("Related topics"),
     SeeTopics("Dirichlet L-functions"),
@@ -394,6 +395,15 @@ make_entry(ID("e6deb7"),
     Formula(LessEqual(Abs(Sum(chi(n), Tuple(n, 0, N))), Totient(q))),
     Variables(N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+
+make_entry(ID("5df909"),
+    Formula(LessEqual(Abs(Sum(chi(n), Tuple(n, M, N))), Sqrt(q)*Log(q)/(2*Log(2)) + 3*Sqrt(q))),
+    Variables(q, chi, M, N),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(M, ZZ), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))),
+    Description("Pólya-Vinogradov inequality, explicit form"),
+    References("E. Dobrowolski and K. S. Williams, An upper bound for the sum ... for a certain class of functions f, Proceedings of the American Mathematical Society, Vol. 114, No. 1 (Jan., 1992), pp. 29-35, http://doi.org/10.2307/2159779"))
+
+
 
 
 
