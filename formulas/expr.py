@@ -808,6 +808,12 @@ class Expr(object):
         if head is DirichletGroup:
             #return "\\{\\chi_{%s}\\}" % argstr[0]
             return "G_{%s}" % argstr[0]
+        if head is StieltjesGamma:
+            arg0 = args[0].latex(in_small=True)
+            if len(args) == 1:
+                return "\\gamma_{%s}" % arg0
+            if len(args) == 2:
+                return "\\gamma_{%s}\\!\\left(%s\\right)" % (arg0, argstr[1])
         if head is StirlingSeriesRemainder:
             assert len(args) == 2
             return "R_{%s}\!\\left(%s\\right)" % tuple(argstr)
@@ -1301,6 +1307,7 @@ ConreyGenerator
 DiscreteLog
 Cases Otherwise
 HurwitzZeta DirichletL GeneralizedBernoulliB
+StieltjesGamma
 """)
 
 inject_builtin("""

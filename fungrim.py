@@ -214,7 +214,7 @@ html_end = html_end.replace("%%TIMESTAMP%%", timestamp)
 index_text = """
 <h1 style="margin-top: 0.5em">The Mathematical Functions Grimoire</h1>
 
-<p style="text-align:center; color:red"><b>Pre-alpha version</b></p>
+<p style="text-align:center; color:orange"><b>Alpha version</b></p>
 
 <p style="margin:1em">
 Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.

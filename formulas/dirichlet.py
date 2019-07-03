@@ -82,7 +82,16 @@ def_Topic(
 
 make_entry(ID("e810d8"),
     SymbolDefinition(DirichletGroup, DirichletGroup(q), "Dirichlet characters with given modulus"),
-    Description("Represents the set of Dirichlet characters modulo", q, "."))
+    Description(SourceForm(DirichletGroup(q)), ", rendered as", DirichletGroup(q), ", represents the set of Dirichlet characters modulo", q, ", given", Element(q, ZZGreaterEqual(1)), "."),
+    Description("Dirichlet characters can be defined axiomatically as functions from", ZZ, "to", CC,
+        "satisfying the properties in formulas", EntryReference("1c3957"), ", ",
+            EntryReference("0851cf"), ", and", EntryReference("afd0c5"), "."),
+    Description("In this definition, the modulus", q, "is not an attribute of the character; for example",
+        "the character giving the sequence", List(0, 1, 0, 1, Ellipsis), "is an element of both", DirichletGroup(2),
+        "and", DirichletGroup(4), "."),
+    Description("A more explicit construction of the characters is possible using the Conrey numbering scheme, which is implemented by", SourceForm(DirichletCharacter), "."))
+
+ellrange = Element(ell, ZZBetween(1, Max(q,2)-1))
 
 make_entry(ID("c7e2fb"),
     SymbolDefinition(DirichletCharacter, DirichletCharacter(q,ell), "Dirichlet character"),
@@ -92,10 +101,14 @@ make_entry(ID("c7e2fb"),
         "A character represents an object", chi, " that can be called (", chi(n), ") as a function from", ZZ, "to", CC, "."),
     Description(SourceForm(DirichletCharacter(q,ell,n)), ", rendered as",
         DirichletCharacter(q,ell,n), ", represents the Dirichlet character with Conrey label", Tuple(q, ell), "evaluated at the integer", n, "."),
+    Description("The Conrey label consists of integers", Element(q, ZZGreaterEqual(1)), "and", Element(ell, ZZBetween(1, Max(q,2)-1)),
+        "such that", Equal(GCD(ell,q), 1), ". ",
+        "In this scheme", DirichletCharacter(q,1), "always represents the trivial/principal character (taking only values 0 and 1) modulo", q, ". ",
+        "Non-principal characters are defined by", EntryReference("4cf4e4"), "when", q, "is an odd prime power, by",
+            EntryReference("fc4f6a"), "and", EntryReference("03fbe8"), "when", q, "is an even prime power, and in general by factoring", q,
+            "into prime powers using", EntryReference("2a48bd"), "."),
     References("http://www.lmfdb.org/Character/Labels"),
     )
-
-ellrange = Element(ell, ZZBetween(1, Max(q,2)-1))
 
 # Fundamental properties
 
@@ -429,7 +442,23 @@ def_Topic(
         "c31c10",
         "4c3678",
     ),
-    Section("Specific values"),
+    Section("Special cases"),
+    Entries(
+        "a9337b",
+        "ff8254",
+    ),
+    Section("Value at 1"),
+    Entries(
+        "6c3fff",
+        "3d5327",
+        "23256b",
+        "d10029",
+        "c2750a",
+        "d83109",
+        "3b8c97",
+        "c9d117",
+    ),
+    Section("Values at integers"),
     Subsection("Generalized Bernoulli numbers"),
     Entries(
         "cb5d51",
@@ -438,6 +467,18 @@ def_Topic(
         "f7a866",
         "d69b41",
         "f5c3c5",
+    ),
+    Section("Analytic properties"),
+    Entries(
+        "8533f5",
+        "97f631",
+        "ea8c55",
+        "fe4692",
+    ),
+    Section("Approximations"),
+    Entries(
+        "312147",
+        "4911bd",
     ),
     Section("Related topics"),
     SeeTopics("Dirichlet characters", "Riemann zeta function", "Bernoulli numbers and polynomials"),
@@ -475,6 +516,9 @@ make_entry(ID("0f96c3"),
 make_entry(ID("04217b"),
     SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"))
 
+make_entry(ID("d10029"),
+    SymbolDefinition(StieltjesGamma, StieltjesGamma(n, a), "Stieltjes constant"))
+
 make_entry(ID("c31c10"),
     Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), Tuple(k, 1, q)))),
     Variables(q, chi, s),
@@ -485,7 +529,51 @@ make_entry(ID("4c3678"),
     Variables(q, k, s),
     Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, ZZBetween(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
 
-# Specific values
+# Special cases
+
+make_entry(ID("a9337b"),
+    Formula(Equal(DirichletL(s, DirichletCharacter(1, 1)), RiemannZeta(s))),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("ff8254"),
+    Formula(Equal(DirichletL(s, DirichletCharacter(2**n, 1)), (1-Pow(2,-s)) * RiemannZeta(s))),
+    Variables(n, s),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(s, CC))))
+
+# Value at 1
+
+make_entry(ID("6c3fff"),
+    Formula(Equal(DirichletL(1, chi), Cases(Tuple(UnsignedInfinity, Equal(chi, DirichletCharacter(q, 1))), Tuple(ComplexLimit(DirichletL(s, chi), s, 1), Otherwise)))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("3d5327"),
+    Formula(Unequal(DirichletL(1, chi), 0)),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("23256b"),
+    Formula(Equal(ComplexLimit((s-1)*DirichletL(1, DirichletCharacter(q, 1)), s, 1), Totient(q)/q)),
+    Variables(q),
+    Assumptions(Element(q, ZZGreaterEqual(1))))
+
+make_entry(ID("c2750a"),
+    Formula(Equal(DirichletL(1,chi), (1/q) * Sum(chi(k) * StieltjesGamma(0,k/q), Tuple(k, 1, q-1)))),
+    Variables(q),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+
+make_entry(ID("d83109"),
+    Formula(Equal(DirichletL(1,DirichletCharacter(3,2)), ConstPi/Sqrt(27))))
+
+make_entry(ID("3b8c97"),
+    Formula(Equal(DirichletL(1,DirichletCharacter(4,3)), ConstPi/4)))
+
+make_entry(ID("c9d117"),
+    Formula(Equal(DirichletL(1,DirichletCharacter(5,4)), 2*Log(GoldenRatio)/Sqrt(5))))
+
+
+# Values at integers
 
 make_entry(ID("cb5d51"),
     SymbolDefinition(GeneralizedBernoulliB, GeneralizedBernoulliB(n, chi), "Generalized Bernoulli number"))
@@ -515,4 +603,38 @@ make_entry(ID("f5c3c5"),
     Formula(Equal(DirichletL(-n, chi), -(GeneralizedBernoulliB(n+1,chi)/(n+1)))),
     Variables(q, chi, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
+
+# Analytic properties
+
+make_entry(ID("8533f5"),
+    Formula(Equal(BranchCuts(DirichletL(s,chi), s, Union(CC, Set(UnsignedInfinity))), Set())),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("97f631"),
+    Formula(Equal(EssentialSingularities(DirichletL(s,chi), s, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("ea8c55"),
+    Formula(Equal(Poles(DirichletL(s,chi), s, Union(CC, Set(UnsignedInfinity))), Cases(Tuple(Set(1), Equal(chi, DirichletCharacter(q, 1))), Tuple(Set(), Otherwise)))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("fe4692"),
+    Formula(Equal(HolomorphicDomain(DirichletL(s,chi), s, Union(CC, Set(UnsignedInfinity))), Cases(Tuple(SetMinus(CC, Set(1)), Equal(chi, DirichletCharacter(q, 1))), Tuple(CC, Otherwise)))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+# Approximations
+
+make_entry(ID("312147"),
+    Formula(LessEqual(Abs(DirichletL(s,chi) - Sum(chi(k) / k**s, Tuple(k, 1, N-1))), HurwitzZeta(Re(s), N))),
+    Variables(q, chi, s, N),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("4911bd"),
+    Formula(LessEqual(Abs(1/DirichletL(s,chi) - PrimeProduct(Parentheses(1-chi(p) / p**s), p, Less(p, N))), HurwitzZeta(Re(s), N))),
+    Variables(q, chi, s, N),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
 
