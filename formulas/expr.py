@@ -808,6 +808,8 @@ class Expr(object):
         if head is DirichletGroup:
             #return "\\{\\chi_{%s}\\}" % argstr[0]
             return "G_{%s}" % argstr[0]
+        if head is PrimitiveDirichletCharacters:
+            return "G_{%s}^{\\text{primitive}}" % argstr[0]
         if head is StieltjesGamma:
             arg0 = args[0].latex(in_small=True)
             if len(args) == 1:
@@ -849,6 +851,12 @@ class Expr(object):
         if head is Det and args[0].head() is Matrix2x2:
             assert len(args) == 1
             return "\\operatorname{det}" + argstr[0]
+        if head is ForAll:
+            assert len(args) == 3
+            return "\\text{for all } %s: %s, %s" % (argstr[0], argstr[1], argstr[2])
+        if head is Exists:
+            assert len(args) == 2
+            return "\\text{there exists } %s: %s" % (argstr[0], argstr[1])
         if head is Cases:
             s = "\\begin{cases} "
             for arg in args:
@@ -893,6 +901,8 @@ class Expr(object):
             return True
         if self.head() is Tuple:
             return all(arg._can_render_html() for arg in self.args())
+        if self.head() is Set:
+            return all(arg._can_render_html() for arg in self.args())
         return False
 
     def html(self, display=False, avoid_latex=False, single=False):
@@ -915,6 +925,8 @@ class Expr(object):
             return "-" + self.args()[0].html(display=display, avoid_latex=True)
         if self.head() is Tuple and avoid_latex and self._can_render_html():
             return "(" + ", ".join(a.html(display=display, avoid_latex=True) for a in self.args()) + ")"
+        if self.head() is Set and avoid_latex and self._can_render_html():
+            return "{" + ", ".join(a.html(display=display, avoid_latex=True) for a in self.args()) + "}"
         if self.head() is Table:
             return self.html_Table()
         if self.head() is Formula:
@@ -1229,6 +1241,7 @@ PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element NotElement Subset SubsetEqual
+ForAll Exists
 EqualAndElement
 Rings CommutativeRings Fields
 PP ZZ QQ RR CC HH AlgebraicNumbers
@@ -1301,8 +1314,7 @@ SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularJ
 PrimitiveReducedPositiveIntegralBinaryQuadraticForms
 HilbertClassPolynomial
-DirichletCharacter
-DirichletGroup
+DirichletCharacter DirichletGroup PrimitiveDirichletCharacters
 ConreyGenerator
 DiscreteLog
 Cases Otherwise

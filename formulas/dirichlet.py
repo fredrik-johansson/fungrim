@@ -6,16 +6,20 @@ def_Topic(
     Title("Dirichlet characters"),
     Section("Definitions"),
     Entries(
-        "e810d8",
         "c7e2fb",
+        "e810d8",
+        "2f52bc",
     ),
-    Section("Fundamental properties"),
-    Subsection("Character group"),
+    Section("Character group"),
     Entries(
         "47d430",
+        "ed65c8",
         "62f7d5",
+        "0ba38f",
+        "f88596",
+        "3b43b0",
     ),
-    Subsection("Character evaluation"),
+    Section("Character evaluation"),
     Entries(
         "d9a187",
         "57d31a",
@@ -26,15 +30,19 @@ def_Topic(
         "d29554",
         "458198",
     ),
+    Section("Principal characters"),
+    Entries(
+        "d8c6d1",
+    ),
+    Section("Primitive decomposition"),
+    Entries(
+        "a7d592",
+    ),
     Section("Conrey numbering"),
     Subsection("Multiplicativity"),
     Entries
     (
         "2a48bd",
-    ),
-    Subsection("Principal character"),
-    Entries(
-        "d8c6d1",
     ),
     Subsection("Odd powers"),
     Entries(
@@ -57,6 +65,11 @@ def_Topic(
         "f4de66",
     ),
     Section("Tables"),
+    Subsection("Primitive and non-primitive characters"),
+    Entries(
+        "338b5c",
+    ),
+    Subsection("Character values"),
     Entries(
         "c40df4",
         "ef432d",
@@ -91,6 +104,12 @@ make_entry(ID("e810d8"),
         "and", DirichletGroup(4), "."),
     Description("A more explicit construction of the characters is possible using the Conrey numbering scheme, which is implemented by", SourceForm(DirichletCharacter), "."))
 
+make_entry(ID("2f52bc"),
+    SymbolDefinition(PrimitiveDirichletCharacters, PrimitiveDirichletCharacters(q), "Primitive Dirichlet characters with given modulus"),
+    Description(SourceForm(PrimitiveDirichletCharacters(q)), ", rendered as", PrimitiveDirichletCharacters(q),
+        ", represents the set of primitive Dirichlet characters modulo", q, ", given", Element(q, ZZGreaterEqual(1)),
+        ". Primitive characters are defined in ", EntryReference("ed65c8"), "."))
+
 ellrange = Element(ell, ZZBetween(1, Max(q,2)-1))
 
 make_entry(ID("c7e2fb"),
@@ -117,10 +136,32 @@ make_entry(ID("47d430"),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
+make_entry(ID("ed65c8"),
+    Formula(Equal(PrimitiveDirichletCharacters(q),
+        SetBuilder(chi, chi, And(Element(chi, DirichletGroup(q)),
+            ForAll(d, And(Element(d, ZZBetween(1, q-1)), Divides(d, q)),
+                Exists(a, And(Element(a, ZZBetween(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1)))))))),
+    Variables(q),
+    Assumptions(Element(q, ZZGreaterEqual(1))),
+    References("T. Apostol (1976), Introduction to Analytic Number Theory, Springer. Chapter 8.7."))
+
 make_entry(ID("62f7d5"),
     Formula(Equal(Cardinality(DirichletGroup(q)), Totient(q))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))))
+
+make_entry(ID("0ba38f"),
+    Formula(Equal(Cardinality(PrimitiveDirichletCharacters(q)), DivisorSum(Totient(d)*MoebiusMu(q/d), d, q))),
+    Variables(q),
+    Assumptions(Element(q, ZZGreaterEqual(1))),
+    References("http://oeis.org/A007431"))
+
+make_entry(ID("f88596"),
+    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)) / (Div(1,2) * N**2), N, Infinity), 6/ConstPi**2)))
+
+make_entry(ID("3b43b0"),
+    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), Tuple(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)), N, Infinity), 6/ConstPi**2)),
+    References("H. Jager, On the number of Dirichlet characters with modulus not exceeding x, Indagationes Mathematicae, Volume 76, Issue 5, 1973, Pages 452-455, https://doi.org/10.1016/1385-7258(73)90069-3"))
 
 make_entry(ID("d9a187"),
     Formula(Where(Equal(chi(n), DirichletCharacter(q,ell,n)), Equal(chi, DirichletCharacter(q,ell)))),
@@ -129,7 +170,7 @@ make_entry(ID("d9a187"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), ellrange, Equal(GCD(ell,q), 1), Element(n, ZZ))))
 
 make_entry(ID("57d31a"),
-    Formula(Where(Element(chi(n), Union(SetBuilder(Exp(2*ConstPi*ConstI*k/r), k, Element(k, ZZBetween(0,r-1))), Set(0))), Equal(r, Totient(q)))),
+    Formula(Where(Element(chi(n), Union(SetBuilder(Exp(2*ConstPi*ConstI*k/r), k, Element(k, ZZ)), Set(0))), Equal(r, Totient(q)))),
     Variables(q,chi,n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZ))))
 
@@ -161,6 +202,22 @@ make_entry(ID("d29554"),
 make_entry(ID("458198"),
     Formula(Equal(chi(0), Cases(Tuple(1, Equal(q, 1)), Tuple(0, Unequal(q, 1))))),
     Variables(q,chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+# Princial characters
+
+make_entry(ID("d8c6d1"),
+    Formula(Equal(DirichletCharacter(q, 1, n), Cases(Tuple(1, Equal(GCD(n,q), 1)), Tuple(0, Otherwise)))),
+    Variables(q,n),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(n, ZZ))))
+
+# Primitive decomposition
+
+make_entry(ID("a7d592"),
+    Formula(Where(Exists(Tuple(d, Subscript(chi, 0)), And(Element(d, ZZBetween(1, q)), Divides(d, q),
+        Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
+            Equal(Subscript(chi, 1), DirichletCharacter(q, 1)))),
+    Variables(q, Subscript(chi, 0)),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 # Conrey numbering
@@ -205,11 +262,6 @@ make_entry(ID("2a48bd"),
     Assumptions(And(Element(q1, ZZGreaterEqual(1)), Element(q2, ZZGreaterEqual(1)),
         Element(ell, ZZBetween(1, Max(q1*q2, 2)-1)), Equal(GCD(ell,q1), GCD(ell,q2), GCD(q1,q2), 1))))
 
-make_entry(ID("d8c6d1"),
-    Formula(Equal(DirichletCharacter(q, 1, n), 1)),
-    Variables(q,n),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(n, ZZ), Equal(GCD(n,q), 1))))
-
 make_entry(ID("4cf4e4"),
     Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*a*b/Totient(q))),
         Equal(q, p**e), Equal(g, ConreyGenerator(p)), Equal(a, DiscreteLog(ell, g, q)), Equal(b, DiscreteLog(n, g, q)))),
@@ -218,9 +270,9 @@ make_entry(ID("4cf4e4"),
         Element(ell, ZZBetween(1, p**e-1)), Element(n, ZZ), Equal(GCD(ell, p**e), GCD(n, p**e), 1))))
 
 make_entry(ID("fc4f6a"),
-    Formula(Equal(DirichletCharacter(4, 3, n), (-1)**Floor(n/2))),
+    Formula(Equal(DirichletCharacter(4, 3, n), Cases(Tuple(1,CongruentMod(n,1,4)), Tuple(-1,CongruentMod(n,3,4)), Tuple(0, Otherwise)))),
     Variables(n),
-    Assumptions(And(Element(n, ZZ), Equal(GCD(n,2), 1))))
+    Assumptions(Element(n, ZZ)))
 
 make_entry(ID("03fbe8"),
     Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*(((1-x)*(1-y)/8 + a*b/2**(e-2))))),
@@ -259,6 +311,47 @@ make_entry(ID("f4de66"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(m, ZZ), Element(n, ZZ))))
 
 # Tables
+
+make_entry(ID("338b5c"),
+    Description("Table of", PrimitiveDirichletCharacters(q), "and", SetMinus(DirichletGroup(q), PrimitiveDirichletCharacters(q)), "for", LessEqual(1, q, 30)),
+    Table(TableRelation(Tuple(q, Cardinality(DirichletGroup(q)), Cardinality(PrimitiveDirichletCharacters(q)), P, N), And(Equal(PrimitiveDirichletCharacters(q), SetBuilder(DirichletCharacter(q,ell), ell, Element(l, P))),
+            Equal(SetMinus(DirichletGroup(q), PrimitiveDirichletCharacters(q)), SetBuilder(DirichletCharacter(q,ell), ell, Element(l, N))))),
+        TableHeadings(q, Cardinality(DirichletGroup(q)), Cardinality(PrimitiveDirichletCharacters(q)),
+            Description(ell, "such that", DirichletCharacter(q,ell), "is primitive"), Description(ell, "such that", DirichletCharacter(q,ell), "is non-primitive")),
+        List(
+    Tuple(1, 1, 1, Set(1), Set()),
+    Tuple(2, 1, 0, Set(), Set(1)),
+    Tuple(3, 2, 1, Set(2), Set(1)),
+    Tuple(4, 2, 1, Set(3), Set(1)),
+    Tuple(5, 4, 3, Set(2, 3, 4), Set(1)),
+    Tuple(6, 2, 0, Set(), Set(1, 5)),
+    Tuple(7, 6, 5, Set(2, 3, 4, 5, 6), Set(1)),
+    Tuple(8, 4, 2, Set(3, 5), Set(1, 7)),
+    Tuple(9, 6, 4, Set(2, 4, 5, 7), Set(1, 8)),
+    Tuple(10, 4, 0, Set(), Set(1, 3, 7, 9)),
+    Tuple(11, 10, 9, Set(2, 3, 4, 5, 6, 7, 8, 9, 10), Set(1)),
+    Tuple(12, 4, 1, Set(11), Set(1, 5, 7)),
+    Tuple(13, 12, 11, Set(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), Set(1)),
+    Tuple(14, 6, 0, Set(), Set(1, 3, 5, 9, 11, 13)),
+    Tuple(15, 8, 3, Set(2, 8, 14), Set(1, 4, 7, 11, 13)),
+    Tuple(16, 8, 4, Set(3, 5, 11, 13), Set(1, 7, 9, 15)),
+    Tuple(17, 16, 15, Set(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16), Set(1)),
+    Tuple(18, 6, 0, Set(), Set(1, 5, 7, 11, 13, 17)),
+    Tuple(19, 18, 17, Set(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18), Set(1)),
+    Tuple(20, 8, 3, Set(3, 7, 19), Set(1, 9, 11, 13, 17)),
+    Tuple(21, 12, 5, Set(2, 5, 11, 17, 20), Set(1, 4, 8, 10, 13, 16, 19)),
+    Tuple(22, 10, 0, Set(), Set(1, 3, 5, 7, 9, 13, 15, 17, 19, 21)),
+    Tuple(23, 22, 21, Set(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22), Set(1)),
+    Tuple(24, 8, 2, Set(5, 11), Set(1, 7, 13, 17, 19, 23)),
+    Tuple(25, 20, 16, Set(2, 3, 4, 6, 8, 9, 11, 12, 13, 14, 16, 17, 19, 21, 22, 23), Set(1, 7, 18, 24)),
+    Tuple(26, 12, 0, Set(), Set(1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25)),
+    Tuple(27, 18, 12, Set(2, 4, 5, 7, 11, 13, 14, 16, 20, 22, 23, 25), Set(1, 8, 10, 17, 19, 26)),
+    Tuple(28, 12, 5, Set(3, 11, 19, 23, 27), Set(1, 5, 9, 13, 15, 17, 25)),
+    Tuple(29, 28, 27, Set(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28), Set(1)),
+    Tuple(30, 8, 0, Set(), Set(1, 7, 11, 13, 17, 19, 23, 29)),
+    )))
+
+
 
 make_entry(ID("c40df4"),
     Description("Table of", DirichletCharacter(1, ell)),
@@ -442,10 +535,12 @@ def_Topic(
         "c31c10",
         "4c3678",
     ),
-    Section("Special cases"),
+    Section("Principal and non-primitive characters"),
     Entries(
         "a9337b",
         "ff8254",
+        "629f70",
+        "1bd945",
     ),
     Section("Value at 1"),
     Entries(
@@ -458,8 +553,7 @@ def_Topic(
         "3b8c97",
         "c9d117",
     ),
-    Section("Values at integers"),
-    Subsection("Generalized Bernoulli numbers"),
+    Section("Values at negative integers"),
     Entries(
         "cb5d51",
         "e44796",
@@ -529,7 +623,7 @@ make_entry(ID("4c3678"),
     Variables(q, k, s),
     Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, ZZBetween(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
 
-# Special cases
+# Principal and non-primitive characters
 
 make_entry(ID("a9337b"),
     Formula(Equal(DirichletL(s, DirichletCharacter(1, 1)), RiemannZeta(s))),
@@ -540,6 +634,23 @@ make_entry(ID("ff8254"),
     Formula(Equal(DirichletL(s, DirichletCharacter(2**n, 1)), (1-Pow(2,-s)) * RiemannZeta(s))),
     Variables(n, s),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(s, CC))))
+
+make_entry(ID("629f70"),
+    Formula(Equal(DirichletL(s, DirichletCharacter(q, 1)), RiemannZeta(s) * PrimeProduct(Parentheses(1 - 1/p**s), p, Divides(p, q)))),
+    Variables(q, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(s, CC))))
+
+make_entry(ID("1bd945"),
+    Formula(Where(Equal(DirichletL(s,chi), DirichletL(s, Subscript(chi,0)) * PrimeProduct(Parentheses(1-Call(Subscript(chi,0), p)/p**s), p, Divides(p, q))),
+        Equal(Subscript(chi, 1), DirichletCharacter(q, 1)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
+    Variables(q, d, Subscript(chi, 0)),
+    Assumptions(And(
+        Element(q, ZZGreaterEqual(1)),
+        Element(d, ZZBetween(1,q)),
+        Divides(d, q),
+        Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)),
+        Element(s, CC))),
+    Description("This allows an L-function of a non-primitive character to be expressed in terms of an L-function of a primitive character."))
 
 # Value at 1
 
