@@ -243,6 +243,8 @@ class Expr(object):
         if self is Ellipsis: return "\\ldots"
         if self is Spectrum: return "\\operatorname{spec}"
         if self is Det: return "\\operatorname{det}"
+        if self is RiemannHypothesis: return "\\operatorname{RH}"
+        if self is GeneralizedRiemannHypothesis: return "\\operatorname{GRH}"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -549,6 +551,9 @@ class Expr(object):
         if head is RiemannZetaZero:
             assert len(args) == 1
             return "\\rho_{" + argstr[0] + "}"
+        if head is DirichletLZero:
+            assert len(args) == 2
+            return "\\rho_{%s, %s}" % (argstr[0], argstr[1])
         if head is BernoulliPolynomial:
             assert len(args) == 2
             return "B_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
@@ -1320,6 +1325,8 @@ DiscreteLog
 Cases Otherwise
 HurwitzZeta DirichletL GeneralizedBernoulliB
 StieltjesGamma
+DirichletLZero
+GeneralizedRiemannHypothesis
 """)
 
 inject_builtin("""

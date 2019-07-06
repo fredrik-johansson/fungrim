@@ -89,8 +89,11 @@ def_Topic(
         "e6deb7",
         "5df909",
     ),
-    Section("Related topics"),
+    Section("L-series"),
     SeeTopics("Dirichlet L-functions"),
+    Entries(
+        "604c7c",
+    ),
 )
 
 make_entry(ID("e810d8"),
@@ -553,6 +556,12 @@ def_Topic(
         "3b8c97",
         "c9d117",
     ),
+    Section("Value at 0"),
+    Entries(
+        "a07d28",
+        "789ca4",
+        "fad52f",
+    ),
     Section("Values at negative integers"),
     Entries(
         "cb5d51",
@@ -561,6 +570,20 @@ def_Topic(
         "f7a866",
         "d69b41",
         "f5c3c5",
+    ),
+    Section("Zeros"),
+    Subsection("Nontrivial zeros"),
+    Entries(
+        "3f96c1",
+        "dc593e",
+        "982e3b",
+        "2a34c3",
+        "214a91",
+    ),
+    Subsection("Trivial zeros"),
+    Entries(
+        "bc755b",
+        "9ba78a",
     ),
     Section("Analytic properties"),
     Entries(
@@ -643,7 +666,7 @@ make_entry(ID("629f70"),
 make_entry(ID("1bd945"),
     Formula(Where(Equal(DirichletL(s,chi), DirichletL(s, Subscript(chi,0)) * PrimeProduct(Parentheses(1-Call(Subscript(chi,0), p)/p**s), p, Divides(p, q))),
         Equal(Subscript(chi, 1), DirichletCharacter(q, 1)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
-    Variables(q, d, Subscript(chi, 0)),
+    Variables(q, d, Subscript(chi, 0), s),
     Assumptions(And(
         Element(q, ZZGreaterEqual(1)),
         Element(d, ZZBetween(1,q)),
@@ -683,8 +706,24 @@ make_entry(ID("3b8c97"),
 make_entry(ID("c9d117"),
     Formula(Equal(DirichletL(1,DirichletCharacter(5,4)), 2*Log(GoldenRatio)/Sqrt(5))))
 
+# Value at 0
 
-# Values at integers
+make_entry(ID("a07d28"),
+    Formula(Equal(DirichletL(0,DirichletCharacter(q,1)), Cases(Tuple(-Div(1,2), Equal(q, 1)), Tuple(0, Otherwise)))),
+    Variables(q),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)))))
+
+make_entry(ID("789ca4"),
+    Formula(Equal(DirichletL(0,chi), -Div(1,q) * Sum(k * chi(k), Tuple(k, 1, q)))),
+    Variables(q),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+
+make_entry(ID("fad52f"),
+    Formula(Implies(Equal(chi(-1), 1), Equal(DirichletL(0,chi), 0))),
+    Variables(q),
+    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(chi, DirichletGroup(q)))))
+
+# Values at negative integers
 
 make_entry(ID("cb5d51"),
     SymbolDefinition(GeneralizedBernoulliB, GeneralizedBernoulliB(n, chi), "Generalized Bernoulli number"))
@@ -714,6 +753,57 @@ make_entry(ID("f5c3c5"),
     Formula(Equal(DirichletL(-n, chi), -(GeneralizedBernoulliB(n+1,chi)/(n+1)))),
     Variables(q, chi, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
+
+# Zeros
+
+make_entry(ID("3f96c1"),
+    SymbolDefinition(DirichletLZero, DirichletLZero(n,chi), "Nontrivial zero of Dirichlet L-function"),
+    Description("Generalizing", SourceForm(RiemannZetaZero), ", this gives an enumeration of the nontrivial zeros of a given Dirichlet L-function, where eventual repeated zeros are counted separately.",
+        "The index", n, "is a nonzero integer such that", Greater(n, 0), "gives zeros with", Greater(Im(DirichletLZero(n,chi)), 0),
+        ", ordered by increasing imaginary part, while", Less(n, 0), "gives zeros with", LessEqual(Im(DirichletLZero(n,chi)), 0),
+        ", ordered by decreasing imaginary part."))
+
+make_entry(ID("dc593e"),
+    SymbolDefinition(GeneralizedRiemannHypothesis, GeneralizedRiemannHypothesis, "Generalized Riemann hypothesis"),
+    Description("Used as a symbol in logical formulas, represents the assertion that the generalized Riemann hypothesis is true for all Dirichlet L-functions, "
+        "or in other words that", EntryReference("214a91"), "always holds."))
+
+make_entry(ID("982e3b"),
+    Formula(Less(0, Re(DirichletLZero(n,chi)), 1)),
+    Variables(q,n,chi),
+    Assumptions(And(Element(q,ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)),
+        Element(n, ZZ), Unequal(n, 0))))
+
+make_entry(ID("214a91"),
+    Formula(Equal(Re(DirichletLZero(n,chi)), Div(1,2))),
+    Variables(q,n,chi),
+    Assumptions(And(Element(q,ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)),
+        Element(n, ZZ), Unequal(n, 0), Or(And(Less(q, 400000), Less(Abs(Im(DirichletLZero(n,chi))), Pow(10,8)/q)), GeneralizedRiemannHypothesis))),
+    References("""D. J. Platt (2013), Numerical computations concerning the GRH. https://arxiv.org/pdf/1305.3087.pdf"""))
+
+make_entry(ID("9ba78a"),
+    Formula(Equal(Zeros(DirichletL(s, chi), s, And(Element(s, CC), LessEqual(Re(s), 0))),
+        Cases(Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
+              Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), Unequal(q, 1))),
+              Tuple(SetBuilder(-(2*n)-1, n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))
+
+make_entry(ID("bc755b"),
+    Formula(Equal(Zeros(DirichletL(s, chi), s, Element(s, CC)),
+        Union(Parentheses(Zeros(DirichletL(s, chi), s, And(Element(s, CC), LessEqual(Re(s), 0)))),
+            SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0))))))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("2a34c3"),
+    Formula(Equal(Zeros(DirichletL(s, chi), s, And(Element(s, CC), Less(0, Re(s), 1))),
+        SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0)))))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+# todo: document extra trivial zeros for non-primitive characters?
+
 
 # Analytic properties
 
