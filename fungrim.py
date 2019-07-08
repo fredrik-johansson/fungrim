@@ -21,7 +21,6 @@ if len(sys.argv) > 1 and sys.argv[1] == "img":
     source_scripts.xray.plots("build/html/img")
     sys.exit(0)
 
-
 from formulas import *
 
 topics_referencing_entry = {}
@@ -67,6 +66,11 @@ if not os.path.exists("build/html/topic"):
     os.makedirs("build/html/topic")
 if not os.path.exists("build/html/symbol"):
     os.makedirs("build/html/symbol")
+
+from shutil import copyfile
+copyfile("favicon.png", "build/html/favicon.png")
+copyfile("fungrim.svg", "build/html/fungrim.svg")
+
 
 import pickle
 katex_cache = {}
@@ -188,6 +192,8 @@ function toggleBig(id, smallurl, bigurl) {
   }
 }
 </script>
+<link rel="icon" type="image/png" href="/favicon.png">
+
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
 </head>
 <body>
@@ -212,15 +218,15 @@ The <a href="https://github.com/fredrik-johansson/fungrim">source code is on Git
 html_end = html_end.replace("%%TIMESTAMP%%", timestamp)
 
 index_text = """
-<h1 style="margin-top: 0.5em">The Mathematical Functions Grimoire</h1>
+<h1 style="margin-top:0.3em; margin-bottom:0.35em">The Mathematical Functions Grimoire</h1>
+<div style="text-align:center">
+<img src="fungrim.svg" alt="Fungrim logo" style="width:120px; height:120px;" />
+</div>
 
-<p style="text-align:center; color:orange"><b>Alpha version</b></p>
-
-<p style="margin:1em">
-Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas for mathematical functions.
+<p style="margin:0.6em 1em 1em 1em; font-size:0.9em">
+Welcome! The Mathematical Functions Grimoire (<i>Fungrim</i>) is an open source library of formulas and data for special functions.
 Fungrim currently consists of %%NUMSYMBOLS%% <i>symbols</i> (named mathematical objects), %%NUMENTRIES%% <i>entries</i> (definitions, formulas, tables, plots), and %%NUMTOPICS%% <i>topics</i> (listings of entries).
-All data in Fungrim is represented in symbolic, semantic form designed to be usable by computer algebra software.
-Fungrim is also fully viewable online, with a permanent ID and URL for each entry, symbol or topic. This is one formula entry:
+This is one example entry:
 </p>
 """
 
@@ -433,7 +439,12 @@ DefinitionsPage().write()
 frontpage = FrontPage()
 frontpage.start()
 frontpage.entry("9ee8bc")
-frontpage.fp.write("""<p style="margin: 1em">Click "Details" to show an expanded view of an entry, or click the ID (9ee8bc) to show the expanded view on its own page.</p>""")
+frontpage.fp.write("""
+<p style="margin: 1em; font-size:0.9em">
+The Fungrim website provides a permanent ID and URL for each entry, symbol or topic. 
+Click "Details" to show an expanded view of an entry, or click the ID (9ee8bc) to show the expanded view on its own page.
+All data in Fungrim is represented in semantic form designed to be usable by computer algebra software.
+</p>""")
 frontpage.section("Browse by topic")
 
 def writetopic(s):
