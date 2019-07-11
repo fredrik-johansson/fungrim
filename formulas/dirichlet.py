@@ -612,6 +612,11 @@ def_Topic(
         "312147",
         "4911bd",
     ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "8ff1ff",
+        "9b3fde",
+    ),
     Section("Related topics"),
     SeeTopics("Dirichlet characters", "Riemann zeta function", "Bernoulli numbers and polynomials"),
 )
@@ -905,4 +910,21 @@ make_entry(ID("4911bd"),
     Formula(LessEqual(Abs(1/DirichletL(s,chi) - PrimeProduct(Parentheses(1-chi(p) / p**s), p, Less(p, N))), HurwitzZeta(Re(s), N))),
     Variables(q, chi, s, N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
+
+# Bounds and inequalities
+
+make_entry(ID("8ff1ff"),
+    Formula(LessEqual(Abs(DirichletL(s, chi)), RiemannZeta(Re(s)))),
+    Variables(q, chi, s),
+    Assumptions(
+        And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)),
+            Element(s, CC), Greater(Re(s), 1))))
+
+make_entry(ID("9b3fde"),
+    Formula(LessEqual(Abs(DirichletL(s,chi)), (q*Abs(1+s)/(2*ConstPi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
+    Variables(q, chi, s, eta),
+    Assumptions(
+        And(Element(q, ZZGreaterEqual(2)), Element(chi, PrimitiveDirichletCharacters(q)),
+            Element(s, CC), Element(eta, OpenClosedInterval(0, Div(1,2))), LessEqual(-eta, Re(s), 1 + eta))),
+    References("H. Rademacher, On the Phragmén-Lindelöf theorem and some applications, Mathematische Zeitschrift, December 1959, Volume 72, Issue 1, pp 192-204. Theorem 3. https://doi.org/10.1007/BF01162949"))
 
