@@ -220,7 +220,7 @@ html_end = html_end.replace("%%TIMESTAMP%%", timestamp)
 index_text = """
 <h1 style="margin-top:0.3em; margin-bottom:0.35em">The Mathematical Functions Grimoire</h1>
 <div style="text-align:center">
-<img src="fungrim.svg" alt="Fungrim logo" style="width:120px; height:120px;" />
+<img src="fungrim.svg" alt="Fungrim logo" style="width:140px; height:140px;" />
 </div>
 
 <p style="margin:0.6em 1em 1em 1em; font-size:0.9em">

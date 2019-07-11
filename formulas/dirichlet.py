@@ -10,15 +10,6 @@ def_Topic(
         "e810d8",
         "2f52bc",
     ),
-    Section("Character group"),
-    Entries(
-        "47d430",
-        "ed65c8",
-        "62f7d5",
-        "0ba38f",
-        "f88596",
-        "3b43b0",
-    ),
     Section("Character evaluation"),
     Entries(
         "d9a187",
@@ -33,6 +24,15 @@ def_Topic(
     Section("Principal characters"),
     Entries(
         "d8c6d1",
+    ),
+    Section("Character group"),
+    Entries(
+        "47d430",
+        "ed65c8",
+        "62f7d5",
+        "0ba38f",
+        "f88596",
+        "3b43b0",
     ),
     Section("Primitive decomposition"),
     Entries(
@@ -207,7 +207,7 @@ make_entry(ID("458198"),
     Variables(q,chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
-# Princial characters
+# Principal characters
 
 make_entry(ID("d8c6d1"),
     Formula(Equal(DirichletCharacter(q, 1, n), Cases(Tuple(1, Equal(GCD(n,q), 1)), Tuple(0, Otherwise)))),
@@ -585,6 +585,21 @@ def_Topic(
         "bc755b",
         "9ba78a",
     ),
+    Section("Conjugate symmetry"),
+    Entries(
+        "7c86d5",
+        "50adea",
+        "97fe89",
+    ),
+    Section("Functional equation"),
+    Entries(
+        "cc6a5a",
+        "b788a1",
+        "11a763",
+        "62f12c",
+        "b78a50",
+        "288207",
+    ),
     Section("Analytic properties"),
     Entries(
         "8533f5",
@@ -804,6 +819,58 @@ make_entry(ID("2a34c3"),
 
 # todo: document extra trivial zeros for non-primitive characters?
 
+# Conjugate symmetry
+
+make_entry(ID("7c86d5"),
+    Formula(Equal(DirichletL(s, Conjugate(chi)), Conjugate(DirichletL(Conjugate(s), chi)))),
+    Variables(s, CC),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC))))
+
+make_entry(ID("50adea"),
+    Formula(Equal(DirichletL(Conjugate(s), chi), Conjugate(DirichletL(s, Conjugate(chi))))),
+    Variables(s, CC),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC))))
+
+make_entry(ID("97fe89"),
+    Formula(Equal(DirichletL(Conjugate(s), Conjugate(chi)), Conjugate(DirichletL(s, chi)))),
+    Variables(s, CC),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC))))
+
+# Functional equation
+
+make_entry(ID("cc6a5a"),
+    SymbolDefinition(DirichletLambda, DirichletLambda(s, chi), "Completed Dirichlet L-function"),
+    Description("The completed Dirichlet L-function is an entire function of", s, ".",
+        "It is defined by", EntryReference("b788a1"), "and taking the limiting value at the exceptional points", s,
+        "where a pole appears in one of the constituent factors."),
+    Description("In the literature, this function is sometimes multiplied by a different constant factor (depending on", chi, "but constant with respect to", s, ")."))
+
+make_entry(ID("b788a1"),
+    Formula(Equal(DirichletLambda(s, chi), Where(beta * (q / ConstPi)**((s+a)/2) * GammaFunction((s+a)/2) * DirichletL(s,chi),
+        Equal(a, (1 - chi(-1))/2), Equal(beta, Cases(Tuple(s*(s-1), Equal(q, 1)), Tuple(1, Otherwise)))))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)), Element(s, CC),
+        NotElement(s, Cases(Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), 1)),
+                            Tuple(SetBuilder(-(2*n)-1, n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1)))),
+        Not(And(Equal(q,1), Equal(s,1))))))
+
+make_entry(ID("11a763"),
+    SymbolDefinition(GaussSum, GaussSum(q, chi), "Gauss sum"))
+
+make_entry(ID("62f12c"),
+    Formula(Equal(GaussSum(q, chi), Sum(chi(n) * Exp(2*ConstPi*ConstI*n/q), Tuple(n, 1, q)))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("b78a50"),
+    Formula(Equal(Abs(GaussSum(q, chi)), Sqrt(q))),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))
+
+make_entry(ID("288207"),
+    Formula(Equal(DirichletLambda(s, chi), Where(epsilon * DirichletLambda(1-s, Conjugate(chi)), Equal(a, (1-chi(-1))/2), Equal(epsilon, GaussSum(q, chi) / (ConstI**a * Sqrt(q)))))),
+    Variables(q, chi, s),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)), Element(s, CC))))
 
 # Analytic properties
 

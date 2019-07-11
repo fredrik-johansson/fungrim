@@ -155,9 +155,6 @@ class Expr(object):
         if self is ConstE: return "e"
         if self is ConstGamma: return "\\gamma"
         if self is GoldenRatio: return "\\varphi"
-        if self is RiemannZeta: return "\\zeta"
-        if self is HurwitzZeta: return "\\zeta"
-        if self is DirichletL: return "L"
         if self is Infinity: return "\\infty"
         if self is UnsignedInfinity: return "{\\tilde \\infty}"
         if self is GammaFunction: return "\\Gamma"
@@ -245,6 +242,10 @@ class Expr(object):
         if self is Det: return "\\operatorname{det}"
         if self is RiemannHypothesis: return "\\operatorname{RH}"
         if self is GeneralizedRiemannHypothesis: return "\\operatorname{GRH}"
+        if self is RiemannZeta: return "\\zeta"
+        if self is HurwitzZeta: return "\\zeta"
+        if self is DirichletL: return "L"
+        if self is DirichletLambda: return "\\Lambda"
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -815,6 +816,9 @@ class Expr(object):
             return "G_{%s}" % argstr[0]
         if head is PrimitiveDirichletCharacters:
             return "G_{%s}^{\\text{primitive}}" % argstr[0]
+        if head is GaussSum:
+            assert len(args) == 2
+            return "G_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is StieltjesGamma:
             arg0 = args[0].latex(in_small=True)
             if len(args) == 1:
@@ -1327,6 +1331,7 @@ HurwitzZeta DirichletL GeneralizedBernoulliB
 StieltjesGamma
 DirichletLZero
 GeneralizedRiemannHypothesis
+DirichletLambda GaussSum JacobiSum
 """)
 
 inject_builtin("""
