@@ -260,6 +260,10 @@ class Expr(object):
         head = self._args[0]
         args = self._args[1:]
 
+        if head in infix_latex_table:
+            argstr = [arg.latex(in_small=in_small) for arg in args]
+            return (" " + infix_latex_table[head] + " ").join(argstr)
+
         if head is Exp:
             assert len(args) == 1
             if args[0].show_exponential_as_power():
@@ -504,30 +508,12 @@ class Expr(object):
         if head is Ceil:
             assert len(args) == 1
             return "\\left\\lceil " + argstr[0] + " \\right\\rceil"
-        if head is Less:
-            return " \\lt ".join(argstr)
-        if head is LessEqual:
-            return " \\le ".join(argstr)
-        if head is Greater:
-            return " \\gt ".join(argstr)
-        if head is GreaterEqual:
-            return " \\ge ".join(argstr)
-        if head is Equal:
-            return " = ".join(argstr)
-        if head is Unequal:
-            return " \\ne ".join(argstr)
-        if head is Subset:
-            return " \\subset ".join(argstr)
-        if head is SubsetEqual:
-            return " \\subseteq ".join(argstr)
         if head is Tuple:
             return "\\left(" + ", ".join(argstr) + "\\right)"
         if head is Set:
             return "\\left\{" + ", ".join(argstr) + "\\right\}"
         if head is List:
             return "\\left[" + ", ".join(argstr) + "\\right]"
-        if head is Divides:
-            return " \\mid ".join(argstr)
         # todo: unify subscript cases
         if head is BernoulliB:
             assert len(args) == 1
@@ -669,18 +655,6 @@ class Expr(object):
         if head is AsymptoticTo:
             assert len(argstr) == 4
             return "%s \\sim %s, \; %s \\to %s" % tuple(argstr)
-        if head is Mod:
-            return " \\bmod ".join(argstr)
-        if head is Element:
-            return " \\in ".join(argstr)
-        if head is NotElement:
-            return " \\notin ".join(argstr)
-        if head is SetMinus:
-            return " \\setminus ".join(argstr)
-        if head is Union:
-            return " \\cup ".join(argstr)
-        if head is Intersection:
-            return " \\cap ".join(argstr)
         if head is And:
             for i in range(len(args)):
                 if (not args[i].is_atom()) and args[i].head() in (And, Or):
@@ -1344,6 +1318,24 @@ inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
 inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa mu nu xi pi rho sigma tau phi chi psi omega ell""")
 inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Mu Nu Xi Pi Rho Sigma Tau Phi Chi Psi Omega""")
+
+infix_latex_table = {
+    Mod: "\\bmod",
+    Element: "\\in",
+    NotElement: "\\notin",
+    SetMinus: "\\setminus",
+    Union: "\\cup",
+    Intersection: "\\cap",
+    Less: "\\lt",
+    LessEqual: "\\le",
+    Greater: "\\gt",
+    GreaterEqual: "\\ge",
+    Equal: "=",
+    Unequal: "\\ne",
+    Subset: "\\subset",
+    SubsetEqual: "\\subseteq",
+    Divides: "\\mid",
+}
 
 symbol_latex_table = {
     ConstPi: "\\pi",
