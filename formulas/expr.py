@@ -4,12 +4,45 @@ int_types = (int, type(1<<128))
 
 katex_function = []
 
-class Expr(object):
+int_cache = {}
 
-    def __new__(self, arg=None, symbol_name=None):
+class Expr(object):
+    """
+    Represents a symbolic expression.
+
+    A symbolic expression is either an atom (symbol, integer or text)
+    or a non-atomic expression representing a function application
+    f(a, b, ...) where f and a, b, ... are symbolic expressions.
+
+    The methods .is_atom(), and specifically .is_symbol(), .is_integer(),
+    .is_text() are useful to check for atoms.
+
+    For a non-atomic expression expr, expr.head() returns f and
+    expr.args() returns (a, b, ...) as a Python tuple.
+    For a non-atomic expression, these methods both return None.
+
+    Expr objects are immutable and instances may be cached silently.
+
+    Most arithmetic operators are overloaded to permit constructing
+    expressions in natural syntax, but the == and != operators
+    perform structural comparison.
+    """
+
+    def __new__(self, arg=None, symbol_name=None, call=None):
+        """
+        Expr(expr) creates a copy of expr (this may actually return
+        the same object).
+
+        Expr(5) creates an Integer atom with the value 5.
+        Expr("text") creates a Text atom with the value "text".
+        Expr(symbol_name="x") creates a Symbol atom with the label "x".
+
+        Expr(call=(f, a, b)) creates the non-atomic expression f(a, b).
+        """
         if isinstance(arg, Expr):
             return arg
         self = object.__new__(Expr)
+        self._hash = None
         self._symbol = None
         self._integer = None
         self._text = None
@@ -19,10 +52,53 @@ class Expr(object):
         elif isinstance(arg, str):
             self._text = arg
         elif isinstance(arg, int_types):
-            self._integer = arg
+            self._integer = int(arg)
+        elif call is not None:
+            assert len(call) >= 1
+            self._args = tuple(Expr(obj) for obj in call)
         return self
 
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return False
+        if hash(self) != hash(other):
+            return False
+        if self._args is not None:
+            if other._args is not None:
+                return self._args == other._args
+            return False
+        if self._symbol is not None:
+            if other._symbol is not None:
+                return self._symbol == other._symbol
+            return False
+        if self._integer is not None:
+            if other._integer is not None:
+                return self._integer == other._integer
+            return False
+        if self._text is not None:
+            if other._text is not None:
+                return self._text == other._text
+            return False
+        return False
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __hash__(self):
+        if self._hash is None:
+            if self._symbol is not None:
+                self._hash = hash(self._symbol)
+            elif self._integer is not None:
+                self._hash = hash(self._integer)
+            elif self._text is not None:
+                self._hash = hash(self._text)
+            else:
+                self._hash = hash(self._args)
+        return self._hash
+
     def is_atom(self):
+        """Returns True if self is an atom (symbol, integer or text),
+        False otherwise."""
         return self._args is None
 
     def is_symbol(self):
@@ -35,18 +111,17 @@ class Expr(object):
         return self._text is not None
 
     def head(self):
-        # todo ...
         if self._args is None:
             return None
         return self._args[0]
 
     def args(self):
+        if self._args is None:
+            return None
         return self._args[1:]
 
     def __call__(self, *args):
-        v = Expr()
-        v._args = (self,) + tuple(Expr(arg) for arg in args)
-        return v
+        return Expr(call=((self,) + args))
 
     def __pos__(self):
         return Pos(self)
@@ -109,17 +184,21 @@ class Expr(object):
     def __repr__(self):
         return self.str()
 
-    def all_symbols(self):
+    def _all_symbols(self):
         if self._symbol is not None:
             return [self]
         symbols = []
         if self._args is not None:
             for arg in self._args:
-                arg_symbols = arg.all_symbols()
+                arg_symbols = arg._all_symbols()
                 for s in arg_symbols:
-                    if s not in symbols:
-                        symbols.append(s)
+                    symbols.append(s)
         return symbols
+
+    def all_symbols(self):
+        from collections import OrderedDict
+        symbols = self._all_symbols()
+        return list(OrderedDict.fromkeys(symbols))
 
     # needs work
     def need_parens_in_mul(self):
@@ -149,103 +228,19 @@ class Expr(object):
                 return False
         return True
 
-    def latex(self, in_small=False):
-        if self is ConstPi: return "\\pi"
-        if self is ConstI: return "i"
-        if self is ConstE: return "e"
-        if self is ConstGamma: return "\\gamma"
-        if self is GoldenRatio: return "\\varphi"
-        if self is Infinity: return "\\infty"
-        if self is UnsignedInfinity: return "{\\tilde \\infty}"
-        if self is GammaFunction: return "\\Gamma"
-        if self is LogGamma: return "\\log \\Gamma"
-        if self is UpperGamma: return "\\Gamma"
-        if self is Erf: return "\\operatorname{erf}"
-        if self is Erfc: return "\\operatorname{erfc}"
-        if self is Erfi: return "\\operatorname{erfi}"
-        if self is DigammaFunction: return "\\psi"
-        if self is DedekindEta: return "\\eta"
-        if self is DedekindEtaEpsilon: return "\\varepsilon"
-        if self is DedekindSum: return "s"
-        if self is ModularJ: return "j"
-        if self is JacobiTheta1: return "\\theta_1"
-        if self is JacobiTheta2: return "\\theta_2"
-        if self is JacobiTheta3: return "\\theta_3"
-        if self is JacobiTheta4: return "\\theta_4"
-        if self is WeierstrassP: return "\\wp"
-        if self is WeierstrassSigma: return "\\sigma"
-        if self is WeierstrassZeta: return "\\zeta"
-        if self is EulerQSeries: return "\\phi"
-        if self is PartitionsP: return "p"
-        if self is DivisorSigma: return "\\sigma"
-        if self is MoebiusMu: return "\\mu"
-        if self is HardyRamanujanA: return "A"
-        if self is Sin: return "\\sin"
-        if self is Sinh: return "\\sinh"
-        if self is Cos: return "\\cos"
-        if self is Cosh: return "\\cosh"
-        if self is Tan: return "\\tan"
-        if self is Tanh: return "\\tanh"
-        if self is Cot: return "\\cot"
-        if self is Coth: return "\\coth"
-        if self is Exp: return "\\exp"
-        if self is Log: return "\\log"
-        if self is Atan: return "\\operatorname{atan}"
-        if self is Acos: return "\\operatorname{acos}"
-        if self is Asin: return "\\operatorname{asin}"
-        if self is Acot: return "\\operatorname{acot}"
-        if self is Atanh: return "\\operatorname{atanh}"
-        if self is Acosh: return "\\operatorname{acosh}"
-        if self is Asinh: return "\\operatorname{asinh}"
-        if self is Acoth: return "\\operatorname{acoth}"
-        if self is Atan2: return "\\operatorname{atan2}"
-        if self is Sinc: return "\\operatorname{sinc}"
-        if self is Hypergeometric0F1: return "\,{}_0F_1"
-        if self is Hypergeometric1F1: return "\,{}_1F_1"
-        if self is Hypergeometric2F1: return "\,{}_2F_1"
-        if self is Hypergeometric2F0: return "\,{}_2F_0"
-        if self is HypergeometricU: return "U"
-        if self is HypergeometricUStar: return "U^{*}"
-        if self is Hypergeometric0F1Regularized: return "\,{}_0{\\textbf F}_1"
-        if self is Hypergeometric1F1Regularized: return "\,{}_1{\\textbf F}_1"
-        if self is Hypergeometric2F1Regularized: return "\,{}_2{\\textbf F}_1"
-        if self is Hypergeometric2F0Regularized: return "\,{}_2{\\textbf F}_0"
-        if self is AiryAi: return "\\operatorname{Ai}"
-        if self is AiryBi: return "\\operatorname{Bi}"
-        if self is AiryAiPrime: return "\\operatorname{Ai}'"
-        if self is AiryBiPrime: return "\\operatorname{Bi}'"
-        if self is LogIntegral: return "\\operatorname{li}"
-        if self is GCD: return "\\gcd"
-        if self is LCM: return "\\operatorname{lcm}"
-        if self is XGCD: return "\\operatorname{xgcd}"
-        if self is Totient: return "\\varphi"
-        if self is Sign: return "\\operatorname{sgn}"
-        if self is Csgn: return "\\operatorname{csgn}"
-        if self is Arg: return "\\arg"
-        if self is Min: return "\\min"
-        if self is Max: return "\\max"
-        if self is PP: return "\\mathbb{P}"
-        if self is ZZ: return "\\mathbb{Z}"
-        if self is QQ: return "\\mathbb{Q}"
-        if self is RR: return "\\mathbb{R}"
-        if self is CC: return "\\mathbb{C}"
-        if self is HH: return "\\mathbb{H}"
-        if self is AlgebraicNumbers: return "\\overline{\\mathbb{Q}}"
-        if self is UnitCircle: return "\\mathbb{T}"
-        if self is PrimePi: return "\\pi"
-        if self is SL2Z: return "\\operatorname{SL}_2(\\mathbb{Z})"
-        if self is PSL2Z: return "\\operatorname{PSL}_2(\\mathbb{Z})"
-        if self is ModularGroupFundamentalDomain: return "\\mathcal{F}"
-        if self is PowerSet: return "\\mathscr{P}"
-        if self is Ellipsis: return "\\ldots"
-        if self is Spectrum: return "\\operatorname{spec}"
-        if self is Det: return "\\operatorname{det}"
-        if self is RiemannHypothesis: return "\\operatorname{RH}"
-        if self is GeneralizedRiemannHypothesis: return "\\operatorname{GRH}"
-        if self is RiemannZeta: return "\\zeta"
-        if self is HurwitzZeta: return "\\zeta"
-        if self is DirichletL: return "L"
-        if self is DirichletLambda: return "\\Lambda"
+    def latex(self, in_small=False, __cache={}):
+        if (self, in_small) in __cache:
+            return __cache[(self, in_small)]
+        else:
+            tex = self._latex(in_small=in_small)
+            __cache[(self, in_small)] = tex
+            return tex
+
+    def _latex(self, in_small=False):
+
+        if self in symbol_latex_table:
+            return symbol_latex_table[self]
+
         if self.is_atom():
             if self._symbol is not None:
                 if self._symbol in variable_names:
@@ -1343,12 +1338,111 @@ Image ImageSource
 """)
 
 # symbols we don't want to show in entry definition listings
-exclude_symbols = [Set, List, Tuple, And, Or, Implies, Equivalent, Not, Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual]
+exclude_symbols = set([Set, List, Tuple, And, Or, Implies, Equivalent, Not, Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual])
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
 inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa mu nu xi pi rho sigma tau phi chi psi omega ell""")
 inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Mu Nu Xi Pi Rho Sigma Tau Phi Chi Psi Omega""")
+
+symbol_latex_table = {
+    ConstPi: "\\pi",
+    ConstI: "i",
+    ConstE: "e",
+    ConstGamma: "\\gamma",
+    GoldenRatio: "\\varphi",
+    Infinity: "\\infty",
+    UnsignedInfinity: "{\\tilde \\infty}",
+    GammaFunction: "\\Gamma",
+    LogGamma: "\\log \\Gamma",
+    UpperGamma: "\\Gamma",
+    Erf: "\\operatorname{erf}",
+    Erfc: "\\operatorname{erfc}",
+    Erfi: "\\operatorname{erfi}",
+    DigammaFunction: "\\psi",
+    DedekindEta: "\\eta",
+    DedekindEtaEpsilon: "\\varepsilon",
+    DedekindSum: "s",
+    ModularJ: "j",
+    JacobiTheta1: "\\theta_1",
+    JacobiTheta2: "\\theta_2",
+    JacobiTheta3: "\\theta_3",
+    JacobiTheta4: "\\theta_4",
+    WeierstrassP: "\\wp",
+    WeierstrassSigma: "\\sigma",
+    WeierstrassZeta: "\\zeta",
+    EulerQSeries: "\\phi",
+    PartitionsP: "p",
+    DivisorSigma: "\\sigma",
+    MoebiusMu: "\\mu",
+    HardyRamanujanA: "A",
+    Sin: "\\sin",
+    Sinh: "\\sinh",
+    Cos: "\\cos",
+    Cosh: "\\cosh",
+    Tan: "\\tan",
+    Tanh: "\\tanh",
+    Cot: "\\cot",
+    Coth: "\\coth",
+    Exp: "\\exp",
+    Log: "\\log",
+    Atan: "\\operatorname{atan}",
+    Acos: "\\operatorname{acos}",
+    Asin: "\\operatorname{asin}",
+    Acot: "\\operatorname{acot}",
+    Atanh: "\\operatorname{atanh}",
+    Acosh: "\\operatorname{acosh}",
+    Asinh: "\\operatorname{asinh}",
+    Acoth: "\\operatorname{acoth}",
+    Atan2: "\\operatorname{atan2}",
+    Sinc: "\\operatorname{sinc}",
+    Hypergeometric0F1: "\\,{}_0F_1",
+    Hypergeometric1F1: "\\,{}_1F_1",
+    Hypergeometric2F1: "\\,{}_2F_1",
+    Hypergeometric2F0: "\\,{}_2F_0",
+    HypergeometricU: "U",
+    HypergeometricUStar: "U^{*}",
+    Hypergeometric0F1Regularized: "\\,{}_0{\\textbf F}_1",
+    Hypergeometric1F1Regularized: "\\,{}_1{\\textbf F}_1",
+    Hypergeometric2F1Regularized: "\\,{}_2{\\textbf F}_1",
+    Hypergeometric2F0Regularized: "\\,{}_2{\\textbf F}_0",
+    AiryAi: "\\operatorname{Ai}",
+    AiryBi: "\\operatorname{Bi}",
+    AiryAiPrime: "\\operatorname{Ai}'",
+    AiryBiPrime: "\\operatorname{Bi}'",
+    LogIntegral: "\\operatorname{li}",
+    GCD: "\\gcd",
+    LCM: "\\operatorname{lcm}",
+    XGCD: "\\operatorname{xgcd}",
+    Totient: "\\varphi",
+    Sign: "\\operatorname{sgn}",
+    Csgn: "\\operatorname{csgn}",
+    Arg: "\\arg",
+    Min: "\\min",
+    Max: "\\max",
+    PP: "\\mathbb{P}",
+    ZZ: "\\mathbb{Z}",
+    QQ: "\\mathbb{Q}",
+    RR: "\\mathbb{R}",
+    CC: "\\mathbb{C}",
+    HH: "\\mathbb{H}",
+    AlgebraicNumbers: "\\overline{\\mathbb{Q}}",
+    UnitCircle: "\\mathbb{T}",
+    PrimePi: "\\pi",
+    SL2Z: "\\operatorname{SL}_2(\\mathbb{Z})",
+    PSL2Z: "\\operatorname{PSL}_2(\\mathbb{Z})",
+    ModularGroupFundamentalDomain: "\\mathcal{F}",
+    PowerSet: "\\mathscr{P}",
+    Ellipsis: "\\ldots",
+    Spectrum: "\\operatorname{spec}",
+    Det: "\\operatorname{det}",
+    RiemannHypothesis: "\\operatorname{RH}",
+    GeneralizedRiemannHypothesis: "\\operatorname{GRH}",
+    RiemannZeta: "\\zeta",
+    HurwitzZeta: "\\zeta",
+    DirichletL: "L",
+    DirichletLambda: "\\Lambda",
+}
 
 described_symbols = []
 descriptions = {}
