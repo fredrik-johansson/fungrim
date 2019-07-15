@@ -44,13 +44,6 @@ from .modular_transformations import *
 from .modular_j import *
 from .dirichlet import *
 
-# todo: move to the right places
-
-describe(EulerQSeries, EulerQSeries(q), [Element(q, CC), Less(Abs(q), 1)], CC, "Euler's q-series")
-describe(DedekindEta, DedekindEta(tau), [Element(tau, HH)], CC, "Dedekind eta function")
-describe(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), [Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ)], CC, "Root of unity in the functional equation of the Dedekind eta function")
-describe(DedekindSum, DedekindSum(n,k), [Element(n, ZZ), Element(k, ZZGreaterEqual(1)), Equal(GCD(n,k), 1)], QQ, "Dedekind sum")
-describe(GCD, GCD(n,k), [Element(n, ZZ), Element(k, ZZ)], ZZ, "Greatest common divisor")
 describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
 describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
@@ -61,13 +54,6 @@ describe(HermitePolynomial, HermitePolynomial(n,z), [Element(n, ZZGreaterEqual(0
 
 describe(BernsteinEllipse, BernsteinEllipse(rho), [Element(rho, RR), Greater(rho, 1)], PowerSet(CC), "Bernstein ellipse with foci -1,+1 and semi-axis sum rho")
 describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
-
-describe(Hypergeometric2F1, Hypergeometric2F1(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Gauss hypergeometric function")
-describe(Hypergeometric2F1Regularized, Hypergeometric2F1Regularized(a,b,c,z), [Element(a,CC),Element(b,CC),Element(c,ZZ),Element(z,CC)], CC, "Regularized Gauss hypergeometric function")
-
-describe(Erf, Erf(z), [Element(z, CC)], CC, "Error function")
-describe(Erfc, Erfc(z), [Element(z, CC)], CC, "Complementary error function")
-describe(Erfi, Erfi(z), [Element(z, CC)], CC, "Imaginary error function")
 
 describe(JacobiTheta1, JacobiTheta1(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")
 describe(JacobiTheta2, JacobiTheta2(z,tau), [Element(z, CC), Element(tau, HH)], CC, "Jacobi theta function")

@@ -1209,6 +1209,7 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
+True_ False_
 Parentheses Brackets Braces
 Ellipsis Call Subscript
 Unknown Undefined
