@@ -3,11 +3,30 @@
 from .expr import *
 
 def_Topic(
+    Title("Illustrations of Eisenstein series"),
+    SeeTopics("Eisenstein series"),
+    Section("X-ray plots"),
+    Entries(
+        "7e1850",
+        "dac0bb",
+        "54951a",
+        "356d7a",
+        "626026",
+        "a14cfc",
+    ),
+)
+
+def_Topic(
     Title("Eisenstein series"),
     Section("Definitions"),
     Entries(
         "9bb960",
         "df3334",
+    ),
+    Section("Illustrations"),
+    SeeTopics("Illustrations of Eisenstein series"),
+    Entries(
+        "54951a",
     ),
     Section("Normalization"),
     Entries(
@@ -156,6 +175,38 @@ make_entry(ID("df3334"),
     SymbolDefinition(EisensteinE, EisensteinE(k,tau), "Normalized Eisenstein series"),
     Description("The normalized Eisenstein series", EisensteinE(k,tau), "is defined for even integers", GreaterEqual(k, 2), "and", tau, "in the upper half-plane."),
     Description("The functions", EisensteinG(k,tau), "and", EisensteinE(k,tau), "are the same up to a normalizing factor."))
+
+# Illustrations
+
+make_entry(ID("7e1850"),
+    Image(Description("X-ray of", EisensteinE(2, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e2")),
+    description_xray)
+
+make_entry(ID("dac0bb"),
+    Image(Description("X-ray of", EisensteinE(4, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e4")),
+    description_xray)
+
+make_entry(ID("54951a"),
+    Image(Description("X-ray of", EisensteinE(6, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e6")),
+    description_xray)
+
+make_entry(ID("356d7a"),
+    Image(Description("X-ray of", EisensteinE(8, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e8")),
+    description_xray)
+
+make_entry(ID("626026"),
+    Image(Description("X-ray of", EisensteinE(10, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e10")),
+    description_xray)
+
+make_entry(ID("a14cfc"),
+    Image(Description("X-ray of", EisensteinE(12, tau), "on", Element(tau, ClosedInterval(-1,1) + ClosedInterval(0,2)*ConstI), "with", ModularGroupFundamentalDomain, "highlighted"),
+        ImageSource("xray_eisenstein_e12")),
+    description_xray)
 
 # Normalization
 

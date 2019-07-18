@@ -150,6 +150,61 @@ def plots(outdir):
 
     directory[0] = outdir
 
+    def coverup_rectangle(xy,w,h):
+        gca().add_patch(patches.Rectangle(xy,w,h,linewidth=0,facecolor=realcolor,zorder=2))
+
+    def elltheta(z, tau):
+        return tuple(complex(c) for c in acb(z).modular_theta(tau))
+
+    def ellzeta(z, tau):
+        return complex(acb(z).elliptic_zeta(tau))
+
+    def eisene(k, tau):
+        if tau.imag < 0.01:
+            return 0.0
+        if k == 2:
+            return ellzeta(0.5, tau) / fp.zeta(2)
+        _, a, b, c = elltheta(0, tau)
+        E4 = 0.5*(a**8 + b**8 + c**8)
+        E6 = 0.5*(-3*a**8*(b**4+c**4)+b**12+c**12)
+        E8 = 0.5*(a**16 + b**16 + c**16)
+        if k == 4: return E4
+        if k == 6: return E6
+        if k == 8: return E8
+        if k == 10: return E4 * E6
+        if k == 12: return (441*E4**3 + 250*E6**2)/691
+        if k == 14: return E4**2 * E6
+        if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
+        raise ValueError
+
+    fundament_x = list(linspace(-0.5,0.5,100))
+    fundament_y = [sqrt(1-x**2) for x in fundament_x]
+
+    fundament_x = [-0.5] + fundament_x + [0.5]
+    fundament_y = [2.0] + fundament_y + [2.0]
+
+    def eisenstein_decorations():
+        coverup_rectangle((-1,0),2,0.015)
+        fill(fundament_x, fundament_y, facecolor=highlightcolor, edgecolor=highlightbordercolor, alpha=0.5, linewidth=0.5, zorder=2)
+
+    xrayplot(lambda tau: eisene(2,tau), (-1,1), (0,2), 600, "eisenstein_e2", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
+    xrayplot(lambda tau: eisene(4,tau), (-1,1), (0,2), 600, "eisenstein_e4", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
+    xrayplot(lambda tau: eisene(6,tau), (-1,1), (0,2), 600, "eisenstein_e6", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
+    xrayplot(lambda tau: eisene(8,tau), (-1,1), (0,2), 600, "eisenstein_e8", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
+    xrayplot(lambda tau: eisene(10,tau), (-1,1), (0,2), 600, "eisenstein_e10", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
+    xrayplot(lambda tau: eisene(12,tau), (-1,1), (0,2), 600, "eisenstein_e12", xtks=([-1,-0.5,0,0.5,1],), ytks=([0,0.5,1,1.5,2],),
+        decorations=eisenstein_decorations, xout=0.1, yout=0.0)
+
     def zeta_decorations():
         axvspan(0, 1, alpha=0.5, color=highlightcolor)
         axvline(0, alpha=0.5, color=highlightbordercolor, linewidth=0.5)
