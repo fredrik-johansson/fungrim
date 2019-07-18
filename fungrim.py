@@ -513,6 +513,7 @@ writetopic("Modular transformations")
 writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
 writetopic("Modular j-invariant")
+writetopic("Eisenstein series")
 writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 

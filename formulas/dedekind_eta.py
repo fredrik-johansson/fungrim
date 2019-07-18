@@ -103,14 +103,14 @@ make_entry(ID("9b8c9f"),
     Formula(Equal(DedekindEta(ConstI), GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4)))))
 
 make_entry(ID("5706ab"),
-    Formula(Equal(Derivative(DedekindEta(tau), tau, ConstI),
+    Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, ConstI),
          -Div(ConstI,4)*DedekindEta(ConstI))))
 
 make_entry(ID("204acd"),
     Formula(Equal(DedekindEta(Exp(2*ConstPi*ConstI/3)), Exp(-(ConstPi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(GammaFunction(Div(1,3)), Div(3,2)) / (2 * ConstPi)))))
 
 make_entry(ID("4af6db"),
-    Formula(Equal(Derivative(DedekindEta(tau), tau, Exp(2*ConstPi*ConstI/3)),
+    Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, Exp(2*ConstPi*ConstI/3)),
         ((ConstI*Sqrt(3))/6) * DedekindEta(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("6b9935"),
@@ -174,15 +174,15 @@ make_entry(ID("a1a3d4"),
 # Derivatives
 
 make_entry(ID("1c25d3"),
-    Formula(Equal(Derivative(DedekindEta(tau), tau, tau),
+    Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, tau),
         (ConstI / (2 * ConstPi)) * DedekindEta(tau) * WeierstrassZeta(Div(1,2), tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("02d14f"),
     Formula(Where(
-        Equal(36*Derivative(y(tau), tau, tau)**2 - 24*Derivative(y(tau), tau, tau, 2)*y(tau) + Derivative(y(tau), tau, tau, 3), 0),
-        Equal(y(tau), Derivative(DedekindEta(tau), tau, tau) / DedekindEta(tau)))),
+        Equal(36*ComplexDerivative(y(tau), tau, tau)**2 - 24*ComplexDerivative(y(tau), tau, tau, 2)*y(tau) + ComplexDerivative(y(tau), tau, tau, 3), 0),
+        Equal(y(tau), ComplexDerivative(DedekindEta(tau), tau, tau) / DedekindEta(tau)))),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References("http://functions.wolfram.com/EllipticFunctions/DedekindEta/13/01/0002/"))
@@ -190,11 +190,11 @@ make_entry(ID("02d14f"),
 make_entry(ID("df5f38"),
     Formula(
         Equal(
-            DedekindEta(tau)**2*(33*Derivative(DedekindEta(tau),tau,tau,2)**2
-            + DedekindEta(tau)*Derivative(DedekindEta(tau),tau,tau,4))
-            - 18*Derivative(DedekindEta(tau),tau,tau)**4
-            + 12*DedekindEta(tau)*Derivative(DedekindEta(tau),tau,tau,2)*Derivative(DedekindEta(tau),tau,tau)**2
-            - 28*DedekindEta(tau)**2*Derivative(DedekindEta(tau),tau,tau,3)*Derivative(DedekindEta(tau),tau,tau), 0)),
+            DedekindEta(tau)**2*(33*ComplexDerivative(DedekindEta(tau),tau,tau,2)**2
+            + DedekindEta(tau)*ComplexDerivative(DedekindEta(tau),tau,tau,4))
+            - 18*ComplexDerivative(DedekindEta(tau),tau,tau)**4
+            + 12*DedekindEta(tau)*ComplexDerivative(DedekindEta(tau),tau,tau,2)*ComplexDerivative(DedekindEta(tau),tau,tau)**2
+            - 28*DedekindEta(tau)**2*ComplexDerivative(DedekindEta(tau),tau,tau,3)*ComplexDerivative(DedekindEta(tau),tau,tau), 0)),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References("http://functions.wolfram.com/EllipticFunctions/DedekindEta/13/01/0001/"))

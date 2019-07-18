@@ -192,7 +192,7 @@ make_entry(ID("acdce8"),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("4d2e45"),
-    Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(n-k) * PartitionsP(k), Tuple(k, 0, n-1)))),
+    Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(1, n-k) * PartitionsP(k), Tuple(k, 0, n-1)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

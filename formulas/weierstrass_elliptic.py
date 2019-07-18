@@ -24,6 +24,8 @@ def_Topic(
         "58d67b",
         "b10ca7",
         "7c4457",
+        "9bf0ad", # defined in eisenstein.py
+        "3e84e3", # defined in eisenstein.py
     ),
     Section("Derivatives"),
     Entries(

@@ -9,7 +9,6 @@ from .complex_parts import *
 from .const_gamma import *
 from .pi import *
 from .golden_ratio import *
-from .dedekind_eta import *
 from .exp import *
 from .powers import *
 from .sqrt import *
@@ -42,9 +41,13 @@ from .weierstrass_elliptic import *
 from .prime_numbers import *
 from .modular_transformations import *
 from .modular_j import *
+from .dedekind_eta import *
+from .eisenstein import *
 from .dirichlet import *
 
-describe(DivisorSigma, DivisorSigma(n), [Element(n, ZZ)], ZZ, "Sum of divisors function")
+describe(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), z, z), [], None, "Multiplicity (order) of complex zero at the given point")
+
+describe(DivisorSigma, DivisorSigma(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of divisors function")
 describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
 describe(LegendrePolynomial, LegendrePolynomial(n,z), [Element(n, ZZGreaterEqual(0)), Element(z, CC)], CC, "Legendre polynomial")

@@ -264,6 +264,13 @@ class Expr(object):
             argstr = [arg.latex(in_small=in_small) for arg in args]
             return (" " + infix_latex_table[head] + " ").join(argstr)
 
+        # F(n,x) -> F_n(x)
+        if head in subscript_call_latex_table:
+            assert len(args) == 2
+            arg0 = args[0].latex(in_small=True)
+            arg1 = args[1].latex(in_small=in_small)
+            return subscript_call_latex_table[head] + "_{" + arg0 + "}" + "\!\\left(" + arg1 + "\\right)"
+
         if head is Exp:
             assert len(args) == 1
             if args[0].show_exponential_as_power():
@@ -315,12 +322,18 @@ class Expr(object):
             base = args[0]
             expo = args[1]
             # todo: more systematic solutions
-            if not base.is_atom() and base.head() in (Sin, Cos, Tan, Sinh, Cosh, Tanh):
+            if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, DedekindEta):
                 return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
             if not base.is_atom() and base.head() is Fibonacci:
                 return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
             if not base.is_atom() and base.head() in (JacobiTheta1, JacobiTheta2, JacobiTheta3, JacobiTheta4) and len(base.args()) == 2:
                 return base.head().latex() + "^{%s}\\!\\left(%s, %s\\right)" % (expo.latex(in_small=True), base.args()[0].latex(), base.args()[1].latex())
+            if not base.is_atom() and base.head() in subscript_call_latex_table and len(base.args()) == 2:
+                h = subscript_call_latex_table[base.head()]
+                s = base.args()[0].latex(in_small=True)
+                e = expo.latex(in_small=True)
+                v = base.args()[1].latex(in_small=in_small)
+                return "%s_{%s}^{%s}\\!\\left(%s\\right)" % (h, s, e, v)
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
             if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber, Matrix2x2)):
@@ -460,6 +473,14 @@ class Expr(object):
             else:
                 formula = formula.latex()
             return "\\mathop{%s}\\limits_{%s} %s" % (opname, predicate, formula)
+        if head is ComplexZeroMultiplicity:
+            assert len(args) == 3
+            f, var, point = argstr
+            if args[1] == args[2]:
+                return "\\mathop{\\operatorname{ord}}\\limits_{%s} %s" % (point, f)
+            else:
+                return "\\mathop{\\operatorname{ord}}\\limits_{%s=%s} %s" % (var, point, f)
+            ComplexZeroMultiplicity(f(tau), tau, 3)
         if head in (Derivative, RealDerivative, ComplexDerivative, ComplexBranchDerivative, MeromorphicDerivative):
             if len(args) == 2:
                 assert args[1]._args[0] is Tuple
@@ -536,27 +557,12 @@ class Expr(object):
         if head is DirichletLZero:
             assert len(args) == 2
             return "\\rho_{%s, %s}" % (argstr[0], argstr[1])
-        if head is BernoulliPolynomial:
-            assert len(args) == 2
-            return "B_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
-        if head is LegendrePolynomial:
-            assert len(args) == 2
-            return "P_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
-        if head is ChebyshevT:
-            assert len(args) == 2
-            return "T_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
-        if head is ChebyshevU:
-            assert len(args) == 2
-            return "U_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is LegendrePolynomialZero:
             assert len(args) == 2
             return "x_{%s,%s}" % (argstr[0], argstr[1])
         if head is GaussLegendreWeight:
             assert len(args) == 2
             return "w_{%s,%s}" % (argstr[0], argstr[1])
-        if head is HermitePolynomial:
-            assert len(args) == 2
-            return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is GeneralizedBernoulliB:
             assert len(args) == 2
             return "B_{%s,%s}" % (argstr[0], argstr[1])
@@ -767,9 +773,6 @@ class Expr(object):
         if head is PrimitiveReducedPositiveIntegralBinaryQuadraticForms:
             assert len(args) == 1
             return "\\mathcal{Q}^{*}_{%s}" % argstr[0]
-        if head is HilbertClassPolynomial:
-            assert len(args) == 2
-            return "H_{" + argstr[0] + "}" + "\!\\left(" + argstr[1] + "\\right)"
         if head is HypergeometricUStarRemainder:
             assert len(args) == 4
             return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
@@ -1249,6 +1252,7 @@ AsymptoticTo
 FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
+ComplexZeroMultiplicity
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
@@ -1302,6 +1306,7 @@ StieltjesGamma
 DirichletLZero
 GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
+EisensteinG EisensteinE
 """)
 
 inject_builtin("""
@@ -1338,6 +1343,18 @@ infix_latex_table = {
     Divides: "\\mid",
 }
 
+subscript_call_latex_table = {
+    BernoulliPolynomial: "B",
+    LegendrePolynomial: "P",
+    ChebyshevT: "T",
+    ChebyshevU: "U",
+    HermitePolynomial: "H",
+    HilbertClassPolynomial: "H",
+    EisensteinG: "G",
+    EisensteinE: "E",
+    DivisorSigma: "\\sigma",
+}
+
 symbol_latex_table = {
     ConstPi: "\\pi",
     ConstI: "i",
@@ -1366,7 +1383,6 @@ symbol_latex_table = {
     WeierstrassZeta: "\\zeta",
     EulerQSeries: "\\phi",
     PartitionsP: "p",
-    DivisorSigma: "\\sigma",
     MoebiusMu: "\\mu",
     HardyRamanujanA: "A",
     Sin: "\\sin",
@@ -1377,6 +1393,10 @@ symbol_latex_table = {
     Tanh: "\\tanh",
     Cot: "\\cot",
     Coth: "\\coth",
+    Sec: "\\sec",
+    Sech: "\\sech",
+    Csc: "\\csc",
+    Csch: "\\csch",
     Exp: "\\exp",
     Log: "\\log",
     Atan: "\\operatorname{atan}",

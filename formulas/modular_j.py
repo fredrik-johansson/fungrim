@@ -38,6 +38,10 @@ def_Topic(
         "cedcfc",
         "664b4c",
     ),
+    Section("Derivatives"),
+    Entries(
+        "348b26",
+    ),
     Section("Analytic properties"),
     Entries(
         "27f9d2",
@@ -138,6 +142,12 @@ make_entry(ID("664b4c"),
     Formula(Equal(ModularJ(tau), ((DedekindEta(tau)/DedekindEta(2*tau))**8 + Pow(2,8) * (DedekindEta(2*tau)/DedekindEta(tau))**16)**3)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
+
+make_entry(ID("348b26"),
+    Formula(Equal(Derivative(ModularJ(tau), tau, tau), -(2*ConstPi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 
 
 
