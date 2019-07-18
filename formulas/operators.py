@@ -13,6 +13,14 @@ def_Topic(
         "8baf79",
         "5830eb",
     ),
+    Section("Solutions and zeros"),
+    Entries(
+        "f7ce46",
+        "d2714b",
+        "5862bb",
+        "f5ae93",
+        "231a99",
+    ),
     Section("Extreme values"),
     Entries(
         "6ec976",
@@ -53,7 +61,6 @@ def_Topic(
         "fb2790",
     ),
 )
-
 
 # Sums and products
 
@@ -110,6 +117,41 @@ make_entry(ID("5830eb"),
         DivisorProduct(f(k), k, n, P(k)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
     Description("The argument", SourceForm(k), "defines a locally bound variable."),
     Description("The empty product is equal to one."))
+
+# Solutions and zeros
+
+make_entry(ID("f7ce46"),
+    SymbolDefinition(Zeros, Zeros(f(x), x, P(x)), "Zeros (roots) of function"),
+    Description(SourceForm(Zeros(f(x), x, P(x))), ", rendered", Zeros(f(x), x, P(x)), ", represents the set of values",
+        x, "satisfying", P(x), "and", Equal(f(x), 0), "."),
+    description_x_predicate)
+
+make_entry(ID("d2714b"),
+    SymbolDefinition(UniqueZero, UniqueZero(f(x), x, P(x)), "Unique zero (root) of function"),
+    Description(SourceForm(UniqueZero(f(x), x, P(x))), ", rendered", UniqueZero(f(x), x, P(x)), ", represents the unique value",
+        x, "satisfying", P(x), "and", Equal(f(x), 0), "."),
+    Description("This operation is undefined if such a value does not exist or is not unique."),
+    description_x_predicate)
+
+make_entry(ID("5862bb"),
+    SymbolDefinition(Solutions, Solutions(Q(x), x, P(x)), "Solution set"),
+    Description(SourceForm(Solutions(Q(x), x, P(x))), ", rendered", Solutions(Q(x), x, P(x)), ", represents the set of values",
+        x, "satisfying", P(x), "and", Q(x), "."),
+    description_x_predicate)
+
+make_entry(ID("f5ae93"),
+    SymbolDefinition(UniqueSolution, UniqueSolution(Q(x), x, P(x)), "Unique solution"),
+    Description(SourceForm(UniqueSolution(Q(x), x, P(x))), ", rendered", UniqueSolution(f(x), x, P(x)), ", represents the unique value",
+        x, "satisfying", P(x), "and", Q(x), "."),
+    Description("This operation is undefined if such a value does not exist or is not unique."),
+    description_x_predicate)
+
+make_entry(ID("231a99"),
+    SymbolDefinition(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), z, z), "Multiplicity (order) of complex zero"),
+    Description(SourceForm(ComplexZeroMultiplicity(f(z), z, c)), ", rendered", ComplexZeroMultiplicity(f(z), z, c),
+        ", gives the root multiplicity (order of vanishing) of", f(z), "at the point", Equal(z, c), "."),
+    Description("If", Unequal(f(c), 0), ", the multiplicity is zero."),
+    Description("It is required that", f(z), "is holomorphic and not identically zero in a neighborhood of", c, "."))
 
 # Extreme values
 

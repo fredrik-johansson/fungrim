@@ -45,8 +45,6 @@ from .dedekind_eta import *
 from .eisenstein import *
 from .dirichlet import *
 
-describe(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), z, z), [], None, "Multiplicity (order) of complex zero at the given point")
-
 describe(DivisorSigma, DivisorSigma(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of divisors function")
 describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")

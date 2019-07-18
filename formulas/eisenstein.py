@@ -136,6 +136,13 @@ def_Topic(
         "6ae250",
         "ad91ae",
     ),
+    Subsection("Weight 2 series"),
+    Entries(
+        "cae067",
+        "f33f09",
+        "67f2ef",
+        "be9790",
+    ),
 )
 
 # Definitions
@@ -521,6 +528,26 @@ make_entry(ID("6ae250"),
 
 make_entry(ID("ad91ae"),
     Formula(Equal(Zeros(EisensteinE(14, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(ConstI, Exp(2*ConstPi*ConstI/3)))))
+
+make_entry(ID("cae067"),
+    Formula(Equal(Zeros(EisensteinE(2, tau), tau, Element(tau, HH)),
+        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), z, And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
+            Element(n, ZZ))))))
+
+make_entry(ID("f33f09"),
+    Formula(Equal(Zeros(EisensteinE(2, tau), tau, And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
+        Where(SetBuilder(Parentheses(UniqueZero(EisensteinE(2, z), z, Element(z, D(c,d)))),
+            Tuple(c, d), And(Element(c, ZZ), Element(d, ZZ), Equal(GCD(c,d),1), Element(-(d/c), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
+            Equal(D(c,d), ClosedDisk(-(d/c) + (ConstI*ConstPi)/(6*c**2), (Decimal("0.000283")*ConstPi**2)/(36*c**2)))))),
+    References("R. Wood and M. P. Young, Zeros of the weight two Eisenstein series, Journal of Number Theory Volume 143, October 2014, Pages 320-333. https://doi.org/10.1016/j.jnt.2014.04.007"))
+
+make_entry(ID("67f2ef"),
+    Formula(Element(UniqueZero(EisensteinE(2, ConstI*y), y, Element(y, OpenInterval(0, Infinity))),
+        RealBall(Decimal("0.523521700017999266800534404806"), Decimal("1.10e-31")))))
+
+make_entry(ID("be9790"),
+    Formula(Element(UniqueZero(EisensteinE(2, -Div(1,2) + ConstI*y), y, Element(y, OpenInterval(0, Infinity))),
+        RealBall(Decimal("0.130919030396762446904114826020"), Decimal("2.87e-31")))))
 
 
 

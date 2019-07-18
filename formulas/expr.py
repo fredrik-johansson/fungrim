@@ -451,13 +451,13 @@ class Expr(object):
             else:
                 s = "\\lim_{%s \\to %s%s} %s" % (var, point, cond, formula)
             return s
-        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, Solutions, UniqueSolution):
+        if head in (Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, UniqueZero, Solutions, UniqueSolution):
             opname = {Minimum:"\\min", Maximum:"\\max",
                       ArgMin:"\\operatorname{arg\,min}",ArgMinUnique:"\\operatorname{arg\,min*}",
                       ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}",
                       Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}",
-                      Zeros:"\\operatorname{zeros}\\,",
-                      Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution}\\,"}[head]
+                      Zeros:"\\operatorname{zeros}\\,", UniqueZero:"\\operatorname{zero*}\\,",
+                      Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution*}\\,"}[head]
             if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
                 return "%s\\left(%s\\right)" % (opname, argstr[0])
             assert len(args) == 3
@@ -1251,7 +1251,7 @@ IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqu
 AsymptoticTo
 FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
-HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros AnalyticContinuation
+HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
