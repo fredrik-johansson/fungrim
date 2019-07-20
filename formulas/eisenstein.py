@@ -582,7 +582,7 @@ make_entry(ID("ad91ae"),
 
 make_entry(ID("cae067"),
     Formula(Equal(Zeros(EisensteinE(2, tau), tau, Element(tau, HH)),
-        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), z, And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
+        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), z, And(Element(z, HH), Element(Re(z), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
             Element(n, ZZ))))))
 
 make_entry(ID("f33f09"),
