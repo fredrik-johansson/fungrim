@@ -52,6 +52,12 @@ def_Topic(
         "3b11d3",
         "718a9b",
     ),
+    Section("Cases for atan2"),
+    Entries(
+        "a6776b",
+        "77e519",
+        "22fb4a",
+    ),
     Section("Argument transformations"),
     Subsection("Symmetries"),
     Entries(
@@ -284,7 +290,7 @@ make_entry(ID("b0049f"),
 
 make_entry(ID("a6cd13"),
     Formula(Equal(HolomorphicDomain(Atan(z), z, Union(CC, Set(UnsignedInfinity))),
-        SetMinus(CC, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))))
+        SetMinus(CC, Union(OpenClosedInterval(-Infinity,-1)*ConstI, ClosedOpenInterval(1,Infinity)*ConstI)))))
 
 make_entry(ID("30ba67"),
     Formula(Equal(EssentialSingularities(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
@@ -301,6 +307,28 @@ make_entry(ID("3b11d3"),
 
 make_entry(ID("718a9b"),
     Formula(Equal(Zeros(Atan(z), z, Element(z, CC)), Set(0))))
+
+# Cases for atan2
+
+make_entry(ID("a6776b"),
+    Formula(Equal(Atan2(0,x), Cases(Tuple(0, GreaterEqual(x, 0)), Tuple(ConstPi, Less(x, 0))))),
+    Variables(x),
+    Assumptions(Element(x, RR)))
+
+make_entry(ID("77e519"),
+    Formula(Equal(Atan2(y,0), (ConstPi/2) * Sign(y))),
+    Variables(y),
+    Assumptions(Element(y, RR)))
+
+make_entry(ID("22fb4a"),
+    Formula(Equal(Atan2(y,x), Cases(
+        Tuple(0, Equal(x, y, 0)),
+        Tuple(Atan(y/x), Greater(x, 0)),
+        Tuple(Parentheses(ConstPi/2) * Sign(y) - Atan(x/y), Unequal(y, 0)),
+        Tuple(ConstPi, And(Equal(y, 0), Less(x, 0))),
+        ))),
+    Variables(x, y),
+    Assumptions(And(Element(x, RR), Element(y, RR))))
 
 # Argument transformations
 

@@ -447,8 +447,11 @@ All data in Fungrim is represented in semantic form designed to be usable by com
 </p>""")
 frontpage.section("Browse by topic")
 
-def writetopic(s):
-    frontpage.fp.write("""<li><a href="topic/%s/">%s</a></li>""" % (escape_title(s), s))
+def writetopic(s, highlight=False):
+    if highlight:
+        frontpage.fp.write("""<li><a href="topic/%s/">%s</a> <span style="color:orange;">&#x2605;</span></li>""" % (escape_title(s), s))
+    else:
+        frontpage.fp.write("""<li><a href="topic/%s/">%s</a></li>""" % (escape_title(s), s))
 
 frontpage.fp.write("""<div class="topiclist"><ul>""")
 
@@ -471,15 +474,15 @@ writetopic("Exponential function")
 writetopic("Natural logarithm")
 writetopic("Square roots")
 writetopic("Powers")
-writetopic("Sine")
-writetopic("Inverse tangent")
+writetopic("Sine", highlight=True)
+writetopic("Inverse tangent", highlight=True)
 writetopic("Lambert W-function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
-writetopic("Greatest common divisor")
+writetopic("Greatest common divisor", highlight=True)
 writetopic("Factorials and binomial coefficients")
-writetopic("Fibonacci numbers")
+writetopic("Fibonacci numbers", highlight=True)
 writetopic("Prime numbers")
 writetopic("Partition function")
 writetopic("Bernoulli numbers and polynomials")
@@ -513,7 +516,7 @@ writetopic("Modular transformations")
 writetopic("Jacobi theta functions")
 writetopic("Dedekind eta function")
 writetopic("Modular j-invariant")
-writetopic("Eisenstein series")
+writetopic("Eisenstein series", highlight=True)
 writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 
@@ -527,6 +530,8 @@ writetopic("Gaussian quadrature")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""</ul></div>""")
+
+frontpage.fp.write("""<p style="margin:1em; text-align:center"><span style="color:orange;">&#x2605;</span> Recommended topic (relatively complete)</p>""")
 
 frontpage.section("General")
 frontpage.fp.write("""<ul>""")
