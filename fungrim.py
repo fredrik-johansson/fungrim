@@ -501,7 +501,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Orthogonal polynomials<ul>""")
 writetopic("Legendre polynomials")
-writetopic("Chebyshev polynomials")
+writetopic("Chebyshev polynomials", highlight=True)
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Zeta and L-functions<ul>""")

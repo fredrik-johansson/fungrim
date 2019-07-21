@@ -55,9 +55,6 @@ def_Topic(
         "0ed026",
         "30b67b",
     ),
-#    Section("Derivatives"),
-#    Entries(
-#    ),
     Section("Recurrence relations"),
     Entries(
         "faeed9",
@@ -85,6 +82,7 @@ def_Topic(
         "b8fdcd",
         "f4b3fa",
         "4c7aeb",
+        "9789ee",
     ),
     Section("Power formulas"),
     Entries(
@@ -114,6 +112,16 @@ def_Topic(
         "27b2bb",
         "9d7c61",
         "fff8ff",
+    ),
+    Section("Derivatives"),
+    Entries(
+        "1a0d11",
+        "05fe07",
+        "35e13b",
+        "6582c4",
+        "e1797b",
+        "12ce84",
+        "a68f0e",
     ),
     Section("Bounds and inequalities"),
     Entries(
@@ -302,14 +310,14 @@ make_entry(ID("78f5bb"),
 
 # Orthogonality
 
-# todo: write more simply using cases
 make_entry(ID("2c26a1"),
-    Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), Tuple(x,-1,1)), ConstPi/2 * (KroneckerDelta(n,m) + KroneckerDelta(n,0)*KroneckerDelta(m,0)))),
+    Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), Tuple(x,-1,1)),
+        Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi, Equal(n, m, 0)), Tuple(ConstPi/2, And(Equal(n, m), Unequal(n, 0)))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("473c36"),
-    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), Tuple(x,-1,1)), ConstPi/2 * KroneckerDelta(n,m))),
+    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), Tuple(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi/2, Equal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
@@ -435,6 +443,11 @@ make_entry(ID("4c7aeb"),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
+make_entry(ID("9789ee"),
+    Formula(Equal(ChebyshevT(2*n+1,Sin(x)), (-1)**n * Sin((2*n+1)*x))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZ), Element(x, CC))))
+
 # Power formulas
 
 make_entry(ID("0cbe75"),
@@ -512,6 +525,50 @@ make_entry(ID("fff8ff"),
     Formula(Equal(Sum(ChebyshevU(n,x) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)), Exp(z*x) * (Cosh(z * Sqrt(x**2-1)) + z*x*Sinc(ConstI*z*Sqrt(x**2-1))))),
     Variables(x, z),
     Assumptions(And(Element(x, CC), Element(z, CC))))
+
+# Derivatives
+
+make_entry(ID("1a0d11"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x), n * ChebyshevU(n-1, x))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZ), Element(x, CC))))
+
+make_entry(ID("05fe07"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, 2), (n * (n * ChebyshevT(n, x) - x * ChebyshevU(n-1, x))) / (x**2-1))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZ), Element(x, SetMinus(CC, Set(-1, 1))))))
+
+make_entry(ID("35e13b"),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x), ((n+1)*ChebyshevT(n+1, x) - x * ChebyshevU(n,x)) / (x**2-1))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZ), Element(x, SetMinus(CC, Set(-1, 1))))))
+
+make_entry(ID("6582c4"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
+        (Sqrt(ConstPi) / (x-1)**r) * Hypergeometric3F2Regularized(1, -n, n, Div(1,2), 1-r, (1-x)/2))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
+    References("http://functions.wolfram.com/Polynomials/ChebyshevT/20/02/01/0002/"))
+
+make_entry(ID("e1797b"),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x, r),
+        ((Sqrt(ConstPi) * (n+1)) / (2 * (x-1)**r)) * Hypergeometric3F2Regularized(1, -n, n+2, Div(3,2), 1-r, (1-x)/2))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
+    References("http://functions.wolfram.com/Polynomials/ChebyshevU/20/02/01/0002/"))
+
+make_entry(ID("12ce84"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
+        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)) * Hypergeometric2F1(r+n, r-n, Div(1,2)+r, (1-x)/2))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1))))))
+
+make_entry(ID("a68f0e"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, 1, r),
+        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)))),
+    Variables(n, r),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
+
 
 # Bounds and inequalities
 

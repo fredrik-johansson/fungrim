@@ -126,6 +126,7 @@ def_Topic(
     Section("Bounds and inequalities"),
     Subsection("Real arguments"),
     Entries(
+        "b63481",
         "e7a9b1",
         "5d6f74",
         "466095",
@@ -534,6 +535,11 @@ make_entry(ID("4e5947"),
 # Bounds and inequalities
 
 ## Real arguments
+
+make_entry(ID("b63481"),
+    Formula(LessEqual(Abs(Atan2(y,x)), ConstPi)),
+    Variables(x, y),
+    Assumptions(And(Element(x, RR), Element(y, RR))))
 
 make_entry(ID("e7a9b1"),
     Formula(Less(Abs(Atan(x)), ConstPi/2)),

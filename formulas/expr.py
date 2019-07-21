@@ -504,6 +504,19 @@ class Expr(object):
                     if order.is_integer() and order._integer == 3:
                         return "%s'''(%s)" % (fstr, pointstr)
                     return "{%s}^{(%s)}(%s)" % (fstr, order.latex(), pointstr)
+                if 0 and (f in subscript_call_latex_table and len(args[0].args()) == 2 and args[0].args()[1] == var):
+                    arg0 = args[0].args()[0].latex(in_small=True)
+                    fstr = subscript_call_latex_table[f]
+                    pointstr = point.latex(in_small=True)
+                    if order.is_integer() and order._integer == 0:
+                        return "%s_{%s}(%s)" % (fstr, arg0, pointstr)
+                    if order.is_integer() and order._integer == 1:
+                        return "%s'_{%s}(%s)" % (fstr, arg0, pointstr)
+                    if order.is_integer() and order._integer == 2:
+                        return "%s''_{%s}(%s)" % (fstr, arg0, pointstr)
+                    if order.is_integer() and order._integer == 3:
+                        return "%s'''_{%s}(%s)" % (fstr, arg0, pointstr)
+                    return "{%s}^{(%s)}_{%s}(%s)" % (fstr, order.latex(), arg0, pointstr)
             varstr = var.latex()
             pointstr = point.latex(in_small=True)
             orderstr = order.latex()
@@ -615,12 +628,15 @@ class Expr(object):
             lstr = l.latex(in_small=True)
             etastr = eta.latex()
             return "\\sigma_{%s}\!\\left(%s\\right)" % (lstr, etastr)
-        if head is Factorial:
+        if head in (Factorial, DoubleFactorial):
             assert len(args) == 1
+            ss = "!"
+            if head is DoubleFactorial:
+                ss += "!"
             if args[0].is_symbol() or (args[0].is_integer() and args[0]._integer >= 0):
-                return argstr[0] + " !"
+                return argstr[0] + " " + ss
             else:
-                return "\\left(" + argstr[0] + "\\right)!"
+                return "\\left(" + argstr[0] + "\\right)" + ss
         if head is RisingFactorial:
             assert len(args) == 2
             return "\\left(" + argstr[0] + "\\right)_{" + argstr[1] + "}"
@@ -701,6 +717,10 @@ class Expr(object):
                 return "\\left( \\frac{%s}{%s} \\right)" % (argstr[0], argstr[1])
         if head is CongruentMod:
             return "%s \\equiv %s \\pmod {%s}" % (argstr[0], argstr[1], argstr[2])
+        if head is Odd:
+            return "%s \\text{ odd}" % (argstr[0])
+        if head is Even:
+            return "%s \\text{ even}" % (argstr[0])
         if head is ZZGreaterEqual:
             assert len(args) == 1
             # if args[0].is_integer():
@@ -843,11 +863,13 @@ class Expr(object):
             for arg in args:
                 assert arg.head() is Tuple
                 v, c = arg.args()
-                v = v.latex(in_small=True)
+                #v = v.latex(in_small=True)
+                v = v.latex(in_small=in_small)
                 if c is Otherwise:
                     c = "\\text{otherwise}"
                 else:
-                    c = c.latex(in_small=True)
+                    #c = c.latex(in_small=True)
+                    c = c.latex(in_small=in_small)
                 s += "%s, & %s\\\\" % (v, c)
             s += " \\end{cases}"
             return s
@@ -1236,7 +1258,7 @@ InteriorClosure
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
-CongruentMod
+CongruentMod Odd Even
 Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
@@ -1261,7 +1283,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
 ConstPi ConstE ConstGamma ConstI GoldenRatio
-Binomial Factorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
+Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
@@ -1270,9 +1292,9 @@ RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK HankelH1 HankelH2
 BesselJDerivative BesselIDerivative BesselYDerivative BesselKDerivative
 CoulombF CoulombG CoulombH CoulombC CoulombSigma
-Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0
+Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0 Hypergeometric3F2
 HypergeometricU HypergeometricUStar
-Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized
+Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized Hypergeometric3F2Regularized
 HypergeometricUStarRemainder
 AiryAi AiryBi AiryAiPrime AiryBiPrime
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
@@ -1413,12 +1435,14 @@ symbol_latex_table = {
     Hypergeometric1F1: "\\,{}_1F_1",
     Hypergeometric2F1: "\\,{}_2F_1",
     Hypergeometric2F0: "\\,{}_2F_0",
+    Hypergeometric3F2: "\\,{}_3F_2",
     HypergeometricU: "U",
     HypergeometricUStar: "U^{*}",
     Hypergeometric0F1Regularized: "\\,{}_0{\\textbf F}_1",
     Hypergeometric1F1Regularized: "\\,{}_1{\\textbf F}_1",
     Hypergeometric2F1Regularized: "\\,{}_2{\\textbf F}_1",
     Hypergeometric2F0Regularized: "\\,{}_2{\\textbf F}_0",
+    Hypergeometric3F2Regularized: "\\,{}_3{\\textbf F}_2",
     AiryAi: "\\operatorname{Ai}",
     AiryBi: "\\operatorname{Bi}",
     AiryAiPrime: "\\operatorname{Ai}'",

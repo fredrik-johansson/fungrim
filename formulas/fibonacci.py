@@ -51,6 +51,7 @@ def_Topic(
     Entries(
         "24107d",
         "050fdb",
+        "ad0d7a",
     ),
     Section("Matrix formulas"),
     Entries(
@@ -69,10 +70,23 @@ def_Topic(
         "d7c89c",
         "b8ed8f",
     ),
-    Section("Special function representations"),
+    Section("Elementary functions"),
     Entries(
+        "12b336",
+        "fd732d",
+        "bceed4",
+        "c4d78a",
+    ),
+    Section("Chebyshev polynomials"),
+    Entries(
+        "aadf90",
+        "223ce1",
         "ae76a3",
+    ),
+    Section("Hypergeometric functions"),
+    Entries(
         "1c90fb",
+        "90c290",
     ),
     Section("Finite sums"),
     Entries(
@@ -97,14 +111,6 @@ def_Topic(
         "f5f706",
         "9d26d2",
     ),
-    Section("Reciprocal series"),
-    Entries(
-        "ae9d30",
-        "344963",
-        "da1873",
-        "22b67a",
-        "6d8bf0",
-    ),
     Section("Asymptotics and limits"),
     Entries(
         "0574c1",
@@ -116,6 +122,14 @@ def_Topic(
         "f3aff5",
         "9c53d7",
         "412334",
+    ),
+    Section("Reciprocal series"),
+    Entries(
+        "ae9d30",
+        "344963",
+        "da1873",
+        "22b67a",
+        "6d8bf0",
     ),
 )
 
@@ -375,6 +389,12 @@ make_entry(ID("050fdb"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
+# todo: define Fibonacci(n) for non-integer n?
+make_entry(ID("ad0d7a"),
+    Formula(Equal(Fibonacci(n), (GoldenRatio**n - Cos(ConstPi*n) * GoldenRatio**(-n)) / Sqrt(5))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
 # Matrix formulas
 
 make_entry(ID("8a548e"),
@@ -422,10 +442,46 @@ make_entry(ID("b8ed8f"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
-# Special functions
+# Elementary functions
+
+make_entry(ID("12b336"),
+    Formula(Equal(Fibonacci(n), Where((Exp(n*u) - Cos(ConstPi*n)*Exp(-n*u))/Sqrt(5), Equal(u, Log(GoldenRatio))))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("fd732d"),
+    Formula(Equal(Fibonacci(n), (2/Sqrt(5)) * Where(Cases(Tuple(Sinh(n*u), Even(n)),
+            Tuple(Cosh(n*u), Odd(n))), Equal(u, Log(GoldenRatio))))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+#    Formula(Equal(Fibonacci(2*n), (2/Sqrt(5)) * Sinh(n*Log(1+GoldenRatio)))),
+#    Formula(Equal(Fibonacci(2*n+1), (2/Sqrt(5)) * Cosh((n+Div(1,2))*Log(1+GoldenRatio)))),
+
+make_entry(ID("bceed4"),
+    Formula(Equal(Fibonacci(n), Where(((1+Cos(ConstPi*n))*Sinh(n*u) + (1-Cos(ConstPi*n))*Cosh(n*u)) / Sqrt(5), Equal(u, Log(GoldenRatio))))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("c4d78a"),
+    Formula(Equal(Fibonacci(n), (2/Sqrt(5)) * (-ConstI)**n * Sinh(n*(Log(GoldenRatio) + Div(1,2)*ConstPi*ConstI)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+# Hypergeometric functions
+
+make_entry(ID("aadf90"),
+    Formula(Equal(Fibonacci(2*n), ChebyshevU(n-1, Div(3,2)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("223ce1"),
+    Formula(Equal(Fibonacci(2*n+1), (2/Sqrt(5)) * ChebyshevT(2*n+1, Sqrt(5)/2))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
 
 make_entry(ID("ae76a3"),
-    Formula(Equal(Fibonacci(n+1), ConstI**(-n) * ChebyshevU(n, ConstI/2))),
+    Formula(Equal(Fibonacci(n), ConstI**(n-1) * ChebyshevU(n-1, -(ConstI/2)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -434,6 +490,11 @@ make_entry(ID("1c90fb"),
     Variables(n),
     Assumptions(Element(n, ZZ)),
     References("http://functions.wolfram.com/IntegerFunctions/Fibonacci/26/01/01/0007/"))
+
+make_entry(ID("90c290"),
+    Formula(Equal(Fibonacci(n), Hypergeometric2F1((1-n)/2, (2-n)/2, 1-n, -4))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(1))))
 
 # Divisibility
 
@@ -521,35 +582,6 @@ make_entry(ID("d454a3"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
-# Reciprocal series
-
-make_entry(ID("ae9d30"),
-    Formula(Equal(Sum(1/(Fibonacci(2*n+1)+1), Tuple(n, 0, Infinity)),
-        Sqrt(5)/2)),
-    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
-
-make_entry(ID("344963"),
-    Formula(Equal(Sum((-1)**(n+1)/(Fibonacci(n)*Fibonacci(n+1)), Tuple(n, 1, Infinity)),
-        (Sqrt(5)-1)/2)),
-    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
-
-make_entry(ID("da1873"),
-    Formula(Equal(Sum(1/Fibonacci(2*n+1), Tuple(n, 0, Infinity)),
-        Where((Sqrt(5)/4) * JacobiTheta2(0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
-    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
-
-# nsum(lambda k: 1/fib(2*k+1), [0,inf]); acb(0).modular_theta(log((3-sqrt(5))/2)/(pi*1j))[1]**2 * sqrt(5)/4
-
-make_entry(ID("22b67a"),
-    Formula(Equal(Sum(1/Fibonacci(n)**2, Tuple(n, 1, Infinity)),
-        Where(Div(5,24) * (JacobiTheta2(0, tau)**4 - JacobiTheta4(0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
-    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
-
-make_entry(ID("6d8bf0"),
-    Formula(Equal(Sum(1/Fibonacci(2**n), Tuple(n, 0, Infinity)),
-        (7-Sqrt(5))/2)),
-    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
-
 # Asymptotics
 
 make_entry(ID("0574c1"),
@@ -580,4 +612,30 @@ make_entry(ID("412334"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(2))))
 
+# Reciprocal series
+
+make_entry(ID("ae9d30"),
+    Formula(Equal(Sum(1/(Fibonacci(2*n+1)+1), Tuple(n, 0, Infinity)),
+        Sqrt(5)/2)),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
+
+make_entry(ID("344963"),
+    Formula(Equal(Sum((-1)**(n+1)/(Fibonacci(n)*Fibonacci(n+1)), Tuple(n, 1, Infinity)),
+        (Sqrt(5)-1)/2)),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
+
+make_entry(ID("da1873"),
+    Formula(Equal(Sum(1/Fibonacci(2*n+1), Tuple(n, 0, Infinity)),
+        Where((Sqrt(5)/4) * JacobiTheta2(0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
+
+make_entry(ID("22b67a"),
+    Formula(Equal(Sum(1/Fibonacci(n)**2, Tuple(n, 1, Infinity)),
+        Where(Div(5,24) * (JacobiTheta2(0, tau)**4 - JacobiTheta4(0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
+
+make_entry(ID("6d8bf0"),
+    Formula(Equal(Sum(1/Fibonacci(2**n), Tuple(n, 0, Infinity)),
+        (7-Sqrt(5))/2)),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
