@@ -232,7 +232,7 @@ make_entry(ID("a1a3d4"),
 
 make_entry(ID("871996"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, tau),
-        (ConstI / (4 * ConstPi)) * DedekindEta(tau) * EisensteinE(2, tau))),
+        ((ConstI * ConstPi) / 12) * DedekindEta(tau) * EisensteinE(2, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
