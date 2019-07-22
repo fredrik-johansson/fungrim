@@ -197,17 +197,17 @@ make_entry(ID("4d2e45"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("d8e37d"),
-    Formula(Equal(Mod(PartitionsP(5*n+4), 5), 0)),
+    Formula(CongruentMod(PartitionsP(5*n+4), 0, 5)),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("89260d"),
-    Formula(Equal(Mod(PartitionsP(7*n+5), 7), 0)),
+    Formula(CongruentMod(PartitionsP(7*n+5), 0, 7)),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("dacd74"),
-    Formula(Equal(Mod(PartitionsP(11*n+6), 11), 0)),
+    Formula(CongruentMod(PartitionsP(11*n+6), 0, 11)),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 

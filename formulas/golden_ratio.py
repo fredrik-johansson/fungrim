@@ -39,6 +39,10 @@ def_Topic(
     Entries(
         "2b6e60",
     ),
+    Section("Special function representations"),
+    Entries(
+        "e9a269",
+    ),
 )
 
 make_entry(ID("37f505"),
@@ -108,4 +112,9 @@ make_entry(ID("6a11ce"),
 
 make_entry(ID("2b6e60"),
     Formula(Equal(GoldenRatio, SequenceLimit(Fibonacci(n+1)/Fibonacci(n), n, Infinity))))
+
+# Special function representations
+
+make_entry(ID("e9a269"),
+    Formula(Equal(GoldenRatio, Div(1,5) * (DedekindEta(ConstI) / DedekindEta(5*ConstI))**2)))
 

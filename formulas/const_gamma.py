@@ -17,10 +17,21 @@ def_Topic(
         "4644c0",
     ),
     Section("Special function representations"),
+    Subsection("Direct values"),
     Entries(
-        "a1f1ec",
         "cf3977",
         "d17d0b",
+    ),
+    Subsection("Limits at singularities"),
+    Entries(
+        "a1f1ec",
+        "79d6ba",
+        "9d5c86",
+        "0888b3",
+        "e8af68",
+    ),
+    Subsection("Infinite series"),
+    Entries(
         "818008",
     ),
     Section("Integral representations"),
@@ -51,14 +62,26 @@ make_entry(ID("28bf9a"),
     Formula(NotElement(ConstGamma, SetBuilder(p/q, Tuple(p, q), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
     References("J. Havil (2003): Exploring Euler's Constant. Princeton University Press. Page 97."))
 
-make_entry(ID("a1f1ec"),
-    Formula(Equal(ConstGamma, ComplexLimit(RiemannZeta(s) - 1/(s-1), s, 1))))
-
 make_entry(ID("cf3977"),
     Formula(Equal(ConstGamma, -Derivative(GammaFunction(z), Tuple(z, 1, 1)))))
 
 make_entry(ID("d17d0b"),
     Formula(Equal(ConstGamma, -DigammaFunction(1))))
+
+make_entry(ID("a1f1ec"),
+    Formula(Equal(ConstGamma, ComplexLimit(Brackets(RiemannZeta(s) - 1/(s-1)), s, 1))))
+
+make_entry(ID("79d6ba"),
+    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(GammaFunction(z) - 1/z), z, 0))))
+
+make_entry(ID("9d5c86"),
+    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(DigammaFunction(z) + 1/z), z, 0))))
+
+make_entry(ID("0888b3"),
+    Formula(Equal(ConstGamma, RightLimit(Brackets((ConstPi/2) * BesselY(0,x) - Log(x/2)), x, 0))))
+
+make_entry(ID("e8af68"),
+    Formula(Equal(ConstGamma, RightLimit(Brackets(-BesselK(0,x) - Log(x/2)), x, 0))))
 
 make_entry(ID("818008"),
     Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, Tuple(k, 2, Infinity)))))

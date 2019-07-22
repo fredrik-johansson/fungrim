@@ -159,6 +159,9 @@ def plots(outdir):
     def ellzeta(z, tau):
         return complex(acb(z).elliptic_zeta(tau))
 
+    def modlambda(tau):
+        return complex(acb(tau).modular_lambda())
+
     def eisene(k, tau):
         if tau.imag < 0.01:
             return 0.0

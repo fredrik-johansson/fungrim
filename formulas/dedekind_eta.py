@@ -17,13 +17,29 @@ def_Topic(
         "8f10b0",
     ),
     Section("Specific values"),
+    Subsection("Limiting values"),
+    Entries(
+        "6b9935",
+        "d8025b",
+    ),
+    Subsection("Imaginary quadratic points"),
     Entries(
         "9b8c9f",
         "5706ab",
+        "87e9ed",
+        "9ce413",
+        "3a56d8",
+        "d2900f",
+        "62ffb3",
+        "7cc3d3",
+        "be2f32",
+        "0701dc",
+        "e3e4c5",
+    ),
+    Subsection("Third roots of unity"),
+    Entries(
         "204acd",
         "4af6db",
-        "6b9935",
-        "d8025b",
     ),
     Section("Connection formulas"),
     Entries(
@@ -44,6 +60,7 @@ def_Topic(
     ),
     Section("Derivatives"),
     Entries(
+        "871996",
         "1c25d3",
         "02d14f",
         "df5f38",
@@ -99,12 +116,59 @@ make_entry(ID("1dc520"),
 
 # Specific values
 
+# Limiting values
+
+make_entry(ID("6b9935"),
+    Formula(Equal(DedekindEta(ConstI*Infinity), ComplexLimit(DedekindEta(tau), tau, ConstI*Infinity), 0)))
+
+make_entry(ID("d8025b"),
+    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), epsilon, 0), 0)))
+
+# Imaginary points
+
+rc = GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4))
+
 make_entry(ID("9b8c9f"),
-    Formula(Equal(DedekindEta(ConstI), GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4)))))
+    Formula(Equal(DedekindEta(ConstI), rc)))
 
 make_entry(ID("5706ab"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, ConstI),
          -Div(ConstI,4)*DedekindEta(ConstI))))
+
+make_entry(ID("87e9ed"),
+    Formula(Equal(DedekindEta(2 * ConstI), Div(DedekindEta(ConstI), Pow(2,Div(3,8))))))
+
+make_entry(ID("9ce413"),
+    Formula(Equal(DedekindEta(3 * ConstI), Div(DedekindEta(ConstI), Pow(3,Div(3,8)) * (2+Sqrt(3))**Div(1,12)))))
+
+make_entry(ID("3a56d8"),
+    Formula(Equal(DedekindEta(4 * ConstI), Div(DedekindEta(ConstI), Pow(2,Div(13,16)) * (1+Sqrt(2))**Div(1,4)))))
+
+make_entry(ID("d2900f"),
+    Formula(Equal(DedekindEta(5 * ConstI), Div(DedekindEta(ConstI), Sqrt(5 * GoldenRatio)))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+make_entry(ID("62ffb3"),
+    Formula(Equal(DedekindEta(6 * ConstI), (1/Pow(6, Div(3, 8))) * ((5-Sqrt(3))/2 - Pow(3, Div(3,4))/Sqrt(2))**Div(1,6) * DedekindEta(ConstI))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+make_entry(ID("7cc3d3"),
+    Formula(Equal(DedekindEta(7 * ConstI), (1/Sqrt(7)) * (-Div(7,2) + Sqrt(7) + Div(1,2) * Sqrt(-7 + 4*Sqrt(7)))**Div(1,4) * DedekindEta(ConstI))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+make_entry(ID("be2f32"),
+    Formula(Equal(DedekindEta(8 * ConstI), (1/Pow(2, Div(41,32))) * (Pow(Pow(2, Div(1,4)) - 1, Div(1,2)) / (1 + Sqrt(2))**Div(1,8)) * DedekindEta(ConstI))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+make_entry(ID("0701dc"),
+    Formula(Equal(DedekindEta(16 * ConstI), (1/Pow(2, Div(113,64))) * ((Pow(2, Div(1,4)) - 1)**Div(1,4) / (1 + Sqrt(2))**Div(1,16)) * (-Pow(2,Div(5,8)) + Sqrt(1 + Sqrt(2)))**Div(1,2) * DedekindEta(ConstI))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+make_entry(ID("e3e4c5"),
+    Formula(Equal(DedekindEta(Sqrt(3) * ConstI), Pow(3,Div(1,8)) / Pow(2,Div(4,3)) * (GammaFunction(Div(1,3))**Div(3,2) / ConstPi))),
+    References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
+
+# Third roots of unity
 
 make_entry(ID("204acd"),
     Formula(Equal(DedekindEta(Exp(2*ConstPi*ConstI/3)), Exp(-(ConstPi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(GammaFunction(Div(1,3)), Div(3,2)) / (2 * ConstPi)))))
@@ -112,13 +176,6 @@ make_entry(ID("204acd"),
 make_entry(ID("4af6db"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, Exp(2*ConstPi*ConstI/3)),
         ((ConstI*Sqrt(3))/6) * DedekindEta(Exp(2*ConstPi*ConstI/3)))))
-
-make_entry(ID("6b9935"),
-    Formula(Equal(DedekindEta(ConstI*Infinity), 0)))
-
-make_entry(ID("d8025b"),
-    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), epsilon, 0), 0)))
-
 # Connection formulas
 
 make_entry(ID("737805"),
@@ -173,6 +230,12 @@ make_entry(ID("a1a3d4"),
 
 # Derivatives
 
+make_entry(ID("871996"),
+    Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, tau),
+        (ConstI / (4 * ConstPi)) * DedekindEta(tau) * EisensteinE(2, tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 make_entry(ID("1c25d3"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), tau, tau),
         (ConstI / (2 * ConstPi)) * DedekindEta(tau) * WeierstrassZeta(Div(1,2), tau))),
@@ -198,9 +261,6 @@ make_entry(ID("df5f38"),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References("http://functions.wolfram.com/EllipticFunctions/DedekindEta/13/01/0001/"))
-
-# todo: using eisenstein series
-
 
 # Analytic properties
 
