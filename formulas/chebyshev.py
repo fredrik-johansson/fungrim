@@ -92,13 +92,20 @@ def_Topic(
         "42eb01",
         "5bd0ec",
     ),
-#    Section("Sum representations"),
-#    Entries(
-#    ),
     Section("Product representations"),
     Entries(
         "305a29",
         "f5fa23",
+    ),
+    Section("Sum representations"),
+    Entries(
+        "99aa38",
+        "50cb6b",
+        "ae791d",
+        "4f3e30",
+        "e9232b",
+        "4e914f",
+        "a9077a",
     ),
     Section("Hypergeometric representations"),
     Entries(
@@ -118,10 +125,12 @@ def_Topic(
         "1a0d11",
         "05fe07",
         "35e13b",
+        "12ce84",
+        "9d66de",
+        "a68f0e",
+        "b6b014",
         "6582c4",
         "e1797b",
-        "12ce84",
-        "a68f0e",
     ),
     Section("Bounds and inequalities"),
     Entries(
@@ -487,6 +496,44 @@ make_entry(ID("f5fa23"),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
+# Sum representations
+
+make_entry(ID("ae791d"),
+    Formula(Equal(ChebyshevT(n, x), Sum(Binomial(n,2*k) * (x**2-1)**k * x**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
+
+make_entry(ID("4f3e30"),
+    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum((-1)**k * Factorial(n-k-1) / (Factorial(k) * Factorial(n-2*k))  * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
+
+make_entry(ID("99aa38"),
+    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum(((-1)**k / (n-k)) * Binomial(n-k, k)  * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
+
+make_entry(ID("e9232b"),
+    Formula(Equal(ChebyshevT(n, x), n * Sum(2**k * Factorial(n+k-1) / (Factorial(n-k) * Factorial(2*k)) * (x-1)**k, Tuple(k, 0, n)))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
+
+make_entry(ID("4e914f"),
+    Formula(Equal(ChebyshevU(n, x), Sum(Binomial(n+1,2*k+1) * (x**2-1)**k * x**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
+
+make_entry(ID("50cb6b"),
+    Formula(Equal(ChebyshevU(n, x), Sum((-1)**k * Binomial(n-k, k) * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
+
+make_entry(ID("a9077a"),
+    Formula(Equal(ChebyshevU(n, x), Sum(2**k * Factorial(n+k+1) / (Factorial(n-k) * Factorial(2*k+1)) * (x-1)**k, Tuple(k, 0, n)))),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
+
+
 # Hypergeometric representations
 
 make_entry(ID("382679"),
@@ -543,6 +590,30 @@ make_entry(ID("35e13b"),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, SetMinus(CC, Set(-1, 1))))))
 
+make_entry(ID("12ce84"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
+        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)) * Hypergeometric2F1(r+n, r-n, Div(1,2)+r, (1-x)/2))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
+
+make_entry(ID("9d66de"),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x, r),
+        (RisingFactorial(n+1,r+1) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r+1)) * Hypergeometric2F1(r+n+2, r-n, Div(3,2)+r, (1-x)/2))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
+
+make_entry(ID("a68f0e"),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, 1, r),
+        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)))),
+    Variables(n, r),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("b6b014"),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, 1, r),
+        (RisingFactorial(n+1,r+1) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r+1)))),
+    Variables(n, r),
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
+
 make_entry(ID("6582c4"),
     Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
         (Sqrt(ConstPi) / (x-1)**r) * Hypergeometric3F2Regularized(1, -n, n, Div(1,2), 1-r, (1-x)/2))),
@@ -556,19 +627,6 @@ make_entry(ID("e1797b"),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
     References("http://functions.wolfram.com/Polynomials/ChebyshevU/20/02/01/0002/"))
-
-make_entry(ID("12ce84"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
-        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)) * Hypergeometric2F1(r+n, r-n, Div(1,2)+r, (1-x)/2))),
-    Variables(n, r, x),
-    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1))))))
-
-make_entry(ID("a68f0e"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, 1, r),
-        (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)))),
-    Variables(n, r),
-    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
-
 
 # Bounds and inequalities
 

@@ -518,12 +518,12 @@ make_entry(ID("aaa244"),
 make_entry(ID("6db705"),
     Formula(Divides(p, Fibonacci(p - KroneckerSymbol(p, 5)))),
     Variables(p),
-    Assumptions(Element(n, PP)))
+    Assumptions(Element(p, PP)))
 
 make_entry(ID("c84407"),
     Formula(CongruentMod(Fibonacci(p), KroneckerSymbol(p, 5), p)),
     Variables(p),
-    Assumptions(Element(n, PP)))
+    Assumptions(Element(p, PP)))
 
 make_entry(ID("a0206a"),
     Formula(Equivalent(Element(x, SetBuilder(Fibonacci(n), n, Element(n, ZZGreaterEqual(0)))),

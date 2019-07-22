@@ -504,7 +504,7 @@ class Expr(object):
                     if order.is_integer() and order._integer == 3:
                         return "%s'''(%s)" % (fstr, pointstr)
                     return "{%s}^{(%s)}(%s)" % (fstr, order.latex(), pointstr)
-                if 0 and (f in subscript_call_latex_table and len(args[0].args()) == 2 and args[0].args()[1] == var):
+                if 1 and (f in subscript_call_latex_table and len(args[0].args()) == 2 and args[0].args()[1] == var):
                     arg0 = args[0].args()[0].latex(in_small=True)
                     fstr = subscript_call_latex_table[f]
                     pointstr = point.latex(in_small=True)
