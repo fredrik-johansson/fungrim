@@ -879,6 +879,12 @@ class Expr(object):
             return "\\log_{%s}\!\\left(%s\\right) \\bmod %s" % (b, n, p)
         if head is ConreyGenerator:
             return "g_{%s}" % argstr[0]
+        if head is QSeriesCoefficient:
+            fun, tau, q, n, qdef = argstr
+            return "[%s^{%s}] %s \; \\left(%s\\right)" % (q, n, fun, qdef)
+        if head is EqualQSeriesEllipsis:
+            fun, tau, q, ser, qdef = argstr
+            return "%s = %s + \\ldots \; \\text{ where } %s" % (fun, ser, qdef)
         if head is Description:
             s = ""
             for arg in args:
@@ -1331,6 +1337,7 @@ GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
 EisensteinG EisensteinE
 EllipticK EllipticE
+QSeriesCoefficient EqualQSeriesEllipsis
 """)
 
 inject_builtin("""

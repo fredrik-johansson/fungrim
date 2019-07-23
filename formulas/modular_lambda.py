@@ -45,13 +45,22 @@ def_Topic(
         "5dd24a",
         "033d39",
     ),
+    Section("Elliptic function representations"),
+    Entries(
+        "166402",
+    ),
     Section("Fourier series (q-series)"),
     Entries(
+        "921f34",
         "e96684",
+        "ac236f",
     ),
     Section("Range"),
     Entries(
         "90b419",
+        "4b20ab",
+        "e4315f",
+        "830dd4",
     ),
     Section("Specific values"),
     Entries(
@@ -76,6 +85,10 @@ def_Topic(
     Section("Connection to the j-invariant"),
     Entries(
         "44a529",
+    ),
+    Section("Derivatives"),
+    Entries(
+        "27b2c7",
     ),
 )
 
@@ -194,18 +207,56 @@ make_entry(ID("033d39"),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
+# Elliptic function representations
+
+_e1 = WeierstrassP(Div(1,2), tau)
+_e2 = WeierstrassP(Div(tau,2), tau)
+_e3 = WeierstrassP(Div(1,2)*(1+tau), tau)
+
+make_entry(ID("166402"),
+    Formula(Equal(ModularLambda(tau), (_e3 - _e2) / (_e1 - _e2))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 # Fourier series (q-series)
+
+make_entry(ID("921f34"),
+    Formula(EqualQSeriesEllipsis(ModularLambda(tau), tau, q, 16*q - 128*q**2 + 704*q**3 - 3072*q**4 + 11488*q**5 - 38400*q**6, Equal(q, Exp(ConstPi*ConstI*tau)))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)),
+    References("https://oeis.org/A115977"))
 
 make_entry(ID("e96684"),
     Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, Tuple(k, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
+make_entry(ID("ac236f"),
+    Formula(Where(AsymptoticTo(a(n), (-1)**(n+1) * (Exp(2*ConstPi*Sqrt(n)) / (32 * n**Div(3,4))),
+        n, Infinity), Equal(a(n), QSeriesCoefficient(ModularLambda(tau), tau, q, n, Equal(q, Exp(ConstPi*ConstI*tau)))))),
+    References("https://oeis.org/A115977"))
+
 # Range
 
 make_entry(ID("90b419"),
     Formula(Equal(SetBuilder(ModularLambda(tau), tau, Element(tau, HH)),
         SetBuilder(ModularLambda(tau), tau, Element(tau, ModularLambdaFundamentalDomain)), SetMinus(CC, Set(0, 1)))))
+
+make_entry(ID("4b20ab"),
+    Formula(Equal(SetBuilder(ModularLambda(tau), tau, And(Element(tau, HH), Equal(Re(tau), -1))), OpenInterval(-Infinity, 0))),
+    Description("This mapping is one-to-one."),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
+
+make_entry(ID("e4315f"),
+    Formula(Equal(SetBuilder(ModularLambda(tau), tau, And(Element(tau, HH), Equal(Abs(tau+Div(1,2)), Div(1,2)))), OpenInterval(1, Infinity))),
+    Description("This mapping is one-to-one."),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
+
+make_entry(ID("830dd4"),
+    Formula(Equal(SetBuilder(ModularLambda(tau), tau, Element(tau, Interior(ModularLambdaFundamentalDomain))),
+        SetMinus(CC, Parentheses(Union(OpenClosedInterval(-Infinity, 0), ClosedOpenInterval(1, Infinity)))))),
+    Description("This mapping is one-to-one."),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
 
 # Specific values
 
@@ -230,7 +281,7 @@ make_entry(ID("4877f2"),
     Formula(Equal(ModularLambda(ConstI/2), 12*Sqrt(2)-16)))
 
 make_entry(ID("35c85f"),
-    Formula(Equal(ModularLambda(2*ConstI), Div(35,2) - 12*Sqrt(2))))
+    Formula(Equal(ModularLambda(2*ConstI), 17 - 12*Sqrt(2))))
 
 # Limiting values
 
@@ -262,4 +313,11 @@ make_entry(ID("44a529"),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
+# Derivatives
+
+make_entry(ID("27b2c7"),
+    Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
+        ((ConstPi*ConstI)/3) * (EisensteinE(2,tau/2) + 8*EisensteinE(2,2*tau) - 6*EisensteinE(2,tau)) * ModularLambda(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
