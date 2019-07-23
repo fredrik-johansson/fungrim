@@ -160,6 +160,8 @@ def plots(outdir):
         return complex(acb(z).elliptic_zeta(tau))
 
     def modlambda(tau):
+        if tau.imag < 0.01:
+            return 0.0
         return complex(acb(tau).modular_lambda())
 
     def eisene(k, tau):
@@ -179,6 +181,23 @@ def plots(outdir):
         if k == 14: return E4**2 * E6
         if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
         raise ValueError
+
+    fundament_lambda_x = list(linspace(-1,0,80))
+    fundament_lambda_y = [0.5*sqrt(1-(2*x+1)**2) for x in fundament_lambda_x]
+    x2 = [x + 1.0 for x in fundament_lambda_x]
+    y2 = fundament_lambda_y[:]
+    fundament_lambda_x = fundament_lambda_x + x2
+    fundament_lambda_y = fundament_lambda_y + y2
+    fundament_lambda_x = [-1.0] + fundament_lambda_x + [1.0]
+    fundament_lambda_y = [2.0] + fundament_lambda_y + [2.0]
+
+    def lambda_decorations():
+        coverup_rectangle((-1.5,0),3,0.015)
+        coverup_rectangle((-0.05,0),0.1,0.1)
+        fill(fundament_lambda_x, fundament_lambda_y, facecolor=highlightcolor, edgecolor=highlightbordercolor, alpha=0.5, linewidth=0.5, zorder=2)
+
+    xrayplot(lambda tau: modlambda(tau), (-1.5,1.5), (0,2), 600, "modular_lambda", xtks=([-1.5,-1,-0.5,0,0.5,1,1.5],), ytks=([0,0.5,1,1.5,2],),
+        decorations=lambda_decorations, xout=0.1, yout=0.0)
 
     fundament_x = list(linspace(-0.5,0.5,100))
     fundament_y = [sqrt(1-x**2) for x in fundament_x]

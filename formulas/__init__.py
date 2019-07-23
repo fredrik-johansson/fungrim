@@ -43,7 +43,11 @@ from .modular_transformations import *
 from .modular_j import *
 from .dedekind_eta import *
 from .eisenstein import *
+from .modular_lambda import *
 from .dirichlet import *
+
+describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
+describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")
 
 describe(DivisorSigma, DivisorSigma(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of divisors function")
 describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")

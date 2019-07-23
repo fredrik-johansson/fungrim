@@ -1,0 +1,265 @@
+# -*- coding: utf-8 -*-
+
+from .expr import *
+
+def_Topic(
+    Title("Modular lambda function"),
+    Section("Definitions"),
+    Entries(
+        "f53771",
+        "6c6204",
+    ),
+    Section("Illustrations"),
+    Entries(
+        "f0981b",
+    ),
+    Section("Modular transformations"),
+    Subsection("Level 2 principal subgroup"),
+    Entries(
+        "6678af",
+        "ec5a44",
+        "21839d",
+    ),
+    Subsection("Arbitrary modular transformations"),
+    Entries(
+        "73427b",
+        "bbfb6c",
+        "07bf27",
+        "e9f0c8",
+        "2ba627",
+        "3a7a0b",
+    ),
+    Subsection("Fundamental domain"),
+    Entries(
+        "737f2b",
+        "b23575",
+    ),
+    Section("Theta function representations"),
+    Entries(
+        "5b9c02",
+        "903962",
+        "04d3a6",
+    ),
+    Section("Dedekind eta function representations"),
+    Entries(
+        "5dd24a",
+        "033d39",
+    ),
+    Section("Fourier series (q-series)"),
+    Entries(
+        "e96684",
+    ),
+    Section("Range"),
+    Entries(
+        "90b419",
+    ),
+    Section("Specific values"),
+    Entries(
+        "a35b3c",
+        "fe2627",
+        "078869",
+        "ea56d1",
+        "b0e1cb",
+        "4877f2",
+        "35c85f",
+    ),
+    Subsection("Limiting values"),
+    Entries(
+        "e8252c",
+        "231141",
+    ),
+    Section("Inverse and transcendental equations"),
+    Entries(
+        "b7174d",
+        "5d550c",
+    ),
+    Section("Connection to the j-invariant"),
+    Entries(
+        "44a529",
+    ),
+)
+
+make_entry(ID("f53771"),
+    SymbolDefinition(ModularLambda, ModularLambda(tau), "Modular lambda function"),
+    Description("The modular lambda function", ModularLambda(tau), "is a function of one variable", tau, "in the upper half-plane."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(tau, HH), Element(ModularLambda(tau), CC)),
+      )))
+
+make_entry(ID("6c6204"),
+    SymbolDefinition(ModularLambdaFundamentalDomain, ModularLambdaFundamentalDomain, "Fundamental domain of the modular lambda function"),
+    Description("This subset of the upper half-planed is defined by ", EntryReference("737f2b"), "."))
+
+# Illustrations
+
+make_entry(ID("f0981b"),
+    Image(Description("X-ray of", ModularLambda(tau), "on", Element(tau, ClosedInterval(-Div(3,2),Div(3,2)) + ClosedInterval(0,2)*ConstI), "with", ModularLambdaFundamentalDomain, "highlighted"),
+        ImageSource("xray_modular_lambda")),
+    description_xray)
+
+# Modular transformations
+
+make_entry(ID("6678af"),
+    Formula(Equal(ModularLambda(tau+2), ModularLambda(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("ec5a44"),
+    Formula(Equal(ModularLambda(tau/(2*tau+1)), ModularLambda(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+
+make_entry(ID("21839d"),
+    Formula(Equal(ModularLambda((a*tau+b)/(c*tau+d)), ModularLambda(tau))),
+    Variables(tau, a, b, c, d),
+    Assumptions(And(Element(tau, HH), Element(Matrix2x2(a,b,c,d), SL2Z), CongruentMod(Matrix2x2(a,b,c,d), Matrix2x2(1,0,0,1), 2))))
+
+lam = ModularLambda(tau)
+
+make_entry(ID("73427b"),
+    Formula(Element(ModularLambda((a*tau+b)/(c*tau+d)), Set(lam, 1-lam, 1/lam, 1/(1-lam), (lam-1)/lam, lam/(lam-1)))),
+    Variables(tau, a, b, c, d),
+    Assumptions(And(Element(tau, HH), Element(Matrix2x2(a,b,c,d), SL2Z))))
+
+make_entry(ID("bbfb6c"),
+    Formula(Equal(ModularLambda(tau+1), lam/(lam-1))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("07bf27"),
+    Formula(Equal(ModularLambda(-(1/tau)), 1-lam)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("e9f0c8"),
+    Formula(Equal(ModularLambda(tau/(1-tau)), 1/lam)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("2ba627"),
+    Formula(Equal(ModularLambda(1/(1-tau)), 1/(1-lam))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("3a7a0b"),
+    Formula(Equal(ModularLambda((tau-1)/tau), (lam-1)/lam)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+## Fundamental domain
+
+make_entry(ID("737f2b"),
+    Formula(Equal(ModularLambdaFundamentalDomain, SetBuilder(tau, tau, And(Element(tau, HH),
+        Or(And(Element(Re(tau), OpenInterval(-1,1)),
+            Greater(Min(Abs(tau-Div(1,2)), Abs(z+Div(1,2))), Div(1,2))),
+            Equal(Re(tau), -1),
+            Equal(Abs(tau+Div(1,2)), Div(1,2))))))),
+    References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 113."))
+
+make_entry(ID("b23575"),
+    Formula(Equal(HH, SetBuilder(ModularGroupAction(gamma, tau), Tuple(tau, gamma),
+        And(Element(tau, ModularLambdaFundamentalDomain),
+            Element(gamma, SL2Z),
+            CongruentMod(gamma, Matrix2x2(1,0,0,1), 2))))))
+
+# Theta function representations
+
+make_entry(ID("5b9c02"),
+    Formula(Equal(ModularLambda(tau), JacobiTheta2(0,tau)**4 / JacobiTheta3(0,tau)**4)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("903962"),
+    Formula(Equal(lam/(lam-1), -(JacobiTheta2(0,tau)**4 / JacobiTheta4(0,tau)**4))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("04d3a6"),
+    Formula(Equal(1-lam, JacobiTheta4(0,tau)**4 / JacobiTheta3(0,tau)**4)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+# Dedekind eta function representations
+
+make_entry(ID("5dd24a"),
+    Formula(Equal(ModularLambda(tau), 16 * (DedekindEta(tau/2)**8 * DedekindEta(2*tau)**16 / DedekindEta(tau)**24))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("033d39"),
+    Formula(Equal(1/ModularLambda(tau), Div(1,16) * (DedekindEta(tau/2)**8 / (DedekindEta(2*tau)**8)) + 1)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+# Fourier series (q-series)
+
+make_entry(ID("e96684"),
+    Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, Tuple(k, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+# Range
+
+make_entry(ID("90b419"),
+    Formula(Equal(SetBuilder(ModularLambda(tau), tau, Element(tau, HH)),
+        SetBuilder(ModularLambda(tau), tau, Element(tau, ModularLambdaFundamentalDomain)), SetMinus(CC, Set(0, 1)))))
+
+# Specific values
+
+make_entry(ID("a35b3c"),
+    Formula(Equal(ModularLambda(ConstI), Div(1,2))))
+
+make_entry(ID("fe2627"),
+    Formula(Equal(ModularLambda(1+ConstI), -1)))
+
+make_entry(ID("078869"),
+    Formula(Equal(ModularLambda((1+ConstI)/2), 2)))
+
+make_entry(ID("ea56d1"),
+    Formula(Element(ModularLambda((a*ConstI+b)/(c*ConstI+d)), Set(-1, Div(1,2), 2))),
+    Variables(a, b, c, d),
+    Assumptions(Element(Matrix2x2(a,b,c,d), SL2Z)))
+
+make_entry(ID("b0e1cb"),
+    Formula(Where(Equal(ModularLambda(omega), -omega), Equal(omega, Exp(2*ConstPi*ConstI/3)))))
+
+make_entry(ID("4877f2"),
+    Formula(Equal(ModularLambda(ConstI/2), 12*Sqrt(2)-16)))
+
+make_entry(ID("35c85f"),
+    Formula(Equal(ModularLambda(2*ConstI), Div(35,2) - 12*Sqrt(2))))
+
+# Limiting values
+
+make_entry(ID("e8252c"),
+    Formula(Equal(ModularLambda(ConstI*Infinity), ComplexLimit(ModularLambda(tau), tau, ConstI*Infinity), 0)))
+
+make_entry(ID("231141"),
+    Formula(Equal(RightLimit(ModularLambda(n+ConstI*epsilon), epsilon, 0), Cases(Tuple(1, Even(n)), Tuple(-Infinity, Odd(n))))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+# Inverse and transcendental equations
+
+make_entry(ID("b7174d"),
+    Formula(Equal(tau, ConstI * (EllipticK(1-ModularLambda(tau))/EllipticK(ModularLambda(tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, Union(Interior(ModularLambdaFundamentalDomain), SetBuilder(tau, tau, And(Element(tau, HH), Equal(Re(tau), 1)))))))
+
+tau1 = Subscript(tau,1)
+
+make_entry(ID("5d550c"),
+    Formula(Equal(tau, ConstI * (EllipticK(1-ModularLambda(tau))/EllipticK(ModularLambda(tau))) + 2 * Ceil(Div(1,2)*Re(tau) - Div(1,2)))),
+    Variables(tau),
+    Assumptions(Element(tau, 
+        SetBuilder(tau1+2*n, Tuple(tau1, n), And(Element(n, ZZ), Or(Element(tau1, Interior(ModularLambdaFundamentalDomain)), And(Element(tau1, HH), Element(Re(tau1), ZZ))))))))
+
+make_entry(ID("44a529"),
+    Formula(Equal(ModularJ(tau), 256 * ((1-ModularLambda(tau)+ModularLambda(tau)**2)**3 / (ModularLambda(tau)**2 * (1 - ModularLambda(tau))**2)))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+

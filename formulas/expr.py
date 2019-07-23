@@ -1254,7 +1254,7 @@ ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 RealBall
 UnitCircle
 OpenDisk ClosedDisk BernsteinEllipse
-InteriorClosure
+InteriorClosure Interior
 Decimal
 Equal Unequal Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
@@ -1316,7 +1316,8 @@ LogIntegral
 Matrix2x2 Matrix2x1
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
-ModularJ
+ModularLambdaFundamentalDomain
+ModularJ ModularLambda
 PrimitiveReducedPositiveIntegralBinaryQuadraticForms
 HilbertClassPolynomial
 DirichletCharacter DirichletGroup PrimitiveDirichletCharacters
@@ -1329,6 +1330,7 @@ DirichletLZero
 GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
 EisensteinG EisensteinE
+EllipticK EllipticE
 """)
 
 inject_builtin("""
@@ -1396,6 +1398,7 @@ symbol_latex_table = {
     DedekindEtaEpsilon: "\\varepsilon",
     DedekindSum: "s",
     ModularJ: "j",
+    ModularLambda: "\\lambda",
     JacobiTheta1: "\\theta_1",
     JacobiTheta2: "\\theta_2",
     JacobiTheta3: "\\theta_3",
@@ -1403,6 +1406,8 @@ symbol_latex_table = {
     WeierstrassP: "\\wp",
     WeierstrassSigma: "\\sigma",
     WeierstrassZeta: "\\zeta",
+    EllipticK: "K",
+    EllipticE: "E",
     EulerQSeries: "\\phi",
     PartitionsP: "p",
     MoebiusMu: "\\mu",
@@ -1469,6 +1474,7 @@ symbol_latex_table = {
     SL2Z: "\\operatorname{SL}_2(\\mathbb{Z})",
     PSL2Z: "\\operatorname{PSL}_2(\\mathbb{Z})",
     ModularGroupFundamentalDomain: "\\mathcal{F}",
+    ModularLambdaFundamentalDomain: "\\mathcal{F}_{\\lambda}",
     PowerSet: "\\mathscr{P}",
     Ellipsis: "\\ldots",
     Spectrum: "\\operatorname{spec}",
