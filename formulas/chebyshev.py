@@ -133,6 +133,7 @@ def_Topic(
         "e1797b",
     ),
     Section("Bounds and inequalities"),
+    Subsection("Upper bounds"),
     Entries(
         "15dd69",
         "3c662e",
@@ -140,6 +141,11 @@ def_Topic(
         "0b3fd6",
         "443759",
         "2a4b9d",
+    ),
+    Subsection("Turán's inequalities"),
+    Entries(
+        "b0c84b",
+        "2ada0f",
     ),
 )
 
@@ -659,4 +665,14 @@ make_entry(ID("2a4b9d"),
     Formula(LessEqual(Abs(ChebyshevU(n,z)), (Abs(z) + Sqrt(Abs(z)**2+1))**n)),
     Variables(n,z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
+
+make_entry(ID("b0c84b"),
+    Formula(GreaterEqual(Parentheses(ChebyshevT(n, x))**2 - ChebyshevT(n-1, x) * ChebyshevT(n+1, x), 0)),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, ClosedInterval(-1, 1)))))
+
+make_entry(ID("2ada0f"),
+    Formula(Greater(Parentheses(ChebyshevT(n, x))**2 - ChebyshevT(n-1, x) * ChebyshevT(n+1, x), 0)),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, OpenInterval(-1, 1)))))
 

@@ -89,6 +89,7 @@ def_Topic(
     Section("Derivatives"),
     Entries(
         "27b2c7",
+        "c18c95",
         "38b4f3",
     ),
 )
@@ -306,8 +307,7 @@ tau1 = Subscript(tau,1)
 make_entry(ID("5d550c"),
     Formula(Equal(tau, ConstI * (EllipticK(1-ModularLambda(tau))/EllipticK(ModularLambda(tau))) + 2 * Ceil(Div(1,2)*Re(tau) - Div(1,2)))),
     Variables(tau),
-    Assumptions(Element(tau, 
-        SetBuilder(tau1+2*n, Tuple(tau1, n), And(Element(n, ZZ), Or(Element(tau1, Interior(ModularLambdaFundamentalDomain)), And(Element(tau1, HH), Element(Re(tau1), ZZ))))))))
+    Assumptions(Element(tau, SetBuilder(tau1+n, Tuple(tau1, n), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))))
 
 make_entry(ID("44a529"),
     Formula(Equal(ModularJ(tau), 256 * ((1-ModularLambda(tau)+ModularLambda(tau)**2)**3 / (ModularLambda(tau)**2 * (1 - ModularLambda(tau))**2)))),
@@ -322,10 +322,16 @@ make_entry(ID("27b2c7"),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
+make_entry(ID("c18c95"),
+    Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
+        ((2*ConstI)/ConstPi) * (WeierstrassZeta(Div(1,2),tau/2) + 8*WeierstrassZeta(Div(1,2),2*tau) - 6*WeierstrassZeta(Div(1,2),tau)) * ModularLambda(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 make_entry(ID("38b4f3"),
     Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
         -((4*ConstI)/ConstPi) * EllipticK(ModularLambda(tau))**2 * (ModularLambda(tau)-1) * ModularLambda(tau))),
     Variables(tau),
-    Assumptions(Element(tau, SetBuilder(tau1+n, Tuple(tau1, n), And(Element(tau1, ModularLambdaFundamentalDomain), Element(n, ZZ))))),
+    Assumptions(Element(tau, SetBuilder(tau1+n, Tuple(tau1, n), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))),
     References("http://functions.wolfram.com/EllipticFunctions/ModularLambda/20/01/0001/ Note: because of the branch cut of the elliptic integral, only valid on part of the domain."))
 

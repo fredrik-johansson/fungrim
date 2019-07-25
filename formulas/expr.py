@@ -336,7 +336,7 @@ class Expr(object):
                 return "%s_{%s}^{%s}\\!\\left(%s\\right)" % (h, s, e, v)
             basestr = base.latex(in_small=in_small)
             expostr = expo.latex(in_small=True)
-            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber, Matrix2x2)):
+            if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber, Matrix2x2, Parentheses, Braces, Brackets)):
                 return "{" + basestr + "}^{" + expostr + "}"
             else:
                 return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"

@@ -79,27 +79,33 @@ def_Topic(
         "ea4754",
         "47b181",
     ),
+    Section("Bounds and inequalities"),
+    Subsection("Turán's inequalities"),
+    Entries(
+        "c8d10e",
+        "227d60",
+    ),
 )
 
 make_entry(ID("0010f3"),
     Formula(Equal(LegendrePolynomial(n,-z), (-1)**n * LegendrePolynomial(n,z))),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(0))), Element(z, CC)))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("367ac2"),
     Formula(Equal((n+1)*LegendrePolynomial(n+1,z) - (2*n+1)*z*LegendrePolynomial(n,z) + n*LegendrePolynomial(n-1,z), 0)),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(1))), Element(z, CC)))
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC))))
 
 make_entry(ID("27688e"),
     Formula(Equal((1-z**2)*Derivative(LegendrePolynomial(n,z), Tuple(z,z,2)) - 2*z*Derivative(LegendrePolynomial(n,z), Tuple(z,z,1)) + n*(n+1)*LegendrePolynomial(n,z), 0)),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(0))), Element(z, CC)))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("925fdf"),
     Formula(Equal((1-z**2)*Derivative(LegendrePolynomial(n,z), Tuple(z,z,1)) + n*z*LegendrePolynomial(n,z) - n*LegendrePolynomial(n-1,z), 0)),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(1))), Element(z, CC)))
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC))))
 
 make_entry(ID("9bdf22"),
     Formula(Equal(LegendrePolynomial(0,z), 1)),
@@ -295,4 +301,16 @@ make_entry(ID("b2d723"),
     Formula(Equal(LegendrePolynomial(n, Conjugate(z)), Conjugate(LegendrePolynomial(n, z)))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
+
+# Bounds and inequalities
+
+make_entry(ID("c8d10e"),
+    Formula(GreaterEqual(Parentheses(LegendrePolynomial(n, x))**2 - LegendrePolynomial(n-1, x) * LegendrePolynomial(n+1, x), 0)),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, ClosedInterval(-1, 1)))))
+
+make_entry(ID("227d60"),
+    Formula(Greater(Parentheses(LegendrePolynomial(n, x))**2 - LegendrePolynomial(n-1, x) * LegendrePolynomial(n+1, x), 0)),
+    Variables(n, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, OpenInterval(-1, 1)))))
 
