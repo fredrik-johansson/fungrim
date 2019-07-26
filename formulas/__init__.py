@@ -45,6 +45,7 @@ from .dedekind_eta import *
 from .eisenstein import *
 from .modular_lambda import *
 from .dirichlet import *
+from .beta_function import *
 
 describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
 describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")

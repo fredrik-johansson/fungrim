@@ -264,12 +264,11 @@ class Expr(object):
             argstr = [arg.latex(in_small=in_small) for arg in args]
             return (" " + infix_latex_table[head] + " ").join(argstr)
 
-        # F(n,x) -> F_n(x)
+        # F(n,x,...) -> F_n(x,...)
         if head in subscript_call_latex_table:
-            assert len(args) == 2
             arg0 = args[0].latex(in_small=True)
-            arg1 = args[1].latex(in_small=in_small)
-            return subscript_call_latex_table[head] + "_{" + arg0 + "}" + "\!\\left(" + arg1 + "\\right)"
+            args1 = ", ".join(arg.latex(in_small=in_small) for arg in args[1:])
+            return subscript_call_latex_table[head] + "_{" + arg0 + "}" + "\!\\left(" + args1 + "\\right)"
 
         if head is Exp:
             assert len(args) == 1
@@ -480,7 +479,13 @@ class Expr(object):
                 return "\\mathop{\\operatorname{ord}}\\limits_{%s} %s" % (point, f)
             else:
                 return "\\mathop{\\operatorname{ord}}\\limits_{%s=%s} %s" % (var, point, f)
-            ComplexZeroMultiplicity(f(tau), tau, 3)
+        if head is Residue:
+            assert len(args) == 3
+            f, var, point = argstr
+            if args[1] == args[2]:
+                return "\\mathop{\\operatorname{Res}}\\limits_{%s} %s" % (point, f)
+            else:
+                return "\\mathop{\\operatorname{Res}}\\limits_{%s=%s} %s" % (var, point, f)
         if head in (Derivative, RealDerivative, ComplexDerivative, ComplexBranchDerivative, MeromorphicDerivative):
             if len(args) == 2:
                 assert args[1]._args[0] is Tuple
@@ -1281,6 +1286,7 @@ FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
+Residue
 Infinity UnsignedInfinity
 Sqrt NthRoot Log LogBase Exp
 Sin Cos Tan Sec Cot Csc
@@ -1338,7 +1344,9 @@ DirichletLambda GaussSum JacobiSum
 EisensteinG EisensteinE
 EllipticK EllipticE
 QSeriesCoefficient EqualQSeriesEllipsis
+BetaFunction IncompleteBeta IncompleteBetaRegularized
 """)
+
 
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
@@ -1384,6 +1392,8 @@ subscript_call_latex_table = {
     EisensteinG: "G",
     EisensteinE: "E",
     DivisorSigma: "\\sigma",
+    IncompleteBeta: "\\mathrm{B}",
+    IncompleteBetaRegularized: "I",
 }
 
 symbol_latex_table = {
@@ -1492,6 +1502,7 @@ symbol_latex_table = {
     HurwitzZeta: "\\zeta",
     DirichletL: "L",
     DirichletLambda: "\\Lambda",
+    BetaFunction: "\\mathrm{B}",
 }
 
 described_symbols = []
