@@ -94,11 +94,25 @@ def xrayplot(func, xaxb, yayb, N, filename, decorations=None, xtks=None, ytks=No
         if decorations is not None:
             decorations()
 
+        def ticklabel(x):
+            if x == int(x):
+                return "$" + str(x) + "$"
+            if x*2 == int(x*2):
+                if x < 0:
+                    return "$-\\frac{%s}{%s}$" % (str(-int(x*2)), 2)
+                else:
+                    return "$\\frac{%s}{%s}$" % (str(int(x*2)), 2)
+            return "$" + str(x) + "$"
+
         axis("scaled")
         xlim([xa,xb]); ylim([ya,yb])
         if xtks is not None:
+            if len(xtks) == 1:
+                xtks = (xtks[0], list(map(ticklabel, xtks[0])))
             xticks(*xtks)
         if ytks is not None:
+            if len(ytks) == 1:
+                ytks = (ytks[0], list(map(ticklabel, ytks[0])))
             yticks(*ytks)
 
         savedpi = 100
