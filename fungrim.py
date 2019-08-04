@@ -353,6 +353,8 @@ class TopicPage(Webpage):
                         print("WARNING: linked topic page '%s' missing" % rel._text)
                 rel_strs = ["""<a href="../%s/">%s</a>""" % (escape_title(rel._text), rel._text) for rel in arg.args()]
                 self.fp.write("""<p style="text-align:center">Related topics: %s</p>""" % ", ".join(rel_strs))
+            if arg.head() is Description:
+                self.fp.write(arg.html(display=True))
         self.end()
 
 class DefinitionsPage(Webpage):

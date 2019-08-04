@@ -1295,7 +1295,7 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
 ConstPi ConstE ConstGamma ConstI GoldenRatio
-Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
+Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction PolyGamma RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial
@@ -1394,6 +1394,7 @@ subscript_call_latex_table = {
     DivisorSigma: "\\sigma",
     IncompleteBeta: "\\mathrm{B}",
     IncompleteBetaRegularized: "I",
+    PolyGamma: "\\psi",
 }
 
 symbol_latex_table = {

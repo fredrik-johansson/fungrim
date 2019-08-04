@@ -65,6 +65,25 @@ def_Topic(
         "a0ca3e",
         "b7fec0",
     ),
+    Section("Representation of other functions"),
+    Subsection("Factorials and binomial coefficients"),
+    Entries(
+        "62c6c9", # included from factorials
+        "e87c43", # included from factorials
+        "c733f7", # included from factorials
+    ),
+    Subsection("Beta function"),
+    Entries(
+        "888581", # included from beta
+    ),
+    Subsection("Elementary functions"),
+    Entries(
+        "d38a03", # included from sine
+        "b7a578",
+        "ee56b9",
+        "d16cb4",
+        "6430cc",
+    ),
 )
 
 
@@ -142,6 +161,7 @@ GammaFunction_sub1_domain = SetMinus(CC, ZZLessEqual(1))
 
 
 
+
 make_entry(ID("f1d31a"),
     Formula(Equal(GammaFunction(n), Factorial(n-1))),
     Variables(n),
@@ -208,6 +228,7 @@ make_entry(ID("774d37"),
     Assumptions(And(Element(z, GammaFunction_domain))))
 
 
+
 make_entry(ID("4e4e0f"),
     Formula(Equal(GammaFunction(z), Integral(t**(z-1) * Exp(-t), Tuple(t, 0, Infinity)))),
     Variables(z),
@@ -262,6 +283,28 @@ make_entry(ID("d7d2a0"),
     Variables(z),
     Assumptions(Element(z, GammaFunction_domain)))
 
+# Representation of other functions
+
+make_entry(ID("ee56b9"),
+    Formula(Equal(Tan(ConstPi*z), (GammaFunction(Div(1,2)+z) * GammaFunction(Div(1,2)-z)) / (GammaFunction(z)*GammaFunction(1-z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("b7a578"),
+    Formula(Equal(Cos(ConstPi * z), ConstPi / (GammaFunction(Div(1,2)+z) * GammaFunction(Div(1,2)-z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("d16cb4"),
+    Formula(Equal(Sinc(ConstPi * z), 1 / (GammaFunction(1+z) * GammaFunction(1-z)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("6430cc"),
+    Formula(Equal(Exp(ConstPi * z), ConstPi * (1/(GammaFunction(Div(1,2)+ConstI*z) * GammaFunction(Div(1,2)-ConstI*z)) + z/(GammaFunction(1+ConstI*z)*GammaFunction(1-ConstI*z))))),
+#    Formula(Equal(Exp(ConstPi * z), ConstPi * (1/(GammaFunction(Div(1,2)+ConstI*z) * GammaFunction(Div(1,2)-ConstI*z)) - ConstI/(GammaFunction(ConstI*z)*GammaFunction(1-ConstI*z))))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
 
 
 def_Topic(
