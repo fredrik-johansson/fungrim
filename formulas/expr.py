@@ -429,7 +429,7 @@ class Expr(object):
                 return "\\sum" + ss
             else:
                 return "\\prod" + ss
-        if head in (Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit):
+        if head in (Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit, SequenceLimitInferior, SequenceLimitSuperior):
             if len(args) == 3:
                 formula, var, point = args
                 cond = ""
@@ -447,6 +447,10 @@ class Expr(object):
                 s = "\\lim_{%s \\to {%s}^{-}%s} %s" % (var, point, cond, formula)
             elif head is RightLimit:
                 s = "\\lim_{%s \\to {%s}^{+}%s} %s" % (var, point, cond, formula)
+            elif head is SequenceLimitInferior:
+                s = "\\liminf_{%s \\to %s%s} %s" % (var, point, cond, formula)
+            elif head is SequenceLimitSuperior:
+                s = "\\limsup_{%s \\to %s%s} %s" % (var, point, cond, formula)
             else:
                 s = "\\lim_{%s \\to %s%s} %s" % (var, point, cond, formula)
             return s
@@ -1276,6 +1280,7 @@ Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
 Solutions UniqueSolution
 Supremum Infimum
 Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
+SequenceLimitInferior SequenceLimitSuperior
 Derivative RealDerivative ComplexDerivative ComplexBranchDerivative MeromorphicDerivative
 Sum Product
 PrimeSum DivisorSum PrimeProduct DivisorProduct

@@ -41,6 +41,8 @@ def_Topic(
         "afd5ca",
         "05a3ee",
         "2be0b5",
+        "6cd302",
+        "fdf152",
     ),
     Section("Derivatives"),
     Entries(
@@ -276,6 +278,12 @@ make_entry(ID("2be0b5"),
     SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), z, a), "Limiting value, allowing poles"),
     Description("This operator is equivalent to", SourceForm(ComplexLimit), "except that whereas", SourceForm(ComplexLimit),
         "in general is undefined when", a, "is a pole (because the direction of the resulting infinity depends on the direction of approach),", SourceForm(MeromorphicLimit), "is taken to give", SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "when", a, "is a pole."))
+
+make_entry(ID("6cd302"),
+    SymbolDefinition(SequenceLimitInferior, SequenceLimitInferior(f(n), n, a), "Limit inferior of sequence"))
+
+make_entry(ID("fdf152"),
+    SymbolDefinition(SequenceLimitSuperior, SequenceLimitSuperior(f(n), n, a), "Limit superior of sequence"))
 
 # Derivatives
 

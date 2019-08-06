@@ -483,6 +483,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
 writetopic("Greatest common divisor", highlight=True)
+writetopic("Totient function")
 writetopic("Factorials and binomial coefficients")
 writetopic("Fibonacci numbers", highlight=True)
 writetopic("Prime numbers")
