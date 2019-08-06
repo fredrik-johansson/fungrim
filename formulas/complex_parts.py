@@ -11,6 +11,7 @@ def_Topic(
         "f5e62c",
         "9086c6",
         "da5d5e",
+        "ce8ee4",
     ),
     Section("Basic formulas"),
     Entries(
@@ -20,6 +21,9 @@ def_Topic(
         "8e6867",
         "ba6d81",
         "acda23",
+        "18d335",
+        "59a5d6",
+        "e9465d",
     ),
     Section("Specific values"),
     Entries(
@@ -114,6 +118,15 @@ make_entry(ID("da5d5e"),
         Tuple(Element(z, CC), Element(Conjugate(z), CC)),
       )))
 
+make_entry(ID("ce8ee4"),
+    SymbolDefinition(Csgn, Csgn(z), "Real-valued sign function for complex numbers"),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(z, CC), Element(Csgn(z), Set(-1, 0, 1))),
+      )),
+    References("https://www.maplesoft.com/support/help/maple/view.aspx?path=csgn"))
+
 
 make_entry(ID("26565c"),
     Formula(Equal(Sign(z), z / Abs(z))),
@@ -144,6 +157,21 @@ make_entry(ID("acda23"),
     Formula(Equal(Conjugate(x+y*ConstI), x-y*ConstI)),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR))))
+
+make_entry(ID("18d335"),
+    Formula(Equal(Sign(x), Cases(Tuple(1, Greater(x, 0)), Tuple(-1, Less(x, 0)), Tuple(0, Equal(x, 0))))),
+    Variables(x),
+    Assumptions(Element(x, RR)))
+
+make_entry(ID("59a5d6"),
+    Formula(Equal(Csgn(z), Cases(Tuple(Sign(Im(z)), Equal(Re(z), 0)), Tuple(Sign(Re(z)), Otherwise)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("e9465d"),
+    Formula(Equal(Csgn(z), Sqrt(z**2) / z)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 
 make_entry(ID("c423d2"),
