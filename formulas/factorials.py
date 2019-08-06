@@ -42,7 +42,6 @@ def_Topic(
         "62c6c9",
         "e87c43",
         "332721",
-        "5cd0a8",
         "1d5e92",
         "22ee07",
         "c733f7",
@@ -401,11 +400,6 @@ make_entry(ID("e87c43"),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)), NotElement(z-k, ZZLessEqual(-1)))))
 
 make_entry(ID("332721"),
-    Formula(Equal(Binomial(n, k), Factorial(n) / (Factorial(k) * Factorial(n-k)))),
-    Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)))))
-
-make_entry(ID("5cd0a8"),
     Formula(Equal(Binomial(n, k), Factorial(n) / (Factorial(k) * Factorial(n-k)))),
     Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)))))
