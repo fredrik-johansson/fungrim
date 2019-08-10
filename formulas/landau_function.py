@@ -159,7 +159,7 @@ make_entry(ID("177218"),
 make_entry(ID("7932c3"),
     Formula(Equal(LandauG(n),
         Maximum(SetBuilder(LCM(Subscript(s, 1), Ellipsis, Subscript(s, k)), Tuple(k, Subscript(s, i)),
-            And(Element(Subscript(s, k), ZZGreaterEqual(1)), Equal(Sum(Subscript(s, i), Tuple(i, 1, k)), n)))))),
+            And(Element(Subscript(s, i), ZZGreaterEqual(1)), Equal(Sum(Subscript(s, i), Tuple(i, 1, k)), n)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
