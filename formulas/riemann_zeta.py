@@ -7,7 +7,6 @@ def_Topic(
     Section("Definitions"),
     Entries(
         "e0a6a2",
-        "669509",
     ),
     Section("Illustrations"),
     Entries(
@@ -43,7 +42,11 @@ def_Topic(
     Section("Zeros"),
     SeeTopics("Zeros of the Riemann zeta function"),
     Entries(
+        "669509",  # RiemannZetaZero
+        "c03de4",  # RiemannHypothesis
+        "49704a",  # RH formula
         "2e1ff3",  # real zeros
+        "a78abc",  # nontrivial zeros
         "692e42",  # complex zeros
         "cbbf16",  # 0 < re < 1
         "e6ff64",  # re = 1/2
@@ -81,10 +84,13 @@ def_Topic(
     Entries(
         "e0a6a2",
         "669509",
+        "c03de4",
     ),
     Section("Main properties"),
     Entries(
+        "49704a",  # RH
         "2e1ff3",  # real zeros
+        "a78abc",  # nontrivial zeros
         "692e42",  # complex zeros
         "cbbf16",  # 0 < re < 1
         "e6ff64",  # re = 1/2
@@ -367,6 +373,9 @@ make_entry(ID("9a258f"),
 make_entry(ID("2e1ff3"),
     Formula(Equal(Zeros(RiemannZeta(s), s, Element(s, RR)), SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))))))
 
+make_entry(ID("a78abc"),
+    Formula(Equal(Zeros(RiemannZeta(s), s, And(Element(s, CC), LessEqual(0, Re(s), 1))), SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0))))))
+
 make_entry(ID("692e42"),
     Formula(Equal(Zeros(RiemannZeta(s), s, Element(s, CC)), Union(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))),
         SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0)))))))
@@ -387,6 +396,14 @@ make_entry(ID("e6ff64"),
     Assumptions(And(Element(n, ZZ), Unequal(n, 0), Or(Less(Abs(n), 103800788359), RiemannHypothesis))),
     References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
 
+make_entry(ID("c03de4"),
+    SymbolDefinition(RiemannHypothesis, RiemannHypothesis, "Riemann hypothesis"),
+    Description("Represents the truth value of the Riemann hypothesis, defined in ", EntryReference("49704a"), "."),
+    Description("Semantically, ", Element(RiemannHypothesis, Set(True_, False_)), "."),
+    Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the Riemann hypothesis."))
+
+make_entry(ID("49704a"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Equal(Re(RiemannZetaZero(n)), Div(1,2))))))
 
 make_entry(ID("945fa5"),
     Formula(Element(RiemannZetaZero(1),

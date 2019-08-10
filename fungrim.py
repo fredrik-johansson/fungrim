@@ -490,6 +490,7 @@ writetopic("Prime numbers")
 writetopic("Partition function")
 writetopic("Bernoulli numbers and polynomials")
 writetopic("Stirling numbers")
+writetopic("Landau's function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Hypergeometric functions<ul>""")

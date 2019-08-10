@@ -8,7 +8,7 @@ def_Topic(
         "38f111",
         "0b643d",
         "6c22c8",
-        "c03de4",
+        "c03de4",  # included from zeta
     ),
     Section("Basic formulas"),
     Entries(
@@ -51,10 +51,6 @@ make_entry(ID("6c22c8"),
         Tuple(Element(x, RR), Element(PrimePi(x), ZZGreaterEqual(0))),
         Tuple(Element(x, Set(Infinity)), Element(PrimePi(x), Set(Infinity))))
       ))
-
-make_entry(ID("c03de4"),
-    SymbolDefinition(RiemannHypothesis, RiemannHypothesis, "Riemann hypothesis"),
-    Description("Used as a symbol in logical formulas, represents the assertion that the Riemann hypothesis is true."))
 
 make_entry(ID("3fc797"),
     Formula(Equal(PP, SetBuilder(PrimeNumber(n), n, Element(n, ZZGreaterEqual(1))))))

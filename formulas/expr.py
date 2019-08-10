@@ -388,6 +388,8 @@ class Expr(object):
                 func, var, cond = args
                 cond = cond.latex(in_small=True)
                 return ss + ("_{%s} %s" % (cond, argstr[0]))
+            elif len(args) == 1:
+                return ss + " " + argstr[0]
             else:
                 raise ValueError
         if head in (DivisorSum, DivisorProduct):
@@ -462,7 +464,10 @@ class Expr(object):
                       Zeros:"\\operatorname{zeros}\\,", UniqueZero:"\\operatorname{zero*}\\,",
                       Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution*}\\,"}[head]
             if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
-                return "%s\\left(%s\\right)" % (opname, argstr[0])
+                if args[0].head() in (Set, SetBuilder):
+                    return opname + " " + argstr[0]
+                else:
+                    return "%s\\left(%s\\right)" % (opname, argstr[0])
             assert len(args) == 3
             formula, var, predicate = args
             #var = var.latex()
@@ -863,10 +868,10 @@ class Expr(object):
             return "\\operatorname{det}" + argstr[0]
         if head is ForAll:
             assert len(args) == 3
-            return "\\text{for all } %s: %s, %s" % (argstr[0], argstr[1], argstr[2])
+            return "\\text{for all } %s \\text{ with } %s, %s" % (argstr[0], argstr[1], argstr[2])
         if head is Exists:
             assert len(args) == 2
-            return "\\text{there exists } %s: %s" % (argstr[0], argstr[1])
+            return "\\text{there exists } %s \\text{ with } %s" % (argstr[0], argstr[1])
         if head is Cases:
             s = "\\begin{cases} "
             for arg in args:
@@ -1329,7 +1334,7 @@ Lattice
 WeierstrassP WeierstrassZeta WeierstrassSigma
 PrimeNumber PrimePi
 RiemannHypothesis
-LogIntegral
+LogIntegral LandauG
 Matrix2x2 Matrix2x1
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
@@ -1403,6 +1408,8 @@ subscript_call_latex_table = {
 }
 
 symbol_latex_table = {
+    True_: "\\operatorname{True}",
+    False_: "\\operatorname{False}",
     ConstPi: "\\pi",
     ConstI: "i",
     ConstE: "e",
@@ -1509,6 +1516,7 @@ symbol_latex_table = {
     DirichletL: "L",
     DirichletLambda: "\\Lambda",
     BetaFunction: "\\mathrm{B}",
+    LandauG: "g",
 }
 
 described_symbols = []

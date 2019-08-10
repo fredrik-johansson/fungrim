@@ -142,8 +142,8 @@ make_entry(ID("47d430"),
 make_entry(ID("ed65c8"),
     Formula(Equal(PrimitiveDirichletCharacters(q),
         SetBuilder(chi, chi, And(Element(chi, DirichletGroup(q)),
-            ForAll(d, And(Element(d, ZZBetween(1, q-1)), Divides(d, q)),
-                Exists(a, And(Element(a, ZZBetween(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1)))))))),
+            Brackets(ForAll(d, And(Element(d, ZZBetween(1, q-1)), Divides(d, q)),
+                Exists(a, And(Element(a, ZZBetween(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1))))))))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))),
     References("T. Apostol (1976), Introduction to Analytic Number Theory, Springer. Chapter 8.7."))
@@ -576,6 +576,7 @@ def_Topic(
     Entries(
         "3f96c1",
         "dc593e",
+        "e2a734",
         "982e3b",
         "2a34c3",
         "214a91",
@@ -785,8 +786,13 @@ make_entry(ID("3f96c1"),
 
 make_entry(ID("dc593e"),
     SymbolDefinition(GeneralizedRiemannHypothesis, GeneralizedRiemannHypothesis, "Generalized Riemann hypothesis"),
-    Description("Used as a symbol in logical formulas, represents the assertion that the generalized Riemann hypothesis is true for all Dirichlet L-functions, "
-        "or in other words that", EntryReference("214a91"), "always holds."))
+    Description("Represents the truth value of the generalized Riemann hypothesis for Dirichlet L-functions, defined in ", EntryReference("e2a734"), "."),
+    Description("Semantically, ", Element(GeneralizedRiemannHypothesis, Set(True_, False_)), "."),
+    Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the generalized Riemann hypothesis."))
+
+make_entry(ID("e2a734"),
+    Formula(Equivalent(GeneralizedRiemannHypothesis, ForAll(Tuple(q, chi, n), And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)),
+        Element(n, SetMinus(ZZ, Set(0)))), Equal(Re(DirichletLZero(n,chi)), Div(1,2))))))
 
 make_entry(ID("982e3b"),
     Formula(Less(0, Re(DirichletLZero(n,chi)), 1)),
