@@ -325,8 +325,10 @@ class Expr(object):
                 return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
             if not base.is_atom() and base.head() is Fibonacci:
                 return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
-            if not base.is_atom() and base.head() in (JacobiTheta1, JacobiTheta2, JacobiTheta3, JacobiTheta4) and len(base.args()) == 2:
-                return base.head().latex() + "^{%s}\\!\\left(%s, %s\\right)" % (expo.latex(in_small=True), base.args()[0].latex(), base.args()[1].latex())
+            # todo: generalized to subscript functions?
+            if not base.is_atom() and base.head() is JacobiTheta and len(base.args()) == 3:
+                return "\\theta" + "_{%s}^{%s}\\!\\left(%s, %s\\right)" % \
+                    (base.args()[0].latex(), expo.latex(in_small=True), base.args()[1].latex(), base.args()[2].latex())
             if not base.is_atom() and base.head() in subscript_call_latex_table and len(base.args()) == 2:
                 h = subscript_call_latex_table[base.head()]
                 s = base.args()[0].latex(in_small=True)
@@ -1323,7 +1325,7 @@ LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
 ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
-JacobiTheta1 JacobiTheta2 JacobiTheta3 JacobiTheta4
+JacobiTheta JacobiThetaEpsilon JacobiThetaPermutation
 Divides
 GCD LCM XGCD DivisorSigma MoebiusMu Totient
 LegendreSymbol JacobiSymbol KroneckerSymbol
@@ -1405,6 +1407,9 @@ subscript_call_latex_table = {
     IncompleteBeta: "\\mathrm{B}",
     IncompleteBetaRegularized: "I",
     PolyGamma: "\\psi",
+    JacobiThetaEpsilon: "\\varepsilon",
+    JacobiThetaPermutation: "S",
+    JacobiTheta: "\\theta",
 }
 
 symbol_latex_table = {
@@ -1429,10 +1434,6 @@ symbol_latex_table = {
     DedekindSum: "s",
     ModularJ: "j",
     ModularLambda: "\\lambda",
-    JacobiTheta1: "\\theta_1",
-    JacobiTheta2: "\\theta_2",
-    JacobiTheta3: "\\theta_3",
-    JacobiTheta4: "\\theta_4",
     WeierstrassP: "\\wp",
     WeierstrassSigma: "\\sigma",
     WeierstrassZeta: "\\zeta",

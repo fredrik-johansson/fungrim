@@ -161,22 +161,22 @@ make_entry(ID("0e649f"),
 
 make_entry(ID("af0dfc"),
     Formula(Equal(WeierstrassP(z,tau),
-        (ConstPi * JacobiTheta2(0,tau) * JacobiTheta3(0,tau) * Div(JacobiTheta4(z,tau), JacobiTheta1(z,tau)))**2
-            - ConstPi**2/3 * (JacobiTheta2(0,tau)**4 + JacobiTheta3(0,tau)**4))),
+        (ConstPi * JacobiTheta(2,0,tau) * JacobiTheta(3,0,tau) * Div(JacobiTheta(4,z,tau), JacobiTheta(1,z,tau)))**2
+            - ConstPi**2/3 * (JacobiTheta(2,0,tau)**4 + JacobiTheta(3,0,tau)**4))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("0207dc"),
     Formula(Equal(WeierstrassZeta(z,tau),
-        -Div(z,3) * Div(Derivative(JacobiTheta1(z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta1(z,tau), Tuple(z, 0, 1)))
-            + Div(Derivative(JacobiTheta1(z,tau), Tuple(z, z, 1)), JacobiTheta1(z,tau)))),
+        -Div(z,3) * Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1)))
+            + Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, z, 1)), JacobiTheta(1,z,tau)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("b96c9d"),
     Formula(Equal(WeierstrassSigma(z,tau),
-        Exp(-Div(z**2,6) * Div(Derivative(JacobiTheta1(z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta1(z,tau), Tuple(z, 0, 1))))
-            * (JacobiTheta1(z,tau) / Derivative(JacobiTheta1(z,tau), Tuple(z, 0, 1))))),
+        Exp(-Div(z**2,6) * Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1))))
+            * (JacobiTheta(1,z,tau) / Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 

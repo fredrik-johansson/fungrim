@@ -626,12 +626,12 @@ make_entry(ID("344963"),
 
 make_entry(ID("da1873"),
     Formula(Equal(Sum(1/Fibonacci(2*n+1), Tuple(n, 0, Infinity)),
-        Where((Sqrt(5)/4) * JacobiTheta2(0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+        Where((Sqrt(5)/4) * JacobiTheta(2,0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("22b67a"),
     Formula(Equal(Sum(1/Fibonacci(n)**2, Tuple(n, 1, Infinity)),
-        Where(Div(5,24) * (JacobiTheta2(0, tau)**4 - JacobiTheta4(0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+        Where(Div(5,24) * (JacobiTheta(2,0, tau)**4 - JacobiTheta(4,0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("6d8bf0"),

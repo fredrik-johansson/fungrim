@@ -183,17 +183,17 @@ make_entry(ID("b23575"),
 # Theta function representations
 
 make_entry(ID("5b9c02"),
-    Formula(Equal(ModularLambda(tau), JacobiTheta2(0,tau)**4 / JacobiTheta3(0,tau)**4)),
+    Formula(Equal(ModularLambda(tau), JacobiTheta(2,0,tau)**4 / JacobiTheta(3,0,tau)**4)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("903962"),
-    Formula(Equal(lam/(lam-1), -(JacobiTheta2(0,tau)**4 / JacobiTheta4(0,tau)**4))),
+    Formula(Equal(lam/(lam-1), -(JacobiTheta(2,0,tau)**4 / JacobiTheta(4,0,tau)**4))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("04d3a6"),
-    Formula(Equal(1-lam, JacobiTheta4(0,tau)**4 / JacobiTheta3(0,tau)**4)),
+    Formula(Equal(1-lam, JacobiTheta(4,0,tau)**4 / JacobiTheta(3,0,tau)**4)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

@@ -135,8 +135,8 @@ make_entry(ID("1cb24e"),
 
 
 make_entry(ID("cedcfc"),
-    Formula(Equal(ModularJ(tau), 32 * (JacobiTheta2(0,tau)**8 + JacobiTheta3(0,tau)**8 + JacobiTheta4(0,tau)**8)**3 /
-        (JacobiTheta2(0,tau) * JacobiTheta3(0,tau) * JacobiTheta4(0,tau))**8)),
+    Formula(Equal(ModularJ(tau), 32 * (JacobiTheta(2,0,tau)**8 + JacobiTheta(3,0,tau)**8 + JacobiTheta(4,0,tau)**8)**3 /
+        (JacobiTheta(2,0,tau) * JacobiTheta(3,0,tau) * JacobiTheta(4,0,tau))**8)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

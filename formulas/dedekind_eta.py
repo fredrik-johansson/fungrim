@@ -179,7 +179,7 @@ make_entry(ID("4af6db"),
 # Connection formulas
 
 make_entry(ID("737805"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * JacobiTheta3((tau+1)/2, 3*tau))),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * JacobiTheta(3,(tau+1)/2, 3*tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
