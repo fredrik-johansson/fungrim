@@ -58,6 +58,7 @@ def_Topic(
         "fc3ef5",
         "89e79d",
         "4d8b0f",
+        "100d3c",
     ),
 )
 
@@ -221,14 +222,16 @@ make_entry(ID("9bda2f"),
                 Tuple(4, CongruentMod(Tuple(m, n), Tuple(1, 0), 2)),
                 Tuple(3, CongruentMod(Tuple(m, n), Tuple(1, 1), 2))))))),
     Variables(j,a,b,c,d),
-    Assumptions(And(Element(j, Set(1,2,3,4)), Element(Matrix2x2(a, b, c, d), PSL2Z))))
+    Assumptions(And(Element(j, Set(1,2,3,4)), Element(Matrix2x2(a, b, c, d), PSL2Z))),
+    References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Section 81."))
 
 make_entry(ID("03356b"),
     Formula(Equal(JacobiThetaEpsilon(1,a,b,c,d),
         Cases(Tuple(KroneckerSymbol(c,d) * Call(Exp, ((ConstPi*ConstI/4) * Brackets(d*(b-c-1)+2))), Even(c)),
               Tuple(KroneckerSymbol(d,c) * Call(Exp, ((ConstPi*ConstI/4) * Brackets(c*(a+d+1)-3))), Odd(c))))),
     Variables(a,b,c,d),
-    Assumptions(Element(Matrix2x2(a,b,c,d), SL2Z)))
+    Assumptions(Element(Matrix2x2(a,b,c,d), SL2Z)),
+    References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Section 80."))
 
 make_entry(ID("3c56c7"),
     Formula(Equal(JacobiThetaEpsilon(j,a,b,c,d),
@@ -239,7 +242,8 @@ make_entry(ID("3c56c7"),
             Tuple(Call(Exp, ((ConstPi*ConstI/4) * Brackets((a-2)*b - 4 + 2*(1-a)*Subscript(delta, b+1)))), Equal(j, 4))),
             Equal(Subscript(delta, n), Mod(n, 2))))),
     Variables(j,a,b,c,d),
-    Assumptions(And(Element(j, Set(2,3,4)), Element(Matrix2x2(a,b,c,d), SL2Z))))
+    Assumptions(And(Element(j, Set(2,3,4)), Element(Matrix2x2(a,b,c,d), SL2Z))),
+    References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Section 81."))
 
 make_entry(ID("fc3ef5"),
     Formula(Equal(JacobiThetaEpsilon(j,a,b,c,d)**4,
@@ -261,5 +265,15 @@ make_entry(ID("4d8b0f"),
         Where(JacobiThetaEpsilon(j,a,b,c,d) * Sqrt(v/ConstI) * Exp(ConstPi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,a,b,c,d), v*z,tau), Equal(v, (c*tau+d)),
         ))),
     Variables(z, tau, a, b, c, d),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))))
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
+    References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Sections 80, 81."))
+
+make_entry(ID("100d3c"),
+    Formula(Equal(JacobiTheta(j,z,tau),
+        Where(JacobiThetaEpsilon(j,-d,b,c,-a) * Sqrt(v/ConstI) * Exp(ConstPi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,-d,b,c,-a), v*z, (a*tau+b)/(c*tau+d)),
+            Equal(v, -(1/(c*tau+d))),
+        ))),
+    Variables(z, tau, a, b, c, d),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
+    References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Sections 80, 81."))
 
