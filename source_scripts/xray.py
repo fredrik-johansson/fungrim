@@ -170,6 +170,11 @@ def plots(outdir):
     def elltheta(z, tau):
         return tuple(complex(c) for c in acb(z).modular_theta(tau))
 
+    theta1 = lambda z, tau: elltheta(z, tau)[0]
+    theta2 = lambda z, tau: elltheta(z, tau)[1]
+    theta3 = lambda z, tau: elltheta(z, tau)[2]
+    theta4 = lambda z, tau: elltheta(z, tau)[3]
+
     def ellzeta(z, tau):
         return complex(acb(z).elliptic_zeta(tau))
 
@@ -195,6 +200,38 @@ def plots(outdir):
         if k == 14: return E4**2 * E6
         if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
         raise ValueError
+
+    xrayplot(lambda tau: 0.0 if tau.imag < 0.13 else theta1(1/3.+0.75j,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_1_tau_b",
+        decorations=lambda: coverup_rectangle((-2.5,0),5,0.14), xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+
+    xrayplot(lambda tau: 0.0 if tau.imag < 0.13 else theta2(1/3.+0.75j,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_2_tau_b",
+        decorations=lambda: coverup_rectangle((-2.5,0),5,0.14), xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+
+    xrayplot(lambda tau: 0.0 if tau.imag < 0.13 else theta3(1/3.+0.75j,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_3_tau_b",
+        decorations=lambda: coverup_rectangle((-2.5,0),5,0.14), xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+
+    xrayplot(lambda tau: 0.0 if tau.imag < 0.13 else theta4(1/3.+0.75j,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_4_tau_b",
+        decorations=lambda: coverup_rectangle((-2.5,0),5,0.14), xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+
+    xrayplot(lambda tau: theta2(0,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_2_tau", xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+    xrayplot(lambda tau: theta3(0,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_3_tau", xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+    xrayplot(lambda tau: theta4(0,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_4_tau", xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
+
+    w3 = 0.25+0.75j
+    xrayplot(lambda z: theta1(z,w3), (-2,2), (-2,2), 400, "jacobi_theta_1_z_c", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta2(z,w3), (-2,2), (-2,2), 400, "jacobi_theta_2_z_c", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta3(z,w3), (-2,2), (-2,2), 400, "jacobi_theta_3_z_c", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta4(z,w3), (-2,2), (-2,2), 400, "jacobi_theta_4_z_c", xout=0.1, yout=0.1)
+
+    xrayplot(lambda z: theta1(z,1j), (-2,2), (-2,2), 400, "jacobi_theta_1_z", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta2(z,1j), (-2,2), (-2,2), 400, "jacobi_theta_2_z", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta3(z,1j), (-2,2), (-2,2), 400, "jacobi_theta_3_z", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta4(z,1j), (-2,2), (-2,2), 400, "jacobi_theta_4_z", xout=0.1, yout=0.1)
+
+    xrayplot(lambda z: theta1(z,0.5j), (-2,2), (-2,2), 400, "jacobi_theta_1_z_b", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta2(z,0.5j), (-2,2), (-2,2), 400, "jacobi_theta_2_z_b", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta3(z,0.5j), (-2,2), (-2,2), 400, "jacobi_theta_3_z_b", xout=0.1, yout=0.1)
+    xrayplot(lambda z: theta4(z,0.5j), (-2,2), (-2,2), 400, "jacobi_theta_4_z_b", xout=0.1, yout=0.1)
 
     fundament_lambda_x = list(linspace(-1,0,80))
     fundament_lambda_y = [0.5*sqrt(1-(2*x+1)**2) for x in fundament_lambda_x]
