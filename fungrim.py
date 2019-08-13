@@ -493,9 +493,12 @@ writetopic("Stirling numbers")
 writetopic("Landau's function")
 frontpage.fp.write("""</ul></li>""")
 
-frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
+frontpage.fp.write("""<li>Gamma function<ul>""")
 writetopic("Gamma function")
 writetopic("Beta function")
+frontpage.fp.write("""</ul></li>""")
+
+frontpage.fp.write("""<li>Hypergeometric functions<ul>""")
 writetopic("Gauss hypergeometric function")
 writetopic("Confluent hypergeometric functions")
 writetopic("Error functions")

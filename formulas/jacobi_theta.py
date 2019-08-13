@@ -17,14 +17,22 @@ def_Topic(
         "9522c6",
         "e2035a",
     ),
-    Section("Exponential Fourier series"),
+    Section("Fourier series (q-series)"),
+    Subsection("Exponential Fourier series"),
+    Entries(
+        "700d94",
+        "495a98",
+        "2f97f5",
+        "d923de",
+    ),
+    Subsection("Pure exponential series"),
     Entries(
         "ed4ce5",
         "7cb651",
         "580ba0",
         "27c319",
     ),
-    Section("Trigonometric Fourier series"),
+    Subsection("Trigonometric Fourier series"),
     Entries(
         "2ba423",
         "06633e",
@@ -38,28 +46,30 @@ def_Topic(
         "caf10a",
         "926b2c",
     ),
-    Section("Symmetry"),
+    Section("Argument transformations"),
+    Subsection("Symmetry"),
     Entries(
         "59f8e1",
         "fb55cb",
         "380076",
         "4f939e",
     ),
-    Section("Periodicity"),
+    Subsection("Periodicity"),
     Entries(
         "2faeb9",
         "b46534",
         "e56f77",
         "4448f1",
     ),
-    Section("Quasi-periodicity"),
+    Subsection("Quasi-periodicity"),
     Entries(
         "43fa0e",
         "d29148",
         "2e4da0",
         "8d6a1d",
     ),
-    Section("Modular transformations"),
+    Section("Lattice transformations"),
+    Subsection("General modular transformations"),
     Entries(
         "c4714a",
         "20172a",
@@ -216,6 +226,20 @@ make_entry(ID("d3b45d"),
 
 make_entry(ID("f96eac"),
     SymbolDefinition(JacobiTheta, JacobiTheta(j,z,tau), "Jacobi theta function"),
+    Description(SourceForm(JacobiTheta(j,z,tau)), ", rendered as", JacobiTheta(j,z,tau), ", denotes a Jacobi theta function. ",
+        "There are four Jacobi theta functions, identified by the index", Element(j, Set(1,2,3,4)), "."),
+    Description("The input", z, "is called the argument and can be any complex number. ",
+        "The input", tau, "is called the lattice parameter and must be a complex number with positive imaginary part."),
+    Description("The Jacobi theta functions are defined by the respective Fourier series (",
+        EntryReference("700d94"), ", ",
+        EntryReference("495a98"), ", ",
+        EntryReference("2f97f5"), ", ",
+        EntryReference("d923de"), "). ",
+        "It is important to note that Fungrim defines theta functions with a factor", ConstPi, "applied to the argument", z,
+        "in the Fourier series, for uniformity with the lattice parameter", tau, ". Many authors omit this scaling factor or replace the input", tau,
+        "by", Equal(q, Exp(ConstPi*ConstI*tau)), ". There are even further notational variations for theta functions in the mathematical literature, "
+        "so care is required when using different reference works."),
+    Description("The following table lists conditions such that", SourceForm(JacobiTheta(j,z,tau)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(
@@ -223,10 +247,34 @@ make_entry(ID("f96eac"),
       )),
     )
 
-# Exponential Fourier series
+make_entry(ID("700d94"),
+    Formula(Equal(JacobiTheta(1,z,tau), Where(-ConstI * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * w**(2*n+1), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("495a98"),
+    Formula(Equal(JacobiTheta(2,z,tau), Where(Exp(ConstPi*ConstI*tau/4) * Sum(q**(n*(n+1)) * w**(2*n+1), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("2f97f5"),
+    Formula(Equal(JacobiTheta(3,z,tau), Where(Sum(q**(n**2) * w**(2*n), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("d923de"),
+    Formula(Equal(JacobiTheta(4,z,tau), Where(Sum((-1)**n * q**(n**2) * w**(2*n), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Pure exponential series
 
 make_entry(ID("ed4ce5"),
-    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Sum((-1)**n * Exp(ConstPi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z)), Tuple(n, -Infinity, Infinity)))),
+    Formula(Equal(JacobiTheta(1,z,tau), Sum(Exp(ConstPi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z + n - Div(1,2))), Tuple(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -248,22 +296,22 @@ make_entry(ID("27c319"),
 # Trigonometric series
 
 make_entry(ID("2ba423"),
-    Formula(Equal(JacobiTheta(1,z,tau), 2 * Sum((-1)**n * Exp(ConstPi*ConstI*(n+Div(1,2))**2*tau) * Sin((2*n+1)*ConstPi*z), Tuple(n, 0, Infinity)))),
+    Formula(Equal(JacobiTheta(1,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * Sin((2*n+1)*ConstPi*z), Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("06633e"),
-    Formula(Equal(JacobiTheta(2,z,tau), 2 * Sum(Exp(ConstPi*ConstI*(n+Div(1,2))**2*tau) * Cos((2*n+1)*ConstPi*z), Tuple(n, 0, Infinity)))),
+    Formula(Equal(JacobiTheta(2,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Sum(q**(n*(n+1)) * Cos((2*n+1)*ConstPi*z), Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("f3e75c"),
-    Formula(Equal(JacobiTheta(3,z,tau), 1 + 2 * Sum(Exp(ConstPi*ConstI*n**2*tau) * Cos(2*n*ConstPi*z), Tuple(n, 1, Infinity)))),
+    Formula(Equal(JacobiTheta(3,z,tau), Where(1 + 2 * Sum(q**(n**2) * Cos(2*n*ConstPi*z), Tuple(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("8a34d1"),
-    Formula(Equal(JacobiTheta(4,z,tau), 1 + 2 * Sum((-1)**n * Exp(ConstPi*ConstI*n**2*tau) * Cos(2*n*ConstPi*z), Tuple(n, 1, Infinity)))),
+    Formula(Equal(JacobiTheta(4,z,tau), Where(1 + 2 * Sum((-1)**n * q**(n**2) * Cos(2*n*ConstPi*z), Tuple(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
