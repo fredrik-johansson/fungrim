@@ -82,7 +82,22 @@ def_Topic(
         "3479be",
         "53fef4",
     ),
+    Section("Differential equations"),
+    Description("Main topic:", TopicReference("Differential equations for Jacobi theta functions")),
+    Subsection("Heat equation"),
+    Entries(
+        "ebc673",
+    ),
+    Subsection("Jacobi's differential equation"),
+    Entries(
+        "936694",
+    ),
+    Subsection("Derivatives of ratios"),
+    Entries(
+        "cb493d",
+    ),
 )
+
 
 def_Topic(
     Title("Illustrations of Jacobi theta functions"),
@@ -227,6 +242,44 @@ def_Topic(
     ),
 )
 
+def_Topic(
+    Title("Differential equations for Jacobi theta functions"),
+    Description("This topic lists identities involving derivatives of Jacobi theta functions", JacobiTheta(j,z,tau), ". ",
+        "See the topic", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Partial differential equations"),
+    Subsection("Heat equation"),
+    Entries(
+        "ebc673",
+    ),
+    Section("Derivatives with respect to the lattice parameter"),
+    Subsection("Jacobi's differential equation"),
+    Entries(
+        "936694",
+    ),
+    Section("Derivatives with respect to the argument"),
+    Subsection("Relations at zero"),
+    Entries(
+        "f2e28a",
+        "278274",
+        "59184e",  # included from lattice transf
+        "46f244",  # included from lattice transf
+    ),
+    Subsection("Derivatives of ratios"),
+    Entries(
+        "cb493d",
+        "d41a95",
+        "a4eecf",
+        "713b6b",
+        "64b65d",
+        "89985a",
+        "0373dc",
+        "2853d4",
+        "378949",
+        "a0552b",
+        "775637",
+        "23077c",
+    ),
+)
 
 # Illustrations
 
@@ -862,6 +915,106 @@ make_entry(ID("0096a8"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("fc3c44"),
-    Formula(Equal(JacobiTheta(4,4*z,4*tau), JacobiTheta(4,z,tau)*JacobiTheta(4,Div(1,4)-z,tau)*JacobiTheta(4,Div(1,4)+z,tau)*JacobiTheta(3,z,tau)/(JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(3,Div(1,4),tau)))),    Variables(z, tau),
+    Formula(Equal(JacobiTheta(4,4*z,4*tau), JacobiTheta(4,z,tau)*JacobiTheta(4,Div(1,4)-z,tau)*JacobiTheta(4,Div(1,4)+z,tau)*JacobiTheta(3,z,tau)/(JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(3,Div(1,4),tau)))),
+    Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Differential equations
+
+# Heat equation
+
+make_entry(ID("ebc673"),
+    Formula(Equal(JacobiTheta(j,z,tau,2) - 4*ConstPi*ConstI*Derivative(JacobiTheta(j,z,tau), tau, tau), 0)),
+    Variables(j, z, tau),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH))))
+
+# Jacobi differential equation
+
+D0 = Subscript(D, 0)
+D1 = Subscript(D, 1)
+D2 = Subscript(D, 2)
+D3 = Subscript(D, 3)
+
+make_entry(ID("936694"),
+    Formula(Where(Equal((30*D1**3-15*D0*D1*D2+D0**2*D3)**2 + 32*(D0*D2-3*D1**2)**3 + ConstPi**2*(D0*D2 - 3*D1**2)**2*D0**10, 0),
+        Equal(Subscript(D, r), Derivative(JacobiTheta(j, 0, tau), tau, tau, r)))),
+    Variables(j, tau),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(tau, HH))))
+
+# Relations at zero
+
+make_entry(ID("f2e28a"),
+    Formula(Equal(JacobiTheta(1,0,tau,1), ConstPi*JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau))),
+    Variables(tau),
+    Assumptions(And(Element(tau, HH))))
+
+make_entry(ID("278274"),
+    Formula(Equal(JacobiTheta(1,0,tau,3) / JacobiTheta(1,0,tau,1), JacobiTheta(2,0,tau,2)/JacobiTheta(2,0,tau) + JacobiTheta(3,0,tau,2)/JacobiTheta(3,0,tau) + JacobiTheta(4,0,tau,2)/JacobiTheta(4,0,tau))),
+    Variables(tau),
+    Assumptions(And(Element(tau, HH))))
+
+# Derivatives of ratios
+
+make_entry(ID("cb493d"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(2,z,tau), z, z), JacobiTheta(2,0,tau)**2 * JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("d41a95"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(3,z,tau), z, z), JacobiTheta(3,0,tau)**2 * JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("a4eecf"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(4,z,tau), z, z), JacobiTheta(4,0,tau)**2 * JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+
+make_entry(ID("713b6b"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(1,z,tau), z, z), -(JacobiTheta(2,0,tau)**2 * JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("64b65d"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(3,z,tau), z, z), -(JacobiTheta(4,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("89985a"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(4,z,tau), z, z), -(JacobiTheta(3,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+
+make_entry(ID("0373dc"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(1,z,tau), z, z), -(JacobiTheta(3,0,tau)**2 * JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("2853d4"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(2,z,tau), z, z), JacobiTheta(4,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("378949"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(4,z,tau), z, z), -(JacobiTheta(2,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(4,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+
+make_entry(ID("a0552b"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(1,z,tau), z, z), -(JacobiTheta(4,0,tau)**2 * JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(1,z,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("775637"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(2,z,tau), z, z), JacobiTheta(3,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("23077c"),
+    Formula(Equal((1/ConstPi) * MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(3,z,tau), z, z), JacobiTheta(2,0,tau)**2 * JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(3,z,tau)**2)),    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
 

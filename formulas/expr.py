@@ -331,6 +331,9 @@ class Expr(object):
                 return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
             if not base.is_atom() and base.head() is Fibonacci:
                 return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
+            if not base.is_atom() and base.head() is Subscript:
+                assert len(base.args()) == 2
+                return "{%s}_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), base.args()[1].latex(in_small=True), expo.latex(in_small=True))
             # todo: generalized to subscript functions?
             if not base.is_atom() and base.head() is JacobiTheta and len(base.args()) == 3:
                 return "\\theta" + "_{%s}^{%s}\\!\\left(%s, %s\\right)" % \
