@@ -6,6 +6,12 @@ katex_function = []
 
 int_cache = {}
 
+def escape_title(name):
+    # paren = name.find("(")
+    # if paren >= 0:
+    #     name = name[:paren].rstrip(" ")
+    return name.replace(" ", "_")
+
 class Expr(object):
     """
     Represents a symbolic expression.
@@ -901,6 +907,25 @@ class Expr(object):
         if head is EqualQSeriesEllipsis:
             fun, tau, q, ser, qdef = argstr
             return "%s = %s + \\ldots \; \\text{ where } %s" % (fun, ser, qdef)
+        if head is JacobiTheta:
+            #midsep = "\\,\\middle|\\,"
+            midsep = ","
+            if len(args) == 3:
+                index = args[0].latex(in_small=True)
+                z = argstr[1]
+                tau = argstr[2]
+                return "\\theta_{%s}\\!\\left(%s %s %s\\right)" % (index, z, midsep, tau)
+            if len(args) == 4:
+                index = args[0].latex(in_small=True)
+                z = argstr[1]
+                tau = argstr[2]
+                if args[3].is_integer():
+                    r = args[3]._integer
+                    if r >= 0 and r <= 4:
+                        return "\\theta%s_{%s}\\!\\left(%s %s %s\\right)" % ("'" * r, index, z, midsep, tau)
+                r = args[3].latex(in_small=True)
+                return "\\theta^{(%s)}_{%s}\\!\\left(%s %s %s\\right)" % (r, index, z, midsep, tau)
+            raise ValueError
         if head is Description:
             s = ""
             for arg in args:
@@ -1094,6 +1119,9 @@ class Expr(object):
             elif (not arg.is_atom()) and arg.head() is EntryReference:
                 id = arg.args()[0]._text
                 s += """<a href="../../entry/%s/">%s</a>""" % (id, id)
+            elif (not arg.is_atom()) and arg.head() is TopicReference:
+                title = arg.args()[0]._text
+                s += """<a href="../../topic/%s/">%s</a>""" % (escape_title(title), title)
             else:
                 s += arg.html(avoid_latex=True)
             s += " "
@@ -1363,7 +1391,7 @@ BetaFunction IncompleteBeta IncompleteBetaRegularized
 inject_builtin("""
 Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableHeadings TableColumnHeadings TableSplit TableSection
-Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference
+Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference TopicReference
 SourceForm SymbolDefinition
 Image ImageSource
 """)
@@ -1409,7 +1437,7 @@ subscript_call_latex_table = {
     PolyGamma: "\\psi",
     JacobiThetaEpsilon: "\\varepsilon",
     JacobiThetaPermutation: "S",
-    JacobiTheta: "\\theta",
+#    JacobiTheta: "\\theta",
 }
 
 symbol_latex_table = {

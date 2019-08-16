@@ -298,12 +298,6 @@ class EntryPage(Webpage):
         self.entry(self.id)
         self.end()
 
-def escape_title(name):
-    # paren = name.find("(")
-    # if paren >= 0:
-    #     name = name[:paren].rstrip(" ")
-    return name.replace(" ", "_")
-
 class TopicPage(Webpage):
 
     def __init__(self, title):
