@@ -168,15 +168,15 @@ make_entry(ID("af0dfc"),
 
 make_entry(ID("0207dc"),
     Formula(Equal(WeierstrassZeta(z,tau),
-        -Div(z,3) * Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1)))
-            + Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, z, 1)), JacobiTheta(1,z,tau)))),
+        -Div(z,3) * Div(JacobiTheta(1,0,tau,3), JacobiTheta(1,0,tau,1))
+            + Div(JacobiTheta(1,z,tau,1), JacobiTheta(1,z,tau)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("b96c9d"),
     Formula(Equal(WeierstrassSigma(z,tau),
-        Exp(-Div(z**2,6) * Div(Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 3)), Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1))))
-            * (JacobiTheta(1,z,tau) / Derivative(JacobiTheta(1,z,tau), Tuple(z, 0, 1))))),
+        Exp(-Div(z**2,6) * Div(JacobiTheta(1,0,tau,3), JacobiTheta(1,0,tau,1)))
+            * (JacobiTheta(1,z,tau) / JacobiTheta(1,0,tau,1)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
