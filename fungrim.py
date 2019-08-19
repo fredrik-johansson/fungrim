@@ -113,7 +113,7 @@ html_start = """
 body { margin: 0; padding: 0; font-family: roboto, arial, sans-serif; background-color:#eee; color:#111; }
 h1 { text-align:center; color:#256; margin-top: 0; }
 h2, h3 { text-align: center; margin-bottom: 0.5em; margin-top: 0.7em; }
-h3 { font-size: 1em; font-weight: bold; color:#633; }
+h3 { font-size: 1em; font-weight: bold; color:#333; }
  a:link { text-decoration: none; }
  a:visited { text-decoration: none; }
  a:hover { text-decoration: underline; }

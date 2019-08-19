@@ -178,7 +178,7 @@ make_entry(ID("b96c9d"),
         Exp(-Div(z**2,6) * Div(JacobiTheta(1,0,tau,3), JacobiTheta(1,0,tau,1)))
             * (JacobiTheta(1,z,tau) / JacobiTheta(1,0,tau,1)))),
     Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 
 make_entry(ID("12a9e8"),
