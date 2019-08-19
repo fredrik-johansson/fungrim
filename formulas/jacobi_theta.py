@@ -160,6 +160,14 @@ def_Topic(
         "580ba0",
         "27c319",
     ),
+    Section("Fourier series for derivatives"),
+    Subsection("Exponential Fourier series"),
+    Entries(
+        "2ae142",
+        "42d832",
+        "f551ca",
+        "1842d9",
+    ),
     Section("Infinite products"),
     Subsection("Infinite q-products with trigonometric factors"),
     Entries(
@@ -202,6 +210,7 @@ def_Topic(
     Section("Taylor series"),
     Entries(
         "1cdd7b",
+        "d637c5",
     ),
 
 )
@@ -469,7 +478,8 @@ make_entry(ID("f96eac"),
         JacobiTheta(j,z,tau,2), ", ",
         JacobiTheta(j,z,tau,3), ", ",
         JacobiTheta(j,z,tau,4), " (", LessEqual(1, r, 4), "), or",
-        JacobiTheta(j,z,tau,r), ", represents the order", r, "derivative of the Jacobi theta function with respect to the argument", z, "."),
+        JacobiTheta(j,z,tau,r), ", represents the order", r, "derivative of the Jacobi theta function with respect to the argument", z, ".",
+        "Derivatives with respect to the lattice parameter", tau, "(and mixed derivatives) can always be converted to derivatives with respect to", z, ", using", EntryReference("37e644"), "."),
     Description("The Jacobi theta functions are defined by the respective Fourier series (",
         EntryReference("700d94"), ", ",
         EntryReference("495a98"), ", ",
@@ -558,6 +568,32 @@ make_entry(ID("8a34d1"),
     Formula(Equal(JacobiTheta(4,z,tau), Where(1 + 2 * Sum((-1)**n * q**(n**2) * Cos(2*n*ConstPi*z), Tuple(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Fourier series for derivatives
+
+make_entry(ID("2ae142"),
+    Formula(Equal(JacobiTheta(1,z,tau,r), Where(-ConstI * (ConstPi*ConstI)**r * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * (2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau, r),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("42d832"),
+    Formula(Equal(JacobiTheta(2,z,tau,r), Where((ConstPi*ConstI)**r * Exp(ConstPi*ConstI*tau/4) * Sum((2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau, r),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("f551ca"),
+    Formula(Equal(JacobiTheta(3,z,tau,r), Where((2*ConstPi*ConstI)**r * Sum(n**r * q**(n**2) * w**(2*n), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau, r),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("1842d9"),
+    Formula(Equal(JacobiTheta(4,z,tau,r), Where((2*ConstPi*ConstI)**r * Sum((-1)**n * n**r * q**(n**2) * w**(2*n), Tuple(n, -Infinity, Infinity)),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Variables(z, tau, r),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 # Infinite products
 
@@ -679,10 +715,16 @@ make_entry(ID("1848f1"),
 # Taylor series
 
 make_entry(ID("1cdd7b"),
-    Formula(Equal(JacobiTheta(j,z,tau),
-        Sum((JacobiTheta(j,c,tau,n) / Factorial(n)) * (z-c)**n, Tuple(n, 0, Infinity)))),
-    Variables(j, c, z, tau),
-    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(c, CC), Element(z, CC), Element(tau, HH))))
+    Formula(Equal(JacobiTheta(j,z+x,tau),
+        Sum((JacobiTheta(j,z,tau,n) / Factorial(n)) * x**n, Tuple(n, 0, Infinity)))),
+    Variables(j, z, tau, x),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(x, CC))))
+
+make_entry(ID("d637c5"),
+    Formula(Equal(JacobiTheta(j,z,tau+x),
+        Sum((1/(4*ConstPi*ConstI)**n) * (JacobiTheta(j,z,tau,2*n) / Factorial(n)) * x**n, Tuple(n, 0, Infinity)))),
+    Variables(j, z, tau, x),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(x, CC), Less(Abs(x), Im(tau)))))
 
 # Other series
 
