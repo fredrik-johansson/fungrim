@@ -28,6 +28,7 @@ def_Topic(
         "e9f0c8",
         "2ba627",
         "3a7a0b",
+        "099301",
     ),
     Subsection("Fundamental domain"),
     Entries(
@@ -163,6 +164,19 @@ make_entry(ID("3a7a0b"),
     Formula(Equal(ModularLambda((tau-1)/tau), (lam-1)/lam)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
+
+make_entry(ID("099301"),
+    Formula(Equal(ModularLambda((a*tau+b)/(c*tau+d)),
+        Cases(
+            Tuple(lam, CongruentMod(Tuple(a,b,c,d), Tuple(1,0,0,1), 2)),
+            Tuple(1-lam, CongruentMod(Tuple(a,b,c,d), Tuple(0,1,1,0), 2)),
+            Tuple(1/lam, CongruentMod(Tuple(a,b,c,d), Tuple(1,0,1,1), 2)),
+            Tuple(1/(1-lam), CongruentMod(Tuple(a,b,c,d), Tuple(0,1,1,1), 2)),
+            Tuple((lam-1)/lam, CongruentMod(Tuple(a,b,c,d), Tuple(1,1,1,0), 2)),
+            Tuple(lam/(lam-1), CongruentMod(Tuple(a,b,c,d), Tuple(1,1,0,1), 2))))),
+    Variables(tau, a, b, c, d),
+    Assumptions(And(Element(tau, HH), Element(Matrix2x2(a,b,c,d), SL2Z))))
+
 
 ## Fundamental domain
 
