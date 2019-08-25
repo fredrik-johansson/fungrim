@@ -36,6 +36,11 @@ def_Topic(
         "caf10a",
         "926b2c",
     ),
+    Section("Specific values"),
+    Description("Main topic:", TopicReference("Specific values of Jacobi theta functions")),
+    Entries(
+        "d15f11",
+    ),
     Section("Argument transformations"),
     Description("Main topic:", TopicReference("Argument transformations for Jacobi theta functions")),
     Subsection("Symmetry"),
@@ -1933,4 +1938,182 @@ make_entry(ID("1c67c8"),
     Formula(Equal((JacobiTheta(1,z,tau)**2 - JacobiTheta(2,z,tau)**2)*JacobiTheta(2,0,2*tau), (JacobiTheta(4,z,tau)**2-JacobiTheta(3,z,tau)**2)*JacobiTheta(3,0,2*tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+#                           Specific values                                   #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+def_Topic(
+    Title("Specific values of Jacobi theta functions"),
+    Description("See", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Particular theta constants"),
+    Subsection("Constant for the square lattice"),
+    Entries(
+        "d15f11",
+        "1403b5",
+        "8697b8",
+        "0d4608",
+        "7d7c65",
+    ),
+    Subsection("Conversion from index 2 and 4 to index 3"),
+    Entries(
+        "47f4ba",
+        "e2288d",
+        "cf7ee3",
+        "81550a",
+    ),
+    Subsection("Algebraic ratios for real part 0"),
+    Entries(
+        "4256f0",
+        "52302f",
+        "7f9273",
+        "cf3c8e",
+        "f12e20",
+        "95e9e4",
+        "483e7e",
+        "cb6c9c",
+        "669765",
+        "72f583",
+        "8356db",
+        "6ade92",
+    ),
+    Subsection("Algebraic ratios for real part 1"),
+    Entries(
+        "4c8873",
+        "324483",
+        "b58070",
+        "6cbce8",
+        "5384f3",
+        "e2bc80",
+        "390158",
+        "675f23",
+    ),
+),
+
+# Fundamental constant
+
+make_entry(ID("d15f11"),
+    Formula(Equal(JacobiTheta(3,0,ConstI), ConstPi**Div(1,4) / GammaFunction(Div(3,4)))))
+
+make_entry(ID("1403b5"),
+    Formula(Equal(JacobiTheta(3,0,ConstI), GammaFunction(Div(1,4)) / (Sqrt(2) * ConstPi**Div(3,4)))))
+
+make_entry(ID("8697b8"),
+    Formula(Element(JacobiTheta(3,0,ConstI), RealBall(Decimal("1.0864348112133080145753161215102234570702057072452"), Decimal("1.89e-50")))))
+
+make_entry(ID("0d4608"),
+    Formula(NotElement(JacobiTheta(3,0,ConstI), AlgebraicNumbers)),
+    Description("Consequence of Nesterenko's theorem."))
+
+make_entry(ID("7d7c65"),
+    Formula(Equal(JacobiTheta(2,0,ConstI), JacobiTheta(4,0,ConstI), JacobiTheta(3,0,1+ConstI), Brackets(2**(-Div(1,4))) * JacobiTheta(3,0,ConstI))))
+
+# Conversions
+
+make_entry(ID("47f4ba"),
+    Formula(Equal(JacobiTheta(2,0,y*ConstI), (1/Sqrt(y)) * JacobiTheta(3,0,1+ConstI/y))),
+    Variables(y),
+    Assumptions(Element(y, OpenInterval(0, Infinity))))
+
+make_entry(ID("e2288d"),
+    Formula(Equal(JacobiTheta(2,0,1+y*ConstI), ((1+ConstI)/Sqrt(2*y)) * JacobiTheta(3,0,1+ConstI/y))),
+    Variables(y),
+    Assumptions(Element(y, OpenInterval(0, Infinity))))
+
+make_entry(ID("cf7ee3"),
+    Formula(Equal(JacobiTheta(4,0,y*ConstI), JacobiTheta(3,0,1+y*ConstI))),
+    Variables(y),
+    Assumptions(Element(y, OpenInterval(0, Infinity))))
+
+make_entry(ID("81550a"),
+    Formula(Equal(JacobiTheta(4,0,1+y*ConstI), JacobiTheta(3,0,y*ConstI))),
+    Variables(y),
+    Assumptions(Element(y, OpenInterval(0, Infinity))))
+
+# Algebraic ratios at real part zero
+
+make_entry(ID("4256f0"),
+    Formula(Equal(JacobiTheta(3,0,ConstI/2), Brackets(Sqrt((Sqrt(2)+1)/2) * 2**Div(1,4)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("52302f"),
+    Formula(Equal(JacobiTheta(3,0,ConstI/3), Brackets((2*Sqrt(3)+3)**Div(1,4)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("7f9273"),
+    Formula(Equal(JacobiTheta(3,0,ConstI/4), Brackets((1+2**(-Div(1,4)))/Sqrt(1+Sqrt(2)) * Sqrt((Sqrt(2)+1)/2) * 2**Div(1,2)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("cf3c8e"),
+    Formula(Equal(JacobiTheta(3,0,2*ConstI), Brackets(Sqrt(Sqrt(2)+2)/2) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("f12e20"),
+    Formula(Equal(JacobiTheta(3,0,3*ConstI), Brackets(Sqrt(Sqrt(3)+1)/(Pow(2,Div(1,4)) * Pow(3,Div(3,8)))) * JacobiTheta(3,0,ConstI))),
+#    Formula(Equal(JacobiTheta(3,0,3*ConstI), Brackets(1/Pow(6*Sqrt(3)-9, Div(1,4))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("95e9e4"),
+    Formula(Equal(JacobiTheta(3,0,4*ConstI), Brackets((1+Pow(2, -Div(1,4)))/2) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("483e7e"),
+    Formula(Equal(JacobiTheta(3,0,5*ConstI), Brackets(1/Sqrt(5*Sqrt(5)-10)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("cb6c9c"),
+    Formula(Equal(JacobiTheta(3,0,5*ConstI), Brackets(Sqrt(5+2*Sqrt(5))/Pow(5,Div(3,4))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("669765"),
+    Formula(Equal(JacobiTheta(3,0,6*ConstI), Brackets((-4+3*Sqrt(2)+3**Div(5,4) + 2*Sqrt(3) - 3**Div(3,4) + 2*Sqrt(2)*Parentheses(3**Div(3,4)))**Div(1,3) / (2*Parentheses(3**Div(3,8))*((Sqrt(2)-1)*(Sqrt(3)-1))**Div(1,6))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("72f583"),
+    Formula(Equal(JacobiTheta(3,0,7*ConstI), Brackets(Sqrt((((Sqrt(13 + Sqrt(7)) + Sqrt(7 + 3*Sqrt(7))) / 14) * Pow(Parentheses(28),Div(1,8))))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("8356db"),
+    Formula(Equal(JacobiTheta(3,0,9*ConstI), Brackets((1 + Pow(2*(Sqrt(3)+1),Div(1,3)))/3) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("6ade92"),
+    Formula(Equal(JacobiTheta(3,0,45*ConstI), Brackets(((3+Sqrt(5)+(Sqrt(3)+Sqrt(5)+Pow(60,Div(1,4)))*Pow(2+Sqrt(3), Div(1,3)))/(3*Sqrt(10+10*Sqrt(5))))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+# Algebraic ratios at real part one
+
+make_entry(ID("4c8873"),
+    Formula(Equal(JacobiTheta(3,0,1+ConstI), Brackets(2**(-Div(1,4))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("324483"),
+    Formula(Equal(JacobiTheta(3,0,1+ConstI/2), Brackets((Pow(Sqrt(2)-1, Div(2,3)) * Pow(4 + 3*Sqrt(2), Div(1,12))) / Pow(2, Div(7,24))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("b58070"),
+    Formula(Equal(JacobiTheta(3,0,1+2*ConstI), Brackets(2**(-Div(1,8))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("6cbce8"),
+    Formula(Equal(JacobiTheta(3,0,1+4*ConstI), Brackets(2**(-Div(7,16)) * (Sqrt(2)+1)**Div(1,4)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("5384f3"),
+    Formula(Equal(JacobiTheta(3,0,1+6*ConstI), Brackets((1+Sqrt(3)+Sqrt(2)*27**Div(1,4))**Div(1,3) / (2**Div(11,24)*3**Div(3,8)*(Sqrt(3)-1)**Div(1,6))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("e2bc80"),
+    Formula(Equal(JacobiTheta(3,0,1+8*ConstI), Brackets(2**(-Div(7,8)) * (16 + 15*2**Div(1,4) + 12*Sqrt(2) + 9*8**Div(1,4))**Div(1,8)) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("390158"),
+    Formula(Equal(JacobiTheta(3,0,1+10*ConstI), Brackets(2**Div(7,8) / ((5**Div(1,4)-1)*Sqrt(5*Sqrt(5)+5))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+make_entry(ID("675f23"),
+    Formula(Equal(JacobiTheta(3,0,1+12*ConstI), Brackets(2**(-Div(19,48)) * 3**(-Div(3,8)) * (2-3*Sqrt(2)+3**Div(5,4)+3**Div(3,4))**Div(1,3) / ((Sqrt(2)-1)**Div(1,12)*(Sqrt(3)+1)**Div(1,6)*(-1-Sqrt(3)+Sqrt(2)*Parentheses(3**Div(3,4)))**Div(1,3))) * JacobiTheta(3,0,ConstI))),
+    References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
 
