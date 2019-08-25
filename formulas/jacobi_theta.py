@@ -14,7 +14,6 @@ def_Topic(
     ),
     Subsection("Variable lattice parameter"),
     Entries(
-        "9522c6",
         "e2035a",
     ),
     Section("Series and product representations"),
@@ -38,6 +37,7 @@ def_Topic(
         "926b2c",
     ),
     Section("Argument transformations"),
+    Description("Main topic:", TopicReference("Argument transformations for Jacobi theta functions")),
     Subsection("Symmetry"),
     Entries(
         "59f8e1",
@@ -73,8 +73,26 @@ def_Topic(
         "3479be",
         "53fef4",
     ),
+    Section("Sums and products"),
+    Subsection("Fourth powers"),
+    Entries(
+        "1fbc09",
+        "08822c",
+        "5a3ebf",
+        "e08bb4",
+    ),
+    Subsection("Sums of squares"),
+    Entries(
+        "fa7251",
+        "265d9c",
+        "0e2635",
+        "6fad93",
+        "abbe42",
+        "1c67c8",
+    ),
     Section("Differential equations"),
     Description("Main topic:", TopicReference("Differential equations for Jacobi theta functions")),
+    Subsection("Notation and conversion to argument derivatives"),
     Entries(
         "a222ed",
         "37e644",
@@ -202,7 +220,7 @@ def_Topic(
         "44e8fb",
         "1848f1",
     ),
-    Subsection("Trigonometric series"),
+    Subsection("Reciprocal trigonometric series"),
     Entries(
         "d81f05",
         "561d75",
@@ -212,13 +230,24 @@ def_Topic(
         "1cdd7b",
         "d637c5",
     ),
-
+    Section("Series for theta constants"),
+    Subsection("Reciprocal trigonometric series"),
+    Entries(
+        "9b7d8c",
+        "7b3ac4",
+        "ab1c77",
+    ),
 )
 
 def_Topic(
     Title("Lattice transformations for Jacobi theta functions"),
     Description("This topic lists identities for how Jacobi theta functions", JacobiTheta(j,z,tau), "transform when the lattice parameter", tau, " is transformed. ",
-        "See the topic", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+        "See", TopicReference("Argument transformations for Jacobi theta functions"), "for identities involving the argument", z, "when", tau, "is fixed.",
+        "See", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Reflection symmetry"),
+    Entries(
+        "fe1b96",
+    ),
     Section("Basic modular transformations"),
     Subsection("Single shift"),
     Entries(
@@ -762,28 +791,23 @@ make_entry(ID("561d75"),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(2, z, tau), 0))))
 
+make_entry(ID("9b7d8c"),
+    Formula(Equal(JacobiTheta(2,0,tau)**2,
+        Sum(1/Cos(ConstPi*tau*(n+Div(1,2))), Tuple(n, -Infinity, Infinity)))),
+    Variables(tau),
+    Assumptions(Element(z, CC), Element(tau, HH)))
 
-# Symmetry
+make_entry(ID("7b3ac4"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2,
+        Sum(1/Cos(ConstPi*tau*n), Tuple(n, -Infinity, Infinity)))),
+    Variables(tau),
+    Assumptions(Element(z, CC), Element(tau, HH)))
 
-make_entry(ID("59f8e1"),
-    Formula(Equal(JacobiTheta(1,-z,tau), -JacobiTheta(1,z,tau))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
-
-make_entry(ID("fb55cb"),
-    Formula(Equal(JacobiTheta(2,-z,tau), JacobiTheta(2,z,tau))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
-
-make_entry(ID("380076"),
-    Formula(Equal(JacobiTheta(3,-z,tau), JacobiTheta(3,z,tau))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
-
-make_entry(ID("4f939e"),
-    Formula(Equal(JacobiTheta(4,-z,tau), JacobiTheta(4,z,tau))),
-    Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+make_entry(ID("ab1c77"),
+    Formula(Equal(JacobiTheta(4,0,tau)**2,
+        Sum(1/Cos(ConstPi*(tau+1)*n), Tuple(n, -Infinity, Infinity)))),
+    Variables(tau),
+    Assumptions(Element(z, CC), Element(tau, HH)))
 
 # Zeros
 
@@ -807,51 +831,14 @@ make_entry(ID("926b2c"),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
-# Periodicity
-
-make_entry(ID("2faeb9"),
-    Formula(Equal(JacobiTheta(1,z+2*n,tau), JacobiTheta(1,z,tau))),
-    Variables(z, tau, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
-
-make_entry(ID("b46534"),
-    Formula(Equal(JacobiTheta(2,z+2*n,tau), JacobiTheta(2,z,tau))),
-    Variables(z, tau, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
-
-make_entry(ID("e56f77"),
-    Formula(Equal(JacobiTheta(3,z+2*n,tau), JacobiTheta(3,z,tau))),
-    Variables(z, tau, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
-
-make_entry(ID("4448f1"),
-    Formula(Equal(JacobiTheta(4,z+2*n,tau), JacobiTheta(4,z,tau))),
-    Variables(z, tau, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
-
-# Quasi-periodicity
-
-make_entry(ID("43fa0e"),
-    Formula(Equal(JacobiTheta(1,z+(m+n*tau),tau), (-1)**(m+n) * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(1,z,tau))),
-    Variables(z, tau, m, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
-
-make_entry(ID("d29148"),
-    Formula(Equal(JacobiTheta(2,z+(m+n*tau),tau), (-1)**m * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(2,z,tau))),
-    Variables(z, tau, m, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
-
-make_entry(ID("2e4da0"),
-    Formula(Equal(JacobiTheta(3,z+(m+n*tau),tau), Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(3,z,tau))),
-    Variables(z, tau, m, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
-
-make_entry(ID("8d6a1d"),
-    Formula(Equal(JacobiTheta(4,z+(m+n*tau),tau), (-1)**n * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(4,z,tau))),
-    Variables(z, tau, m, n),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
-
 # Lattice transformations
+
+# Reflection symmetry
+
+make_entry(ID("fe1b96"),
+    Formula(Equal(JacobiTheta(j, z, -Conjugate(tau)), Conjugate(JacobiTheta(j,Conjugate(z), tau)))),
+    Variables(j, z, tau),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH))))
 
 # Basic modular transformations
 
@@ -1327,4 +1314,623 @@ make_entry(ID("23077c"),
     Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(3,z,tau), z, z), ConstPi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(3,z,tau)**2))),    Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
+#-----------------------------------------------------------------------------#
+#                                                                             #
+#                           Argument transformations                          #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+def_Topic(
+    Title("Argument transformations for Jacobi theta functions"),
+    Description("This topic lists identities for how Jacobi theta functions", JacobiTheta(j,z,tau), "transform when the argument", z, " is transformed. ",
+        "This topic mainly covers identities where the lattice parameter", tau, "is fixed.",
+        "See", TopicReference("Lattice transformations for Jacobi theta functions"), "for identities involving transformations of", tau, ".",
+        "See", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Reflection symmetry"),
+    Subsection("Odd-even symmetry"),
+    Entries(
+        "59f8e1",
+        "fb55cb",
+        "380076",
+        "4f939e",
+    ),
+    Subsection("Conjugate symmetry"),
+    Entries(
+        "a891da",
+    ),
+    Section("Periodicity"),
+    Entries(
+        "2faeb9",
+        "b46534",
+        "5cdae6",
+        "f697d5",
+        "e56f77",
+        "4448f1",
+    ),
+    Section("Quasi-periodicity"),
+    Subsection("Single shifts"),
+    Entries(
+        "d989cd",
+        "cd5f45",
+        "103bfb",
+        "b83f63",
+    ),
+    Subsection("General shifts"),
+    Entries(
+        "43fa0e",
+        "d29148",
+        "2e4da0",
+        "8d6a1d",
+    ),
+    Section("Half-period or quarter-period shifts"),
+    Entries(
+        "563d18",
+        "47f6dd",
+        "7d559c",
+        "bb2d01",
+        "d5a29e",
+        "cc6d21",
+        "2d2dde",
+        "429093",
+    ),
+    Section("Theta functions represented in terms of each other"),
+    Subsection("Theta 1"),
+    Entries(
+        "95988c",
+        "4c462b",
+        "ed0756",
+    ),
+    Subsection("Theta 2"),
+    Entries(
+        "785668",
+        "0878a4",
+        "6a7704",
+    ),
+    Subsection("Theta 3"),
+    Entries(
+        "b3fc6d",
+        "71d5ee",
+        "235d0d",
+    ),
+    Subsection("Theta 4"),
+    Entries(
+        "5d41b1",
+        "6d918c",
+        "10ca40",
+    ),
+    Section("Double argument"),
+    Subsection("Theta 1"),
+    Entries(
+        "5fe58d",
+    ),
+    Subsection("Theta 2"),
+    Entries(
+        "3a77e0",
+        "e6dc09",
+        "aaa582",
+        "b1d07b",
+    ),
+    Subsection("Theta 3"),
+    Entries(
+        "20d581",
+        "ed3ff9",
+        "794106",
+        "a94b43",
+    ),
+    Subsection("Theta 4"),
+    Entries(
+        "8b825c",
+        "7131cd",
+        "931201",
+        "21dc98",
+    ),
+    Section("Relations involving sums and differences of arguments"),
+    Subsection("Cross-products with two factors and double lattice parameter"),
+    Entries(
+        "1792a9",
+        "5f9e54",
+        "9a9487",
+        "f4554f",
+        "d36e97",
+        "73eb5d",
+    ),
+    Subsection("Cross-products with four factors"),
+    Entries(
+        "34d1c6",
+        "47e587",
+        "ee8617",
+        "dfea7d",
+        "9973ef",
+        "077394",
+    ),
+    Subsection("Cross-products of squares"),
+    Entries(
+        "45165c",
+        "75cb8c",
+        "663a02",
+        "1feda6",
+        "89c9e4",
+        "48a1c6",
+        "66efb8",
+        "9aa437",
+        "5752b8",
+        "c891a1",
+        "3cac28",
+        "45a130",
+    ),
+)
+
+
+# Symmetry
+
+make_entry(ID("59f8e1"),
+    Formula(Equal(JacobiTheta(1,-z,tau), -JacobiTheta(1,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("fb55cb"),
+    Formula(Equal(JacobiTheta(2,-z,tau), JacobiTheta(2,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("380076"),
+    Formula(Equal(JacobiTheta(3,-z,tau), JacobiTheta(3,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("4f939e"),
+    Formula(Equal(JacobiTheta(4,-z,tau), JacobiTheta(4,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Conjugate symmetry
+
+make_entry(ID("a891da"),
+    Formula(Equal(JacobiTheta(j, Conjugate(z), tau), Conjugate(JacobiTheta(j,z, -Conjugate(tau))))),
+    Variables(j, z, tau),
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH))))
+
+# Periodicity
+
+make_entry(ID("2faeb9"),
+    Formula(Equal(JacobiTheta(1,z+2*n,tau), JacobiTheta(1,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+make_entry(ID("b46534"),
+    Formula(Equal(JacobiTheta(2,z+2*n,tau), JacobiTheta(2,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+make_entry(ID("5cdae6"),
+    Formula(Equal(JacobiTheta(1,z+n,tau), (-1)**n * JacobiTheta(1,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+make_entry(ID("f697d5"),
+    Formula(Equal(JacobiTheta(2,z+n,tau), (-1)**n * JacobiTheta(2,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+make_entry(ID("e56f77"),
+    Formula(Equal(JacobiTheta(3,z+n,tau), JacobiTheta(3,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+make_entry(ID("4448f1"),
+    Formula(Equal(JacobiTheta(4,z+n,tau), JacobiTheta(4,z,tau))),
+    Variables(z, tau, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
+
+# Single translates
+# check(JacobiTheta(1,z+1,tau), -JacobiTheta(1,z,tau))
+# check(JacobiTheta(2,z+1,tau), -JacobiTheta(2,z,tau))
+# check(JacobiTheta(3,z+1,tau), JacobiTheta(3,z,tau))
+# check(JacobiTheta(4,z+1,tau), JacobiTheta(4,z,tau))
+
+# Quasi-periodicity
+
+# Single shifts
+
+make_entry(ID("d989cd"),
+    Formula(Equal(JacobiTheta(1,z+tau,tau), -Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(1,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("cd5f45"),
+    Formula(Equal(JacobiTheta(2,z+tau,tau), Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(2,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("103bfb"),
+    Formula(Equal(JacobiTheta(3,z+tau,tau), Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(3,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("b83f63"),
+    Formula(Equal(JacobiTheta(4,z+tau,tau), -Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(4,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# General shifts
+
+make_entry(ID("43fa0e"),
+    Formula(Equal(JacobiTheta(1,z+(m+n*tau),tau), (-1)**(m+n) * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(1,z,tau))),
+    Variables(z, tau, m, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
+
+make_entry(ID("d29148"),
+    Formula(Equal(JacobiTheta(2,z+(m+n*tau),tau), (-1)**m * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(2,z,tau))),
+    Variables(z, tau, m, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
+
+make_entry(ID("2e4da0"),
+    Formula(Equal(JacobiTheta(3,z+(m+n*tau),tau), Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(3,z,tau))),
+    Variables(z, tau, m, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
+
+make_entry(ID("8d6a1d"),
+    Formula(Equal(JacobiTheta(4,z+(m+n*tau),tau), (-1)**n * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(4,z,tau))),
+    Variables(z, tau, m, n),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
+
+# Half-shifts
+
+make_entry(ID("563d18"),
+    Formula(Equal(JacobiTheta(1,z+Div(1,2),tau), JacobiTheta(2,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("47f6dd"),
+    Formula(Equal(JacobiTheta(2,z+Div(1,2),tau), -JacobiTheta(1,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("7d559c"),
+    Formula(Equal(JacobiTheta(3,z+Div(1,2),tau), JacobiTheta(4,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("bb2d01"),
+    Formula(Equal(JacobiTheta(4,z+Div(1,2),tau), JacobiTheta(3,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("d5a29e"),
+    Formula(Equal(JacobiTheta(1,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(4,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("cc6d21"),
+    Formula(Equal(JacobiTheta(2,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * JacobiTheta(3,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("2d2dde"),
+    Formula(Equal(JacobiTheta(3,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * JacobiTheta(2,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("429093"),
+    Formula(Equal(JacobiTheta(4,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(1,z,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Theta functions representated in terms of each other
+
+make_entry(ID("95988c"),
+    Formula(Equal(JacobiTheta(1,z,tau), -JacobiTheta(2,z+Div(1,2),tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("4c462b"),
+    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("ed0756"),
+    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("785668"),
+    Formula(Equal(JacobiTheta(2,z,tau), JacobiTheta(1,z+Div(1,2),tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("0878a4"),
+    Formula(Equal(JacobiTheta(2,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("6a7704"),
+    Formula(Equal(JacobiTheta(2,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("b3fc6d"),
+    Formula(Equal(JacobiTheta(3,z,tau), JacobiTheta(4,z+Div(1,2),tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("71d5ee"),
+    Formula(Equal(JacobiTheta(3,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("235d0d"),
+    Formula(Equal(JacobiTheta(3,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("5d41b1"),
+    Formula(Equal(JacobiTheta(4,z,tau), JacobiTheta(3,z+Div(1,2),tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("6d918c"),
+    Formula(Equal(JacobiTheta(4,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("10ca40"),
+    Formula(Equal(JacobiTheta(4,z,tau), ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Double argument
+
+make_entry(ID("5fe58d"),
+    Formula(Equal(JacobiTheta(1,2*z,tau), 2*JacobiTheta(1,z,tau)*JacobiTheta(2,z,tau)*JacobiTheta(3,z,tau)*JacobiTheta(4,z,tau)/(JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("3a77e0"),
+    Formula(Equal(JacobiTheta(2,2*z,tau), (JacobiTheta(2,z,tau)**4 - JacobiTheta(1,z,tau)**4)/JacobiTheta(2,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("e6dc09"),
+    Formula(Equal(JacobiTheta(2,2*z,tau), (JacobiTheta(3,z,tau)**4 - JacobiTheta(4,z,tau)**4)/JacobiTheta(2,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("aaa582"),
+    Formula(Equal(JacobiTheta(2,2*z,tau), (JacobiTheta(2,z,tau)**2*JacobiTheta(3,z,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(4,z,tau)**2)/(JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("b1d07b"),
+    Formula(Equal(JacobiTheta(2,2*z,tau), (JacobiTheta(2,z,tau)**2*JacobiTheta(4,z,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(3,z,tau)**2)/(JacobiTheta(2,0,tau)*JacobiTheta(4,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("20d581"),
+    Formula(Equal(JacobiTheta(3,2*z,tau), (JacobiTheta(1,z,tau)**4 + JacobiTheta(3,z,tau)**4)/JacobiTheta(3,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("ed3ff9"),
+    Formula(Equal(JacobiTheta(3,2*z,tau), (JacobiTheta(2,z,tau)**4 + JacobiTheta(4,z,tau)**4)/JacobiTheta(3,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("794106"),
+    Formula(Equal(JacobiTheta(3,2*z,tau), (JacobiTheta(2,z,tau)**2*JacobiTheta(3,z,tau)**2 + JacobiTheta(1,z,tau)**2*JacobiTheta(4,z,tau)**2)/(JacobiTheta(3,0,tau)*JacobiTheta(2,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("a94b43"),
+    Formula(Equal(JacobiTheta(3,2*z,tau), (JacobiTheta(3,z,tau)**2*JacobiTheta(4,z,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(2,z,tau)**2)/(JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("8b825c"),
+    Formula(Equal(JacobiTheta(4,2*z,tau), (JacobiTheta(4,z,tau)**4 - JacobiTheta(1,z,tau)**4)/JacobiTheta(4,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("7131cd"),
+    Formula(Equal(JacobiTheta(4,2*z,tau), (JacobiTheta(3,z,tau)**4 - JacobiTheta(2,z,tau)**4)/JacobiTheta(4,0,tau)**3)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("931201"),
+    Formula(Equal(JacobiTheta(4,2*z,tau), (JacobiTheta(1,z,tau)**2*JacobiTheta(3,z,tau)**2 + JacobiTheta(2,z,tau)**2*JacobiTheta(4,z,tau)**2)/(JacobiTheta(4,0,tau)*JacobiTheta(2,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("21dc98"),
+    Formula(Equal(JacobiTheta(4,2*z,tau), (JacobiTheta(1,z,tau)**2*JacobiTheta(2,z,tau)**2 + JacobiTheta(3,z,tau)**2*JacobiTheta(4,z,tau)**2)/(JacobiTheta(4,0,tau)*JacobiTheta(3,0,tau)**2))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Relations involving sums and differences of arguments
+
+# Cross-products with two factors
+
+make_entry(ID("1792a9"),
+    Formula(Equal(JacobiTheta(1,z,tau)*JacobiTheta(1,w,tau), JacobiTheta(3,z+w,2*tau)*JacobiTheta(2,z-w,2*tau) - JacobiTheta(2,z+w,2*tau)*JacobiTheta(3,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("5f9e54"),
+    Formula(Equal(JacobiTheta(1,z,tau)*JacobiTheta(2,w,tau), JacobiTheta(1,z+w,2*tau)*JacobiTheta(4,z-w,2*tau) + JacobiTheta(4,z+w,2*tau)*JacobiTheta(1,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("9a9487"),
+    Formula(Equal(JacobiTheta(2,z,tau)*JacobiTheta(2,w,tau), JacobiTheta(2,z+w,2*tau)*JacobiTheta(3,z-w,2*tau) + JacobiTheta(3,z+w,2*tau)*JacobiTheta(2,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("f4554f"),
+    Formula(Equal(JacobiTheta(3,z,tau)*JacobiTheta(3,w,tau), JacobiTheta(3,z+w,2*tau)*JacobiTheta(3,z-w,2*tau) + JacobiTheta(2,z+w,2*tau)*JacobiTheta(2,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("d36e97"),
+    Formula(Equal(JacobiTheta(3,z,tau)*JacobiTheta(4,w,tau), JacobiTheta(4,z+w,2*tau)*JacobiTheta(4,z-w,2*tau) - JacobiTheta(1,z+w,2*tau)*JacobiTheta(1,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("73eb5d"),
+    Formula(Equal(JacobiTheta(4,z,tau)*JacobiTheta(4,w,tau), JacobiTheta(3,z+w,2*tau)*JacobiTheta(3,z-w,2*tau) - JacobiTheta(2,z+w,2*tau)*JacobiTheta(2,z-w,2*tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+# Cross-products with four factors
+
+make_entry(ID("34d1c6"),
+    Formula(Equal(JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(1,z+w,tau)*JacobiTheta(2,z-w, tau), JacobiTheta(1,z,tau)*JacobiTheta(2,z,tau)*JacobiTheta(3,w,tau)*JacobiTheta(4,w,tau) + JacobiTheta(3,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(2,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("47e587"),
+    Formula(Equal(JacobiTheta(2,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(1,z+w,tau)*JacobiTheta(3,z-w, tau), JacobiTheta(1,z,tau)*JacobiTheta(3,z,tau)*JacobiTheta(2,w,tau)*JacobiTheta(4,w,tau) + JacobiTheta(2,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(3,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("ee8617"),
+    Formula(Equal(JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(1,z+w,tau)*JacobiTheta(4,z-w, tau), JacobiTheta(1,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(2,w,tau)*JacobiTheta(3,w,tau) + JacobiTheta(2,z,tau)*JacobiTheta(3,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(4,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("dfea7d"),
+    Formula(Equal(JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(2,z+w,tau)*JacobiTheta(3,z-w, tau), JacobiTheta(2,z,tau)*JacobiTheta(3,z,tau)*JacobiTheta(2,w,tau)*JacobiTheta(3,w,tau) - JacobiTheta(1,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(4,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("9973ef"),
+    Formula(Equal(JacobiTheta(2,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(2,z+w,tau)*JacobiTheta(4,z-w, tau), JacobiTheta(2,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(2,w,tau)*JacobiTheta(4,w,tau) - JacobiTheta(1,z,tau)*JacobiTheta(3,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(3,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("077394"),
+    Formula(Equal(JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau)*JacobiTheta(3,z+w,tau)*JacobiTheta(4,z-w, tau), JacobiTheta(3,z,tau)*JacobiTheta(4,z,tau)*JacobiTheta(3,w,tau)*JacobiTheta(4,w,tau) - JacobiTheta(1,z,tau)*JacobiTheta(2,z,tau)*JacobiTheta(1,w,tau)*JacobiTheta(2,w,tau))),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+# Cross-products of squares
+
+make_entry(ID("45165c"),
+    Formula(Equal(JacobiTheta(1,z+w,tau)*JacobiTheta(1,z-w,tau)*JacobiTheta(2,0,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(2,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(3,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("75cb8c"),
+    Formula(Equal(JacobiTheta(1,z+w,tau)*JacobiTheta(1,z-w,tau)*JacobiTheta(3,0,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(3,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(2,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("663a02"),
+    Formula(Equal(JacobiTheta(1,z+w,tau)*JacobiTheta(1,z-w,tau)*JacobiTheta(4,0,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(2,z,tau)**2*JacobiTheta(3,w,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(4,w,tau)**2 - JacobiTheta(4,z,tau)**2*JacobiTheta(1,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+
+
+make_entry(ID("1feda6"),
+    Formula(Equal(JacobiTheta(2,z+w,tau)*JacobiTheta(2,z-w,tau)*JacobiTheta(2,0,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(4,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("89c9e4"),
+    Formula(Equal(JacobiTheta(2,z+w,tau)*JacobiTheta(2,z-w,tau)*JacobiTheta(3,0,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(4,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("48a1c6"),
+    Formula(Equal(JacobiTheta(2,z+w,tau)*JacobiTheta(2,z-w,tau)*JacobiTheta(4,0,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(2,w,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(3,w,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(4,w,tau)**2 - JacobiTheta(3,z,tau)**2*JacobiTheta(1,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+
+make_entry(ID("66efb8"),
+    Formula(Equal(JacobiTheta(3,z+w,tau)*JacobiTheta(3,z-w,tau)*JacobiTheta(2,0,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(2,w,tau)**2 + JacobiTheta(4,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(3,w,tau)**2 + JacobiTheta(1,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("9aa437"),
+    Formula(Equal(JacobiTheta(3,z+w,tau)*JacobiTheta(3,z-w,tau)*JacobiTheta(3,0,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(1,w,tau)**2 + JacobiTheta(3,z,tau)**2*JacobiTheta(3,w,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(2,w,tau)**2 + JacobiTheta(4,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("5752b8"),
+    Formula(Equal(JacobiTheta(3,z+w,tau)*JacobiTheta(3,z-w,tau)*JacobiTheta(4,0,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(2,w,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(4,w,tau)**2 - JacobiTheta(2,z,tau)**2*JacobiTheta(1,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+
+make_entry(ID("c891a1"),
+    Formula(Equal(JacobiTheta(4,z+w,tau)*JacobiTheta(4,z-w,tau)*JacobiTheta(2,0,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(2,w,tau)**2 + JacobiTheta(3,z,tau)**2*JacobiTheta(1,w,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(3,w,tau)**2 + JacobiTheta(2,z,tau)**2*JacobiTheta(4,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("3cac28"),
+    Formula(Equal(JacobiTheta(4,z+w,tau)*JacobiTheta(4,z-w,tau)*JacobiTheta(3,0,tau)**2, JacobiTheta(1,z,tau)**2*JacobiTheta(2,w,tau)**2 + JacobiTheta(3,z,tau)**2*JacobiTheta(4,w,tau)**2, JacobiTheta(2,z,tau)**2*JacobiTheta(1,w,tau)**2 + JacobiTheta(4,z,tau)**2*JacobiTheta(3,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+make_entry(ID("45a130"),
+    Formula(Equal(JacobiTheta(4,z+w,tau)*JacobiTheta(4,z-w,tau)*JacobiTheta(4,0,tau)**2, JacobiTheta(3,z,tau)**2*JacobiTheta(3,w,tau)**2 - JacobiTheta(2,z,tau)**2*JacobiTheta(2,w,tau)**2, JacobiTheta(4,z,tau)**2*JacobiTheta(4,w,tau)**2 - JacobiTheta(1,z,tau)**2*JacobiTheta(1,w,tau)**2)),
+    Variables(z, w, tau),
+    Assumptions(And(Element(z, CC), Element(w, tau), Element(tau, HH))))
+
+
+# Sums and products
+
+# Fourth powers
+
+make_entry(ID("1fbc09"),
+    Formula(Equal(JacobiTheta(3,0,tau)**4, JacobiTheta(2,0,tau)**4 + JacobiTheta(4,0,tau)**4)),
+    Variables(tau),
+    Assumptions(And(Element(tau, HH))))
+
+make_entry(ID("08822c"),
+    Formula(Equal(JacobiTheta(1,z,tau)**4 + JacobiTheta(3,z,tau)**4, JacobiTheta(2,z,tau)**4 + JacobiTheta(4,z,tau)**4)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("5a3ebf"),
+    Formula(Equal(JacobiTheta(1,z,tau)**4 - JacobiTheta(2,z,tau)**4, JacobiTheta(4,z,tau)**4 - JacobiTheta(3,z,tau)**4)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("e08bb4"),
+    Formula(Equal(JacobiTheta(1,z,tau)**4 - JacobiTheta(4,z,tau)**4, JacobiTheta(2,z,tau)**4 - JacobiTheta(3,z,tau)**4)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+# Sums of squares
+
+make_entry(ID("fa7251"),
+    Formula(Equal(JacobiTheta(2,0,tau)**2 * JacobiTheta(3,z,tau)**2, JacobiTheta(4,0,tau)**2 * JacobiTheta(1,z,tau)**2 + JacobiTheta(3,0,tau)**2 * JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("265d9c"),
+    Formula(Equal(JacobiTheta(2,0,tau)**2 * JacobiTheta(4,z,tau)**2, JacobiTheta(3,0,tau)**2 * JacobiTheta(1,z,tau)**2 + JacobiTheta(4,0,tau)**2 * JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("0e2635"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 * JacobiTheta(2,z,tau)**2, JacobiTheta(2,0,tau)**2 * JacobiTheta(3,z,tau)**2 - JacobiTheta(4,0,tau)**2 * JacobiTheta(1,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("6fad93"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 * JacobiTheta(3,z,tau)**2, JacobiTheta(4,0,tau)**2 * JacobiTheta(4,z,tau)**2 + JacobiTheta(2,0,tau)**2 * JacobiTheta(2,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("abbe42"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 * JacobiTheta(4,z,tau)**2, JacobiTheta(2,0,tau)**2 * JacobiTheta(1,z,tau)**2 + JacobiTheta(4,0,tau)**2 * JacobiTheta(3,z,tau)**2)),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("1c67c8"),
+    Formula(Equal((JacobiTheta(1,z,tau)**2 - JacobiTheta(2,z,tau)**2)*JacobiTheta(2,0,2*tau), (JacobiTheta(4,z,tau)**2-JacobiTheta(3,z,tau)**2)*JacobiTheta(3,0,2*tau))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
 
