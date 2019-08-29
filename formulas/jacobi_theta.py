@@ -2226,6 +2226,14 @@ def_Topic(
         "5b87f3",
         "1a15f9",
     ),
+    Section("Periodic integrals"),
+    Entries(
+        "7c78ea",
+        "f71675",
+        "cc59e4",
+        "2429b2",
+        "a0955b",
+    ),
 )
 
 # Laplace transforms
@@ -2383,4 +2391,31 @@ make_entry(ID("5b87f3"),
 make_entry(ID("1a15f9"),
     Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**2 / (1+t**2), Tuple(t, 0, Infinity)), Div(2,3))),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+# Periodic integrals
+
+make_entry(ID("7c78ea"),
+    Formula(Equal(Integral(JacobiTheta(1,x,tau), Tuple(x, M+Div(1,2), N+Div(1,2))), 0)),
+    Variables(tau, M, N),
+    Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
+
+make_entry(ID("f71675"),
+    Formula(Equal(Integral(JacobiTheta(1,x,tau), Tuple(x, 2*M, 2*N)), 0)),
+    Variables(tau, M, N),
+    Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
+
+make_entry(ID("cc59e4"),
+    Formula(Equal(Integral(JacobiTheta(2,x,tau), Tuple(x, M, N)), 0)),
+    Variables(tau, M, N),
+    Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
+
+make_entry(ID("2429b2"),
+    Formula(Equal(Integral(JacobiTheta(3,x,tau), Tuple(x, M/2, N/2)), (N-M)/2)),
+    Variables(tau, M, N),
+    Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
+
+make_entry(ID("a0955b"),
+    Formula(Equal(Integral(JacobiTheta(4,x,tau), Tuple(x, M/2, N/2)), (N-M)/2)),
+    Variables(tau, M, N),
+    Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
 
