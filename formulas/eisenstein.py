@@ -331,33 +331,32 @@ make_entry(ID("171724"),
 
 # Theta function representations
 
+_a = JacobiTheta(2,0,tau)
+_b = JacobiTheta(3,0,tau)
+_c = JacobiTheta(4,0,tau)
+
 make_entry(ID("cc579c"),
-    Formula(Equal(EisensteinE(4, tau), 
-        Where(Div(1,2) * (a**8 + b**8 + c**8), Equal(a, JacobiTheta(2,0, tau)), Equal(b, JacobiTheta(3,0, tau)), Equal(c, JacobiTheta(4,0, tau))))),
+    Formula(Equal(EisensteinE(4, tau), Div(1,2) * (_a**8 + _b**8 + _c**8))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("10f3b2"),
-    Formula(Equal(EisensteinE(6, tau), 
-        Where(Div(1,2) * (b**12 + c**12 - 3*a**8*(b**4+c**4)), Equal(a, JacobiTheta(2,0, tau)), Equal(b, JacobiTheta(3,0, tau)), Equal(c, JacobiTheta(4,0, tau))))),
+    Formula(Equal(EisensteinE(6, tau), Div(1,2) * (_b**12 + _c**12 - 3*_a**8*(_b**4+_c**4)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("6d2880"),
-    Formula(Equal(EisensteinE(8, tau), 
-        Where(Div(1,2) * (a**16 + b**16 + c**16), Equal(a, JacobiTheta(2,0, tau)), Equal(b, JacobiTheta(3,0, tau)), Equal(c, JacobiTheta(4,0, tau))))),
+    Formula(Equal(EisensteinE(8, tau), Div(1,2) * (_a**16 + _b**16 + _c**16))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("a0dff6"),
-    Formula(Equal(EisensteinE(6, tau)**2, 
-        Where(Div(1,8) * ((a**8 + b**8 + c**8)**3 - 54*(a*b*c)**8), Equal(a, JacobiTheta(2,0, tau)), Equal(b, JacobiTheta(3,0, tau)), Equal(c, JacobiTheta(4,0, tau))))),
+    Formula(Equal(EisensteinE(6, tau)**2, Div(1,8) * ((_a**8 + _b**8 + _c**8)**3 - 54*(_a*_b*_c)**8))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("bd7d8e"),
-    Formula(Equal(EisensteinE(4, tau)**3 - EisensteinE(6, tau)**2, 
-        Where(Div(27,4) * (a*b*c)**8, Equal(a, JacobiTheta(2,0, tau)), Equal(b, JacobiTheta(3,0, tau)), Equal(c, JacobiTheta(4,0, tau))))),
+    Formula(Equal(EisensteinE(4, tau)**3 - EisensteinE(6, tau)**2, Div(27,4) * (_a*_b*_c)**8)),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

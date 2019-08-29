@@ -43,12 +43,16 @@ def_Topic(
     ),
     Section("Argument transformations"),
     Description("Main topic:", TopicReference("Argument transformations for Jacobi theta functions")),
-    Subsection("Symmetry"),
+    Subsection("Even-odd symmetry"),
     Entries(
         "59f8e1",
         "fb55cb",
         "380076",
         "4f939e",
+    ),
+    Subsection("Conjugate symmetry"),
+    Entries(
+        "a891da",
     ),
     Subsection("Periodicity"),
     Entries(
@@ -66,10 +70,19 @@ def_Topic(
     ),
     Section("Lattice transformations"),
     Description("Main topic:", TopicReference("Lattice transformations for Jacobi theta functions")),
-    Subsection("Modular transformations"),
+    Subsection("Basic modular transformations"),
     Entries(
+        "6b2078",
+        "cde93e",
         "9c1e9a",
+        "a5c258",
+        "e8ce0b",
+        "06319a",
         "c4b16c",
+        "ed8ba7",
+    ),
+    Subsection("General modular transformations"),
+    Entries(
         "4d8b0f",
     ),
     Subsection("Multiplication of the lattice parameter"),
@@ -133,6 +146,23 @@ def_Topic(
     Entries(
         "ecb406",
         "727715",
+    ),
+    Section("Representation of other functions"),
+    Subsection("Modular forms and functions"),
+    Entries(
+        "737805",
+        "cedcfc",
+        "5b9c02",
+        "903962",
+        "04d3a6",
+        "cc579c",
+        "10f3b2",
+    ),
+    Subsection("Weierstrass elliptic functions"),
+    Entries(
+        "af0dfc",
+        "0207dc",
+        "b96c9d",
     ),
 )
 
@@ -1352,7 +1382,7 @@ def_Topic(
         "See", TopicReference("Lattice transformations for Jacobi theta functions"), "for identities involving transformations of", tau, ".",
         "See", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
     Section("Reflection symmetry"),
-    Subsection("Odd-even symmetry"),
+    Subsection("Even-odd symmetry"),
     Entries(
         "59f8e1",
         "fb55cb",
@@ -2063,7 +2093,7 @@ make_entry(ID("0d4608"),
     Description("Consequence of Nesterenko's theorem."))
 
 make_entry(ID("7d7c65"),
-    Formula(Equal(JacobiTheta(2,0,ConstI), JacobiTheta(4,0,ConstI), JacobiTheta(3,0,1+ConstI), Brackets(2**(-Div(1,4))) * JacobiTheta(3,0,ConstI))))
+    Formula(Equal(JacobiTheta(2,0,ConstI), JacobiTheta(4,0,ConstI), Brackets(2**(-Div(1,4))) * JacobiTheta(3,0,ConstI))))
 
 make_entry(ID("8697b8"),
     Formula(Element(JacobiTheta(3,0,ConstI), RealBall(Decimal("1.0864348112133080145753161215102234570702057072452"), Decimal("1.89e-50")))))
