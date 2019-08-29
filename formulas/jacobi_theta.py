@@ -1975,15 +1975,24 @@ def_Topic(
         "a8ea67",
         "bf747b",
     ),
-    Section("Particular theta constants"),
-    Subsection("Constant for the square lattice"),
+    Section("Square lattice"),
+    Subsection("Theta constants for the square lattice"),
     Entries(
         "d15f11",
         "1403b5",
-        "8697b8",
         "0d4608",
         "7d7c65",
+        "8697b8",
+        "66df95",
     ),
+    Subsection("Values for simple rational arguments"),
+    Entries(
+        "2f3ed3",
+        "dd5f43",
+        "3fb309",
+        "8c4ab4",
+    ),
+    Section("Theta constants for non-square lattices"),
     Subsection("Conversion from index 2 and 4 to index 3"),
     Entries(
         "47f4ba",
@@ -2049,15 +2058,50 @@ make_entry(ID("d15f11"),
 make_entry(ID("1403b5"),
     Formula(Equal(JacobiTheta(3,0,ConstI), GammaFunction(Div(1,4)) / (Sqrt(2) * ConstPi**Div(3,4)))))
 
-make_entry(ID("8697b8"),
-    Formula(Element(JacobiTheta(3,0,ConstI), RealBall(Decimal("1.0864348112133080145753161215102234570702057072452"), Decimal("1.89e-50")))))
-
 make_entry(ID("0d4608"),
     Formula(NotElement(JacobiTheta(3,0,ConstI), AlgebraicNumbers)),
     Description("Consequence of Nesterenko's theorem."))
 
 make_entry(ID("7d7c65"),
     Formula(Equal(JacobiTheta(2,0,ConstI), JacobiTheta(4,0,ConstI), JacobiTheta(3,0,1+ConstI), Brackets(2**(-Div(1,4))) * JacobiTheta(3,0,ConstI))))
+
+make_entry(ID("8697b8"),
+    Formula(Element(JacobiTheta(3,0,ConstI), RealBall(Decimal("1.0864348112133080145753161215102234570702057072452"), Decimal("1.89e-50")))))
+
+make_entry(ID("66df95"),
+    Formula(Element(JacobiTheta(4,0,ConstI), RealBall(Decimal("0.91357913815611682140724259340122208970196391639347"), Decimal("9.67e-52")))))
+
+make_entry(ID("2f3ed3"),
+    Formula(Equal(JacobiTheta(1,n/4,ConstI), Cases(
+        Tuple(0, CongruentMod(n, 0, 4)),
+        Tuple((-1)**Floor(n/4) * JacobiTheta(4,0,ConstI), CongruentMod(n, 2, 4)),
+        Tuple((-1)**Floor(n/4) * Brackets(2**(-Div(7,16)) * Sqrt(Sqrt(2)-1) * (Sqrt(2)+1)**Div(1,4)) * JacobiTheta(3,0,ConstI), Otherwise)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("dd5f43"),
+    Formula(Equal(JacobiTheta(2,n/4,ConstI), Cases(
+        Tuple((-1)**Floor((n+1)/4) * JacobiTheta(4,0,ConstI), CongruentMod(n, 0, 4)),
+        Tuple(0, CongruentMod(n, 2, 4)),
+        Tuple((-1)**Floor((n+1)/4) * Brackets(2**(-Div(7,16)) * Sqrt(Sqrt(2)-1) * (Sqrt(2)+1)**Div(1,4)) * JacobiTheta(3,0,ConstI), Otherwise)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("3fb309"),
+    Formula(Equal(JacobiTheta(3,n/4,ConstI), Cases(
+        Tuple(JacobiTheta(3,0,ConstI), CongruentMod(n, 0, 4)),
+        Tuple(JacobiTheta(4,0,ConstI), CongruentMod(n, 2, 4)),
+        Tuple(Brackets((2**(-Div(7,16)) * (Sqrt(2)+1)**Div(1,4))) * JacobiTheta(3,0,ConstI), Otherwise)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+
+make_entry(ID("8c4ab4"),
+    Formula(Equal(JacobiTheta(4,n/4,ConstI), Cases(
+        Tuple(JacobiTheta(4,0,ConstI), CongruentMod(n, 0, 4)),
+        Tuple(JacobiTheta(3,0,ConstI), CongruentMod(n, 2, 4)),
+        Tuple(Brackets((2**(-Div(7,16)) * (Sqrt(2)+1)**Div(1,4))) * JacobiTheta(3,0,ConstI), Otherwise)))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
 
 # Conversions
 
