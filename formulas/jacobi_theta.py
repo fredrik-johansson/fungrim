@@ -285,7 +285,14 @@ def_Topic(
         "1cdd7b",
         "d637c5",
     ),
-    Section("Series for theta constants"),
+    Section("Powers of theta constants"),
+    Subsection("Fourier series (q-series) with linear exponents"),
+    Entries(
+        "a5e568",
+        "7c90eb",
+        "df88a0",
+        "290f36",
+    ),
     Subsection("Reciprocal trigonometric series"),
     Entries(
         "9b7d8c",
@@ -846,23 +853,44 @@ make_entry(ID("561d75"),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(2, z, tau), 0))))
 
+
+make_entry(ID("a5e568"),
+    Formula(Equal(JacobiTheta(3,0,tau)**k, Where(Sum(SquaresR(k, n) * q**n, Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(k, tau),
+    Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(tau, HH))))
+
+make_entry(ID("7c90eb"),
+    Formula(Equal(JacobiTheta(4,0,tau)**k, Where(Sum((-1)**n * SquaresR(k, n) * q**n, Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(k, tau),
+    Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(tau, HH))))
+
+make_entry(ID("df88a0"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 + JacobiTheta(4,0,tau)**2, 2 * Where(Sum(SquaresR(2, 2*n) * q**(2*n), Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("290f36"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 - JacobiTheta(3,0,2*tau)**2, Where(Sum(SquaresR(2, 2*n+1) * q**(2*n+1), Tuple(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 make_entry(ID("9b7d8c"),
     Formula(Equal(JacobiTheta(2,0,tau)**2,
         Sum(1/Cos(ConstPi*tau*(n+Div(1,2))), Tuple(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(Element(z, CC), Element(tau, HH)))
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("7b3ac4"),
     Formula(Equal(JacobiTheta(3,0,tau)**2,
         Sum(1/Cos(ConstPi*tau*n), Tuple(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(Element(z, CC), Element(tau, HH)))
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("ab1c77"),
     Formula(Equal(JacobiTheta(4,0,tau)**2,
         Sum(1/Cos(ConstPi*(tau+1)*n), Tuple(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(Element(z, CC), Element(tau, HH)))
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # Zeros
 

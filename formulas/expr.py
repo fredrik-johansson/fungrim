@@ -1358,7 +1358,7 @@ ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta JacobiThetaEpsilon JacobiThetaPermutation
 Divides
-GCD LCM XGCD DivisorSigma MoebiusMu Totient
+GCD LCM XGCD DivisorSigma MoebiusMu Totient SquaresR
 LegendreSymbol JacobiSymbol KroneckerSymbol
 Fibonacci
 PartitionsP HardyRamanujanA
@@ -1441,6 +1441,7 @@ subscript_call_latex_table = {
     JacobiThetaEpsilon: "\\varepsilon",
     JacobiThetaPermutation: "S",
 #    JacobiTheta: "\\theta",
+    SquaresR: "r",
 }
 
 symbol_latex_table = {
