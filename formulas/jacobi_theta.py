@@ -115,13 +115,7 @@ def_Topic(
         "cb493d",
     ),
     Section("Integrals"),
-    Subsection("Special cases of Laplace transforms"),
-    Entries(
-        "f42652",
-        "b2f31a",
-        "1ee920",
-        "594cc3",
-    ),
+    Description("Main topic:", TopicReference("Integrals of Jacobi theta functions")),
     Subsection("Laplace transforms"),
     Entries(
         "8a857c",
@@ -129,18 +123,16 @@ def_Topic(
         "026e44",
         "a46f94",
     ),
-    Subsection("Laplace transforms of derivatives"),
-    Entries(
-        "321538",
-        "f5a15a",
-        "64c188",
-        "5c054e",
-    ),
     Subsection("Mellin transforms"),
     Entries(
         "9376ec",
         "41631f",
         "709905",
+    ),
+    Subsection("Constant definite integrals"),
+    Entries(
+        "ecb406",
+        "727715",
     ),
 )
 
@@ -2180,6 +2172,62 @@ make_entry(ID("675f23"),
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
+# todo: more integral transform entries (see G&R)
+
+def_Topic(
+    Title("Integrals of Jacobi theta functions"),
+    Description("This topic lists identities involving integrals of Jacobi theta functions", JacobiTheta(j,z,tau), ". ",
+        "See the topic", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Laplace transforms"),
+    Subsection("Laplace transforms"),
+    Entries(
+        "8a857c",
+        "74be8f",
+        "026e44",
+        "a46f94",
+    ),
+    Subsection("Laplace transforms of derivatives"),
+    Entries(
+        "321538",
+        "f5a15a",
+        "64c188",
+        "5c054e",
+    ),
+    Subsection("Special cases of Laplace transforms"),
+    Entries(
+        "f42652",
+        "b2f31a",
+        "1ee920",
+        "594cc3",
+    ),
+    Section("Mellin transforms"),
+    Entries(
+        "9376ec",
+        "41631f",
+        "709905",
+    ),
+    Section("Constant definite integrals"),
+    Entries(
+        "f2a0c7",
+        "ecb406",
+        "799742",
+        "f89d5a",
+        "ae6718",
+        "4f3d2b",
+        "140815",
+        "fe4967",
+        "727715",
+        "ea304c",
+        "02d9e4",
+        "963daf",
+        "e4cdf1",
+        "86d68c",
+        "45267a",
+        "5b87f3",
+        "1a15f9",
+    ),
+)
+
 # Laplace transforms
 
 make_entry(ID("f42652"),
@@ -2274,4 +2322,65 @@ make_entry(ID("709905"),
     Formula(Equal(Integral(t**(s-1) * (JacobiTheta(4,0,ConstI*t**2) - 1), Tuple(t, 0, Infinity)), (2**(1-s) - 1) * ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
+
+# Constant definite integrals
+
+make_entry(ID("f2a0c7"),
+    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1), Tuple(t, 0, Infinity)), 2*ConstPi)))
+
+make_entry(ID("ecb406"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t), Tuple(t, 0, Infinity)), ConstPi)))
+
+make_entry(ID("799742"),
+    Formula(Equal(Integral(Parentheses(JacobiTheta(3,0,ConstI*t)-1), Tuple(t, 0, Infinity)), ConstPi/3)))
+
+make_entry(ID("f89d5a"),
+    Formula(Equal(Integral(Parentheses(JacobiTheta(4,0,ConstI*t)-1), Tuple(t, 0, Infinity)), -(ConstPi/6))))
+
+make_entry(ID("ae6718"),
+    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1)**2, Tuple(t, 0, Infinity)), GammaFunction(Div(1,4))**4/(4*ConstPi))))
+
+make_entry(ID("4f3d2b"),
+    Formula(Equal(Integral(Parentheses(JacobiTheta(4,0,ConstI*t)**2-1), Tuple(t, 0, Infinity)), -Log(2))))
+
+make_entry(ID("140815"),
+    Formula(Equal(Integral((JacobiTheta(4,0,ConstI*t)-1)**2, Tuple(t, 0, Infinity)), ConstPi/3 - Log(2))))
+
+make_entry(ID("fe4967"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)*JacobiTheta(4,0,ConstI*t), Tuple(t, 0, Infinity)), Log(3+2*Sqrt(2)))))
+
+make_entry(ID("727715"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)*JacobiTheta(3,0,ConstI*t)*JacobiTheta(4,0,ConstI*t), Tuple(t, 0, Infinity)), 2)))
+
+make_entry(ID("ea304c"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**2 * JacobiTheta(4,0,ConstI*t)**2, Tuple(t, 0, Infinity)), 1)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("02d9e4"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**2, Tuple(t, 0, Infinity)), 1)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("963daf"),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**2 / (1+t**2), Tuple(t, 0, Infinity)), 1)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("e4cdf1"),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), Tuple(t, 0, Infinity)), 4*Log(2)/ConstPi)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("86d68c"),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**6 / (1+t**2), Tuple(t, 0, Infinity)), 16*ConstCatalan/ConstPi**2 - Div(2,3))),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("45267a"),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**8 / (1+t**2), Tuple(t, 0, Infinity)), 20*RiemannZeta(3)/ConstPi**3)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("5b87f3"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), Tuple(t, 0, Infinity)), 8*RiemannZeta(3)/ConstPi**3)),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
+
+make_entry(ID("1a15f9"),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**2 / (1+t**2), Tuple(t, 0, Infinity)), Div(2,3))),
+    References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 

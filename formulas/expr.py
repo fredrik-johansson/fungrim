@@ -1337,7 +1337,7 @@ Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
-ConstPi ConstE ConstGamma ConstI GoldenRatio
+ConstPi ConstE ConstGamma ConstI GoldenRatio ConstCatalan
 Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction PolyGamma RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
@@ -1450,6 +1450,7 @@ symbol_latex_table = {
     ConstI: "i",
     ConstE: "e",
     ConstGamma: "\\gamma",
+    ConstCatalan: "G",
     GoldenRatio: "\\varphi",
     Infinity: "\\infty",
     UnsignedInfinity: "{\\tilde \\infty}",
