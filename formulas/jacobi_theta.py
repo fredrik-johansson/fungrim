@@ -114,6 +114,34 @@ def_Topic(
     Entries(
         "cb493d",
     ),
+    Section("Integrals"),
+    Subsection("Special cases of Laplace transforms"),
+    Entries(
+        "f42652",
+        "b2f31a",
+        "1ee920",
+        "594cc3",
+    ),
+    Subsection("Laplace transforms"),
+    Entries(
+        "8a857c",
+        "74be8f",
+        "026e44",
+        "a46f94",
+    ),
+    Subsection("Laplace transforms of derivatives"),
+    Entries(
+        "321538",
+        "f5a15a",
+        "64c188",
+        "5c054e",
+    ),
+    Subsection("Mellin transforms"),
+    Entries(
+        "9376ec",
+        "41631f",
+        "709905",
+    ),
 )
 
 
@@ -1948,6 +1976,13 @@ make_entry(ID("1c67c8"),
 def_Topic(
     Title("Specific values of Jacobi theta functions"),
     Description("See", TopicReference("Jacobi theta functions"), "for other properties of these functions."),
+    Section("Values at infinity"),
+    Entries(
+        "e6b579",
+        "1dcf7e",
+        "a8ea67",
+        "bf747b",
+    ),
     Section("Particular theta constants"),
     Subsection("Constant for the square lattice"),
     Entries(
@@ -1992,7 +2027,29 @@ def_Topic(
     ),
 ),
 
-# Fundamental constant
+# Values at infinity
+
+make_entry(ID("e6b579"),
+    Formula(Equal(ComplexLimit(JacobiTheta(1,z,tau), tau, ConstI*Infinity), 0)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("1dcf7e"),
+    Formula(Equal(ComplexLimit(JacobiTheta(2,z,tau), tau, ConstI*Infinity), 0)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("a8ea67"),
+    Formula(Equal(ComplexLimit(JacobiTheta(3,z,tau), tau, ConstI*Infinity), 1)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("bf747b"),
+    Formula(Equal(ComplexLimit(JacobiTheta(4,z,tau), tau, ConstI*Infinity), 1)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+# Constant for the square lattice
 
 make_entry(ID("d15f11"),
     Formula(Equal(JacobiTheta(3,0,ConstI), ConstPi**Div(1,4) / GammaFunction(Div(3,4)))))
@@ -2102,7 +2159,7 @@ make_entry(ID("6cbce8"),
     References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
 
 make_entry(ID("5384f3"),
-    Formula(Equal(JacobiTheta(3,0,1+6*ConstI), Brackets((1+Sqrt(3)+Sqrt(2)*27**Div(1,4))**Div(1,3) / (2**Div(11,24)*3**Div(3,8)*(Sqrt(3)-1)**Div(1,6))) * JacobiTheta(3,0,ConstI))),
+    Formula(Equal(JacobiTheta(3,0,1+6*ConstI), Brackets((1+Sqrt(3)+Sqrt(2)*Parentheses(27)**Div(1,4))**Div(1,3) / (2**Div(11,24)*3**Div(3,8)*(Sqrt(3)-1)**Div(1,6))) * JacobiTheta(3,0,ConstI))),
     References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
 
 make_entry(ID("e2bc80"),
@@ -2116,4 +2173,105 @@ make_entry(ID("390158"),
 make_entry(ID("675f23"),
     Formula(Equal(JacobiTheta(3,0,1+12*ConstI), Brackets(2**(-Div(19,48)) * 3**(-Div(3,8)) * (2-3*Sqrt(2)+3**Div(5,4)+3**Div(3,4))**Div(1,3) / ((Sqrt(2)-1)**Div(1,12)*(Sqrt(3)+1)**Div(1,6)*(-1-Sqrt(3)+Sqrt(2)*Parentheses(3**Div(3,4)))**Div(1,3))) * JacobiTheta(3,0,ConstI))),
     References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+#                           Integrals                                         #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+# Laplace transforms
+
+make_entry(ID("f42652"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,0,ConstI*t,1), Tuple(t, 0, Infinity)), 2 * ConstPi * (1/Cosh(Sqrt(ConstPi*a))))),
+    Variables(a),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("b2f31a"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,0,ConstI*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/a) * Tanh(Sqrt(ConstPi*a)))),
+    Variables(a),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("1ee920"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,0,ConstI*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/a) * Coth(Sqrt(ConstPi*a)))),
+    Variables(a),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("594cc3"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,0,ConstI*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/a) * (1/Sinh(Sqrt(ConstPi*a))))),
+    Variables(a),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+# Laplace transforms
+
+make_entry(ID("8a857c"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Sinh((2*x)*Sqrt(ConstPi*a/b))/Cosh(Sqrt(ConstPi*a/b))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(-Div(1,2), Div(1,2))))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("74be8f"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t), Tuple(t, 0, Infinity)), -Sqrt(ConstPi/(a*b))*(Sinh((2*x-1)*Sqrt(ConstPi*a/b))/Cosh(Sqrt(ConstPi*a/b))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(0, 1)))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("026e44"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Cosh((2*x-1)*Sqrt(ConstPi*a/b))/Sinh(Sqrt(ConstPi*a/b))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(0, 1)))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("a46f94"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t), Tuple(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Cosh((2*x)*Sqrt(ConstPi*a/b))/Sinh(Sqrt(ConstPi*a/b))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(-Div(1,2), Div(1,2))))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+# Laplace transforms of derivatives
+
+make_entry(ID("321538"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t,1), Tuple(t, 0, Infinity)), (2*ConstPi/b)*(Cosh((2*x)*Sqrt(ConstPi*a/b))/(Cosh(Sqrt(ConstPi*a/b)))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(-Div(1,2), Div(1,2))))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("f5a15a"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t,1), Tuple(t, 0, Infinity)), -(2*ConstPi/b)*(Cosh((2*x-1)*Sqrt(ConstPi*a/b))/(Cosh(Sqrt(ConstPi*a/b)))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(0, 1)))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("64c188"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t,1), Tuple(t, 0, Infinity)), (2*ConstPi/b)*(Sinh((2*x-1)*Sqrt(ConstPi*a/b))/(Sinh(Sqrt(ConstPi*a/b)))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(0, 1)))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+make_entry(ID("5c054e"),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t,1), Tuple(t, 0, Infinity)), (2*ConstPi/b)*(Sinh((2*x)*Sqrt(ConstPi*a/b))/(Sinh(Sqrt(ConstPi*a/b)))))),
+    Variables(a, b, x),
+    Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(-Div(1,2), Div(1,2))))),
+    References("https://doi.org/10.1016/0022-0728(88)87001-3"))
+
+# Mellin transforms
+
+make_entry(ID("9376ec"),
+    Formula(Equal(Integral(t**(s-1) * JacobiTheta(2,0,ConstI*t**2), Tuple(t, 0, Infinity)), (2**s - 1) * ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
+
+make_entry(ID("41631f"),
+    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(3,0,ConstI*t**2) - 1), Tuple(t, 0, Infinity)), ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
+
+make_entry(ID("709905"),
+    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(4,0,ConstI*t**2) - 1), Tuple(t, 0, Infinity)), (2**(1-s) - 1) * ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
 
