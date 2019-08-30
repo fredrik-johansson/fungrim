@@ -285,7 +285,7 @@ def_Topic(
         "1cdd7b",
         "d637c5",
     ),
-    Section("Powers of theta constants"),
+    Section("Theta constants"),
     Subsection("Fourier series (q-series) with linear exponents"),
     Entries(
         "a5e568",
@@ -293,9 +293,25 @@ def_Topic(
         "df88a0",
         "290f36",
     ),
+    Subsection("Infinite products for quotients"),
+    Entries(
+        "a0ba58",
+        "f1f42f",
+    ),
+    Subsection("Lambert series"),
+    Entries(
+        "e4e707",
+        "0650f8",
+        "c743eb",
+        "8a316c",
+        "dc7c83",
+        "1cec67",
+        "4d26ec",
+    ),
     Subsection("Reciprocal trigonometric series"),
     Entries(
         "9b7d8c",
+        "f8cd8f",
         "7b3ac4",
         "ab1c77",
     ),
@@ -874,11 +890,81 @@ make_entry(ID("290f36"),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
+make_entry(ID("a0ba58"),
+    Formula(Equal(JacobiTheta(3,0,tau) / JacobiTheta(4,0,tau),
+        Where(Product(((1+q**(2*n-1))/(1-q**(2*n-1)))**2, Tuple(n, 1, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("f1f42f"),
+    Formula(Equal(JacobiTheta(2,0,tau) / JacobiTheta(3,0,tau),
+        Where(2 * Exp(ConstPi*ConstI*tau/4) * Product(((1+q**(2*n))/(1+q**(2*n-1)))**2, Tuple(n, 1, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+
+make_entry(ID("e4e707"),
+    Formula(Equal(JacobiTheta(3,0,tau),
+        Where(1 + 2*Sum(LiouvilleLambda(n) * q**n / (1-q**n), Tuple(n,1,Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("0650f8"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2,
+        Where(1 + 4*Sum(q**n / (1 + q**(2*n)), Tuple(n, 1, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("c743eb"),
+    Formula(Equal(JacobiTheta(2,0,tau)**4,
+        Where(8 * Sum(((2*n+1)*q**(2*n+1))/(1+q**(2*n+1)), Tuple(n, 0, Infinity)) + 8 * Sum(((2*n+1)*q**(2*n+1))/(1-q**(2*n+1)), Tuple(n, 0, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("8a316c"),
+    Formula(Equal(JacobiTheta(3,0,tau)**4,
+        Where(1 + 8 * Sum(2*n*q**(2*n)/(1+q**(2*n)), Tuple(n, 0, Infinity)) + 8 * Sum(((2*n+1)*q**(2*n+1))/(1-q**(2*n+1)), Tuple(n, 0, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("dc7c83"),
+    Formula(Equal(JacobiTheta(4,0,tau)**4,
+        Where(1 + 8 * Sum(2*n*q**(2*n)/(1+q**(2*n)), Tuple(n, 0, Infinity)) - 8 * Sum(((2*n+1)*q**(2*n+1))/(1+q**(2*n+1)), Tuple(n, 0, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("1cec67"),
+    Formula(Equal(JacobiTheta(4,0,tau)**4 - JacobiTheta(2,0,tau)**4,
+        Where(1 - 24 * Sum((2*n+1) * q**(2*n+1) / (1 + q**(2*n+1)), Tuple(n, 0, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("4d26ec"),
+    Formula(Equal(JacobiTheta(4,0,tau)**8,
+        Where(1 + 16 * Sum((-1)**n * n**3 * q**n / (1-q**n), Tuple(n, 1, Infinity)),
+            Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+
 make_entry(ID("9b7d8c"),
     Formula(Equal(JacobiTheta(2,0,tau)**2,
         Sum(1/Cos(ConstPi*tau*(n+Div(1,2))), Tuple(n, -Infinity, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
+
+make_entry(ID("f8cd8f"),
+    Formula(Equal(JacobiTheta(3,0,tau)**2, 1 + 2 * Sum(1/Cos(ConstPi*tau*n), Tuple(n, 1, Infinity)))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("7b3ac4"),
     Formula(Equal(JacobiTheta(3,0,tau)**2,

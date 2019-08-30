@@ -1358,7 +1358,7 @@ ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
 JacobiTheta JacobiThetaEpsilon JacobiThetaPermutation
 Divides
-GCD LCM XGCD DivisorSigma MoebiusMu Totient SquaresR
+GCD LCM XGCD DivisorSigma MoebiusMu Totient SquaresR LiouvilleLambda
 LegendreSymbol JacobiSymbol KroneckerSymbol
 Fibonacci
 PartitionsP HardyRamanujanA
@@ -1551,6 +1551,7 @@ symbol_latex_table = {
     DirichletLambda: "\\Lambda",
     BetaFunction: "\\mathrm{B}",
     LandauG: "g",
+    LiouvilleLambda: "\\lambda",
 }
 
 described_symbols = []

@@ -53,6 +53,7 @@ describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the f
 describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")
 
 describe(SquaresR, SquaresR(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of squares function")
+describe(LiouvilleLambda, LiouvilleLambda(n), [Element(n, ZZGreaterEqual(0))], ZZ, "Liouville function")
 describe(DivisorSigma, DivisorSigma(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of divisors function")
 describe(MoebiusMu, MoebiusMu(n), [Element(n, ZZGreaterEqual(1))], ZZ, "Möbius function")
 describe(KroneckerDelta, KroneckerDelta(x,y), [Element(x, CC), Element(y, CC)], Set(0, 1), "Kronecker delta")
