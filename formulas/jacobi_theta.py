@@ -39,7 +39,9 @@ def_Topic(
     Section("Specific values"),
     Description("Main topic:", TopicReference("Specific values of Jacobi theta functions")),
     Entries(
+        "8f43ab",
         "d15f11",
+        "7d7c65",
     ),
     Section("Argument transformations"),
     Description("Main topic:", TopicReference("Argument transformations for Jacobi theta functions")),
@@ -92,6 +94,8 @@ def_Topic(
         "53fef4",
     ),
     Section("Sums and products"),
+    Description("See also", TopicReference("Argument transformations for Jacobi theta functions"), "and",
+        TopicReference("Lattice transformations for Jacobi theta functions"), "for sum and product identities involving transformations."),
     Subsection("Fourth powers"),
     Entries(
         "1fbc09",
@@ -163,6 +167,13 @@ def_Topic(
         "af0dfc",
         "0207dc",
         "b96c9d",
+    ),
+    Section("Representation by other functions"),
+    Entries(
+        "a9c825",
+        "85b2ff",
+        "9448f2",
+        "557b19",
     ),
     Section("Approximations"),
     Description("Main topic:", TopicReference("Approximations of Jacobi theta functions")),
@@ -2115,7 +2126,7 @@ make_entry(ID("abbe42"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("1c67c8"),
-    Formula(Equal((JacobiTheta(1,z,tau)**2 - JacobiTheta(2,z,tau)**2)*JacobiTheta(2,0,2*tau), (JacobiTheta(4,z,tau)**2-JacobiTheta(3,z,tau)**2)*JacobiTheta(3,0,2*tau))),
+    Formula(Equal(JacobiTheta(2,0,2*tau)*(JacobiTheta(1,z,tau)**2 - JacobiTheta(2,z,tau)**2), JacobiTheta(3,0,2*tau)*(JacobiTheta(4,z,tau)**2-JacobiTheta(3,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -2134,6 +2145,14 @@ def_Topic(
         "1dcf7e",
         "a8ea67",
         "bf747b",
+    ),
+    Section("Trivial values"),
+    Entries(
+        "8f43ab",
+        "b3c440",
+        "474c51",
+        "d4e418",
+        "055b0a",
     ),
     Section("Square lattice"),
     Subsection("Theta constants for the square lattice"),
@@ -2209,6 +2228,33 @@ make_entry(ID("bf747b"),
     Formula(Equal(ComplexLimit(JacobiTheta(4,z,tau), tau, ConstI*Infinity), 1)),
     Variables(z),
     Assumptions(Element(z, CC)))
+
+# Trivial values
+
+make_entry(ID("8f43ab"),
+    Formula(Equal(JacobiTheta(1,0,tau), 0)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("b3c440"),
+    Formula(Equal(JacobiTheta(1,0,tau,2*r), 0)),
+    Variables(tau, r),
+    Assumptions(And(Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("474c51"),
+    Formula(Equal(JacobiTheta(2,0,tau,2*r+1), 0)),
+    Variables(tau, r),
+    Assumptions(And(Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("d4e418"),
+    Formula(Equal(JacobiTheta(3,0,tau,2*r+1), 0)),
+    Variables(tau, r),
+    Assumptions(And(Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
+
+make_entry(ID("055b0a"),
+    Formula(Equal(JacobiTheta(4,0,tau,2*r+1), 0)),
+    Variables(tau, r),
+    Assumptions(And(Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 # Constant for the square lattice
 
@@ -2676,4 +2722,27 @@ make_entry(ID("c574fd"),
     )),
     Variables(z, tau, r, N),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
+
+# Representation by other functions
+
+make_entry(ID("a9c825"),
+    Formula(Equal(JacobiTheta(2,0,tau), 2*DedekindEta(2*tau)**2/DedekindEta(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("85b2ff"),
+    Formula(Equal(JacobiTheta(3,0,tau), DedekindEta(Div(1,2)*(tau+1))**2/DedekindEta(tau+1))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("9448f2"),
+    Formula(Equal(JacobiTheta(4,0,tau), DedekindEta(Div(1,2)*tau)**2/DedekindEta(tau))),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
+make_entry(ID("557b19"),
+    Formula(Equal(JacobiTheta(2,0,tau) * JacobiTheta(3,0,tau) * JacobiTheta(4,0,tau), 2 * DedekindEta(tau)**3)),
+    Variables(tau),
+    Assumptions(Element(tau, HH)))
+
 
