@@ -164,8 +164,24 @@ def_Topic(
         "0207dc",
         "b96c9d",
     ),
+    Section("Approximations"),
+    Description("Main topic:", TopicReference("Approximations of Jacobi theta functions")),
+    Entries(
+        "24a793",
+    ),
 )
 
+def_Topic(
+    Title("Approximations of Jacobi theta functions"),
+    Description("See", TopicReference("Jacobi theta functions"), "for an introduction to these functions."),
+    Section("Approximation by truncated Fourier series"),
+    Entries(
+        "001234",
+        "dac0aa",
+        "24a793",
+        "c574fd",
+    ),
+)
 
 def_Topic(
     Title("Illustrations of Jacobi theta functions"),
@@ -2606,4 +2622,58 @@ make_entry(ID("a0955b"),
     Formula(Equal(Integral(JacobiTheta(4,x,tau), Tuple(x, M/2, N/2)), (N-M)/2)),
     Variables(tau, M, N),
     Assumptions(And(Element(tau, HH), Element(M, ZZ), Element(N, ZZ))))
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+#                           Approximations                                    #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+make_entry(ID("dac0aa"),
+    Formula(Where(LessEqual(Abs(Exp(-(ConstPi*ConstI*tau/4)) * JacobiTheta(2,z,tau,r) / (ConstPi*ConstI)**r -
+        Sum((2*n+1)**r * q**(n*(n+1)) * (w**(2*n+1) + (-1)**r / w**(2*n+1)), Tuple(n, 0, N-1))),
+        Cases(Tuple(2 * Q**(N*(N+1)) * W**(2*N+1) * (2*N+1)**r / (1 - alpha), Less(alpha, 1)),
+              Tuple(Infinity, Otherwise))),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
+        Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/(N+1))),
+    )),
+    Variables(z, tau, r, N),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("001234"),
+    Formula(Where(LessEqual(Abs(ConstI * Exp(-(ConstPi*ConstI*tau/4)) * JacobiTheta(1,z,tau,r) / (ConstPi*ConstI)**r -
+        Sum((-1)**n * (2*n+1)**r * q**(n*(n+1)) * (w**(2*n+1) - (-1)**r / w**(2*n+1)), Tuple(n, 0, N-1))),
+        Cases(Tuple(2 * Q**(N*(N+1)) * W**(2*N+1) * (2*N+1)**r / (1 - alpha), Less(alpha, 1)),
+              Tuple(Infinity, Otherwise))),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
+        Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/(N+1))),
+    )),
+    Variables(z, tau, r, N),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("24a793"),
+    Formula(Where(LessEqual(Abs(JacobiTheta(3,z,tau,r)/(2*ConstPi*ConstI)**r -
+        Parentheses(0**r + Sum(n**r * q**(n**2) * (w**(2*n) + (-1)**r / w**(2*n)), Tuple(n, 1, N-1)))),
+        Cases(Tuple(2 * Q**(N**2) * W**(2*N) * N**r / (1 - alpha), Less(alpha, 1)),
+              Tuple(Infinity, Otherwise))),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
+        Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/N)),
+    )),
+    Variables(z, tau, r, N),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("c574fd"),
+    Formula(Where(LessEqual(Abs(JacobiTheta(4,z,tau,r)/(2*ConstPi*ConstI)**r -
+        Parentheses(0**r + Sum((-1)**n * n**r * q**(n**2) * (w**(2*n) + (-1)**r / w**(2*n)), Tuple(n, 1, N-1)))),
+        Cases(Tuple(2 * Q**(N**2) * W**(2*N) * N**r / (1 - alpha), Less(alpha, 1)),
+              Tuple(Infinity, Otherwise))),
+        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
+        Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/N)),
+    )),
+    Variables(z, tau, r, N),
+    Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
 
