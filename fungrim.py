@@ -515,7 +515,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")
 writetopic("Modular transformations")
-writetopic("Jacobi theta functions")
+writetopic("Jacobi theta functions", highlight=True)
 writetopic("Dedekind eta function")
 writetopic("Modular j-invariant")
 writetopic("Modular lambda function", highlight=True)
