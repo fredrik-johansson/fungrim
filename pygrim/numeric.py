@@ -34,17 +34,6 @@ def substitute(expr, dictionary):
     args = expr.args()
     return Expr(call=[head]+[substitute(arg, dictionary) for arg in args])
 
-def substitute(expr, dictionary):
-    if expr in dictionary:
-        v = dictionary[expr]
-        assert isinstance(v, Expr)
-        return v
-    if expr.is_atom():
-        return expr
-    head = expr.head()
-    args = expr.args()
-    return Expr(call=[head]+[substitute(arg, dictionary) for arg in args])
-
 function_arb_method_table = {
     Exp : "exp",
     Sqrt : "sqrt",
