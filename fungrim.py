@@ -21,7 +21,8 @@ if len(sys.argv) > 1 and sys.argv[1] == "img":
     source_scripts.xray.plots("build/html/img")
     sys.exit(0)
 
-from formulas import *
+from pygrim import *
+from pygrim.formulas import *
 
 topics_referencing_entry = {}
 entries_referencing_symbol = {}
