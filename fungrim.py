@@ -29,7 +29,7 @@ entries_referencing_symbol = {}
 all_used_symbols = set()
 
 for entry in all_entries:
-    for symbol in entry.all_symbols():
+    for symbol in entry.symbols(unique=True):
         all_used_symbols.add(symbol)
         if symbol in entries_referencing_symbol:
             entries_referencing_symbol[symbol].add(entry.id())
@@ -48,7 +48,7 @@ for topic in all_topics:
                     topics_referencing_entry[id._text].append(title)
                 else:
                     topics_referencing_entry[id._text] = [title]
-                for symbol in entry.all_symbols():
+                for symbol in entry.symbols(unique=True):
                     if symbol not in topics_referencing_symbol:
                         topics_referencing_symbol[symbol] = {title:0}
                     if title not in topics_referencing_symbol[symbol]:
