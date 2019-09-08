@@ -197,10 +197,14 @@ symbol_latex_table = {
     Hypergeometric2F1Regularized: "\\,{}_2{\\textbf F}_1",
     Hypergeometric2F0Regularized: "\\,{}_2{\\textbf F}_0",
     Hypergeometric3F2Regularized: "\\,{}_3{\\textbf F}_2",
+    BesselJ: "J",
+    BesselI: "I",
+    BesselY: "Y",
+    BesselK: "K",
+    HankelH1: "H^{(1)}",
+    HankelH2: "H^{(2)}",
     AiryAi: "\\operatorname{Ai}",
     AiryBi: "\\operatorname{Bi}",
-    AiryAiPrime: "\\operatorname{Ai}'",
-    AiryBiPrime: "\\operatorname{Bi}'",
     LogIntegral: "\\operatorname{li}",
     GCD: "\\gcd",
     LCM: "\\operatorname{lcm}",
@@ -378,7 +382,7 @@ def tex_JacobiTheta(head, args, **kwargs):
         tau = argstr[2]
         if args[3].is_integer():
             r = args[3]._integer
-            if r >= 0 and r <= 4:
+            if r >= 0 and r <= 3:
                 return "\\theta%s_{%s}\\!\\left(%s %s %s\\right)" % ("'" * r, index, z, midsep, tau)
         r = args[3].latex(in_small=True)
         return "\\theta^{(%s)}_{%s}\\!\\left(%s %s %s\\right)" % (r, index, z, midsep, tau)
@@ -832,27 +836,40 @@ def tex_Decimal(head, args, **kwargs):
 
 @deftex_heads([BesselJ, BesselY, BesselI, BesselK, HankelH1, HankelH2])
 def tex_Bessel(head, args, **kwargs):
-    assert len(args) == 2
-    in_small = kwargs.get("in_small", False)
-    n, z = args
-    nstr = n.latex(in_small=True)
-    zstr = z.latex(in_small=in_small)
-    fsym = {BesselJ:"J", BesselI:"I", BesselY:"Y", BesselK:"K", HankelH1:"H^{(1)}", HankelH2:"H^{(2)}"}[head]
-    return fsym + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
-
-@deftex_heads([BesselJDerivative, BesselYDerivative, BesselIDerivative, BesselKDerivative])
-def tex_BesselDerivative(head, args, **kwargs):
-    assert len(args) == 3
-    n, z, r = args
-    in_small = kwargs.get("in_small", False)
-    nstr = n.latex(in_small=True)
-    zstr = z.latex(in_small=in_small)
-    rstr = r.latex(in_small=in_small)
-    fsym = {BesselJDerivative:"J", BesselIDerivative:"I", BesselYDerivative:"Y", BesselKDerivative:"K", HankelH1:"H^{(1)}", HankelH2:"H^{(2)}"}[head]
-    if r.is_integer() and r._integer >= 0 and r._integer <= 3:
-        return fsym + ("'" * r._integer) + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+    assert len(args) in (2, 3)
+    fsym = symbol_latex_table[head]
+    if len(args) == 2:
+        in_small = kwargs.get("in_small", False)
+        n, z = args
+        nstr = n.latex(in_small=True)
+        zstr = z.latex(in_small=in_small)
+        return fsym + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
     else:
-        return fsym + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+        n, z, r = args
+        in_small = kwargs.get("in_small", False)
+        nstr = n.latex(in_small=True)
+        zstr = z.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+            return fsym + ("'" * r._integer) + "_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+        else:
+            return fsym + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
+
+@deftex_heads([AiryAi, AiryBi])
+def tex_Airy(head, args, **kwargs):
+    assert len(args) in (1, 2)
+    if len(args) == 1:
+        return latex(Call(head, *args), **kwargs)
+    else:
+        fsym = symbol_latex_table[head]
+        z, r = args
+        in_small = kwargs.get("in_small", False)
+        zstr = z.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+            return fsym + ("'" * r._integer) + "\!\\left(" + zstr + "\\right)"
+        else:
+            return fsym + "^{(" + rstr + ")}" + "\!\\left(" + zstr + "\\right)"
 
 @deftex_heads([CoulombF, CoulombG])
 def tex_Coulomb(head, args, **kwargs):
