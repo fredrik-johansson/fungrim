@@ -14,7 +14,36 @@ Early view at http://fungrim.org/
 
 ## Usage
 
+### Building the website
+
 Just run `python fungrim.py`, and the grimoire will appear in `build/html/index.html`.
+
+The first build may take several minutes (due to starting node.js thousands of times to run KaTeX for each formula), but subsequent rebuilds should be fast since this data is cached.
+
+Run `python fungrim.py img` to build the image files (requires `matplotlib`, `mpmath` and `python-flint`).
+
+### Using the Python library
+
+Run `python setup.py install` to install the `pygrim` Python library. This is the symbolic library used to build the Fungrim website. As currently implemented, all formulas are part of the library (but built data such as images are not).
+
+    >>> import pygrim
+    >>> pygrim.Equal
+    Equal
+    >>> pygrim.ConstPi
+    ConstPi
+    >>> pygrim.Equal(pygrim.ConstPi - pygrim.ConstPi, 0)
+    Equal(Sub(ConstPi, ConstPi), 0)
+    >>> import pygrim.formulas
+    >>> e = pygrim.formulas.entries_dict["590136"]
+    >>> e
+    Entry(ID("590136"),
+        Formula(Equal(ConstPi, Neg(Mul(ConstI, Log(-1))))))
+    >>> e.args()[1].args()[0].head()
+    Equal
+    >>> e.args()[1].args()[0].args()
+    (ConstPi, Neg(Mul(ConstI, Log(-1))))
+
+The Python library is a work in progress and the API will certainly change.
 
 ## What is the Mathematical Functions Grimoire (Fungrim)?
 
