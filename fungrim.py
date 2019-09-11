@@ -469,11 +469,11 @@ class OrdnerMainPage(Webpage):
         count_expressions = len(ordner.expressions_values)
 
         write("""<p style="margin:1em; font-size:0.9em;">""")
-        write("""Welcome to <abbr title="Online Real Decimal Number Encyclopedia Reference">Ordner</abbr>, a catalog of real numbers in Fungrim. """)
+        write("""Welcome to Ordner, a catalog of real numbers in Fungrim. """)
         write("""Ordner is indexed by 30-digit floating-point decimal keys such as <tt>0.707106781186547524400844362105</tt>. """)
         write("""For each key, Ordner lists constant symbolic expressions (for example <tt>Div(1,&nbsp;Sqrt(2))</tt>) with numerical value within &pm;1 <abbr title="unit in the last place">ulp</abbr> of the key. """)
-        write("""For each expression, Ordner also lists the Fungrim entries where it appears. """)
-        write("""Ordner currently consists of %i decimal keys (of which %i are integers) and %i symbolic expressions.""" % (count_decimals, count_integer_decimals, count_expressions))
+        write("""For each expression <tt>x</tt>, Ordner also links to the Fungrim entries where <tt>x</tt> appears. """)
+        write("""Ordner currently contains %i decimal keys (of which %i are integers) and %i symbolic expressions.""" % (count_decimals, count_integer_decimals, count_expressions))
         write("""</p>""")
 
         write("""<h2>Hall of fame</h2>""")
@@ -527,6 +527,10 @@ class OrdnerMainPage(Webpage):
 
         write("""<p style="margin:1em; font-size:0.9em;">""")
         write("""For some keys, only a decimal literal is listed as a symbolic expression, even when the origin of that quantity is something more meaningful (typically because the decimal appears in a table of numerical values where the corresponding symbolic expressions are only given implicitly). In such cases, the user may look up the entry where the decimal literal appears to find the real meaning. Limitations of this kind will be fixed in the future.""")
+        write("""</p>""")
+
+        write("""<p style="margin:1em; font-size:0.9em;">""")
+        write("""ORDNER stands for Online Real Decimal Number Encyclopedia Reference.""")
         write("""</p>""")
 
         self.end()
