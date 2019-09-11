@@ -52,14 +52,12 @@ function_arb_method_table = {
     Erf : "erf",
     Erfc : "erfc",
     Erfi : "erfi",
-    AiryAi : "airy_ai",
-    AiryBi : "airy_bi",
 }
 
 function_acb_method_table = {
     DedekindEta : "modular_eta",
     ModularJ : "modular_j",
-    ModularLambda : "modular_eta",
+    ModularLambda : "modular_lambda",
 }
 
 class ArbFiniteError(ValueError):
@@ -121,6 +119,7 @@ class ArbNumericalEvaluation(object):
 
     def eval_inner(self, expr, **kwargs):
 
+        flint = self.flint
         arb = self.flint.arb
         acb = self.flint.acb
 
@@ -150,7 +149,7 @@ class ArbNumericalEvaluation(object):
         head = expr.head()
         args = expr.args()
 
-        if head is Mul:
+        if head == Mul:
             if len(args) == 0:
                 return arb(1)
             x = self.eval(args[0], **kwargs)
@@ -159,7 +158,7 @@ class ArbNumericalEvaluation(object):
                 x *= y
             return x
 
-        if head is Add:
+        if head == Add:
             if len(args) == 0:
                 return arb(0)
             x = self.eval(args[0], **kwargs)
@@ -168,18 +167,18 @@ class ArbNumericalEvaluation(object):
                 x += y
             return x
 
-        if head is Neg:
+        if head == Neg:
             assert len(args) == 1
             x = self.eval(args[0], **kwargs)
             return (-x)
 
-        if head is Sub:
+        if head == Sub:
             assert len(args) == 2
             x = self.eval(args[0], **kwargs)
             y = self.eval(args[1], **kwargs)
             return x - y
 
-        if head is Div:
+        if head == Div:
             assert len(args) == 2
             x = self.eval(args[0], **kwargs)
             y = self.eval(args[1], **kwargs)
@@ -187,7 +186,7 @@ class ArbNumericalEvaluation(object):
                 return x / y
             raise ArbFiniteError
 
-        if head is Pow:
+        if head == Pow:
             assert len(args) == 2
             x = self.eval(args[0], **kwargs)
             y = self.eval(args[1], **kwargs)
@@ -201,12 +200,12 @@ class ArbNumericalEvaluation(object):
                         return v
             raise ArbFiniteError
 
-        if head is Abs:
+        if head == Abs:
             assert len(args) == 1
             x = self.eval(args[0], **kwargs)
             return abs(x)
 
-        if head is Re:
+        if head == Re:
             assert len(args) == 1
             v = self.eval(args[0], **kwargs)
             if v.is_finite():
@@ -216,7 +215,7 @@ class ArbNumericalEvaluation(object):
                     return v.real
             raise ArbFiniteError
 
-        if head is Im:
+        if head == Im:
             assert len(args) == 1
             v = self.eval(args[0], **kwargs)
             if v.is_finite():
@@ -276,7 +275,7 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
-        if head is JacobiTheta:
+        if head == JacobiTheta:
             if len(args) == 3:
                 j, z, tau = args
                 r = 0
@@ -296,12 +295,12 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
-        if head is Decimal:
+        if head == Decimal:
             assert len(args) == 1
             x = arb(args[0]._text)
             return x
 
-        if head is DirichletCharacter:
+        if head == DirichletCharacter:
             if len(args) == 3:
                 q, l, n = args
                 if q.is_integer() and l.is_integer() and n.is_integer():
@@ -314,7 +313,7 @@ class ArbNumericalEvaluation(object):
                     except (AssertionError, ValueError):
                         pass
 
-        if head is DirichletL:
+        if head == DirichletL:
             if len(args) == 2:
                 s, chi = args
                 if chi.head() == DirichletCharacter and len(chi.args()) == 2:
@@ -327,7 +326,7 @@ class ArbNumericalEvaluation(object):
                             return v
                         raise ArbFiniteError
 
-        if head is LambertW:
+        if head == LambertW:
             if len(args) == 2:
                 k, x = args
                 if k.is_integer():
@@ -339,7 +338,62 @@ class ArbNumericalEvaluation(object):
                         return v
                     raise ArbFiniteError
 
-        if head is Where:
+        if head in (AiryAi, AiryBi):
+            if head == AiryAi:
+                fname = "airy_ai"
+            else:
+                fname = "airy_bi"
+            if len(args) == 1:
+                x = args[0]
+                x = self.eval(x, **kwargs)
+                v = getattr(x, fname)()
+                if v.is_finite():
+                    return v
+            elif len(args) == 2:
+                x, r = args
+                x = self.eval(x, **kwargs)
+                if r.is_integer():
+                    r = r._integer
+                    # todo: handle more directly in python-flint?
+                    if 0 <= r <= 1000:
+                        orig = flint.ctx.cap
+                        try:
+                            flint.ctx.cap = r + 1
+                            if isinstance(x, arb):
+                                v = getattr(flint.arb_series([x,1]), fname)()[r] * arb.fac_ui(r)
+                            else:
+                                v = getattr(flint.acb_series([x,1]), fname)()[r] * arb.fac_ui(r)
+                        finally:
+                            flint.ctx.cap = orig
+                        if v.is_finite():
+                            return v
+
+        if head in (EisensteinG, EisensteinE):
+            # todo: wrap eisenstein series in python-flint
+            if len(args) == 2:
+                n, tau = args
+                if n.is_integer():
+                    n = n._integer
+                    if n >= 2 and n % 2 == 0 and n <= 8:
+                        tau = self.eval(tau, **kwargs)
+                        if n == 2:
+                            v = 2 * acb(0.5).elliptic_zeta(tau)
+                            if head == EisensteinE:
+                                v /= (2 * arb(n).zeta())
+                        else:
+                            _, a, b, c = acb(0).modular_theta(tau)
+                            if n == 4:
+                                v = 0.5 * (a**8 + b**8 + c**8)
+                            elif n == 6:
+                                v = 0.5 * (b**12 + c**12 - 3*a**8*(b**4 + c**4))
+                            else:
+                                v = 0.5 * (a**16 + b**16 + c**16)
+                            if head == EisensteinG:
+                                v *= (2 * arb(n).zeta())
+                        if v.is_finite():
+                            return v
+
+        if head == Where:
             symbol_stack = kwargs.get("symbol_stack", [])[:]
             nv = len(args) - 1
             assert nv >= 0
@@ -394,13 +448,8 @@ def neval(expr, digits=20, **kwargs):
         raise ValueError("failed to converge to a finite value")
     if isinstance(v, acb) and v.imag == 0:
         v = v.real
-    return arb_as_fungrim(v, digits)
-    # return v
-
-def subexpressions(expr):
-    if not expr.is_atom():
-        for arg in expr.args():
-            for v in subexpressions(arg):
-                yield v
-    yield expr
+    if kwargs.get("as_arb"):
+        return v
+    else:
+        return arb_as_fungrim(v, digits)
 

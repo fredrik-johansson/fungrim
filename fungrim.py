@@ -21,6 +21,33 @@ if len(sys.argv) > 1 and sys.argv[1] == "img":
     source_scripts.xray.plots("build/html/img")
     sys.exit(0)
 
+ordner_ = None
+if len(sys.argv) > 1 and sys.argv[1] == "ordner":
+    import pygrim
+    import pygrim.formulas
+    import pickle
+    import os
+    print("building Ordner...")
+    from pygrim.ordner import Ordner
+    ordner = Ordner()
+    ordner.build(pygrim.all_entries)
+    if not os.path.exists("build"):
+        os.makedirs("build")
+    with open("build/ordner.pickle", "wb") as fp:
+        pickle.dump(ordner, fp, protocol=pickle.HIGHEST_PROTOCOL)
+    print("success!")
+    sys.exit(0)
+
+try:
+    import pickle
+    with open("build/ordner.pickle", "rb") as fp:
+        ordner_ = pickle.load(fp, encoding="utf-8")
+except FileNotFoundError:
+    print("Ordner database not found -- skipping ordner output")
+
+    # ordner.html()
+    # sys.exit(0)
+
 from pygrim import *
 from pygrim.formulas import *
 
@@ -67,6 +94,8 @@ if not os.path.exists("build/html/topic"):
     os.makedirs("build/html/topic")
 if not os.path.exists("build/html/symbol"):
     os.makedirs("build/html/symbol")
+if not os.path.exists("build/html/ordner"):
+    os.makedirs("build/html/ordner")
 
 from shutil import copyfile
 copyfile("favicon.png", "build/html/favicon.png")
@@ -416,6 +445,164 @@ class SymbolPage(Webpage):
         self.content(self.symbol)
         self.end()
 
+class OrdnerMainPage(Webpage):
+
+    def __init__(self, ordner, index_splits):
+        self.ordner = ordner
+        self.index_splits = index_splits
+        self.filepath = "build/html/ordner/index.html"
+        self.title = "Ordner: index of real numbers"
+        self.pagetitle = "Ordner: index of real numbers - Fungrim: The Mathematical Functions Grimoire"
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>%s</h1>""" % self.title)
+
+    def write(self):
+        self.start()
+        write = self.fp.write
+
+        ordner = self.ordner
+        count_decimals = len(ordner.values_expressions)
+        count_integer_decimals = len(ordner.integer_values)
+        count_expressions = len(ordner.expressions_values)
+
+        write("""<p style="margin:1em; font-size:0.9em;">""")
+        write("""Welcome to <abbr title="Online Real Decimal Number Encyclopedia Reference">Ordner</abbr>, a catalog of real numbers in Fungrim. """)
+        write("""Ordner is indexed by 30-digit floating-point decimal keys such as <tt>0.707106781186547524400844362105</tt>. """)
+        write("""For each key, Ordner lists constant symbolic expressions (for example <tt>Div(1,&nbsp;Sqrt(2))</tt>) with numerical value within &pm;1 <abbr title="unit in the last place">ulp</abbr> of the key. """)
+        write("""For each expression, Ordner also lists the Fungrim entries where it appears. """)
+        write("""Ordner currently consists of %i decimal keys (of which %i are integers) and %i symbolic expressions.""" % (count_decimals, count_integer_decimals, count_expressions))
+        write("""</p>""")
+
+        write("""<h2>Hall of fame</h2>""")
+
+        write("""<p style="margin:1em; font-size:0.9em;">Find out which real numbers have real significance! <i>Frequency</i> denotes the total number of times any expression matching that decimal key appears in Fungrim, counting repetitions.</p>""")
+
+        write("""<div style="margin: 0 auto;">""")
+        write("""<div style="text-align:center">""")
+        write("""<div style="display: inline-block;">""")
+
+        write("""<ul style="text-align:left; padding:0; margin-top:0">""")
+
+        write("""<li><a href="top250/">Top 250 real numbers by frequency, excluding integers</a></li>""")
+        write("""<li><a href="top250inclusive/">Top 250 real numbers by frequency, including integers</a></li>""")
+        write("""<li><a href="top250expr/">Top 250 real numbers by number of expressions</a></li>""")
+
+        write("""</ul>""")
+        write("""</div>""")
+        write("""</div>""")
+        write("""</div>""")
+
+        write("""<h2>All numbers, ordered by magnitude</h2>""")
+        write("""<p style="margin:1em; font-size:0.9em;">""")
+        write("""Browse [0, &infin;). To keep the page sizes reasonable, the listing is split into intervals with a few hundred keys per page. The splitting points are not permanent and will change when Fungrim is updated.""")
+        write("""</p>""")
+
+        write("""<div style="margin: 0 auto;">""")
+        write("""<div style="text-align:center">""")
+        write("""<div style="display: inline-block;">""")
+
+        write("""<ul style="text-align:left; list-style-type: none; margin:0; padding:0">""")
+        for i, (a, b, s) in enumerate(index_splits):
+            # write("""<li><a href="index%02i/">%02i: &nbsp; %s</a></li>""" % (i, i, s))
+            write("""<li><a href="index%02i/">&nbsp; %s</a></li>""" % (i, s))
+        write("""</ul>""")
+        write("""</div>""")
+        write("""</div>""")
+        write("""</div>""")
+
+
+        write("""<h2>How it works</h2>""")
+
+        write("""<p style="margin:1em; font-size:0.9em;">""")
+        write("""Ordner is generated automatically by searching all Fungrim formulas for constant subexpressions that <a href="http://arblib.org">Arb</a> can evaluate numerically. Only expressions that appear explicitly in Fungrim are covered, with the following exceptions. All decimal keys in Ordner are normalized to be nonnegative, so expressions <tt>x</tt> representing negative values are indexed as <tt>Neg(x)</tt> in Ordner. """)
+        write("""Complex numbers are indexed by the real and imaginary parts (<tt>Re(x)</tt>, <tt>Im(x)</tt>), as well as the absolute value and complex argument (<tt>Abs(x)</tt>, <tt>Arg(x)</tt>) when both the real and imaginary parts are nonzero. """)
+        write("""The number 0 is a special case: a vanishing expression is only included when the numerical evaluation code can prove that the expression exactly represents 0. Some trivially zero-valued expressions are excluded to prevent bloat. """)
+        write("""Finally, since the Fungrim formula language normally uses <tt>Exp(x)</tt> instead of <tt>Pow(ConstE, x)</tt> to represent the exponential function, """)
+        write("""formulas containing <tt>Exp(...)</tt> are listed under <tt>2.71828182845904523536028747135</tt> as a special case, so as to represent this fundamental constant fairly! """)
+
+        write("""</p>""")
+
+        write("""<p style="margin:1em; font-size:0.9em;">""")
+        write("""For some keys, only a decimal literal is listed as a symbolic expression, even when the origin of that quantity is something more meaningful (typically because the decimal appears in a table of numerical values where the corresponding symbolic expressions are only given implicitly). In such cases, the user may look up the entry where the decimal literal appears to find the real meaning. Limitations of this kind will be fixed in the future.""")
+        write("""</p>""")
+
+        self.end()
+
+class OrdnerTablePage(Webpage):
+
+    def __init__(self, ordner, title, dirname, num=10000, sort=None, integers=True, between=None, index_splits=None, max_expressions=4, max_entries=10):
+        self.num = num
+        self.ordner = ordner
+        self.integers = integers
+        self.between = between
+        self.filepath = "build/html/ordner/" + dirname + "/index.html"
+        self.sort = sort
+        self.title = title
+        self.pagetitle = title + " - Ordner: index to real numbers in Fungrim"
+        self.index_splits = index_splits
+        self.max_expressions = max_expressions
+        self.max_entries = max_entries
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../../">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>%s</h1>""" % self.title)
+
+    def write(self):
+        self.start()
+        write = self.fp.write
+        ordner = self.ordner
+
+        write("""<p style="margin:1em; font-size:0.9em; text-align:center">""")
+        write("""From <a href="../">Ordner</a>, a catalog of real numbers in Fungrim. """)
+        write("""</p>""")
+
+        if self.between is None:
+            write("""<p style="margin:1em; font-size:0.9em;">""")
+            if self.sort == "frequency":
+                write("""This page lists the top 250 decimal keys in Ordner when ranked by frequency (the total number of times any expression matching the given decimal key appears in Fungrim, counting repetitions). """)
+                if self.integers:
+                    write("""This page <b>includes</b> integer-valued keys in the list. """)
+                else:
+                    write("""This page <b>excludes</b> integer-valued keys from the list. """)
+            else:
+                write("""This page lists the top 250 decimal keys in Ordner when ranked by the number of distinct symbolic expressions in Fungrim matching the key. """)
+
+            links = []
+            if not (self.sort == "frequency" and self.integers == False): links.append("""<a href="../top250/">Top 250 real numbers by frequency, excluding integers</a>""")
+            if not (self.sort == "frequency" and self.integers == True): links.append("""<a href="../top250inclusive/">Top 250 real numbers by frequency, including integers</a>""")
+            if not (self.sort == "expressions"): links.append("""<a href="../top250expr/">Top 250 real numbers by number of expressions</a>""")
+
+            write("See also: ")
+            write(links[0])
+            write(" and ")
+            write(links[1])
+            write(".")
+
+            write("""</p>""")
+        else:
+            for i, (a, b, s) in enumerate(index_splits):
+                if (a, b) == self.between:
+                    if i != 0:
+                        write("""<p style="margin:1em; font-size:0.9em; text-align:center">""")
+                        write("""Previous interval: <a href="../index%02i">%s</a>""" % (i-1, index_splits[i-1][2]))
+                        write("""</p>""")
+                    write("""<p style="margin:1em; font-size:0.9em; text-align:center">""")
+                    write("""<span style="font-weight:bold">This interval</span>: %s""" % s)
+                    write("""</p>""")
+                    if i != len(index_splits) - 1:
+                        write("""<p style="margin:1em; font-size:0.9em; text-align:center">""")
+                        write("""Next interval: <a href="../index%02i">%s</a>""" % (i+1, index_splits[i+1][2]))
+                        write("""</p>""")
+
+        ordner.html_table(write, num=self.num, between=self.between, sort=self.sort, integers=self.integers, max_entries=self.max_entries, max_expressions=self.max_expressions)
+
+        self.end()
+
+
 for entry in all_entries:
     print("entry " + str(entry.id()))
     EntryPage(entry.id()).write()
@@ -429,6 +616,43 @@ for symbol in all_used_symbols:
     SymbolPage(symbol).write()
 
 DefinitionsPage().write()
+
+if ordner_ is not None:
+    ordner = ordner_  # the variable was overwritten; make this local...
+    print("writing ordner...")
+    num = len(ordner.values_ordered)
+    index_splits = []
+    N = 1
+    while num // N > 250:
+        N += 1
+    num_per_page = (num + N - 1) // N
+    for i in range(N):
+        a = i * num_per_page
+        b = min((i + 1) * num_per_page, len(ordner.values_ordered)-1)
+        av = ordner.values_ordered[a]
+        bv = ordner.values_ordered[b]
+        if i == N - 1:
+            s = "[<tt>%s,&nbsp;&infin;</tt>)" % av
+        else:
+            s = "[<tt>%s,&nbsp;%s</tt>]" % (av, bv)
+        index_splits.append((a, b, s))
+
+    for i, val in enumerate(ordner.values_ordered):
+        expressions = ordner.values_expressions[val]
+        if len(expressions) > 4 or max(len(ordner.expressions_entries[expr]) for expr in expressions) > 10:
+            OrdnerTablePage(ordner, val, val, between=(i, i), max_expressions=10000, max_entries=1000).write()
+
+    for i, (a, b, s) in enumerate(index_splits):
+        av = ordner.values_ordered[a]
+        bv = ordner.values_ordered[b]
+        OrdnerTablePage(ordner, "Real numbers from %s" % av, "index%02i" % i, between=(a, b), index_splits=index_splits).write()
+
+    OrdnerTablePage(ordner, "Top 250 real numbers by frequency, excluding integers", "top250", num=250, sort="frequency", integers=False).write()
+    OrdnerTablePage(ordner, "Top 250 real numbers by frequency, including integers", "top250inclusive", num=250, sort="frequency", integers=True).write()
+    OrdnerTablePage(ordner, "Top 250 real numbers by number of expressions", "top250expr", num=250, sort="expressions", integers=True).write()
+
+    OrdnerMainPage(ordner, index_splits).write()
+
 
 #def index_link(symbol):
 #    s = """<a href="%s.html">%s</a> &nbsp; (%i entries)""" % described_symbols
@@ -537,10 +761,16 @@ frontpage.fp.write("""</ul></div>""")
 
 frontpage.fp.write("""<p style="margin:1em; text-align:center"><span style="color:orange;">&#x2605;</span> Recommended topic (relatively complete)</p>""")
 
-frontpage.section("General")
+frontpage.section("Browse by symbol")
 frontpage.fp.write("""<ul>""")
 frontpage.fp.write("""<li><a href="definitions.html">Table of defined symbols</a> &nbsp;(%i total entries)</li>""" % len(described_symbols))
 frontpage.fp.write("""</ul>""")
+
+frontpage.section("Browse real numbers (Ordner)")
+frontpage.fp.write("""<ul>""")
+frontpage.fp.write("""<li><a href="ordner/">Ordner: index of real numbers</li>""")
+frontpage.fp.write("""</ul>""")
+
 
 frontpage.end()
 
