@@ -87,7 +87,9 @@ def_Topic(
         "c03de4",
     ),
     Section("Main properties"),
+    Description("See also: ", TopicReference("Riemann hypothesis")),
     Entries(
+        "9fa2a1",  # RH formula
         "49704a",  # RH
         "2e1ff3",  # real zeros
         "a78abc",  # nontrivial zeros
@@ -395,15 +397,6 @@ make_entry(ID("e6ff64"),
     Variables(n),
     Assumptions(And(Element(n, ZZ), Unequal(n, 0), Or(Less(Abs(n), 103800788359), RiemannHypothesis))),
     References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
-
-make_entry(ID("c03de4"),
-    SymbolDefinition(RiemannHypothesis, RiemannHypothesis, "Riemann hypothesis"),
-    Description("Represents the truth value of the Riemann hypothesis, defined in ", EntryReference("49704a"), "."),
-    Description("Semantically, ", Element(RiemannHypothesis, Set(True_, False_)), "."),
-    Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the Riemann hypothesis."))
-
-make_entry(ID("49704a"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Equal(Re(RiemannZetaZero(n)), Div(1,2))))))
 
 make_entry(ID("945fa5"),
     Formula(Element(RiemannZetaZero(1),
@@ -998,4 +991,107 @@ make_entry(ID("71d9d9"),
     Tuple(48, Decimal("139.73620895212138895045004652338246084679005256538")),
     Tuple(49, Decimal("141.12370740402112376194035381847535509030066087975")),
     Tuple(50, Decimal("143.11184580762063273940512386891392996623310243035")))))
+
+def_Topic(
+    Title("Riemann hypothesis"),
+    Section("Definitions"),
+    Entries(
+        "c03de4",
+    ),
+    Section("Formal statement"),
+    Description("Related topics: ",
+        TopicReference("Riemann zeta function"), ",",
+        TopicReference("Zeros of the Riemann zeta function"),
+    ),
+    Entries(
+        "9fa2a1",
+        "49704a",
+    ),
+    Section("Statements equivalent to the Riemann hypothesis"),
+    Subsection("Prime counting function"),
+    Description("Related topic: ",
+        TopicReference("Prime numbers"),
+    ),
+    Entries(
+        "bfaeb5",
+    ),
+    Subsection("Robin's criterion"),
+    Entries(
+        "3142ec",
+        "e4287f",
+    ),
+    Subsection("Li's criterion"),
+    Entries(
+        "e68f82",
+        "a5d65f",
+    ),
+    Subsection("Landau's function"),
+    Description("Related topic: ",
+        TopicReference("Landau's function"),
+    ),
+    Entries(
+        "65fa9f",  # included from landau's function
+    ),
+    Subsection("Definite integrals"),
+    Entries(
+        "7783f9",
+        "cf70ce",
+    ),
+    Section("Formulas conditional on the Riemann hypothesis"),
+    Entries(
+        "e6ff64",
+        "375afe",
+    ),
+    Section("Generalizations"),
+    Description("See also: ",
+        TopicReference("Dirichlet L-functions"),
+    ),
+    Entries(
+        "dc593e",
+        "e2a734",
+    ),
+)
+
+make_entry(ID("c03de4"),
+    SymbolDefinition(RiemannHypothesis, RiemannHypothesis, "Riemann hypothesis"),
+    Description("Represents the truth value of the Riemann hypothesis, defined in ", EntryReference("49704a"), "."),
+    Description("Semantically, ", Element(RiemannHypothesis, Set(True_, False_)), "."),
+    Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the Riemann hypothesis."))
+
+make_entry(ID("9fa2a1"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(s, And(Element(s, CC), LessEqual(0, Re(s), 1), Equal(RiemannZeta(s), 0)), Equal(Re(s), Div(1,2))))))
+
+make_entry(ID("49704a"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Equal(Re(RiemannZetaZero(n)), Div(1,2))))))
+
+make_entry(ID("bfaeb5"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(x, Element(x, ClosedOpenInterval(2, Infinity)), Less(Abs(PrimePi(x) - LogIntegral(x)), Sqrt(x) * Log(x))))),
+    References("https://mathoverflow.net/q/338066"))
+
+make_entry(ID("3142ec"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(5041)), Less(DivisorSigma(1,n), Exp(ConstGamma) * n*Log(Log(n)))))))
+
+make_entry(ID("e4287f"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), LessEqual(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n)))))))
+
+make_entry(ID("e68f82"),
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Greater(KeiperLiLambda(n), 0)))),
+    References("https://doi.org/10.1006/jnth.1997.2137"))
+
+make_entry(ID("a5d65f"),
+    Formula(Equivalent(RiemannHypothesis, Where(Less(Sum(Abs(KeiperLiLambda(n) - a(n))**2, Tuple(n, 1, Infinity)), Infinity),
+        Equal(a(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2)))),
+    References("https://doi.org/10.7169/facm/1317045228"))
+
+make_entry(ID("7783f9"),
+    Formula(Equivalent(RiemannHypothesis, Equal(
+        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), Tuple(t, 0, Infinity)),
+        ConstPi/8 + ConstGamma/4 + Log(8*ConstPi)/4 - 2))),
+    References("https://mathoverflow.net/q/279936"))
+
+make_entry(ID("cf70ce"),
+    Formula(Equivalent(RiemannHypothesis, Equal(
+        Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), Tuple(sigma, Div(1,2), Infinity)), Tuple(t, 0, Infinity)),
+        ConstPi * (3-ConstGamma) / 32))),
+    References("https://doi.org/10.1007/BF01056314"))
 

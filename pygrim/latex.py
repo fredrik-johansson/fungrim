@@ -100,6 +100,7 @@ subscript_latex_table = {
     LambertWPuiseuxCoefficient: "\\mu",
     DirichletGroup: "G",
     ConreyGenerator: "g",
+    KeiperLiLambda: "\\lambda",
 }
 
 subscript_pair_latex_table = {
@@ -1125,7 +1126,7 @@ def tex_Det(head, args, **kwargs):
 def tex_ForAll(head, args, **kwargs):
     assert len(args) == 3
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\text{for all } %s \\text{ with } %s, %s" % (argstr[0], argstr[1], argstr[2])
+    return "\\text{for all } %s \\text{ with } %s, \\, %s" % (argstr[0], argstr[1], argstr[2])
 
 @deftex
 def tex_Exists(head, args, **kwargs):
