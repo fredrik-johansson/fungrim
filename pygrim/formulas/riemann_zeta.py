@@ -999,7 +999,7 @@ def_Topic(
         "c03de4",
     ),
     Section("Formal statement"),
-    Description("Related topics: ",
+    Description("Related topics:",
         TopicReference("Riemann zeta function"), ",",
         TopicReference("Zeros of the Riemann zeta function"),
     ),
@@ -1009,7 +1009,7 @@ def_Topic(
     ),
     Section("Statements equivalent to the Riemann hypothesis"),
     Subsection("Prime counting function"),
-    Description("Related topic: ",
+    Description("Related topic:",
         TopicReference("Prime numbers"),
     ),
     Entries(
@@ -1026,7 +1026,7 @@ def_Topic(
         "a5d65f",
     ),
     Subsection("Landau's function"),
-    Description("Related topic: ",
+    Description("Related topic:",
         TopicReference("Landau's function"),
     ),
     Entries(
@@ -1043,7 +1043,7 @@ def_Topic(
         "375afe",
     ),
     Section("Generalizations"),
-    Description("See also: ",
+    Description("Related topic:",
         TopicReference("Dirichlet L-functions"),
     ),
     Entries(
@@ -1072,7 +1072,8 @@ make_entry(ID("3142ec"),
     Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(5041)), Less(DivisorSigma(1,n), Exp(ConstGamma) * n*Log(Log(n)))))))
 
 make_entry(ID("e4287f"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), LessEqual(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n)))))))
+    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(2)), Less(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n)))))),
+    References("https://doi.org/10.2307/2695443"))
 
 make_entry(ID("e68f82"),
     Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Greater(KeiperLiLambda(n), 0)))),
