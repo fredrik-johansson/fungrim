@@ -1022,6 +1022,9 @@ def_Topic(
     ),
     Subsection("Li's criterion"),
     Entries(
+        "432bee",
+        "fcab61",
+        "cce75b",
         "e68f82",
         "a5d65f",
     ),
@@ -1036,6 +1039,11 @@ def_Topic(
     Entries(
         "7783f9",
         "cf70ce",
+    ),
+    Subsection("De Bruijn-Newman constant"),
+    Entries(
+        "22ab47",
+        "a71ddd",
     ),
     Section("Formulas conditional on the Riemann hypothesis"),
     Entries(
@@ -1075,6 +1083,20 @@ make_entry(ID("e4287f"),
     Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(2)), Less(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n)))))),
     References("https://doi.org/10.2307/2695443"))
 
+make_entry(ID("432bee"),
+    SymbolDefinition(KeiperLiLambda, KeiperLiLambda(n), "Keiper-Li coefficient"))
+
+make_entry(ID("fcab61"),
+    Formula(Equal(KeiperLiLambda(n), (1/Factorial(n)) * Derivative(Log(RiemannXi(s/(s-1))), s, 0, n))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
+# todo: absolute convergence? need to encode order of summation?
+make_entry(ID("cce75b"),
+    Formula(Equal(KeiperLiLambda(n), (1/n) * Sum(Parentheses(1 - (RiemannZetaZero(k) / (RiemannZetaZero(k) - 1))**n), k, And(Element(k, ZZ), Unequal(k, 0))))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(1))))
+
 make_entry(ID("e68f82"),
     Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Greater(KeiperLiLambda(n), 0)))),
     References("https://doi.org/10.1006/jnth.1997.2137"))
@@ -1095,4 +1117,11 @@ make_entry(ID("cf70ce"),
         Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), Tuple(sigma, Div(1,2), Infinity)), Tuple(t, 0, Infinity)),
         ConstPi * (3-ConstGamma) / 32))),
     References("https://doi.org/10.1007/BF01056314"))
+
+make_entry(ID("22ab47"),
+    SymbolDefinition(DeBruijnNewmanLambda, DeBruijnNewmanLambda, "De Bruijn-Newman constant"))
+
+make_entry(ID("a71ddd"),
+    Formula(Equivalent(RiemannHypothesis, Equal(DeBruijnNewmanLambda, 0))),
+    References("https://arxiv.org/abs/1801.05914"))
 

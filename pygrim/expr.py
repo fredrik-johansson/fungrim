@@ -719,7 +719,7 @@ ConreyGenerator
 DiscreteLog
 Cases Otherwise
 HurwitzZeta DirichletL GeneralizedBernoulliB
-StieltjesGamma KeiperLiLambda
+RiemannXi StieltjesGamma KeiperLiLambda DeBruijnNewmanLambda
 DirichletLZero
 GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum

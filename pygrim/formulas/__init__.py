@@ -67,8 +67,8 @@ describe(UnitCircle, UnitCircle, [], PowerSet(CC), "Unit circle")
 
 describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
 
-describe(KeiperLiLambda, KeiperLiLambda(n), [Element(n, ZZGreaterEqual(0))], RR, "Keiper-Li coefficient")
 describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
+describe(RiemannXi, RiemannXi(s), [Element(s, CC)], CC, "Riemann xi-function")
 
 describe2(FormalPowerSeries, FormalPowerSeries(K,x), "Formal power series", None,
     Description("Represents the set of formal power series in the (formal) symbol", x,

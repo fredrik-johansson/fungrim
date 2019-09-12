@@ -242,6 +242,8 @@ symbol_latex_table = {
     BetaFunction: "\\mathrm{B}",
     LandauG: "g",
     LiouvilleLambda: "\\lambda",
+    DeBruijnNewmanLambda: "\\Lambda",
+    RiemannXi: "\\xi",
 }
 
 def deftex(f):
