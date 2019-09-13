@@ -27,7 +27,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "ordner":
     import pygrim.formulas
     import pickle
     import os
-    print("building Ordner...")
+    print("Building Ordner...")
     from pygrim.ordner import Ordner
     ordner = Ordner()
     ordner.build(pygrim.all_entries)
@@ -35,7 +35,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "ordner":
         os.makedirs("build")
     with open("build/ordner.pickle", "wb") as fp:
         pickle.dump(ordner, fp, protocol=pickle.HIGHEST_PROTOCOL)
-    print("success!")
+    print("Success!")
     sys.exit(0)
 
 try:

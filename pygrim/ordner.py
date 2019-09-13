@@ -35,6 +35,7 @@ class Ordner(object):
                 else:
                     insert(expr, val, eid)
 
+        print("Evaluating expressions...")
         for entry in entries:
             eid = entry.id()
             for expr in entry.subexpressions():
@@ -63,6 +64,30 @@ class Ordner(object):
                         #if not (a != 0 or b != 0):
                         #    insert_real(Abs(expr), abs(val), eid)
                         #    insert_real(Arg(expr), val.arg(), eid)
+
+        # todo: handle complex numbers (need to keep symbolics above?)
+        # insert symbolic equations
+        print("Adding symbolic equalities...")
+        for entry in entries:
+            # only look for constant equations
+            variables = entry.get_arg_with_head(Variables)
+            if variables is not None:
+                continue
+            formula = entry.get_arg_with_head(Formula)
+            if formula is None:
+                continue
+            eid = entry.id()
+            content = formula.args()[0]
+            if content.head() == Equal:
+                for arg in content.args():
+                    if arg in expressions_values:
+                        for arg2 in content.args():
+                            if arg2 not in expressions_values:
+                                print("  ", arg2, " = ", arg)
+                                insert(arg2, expressions_values[arg], eid)
+                        break
+
+        print("Building final tables...")
 
         # expr -> str(expr) ?
         expressions_values = dict((str(expr), val) for (expr, val) in expressions_values.items())
