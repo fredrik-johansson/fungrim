@@ -381,6 +381,28 @@ class TopicPage(Webpage):
                 self.fp.write(arg.html(display=True))
         self.end()
 
+class TopicIndexPage(Webpage):
+
+    def __init__(self):
+        self.filepath = "build/html/topic/index.html"
+        self.title = "All topics in alphabetical order"
+        self.pagetitle = "All topics in alphabetical order"
+
+    def start(self):
+        Webpage.start(self)
+        self.fp.write("""<p style="text-align:center; font-size:85%; margin-top: 0.2em;em"><a href="../">Fungrim home page</a></p>""")
+        self.fp.write("""<h1>%s</h1>""" % self.title)
+
+    def write(self):
+        self.start()
+        self.fp.write("<ul>")
+        for topic in sorted(all_topics, key=lambda t: t.title()):
+            title = topic.title()
+            etitle = escape_title(title)
+            self.fp.write("""<li><a href="%s/">%s</a></li>""" % (etitle, title))
+        self.fp.write("</ul>")
+        self.end()
+
 class DefinitionsPage(Webpage):
 
     def __init__(self):
@@ -615,6 +637,7 @@ for symbol in all_used_symbols:
     print("symbol " + str(symbol))
     SymbolPage(symbol).write()
 
+TopicIndexPage().write()
 DefinitionsPage().write()
 
 if ordner_ is not None:
@@ -675,6 +698,8 @@ def writetopic(s, highlight=False):
         frontpage.fp.write("""<li><a href="topic/%s/">%s</a></li>""" % (escape_title(s), s))
 
 frontpage.fp.write("""<div class="topiclist"><ul>""")
+
+frontpage.fp.write("""<li><a href="topic/">All topics in alphabetical order</a></li>""")
 
 frontpage.fp.write("""<li>Fundamentals<ul>""")
 writetopic("Elementary logic and set theory")
