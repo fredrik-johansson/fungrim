@@ -47,8 +47,10 @@ make_entry(ID("32e430"),
 
 make_entry(ID("177218"),
     Description("Table of", LandauG(n), "for", LessEqual(0, n, 100)),
-    Table(TableRelation(Tuple(n, y), Equal(LandauG(n), y)),
-      TableHeadings(n, LandauG(n)), TableSplit(4),
+    Table(
+      Var(n),
+      TableValueHeadings(n, LandauG(n)),
+      TableSplit(4),
       List(
     Tuple(0, 1),
     Tuple(1, 1),
