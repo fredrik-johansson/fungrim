@@ -193,8 +193,11 @@ make_entry(ID("9ee8bc"),
 
 make_entry(ID("7cb17f"),
     Description("Table of", RiemannZeta(2*n), "for", LessEqual(1, n, 20)),
-    Table(TableRelation(Tuple(n, y), Equal(RiemannZeta(n), y)),
-      TableHeadings(2*n, RiemannZeta(2*n)), TableSplit(2),
+    Table(
+      Var(n),
+      # todo: support writing 2n and still parse table?
+      TableValueHeadings(n, RiemannZeta(n)),
+      TableSplit(2),
       List(
     Tuple(2, Div(1, 6) * ConstPi**2),
     Tuple(4, Div(1, 90) * ConstPi**4),
@@ -219,8 +222,11 @@ make_entry(ID("7cb17f"),
 
 make_entry(ID("e50a56"),
     Description("Table of", RiemannZeta(-n), "for", LessEqual(0, n, 30)),
-    Table(TableRelation(Tuple(n, y), Equal(RiemannZeta(n), y)),
-      TableHeadings(-n, RiemannZeta(-n)), TableSplit(3),
+    Table(
+      Var(n),
+      # todo: support writing -n and still parse table?
+      TableValueHeadings(n, RiemannZeta(n)),
+      TableSplit(3),
       List(
     Tuple(0, -Div(1, 2)),
     Tuple(-1, -Div(1, 12)),
@@ -256,8 +262,11 @@ make_entry(ID("e50a56"),
 
 make_entry(ID("e93ca8"),
     Description("Table of", RiemannZeta(n), "to 50 digits for", LessEqual(2, n, 50)),
-    Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(RiemannZeta(n), 50), y)),
-      TableHeadings(n, RiemannZeta(n)), TableSplit(1),
+    Table(
+      Var(n),
+      # todo: support writing -n and still parse table?
+      TableValueHeadings(n, NearestDecimal(RiemannZeta(n), 50)),
+      TableSplit(1),
       List(
     Tuple(2, Decimal("1.6449340668482264364724151666460251892189499012068")),
     Tuple(3, Decimal("1.2020569031595942853997381615114499907649862923405")),
@@ -1130,6 +1139,7 @@ def_Topic(
     (
         "e68f82",
         "a5d65f",
+        "8f8fb7",
     ),
 )
 
@@ -1224,5 +1234,12 @@ make_entry(ID("a5d65f"),
     Formula(Equivalent(RiemannHypothesis, Where(Less(Sum(Abs(KeiperLiLambda(n) - a(n))**2, Tuple(n, 1, Infinity)), Infinity),
         Equal(a(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2)))),
     References("https://doi.org/10.7169/facm/1317045228"))
+
+make_entry(ID("8f8fb7"),
+    Formula(Implies(ForAll(n, And(Element(n, ZZGreaterEqual(1)), Less(Im(RiemannZetaZero(n)), T)), Equal(Re(RiemannZetaZero(n)), Div(1,2))),
+        ForAll(n, And(Element(n, ZZGreaterEqual(0)), LessEqual(n, T**2)), GreaterEqual(KeiperLiLambda(n), 0)))),
+    Variables(T),
+    Assumptions(Element(T, ClosedOpenInterval(0, Infinity))),
+    References("https://arxiv.org/abs/1703.02844"))
 
 
