@@ -148,8 +148,10 @@ make_entry(ID("ce6dd0"),
 
 make_entry(ID("b506ad"),
     Description("Table of", Fibonacci(n), "for", LessEqual(0, n, 100)),
-    Table(TableRelation(Tuple(n, y), Equal(Fibonacci(n), y)),
-      TableHeadings(n, Fibonacci(n)), TableSplit(2),
+    Table(
+      Var(n),
+      TableValueHeadings(n, Fibonacci(n)),
+      TableSplit(2),
       List(
     Tuple(0, 0),
     Tuple(1, 1),
@@ -256,8 +258,10 @@ make_entry(ID("b506ad"),
 
 make_entry(ID("5818e3"),
     Description("Table of", Fibonacci(10**n), "to 50 digits for", LessEqual(0, n, 20)),
-    Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(Fibonacci(10**n), 50), y)),
-      TableHeadings(n, Fibonacci(10**n)), TableSplit(1),
+    Table(
+      Var(n),
+      TableSplit(1),
+      TableValueHeadings(n, NearestDecimal(Fibonacci(10**n), 50)),
       List(
     Tuple(0, Decimal("1")),
     Tuple(1, Decimal("55")),

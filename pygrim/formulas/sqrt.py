@@ -137,8 +137,10 @@ make_entry(ID("97b736"),
 
 make_entry(ID("9d5b81"),
     Description("Table of", Sqrt(n), "to 50 digits for", LessEqual(0, n, 50)),
-    Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(Sqrt(n), 50), y)),
-      TableHeadings(n, Sqrt(n)), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(Sqrt(n), 50)),
+      TableSplit(1),
       List(
     Tuple(0, Decimal("0")),
     Tuple(1, Decimal("1")),

@@ -86,8 +86,10 @@ make_entry(ID("1f88a4"),
 
 make_entry(ID("aed6bd"),
     Description("Table of", BernoulliB(n), "for", LessEqual(0, n, 50)),
-    Table(TableRelation(Tuple(n, y, r), And(Equal(BernoulliB(n), y), Equal(NearestDecimal(BernoulliB(n), 30), r))),
-      TableHeadings(n, BernoulliB(n), NearestDecimal(BernoulliB(n), 30)), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, BernoulliB(n), NearestDecimal(BernoulliB(n), 30)),
+      TableSplit(1),
       List(
 Tuple(0, 1, Decimal("1.00000000000000000000000000000")),
 Tuple(1, -Div(1,2), Decimal("-0.500000000000000000000000000000")),
@@ -140,6 +142,7 @@ Tuple(47, 0, Decimal("0")),
 Tuple(48, -Div(5609403368997817686249127547,46410), Decimal("-120866265222965259346027.311937")),
 Tuple(49, 0, Decimal("0")),
 Tuple(50, Div(495057205241079648212477525,66), Decimal("7500866746076964366855720.07576")))))
+
 
 
 make_entry(ID("588889"),

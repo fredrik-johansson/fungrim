@@ -1,5 +1,36 @@
 from .expr import *
 
+def table_values(entry):
+    # only look for constant tables
+    variables = entry.get_arg_with_head(Variables)
+    if variables is not None:
+        return
+    table = entry.get_arg_with_head(Table)
+    if table is not None:
+        headings = table.get_arg_with_head(TableValueHeadings)
+        if headings is not None:
+            headings = headings.args()
+            vars = []
+            data = []
+            for arg in table.args():
+                if arg.head() == Var:
+                    vars = arg.args()
+                if arg.head() == List:
+                    data = arg.args()
+            for row in data:
+                row = list(row.args())
+                subs_dict = {}
+                for var in vars:
+                    i = headings.index(var)
+                    subs_dict[var] = row[i]
+                # substitute the variables
+                for i in range(len(headings)):
+                    if row[i] not in vars:
+                        expr = headings[i].replace(subs_dict)
+                        value = row[i]
+                        yield expr, value
+
+
 class Ordner(object):
     def __init__(self):
         pass
@@ -35,35 +66,61 @@ class Ordner(object):
                 else:
                     insert(expr, val, eid)
 
+        # arb or acb
+        def insert_arb(expr, val, eid):
+            if isinstance(val, arb):
+                insert_real(expr, val, eid)
+            else:
+                a = val.real
+                b = val.imag
+                if a != 0:
+                    insert_real(Re(expr), a, eid)
+                if b != 0:
+                    insert_real(Im(expr), b, eid)
+                if a != 0 and b != 0:
+                    insert_real(Abs(expr), abs(val), eid)
+                    insert_real(Arg(expr), val.arg(), eid)
+
+        def insert_expr(expr, eid):
+            if expr == Exp:
+                insert_real(Expr("Indirect use of e: Exp(...)"), ConstE.n(eval_digits, as_arb=True), eid)
+            if expr.head() not in excluded:
+                if expr in expressions_values:
+                    val = expressions_values[expr]
+                else:
+                    try:
+                        val = expr.n(eval_digits, as_arb=True)
+                    except (ValueError, NotImplementedError):
+                        return
+                insert_arb(expr, val, eid)
+
+        # todo: second passes for subexpressions, symbolic equalities?
+        print("Evaluating tables...")
+        for entry in entries:
+            eid = entry.id()
+            for expr, val in table_values(entry):
+                if expr.head() == NearestDecimal:
+                    expr, numdigits = expr.args()
+                    if numdigits.is_integer() and int(numdigits) >= digits:
+                        val = val.n(eval_digits, as_arb=True)
+                        # todo ...
+                        insert_arb(expr, val, eid)
+
         print("Evaluating expressions...")
         for entry in entries:
             eid = entry.id()
             for expr in entry.subexpressions():
-                if expr == Exp:
-                    insert_real(Expr("Indirect use of e: Exp(...)"), ConstE.n(eval_digits, as_arb=True), eid)
-                if expr.head() not in excluded:
-                    if expr in expressions_values:
-                        val = expressions_values[expr]
-                    else:
-                        try:
-                            val = expr.n(eval_digits, as_arb=True)
-                        except (ValueError, NotImplementedError):
-                            continue
-                    if isinstance(val, arb):
-                        insert_real(expr, val, eid)
-                    else:
-                        a = val.real
-                        b = val.imag
-                        if a != 0:
-                            insert_real(Re(expr), a, eid)
-                        if b != 0:
-                            insert_real(Im(expr), b, eid)
-                        if a != 0 and b != 0:
-                            insert_real(Abs(expr), abs(val), eid)
-                            insert_real(Arg(expr), val.arg(), eid)
-                        #if not (a != 0 or b != 0):
-                        #    insert_real(Abs(expr), abs(val), eid)
-                        #    insert_real(Arg(expr), val.arg(), eid)
+                insert_expr(expr, eid)
+
+        print("Evaluating tables, 2...")
+        for entry in entries:
+            eid = entry.id()
+            for expr, val in table_values(entry):
+                if expr.head() != NearestDecimal:
+                    insert_expr(expr, eid)
+                    insert_expr(val, eid)
+                    if val in expressions_values and expr not in expressions_values:
+                        insert(expr, expressions_values[val], eid)
 
         # todo: handle complex numbers (need to keep symbolics above?)
         # insert symbolic equations

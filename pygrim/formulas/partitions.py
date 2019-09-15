@@ -75,8 +75,10 @@ make_entry(ID("3eae25"),
 
 make_entry(ID("856db2"),
     Description("Table of", PartitionsP(n), "for", LessEqual(0, n, 200)),
-    Table(TableRelation(Tuple(n, y), Equal(PartitionsP(n), y)),
-      TableHeadings(n, PartitionsP(n)), TableSplit(4),
+    Table(
+      Var(n),
+      TableValueHeadings(n, PartitionsP(n)),
+      TableSplit(4),
       List(
 Tuple(0, 1), Tuple(1, 1), Tuple(2, 2), Tuple(3, 3), Tuple(4, 5),
 Tuple(5, 7), Tuple(6, 11), Tuple(7, 15), Tuple(8, 22), Tuple(9, 30),
@@ -123,8 +125,10 @@ Tuple(200, 3972999029388),
 
 make_entry(ID("9933df"),
     Description("Table of", PartitionsP(10**n), "to 50 digits for", LessEqual(0, n, 30)),
-    Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(PartitionsP(10**n), 50), y)),
-      TableHeadings(n, PartitionsP(10**n)), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(PartitionsP(10**n), 50)),
+      TableSplit(1),
       List(
         Tuple(0, Decimal("1")),
         Tuple(1, Decimal("42")),

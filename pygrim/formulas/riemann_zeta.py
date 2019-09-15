@@ -915,8 +915,10 @@ make_entry(ID("dc558b"),
 
 make_entry(ID("2e1cc7"),
     Description("Table of", Im(RiemannZetaZero(10**n)), "to 50 digits for", LessEqual(0, n, 16)),
-    Table(TableRelation(Tuple(n, y), And(Equal(Re(RiemannZetaZero(10**n)), Div(1,2)), Equal(NearestDecimal(Im(RiemannZetaZero(10**n)), 50), y))),
-      TableHeadings(n, Im(RiemannZetaZero(10**n))), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(Im(RiemannZetaZero(10**n)), 50)),
+      TableSplit(1),
       List(
       Tuple(0, Decimal("14.134725141734693790457251983562470270784257115699")),
       Tuple(1, Decimal("49.773832477672302181916784678563724057723178299677")),
@@ -938,8 +940,10 @@ make_entry(ID("2e1cc7"),
 
 make_entry(ID("71d9d9"),
     Description("Table of", Im(RiemannZetaZero(n)), "to 50 digits for", LessEqual(1, n, 50)),
-    Table(TableRelation(Tuple(n, y), And(Equal(Re(RiemannZetaZero(n)), Div(1,2)), Equal(NearestDecimal(Im(RiemannZetaZero(n)), 50), y))),
-      TableHeadings(n, Im(RiemannZetaZero(n))), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(Im(RiemannZetaZero(n)), 50)),
+      TableSplit(1),
       List(
     Tuple(1, Decimal("14.134725141734693790457251983562470270784257115699")),
     Tuple(2, Decimal("21.022039638771554992628479593896902777334340524903")),
@@ -1086,6 +1090,19 @@ make_entry(ID("a71ddd"),
     Formula(Equivalent(RiemannHypothesis, Equal(DeBruijnNewmanLambda, 0))),
     References("https://arxiv.org/abs/1801.05914"))
 
+make_entry(ID("7783f9"),
+    Formula(Equivalent(RiemannHypothesis, Equal(
+        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), Tuple(t, 0, Infinity)),
+        ConstPi/8 + ConstGamma/4 + Log(8*ConstPi)/4 - 2))),
+    References("https://mathoverflow.net/q/279936"))
+
+make_entry(ID("cf70ce"),
+    Formula(Equivalent(RiemannHypothesis, Equal(
+        Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), Tuple(sigma, Div(1,2), Infinity)), Tuple(t, 0, Infinity)),
+        ConstPi * (3-ConstGamma) / 32))),
+    References("https://doi.org/10.1007/BF01056314"))
+
+
 def_Topic(
     Title("Keiper-Li coefficients"),
     Section("Definitions"),
@@ -1101,6 +1118,12 @@ def_Topic(
     Entries(
         "081205",
         "d8d820",
+        "faf448",
+        "706f66",
+    ),
+    Section("Asymptotics"),
+    Entries(
+        "64bd32",
     ),
     Section("Riemann hypothesis (Li's criterion)"),
     Entries
@@ -1111,10 +1134,14 @@ def_Topic(
 )
 
 make_entry(ID("432bee"),
-    SymbolDefinition(KeiperLiLambda, KeiperLiLambda(n), "Keiper-Li coefficient"))
+    SymbolDefinition(KeiperLiLambda, KeiperLiLambda(n), "Keiper-Li coefficient"),
+    Description(SourceForm(KeiperLiLambda(n)), ", rendered as", KeiperLiLambda(n),
+        ", denotes a power series coefficient associated with the Riemann zeta function. "),
+    Description("The definition", EntryReference("fcab61"), "follows Keiper (1992). Li (1997) defines the coefficients with a different scaling factor, equivalent to", n*KeiperLiLambda(n), "in Keiper's (and Fungrim's) notation."),
+    References("https://doi.org/10.2307/2153215", "https://doi.org/10.1006/jnth.1997.2137", "https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("fcab61"),
-    Formula(Equal(KeiperLiLambda(n), (1/Factorial(n)) * Derivative(Log(RiemannXi(s/(s-1))), s, 0, n))),
+    Formula(Equal(KeiperLiLambda(n), (1/Factorial(n)) * Derivative(Log(2 * RiemannXi(s/(s-1))), s, 0, n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
@@ -1125,10 +1152,69 @@ make_entry(ID("cce75b"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("081205"),
-    Formula(Equal(KeiperLiLambda(0), -Log(2))))
+    Formula(Equal(KeiperLiLambda(0), 0)))
 
 make_entry(ID("d8d820"),
     Formula(Equal(KeiperLiLambda(1), (ConstGamma/2 + 1) - Log(4*ConstPi)/2)))
+
+make_entry(ID("faf448"),
+    Description("Table of", KeiperLiLambda(n), "to 50 digits for", LessEqual(0, n, 30)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(KeiperLiLambda(n), 50)),
+      TableSplit(1),
+      List(
+    Tuple(0, Decimal("0")),
+    Tuple(1, Decimal("0.023095708966121033814310247906495291621932127152051")),
+    Tuple(2, Decimal("0.046172867614023335192864243096033943387066108314123")),
+    Tuple(3, Decimal("0.069212973518108267930497348872601068994212026393200")),
+    Tuple(4, Decimal("0.092197619873060409647627872409439018065541673490213")),
+    Tuple(5, Decimal("0.11510854289223549048622128109857276671349132303596")),
+    Tuple(6, Decimal("0.13792766871372988290416713700341666356138966078654")),
+    Tuple(7, Decimal("0.16063715965299421294040287257385366292282442046163")),
+    Tuple(8, Decimal("0.18321945964338257908193931774721859848998098273432")),
+    Tuple(9, Decimal("0.20565733870917046170289387421343304741236553410044")),
+    Tuple(10, Decimal("0.22793393631931577436930340573684453380748385942738")),
+    Tuple(11, Decimal("0.25003280347456327821404973571398176484638012641151")),
+    Tuple(12, Decimal("0.27193794338538498733992383249265390667786600994911")),
+    Tuple(13, Decimal("0.29363385060368815285418215009889439246684857721098")),
+    Tuple(14, Decimal("0.31510554847718560800576009263276843951188505373007")),
+    Tuple(15, Decimal("0.33633862480178623056900742916909716316435743073656")),
+    Tuple(16, Decimal("0.35731926555429953996369166686545971896237127626351")),
+    Tuple(17, Decimal("0.37803428659512958242032593887899541131751543174423")),
+    Tuple(18, Decimal("0.39847116323842905329183170701797400318996274958010")),
+    Tuple(19, Decimal("0.41861805759536317393727500409965507879749928476235")),
+    Tuple(20, Decimal("0.43846384360466075647997306767236011141956127351910")),
+    Tuple(21, Decimal("0.45799812967347233249339981618322155418048244629837")),
+    Tuple(22, Decimal("0.47721127886067612259488922142809435229670372335579")),
+    Tuple(23, Decimal("0.49609442654413481917007764284527175942412402470703")),
+    Tuple(24, Decimal("0.51463949552297154237641907033478550942000739520745")),
+    Tuple(25, Decimal("0.53283920851566303199773431527093937195060386800653")),
+    Tuple(26, Decimal("0.55068709802460266427322142354105110711472096137358")),
+    Tuple(27, Decimal("0.56817751354772529773768642819955547787404863111699")),
+    Tuple(28, Decimal("0.58530562612777004271739082427374534543603950676386")),
+    Tuple(29, Decimal("0.60206743023974549532618306036749838157067445931420")),
+    Tuple(30, Decimal("0.61845974302711452077115586049317787034309975741269")),
+    )))
+
+make_entry(ID("706f66"),
+    Description("Table of", KeiperLiLambda(10**n), "to 50 digits for", LessEqual(0, n, 5)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(KeiperLiLambda(10**n), 50)),
+      TableSplit(1),
+      List(
+    Tuple(0, Decimal("0.023095708966121033814310247906495291621932127152051")),
+    Tuple(1, Decimal("0.22793393631931577436930340573684453380748385942738")),
+    Tuple(2, Decimal("1.1860377537679132992736469839793792693298702359323")),
+    Tuple(3, Decimal("2.3260531616864664574065046940832238158044982041693")),
+    Tuple(4, Decimal("3.4736579732241613740180609478145593215167373519711")),
+    Tuple(5, Decimal("4.6258078240690223140941603808334320467617286152507")),
+    )))
+
+make_entry(ID("64bd32"),
+    Formula(Implies(RiemannHypothesis, AsymptoticTo(KeiperLiLambda(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2, n, Infinity))),
+    References("https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("e68f82"),
     Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Greater(KeiperLiLambda(n), 0)))),
@@ -1139,15 +1225,4 @@ make_entry(ID("a5d65f"),
         Equal(a(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2)))),
     References("https://doi.org/10.7169/facm/1317045228"))
 
-make_entry(ID("7783f9"),
-    Formula(Equivalent(RiemannHypothesis, Equal(
-        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), Tuple(t, 0, Infinity)),
-        ConstPi/8 + ConstGamma/4 + Log(8*ConstPi)/4 - 2))),
-    References("https://mathoverflow.net/q/279936"))
-
-make_entry(ID("cf70ce"),
-    Formula(Equivalent(RiemannHypothesis, Equal(
-        Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), Tuple(sigma, Div(1,2), Infinity)), Tuple(t, 0, Infinity)),
-        ConstPi * (3-ConstGamma) / 32))),
-    References("https://doi.org/10.1007/BF01056314"))
 

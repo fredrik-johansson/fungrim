@@ -517,16 +517,12 @@ class OrdnerMainPage(Webpage):
         write("""<h2>How it works</h2>""")
 
         write("""<p style="margin:1em; font-size:0.9em;">""")
-        write("""Ordner is generated automatically by searching all Fungrim formulas for constant subexpressions that <a href="http://arblib.org">Arb</a> can evaluate numerically. Only expressions that appear explicitly in Fungrim are covered, with the following exceptions. All decimal keys in Ordner are normalized to be nonnegative, so expressions <tt>x</tt> representing negative values are indexed as <tt>Neg(x)</tt> in Ordner. """)
+        write("""Ordner is generated automatically by searching all Fungrim formulas for constant subexpressions that <a href="http://arblib.org">Arb</a> can evaluate numerically. Only expressions that appear explicitly in Fungrim are covered, with the following exceptions. For tables with numerical data, all the listed instances of the ground expression are included. All decimal keys in Ordner are normalized to be nonnegative, so expressions <tt>x</tt> representing negative values are indexed as <tt>Neg(x)</tt> in Ordner. """)
         write("""Complex numbers are indexed by the real and imaginary parts (<tt>Re(x)</tt>, <tt>Im(x)</tt>), as well as the absolute value and complex argument (<tt>Abs(x)</tt>, <tt>Arg(x)</tt>) when both the real and imaginary parts are nonzero. """)
         write("""The number 0 is a special case: a vanishing expression is only included when the numerical evaluation code can prove that the expression exactly represents 0. Some trivially zero-valued expressions are excluded to prevent bloat. """)
         write("""Finally, since the Fungrim formula language normally uses <tt>Exp(x)</tt> instead of <tt>Pow(ConstE, x)</tt> to represent the exponential function, """)
         write("""formulas containing <tt>Exp(...)</tt> are listed under <tt>2.71828182845904523536028747135</tt> as a special case, so as to represent this fundamental constant fairly! """)
 
-        write("""</p>""")
-
-        write("""<p style="margin:1em; font-size:0.9em;">""")
-        write("""For some keys, only a decimal literal is listed as a symbolic expression, even when the origin of that quantity is something more meaningful (typically because the decimal appears in a table of numerical values where the corresponding symbolic expressions are only given implicitly). In such cases, the user may look up the entry where the decimal literal appears to find the real meaning. Limitations of this kind will be fixed in the future.""")
         write("""</p>""")
 
         write("""<p style="margin:1em; font-size:0.9em;">""")

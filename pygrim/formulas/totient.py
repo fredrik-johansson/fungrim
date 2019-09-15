@@ -351,8 +351,10 @@ make_entry(ID("0477b3"),
 
 make_entry(ID("6d37c9"),
     Description("Table of", Totient(n), "for", LessEqual(0, n, 100)),
-    Table(TableRelation(Tuple(n, y), Equal(Totient(n), y)),
-      TableHeadings(n, Totient(n)), TableSplit(5),
+    Table(
+      Var(n),
+      TableValueHeadings(n, Totient(n)),
+      TableSplit(5),
       List(
     Tuple(0, 0),
     Tuple(1, 1),

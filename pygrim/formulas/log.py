@@ -102,8 +102,10 @@ make_entry(ID("699c83"),
 
 make_entry(ID("d496b8"),
     Description("Table of", Log(n), "to 50 digits for", LessEqual(1, n, 50)),
-    Table(TableRelation(Tuple(n, y), Equal(NearestDecimal(Log(n), 50), y)),
-      TableHeadings(n, Log(n)), TableSplit(1),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(Log(n), 50)),
+      TableSplit(1),
       List(
     Tuple(1, Decimal("0")),
     Tuple(2, Decimal("0.69314718055994530941723212145817656807550013436026")),

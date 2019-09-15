@@ -147,8 +147,10 @@ make_entry(ID("3c2469"),
 
 make_entry(ID("3009a7"),
     Description("Table of", Factorial(n), "for", LessEqual(0, n, 30)),
-    Table(TableRelation(Tuple(n, y), Equal(Factorial(n), y)),
-      TableHeadings(n, Factorial(n)), TableSplit(2),
+    Table(
+      Var(n),
+      TableValueHeadings(n, Factorial(n)),
+      TableSplit(2),
       List(
     Tuple(0, 1),
     Tuple(1, 1),

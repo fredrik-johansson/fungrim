@@ -60,8 +60,8 @@ class Expr(object):
         elif isinstance(arg, int_types):
             self._integer = int(arg)
         elif call is not None:
-            assert len(call) >= 1
             self._args = tuple(Expr(obj) for obj in call)
+            assert len(self._args) >= 1
         return self
 
     def __eq__(self, other):
@@ -101,6 +101,9 @@ class Expr(object):
             else:
                 self._hash = hash(self._args)
         return self._hash
+
+    def __int__(self):
+        return int(self._integer)
 
     def is_atom(self):
         """Returns True if self is an atom (symbol, integer or text),
@@ -249,6 +252,17 @@ class Expr(object):
                     for expr in arg.subexpressions():
                         yield expr
 
+    def replace(self, rules):
+        """
+        Replace subexpressions of self with exact matches in the given
+        dictionary. Warning: does not treat locally bound variables specially.
+        """
+        if self in rules:
+            return rules[self]
+        if self.is_atom():
+            return self
+        return Expr(call=(arg.replace(rules) for arg in self._args))
+
     # needs work
     def need_parens_in_mul(self):
         if self.is_atom():
@@ -363,6 +377,8 @@ class Expr(object):
     def html_Table(self):
         rel = self.get_arg_with_head(TableRelation)
         heads = self.get_arg_with_head(TableHeadings)
+        if heads is None:
+            heads = self.get_arg_with_head(TableValueHeadings)
         data = self.get_arg_with_head(List)
         split = self.get_arg_with_head(TableSplit)
         colheads = self.get_arg_with_head(TableColumnHeadings)
@@ -731,8 +747,9 @@ BetaFunction IncompleteBeta IncompleteBetaRegularized
 
 
 inject_builtin("""
+Var
 Entry Formula ID Assumptions References Variables DomainCodomain
-Description Table TableRelation TableHeadings TableColumnHeadings TableSplit TableSection
+Description Table TableRelation TableValueHeadings TableHeadings TableColumnHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference TopicReference
 SourceForm SymbolDefinition
 Image ImageSource

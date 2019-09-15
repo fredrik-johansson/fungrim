@@ -18,6 +18,8 @@ def_Topic(
     Section("Numerical values"),
     Entries(
         "a3035f",
+        "1e142c",
+        "5404ce",
     ),
     Section("Bounds and inequalities"),
     Entries(
@@ -98,8 +100,10 @@ make_entry(ID("6f3cf7"),
 
 make_entry(ID("a3035f"),
     Description("Table of", PrimeNumber(n), "for", LessEqual(1, n, 200)),
-    Table(TableRelation(Tuple(n, y), Equal(PrimeNumber(n), y)),
-      TableHeadings(n, PrimeNumber(n)), TableSplit(4),
+    Table(
+      Var(n),
+      TableValueHeadings(n, PrimeNumber(n)),
+      TableSplit(4),
       List(
 Tuple(1, 2), Tuple(2, 3), Tuple(3, 5), Tuple(4, 7), Tuple(5, 11),
 Tuple(6, 13), Tuple(7, 17), Tuple(8, 19), Tuple(9, 23), Tuple(10, 29),
@@ -142,4 +146,75 @@ Tuple(186, 1109), Tuple(187, 1117), Tuple(188, 1123), Tuple(189, 1129), Tuple(19
 Tuple(191, 1153), Tuple(192, 1163), Tuple(193, 1171), Tuple(194, 1181), Tuple(195, 1187),
 Tuple(196, 1193), Tuple(197, 1201), Tuple(198, 1213), Tuple(199, 1217), Tuple(200, 1223),
     )))
+
+make_entry(ID("1e142c"),
+    Description("Table of", PrimeNumber(10**n), "for", LessEqual(0, n, 24)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, PrimeNumber(10**n)),
+      TableSplit(2),
+      List(
+    Tuple(0, 2),
+    Tuple(1, 29),
+    Tuple(2, 541),
+    Tuple(3, 7919),
+    Tuple(4, 104729),
+    Tuple(5, 1299709),
+    Tuple(6, 15485863),
+    Tuple(7, 179424673),
+    Tuple(8, 2038074743),
+    Tuple(9, 22801763489),
+    Tuple(10, 252097800623),
+    Tuple(11, 2760727302517),
+    Tuple(12, 29996224275833),
+    Tuple(13, 323780508946331),
+    Tuple(14, 3475385758524527),
+    Tuple(15, 37124508045065437),
+    Tuple(16, 394906913903735329),
+    Tuple(17, 4185296581467695669),
+    Tuple(18, 44211790234832169331),
+    Tuple(19, 465675465116607065549),
+    Tuple(20, 4892055594575155744537),
+    Tuple(21, 51271091498016403471853),
+    Tuple(22, 536193870744162118627429),
+    Tuple(23, 5596564467986980643073683),
+    Tuple(24, 58310039994836584070534263))))
+
+make_entry(ID("5404ce"),
+    Description("Table of", PrimePi(10**n), "for", LessEqual(0, n, 27)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, PrimePi(10**n)),
+      TableSplit(2),
+      List(
+    Tuple(0, 0),
+    Tuple(1, 4),
+    Tuple(2, 25),
+    Tuple(3, 168),
+    Tuple(4, 1229),
+    Tuple(5, 9592),
+    Tuple(6, 78498),
+    Tuple(7, 664579),
+    Tuple(8, 5761455),
+    Tuple(9, 50847534),
+    Tuple(10, 455052511),
+    Tuple(11, 4118054813),
+    Tuple(12, 37607912018),
+    Tuple(13, 346065536839),
+    Tuple(14, 3204941750802),
+    Tuple(15, 29844570422669),
+    Tuple(16, 279238341033925),
+    Tuple(17, 2623557157654233),
+    Tuple(18, 24739954287740860),
+    Tuple(19, 234057667276344607),
+    Tuple(20, 2220819602560918840),
+    Tuple(21, 21127269486018731928),
+    Tuple(22, 201467286689315906290),
+    Tuple(23, 1925320391606803968923),
+    Tuple(24, 18435599767349200867866),
+    Tuple(25, 176846309399143769411680),
+    Tuple(26, 1699246750872437141327603),
+    Tuple(27, 16352460426841680446427399))))
+
+
 

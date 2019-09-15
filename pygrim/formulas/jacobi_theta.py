@@ -2206,6 +2206,11 @@ def_Topic(
         "390158",
         "675f23",
     ),
+    Subsection("Other values"),
+    Entries(
+        "c60033",
+        "799b5e",
+    ),
 ),
 
 # Values at infinity
@@ -2416,6 +2421,19 @@ make_entry(ID("390158"),
 make_entry(ID("675f23"),
     Formula(Equal(JacobiTheta(3,0,1+12*ConstI), Brackets(2**(-Div(19,48)) * 3**(-Div(3,8)) * (2-3*Sqrt(2)+3**Div(5,4)+3**Div(3,4))**Div(1,3) / ((Sqrt(2)-1)**Div(1,12)*(Sqrt(3)+1)**Div(1,6)*(-1-Sqrt(3)+Sqrt(2)*Parentheses(3**Div(3,4)))**Div(1,3))) * JacobiTheta(3,0,ConstI))),
     References("https://doi.org/10.1016/j.jmaa.2003.12.009"))
+
+# Other values
+
+make_entry(ID("c60033"),
+    Formula(Equal(JacobiTheta(3, 0, Sqrt(6)*ConstI),
+        Pow((Sqrt(6)/(96*ConstPi**3)) * ((GammaFunction(Div(1,24))*GammaFunction(Div(5,24))*GammaFunction(Div(7,24))*GammaFunction(Div(11,24))) / (18 + 12*Sqrt(2) - 10*Sqrt(3) - 7*Sqrt(6))), Div(1,4)))),
+    References("http://mathworld.wolfram.com/PolyasRandomWalkConstants.html"))
+
+make_entry(ID("799b5e"),
+    Formula(Equal(JacobiTheta(3, 0, Sqrt(6)*ConstI),
+        Sqrt((2/ConstPi) * EllipticK(((2-Sqrt(3))**2 * (Sqrt(2)-Sqrt(3))**2))))),
+    References("http://mathworld.wolfram.com/PolyasRandomWalkConstants.html"))
+
 
 #-----------------------------------------------------------------------------#
 #                                                                             #

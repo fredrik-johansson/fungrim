@@ -213,8 +213,10 @@ make_entry(ID("cecede"),
 
 make_entry(ID("4c6267"),
     Description("Table of", BellNumber(n), "for", LessEqual(0, n, 40)),
-    Table(TableRelation(Tuple(n, y), Equal(BellNumber(n), y)),
-      TableHeadings(n, BellNumber(n)), TableSplit(2),
+    Table(
+      Var(n),
+      TableValueHeadings(n, BellNumber(n)),
+      TableSplit(2),
       List(
     Tuple(0, 1),
     Tuple(1, 1),

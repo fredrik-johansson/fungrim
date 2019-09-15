@@ -1158,6 +1158,12 @@ def tex_EqualQSeriesEllipsis(head, args, **kwargs):
     return "%s = %s + \\ldots \; \\text{ where } %s" % (fun, ser, qdef)
 
 @deftex
+def tex_NearestDecimal(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s \\; (\\text{nearest } %s \\text{D})" % (argstr[0], argstr[1])
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:
