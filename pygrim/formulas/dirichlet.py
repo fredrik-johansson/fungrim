@@ -546,11 +546,11 @@ def_Topic(
         "1bd945",
     ),
     Section("Value at 1"),
+    Description("Related topic: ", TopicReference("Stieltjes constants")),
     Entries(
         "6c3fff",
         "3d5327",
         "23256b",
-        "d10029",
         "c2750a",
         "d83109",
         "3b8c97",
@@ -653,9 +653,6 @@ make_entry(ID("0f96c3"),
 
 make_entry(ID("04217b"),
     SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"))
-
-make_entry(ID("d10029"),
-    SymbolDefinition(StieltjesGamma, StieltjesGamma(n, a), "Stieltjes constant"))
 
 make_entry(ID("c31c10"),
     Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), Tuple(k, 1, q)))),

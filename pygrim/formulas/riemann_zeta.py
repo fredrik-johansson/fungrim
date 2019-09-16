@@ -21,6 +21,11 @@ def_Topic(
     Entries(
         "8f5e66",  # Euler product
     ),
+    Section("Laurent series"),
+    Description("Related topic:", TopicReference("Stieltjes constants")),
+    Entries(
+        "b1a2e1",
+    ),
     Section("Special values"),
     Entries(
         "a01b6e",  # zeta(2)
@@ -1242,4 +1247,176 @@ make_entry(ID("8f8fb7"),
     Assumptions(Element(T, ClosedOpenInterval(0, Infinity))),
     References("https://arxiv.org/abs/1703.02844"))
 
+
+def_Topic(
+    Title("Stieltjes constants"),
+    Section("Definitions"),
+    Entries(
+        "d10029",
+    ),
+    Section("Generating functions"),
+    Entries(
+        "b1a2e1",
+        "60c6da",
+    ),
+    Section("Limit representations"),
+    Entries(
+        "411f3b",
+    ),
+    Section("Specific values"),
+    Entries(
+        "51206a",
+        "8ae153",
+        "70a705",
+        "e5bd3c",
+        "569d5c",
+    ),
+    Section("Recurrence relations"),
+    Entries(
+        "687b4d",
+    ),
+    Section("Integral representations"),
+    Entries(
+        "a41c92",
+    ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "1dec0d",
+    )
+)
+
+make_entry(ID("d10029"),
+    SymbolDefinition(StieltjesGamma, StieltjesGamma(n, a), "Stieltjes constant"),
+    Description(SourceForm(StieltjesGamma(n)), ", rendered as", StieltjesGamma(n), ", represents the Stieltjes constant of index", n, "."),
+    Description(SourceForm(StieltjesGamma(n, a)), ", rendered as", StieltjesGamma(n, a), ", represents the generalized Stieltjes constant of index", n, " with parameter", a, "."),
+    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
+      TableHeadings(Description("Domain"), Description("Codomain")),
+      List(
+        Tuple(Element(n, ZZGreaterEqual(0)), Element(StieltjesGamma(n), RR)),
+        Tuple(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a, ZZLessEqual(0))), Element(StieltjesGamma(n, a), CC)),
+    ))
+)
+
+# Generating functions
+
+make_entry(ID("b1a2e1"),
+    Formula(Equal(RiemannZeta(s), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n) * (s-1)**n, Tuple(n, 0, Infinity)))),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("60c6da"),
+    Formula(Equal(HurwitzZeta(s, a), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n, a) * (s-1)**n, Tuple(n, 0, Infinity)))),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
+
+# Limit representations
+
+make_entry(ID("411f3b"),
+    Formula(Equal(StieltjesGamma(n, a), SequenceLimit(Brackets(Parentheses(Sum(Log(k+a)**n / (k+a), Tuple(k, 0, N))) - Log(N+a)**(n+1)/(n+1)), N, Infinity))),
+    Variables(n, a),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
+
+# Specific values
+
+make_entry(ID("51206a"),
+    Formula(Equal(StieltjesGamma(n, 1), StieltjesGamma(n))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
+make_entry(ID("8ae153"),
+    Formula(Equal(StieltjesGamma(0, 1), StieltjesGamma(0), ConstGamma)))
+
+make_entry(ID("70a705"),
+    Formula(Equal(StieltjesGamma(1, Div(1,2)), StieltjesGamma(1) - 2*ConstGamma*Log(2) - Log(2)**2)))
+
+make_entry(ID("e5bd3c"),
+    Description("Table of", StieltjesGamma(n), "to 50 digits for", LessEqual(0, n, 30)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(StieltjesGamma(n), 50)),
+      TableSplit(1),
+      List(
+    Tuple(0, Decimal("0.57721566490153286060651209008240243104215933593992")),
+    Tuple(1, Decimal("-0.072815845483676724860586375874901319137736338334338")),
+    Tuple(2, Decimal("-0.0096903631928723184845303860352125293590658061013407")),
+    Tuple(3, Decimal("0.0020538344203033458661600465427533842857158044454106")),
+    Tuple(4, Decimal("0.0023253700654673000574681701775260680009044694137849")),
+    Tuple(5, Decimal("0.00079332381730106270175333487744444483073153940458489")),
+    Tuple(6, Decimal("-0.00023876934543019960987242184190800427778371515635808")),
+    Tuple(7, Decimal("-0.00052728956705775104607409750547885828199625347296990")),
+    Tuple(8, Decimal("-0.00035212335380303950960205216500120874172918053379235")),
+    Tuple(9, Decimal("-3.4394774418088048177914623798227390620789538594442e-5")),
+    Tuple(10, Decimal("0.00020533281490906479468372228923706530295985377416676")),
+    Tuple(11, Decimal("0.00027018443954390352667290208206795567382784205868840")),
+    Tuple(12, Decimal("0.00016727291210514019335350154334118344660780663280557")),
+    Tuple(13, Decimal("-2.7463806603760158860007603693355181526785337670396e-5")),
+    Tuple(14, Decimal("-0.00020920926205929994583713969734458495783154421150607")),
+    Tuple(15, Decimal("-0.00028346865532024144664293447499712697706870298071768")),
+    Tuple(16, Decimal("-0.00019969685830896977470778456320324039191576497403406")),
+    Tuple(17, Decimal("2.6277037109918336699466597630510122816078692929114e-5")),
+    Tuple(18, Decimal("0.00030736840814925282659275475194862564552381129073146")),
+    Tuple(19, Decimal("0.00050360545304735562905559643771716003532126980764950")),
+    Tuple(20, Decimal("0.00046634356151155944940059482443355052511314347392569")),
+    Tuple(21, Decimal("0.00010443776975600011581079567436772049104442825070555")),
+    Tuple(22, Decimal("-0.00054159958220399770165519617317410558454386092870075")),
+    Tuple(23, Decimal("-0.0012439620904082457792997415995371658091470281139646")),
+    Tuple(24, Decimal("-0.0015885112789035615619061966115211158573187228221441")),
+    Tuple(25, Decimal("-0.0010745919527384888247242919873531730892739793314532")),
+    Tuple(26, Decimal("0.00065680351863715443150477300335621524888606506047754")),
+    Tuple(27, Decimal("0.0034778369136185382090073595742588115476629156638859")),
+    Tuple(28, Decimal("0.0064000685317006294581072282219458636666371981445885")),
+    Tuple(29, Decimal("0.0073711517704722391344124024235594021578413274885128")),
+    Tuple(30, Decimal("0.0035577288555731609479135377489084026108096506495221")),
+    )))
+
+make_entry(ID("569d5c"),
+    Description("Table of", StieltjesGamma(10**n), "to 50 digits for", LessEqual(0, n, 20)),
+    Table(
+      Var(n),
+      TableValueHeadings(n, NearestDecimal(StieltjesGamma(10**n), 50)),
+      TableSplit(1),
+      List(
+    Tuple(0, Decimal("-0.072815845483676724860586375874901319137736338334338")),
+    Tuple(1, Decimal("0.00020533281490906479468372228923706530295985377416676")),
+    Tuple(2, Decimal("-425340157170802696.23144385197278358247028931053473")),
+    Tuple(3, Decimal("-1.5709538442047449345494023425120825242380299554570e+486")),
+    Tuple(4, Decimal("-2.2104970567221060862971082857536501900234397174729e+6883")),
+    Tuple(5, Decimal("1.9919273063125410956582272431568589205211659777533e+83432")),
+    Tuple(6, Decimal("-4.4209504730980210273285480902514758066667150603243e+947352")),
+    Tuple(7, Decimal("-2.7882974834697458134414289662704891120456603986498e+10390401")),
+    Tuple(8, Decimal("2.7324629454457814909592178706122081982218137653871e+111591574")),
+    Tuple(9, Decimal("2.1048416655418517821363600001419516191053973500980e+1181965380")),
+    Tuple(10, Decimal("7.5883621237131051948224033799125486921750410324510e+12397849705")),
+    Tuple(11, Decimal("3.4076163168007069203916546697422088077748515862016e+129115149508")),
+    Tuple(12, Decimal("-1.1713923594956898094830946178584108308869819425684e+1337330792656")),
+    Tuple(13, Decimal("5.1442844004429501778205029347495102582243127602569e+13792544216233")),
+    Tuple(14, Decimal("-5.8565687699062182176274937548885177768345135170181e+141762672271719")),
+    Tuple(15, Decimal("1.8441017255847322907032695598351364885675746553316e+1452992510427658")),
+    Tuple(16, Decimal("1.0887949866822670316936532894122644696901837098117e+14857814744168222")),
+    Tuple(17, Decimal("-9.0932573236841531922129808939176217547651121139948e+151633823511792145")),
+    Tuple(18, Decimal("2.6314370018873515830151010192294307578971415626833e+1544943249673388947")),
+    Tuple(19, Decimal("4.8807917914447513336887536981308809263719031557975e+15718277029330950920")),
+    Tuple(20, Decimal("2.3945266166432844875810628102042011083015231233149e+159718433793014252763")),
+    )))
+
+# Recurrence relations
+
+make_entry(ID("687b4d"),
+    Formula(Equal(StieltjesGamma(n, a+1), StieltjesGamma(n, a) - Log(a)**n / a)),
+    Variables(n, a),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
+
+# Integral representations
+
+make_entry(ID("a41c92"),
+    Formula(Equal(StieltjesGamma(n, a), -((ConstPi/(2*(n+1))) * Integral((Log(a-Div(1,2)+ConstI*x)**(n+1) + Log(a-Div(1,2)-ConstI*x)**(n+1))/Cosh(ConstPi*x)**2, Tuple(x, 0, Infinity))))),
+    Variables(n, a),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Greater(Re(a), Div(1,2)))))
+
+# Bounds and inequalities
+
+make_entry(ID("1dec0d"),
+    Formula(Less(Abs(StieltjesGamma(n)), Pow(10,-4) * Exp(n*Log(Log(n))))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(5))))
 

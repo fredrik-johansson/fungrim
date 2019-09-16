@@ -393,6 +393,21 @@ class ArbNumericalEvaluation(object):
                         if v.is_finite():
                             return v
 
+        if head == StieltjesGamma:
+            if len(args) == 1:
+                n = args[0]
+                if n.is_integer() and int(n) >= 0:
+                    v = acb.stieltjes(int(n))
+                    if v.is_finite():
+                        return v
+            if len(args) == 2:
+                n, a = args
+                a = self.eval(a, **kwargs)
+                if n.is_integer() and int(n) >= 0:
+                    v = acb.stieltjes(int(n), a)
+                    if v.is_finite():
+                        return v
+
         if head == Where:
             symbol_stack = kwargs.get("symbol_stack", [])[:]
             nv = len(args) - 1
