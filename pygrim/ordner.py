@@ -176,10 +176,10 @@ class Ordner(object):
         values_frequency = {}
         values_diversity = {}
         for expr, val in expressions_values.items():
-            if val in values_frequency:
-                values_frequency[val] += len(expressions_entries[expr])
-            else:
-                values_frequency[val] = len(expressions_entries[expr])
+            #if val in values_frequency:
+            #    values_frequency[val] += len(expressions_entries[expr])
+            #else:
+            #    values_frequency[val] = len(expressions_entries[expr])
 
             if val in values_diversity:
                 values_diversity[val] += 1
@@ -190,6 +190,13 @@ class Ordner(object):
                 values_expressions[val].add(expr)
             else:
                 values_expressions[val] = set([expr])
+
+        for val, expressions in values_expressions.items():
+            val_entries = set()
+            for expr in expressions:
+                for ent in expressions_entries[expr]:
+                    val_entries.add(ent)
+            values_frequency[val] = len(val_entries)
 
         values_ordered = list(values_expressions.keys())
         values_ordered.sort(key=lambda d: arb(d))
@@ -252,7 +259,11 @@ class Ordner(object):
             #else:
             #    num_shown = 10
 
-            exprs = sorted(self.values_expressions[decimal], key=lambda expr: len(str(expr)))
+            def sort_key(s):
+                return s.count("(") + len(s) + 1000 * ("Decimal" in s)
+                #return len(s)
+
+            exprs = sorted(self.values_expressions[decimal], key=sort_key)
 
             nmax = max_entries
 

@@ -500,7 +500,7 @@ class OrdnerMainPage(Webpage):
 
         write("""<h2>Hall of fame</h2>""")
 
-        write("""<p style="margin:1em; font-size:0.9em;">Find out which real numbers have real significance! <i>Frequency</i> denotes the total number of times any expression matching that decimal key appears in Fungrim, counting repetitions.</p>""")
+        write("""<p style="margin:1em; font-size:0.9em;">Find out which real numbers have real significance!</p>""")
 
         write("""<div style="margin: 0 auto;">""")
         write("""<div style="text-align:center">""")
@@ -508,8 +508,8 @@ class OrdnerMainPage(Webpage):
 
         write("""<ul style="text-align:left; padding:0; margin-top:0">""")
 
-        write("""<li><a href="top250/">Top 250 real numbers by frequency, excluding integers</a></li>""")
-        write("""<li><a href="top250inclusive/">Top 250 real numbers by frequency, including integers</a></li>""")
+        write("""<li><a href="top250/">Top 250 real numbers, excluding integers</a></li>""")
+        write("""<li><a href="top250inclusive/">Top 250 real numbers, including integers</a></li>""")
         write("""<li><a href="top250expr/">Top 250 real numbers by number of expressions</a></li>""")
 
         write("""</ul>""")
@@ -585,7 +585,7 @@ class OrdnerTablePage(Webpage):
         if self.between is None:
             write("""<p style="margin:1em; font-size:0.9em;">""")
             if self.sort == "frequency":
-                write("""This page lists the top 250 decimal keys in Ordner when ranked by frequency (the total number of times any expression matching the given decimal key appears in Fungrim, counting repetitions). """)
+                write("""This page lists the top 250 decimal keys in Ordner ranked by frequency (the total number of entries where the value appears).""")
                 if self.integers:
                     write("""This page <b>includes</b> integer-valued keys in the list. """)
                 else:
@@ -594,8 +594,8 @@ class OrdnerTablePage(Webpage):
                 write("""This page lists the top 250 decimal keys in Ordner when ranked by the number of distinct symbolic expressions in Fungrim matching the key. """)
 
             links = []
-            if not (self.sort == "frequency" and self.integers == False): links.append("""<a href="../top250/">Top 250 real numbers by frequency, excluding integers</a>""")
-            if not (self.sort == "frequency" and self.integers == True): links.append("""<a href="../top250inclusive/">Top 250 real numbers by frequency, including integers</a>""")
+            if not (self.sort == "frequency" and self.integers == False): links.append("""<a href="../top250/">Top 250 real numbers, excluding integers</a>""")
+            if not (self.sort == "frequency" and self.integers == True): links.append("""<a href="../top250inclusive/">Top 250 real numbers, including integers</a>""")
             if not (self.sort == "expressions"): links.append("""<a href="../top250expr/">Top 250 real numbers by number of expressions</a>""")
 
             write("See also: ")
@@ -670,8 +670,8 @@ if ordner_ is not None:
         bv = ordner.values_ordered[b]
         OrdnerTablePage(ordner, "Real numbers from %s" % av, "index%02i" % i, between=(a, b), index_splits=index_splits).write()
 
-    OrdnerTablePage(ordner, "Top 250 real numbers by frequency, excluding integers", "top250", num=250, sort="frequency", integers=False).write()
-    OrdnerTablePage(ordner, "Top 250 real numbers by frequency, including integers", "top250inclusive", num=250, sort="frequency", integers=True).write()
+    OrdnerTablePage(ordner, "Top 250 real numbers, excluding integers", "top250", num=250, sort="frequency", integers=False).write()
+    OrdnerTablePage(ordner, "Top 250 real numbers, including integers", "top250inclusive", num=250, sort="frequency", integers=True).write()
     OrdnerTablePage(ordner, "Top 250 real numbers by number of expressions", "top250expr", num=250, sort="expressions", integers=True).write()
 
     OrdnerMainPage(ordner, index_splits).write()
