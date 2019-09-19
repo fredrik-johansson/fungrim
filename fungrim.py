@@ -585,7 +585,7 @@ class OrdnerTablePage(Webpage):
         if self.between is None:
             write("""<p style="margin:1em; font-size:0.9em;">""")
             if self.sort == "frequency":
-                write("""This page lists the top 250 decimal keys in Ordner ranked by frequency (the total number of entries where the value appears).""")
+                write("""This page lists the top 250 decimal keys in Ordner ranked by frequency (the total number of entries where the value appears). """)
                 if self.integers:
                     write("""This page <b>includes</b> integer-valued keys in the list. """)
                 else:

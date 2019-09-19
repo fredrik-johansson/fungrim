@@ -143,7 +143,7 @@ make_entry(ID("69fe63"),
     Formula(Equal(ConstPi, 2*Product((4*k**2)/(4*k**2-1), Tuple(k, 1, Infinity)))))
 
 make_entry(ID("e1e106"),
-    Formula(Equal(ConstPi, SequenceLimit(16**k/(k*Binomial(2*k,k)**2), k, Infinity))))
+    Formula(Equal(ConstPi, SequenceLimit(16**k/(k*Binomial(2*k,k)**2), Var(k), Infinity))))
 
 make_entry(ID("2516c2"),
     Formula(Less(Abs(ConstPi - Div(22,7)), Decimal("0.00127"))))

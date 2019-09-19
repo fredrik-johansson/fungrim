@@ -276,7 +276,7 @@ make_entry(ID("9a44c5"),
     Formula(Equal(BranchCuts(GammaFunction(z), z, CC), Set())))
 
 make_entry(ID("a76328"),
-    Formula(Equal(Zeros(GammaFunction(z), z, Element(z, CC)), Set())))
+    Formula(Equal(Zeros(GammaFunction(z), Var(z), Element(z, CC)), Set())))
 
 make_entry(ID("d7d2a0"),
     Formula(Equal(GammaFunction(Conjugate(z)), Conjugate(GammaFunction(z)))),
@@ -344,13 +344,13 @@ def_Topic(
 ),
 
 make_entry(ID("1bbbc7"),
-    Formula(Element(ArgMinUnique(GammaFunction(x), x, Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("1.46163214496836234126265954233"), Decimal("4.28e-30")))))
+    Formula(Element(ArgMinUnique(GammaFunction(x), Var(x), Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("1.46163214496836234126265954233"), Decimal("4.28e-30")))))
 
 make_entry(ID("e010c9"),
-    Formula(Element(Minimum(GammaFunction(x), x, Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("0.885603194410888700278815900583"), Decimal("4.12e-31")))))
+    Formula(Element(Minimum(GammaFunction(x), Var(x), Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("0.885603194410888700278815900583"), Decimal("4.12e-31")))))
 
 make_entry(ID("b05f2b"),
-    Formula(Element(Minimum(LogGamma(x), x, Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("-0.121486290535849608095514557178"), Decimal("3.09e-31")))))
+    Formula(Element(Minimum(LogGamma(x), Var(x), Element(x, OpenInterval(0, Infinity))), RealBall(Decimal("-0.121486290535849608095514557178"), Decimal("3.09e-31")))))
 
 make_entry(ID("2a47d7"),
     Formula(Greater(GammaFunction(x), (2*ConstPi)**Div(1,2) * x**(x-Div(1,2)) * Exp(-x))),

@@ -152,19 +152,19 @@ make_entry(ID("88168b"),
         And(Equal(k, 0), Equal(z, 0)))))
 
 make_entry(ID("d7136f"),
-    Formula(Equal(Solutions(Brackets(Equal(w * Exp(w), z)), w, Element(w, CC)),
+    Formula(Equal(Solutions(Brackets(Equal(w * Exp(w), z)), Var(w), Element(w, CC)),
         SetBuilder(LambertW(k,z), k, And(Element(k, ZZ), Or(Unequal(z, 0), Equal(k, 0)))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("314807"),
-    Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), w, Element(w, ClosedOpenInterval(-1, Infinity))),
+    Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), Var(w), Element(w, ClosedOpenInterval(-1, Infinity))),
         LambertW(0,x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(-(1/ConstE), Infinity))))
 
 make_entry(ID("636929"),
-    Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), w, Element(w, OpenClosedInterval(-Infinity, -1))),
+    Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), Var(w), Element(w, OpenClosedInterval(-Infinity, -1))),
         LambertW(-1,x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(-(1/ConstE), 0))))
@@ -274,10 +274,10 @@ make_entry(ID("6191cd"),
     Assumptions(Element(k, SetMinus(ZZ, Set(-1,0,1)))))
 
 make_entry(ID("f0f17c"),
-    Formula(Equal(Zeros(LambertW(0,z), z, Element(z, CC)), Set(0))))
+    Formula(Equal(Zeros(LambertW(0,z), Var(z), Element(z, CC)), Set(0))))
 
 make_entry(ID("766302"),
-    Formula(Equal(Zeros(LambertW(k,z), z, Element(z, CC)), Set())),
+    Formula(Equal(Zeros(LambertW(k,z), Var(z), Element(z, CC)), Set())),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 

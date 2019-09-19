@@ -122,116 +122,160 @@ make_entry(ID("5830eb"),
 
 # Solutions and zeros
 
+description_var_xyz = Description("The special expression", SourceForm(Var(x)),
+    "declares", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator. ",
+    "The corresponding predicate", P(x), "must define the domain of", x, "unambiguously; that is, it must include a statement such as",
+    Element(x, S), "where", S, "is a known set. Similarly,", SourceForm(Var(x, y)), ", ", SourceForm(Var(x, y, z)), ", etc.",
+    "defines multiple locally bound variables which must be accompanied by a multivariate predicate", P(x,y), ", ", P(x,y,z), ", etc.")
+
 make_entry(ID("f7ce46"),
-    SymbolDefinition(Zeros, Zeros(f(x), x, P(x)), "Zeros (roots) of function"),
-    Description(SourceForm(Zeros(f(x), x, P(x))), ", rendered", Zeros(f(x), x, P(x)), ", represents the set of values",
+    SymbolDefinition(Zeros, Zeros(f(x), Var(x), P(x)), "Zeros (roots) of function"),
+    Description(SourceForm(Zeros(f(x), Var(x), P(x))), ", rendered", Zeros(f(x), Var(x), P(x)), ", represents the set of values",
         x, "satisfying", P(x), "and", Equal(f(x), 0), "."),
-    description_x_predicate)
+    Description(SourceForm(Zeros(f(x,y), Var(x,y), P(x,y))), ", rendered", Zeros(f(x,y), Var(x,y), P(x,y)), ", represents the set of tuples",
+        Tuple(x, y), "satisfying", P(x, y), "and", Equal(f(x,y), 0), ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("d2714b"),
-    SymbolDefinition(UniqueZero, UniqueZero(f(x), x, P(x)), "Unique zero (root) of function"),
-    Description(SourceForm(UniqueZero(f(x), x, P(x))), ", rendered", UniqueZero(f(x), x, P(x)), ", represents the unique value",
+    SymbolDefinition(UniqueZero, UniqueZero(f(x), Var(x), P(x)), "Unique zero (root) of function"),
+    Description(SourceForm(UniqueZero(f(x), Var(x), P(x))), ", rendered", UniqueZero(f(x), Var(x), P(x)), ", represents the unique value",
         x, "satisfying", P(x), "and", Equal(f(x), 0), "."),
     Description("This operation is undefined if such a value does not exist or is not unique."),
-    description_x_predicate)
+    Description(SourceForm(UniqueZero(f(x,y), Var(x,y), P(x,y))), ", rendered", UniqueZero(f(x,y), Var(x,y), P(x,y)), ", represents the unique tuple",
+        Tuple(x, y), "satisfying", P(x, y), "and", Equal(f(x,y), 0), ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("5862bb"),
-    SymbolDefinition(Solutions, Solutions(Q(x), x, P(x)), "Solution set"),
-    Description(SourceForm(Solutions(Q(x), x, P(x))), ", rendered", Solutions(Q(x), x, P(x)), ", represents the set of values",
+    SymbolDefinition(Solutions, Solutions(Q(x), Var(x), P(x)), "Solution set"),
+    Description(SourceForm(Solutions(Q(x), Var(x), P(x))), ", rendered", Solutions(Q(x), Var(x), P(x)), ", represents the set of values",
         x, "satisfying", P(x), "and", Q(x), "."),
-    description_x_predicate)
+    Description(SourceForm(Solutions(Q(x,y), Var(x,y), P(x,y))), ", rendered", Solutions(Q(x,y), Var(x,y), P(x,y)), ", represents the set of tuples",
+        Tuple(x, y), "satisfying", P(x, y), "and", Q(x, y), ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("f5ae93"),
-    SymbolDefinition(UniqueSolution, UniqueSolution(Q(x), x, P(x)), "Unique solution"),
-    Description(SourceForm(UniqueSolution(Q(x), x, P(x))), ", rendered", UniqueSolution(f(x), x, P(x)), ", represents the unique value",
+    SymbolDefinition(UniqueSolution, UniqueSolution(Q(x), Var(x), P(x)), "Unique solution"),
+    Description(SourceForm(UniqueSolution(Q(x), Var(x), P(x))), ", rendered", UniqueSolution(f(x), Var(x), P(x)), ", represents the unique value",
         x, "satisfying", P(x), "and", Q(x), "."),
     Description("This operation is undefined if such a value does not exist or is not unique."),
-    description_x_predicate)
+    Description(SourceForm(UniqueSolution(Q(x,y), Var(x,y), P(x,y))), ", rendered", UniqueSolution(f(x,y), Var(x,y), P(x,y)), ", represents the unique tuple",
+        Tuple(x,y), "satisfying", P(x,y), "and", Q(x,y), ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("231a99"),
-    SymbolDefinition(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), z, z), "Multiplicity (order) of complex zero"),
-    Description(SourceForm(ComplexZeroMultiplicity(f(z), z, c)), ", rendered", ComplexZeroMultiplicity(f(z), z, c),
+    SymbolDefinition(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), Var(z), c), "Multiplicity (order) of complex zero"),
+    Description(SourceForm(ComplexZeroMultiplicity(f(z), Var(z), c)), ", rendered", ComplexZeroMultiplicity(f(z), Var(z), c),
         ", gives the root multiplicity (order of vanishing) of", f(z), "at the point", Equal(z, c), "."),
     Description("If", Unequal(f(c), 0), ", the multiplicity is zero."),
-    Description("It is required that", f(z), "is holomorphic and not identically zero in a neighborhood of", c, "."))
+    Description("It is required that", f(z), "is holomorphic and not identically zero in a neighborhood of", c, "."),
+    Description("The special expression", SourceForm(Var(z)), "declares", SourceForm(z), "as a locally bound variable within the scope of the arguments to this operator."),
+)
 
 # Extreme values
 
 make_entry(ID("6ec976"),
-    SymbolDefinition(Supremum, Supremum(f(x), x, P(x)), "Supremum of a set or function"),
+    SymbolDefinition(Supremum, Supremum(f(x), Var(x), P(x)), "Supremum of a set or function"),
     Description("This operator can be called with 1 or 3 arguments."),
     Description("Called with 1 argument, ", SourceForm(Supremum(S)), ", rendered", Supremum(S), ", represents the supremum of the set", S, ".",
         "This operator is only defined if", S, "is a subset of", Union(RR, Set(-Infinity, +Infinity)), ".",
         "The supremum does not need to be an element of", S, "itself; in particular, for an open interval",
         Equal(S, OpenInterval(a,b)), ", we have", Equal(Supremum(S), b), "."),
-    Description("Called with 3 arguments, ", SourceForm(Supremum(f(x), x, P(x))), ", rendered", Supremum(f(x), x, P(x)),
+    Description("Called with 3 arguments, ", SourceForm(Supremum(f(x), Var(x), P(x))), ", rendered", Supremum(f(x), Var(x), P(x)),
         ", represents", Supremum(SetBuilder(f(x), x, P(x))), "where", P(x), "is a predicate defining the range of", x, "."),
-    description_x_predicate)
+    Description(SourceForm(Supremum(f(x,y), Var(x,y), P(x,y))), ", rendered", Supremum(f(x,y), Var(x, y), P(x,y)),
+        ", represents", Supremum(SetBuilder(f(x,y), x, P(x,y))), "where", P(x,y), "is a predicate defining the range of", x, "and", y,
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("bbeb35"),
-    SymbolDefinition(Infimum, Infimum(f(x), x, P(x)), "Infimum of a set or function"),
+    SymbolDefinition(Infimum, Infimum(f(x), Var(x), P(x)), "Infimum of a set or function"),
     Description("This operator can be called with 1 or 3 arguments."),
     Description("Called with 1 argument, ", SourceForm(Infimum(S)), ", rendered", Infimum(S), ", represents the infimum of the set", S, ".",
         "This operator is only defined if", S, "is a subset of", Union(RR, Set(-Infinity, +Infinity)), ".",
         "The infimum does not need to be an element of", S, "itself; in particular, for an open interval",
         Equal(S, OpenInterval(a,b)), ", we have", Equal(Infimum(S), a), "."),
-    Description("Called with 3 arguments, ", SourceForm(Infimum(f(x), x, P(x))), ", rendered", Infimum(f(x), x, P(x)),
+    Description("Called with 3 arguments, ", SourceForm(Infimum(f(x), Var(x), P(x))), ", rendered", Infimum(f(x), Var(x), P(x)),
         ", represents", Infimum(SetBuilder(f(x), x, P(x))), "where", P(x), "is a predicate defining the range of", x, "."),
-    description_x_predicate)
+    Description(SourceForm(Infimum(f(x,y), Var(x,y), P(x,y))), ", rendered", Infimum(f(x,y), Var(x, y), P(x,y)),
+        ", represents", Infimum(SetBuilder(f(x,y), x, P(x,y))), "where", P(x,y), "is a predicate defining the range of", x, "and", y,
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("d0cb24"),
-    SymbolDefinition(Minimum, Minimum(f(x), x, P(x)), "Minimum value of a set or function"),
+    SymbolDefinition(Minimum, Minimum(f(x), Var(x), P(x)), "Minimum value of a set or function"),
     Description("This operator can be called with 1 or 3 arguments."),
     Description("Called with 1 argument, ", SourceForm(Minimum(S)), ", rendered", Minimum(S), ", represents the minimum element of the set", S, ".",
         "This operator is only defined if", S, "is a subset of", Union(RR, Set(-Infinity, +Infinity)), " and the minimum exists."),
-    Description("Called with 3 arguments, ", SourceForm(Minimum(f(x), x, P(x))), ", rendered", Minimum(f(x), x, P(x)),
+    Description("Called with 3 arguments, ", SourceForm(Minimum(f(x), Var(x), P(x))), ", rendered", Minimum(f(x), Var(x), P(x)),
         ", represents", Minimum(SetBuilder(f(x), x, P(x))), "."),
-    description_x_predicate)
+    Description(SourceForm(Minimum(f(x,y), Var(x,y), P(x,y))), ", rendered", Minimum(f(x,y), Var(x, y), P(x,y)),
+        ", represents", Minimum(SetBuilder(f(x,y), x, P(x,y))), "where", P(x,y), "is a predicate defining the range of", x, "and", y,
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("65ccf2"),
-    SymbolDefinition(Maximum, Maximum(f(x), x, P(x)), "Maximum value of a set or function"),
+    SymbolDefinition(Maximum, Maximum(f(x), Var(x), P(x)), "Maximum value of a set or function"),
     Description("This operator can be called with 1 or 3 arguments."),
     Description("Called with 1 argument, ", SourceForm(Maximum(S)), ", rendered", Maximum(S), ", represents the maximum element of the set", S, ".",
         "This operator is only defined if", S, "is a subset of", Union(RR, Set(-Infinity, +Infinity)), " and the maximum exists."),
-    Description("Called with 3 arguments, ", SourceForm(Maximum(f(x), x, P(x))), ", rendered", Maximum(f(x), x, P(x)),
+    Description("Called with 3 arguments, ", SourceForm(Maximum(f(x), Var(x), P(x))), ", rendered", Maximum(f(x), Var(x), P(x)),
         ", represents", Maximum(SetBuilder(f(x), x, P(x))), "."),
-    description_x_predicate)
+    Description(SourceForm(Maximum(f(x,y), Var(x,y), P(x,y))), ", rendered", Maximum(f(x,y), Var(x, y), P(x,y)),
+        ", represents", Maximum(SetBuilder(f(x,y), x, P(x,y))), "where", P(x,y), "is a predicate defining the range of", x, "and", y,
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("0a3e5a"),
-    SymbolDefinition(ArgMin, ArgMin(f(x), x, P(x)), "Locations of minimum value"),
-    Description(SourceForm(ArgMin(f(x), x, P(x))), ", rendered", ArgMin(f(x), x, P(x)), ", gives the set of points", r,
-        "satisfying", P(r),
-        "such that", Equal(f(r), Minimum(f(x), x, P(x))), ", if the minimum value exists."),
+    SymbolDefinition(ArgMin, ArgMin(f(x), Var(x), P(x)), "Locations of minimum value"),
+    Description(SourceForm(ArgMin(f(x), Var(x), P(x))), ", rendered", ArgMin(f(x), Var(x), P(x)), ", gives the set of values", x,
+        "satisfying", P(x),
+        "such that", Equal(f(x), Minimum(f(s), Var(s), P(s))), ", if the minimum value exists."),
     Description("If", f(x), "does not attain a minimum value on the set of points defined by", P(x), ", the result is the empty set", Set(), "."),
-    description_x_predicate)
+    Description(SourceForm(ArgMin(f(x,y), Var(x,y), P(x,y))), ", rendered", ArgMin(f(x,y), Var(x,y), P(x,y)), ", gives the set of tuples",
+        Tuple(x, y), "satisfying", P(x,y),
+        "such that", Equal(f(x,y), Minimum(f(s,t), Var(s,t), P(s,t))),
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("617fe3"),
-    SymbolDefinition(ArgMax, ArgMax(f(x), x, P(x)), "Locations of maximum value"),
-    Description(SourceForm(ArgMax(f(x), x, P(x))), ", rendered", ArgMax(f(x), x, P(x)), ", gives the set of points", r,
-        "satisfying", P(r),
-        "such that", Equal(f(r), Maximum(f(x), x, P(x))), ", if the maximum value exists."),
+    SymbolDefinition(ArgMax, ArgMax(f(x), Var(x), P(x)), "Locations of maximum value"),
+    Description(SourceForm(ArgMax(f(x), Var(x), P(x))), ", rendered", ArgMax(f(x), Var(x), P(x)), ", gives the set of values", x,
+        "satisfying", P(x),
+        "such that", Equal(f(x), Maximum(f(s), Var(s), P(s))), ", if the maximum value exists."),
     Description("If", f(x), "does not attain a maximum value on the set of points defined by", P(x), ", the result is the empty set", Set(), "."),
-    description_x_predicate)
+    Description(SourceForm(ArgMax(f(x,y), Var(x,y), P(x,y))), ", rendered", ArgMax(f(x,y), Var(x,y), P(x,y)), ", gives the set of tuples",
+        Tuple(x, y), "satisfying", P(x,y),
+        "such that", Equal(f(x,y), Maximum(f(s,t), Var(s,t), P(s,t))),
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("f4fbb8"),
-    SymbolDefinition(ArgMinUnique, ArgMinUnique(f(x), x, P(x)), "Unique location of minimum value"),
-    Description(SourceForm(ArgMinUnique(f(x), x, P(x))), "represents the unique point", r,
-        "satisfying", P(r),
-        "such that", Equal(f(r), Minimum(f(x), x, P(x))), ". This operation is only defined if such a unique point exists."),
-    description_x_predicate)
+    SymbolDefinition(ArgMinUnique, ArgMinUnique(f(x), Var(x), P(x)), "Unique location of minimum value"),
+    Description(SourceForm(ArgMinUnique(f(x), Var(x), P(x))), "represents the unique value", x,
+        "satisfying", P(x),
+        "such that", Equal(f(x), Minimum(f(s), Var(s), P(s))), ". This operation is only defined if such a unique value exists."),
+    Description(SourceForm(ArgMinUnique(f(x,y), Var(x,y), P(x,y))), "represents the unique tuple", Tuple(x, y),
+        "satisfying", P(x, y),
+        "such that", Equal(f(x, y), Minimum(f(s,t), Var(s,t), P(s,t))),
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 make_entry(ID("be4926"),
-    SymbolDefinition(ArgMaxUnique, ArgMaxUnique(f(x), x, P(x)), "Unique location of maximum value"),
-    Description(SourceForm(ArgMaxUnique(f(x), x, P(x))), "represents the unique point", r,
-        "satisfying", P(r),
-        "such that", Equal(f(r), Maximum(f(x), x, P(x))), ". This operation is only defined if such a unique point exists."),
-    description_x_predicate)
+    SymbolDefinition(ArgMaxUnique, ArgMaxUnique(f(x), Var(x), P(x)), "Unique location of maximum value"),
+    Description(SourceForm(ArgMaxUnique(f(x), Var(x), P(x))), "represents the unique value", x,
+        "satisfying", P(x),
+        "such that", Equal(f(x), Maximum(f(s), Var(s), P(s))), ". This operation is only defined if such a unique value exists."),
+    Description(SourceForm(ArgMaxUnique(f(x,y), Var(x,y), P(x,y))), "represents the unique tuple", Tuple(x, y),
+        "satisfying", P(x, y),
+        "such that", Equal(f(x, y), Maximum(f(s,t), Var(s,t), P(s,t))),
+        ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
+    description_var_xyz)
 
 # Limits
 
 make_entry(ID("26ea9f"),
-    SymbolDefinition(Limit, Limit(f(x), x, a), "Limiting value"),
-    Description(SourceForm(Limit(f(x), x, a, P(x))), "rendered as", Limit(f(x), x, a, P(x)), "represents the limiting value of", f(x),
+    SymbolDefinition(Limit, Limit(f(x), Var(x), a), "Limiting value"),
+    Description(SourceForm(Limit(f(x), Var(x), a, P(x))), "rendered as", Limit(f(x), Var(x), a, P(x)), "represents the limiting value of", f(x),
         "for every sequence of", x, "satisfying", P(x), "and approaching the limit point", a, "."),
     Description("If the predicate", P(x), "is omitted, the expression renders correctly to LaTeX, ",
         "but this form should be avoided since it is ambiguous whether it denotes a sequence limit, ",
@@ -239,51 +283,57 @@ make_entry(ID("26ea9f"),
         SourceForm(SequenceLimit), ",", SourceForm(RealLimit), ",", SourceForm(LeftLimit), ",", SourceForm(RightLimit), "or", SourceForm(ComplexLimit), "."),
     Description("The limit is always a deleted limit. That is, the value of", f(a), "does not need to be equal to the limit and does not even need to be defined."),
     Description("The expression", SourceForm(f(x)), "is not required to be defined for all", x, "satisfying", P(x), ".",
-        "It only needs to be defined for all", x, "in some neighborhood of the limit point and also satisfying", P(x), "."))
+        "It only needs to be defined for all", x, "in some neighborhood of the limit point and also satisfying", P(x), "."),
+    Description("The expression", SourceForm(Var(x)), "serves to declare", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("1d2ee5"),
-    SymbolDefinition(SequenceLimit, SequenceLimit(f(n), n, a), "Limiting value of sequence"),
+    SymbolDefinition(SequenceLimit, SequenceLimit(f(n), Var(n), a), "Limiting value of sequence"),
     Description("This operator can be called with three or four arguments."),
-    Description(SourceForm(SequenceLimit(f(n), n, a)), ", rendered as", SequenceLimit(f(n), n, a), ", is equivalent to", SourceForm(Limit(f(n), n, a, Element(n, ZZ))),
+    Description(SourceForm(SequenceLimit(f(n), Var(n), a)), ", rendered as", SequenceLimit(f(n), Var(n), a), ", is equivalent to", SourceForm(Limit(f(n), Var(n), a, Element(n, ZZ))),
         "but renders to LaTeX without displaying the predicate", Element(n, ZZ), " which readers will typically understand from context."),
-    Description(SourceForm(SequenceLimit(f(n), n, a, P(n))), ", rendered as", SequenceLimit(f(n), n, a, P(n)), ", is equivalent to", SourceForm(Limit(f(n), n, a, And(Element(n, ZZ), P(n)))), "."))
+    Description(SourceForm(SequenceLimit(f(n), Var(n), a, P(n))), ", rendered as", SequenceLimit(f(n), Var(n), a, P(n)), ", is equivalent to", SourceForm(Limit(f(n), Var(n), a, And(Element(n, ZZ), P(n)))), "."),
+    Description("The expression", SourceForm(Var(n)), "serves to declare", SourceForm(n), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("6fe5c1"),
-    SymbolDefinition(RealLimit, RealLimit(f(x), x, a), "Limiting value, real variable"),
+    SymbolDefinition(RealLimit, RealLimit(f(x), Var(x), a), "Limiting value, real variable"),
     Description("This operator can be called with three or four arguments."),
-    Description(SourceForm(RealLimit(f(x), x, a)), ", rendered as", RealLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, RR))),
+    Description(SourceForm(RealLimit(f(x), Var(x), a)), ", rendered as", RealLimit(f(x), Var(x), a), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, Element(x, RR))),
         "but renders to LaTeX without displaying the predicate", Element(x, RR), " which readers will typically understand from context."),
-    Description(SourceForm(RealLimit(f(x), x, a, P(x))), ", rendered as", RealLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, RR), P(x)))), "."))
+    Description(SourceForm(RealLimit(f(x), Var(x), a, P(x))), ", rendered as", RealLimit(f(x), Var(x), a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, And(Element(x, RR), P(x)))), "."),
+    Description("The expression", SourceForm(Var(x)), "serves to declare", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("c8a5f0"),
-    SymbolDefinition(LeftLimit, LeftLimit(f(x), x, a), "Limiting value, from the left"),
+    SymbolDefinition(LeftLimit, LeftLimit(f(x), Var(x), a), "Limiting value, from the left"),
     Description("This operator can be called with three or four arguments."),
-    Description(SourceForm(LeftLimit(f(x), x, a)), ", rendered as", LeftLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, OpenInterval(-Infinity,a)))), "."),
-    Description(SourceForm(LeftLimit(f(x), x, a, P(x))), ", rendered as", LeftLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, OpenInterval(-Infinity,a)), P(x)))), "."))
+    Description(SourceForm(LeftLimit(f(x), Var(x), a)), ", rendered as", LeftLimit(f(x), Var(x), a), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, Element(x, OpenInterval(-Infinity,a)))), "."),
+    Description(SourceForm(LeftLimit(f(x), Var(x), a, P(x))), ", rendered as", LeftLimit(f(x), Var(x), a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, And(Element(x, OpenInterval(-Infinity,a)), P(x)))), "."),
+    Description("The expression", SourceForm(Var(x)), "serves to declare", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("afd5ca"),
-    SymbolDefinition(RightLimit, RightLimit(f(x), x, a), "Limiting value, from the right"),
+    SymbolDefinition(RightLimit, RightLimit(f(x), Var(x), a), "Limiting value, from the right"),
     Description("This operator can be called with three or four arguments."),
-    Description(SourceForm(RightLimit(f(x), x, a)), ", rendered as", RightLimit(f(x), x, a), ", is equivalent to", SourceForm(Limit(f(x), x, a, Element(x, OpenInterval(a,Infinity)))), "."),
-    Description(SourceForm(RightLimit(f(x), x, a, P(x))), ", rendered as", RightLimit(f(x), x, a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), x, a, And(Element(x, OpenInterval(a,Infinity)), P(x)))), "."))
+    Description(SourceForm(RightLimit(f(x), Var(x), a)), ", rendered as", RightLimit(f(x), Var(x), a), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, Element(x, OpenInterval(a,Infinity)))), "."),
+    Description(SourceForm(RightLimit(f(x), Var(x), a, P(x))), ", rendered as", RightLimit(f(x), Var(x), a, P(x)), ", is equivalent to", SourceForm(Limit(f(x), Var(x), a, And(Element(x, OpenInterval(a,Infinity)), P(x)))), "."),
+    Description("The expression", SourceForm(Var(x)), "serves to declare", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("05a3ee"),
-    SymbolDefinition(ComplexLimit, ComplexLimit(f(z), z, a), "Limiting value, complex variable"),
+    SymbolDefinition(ComplexLimit, ComplexLimit(f(z), Var(z), a), "Limiting value, complex variable"),
     Description("This operator can be called with three or four arguments."),
-    Description(SourceForm(ComplexLimit(f(z), z, a)), ", rendered as", ComplexLimit(f(z), z, a), ", is equivalent to", SourceForm(Limit(f(z), z, a, Element(z, CC))),
+    Description(SourceForm(ComplexLimit(f(z), Var(z), a)), ", rendered as", ComplexLimit(f(z), Var(z), a), ", is equivalent to", SourceForm(Limit(f(z), Var(z), a, Element(z, CC))),
         "but renders to LaTeX without displaying the predicate", Element(z, CC), " which readers will typically understand from context."),
-    Description(SourceForm(ComplexLimit(f(z), z, a, P(z))), ", rendered as", ComplexLimit(f(z), z, a, P(z)), ", is equivalent to", SourceForm(Limit(f(z), z, a, And(Element(z, CC), P(z)))), "."))
+    Description(SourceForm(ComplexLimit(f(z), Var(z), a, P(z))), ", rendered as", ComplexLimit(f(z), Var(z), a, P(z)), ", is equivalent to", SourceForm(Limit(f(z), Var(z), a, And(Element(z, CC), P(z)))), "."),
+    Description("The expression", SourceForm(Var(z)), "serves to declare", SourceForm(z), "as a locally bound variable within the scope of the arguments to this operator."))
 
 make_entry(ID("2be0b5"),
-    SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), z, a), "Limiting value, allowing poles"),
+    SymbolDefinition(MeromorphicLimit, MeromorphicLimit(f(z), Var(z), a), "Limiting value, allowing poles"),
     Description("This operator is equivalent to", SourceForm(ComplexLimit), "except that whereas", SourceForm(ComplexLimit),
         "in general is undefined when", a, "is a pole (because the direction of the resulting infinity depends on the direction of approach),", SourceForm(MeromorphicLimit), "is taken to give", SourceForm(UnsignedInfinity), "(", UnsignedInfinity, ")", "when", a, "is a pole."))
 
 make_entry(ID("6cd302"),
-    SymbolDefinition(SequenceLimitInferior, SequenceLimitInferior(f(n), n, a), "Limit inferior of sequence"))
+    SymbolDefinition(SequenceLimitInferior, SequenceLimitInferior(f(n), Var(n), a), "Limit inferior of sequence"))
 
 make_entry(ID("fdf152"),
-    SymbolDefinition(SequenceLimitSuperior, SequenceLimitSuperior(f(n), n, a), "Limit superior of sequence"))
+    SymbolDefinition(SequenceLimitSuperior, SequenceLimitSuperior(f(n), Var(n), a), "Limit superior of sequence"))
 
 # Derivatives
 
@@ -302,7 +352,7 @@ make_entry(ID("1b6a57"),
 make_entry(ID("452407"),
     SymbolDefinition(RealDerivative, RealDerivative(Call(f, x), x, x), "Real derivative"),
     Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
-    Description("The result is defined as", Equal(RealDerivative(f(x), x, x), RealLimit((f(x+h)-f(x))/h, h, 0)),
+    Description("The result is defined as", Equal(RealDerivative(f(x), x, x), RealLimit((f(x+h)-f(x))/h, Var(h), 0)),
         "where the limit is taken with respect to a real variable", h, "(", SourceForm(RealLimit), ")."),
     Description("Note that", x,
         """can be complex and that the "real derivative" can be complex-valued; the "real" qualifier just refers to the direction in which the limit is computed."""))
@@ -310,7 +360,7 @@ make_entry(ID("452407"),
 make_entry(ID("b4b319"),
     SymbolDefinition(ComplexDerivative, ComplexDerivative(Call(f, z), z, z), "Complex derivative"),
     Description("The call syntax for this operator is the same as for", SourceForm(Derivative), "."),
-    Description("The result is defined as", Equal(ComplexDerivative(f(z), z, z), ComplexLimit((f(z+h)-f(z))/h, h, 0)),
+    Description("The result is defined as", Equal(ComplexDerivative(f(z), z, z), ComplexLimit((f(z+h)-f(z))/h, Var(h), 0)),
         "where the limit is taken with respect to a complex variable", h, "(", SourceForm(ComplexLimit), ")."),
     Description("If this limit exists (and is finite), then", f, "is holomorphic at", z, "."))
 

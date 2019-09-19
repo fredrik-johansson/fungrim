@@ -160,10 +160,10 @@ make_entry(ID("0ba38f"),
     References("http://oeis.org/A007431"))
 
 make_entry(ID("f88596"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)) / (Div(1,2) * N**2), N, Infinity), 6/ConstPi**2)))
+    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)) / (Div(1,2) * N**2), Var(N), Infinity), 6/ConstPi**2)))
 
 make_entry(ID("3b43b0"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), Tuple(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)), N, Infinity), 6/ConstPi**2)),
+    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), Tuple(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)), Var(N), Infinity), 6/ConstPi**2)),
     References("H. Jager, On the number of Dirichlet characters with modulus not exceeding x, Indagationes Mathematicae, Volume 76, Issue 5, 1973, Pages 452-455, https://doi.org/10.1016/1385-7258(73)90069-3"))
 
 make_entry(ID("d9a187"),
@@ -696,7 +696,7 @@ make_entry(ID("1bd945"),
 # Value at 1
 
 make_entry(ID("6c3fff"),
-    Formula(Equal(DirichletL(1, chi), Cases(Tuple(UnsignedInfinity, Equal(chi, DirichletCharacter(q, 1))), Tuple(ComplexLimit(DirichletL(s, chi), s, 1), Otherwise)))),
+    Formula(Equal(DirichletL(1, chi), Cases(Tuple(UnsignedInfinity, Equal(chi, DirichletCharacter(q, 1))), Tuple(ComplexLimit(DirichletL(s, chi), Var(s), 1), Otherwise)))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -706,7 +706,7 @@ make_entry(ID("3d5327"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("23256b"),
-    Formula(Equal(ComplexLimit((s-1)*DirichletL(1, DirichletCharacter(q, 1)), s, 1), Totient(q)/q)),
+    Formula(Equal(ComplexLimit((s-1)*DirichletL(1, DirichletCharacter(q, 1)), Var(s), 1), Totient(q)/q)),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
@@ -805,7 +805,7 @@ make_entry(ID("214a91"),
     References("""D. J. Platt (2013), Numerical computations concerning the GRH. https://arxiv.org/pdf/1305.3087.pdf"""))
 
 make_entry(ID("9ba78a"),
-    Formula(Equal(Zeros(DirichletL(s, chi), s, And(Element(s, CC), LessEqual(Re(s), 0))),
+    Formula(Equal(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), LessEqual(Re(s), 0))),
         Cases(Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
               Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), Unequal(q, 1))),
               Tuple(SetBuilder(-(2*n)-1, n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
@@ -813,14 +813,14 @@ make_entry(ID("9ba78a"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))
 
 make_entry(ID("bc755b"),
-    Formula(Equal(Zeros(DirichletL(s, chi), s, Element(s, CC)),
-        Union(Parentheses(Zeros(DirichletL(s, chi), s, And(Element(s, CC), LessEqual(Re(s), 0)))),
+    Formula(Equal(Zeros(DirichletL(s, chi), Var(s), Element(s, CC)),
+        Union(Parentheses(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), LessEqual(Re(s), 0)))),
             SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0))))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("2a34c3"),
-    Formula(Equal(Zeros(DirichletL(s, chi), s, And(Element(s, CC), Less(0, Re(s), 1))),
+    Formula(Equal(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), Less(0, Re(s), 1))),
         SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0)))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))

@@ -782,10 +782,11 @@ def describe2(symbol, example, description, domain_table=None, long_description=
 
 
 
-description_x_predicate = Description("The argument", SourceForm(x), "to this operator defines a locally bound variable.",
+description_x_predicate = Description("The expression", SourceForm(Var(x)),
+    "declares", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator. ",
     "The corresponding predicate", P(x), "must define the domain of", x, "unambiguously; that is, it must include a statement such as",
     Element(x, S), "where", S, "is a known set.",
-    "More generally,", SourceForm(x), "can be a collection of variables", Tuple(x, y, Ellipsis),
+    "More generally,", SourceForm(Var(x, y, Ellipsis)), "defines a collection of variables", Tuple(x, y, Ellipsis),
     "all of which become locally bound, with a corresponding predicate", P(x, y, Ellipsis), ".")
 
 description_xray = Description("An X-ray plot illustrates the geometry of a complex analytic function", f(z), ".",

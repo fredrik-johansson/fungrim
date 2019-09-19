@@ -164,7 +164,7 @@ make_entry(ID("b62d05"),
     Formula(Equal(BranchCuts(Exp(z), z, CC), Set())))
 
 make_entry(ID("bceb84"),
-    Formula(Equal(Zeros(Exp(z), z, Element(z, CC)), Set())))
+    Formula(Equal(Zeros(Exp(z), Var(z), Element(z, CC)), Set())))
 
 make_entry(ID("1635f5"),
     Formula(Equal(Exp(z), Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),

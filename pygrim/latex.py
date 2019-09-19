@@ -503,6 +503,10 @@ def tex_Subscript(head, args, **kwargs):
     argstr1 = args[1].latex(**kwargs)
     return "{" + argstr0 + "}_{" + argstr1 + "}"
 
+@deftex
+def tex_Var(head, args, **kwargs):
+    return ", ".join(arg.latex(**kwargs) for arg in args)
+
 @deftex_heads([Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit, SequenceLimitInferior, SequenceLimitSuperior])
 def tex_Limit(head, args, **kwargs):
     if len(args) == 3:
@@ -513,6 +517,7 @@ def tex_Limit(head, args, **kwargs):
         cond = ", " + cond.latex(in_small=True)
     else:
         raise ValueError
+    assert var.head() == Var
     var = var.latex()
     point = point.latex(in_small=True)
     formula = formula.latex()
@@ -546,6 +551,7 @@ def tex_std_operator(head, args, **kwargs):
             return "%s\\left(%s\\right)" % (opname, argstr[0])
     assert len(args) == 3
     formula, var, predicate = args
+    assert var.head() == Var
     #var = var.latex()
     if 0 and predicate.head() == And and len(predicate.args()) > 1:
         # katex does not support substack
@@ -721,21 +727,23 @@ def tex_PrimeSum_PrimeProduct(head, args, **kwargs):
 def tex_ComplexZeroMultiplicity(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     assert len(args) == 3
+    assert args[1].head() == Var
     f, var, point = argstr
-    if args[1] == args[2]:
-        return "\\mathop{\\operatorname{ord}}\\limits_{%s} %s" % (point, f)
-    else:
-        return "\\mathop{\\operatorname{ord}}\\limits_{%s=%s} %s" % (var, point, f)
+    #if args[1] == args[2]:
+    #    return "\\mathop{\\operatorname{ord}}\\limits_{%s} %s" % (point, f)
+    #else:
+    return "\\mathop{\\operatorname{ord}}\\limits_{%s=%s} %s" % (var, point, f)
 
 @deftex
 def tex_Residue(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     assert len(args) == 3
+    assert args[1].head() == Var
     f, var, point = argstr
-    if args[1] == args[2]:
-        return "\\mathop{\\operatorname{Res}}\\limits_{%s} %s" % (point, f)
-    else:
-        return "\\mathop{\\operatorname{Res}}\\limits_{%s=%s} %s" % (var, point, f)
+    #if args[1] == args[2]:
+    #    return "\\mathop{\\operatorname{Res}}\\limits_{%s} %s" % (point, f)
+    #else:
+    return "\\mathop{\\operatorname{Res}}\\limits_{%s=%s} %s" % (var, point, f)
 
 @deftex
 def tex_CongruentMod(head, args, **kwargs):

@@ -277,27 +277,27 @@ make_entry(ID("7d111e"),
 # Zeros and extrema
 
 make_entry(ID("7a7d1d"),
-    Formula(Equal(Zeros(ChebyshevT(n,x), x, Element(x, CC)), SetBuilder(Cos(((2*k-1)/(2*n))*ConstPi), k, Element(k, ZZBetween(1, n))))),
+    Formula(Equal(Zeros(ChebyshevT(n,x), Var(x), Element(x, CC)), SetBuilder(Cos(((2*k-1)/(2*n))*ConstPi), k, Element(k, ZZBetween(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("ce39ac"),
-    Formula(Equal(Zeros(ChebyshevU(n,x), x, Element(x, CC)), SetBuilder(Cos((k/(n+1))*ConstPi), k, Element(k, ZZBetween(1, n))))),
+    Formula(Equal(Zeros(ChebyshevU(n,x), Var(x), Element(x, CC)), SetBuilder(Cos((k/(n+1))*ConstPi), k, Element(k, ZZBetween(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("3d25dd"),
-    Formula(Equal(Solutions(Brackets(Element(ChebyshevT(n,x), Set(-1,1))), x, Element(x, CC)), SetBuilder(Cos((k/n)*ConstPi), k, Element(k, ZZBetween(0, n))))),
+    Formula(Equal(Solutions(Brackets(Element(ChebyshevT(n,x), Set(-1,1))), Var(x), Element(x, CC)), SetBuilder(Cos((k/n)*ConstPi), k, Element(k, ZZBetween(0, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("b5a25e"),
-    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), 1)), x, Element(x, CC)), SetBuilder(Cos((2*k/n)*ConstPi), k, Element(k, ZZBetween(0, Floor(n/2)))))),
+    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), 1)), Var(x), Element(x, CC)), SetBuilder(Cos((2*k/n)*ConstPi), k, Element(k, ZZBetween(0, Floor(n/2)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("db2b0a"),
-    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), -1)), x, Element(x, CC)), SetBuilder(Cos(((2*k-1)/n)*ConstPi), k, Element(k, ZZBetween(1, Floor((n+1)/2)))))),
+    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), -1)), Var(x), Element(x, CC)), SetBuilder(Cos(((2*k-1)/n)*ConstPi), k, Element(k, ZZBetween(1, Floor((n+1)/2)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

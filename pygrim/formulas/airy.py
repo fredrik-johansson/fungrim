@@ -154,9 +154,9 @@ make_entry(ID("7194d4"),
     Assumptions(And(Element(C, CC), Element(D, CC))))
 
 make_entry(ID("d1f9d0"),
-    Formula(Subset(Zeros(AiryAi(z), z, Element(z, CC)), RR)))
+    Formula(Subset(Zeros(AiryAi(z), Var(z), Element(z, CC)), RR)))
 
 make_entry(ID("a2df77"),
-    Formula(Subset(Zeros(AiryAi(z,1), z, Element(z, CC)), RR)))
+    Formula(Subset(Zeros(AiryAi(z,1), Var(z), Element(z, CC)), RR)))
 
 

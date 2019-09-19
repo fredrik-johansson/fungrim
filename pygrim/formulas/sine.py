@@ -251,19 +251,19 @@ make_entry(ID("056c0e"),
     References("Niven's theorem"))
 
 make_entry(ID("2f6818"),
-    Formula(Equal(Zeros(Brackets(Sin(z)), z, Element(z, CC)), SetBuilder(ConstPi * n, n, Element(n, ZZ)))))
+    Formula(Equal(Zeros(Brackets(Sin(z)), Var(z), Element(z, CC)), SetBuilder(ConstPi * n, n, Element(n, ZZ)))))
 
 make_entry(ID("c5bdcc"),
-    Formula(Equal(ArgMax(Brackets(Sin(x)), x, Element(x, RR)), SetBuilder(ConstPi * (2 * n + Div(1,2)), n, Element(n, ZZ)))))
+    Formula(Equal(ArgMax(Brackets(Sin(x)), Var(x), Element(x, RR)), SetBuilder(ConstPi * (2 * n + Div(1,2)), n, Element(n, ZZ)))))
 
 make_entry(ID("ad04bd"),
-    Formula(Equal(ArgMin(Brackets(Sin(x)), x, Element(x, RR)), SetBuilder(ConstPi * (2 * n - Div(1,2)), n, Element(n, ZZ)))))
+    Formula(Equal(ArgMin(Brackets(Sin(x)), Var(x), Element(x, RR)), SetBuilder(ConstPi * (2 * n - Div(1,2)), n, Element(n, ZZ)))))
 
 make_entry(ID("bfe28b"),
-    Formula(Equal(Maximum(Brackets(Sin(x)), x, Element(x, RR)), 1)))
+    Formula(Equal(Maximum(Brackets(Sin(x)), Var(x), Element(x, RR)), 1)))
 
 make_entry(ID("27766c"),
-    Formula(Equal(Minimum(Brackets(Sin(x)), x, Element(x, RR)), -1)))
+    Formula(Equal(Minimum(Brackets(Sin(x)), Var(x), Element(x, RR)), -1)))
 
 # Analytic properties
 

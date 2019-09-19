@@ -168,7 +168,7 @@ make_entry(ID("7932c3"),
 # Asymptotics
 
 make_entry(ID("a3ab2a"),
-    Formula(Equal(SequenceLimit(Log(LandauG(n)) / Sqrt(n * Log(n)), n, Infinity), 1)))
+    Formula(Equal(SequenceLimit(Log(LandauG(n)) / Sqrt(n * Log(n)), Var(n), Infinity), 1)))
 
 # Bounds and inequalities
 
@@ -195,6 +195,6 @@ make_entry(ID("87d19b"),
 make_entry(ID("65fa9f"),
     Formula(Equivalent(RiemannHypothesis,
         ForAll(n, Element(n, ZZGreaterEqual(1)),
-            Less(Log(LandauG(n)), Where(Sqrt(f(n)), Equal(f(y), UniqueSolution(Brackets(Equal(LogIntegral(x), y)), x, Element(x, OpenInterval(1, Infinity))))))))),
+            Less(Log(LandauG(n)), Where(Sqrt(f(n)), Equal(f(y), UniqueSolution(Brackets(Equal(LogIntegral(x), y)), Var(x), Element(x, OpenInterval(1, Infinity))))))))),
     References("Marc Deleglise, Jean-Louis Nicolas, The Landau function and the Riemann Hypothesis, https://arxiv.org/abs/1907.07664"))
 

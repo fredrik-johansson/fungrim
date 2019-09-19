@@ -509,20 +509,20 @@ make_entry(ID("a4109c"),
     Formula(Equal(EisensteinG(6, ConstI), EisensteinE(6, ConstI), 0)))
 
 make_entry(ID("c6be24"),
-    Formula(Equal(EisensteinG(2*k, ConstI*Infinity), ComplexLimit(EisensteinG(2*k, tau), tau, ConstI*Infinity), 2 * RiemannZeta(2*k))),
+    Formula(Equal(EisensteinG(2*k, ConstI*Infinity), ComplexLimit(EisensteinG(2*k, tau), Var(tau), ConstI*Infinity), 2 * RiemannZeta(2*k))),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(1)))))
 
 make_entry(ID("ad9ba2"),
-    Formula(Equal(EisensteinE(2*k, ConstI*Infinity), ComplexLimit(EisensteinE(2*k, tau), tau, ConstI*Infinity), 1)),
+    Formula(Equal(EisensteinE(2*k, ConstI*Infinity), ComplexLimit(EisensteinE(2*k, tau), Var(tau), ConstI*Infinity), 1)),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(1)))))
 
 # Zeros
 
 make_entry(ID("e46697"),
-    Formula(Equal(Zeros(EisensteinE(2*k, tau), tau, Element(tau, HH)),
-        SetBuilder(ModularGroupAction(gamma, tau), Tuple(gamma, tau), And(Element(tau, Zeros(EisensteinE(2*k, z), z, Element(z, ModularGroupFundamentalDomain))), Element(gamma, PSL2Z))))),
+    Formula(Equal(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, HH)),
+        SetBuilder(ModularGroupAction(gamma, tau), Tuple(gamma, tau), And(Element(tau, Zeros(EisensteinE(2*k, z), Var(z), Element(z, ModularGroupFundamentalDomain))), Element(gamma, PSL2Z))))),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(2)))))
 
@@ -530,19 +530,19 @@ make_entry(ID("2f6805"),
     #Formula(Implies(And(Element(tau, ModularGroupFundamentalDomain), Equal(EisensteinE(2*k, tau), 0)), Equal(Abs(tau), 1))),
     #Variables(tau,k),
     #Assumptions(And(Element(k, ZZGreaterEqual(2)), Element(tau, HH))),
-    Formula(Subset(Zeros(EisensteinE(2*k, tau), tau, Element(tau, ModularGroupFundamentalDomain)), SetBuilder(Exp(ConstI*theta), theta, Element(theta, ClosedInterval(ConstPi/2, 2*ConstPi/3))))),
+    Formula(Subset(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), SetBuilder(Exp(ConstI*theta), theta, Element(theta, ClosedInterval(ConstPi/2, 2*ConstPi/3))))),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(2)))),
     References("F. K. C. Rankin and H. P. F. Swinnerton-Dyer, On the zeros of Eisenstein Series, Bull. London Math. Soc., 2(1970),169-170."))
 
 make_entry(ID("a50278"),
-    Formula(GreaterEqual(Cardinality(Zeros(EisensteinE(2*k, tau), tau, Element(tau, ModularGroupFundamentalDomain))), 1)),
+    Formula(GreaterEqual(Cardinality(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain))), 1)),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(2)))),
     References("F. K. C. Rankin and H. P. F. Swinnerton-Dyer, On the zeros of Eisenstein Series, Bull. London Math. Soc., 2(1970),169-170."))
 
 make_entry(ID("13cac5"),
-    Formula(Where(Equal(Sum(w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, tau), tau, tau), tau, Element(tau, ModularGroupFundamentalDomain)), 2*k/12),
+    Formula(Where(Equal(Sum(w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), tau, Element(tau, ModularGroupFundamentalDomain)), 2*k/12),
         Equal(w(tau), Cases(Tuple(Div(1,2), Equal(tau, ConstI)), Tuple(Div(1,3), Equal(tau, Exp(2*ConstPi*ConstI/3))), Tuple(1, Otherwise))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))),
@@ -550,7 +550,7 @@ make_entry(ID("13cac5"),
     "S. Garthwaite, L. Long, H. Swisher, S. Treneer. Zeros of classical Eisenstein series and recent developments, Fields Communications Volume 60, WIN - Women In Numbers, Proceedings of the WIN Workshop, (2011), 251-263. http://math.oregonstate.edu/~swisherh/C1P.pdf"))
 
 make_entry(ID("097efc"),
-    Formula(Where(Equal(Sum(ModularJ(tau) * w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, tau), tau, tau), tau, Element(tau, ModularGroupFundamentalDomain)), 120*k - 2/RiemannZeta(1-2*k)),
+    Formula(Where(Equal(Sum(ModularJ(tau) * w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), tau, Element(tau, ModularGroupFundamentalDomain)), 120*k - 2/RiemannZeta(1-2*k)),
         Equal(w(tau), Cases(Tuple(Div(1,2), Equal(tau, ConstI)), Tuple(1, Otherwise))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))),
@@ -560,43 +560,43 @@ make_entry(ID("097efc"),
 # todo: more distribution theorems?
 
 make_entry(ID("4a200a"),
-    Formula(Equal(Zeros(EisensteinE(4, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(EisensteinE(4, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("ec4f56"),
-    Formula(Equal(Zeros(EisensteinE(6, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(ConstI))))
+    Formula(Equal(Zeros(EisensteinE(6, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(ConstI))))
 
 make_entry(ID("83566f"),
-    Formula(Equal(Zeros(EisensteinE(8, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(EisensteinE(8, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("26faf3"),
-    Formula(Equal(Zeros(EisensteinE(10, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(ConstI, Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(EisensteinE(10, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(ConstI, Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("6ae250"),
-    Formula(Equal(Zeros(EisensteinE(12, tau), tau, Element(tau, ModularGroupFundamentalDomain)),
+    Formula(Equal(Zeros(EisensteinE(12, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)),
         Where(Set(ConstI * Hypergeometric2F1(Div(1,6),Div(5,6),1,a) / Hypergeometric2F1(Div(1,6),Div(5,6),1,1-a)),
             Equal(a, Div(1,2) + 21*Sqrt(10)*ConstI/100)))))
 
 make_entry(ID("ad91ae"),
-    Formula(Equal(Zeros(EisensteinE(14, tau), tau, Element(tau, ModularGroupFundamentalDomain)), Set(ConstI, Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(EisensteinE(14, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(ConstI, Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("cae067"),
-    Formula(Equal(Zeros(EisensteinE(2, tau), tau, Element(tau, HH)),
-        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), z, And(Element(z, HH), Element(Re(z), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
+    Formula(Equal(Zeros(EisensteinE(2, tau), Var(tau), Element(tau, HH)),
+        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), Var(z), And(Element(z, HH), Element(Re(z), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
             Element(n, ZZ))))))
 
 make_entry(ID("f33f09"),
-    Formula(Equal(Zeros(EisensteinE(2, tau), tau, And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
-        Where(SetBuilder(Parentheses(UniqueZero(EisensteinE(2, z), z, Element(z, D(c,d)))),
+    Formula(Equal(Zeros(EisensteinE(2, tau), Var(tau), And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
+        Where(SetBuilder(Parentheses(UniqueZero(EisensteinE(2, z), Var(z), Element(z, D(c,d)))),
             Tuple(c, d), And(Element(c, ZZ), Element(d, ZZ), Equal(GCD(c,d),1), Element(-(d/c), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
             Equal(D(c,d), ClosedDisk(-(d/c) + (ConstI*ConstPi)/(6*c**2), (Decimal("0.000283")*ConstPi**2)/(36*c**2)))))),
     References("R. Wood and M. P. Young, Zeros of the weight two Eisenstein series, Journal of Number Theory Volume 143, October 2014, Pages 320-333. https://doi.org/10.1016/j.jnt.2014.04.007"))
 
 make_entry(ID("67f2ef"),
-    Formula(Element(UniqueZero(EisensteinE(2, ConstI*y), y, Element(y, OpenInterval(0, Infinity))),
+    Formula(Element(UniqueZero(EisensteinE(2, ConstI*y), Var(y), Element(y, OpenInterval(0, Infinity))),
         RealBall(Decimal("0.523521700017999266800534404806"), Decimal("1.10e-31")))))
 
 make_entry(ID("be9790"),
-    Formula(Element(UniqueZero(EisensteinE(2, -Div(1,2) + ConstI*y), y, Element(y, OpenInterval(0, Infinity))),
+    Formula(Element(UniqueZero(EisensteinE(2, -Div(1,2) + ConstI*y), Var(y), Element(y, OpenInterval(0, Infinity))),
         RealBall(Decimal("0.130919030396762446904114826020"), Decimal("2.87e-31")))))
 
 

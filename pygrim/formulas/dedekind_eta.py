@@ -119,10 +119,10 @@ make_entry(ID("1dc520"),
 # Limiting values
 
 make_entry(ID("6b9935"),
-    Formula(Equal(DedekindEta(ConstI*Infinity), ComplexLimit(DedekindEta(tau), tau, ConstI*Infinity), 0)))
+    Formula(Equal(DedekindEta(ConstI*Infinity), ComplexLimit(DedekindEta(tau), Var(tau), ConstI*Infinity), 0)))
 
 make_entry(ID("d8025b"),
-    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), epsilon, 0), 0)))
+    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), Var(epsilon), 0), 0)))
 
 # Imaginary points
 
@@ -277,7 +277,7 @@ make_entry(ID("6d7668"),
     Formula(Equal(BranchCuts(DedekindEta(tau), tau, HH), Set())))
 
 make_entry(ID("39fb36"),
-    Formula(Equal(Zeros(DedekindEta(tau), tau, Element(tau, HH)), Set())))
+    Formula(Equal(Zeros(DedekindEta(tau), Var(tau), Element(tau, HH)), Set())))
 
 # Dedekind sums
 

@@ -302,10 +302,10 @@ make_entry(ID("35c85f"),
 # Limiting values
 
 make_entry(ID("e8252c"),
-    Formula(Equal(ModularLambda(ConstI*Infinity), ComplexLimit(ModularLambda(tau), tau, ConstI*Infinity), 0)))
+    Formula(Equal(ModularLambda(ConstI*Infinity), ComplexLimit(ModularLambda(tau), Var(tau), ConstI*Infinity), 0)))
 
 make_entry(ID("231141"),
-    Formula(Equal(RightLimit(ModularLambda(n+ConstI*epsilon), epsilon, 0), Cases(Tuple(1, Even(n)), Tuple(-Infinity, Odd(n))))),
+    Formula(Equal(RightLimit(ModularLambda(n+ConstI*epsilon), Var(epsilon), 0), Cases(Tuple(1, Even(n)), Tuple(-Infinity, Odd(n))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 

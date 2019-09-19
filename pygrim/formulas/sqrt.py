@@ -220,17 +220,17 @@ make_entry(ID("f9f31d"),
 
 
 make_entry(ID("08d275"),
-    Formula(Equal(Zeros(z**2 - c, z, Element(z, CC)), Set(Sqrt(c), -Sqrt(c)))),
+    Formula(Equal(Zeros(z**2 - c, Var(z), Element(z, CC)), Set(Sqrt(c), -Sqrt(c)))),
     Variables(c),
     Assumptions(Element(c, CC)))
 
 make_entry(ID("e0ac95"),
-    Formula(Equal(Zeros(z**2 - c, z, Element(z, CC)), Set(ConstI*Sqrt(-c), -ConstI*Sqrt(-c)))),
+    Formula(Equal(Zeros(z**2 - c, Var(z), Element(z, CC)), Set(ConstI*Sqrt(-c), -ConstI*Sqrt(-c)))),
     Variables(c),
     Assumptions(Element(c, CC)))
 
 make_entry(ID("fc2582"),
-    Formula(Equal(Zeros(a*z**2+b*z+c, z, Element(z, CC)), Set((-b+Sqrt(b**2-4*a*c))/(2*a), (-b-Sqrt(b**2-4*a*c))/(2*a)))),
+    Formula(Equal(Zeros(a*z**2+b*z+c, Var(z), Element(z, CC)), Set((-b+Sqrt(b**2-4*a*c))/(2*a), (-b-Sqrt(b**2-4*a*c))/(2*a)))),
     Variables(a, b, c),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(c, CC), Unequal(a, 0))))
 

@@ -1009,22 +1009,22 @@ make_entry(ID("ab1c77"),
 # Zeros
 
 make_entry(ID("154c44"),
-    Formula(Equal(Zeros(JacobiTheta(1,z,tau), z, Element(z, CC)), SetBuilder(m+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Formula(Equal(Zeros(JacobiTheta(1,z,tau), Var(z), Element(z, CC)), SetBuilder(m+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("ad1eaf"),
-    Formula(Equal(Zeros(JacobiTheta(2,z,tau), z, Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Formula(Equal(Zeros(JacobiTheta(2,z,tau), Var(z), Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+n*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("caf10a"),
-    Formula(Equal(Zeros(JacobiTheta(3,z,tau), z, Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Formula(Equal(Zeros(JacobiTheta(3,z,tau), Var(z), Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("926b2c"),
-    Formula(Equal(Zeros(JacobiTheta(4,z,tau), z, Element(z, CC)), SetBuilder(m+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
+    Formula(Equal(Zeros(JacobiTheta(4,z,tau), Var(z), Element(z, CC)), SetBuilder(m+(n+Div(1,2))*tau, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -2216,22 +2216,22 @@ def_Topic(
 # Values at infinity
 
 make_entry(ID("e6b579"),
-    Formula(Equal(ComplexLimit(JacobiTheta(1,z,tau), tau, ConstI*Infinity), 0)),
+    Formula(Equal(ComplexLimit(JacobiTheta(1,z,tau), Var(tau), ConstI*Infinity), 0)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("1dcf7e"),
-    Formula(Equal(ComplexLimit(JacobiTheta(2,z,tau), tau, ConstI*Infinity), 0)),
+    Formula(Equal(ComplexLimit(JacobiTheta(2,z,tau), Var(tau), ConstI*Infinity), 0)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("a8ea67"),
-    Formula(Equal(ComplexLimit(JacobiTheta(3,z,tau), tau, ConstI*Infinity), 1)),
+    Formula(Equal(ComplexLimit(JacobiTheta(3,z,tau), Var(tau), ConstI*Infinity), 1)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("bf747b"),
-    Formula(Equal(ComplexLimit(JacobiTheta(4,z,tau), tau, ConstI*Infinity), 1)),
+    Formula(Equal(ComplexLimit(JacobiTheta(4,z,tau), Var(tau), ConstI*Infinity), 1)),
     Variables(z),
     Assumptions(Element(z, CC)))
 

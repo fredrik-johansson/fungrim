@@ -74,7 +74,7 @@ make_entry(ID("d774fe"),
     Assumptions(And(Element(a, OpenInterval(0, Infinity)), Element(b, OpenInterval(0, Infinity)))))
 
 make_entry(ID("77c324"),
-    Formula(Equal(Zeros(x**2-x-1, x, Element(x, CC)), Set(GoldenRatio, 1-GoldenRatio))))
+    Formula(Equal(Zeros(x**2-x-1, Var(x), Element(x, CC)), Set(GoldenRatio, 1-GoldenRatio))))
 
 make_entry(ID("6d2709"),
     Formula(Equal(GoldenRatio, 1+1/GoldenRatio)))
@@ -111,7 +111,7 @@ make_entry(ID("6a11ce"),
 # Limit representations
 
 make_entry(ID("2b6e60"),
-    Formula(Equal(GoldenRatio, SequenceLimit(Fibonacci(n+1)/Fibonacci(n), n, Infinity))))
+    Formula(Equal(GoldenRatio, SequenceLimit(Fibonacci(n+1)/Fibonacci(n), Var(n), Infinity))))
 
 # Special function representations
 
