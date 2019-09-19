@@ -734,7 +734,7 @@ DirichletCharacter DirichletGroup PrimitiveDirichletCharacters
 ConreyGenerator
 DiscreteLog
 Cases Otherwise
-HurwitzZeta DirichletL GeneralizedBernoulliB
+HurwitzZeta DirichletL GeneralizedBernoulliB LerchPhi PolyLog
 RiemannXi StieltjesGamma KeiperLiLambda DeBruijnNewmanLambda
 DirichletLZero
 GeneralizedRiemannHypothesis

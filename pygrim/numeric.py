@@ -393,6 +393,31 @@ class ArbNumericalEvaluation(object):
                         if v.is_finite():
                             return v
 
+        if head == HurwitzZeta:
+            if len(args) == 2:
+                s, a = args
+                s = self.eval(s, **kwargs)
+                a = self.eval(a, **kwargs)
+                s = acb(s)
+                v = s.zeta(a)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
+
+        if head in (PolyGamma, PolyLog):
+            if len(args) == 2:
+                s, z = args
+                s = self.eval(s, **kwargs)
+                z = self.eval(z, **kwargs)
+                z = acb(z)
+                if head == PolyGamma:
+                    v = z.polygamma(s)
+                else:
+                    v = z.polylog(s)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
+
         if head == StieltjesGamma:
             if len(args) == 1:
                 n = args[0]

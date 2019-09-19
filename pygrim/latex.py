@@ -123,6 +123,7 @@ subscript_call_latex_table = {
     IncompleteBeta: "\\mathrm{B}",
     IncompleteBetaRegularized: "I",
     PolyGamma: "\\psi",
+    PolyLog: "\\operatorname{Li}",
     JacobiThetaEpsilon: "\\varepsilon",
     JacobiThetaPermutation: "S",
 #    JacobiTheta: "\\theta",
@@ -244,6 +245,7 @@ symbol_latex_table = {
     LiouvilleLambda: "\\lambda",
     DeBruijnNewmanLambda: "\\Lambda",
     RiemannXi: "\\xi",
+    LerchPhi: "\\Phi",
 }
 
 def deftex(f):

@@ -712,6 +712,7 @@ frontpage.fp.write("""<li>Constants<ul>""")
 writetopic("Pi")
 writetopic("Euler's constant")
 writetopic("Golden ratio")
+writetopic("Catalan's constant")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Elementary functions<ul>""")
