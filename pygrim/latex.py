@@ -1060,15 +1060,15 @@ def tex_PrimitiveReducedPositiveIntegralBinaryQuadraticForms(head, args, **kwarg
 def tex_HypergeometricUStarRemainder(head, args, **kwargs):
     assert len(args) == 4
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "R_{%s}\!\\left(%s,%s,%s\\right)" % tuple(argstr)
+    return "R_{%s}\\!\\left(%s,%s,%s\\right)" % tuple(argstr)
 
 @deftex
 def tex_DirichletCharacter(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     if len(args) == 2:
-        return "\\chi_{%s}(%s, \\cdot)" % tuple(argstr)
+        return "\\chi_{%s \\, . \\, %s}" % tuple(argstr)
     elif len(args) == 3:
-        return "\\chi_{%s}(%s, %s)" % tuple(argstr)
+        return "\\chi_{%s \\, . \\, %s}\\!\\left(%s\\right)" % tuple(argstr)
     else:
         raise ValueError
 

@@ -1267,6 +1267,7 @@ def_Topic(
     Entries(
         "51206a",
         "8ae153",
+        "b6808d",
         "70a705",
         "e5bd3c",
         "569d5c",
@@ -1325,6 +1326,11 @@ make_entry(ID("51206a"),
 
 make_entry(ID("8ae153"),
     Formula(Equal(StieltjesGamma(0, 1), StieltjesGamma(0), ConstGamma)))
+
+make_entry(ID("b6808d"),
+    Formula(Equal(StieltjesGamma(0, a), -DigammaFunction(a))),
+    Variables(a),
+    Assumptions(And(Element(a, CC), NotElement(a, ZZLessEqual(0)))))
 
 make_entry(ID("70a705"),
     Formula(Equal(StieltjesGamma(1, Div(1,2)), StieltjesGamma(1) - 2*ConstGamma*Log(2) - Log(2)**2)))

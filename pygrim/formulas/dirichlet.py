@@ -711,7 +711,7 @@ make_entry(ID("23256b"),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
 make_entry(ID("c2750a"),
-    Formula(Equal(DirichletL(1,chi), (1/q) * Sum(chi(k) * StieltjesGamma(0,k/q), Tuple(k, 1, q-1)))),
+    Formula(Equal(DirichletL(1,chi), -((1/q) * Sum(chi(k) * DigammaFunction(k/q), Tuple(k, 1, q-1))))),
     Variables(q),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
 

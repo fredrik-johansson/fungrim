@@ -67,9 +67,11 @@ def_Topic(
 
 make_entry(ID("f7b6aa"),
     SymbolDefinition(ConstCatalan, ConstCatalan, "Catalan's constant"),
-    References("https://en.wikipedia.org/wiki/Catalan's_constant",
+    References(
+        "David M. Bradley, Representations of Catalan's constant, https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.26.1879",
+        "https://en.wikipedia.org/wiki/Catalan's_constant",
         "http://mathworld.wolfram.com/CatalansConstant.html",
-        "http://functions.wolfram.com/Constants/Catalan/"))
+        "https://doi.org/10.1017/mag.2017.4"))
 
 # Numerical value
 
