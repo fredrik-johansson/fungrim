@@ -530,13 +530,13 @@ make_entry(ID("c84407"),
     Assumptions(Element(p, PP)))
 
 make_entry(ID("a0206a"),
-    Formula(Equivalent(Element(x, SetBuilder(Fibonacci(n), n, Element(n, ZZGreaterEqual(0)))),
+    Formula(Equivalent(Element(x, Set(Fibonacci(n), ForElement(n, ZZGreaterEqual(0)))),
         Or(Element(Sqrt(5*x**2+4), ZZ), Element(Sqrt(5*x**2-4), ZZ)))),
     Variables(x),
     Assumptions(Element(x, ZZGreaterEqual(0))))
 
 make_entry(ID("4ec333"),
-    Formula(Equal(Cardinality(SetBuilder(k, k, And(Element(k, ZZ), Divides(n, Fibonacci(k))))), Cardinality(ZZ))),
+    Formula(Equal(Cardinality(Set(k, For(k), And(Element(k, ZZ), Divides(n, Fibonacci(k))))), Cardinality(ZZ))),
     Variables(n),
     Assumptions(Element(n, SetMinus(ZZ, Set(0)))))
 
@@ -546,7 +546,7 @@ make_entry(ID("f5f706"),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("9d26d2"),
-    Formula(Equal(SetBuilder(Fibonacci(n), n, And(Element(n, ZZGreaterEqual(0)), Element(Sqrt(Fibonacci(n)), ZZ))),
+    Formula(Equal(Set(Fibonacci(n), For(n), And(Element(n, ZZGreaterEqual(0)), Element(Sqrt(Fibonacci(n)), ZZ))),
         Set(Fibonacci(0), Fibonacci(1), Fibonacci(2), Fibonacci(12)), Set(0, 1, 144))))
 
 # Finite sums

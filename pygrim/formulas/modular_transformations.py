@@ -51,10 +51,10 @@ make_entry(ID("dc2c26"),
 
 
 make_entry(ID("c84f3f"),
-    Formula(Equal(SL2Z, SetBuilder(Matrix2x2(a, b, c, d), Tuple(a, b, c, d), And(Element(a,ZZ), Element(b,ZZ), Element(c,ZZ), Element(d,ZZ), Equal(a*d-b*c, 1))))))
+    Formula(Equal(SL2Z, Set(Matrix2x2(a, b, c, d), For(Tuple(a, b, c, d)), And(Element(a,ZZ), Element(b,ZZ), Element(c,ZZ), Element(d,ZZ), Equal(a*d-b*c, 1))))))
 
 make_entry(ID("80279d"),
-    Formula(Equal(PSL2Z, SetBuilder(Matrix2x2(a, b, c, d), Tuple(a, b, c, d), And(Element(Matrix2x2(a, b, c, d), SL2Z), Or(Greater(c, 0), And(Equal(c, 0), Greater(d, 0))))))))
+    Formula(Equal(PSL2Z, Set(Matrix2x2(a, b, c, d), For(Tuple(a, b, c, d)), And(Element(Matrix2x2(a, b, c, d), SL2Z), Or(Greater(c, 0), And(Equal(c, 0), Greater(d, 0))))))))
 
 make_entry(ID("127a52"),
     Formula(Equal(ModularGroupAction(Matrix2x2(a, b, c, d), tau), (a * tau + b) / (c * tau + d))),
@@ -68,7 +68,7 @@ make_entry(ID("5636db"),
     Assumptions(And(Element(gamma, SL2Z), Element(eta, SL2Z), Element(tau, HH))))
 
 make_entry(ID("a637cd"),
-    Formula(Equal(ModularGroupFundamentalDomain, SetBuilder(tau, tau, And(Element(tau, HH),
+    Formula(Equal(ModularGroupFundamentalDomain, Set(tau, For(tau), And(Element(tau, HH),
         Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))),
             Or(Greater(Abs(tau), 1), And(Equal(Abs(tau), 1), LessEqual(Re(tau), 0))))))),
     Description("The choice to include the left or right boundary is arbitrary; the present definition follows Cohen and simplifies the treatment of reduced binary quadratic forms."),
@@ -87,5 +87,5 @@ make_entry(ID("e28209"),
     Assumptions(Element(tau, ModularGroupFundamentalDomain)))
 
 make_entry(ID("fd53ab"),
-    Formula(Equal(SetBuilder(ModularGroupAction(gamma, tau), Tuple(gamma, tau), And(Element(tau, ModularGroupFundamentalDomain), Element(gamma, PSL2Z))), HH)))
+    Formula(Equal(Set(ModularGroupAction(gamma, tau), For(Tuple(gamma, tau)), And(Element(tau, ModularGroupFundamentalDomain), Element(gamma, PSL2Z))), HH)))
 

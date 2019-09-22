@@ -59,7 +59,7 @@ make_entry(ID("851121"),
     Description("The imaginary unit."))
 
 make_entry(ID("c01d22"),
-    Formula(Equal(QQ, SetBuilder(p/q, Tuple(p, q), And(Element(p, ZZ), Element(q, SetMinus(ZZ, Set(0))))))))
+    Formula(Equal(QQ, Set(p/q, For(Tuple(p, q)), And(Element(p, ZZ), Element(q, SetMinus(ZZ, Set(0))))))))
 
 make_entry(ID("3e1c20"),
     Formula(Equal(ConstI**2, -1)))

@@ -218,7 +218,7 @@ make_entry(ID("f516e3"),
     Assumptions(And(Element(theta, CC), Less(-(ConstPi/2), Re(theta), ConstPi/2))))
 
 make_entry(ID("cbce7f"),
-    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), Var(w), Element(w, CC)), SetBuilder(Atan(z) + ConstPi*n, n, Element(n, ZZ)))),
+    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), Var(w), Element(w, CC)), Set(Atan(z) + ConstPi*n, ForElement(n, ZZ)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(-ConstI, ConstI)))))
 

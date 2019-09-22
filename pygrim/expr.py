@@ -649,7 +649,6 @@ Ellipsis Call Subscript
 Unknown Undefined
 Where
 Set List Tuple
-SetBuilder
 PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality

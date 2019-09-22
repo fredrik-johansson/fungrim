@@ -387,14 +387,14 @@ make_entry(ID("9a258f"),
     Formula(Equal(BranchCuts(RiemannZeta(s), s, Union(CC)), Set())))
 
 make_entry(ID("2e1ff3"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, RR)), SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))))))
+    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, RR)), Set(-(2*n), ForElement(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("a78abc"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), And(Element(s, CC), LessEqual(0, Re(s), 1))), SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0))))))
+    Formula(Equal(Zeros(RiemannZeta(s), Var(s), And(Element(s, CC), LessEqual(0, Re(s), 1))), Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0))))))
 
 make_entry(ID("692e42"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, CC)), Union(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))),
-        SetBuilder(RiemannZetaZero(n), n, And(Element(n, ZZ), Unequal(n, 0)))))))
+    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, CC)), Union(Set(-(2*n), ForElement(n, ZZGreaterEqual(1))),
+        Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0)))))))
 
 make_entry(ID("cbbf16"),
     Formula(Less(0, Re(RiemannZetaZero(n)), 1)),

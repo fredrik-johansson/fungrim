@@ -98,7 +98,7 @@ make_entry(ID("2c46dc"),
 # Counting
 
 make_entry(ID("c19cd6"),
-    Formula(Equal(Totient(n), Cardinality(SetBuilder(k, k, And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))))),
+    Formula(Equal(Totient(n), Cardinality(Set(k, For(k), And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -331,7 +331,7 @@ make_entry(ID("433a5c"),
     Assumptions(Element(n, ZZGreaterEqual(3))))
 
 make_entry(ID("86fcf1"),
-    Formula(Equal(Cardinality(SetBuilder(n, n, And(Element(n, ZZGreaterEqual(1)), Less(Totient(n), n / (Exp(ConstGamma) * Log(Log(n))))))), Cardinality(ZZ))))
+    Formula(Equal(Cardinality(Set(n, For(n), And(Element(n, ZZGreaterEqual(1)), Less(Totient(n), n / (Exp(ConstGamma) * Log(Log(n))))))), Cardinality(ZZ))))
 
 make_entry(ID("acb28a"),
     Formula(Less(Totient(n) * DivisorSigma(1, n), n**2)),

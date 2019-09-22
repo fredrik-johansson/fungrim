@@ -125,7 +125,7 @@ make_entry(ID("3c1659"),
     SymbolDefinition(Lattice, Lattice(a,b), "Complex lattice with periods a, b"))
 
 make_entry(ID("d530b1"),
-    Formula(Equal(Lattice(a,b), SetBuilder(a*m+b*n, Tuple(m, n), And(Element(m,ZZ), Element(n,ZZ))))),
+    Formula(Equal(Lattice(a,b), Set(a*m+b*n, For(Tuple(m, n)), And(Element(m,ZZ), Element(n,ZZ))))),
     Variables(a,b),
     Assumptions(And(Element(a, SetMinus(CC, Set(0))), Element(b, SetMinus(CC, Set(0))), Greater(Im(b/a), 0))))
 
@@ -242,7 +242,7 @@ make_entry(ID("1da705"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c6234b"),
-    Formula(Equal(Zeros(WeierstrassP(z,ConstI), Var(z), Element(z, CC)), SetBuilder(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, Tuple(m, n), And(Element(m, ZZ), Element(n, ZZ))))))
+    Formula(Equal(Zeros(WeierstrassP(z,ConstI), Var(z), Element(z, CC)), Set(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, For(Tuple(m, n)), And(Element(m, ZZ), Element(n, ZZ))))))
 
 make_entry(ID("69eb9b"),
     Formula(Equal(HolomorphicDomain(WeierstrassP(z,tau),z,CC), SetMinus(CC, Lattice(1, tau)))),

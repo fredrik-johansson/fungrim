@@ -135,13 +135,13 @@ make_entry(ID("c7e2fb"),
 # Fundamental properties
 
 make_entry(ID("47d430"),
-    Formula(Equal(DirichletGroup(q), SetBuilder(DirichletCharacter(q,ell), ell, And(ellrange, Equal(GCD(ell,q), 1))))),
+    Formula(Equal(DirichletGroup(q), Set(DirichletCharacter(q,ell), For(ell), And(ellrange, Equal(GCD(ell,q), 1))))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
 make_entry(ID("ed65c8"),
     Formula(Equal(PrimitiveDirichletCharacters(q),
-        SetBuilder(chi, chi, And(Element(chi, DirichletGroup(q)),
+        Set(chi, For(chi), And(Element(chi, DirichletGroup(q)),
             Brackets(ForAll(d, And(Element(d, ZZBetween(1, q-1)), Divides(d, q)),
                 Exists(a, And(Element(a, ZZBetween(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1))))))))),
     Variables(q),
@@ -173,7 +173,7 @@ make_entry(ID("d9a187"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), ellrange, Equal(GCD(ell,q), 1), Element(n, ZZ))))
 
 make_entry(ID("57d31a"),
-    Formula(Where(Element(chi(n), Union(SetBuilder(Exp(2*ConstPi*ConstI*k/r), k, Element(k, ZZ)), Set(0))), Equal(r, Totient(q)))),
+    Formula(Where(Element(chi(n), Union(Set(Exp(2*ConstPi*ConstI*k/r), ForElement(k, ZZ)), Set(0))), Equal(r, Totient(q)))),
     Variables(q,chi,n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZ))))
 
@@ -237,10 +237,10 @@ make_entry(ID("166a87"),
 
 make_entry(ID("75231e"),
     Formula(Equal(ConreyGenerator(p), Minimum(
-        SetBuilder(a, a,
+        Set(a, For(a),
         And(Element(a, ZZGreaterEqual(1)),
-            Equal(Cardinality(SetBuilder(Mod(a**k, p), k, Element(k, ZZGreaterEqual(0)))), p-1),
-            Equal(Cardinality(SetBuilder(Mod(a**k, p**2), k, Element(k, ZZGreaterEqual(0)))), p*(p-1)))
+            Equal(Cardinality(Set(Mod(a**k, p), For(k), Element(k, ZZGreaterEqual(0)))), p-1),
+            Equal(Cardinality(Set(Mod(a**k, p**2), For(k), Element(k, ZZGreaterEqual(0)))), p*(p-1)))
         )))),
     Variables(p),
     Assumptions(And(Element(p, PP), GreaterEqual(p, 3))))
@@ -248,9 +248,9 @@ make_entry(ID("75231e"),
 make_entry(ID("540931"),
     Formula(Where(Equal(ConreyGenerator(p), Cases(Tuple(10, Equal(p, 40487)), Tuple(7, Equal(p, 6692367337)),
             Tuple(Minimum(A), Otherwise))),
-        Equal(A, SetBuilder(a, a,
+        Equal(A, Set(a, For(a),
         And(Element(a, ZZGreaterEqual(1)),
-            Equal(Cardinality(SetBuilder(Mod(a**k, p), k, Element(k, ZZGreaterEqual(0)))), p-1))
+            Equal(Cardinality(Set(Mod(a**k, p), For(k), Element(k, ZZGreaterEqual(0)))), p-1))
         )))),
     Variables(p),
     Assumptions(And(Element(p, PP), GreaterEqual(p, 3), Less(p, Pow(10, 12)))))
@@ -281,9 +281,9 @@ make_entry(ID("03fbe8"),
     Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*(((1-x)*(1-y)/8 + a*b/2**(e-2))))),
         Equal(q, 2**e), Equal(L(k),
             Cases(Tuple(
-                Tuple(1, DiscreteLog(k, 5, q)), Element(k, SetBuilder(Mod(5**i, q), i, Element(i, ZZGreaterEqual(1))))),
+                Tuple(1, DiscreteLog(k, 5, q)), Element(k, Set(Mod(5**i, q), For(i), Element(i, ZZGreaterEqual(1))))),
                  Tuple(
-                Tuple(-1, DiscreteLog(-k, 5, q)), Element(k, SetBuilder(Mod(-5**i, q), i, Element(i, ZZGreaterEqual(1))))))),
+                Tuple(-1, DiscreteLog(-k, 5, q)), Element(k, Set(Mod(-5**i, q), For(i), Element(i, ZZGreaterEqual(1))))))),
     Equal(Tuple(x, a), L(ell)), Equal(Tuple(y, b), L(n)))),
     Variables(e, ell, n),
     Assumptions(And(Element(e, ZZGreaterEqual(3)), Element(ell, ZZBetween(1, 2**e-1)), Element(n, ZZ), Equal(GCD(ell, 2), GCD(n, 2), 1))))
@@ -317,8 +317,8 @@ make_entry(ID("f4de66"),
 
 make_entry(ID("338b5c"),
     Description("Table of", PrimitiveDirichletCharacters(q), "and", SetMinus(DirichletGroup(q), PrimitiveDirichletCharacters(q)), "for", LessEqual(1, q, 30)),
-    Table(TableRelation(Tuple(q, Cardinality(DirichletGroup(q)), Cardinality(PrimitiveDirichletCharacters(q)), P, N), And(Equal(PrimitiveDirichletCharacters(q), SetBuilder(DirichletCharacter(q,ell), ell, Element(l, P))),
-            Equal(SetMinus(DirichletGroup(q), PrimitiveDirichletCharacters(q)), SetBuilder(DirichletCharacter(q,ell), ell, Element(l, N))))),
+    Table(TableRelation(Tuple(q, Cardinality(DirichletGroup(q)), Cardinality(PrimitiveDirichletCharacters(q)), P, N), And(Equal(PrimitiveDirichletCharacters(q), Set(DirichletCharacter(q,ell), For(ell), Element(ell, P))),
+            Equal(SetMinus(DirichletGroup(q), PrimitiveDirichletCharacters(q)), Set(DirichletCharacter(q,ell), For(ell), Element(ell, N))))),
         TableHeadings(q, Cardinality(DirichletGroup(q)), Cardinality(PrimitiveDirichletCharacters(q)),
             Description(ell, "such that", DirichletCharacter(q,ell), "is primitive"), Description(ell, "such that", DirichletCharacter(q,ell), "is non-primitive")),
         List(
@@ -813,22 +813,22 @@ make_entry(ID("214a91"),
 
 make_entry(ID("9ba78a"),
     Formula(Equal(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), LessEqual(Re(s), 0))),
-        Cases(Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
-              Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), Unequal(q, 1))),
-              Tuple(SetBuilder(-(2*n)-1, n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
+        Cases(Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
+              Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), Unequal(q, 1))),
+              Tuple(Set(-(2*n)-1, For(n), Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))
 
 make_entry(ID("bc755b"),
     Formula(Equal(Zeros(DirichletL(s, chi), Var(s), Element(s, CC)),
         Union(Parentheses(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), LessEqual(Re(s), 0)))),
-            SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0))))))),
+            Set(DirichletLZero(n, chi), For(n), Element(n, SetMinus(ZZ, Set(0))))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("2a34c3"),
     Formula(Equal(Zeros(DirichletL(s, chi), Var(s), And(Element(s, CC), Less(0, Re(s), 1))),
-        SetBuilder(DirichletLZero(n, chi), n, Element(n, SetMinus(ZZ, Set(0)))))),
+        Set(DirichletLZero(n, chi), For(n), Element(n, SetMinus(ZZ, Set(0)))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -865,8 +865,8 @@ make_entry(ID("b788a1"),
         Equal(a, (1 - chi(-1))/2), Equal(beta, Cases(Tuple(s*(s-1), Equal(q, 1)), Tuple(1, Otherwise)))))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)), Element(s, CC),
-        NotElement(s, Cases(Tuple(SetBuilder(-(2*n), n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), 1)),
-                            Tuple(SetBuilder(-(2*n)-1, n, Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1)))),
+        NotElement(s, Cases(Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(0))), Equal(chi(-1), 1)),
+                            Tuple(Set(-(2*n)-1, For(n), Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1)))),
         Not(And(Equal(q,1), Equal(s,1))))))
 
 make_entry(ID("11a763"),

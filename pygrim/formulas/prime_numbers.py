@@ -55,10 +55,10 @@ make_entry(ID("6c22c8"),
       ))
 
 make_entry(ID("3fc797"),
-    Formula(Equal(PP, SetBuilder(PrimeNumber(n), n, Element(n, ZZGreaterEqual(1))))))
+    Formula(Equal(PP, Set(PrimeNumber(n), ForElement(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("04427b"),
-    Formula(Equal(PrimePi(x), Cardinality(SetBuilder(p, p, And(Element(p, PP), LessEqual(p, x)))))),
+    Formula(Equal(PrimePi(x), Cardinality(Set(p, For(p), And(Element(p, PP), LessEqual(p, x)))))),
     Variables(x),
     Assumptions(Element(x, RR)))
 

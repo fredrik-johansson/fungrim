@@ -63,7 +63,7 @@ make_entry(ID("288da1"),
     Formula(Equal(Exp(ConstGamma), SequenceLimit(1/Log(PrimeNumber(N)) * Product(PrimeNumber(n)/(PrimeNumber(n)-1), For(n, 1, N)), Var(N), Infinity))))
 
 make_entry(ID("28bf9a"),
-    Formula(NotElement(ConstGamma, SetBuilder(p/q, Tuple(p, q), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
+    Formula(NotElement(ConstGamma, Set(p/q, For(Tuple(p, q)), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
     References("J. Havil (2003): Exploring Euler's Constant. Princeton University Press. Page 97."))
 
 make_entry(ID("cf3977"),

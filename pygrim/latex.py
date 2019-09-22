@@ -459,20 +459,46 @@ def tex_Ceil(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     return "\\left\\lceil " + argstr[0] + " \\right\\rceil"
 
-@deftex
-def tex_Tuple(head, args, **kwargs):
+@deftex_heads([Tuple, Set, List])
+def tex_TupleSetList(head, args, **kwargs):
+    if head == Tuple:
+        L, R = "\\left(", "\\right)"
+    elif head == Set:
+        L, R = "\\left\\{", "\\right\\}"
+    else:
+        L, R = "\\left[", "\\right]"
+    for arg in args:
+        if arg.head() in (For, ForElement):
+            if arg.head() == For:
+                forargs = arg.args()
+                if len(args) == 2 and len(forargs) == 3:
+                    var, a, b = forargs
+                    func = args[0]
+                    first = func.replace({var: a}).latex(**kwargs)
+                    last = func.replace({var: b}).latex(**kwargs)
+                    return "%s%s, \\ldots, %s%s" % (L, first, last, R)
+                if len(args) == 3 and len(forargs) == 1:
+                    func = args[0].latex(**kwargs)
+                    cond = args[2].latex(**kwargs)
+                    return "%s %s : %s %s" % (L, func, cond, R)
+            if arg.head() == ForElement:
+                forargs = arg.args()
+                if len(args) == 2 and len(forargs) == 2:
+                    var, domain = forargs
+                    func = args[0]
+                    cond = Element(var, domain).latex(**kwargs)
+                    func = func.latex(**kwargs)
+                    return "%s %s : %s %s" % (L, func, cond, R)
+                if len(args) == 3 and len(forargs) == 2:
+                    var, domain = forargs
+                    func = args[0]
+                    cond2 = args[2]
+                    cond = Element(var, domain).latex(**kwargs)
+                    func = func.latex(**kwargs)
+                    cond2 = cond2.latex(**kwargs)
+                    return "%s %s : %s \\,\\mathbin{\\operatorname{and}}\\, %s %s" % (L, func, cond, cond2, R)
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\left(" + ", ".join(argstr) + "\\right)"
-
-@deftex
-def tex_Set(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\left\{" + ", ".join(argstr) + "\\right\}"
-
-@deftex
-def tex_List(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\left[" + ", ".join(argstr) + "\\right]"
+    return L + ", ".join(argstr) + R
 
 @deftex
 def tex_Parentheses(head, args, **kwargs):
@@ -547,7 +573,7 @@ def tex_std_operator(head, args, **kwargs):
               Zeros:"\\operatorname{zeros}\\,", UniqueZero:"\\operatorname{zero*}\\,",
               Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution*}\\,"}[head]
     if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
-        if args[0].head() in (Set, SetBuilder):
+        if args[0].head() == Set:
             return opname + " " + argstr[0]
         else:
             return "%s\\left(%s\\right)" % (opname, argstr[0])
@@ -698,7 +724,6 @@ def tex_Sum_Product(head, args, **kwargs):
             return ss + ("_{%s} %s" % (var, func))
         # Sum(f(n), ForElement(n, S), P(n))
         if len(args) == 3:
-            print(head, args)
             cond = args[2].latex(in_small=True)
             return ss + ("_{\\textstyle{%s \\atop %s}} %s" % (var, cond, func))
     raise ValueError
@@ -845,12 +870,6 @@ def tex_Conjugate(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
     return "\\overline{%s}" % argstr[0]
-
-@deftex
-def tex_SetBuilder(head, args, **kwargs):
-    assert len(args) == 3
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\left\\{ %s : %s \\right\\}" % (argstr[0], argstr[2])
 
 @deftex
 def tex_Cardinality(head, args, **kwargs):

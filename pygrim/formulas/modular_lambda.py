@@ -181,7 +181,7 @@ make_entry(ID("099301"),
 ## Fundamental domain
 
 make_entry(ID("737f2b"),
-    Formula(Equal(ModularLambdaFundamentalDomain, SetBuilder(tau, tau, And(Element(tau, HH),
+    Formula(Equal(ModularLambdaFundamentalDomain, Set(tau, For(tau), And(Element(tau, HH),
         Or(And(Element(Re(tau), OpenInterval(-1,1)),
             Greater(Min(Abs(tau-Div(1,2)), Abs(z+Div(1,2))), Div(1,2))),
             Equal(Re(tau), -1),
@@ -189,7 +189,7 @@ make_entry(ID("737f2b"),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 113."))
 
 make_entry(ID("b23575"),
-    Formula(Equal(HH, SetBuilder(ModularGroupAction(gamma, tau), Tuple(tau, gamma),
+    Formula(Equal(HH, Set(ModularGroupAction(gamma, tau), For(Tuple(tau, gamma)),
         And(Element(tau, ModularLambdaFundamentalDomain),
             Element(gamma, SL2Z),
             CongruentMod(gamma, Matrix2x2(1,0,0,1), 2))))))
@@ -255,21 +255,21 @@ make_entry(ID("ac236f"),
 # Range
 
 make_entry(ID("90b419"),
-    Formula(Equal(SetBuilder(ModularLambda(tau), tau, Element(tau, HH)),
-        SetBuilder(ModularLambda(tau), tau, Element(tau, ModularLambdaFundamentalDomain)), SetMinus(CC, Set(0, 1)))))
+    Formula(Equal(Set(ModularLambda(tau), ForElement(tau, HH)),
+        Set(ModularLambda(tau), ForElement(tau, ModularLambdaFundamentalDomain)), SetMinus(CC, Set(0, 1)))))
 
 make_entry(ID("4b20ab"),
-    Formula(Equal(SetBuilder(ModularLambda(tau), tau, And(Element(tau, HH), Equal(Re(tau), -1))), OpenInterval(-Infinity, 0))),
+    Formula(Equal(Set(ModularLambda(tau), For(tau), And(Element(tau, HH), Equal(Re(tau), -1))), OpenInterval(-Infinity, 0))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
 
 make_entry(ID("e4315f"),
-    Formula(Equal(SetBuilder(ModularLambda(tau), tau, And(Element(tau, HH), Equal(Abs(tau+Div(1,2)), Div(1,2)))), OpenInterval(1, Infinity))),
+    Formula(Equal(Set(ModularLambda(tau), For(tau), And(Element(tau, HH), Equal(Abs(tau+Div(1,2)), Div(1,2)))), OpenInterval(1, Infinity))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
 
 make_entry(ID("830dd4"),
-    Formula(Equal(SetBuilder(ModularLambda(tau), tau, Element(tau, Interior(ModularLambdaFundamentalDomain))),
+    Formula(Equal(Set(ModularLambda(tau), For(tau), Element(tau, Interior(ModularLambdaFundamentalDomain))),
         SetMinus(CC, Parentheses(Union(OpenClosedInterval(-Infinity, 0), ClosedOpenInterval(1, Infinity)))))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
@@ -314,14 +314,14 @@ make_entry(ID("231141"),
 make_entry(ID("b7174d"),
     Formula(Equal(tau, ConstI * (EllipticK(1-ModularLambda(tau))/EllipticK(ModularLambda(tau))))),
     Variables(tau),
-    Assumptions(Element(tau, Union(Interior(ModularLambdaFundamentalDomain), SetBuilder(tau, tau, And(Element(tau, HH), Equal(Re(tau), 1)))))))
+    Assumptions(Element(tau, Union(Interior(ModularLambdaFundamentalDomain), Set(tau, For(tau), And(Element(tau, HH), Equal(Re(tau), 1)))))))
 
 tau1 = Subscript(tau,1)
 
 make_entry(ID("5d550c"),
     Formula(Equal(tau, ConstI * (EllipticK(1-ModularLambda(tau))/EllipticK(ModularLambda(tau))) + 2 * Ceil(Div(1,2)*Re(tau) - Div(1,2)))),
     Variables(tau),
-    Assumptions(Element(tau, SetBuilder(tau1+n, Tuple(tau1, n), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))))
+    Assumptions(Element(tau, Set(tau1+n, For(Tuple(tau1, n)), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))))
 
 make_entry(ID("44a529"),
     Formula(Equal(ModularJ(tau), 256 * ((1-ModularLambda(tau)+ModularLambda(tau)**2)**3 / (ModularLambda(tau)**2 * (1 - ModularLambda(tau))**2)))),
@@ -346,6 +346,6 @@ make_entry(ID("38b4f3"),
     Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
         -((4*ConstI)/ConstPi) * EllipticK(ModularLambda(tau))**2 * (ModularLambda(tau)-1) * ModularLambda(tau))),
     Variables(tau),
-    Assumptions(Element(tau, SetBuilder(tau1+n, Tuple(tau1, n), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))),
+    Assumptions(Element(tau, Set(tau1+n, For(Tuple(tau1, n)), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))),
     References("http://functions.wolfram.com/EllipticFunctions/ModularLambda/20/01/0001/ Note: because of the branch cut of the elliptic integral, only valid on part of the domain."))
 

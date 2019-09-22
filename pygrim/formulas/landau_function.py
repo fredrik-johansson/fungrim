@@ -160,7 +160,7 @@ make_entry(ID("177218"),
 # todo: semantic markup for variable-length tuples (or better, partitions?)
 make_entry(ID("7932c3"),
     Formula(Equal(LandauG(n),
-        Maximum(SetBuilder(LCM(Subscript(s, 1), Ellipsis, Subscript(s, k)), Tuple(k, Subscript(s, i)),
+        Maximum(Set(LCM(Subscript(s, 1), Ellipsis, Subscript(s, k)), For(Tuple(k, Subscript(s, i))),
             And(Element(k, ZZGreaterEqual(0)), Element(Subscript(s, i), ZZGreaterEqual(1)), Equal(Sum(Subscript(s, i), For(i, 1, k)), n)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
@@ -185,7 +185,7 @@ make_entry(ID("3d5019"),
     References("Jean-Pierre Massias, Jean-Louis Nicolas and Guy Robin (1989), Effective bounds for the maximal order of an element in the symmetric group, Mathematics of Computation, 53, 118, pp. 665-665, https://doi.org/10.1090/s0025-5718-1989-0979940-4"))
 
 make_entry(ID("87d19b"),
-    Formula(LessEqual(Maximum(SetBuilder(p, p, And(Element(p, PP), Divides(p, LandauG(n))))), Decimal("1.328") * Sqrt(n*Log(n)))),
+    Formula(LessEqual(Maximum(Set(p, For(p), And(Element(p, PP), Divides(p, LandauG(n))))), Decimal("1.328") * Sqrt(n*Log(n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(5))),
     References("Jon Grantham (1995), The largest prime dividing the maximal order of an element of S_n, 64, 209, pp. 407--210, https://doi.org/10.2307/2153344"))

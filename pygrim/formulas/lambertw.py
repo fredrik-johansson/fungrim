@@ -153,7 +153,7 @@ make_entry(ID("88168b"),
 
 make_entry(ID("d7136f"),
     Formula(Equal(Solutions(Brackets(Equal(w * Exp(w), z)), Var(w), Element(w, CC)),
-        SetBuilder(LambertW(k,z), k, And(Element(k, ZZ), Or(Unequal(z, 0), Equal(k, 0)))))),
+        Set(LambertW(k,z), For(k), And(Element(k, ZZ), Or(Unequal(z, 0), Equal(k, 0)))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -390,7 +390,7 @@ make_entry(ID("da0f15"),
 # Range
 
 make_entry(ID("c0ae5b"),
-    Formula(Equal(SetBuilder(LambertW(k,z), Tuple(k,z), And(Element(k, ZZ), Element(z, CC), Or(Unequal(z, 0), Equal(k, 0)))), CC)))
+    Formula(Equal(Set(LambertW(k,z), For(Tuple(k,z)), And(Element(k, ZZ), Element(z, CC), Or(Unequal(z, 0), Equal(k, 0)))), CC)))
 
 k1 = Subscript(k,1)
 k2 = Subscript(k,2)
@@ -406,38 +406,38 @@ make_entry(ID("6e05c9"),
 # Image of the principal branch
 
 make_entry(ID("ee86fb"),
-    Formula(Equal(SetBuilder(LambertW(0,x), x, Element(x, OpenInterval(-Exp(-1), Infinity))), OpenInterval(-1, Infinity))))
+    Formula(Equal(Set(LambertW(0,x), ForElement(x, OpenInterval(-Exp(-1), Infinity))), OpenInterval(-1, Infinity))))
 
 make_entry(ID("55498b"),
-    Formula(Equal(SetBuilder(LambertW(0,x), x, Element(x, Set(-Exp(-1)))), Set(-1))))
+    Formula(Equal(Set(LambertW(0,x), ForElement(x, Set(-Exp(-1)))), Set(-1))))
 
 make_entry(ID("44ad09"),
-    Formula(Equal(SetBuilder(LambertW(0,x), x, Element(x, OpenInterval(-Infinity, -Exp(-1)))),
-        SetBuilder(-y*Cot(y) + y*ConstI, y, Element(y, OpenInterval(0, ConstPi))))))
+    Formula(Equal(Set(LambertW(0,x), ForElement(x, OpenInterval(-Infinity, -Exp(-1)))),
+        Set(-y*Cot(y) + y*ConstI, ForElement(y, OpenInterval(0, ConstPi))))))
 
 make_entry(ID("2d3356"),
-    Formula(Equal(SetBuilder(LambertW(0,z), z, Element(z, SetMinus(CC, RR))),
-        SetBuilder(x+y*ConstI, Tuple(x, y), And(Element(y, SetMinus(OpenInterval(-ConstPi, ConstPi), Set(0))), Element(x, OpenInterval(-y*Cot(y), Infinity)))))))
+    Formula(Equal(Set(LambertW(0,z), ForElement(z, SetMinus(CC, RR))),
+        Set(x+y*ConstI, For(Tuple(x, y)), And(Element(y, SetMinus(OpenInterval(-ConstPi, ConstPi), Set(0))), Element(x, OpenInterval(-y*Cot(y), Infinity)))))))
 
 # Image of the non-principal branches
 
 make_entry(ID("21d9a0"),
-    Formula(Equal(SetBuilder(LambertW(-1,z), z, Element(z, SetMinus(CC, Set(0)))),
-        Union(OpenClosedInterval(-Infinity, -1), SetBuilder(x+y*ConstI, Tuple(x, y),
+    Formula(Equal(Set(LambertW(-1,z), ForElement(z, SetMinus(CC, Set(0)))),
+        Union(OpenClosedInterval(-Infinity, -1), Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(0, u, 2), LessEqual(t, v)), Parentheses(LessEqual(1, u, 2)), And(Less(1, u, 3), Greater(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/ConstPi))))))))
 
 make_entry(ID("d5917b"),
-    Formula(Equal(SetBuilder(LambertW(k,z), z, Element(z, SetMinus(CC, Set(0)))),
-        SetBuilder(x+y*ConstI, Tuple(x, y),
+    Formula(Equal(Set(LambertW(k,z), ForElement(z, SetMinus(CC, Set(0)))),
+        Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), Less(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), GreaterEqual(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, y/ConstPi))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(1))))
 
 make_entry(ID("bf3e29"),
-    Formula(Equal(SetBuilder(LambertW(-k,z), z, Element(z, SetMinus(CC, Set(0)))),
-        SetBuilder(x+y*ConstI, Tuple(x, y),
+    Formula(Equal(Set(LambertW(-k,z), ForElement(z, SetMinus(CC, Set(0)))),
+        Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), LessEqual(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), Greater(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/ConstPi)))))),
     Variables(k),

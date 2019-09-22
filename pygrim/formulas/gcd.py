@@ -258,12 +258,12 @@ make_entry(ID("99dc4a"),
 # Divisibility
 
 make_entry(ID("6880d0"),
-    Formula(Equal(GCD(a,b), Maximum(SetBuilder(d, d, And(Element(d, ZZGreaterEqual(1)), Divides(d, a), Divides(d, b)))))),
+    Formula(Equal(GCD(a,b), Maximum(Set(d, For(d), And(Element(d, ZZGreaterEqual(1)), Divides(d, a), Divides(d, b)))))),
     Variables(a,b),
     Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
 
 make_entry(ID("805c7a"),
-    Formula(Equal(LCM(a,b), Minimum(SetBuilder(m, m, And(Element(m, ZZGreaterEqual(1)), Divides(a, m), Divides(b, m)))))),
+    Formula(Equal(LCM(a,b), Minimum(Set(m, For(m), And(Element(m, ZZGreaterEqual(1)), Divides(a, m), Divides(b, m)))))),
     Variables(a,b),
     Assumptions(And(Element(a,SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
@@ -335,13 +335,13 @@ make_entry(ID("be5fcd"),
     Assumptions(And(Element(a,ZZ), Element(b, ZZ))))
 
 make_entry(ID("965ac0"),
-    Formula(Where(Equal(SetBuilder(a*x+b*y, Tuple(x,y), And(Element(x, ZZ), Element(y, ZZ))),
-        SetBuilder(n*d, n, Element(n, ZZ))), Equal(d, GCD(a,b)))),
+    Formula(Where(Equal(Set(a*x+b*y, For(Tuple(x,y)), And(Element(x, ZZ), Element(y, ZZ))),
+        Set(n*d, ForElement(n, ZZ))), Equal(d, GCD(a,b)))),
     Variables(a,b),
     Assumptions(And(Element(a,ZZ), Element(b, ZZ))))
 
 make_entry(ID("e922c4"),
-    Formula(Equal(GCD(a,b), Minimum(SetBuilder(a*x + b*y, Tuple(x, y), And(Element(x, ZZ), Element(y, ZZ), GreaterEqual(a*x + b*y, 1)))))),
+    Formula(Equal(GCD(a,b), Minimum(Set(a*x + b*y, For(Tuple(x, y)), And(Element(x, ZZ), Element(y, ZZ), GreaterEqual(a*x + b*y, 1)))))),
     Variables(a,b),
     Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
 
@@ -695,14 +695,14 @@ make_entry(ID("da45c0"),
 # Summation and counting
 
 make_entry(ID("7b27cd"),
-    Formula(Equal(Cardinality(SetBuilder(k, k, And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
+    Formula(Equal(Cardinality(Set(k, For(k), And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 # fixme: should be CartesianPower, not Pow
 make_entry(ID("4099d2"),
     Formula(Equal(SequenceLimit(
-        (1/N**n) * Cardinality(SetBuilder(T, T, And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
+        (1/N**n) * Cardinality(Set(T, For(T), And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
         Var(N), Infinity), 1/RiemannZeta(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(2))))

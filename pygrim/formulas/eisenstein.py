@@ -442,13 +442,13 @@ make_entry(ID("9bf0ad"),
     Formula(Equal(WeierstrassP(z, tau), 1/z**2 + Sum((2*k+1)*EisensteinG(2*k+2,tau) * z**(2*k), For(k, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(z), 
-        Infimum(SetBuilder(Abs(s), s, Element(s, SetMinus(Lattice(1, tau), Set(0)))))))))
+        Infimum(Set(Abs(s), ForElement(s, SetMinus(Lattice(1, tau), Set(0)))))))))
 
 make_entry(ID("3e84e3"),
     Formula(Equal(WeierstrassZeta(z, tau), 1/z - Sum(EisensteinG(2*k+2,tau) * z**(2*k+1), For(k, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(z), 
-        Infimum(SetBuilder(Abs(s), s, Element(s, SetMinus(Lattice(1, tau), Set(0)))))))))
+        Infimum(Set(Abs(s), ForElement(s, SetMinus(Lattice(1, tau), Set(0)))))))))
 
 # Derivatives
 
@@ -522,7 +522,7 @@ make_entry(ID("ad9ba2"),
 
 make_entry(ID("e46697"),
     Formula(Equal(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, HH)),
-        SetBuilder(ModularGroupAction(gamma, tau), Tuple(gamma, tau), And(Element(tau, Zeros(EisensteinE(2*k, z), Var(z), Element(z, ModularGroupFundamentalDomain))), Element(gamma, PSL2Z))))),
+        Set(ModularGroupAction(gamma, tau), For(Tuple(gamma, tau)), And(Element(tau, Zeros(EisensteinE(2*k, z), Var(z), Element(z, ModularGroupFundamentalDomain))), Element(gamma, PSL2Z))))),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(2)))))
 
@@ -530,7 +530,7 @@ make_entry(ID("2f6805"),
     #Formula(Implies(And(Element(tau, ModularGroupFundamentalDomain), Equal(EisensteinE(2*k, tau), 0)), Equal(Abs(tau), 1))),
     #Variables(tau,k),
     #Assumptions(And(Element(k, ZZGreaterEqual(2)), Element(tau, HH))),
-    Formula(Subset(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), SetBuilder(Exp(ConstI*theta), theta, Element(theta, ClosedInterval(ConstPi/2, 2*ConstPi/3))))),
+    Formula(Subset(Zeros(EisensteinE(2*k, tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(Exp(ConstI*theta), ForElement(theta, ClosedInterval(ConstPi/2, 2*ConstPi/3))))),
     Variables(k),
     Assumptions(And(Element(k, ZZGreaterEqual(2)))),
     References("F. K. C. Rankin and H. P. F. Swinnerton-Dyer, On the zeros of Eisenstein Series, Bull. London Math. Soc., 2(1970),169-170."))
@@ -581,13 +581,13 @@ make_entry(ID("ad91ae"),
 
 make_entry(ID("cae067"),
     Formula(Equal(Zeros(EisensteinE(2, tau), Var(tau), Element(tau, HH)),
-        SetBuilder(tau+n, Tuple(tau, n), And(Element(tau, Zeros(EisensteinE(2, z), Var(z), And(Element(z, HH), Element(Re(z), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
+        Set(tau+n, For(Tuple(tau, n)), And(Element(tau, Zeros(EisensteinE(2, z), Var(z), And(Element(z, HH), Element(Re(z), ClosedOpenInterval(-Div(1,2), Div(1,2)))))),
             Element(n, ZZ))))))
 
 make_entry(ID("f33f09"),
     Formula(Equal(Zeros(EisensteinE(2, tau), Var(tau), And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
-        Where(SetBuilder(Parentheses(UniqueZero(EisensteinE(2, z), Var(z), Element(z, D(c,d)))),
-            Tuple(c, d), And(Element(c, ZZ), Element(d, ZZ), Equal(GCD(c,d),1), Element(-(d/c), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
+        Where(Set(Parentheses(UniqueZero(EisensteinE(2, z), Var(z), Element(z, D(c,d)))),
+            For(Tuple(c, d)), And(Element(c, ZZ), Element(d, ZZ), Equal(GCD(c,d),1), Element(-(d/c), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
             Equal(D(c,d), ClosedDisk(-(d/c) + (ConstI*ConstPi)/(6*c**2), (Decimal("0.000283")*ConstPi**2)/(36*c**2)))))),
     References("R. Wood and M. P. Young, Zeros of the weight two Eisenstein series, Journal of Number Theory Volume 143, October 2014, Pages 320-333. https://doi.org/10.1016/j.jnt.2014.04.007"))
 

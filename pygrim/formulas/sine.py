@@ -251,13 +251,13 @@ make_entry(ID("056c0e"),
     References("Niven's theorem"))
 
 make_entry(ID("2f6818"),
-    Formula(Equal(Zeros(Brackets(Sin(z)), Var(z), Element(z, CC)), SetBuilder(ConstPi * n, n, Element(n, ZZ)))))
+    Formula(Equal(Zeros(Brackets(Sin(z)), Var(z), Element(z, CC)), Set(ConstPi * n, ForElement(n, ZZ)))))
 
 make_entry(ID("c5bdcc"),
-    Formula(Equal(ArgMax(Brackets(Sin(x)), Var(x), Element(x, RR)), SetBuilder(ConstPi * (2 * n + Div(1,2)), n, Element(n, ZZ)))))
+    Formula(Equal(ArgMax(Brackets(Sin(x)), Var(x), Element(x, RR)), Set(ConstPi * (2 * n + Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("ad04bd"),
-    Formula(Equal(ArgMin(Brackets(Sin(x)), Var(x), Element(x, RR)), SetBuilder(ConstPi * (2 * n - Div(1,2)), n, Element(n, ZZ)))))
+    Formula(Equal(ArgMin(Brackets(Sin(x)), Var(x), Element(x, RR)), Set(ConstPi * (2 * n - Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("bfe28b"),
     Formula(Equal(Maximum(Brackets(Sin(x)), Var(x), Element(x, RR)), 1)))
@@ -422,7 +422,7 @@ make_entry(ID("acf63c"),
     Formula(Equal(Sin(z)**2, Tan(z)**2 / (1 + Tan(z)**2))),
     Variables(z),
     Assumptions(And(Element(z, CC),
-        NotElement(z, SetBuilder((2*n+1)*ConstPi/2, n, Element(n, ZZ))))))
+        NotElement(z, Set((2*n+1)*ConstPi/2, ForElement(n, ZZ))))))
 
 make_entry(ID("2a6702"),
     Formula(Equal(Sin(z)**3, (3*Sin(z) - Sin(3*z))/4)),
@@ -476,8 +476,8 @@ make_entry(ID("925e5b"),
 make_entry(ID("3fb3ca"),
     Formula(Equal(Sin(z), (2*Tan(z/2))/(Tan(z/2)**2 + 1))),
     Variables(z),
-    Assumptions(And(Element(z, CC), NotElement(z, SetBuilder((2*n+1)*ConstPi, n, Element(n, ZZ)))),
-        And(Element(z, FormalPowerSeries(CC, x)), NotElement(z, SetBuilder((2*n+1)*ConstPi, n, Element(n, ZZ))))))
+    Assumptions(And(Element(z, CC), NotElement(z, Set((2*n+1)*ConstPi, ForElement(n, ZZ)))),
+        And(Element(z, FormalPowerSeries(CC, x)), NotElement(z, Set((2*n+1)*ConstPi, ForElement(n, ZZ))))))
 
 make_entry(ID("18f40c"),
     Formula(Equal(Sin(z), (Exp(ConstI*z) - Exp(-ConstI*z)) / (2 * ConstI))),

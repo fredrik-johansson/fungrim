@@ -169,10 +169,10 @@ make_entry(ID("ea3e3c"),
     Formula(Equal(Zeros(ModularJ(tau), Var(tau), Element(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
 
 make_entry(ID("1b2d8a"),
-    Formula(Equal(Zeros(ModularJ(tau), Var(tau), Element(tau, HH)), SetBuilder(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), gamma, Element(gamma, PSL2Z)))))
+    Formula(Equal(Zeros(ModularJ(tau), Var(tau), Element(tau, HH)), Set(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), ForElement(gamma, PSL2Z)))))
 
 make_entry(ID("dcc8b1"),
-    Formula(Equal(SetBuilder(ModularJ(tau), tau, Element(tau, ModularGroupFundamentalDomain)), CC)))
+    Formula(Equal(Set(ModularJ(tau), ForElement(tau, ModularGroupFundamentalDomain)), CC)))
 
 make_entry(ID("441301"),
     Formula(Equal(Cardinality(Solutions(Brackets(Equal(ModularJ(tau), z)), Var(tau), Element(tau, ModularGroupFundamentalDomain))), 1)),
@@ -187,7 +187,7 @@ make_entry(ID("36eb82"),
 
 make_entry(ID("0b4d4b"),
     Formula(Equal(PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D),
-        SetBuilder(Tuple(a,b,c), Tuple(a,b,c), And(Element(a, ZZGreaterEqual(1)), Element(b, ZZ), Element(c, ZZ),
+        Set(Tuple(a,b,c), For(Tuple(a,b,c)), And(Element(a, ZZGreaterEqual(1)), Element(b, ZZ), Element(c, ZZ),
             Equal(b**2 - 4*a*c, D),
             LessEqual(Abs(b), a, c), Parentheses(Implies(Or(Equal(Abs(b), a), Equal(a, c)), GreaterEqual(b, 0))),
             Equal(GCD(a,b,c), 1))))),

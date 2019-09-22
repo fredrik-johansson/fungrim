@@ -15,7 +15,6 @@ def_Topic(
     Section("Sets"),
     Entries(
         "cf447f",
-        "66ca58",
     ),
     Section("Set operations"),
     Entries(
@@ -49,17 +48,16 @@ make_entry(ID("379aa0"),
 
 make_entry(ID("cf447f"),
     SymbolDefinition(Set, Set(Ellipsis), "Set with given elements"),
-    Description(SourceForm(Set(x, y, Ellipsis)), ", rendered as", Set(x, y, Ellipsis),
-        ", represents the finite set containing the given elements.",
+    Description(SourceForm(Set(x, y, z)), ", rendered as", Set(x, y, z),
+        ", represents the finite set containing the given elements (and similarly with any number of argumeents).",
         "In particular, ", SourceForm(Set()), "or", Set(),
-            "is the empty set, and", SourceForm(Set(x)), "or", Set(x), "is a singleton set."))
-
-make_entry(ID("66ca58"),
-    SymbolDefinition(SetBuilder, SetBuilder(f(x), x, P(x)), "Set comprehension"),
-    Description("Called with 3 arguments", SourceForm(SetBuilder(f(x), x, P(x))), ", rendered as", SetBuilder(f(x), x, P(x)),
-        ", represents the set of values", f(x), "for all", x, "satisfying the predicate", P(x), "."),
-    description_x_predicate)
-
+            "is the empty set, and", SourceForm(Set(x)), "or", Set(x), "is a singleton set."),
+    Description("The special expressions", SourceForm(For), ", ", SourceForm(ForElement), "define a set comprehension:"),
+    Description(SourceForm(Set(f(x), For(x), P(x))), ", rendered as", Set(f(x), For(x), P(x)), "."),
+    Description(SourceForm(Set(f(x), ForElement(x, S))), ", rendered as", Set(f(x), ForElement(x, S)), "."),
+    Description(SourceForm(Set(f(x), ForElement(x, S), P(x))), ", rendered as", Set(f(x), ForElement(x, S), P(x)), "."),
+    Description(SourceForm(Set(f(x), For(x, a, b))), ", rendered as", Set(f(x), For(x, a, b)), ".")
+)
 
 make_entry(ID("81efd5"),
     SymbolDefinition(Cardinality, Cardinality(S), "Set cardinality"),
