@@ -67,24 +67,50 @@ def_Topic(
 # Sums and products
 
 make_entry(ID("044e42"),
-    SymbolDefinition(Sum, Sum(f(n), For(n)), "Sum"))
-
-#    Description(SourceForm(Sum(f(n), For(n), P(n))), ", rendered as ",
-#        Sum(f(n), For(n), P(n)), ", represents the sum of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-#    Description("The argument", SourceForm(n), "defines a locally bound variable."),
-#    Description("As a special syntax", SourceForm(Sum(f(n), Tuple(n, a, b))), ", rendered as ",
-#        Sum(f(n), Tuple(n, a, b)), ", represents the sum taken over all integers", LessEqual(a, n, b), "."),
-#    Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
+    SymbolDefinition(Sum, Sum(f(n), For(n)), "Sum"),
+    Description(SourceForm(Sum(S)), ", rendered as ", Sum(S), ", gives the sum of the elements of the set", S, ". "
+        "The sum is required to be absolutely convergent. The empty sum is 0."),
+    Description(SourceForm(Sum(f(n), For(n, a, b))), ", rendered as ", Sum(f(n), For(n, a, b)), ", gives the sum of", f(n),
+        "for integers", n, "from", a, "to", b, ", where", a, "and", b, "should be integers or", -Infinity, "or", Infinity, ". ",
+        "If", Less(a, b), ", the sum is 0. The sum", Sum(f(n), For(n, 0, Infinity)), "is interpreted as",
+        SequenceLimit(Sum(f(n), For(n, 0, N)), Var(N), Infinity), "and can be conditionally convergent."),
+    Description(SourceForm(Sum(f(n), For(n, a, b), P(n))), ", rendered as ", Sum(f(n), For(n, a, b), P(n)), ", is as above but",
+        "only terms satisfying the predicate", P(n), "are included."),
+    Description(SourceForm(Sum(f(x), ForElement(x, S))), ", rendered as ", Sum(f(x), ForElement(x, S)), ", gives the sum of", f(x),
+        "for all", x, "in the set", S, ". The sum is required to be absolutely convergent."),
+    Description(SourceForm(Sum(f(x), ForElement(x, S), P(x))), ", rendered as ", Sum(f(x), ForElement(x, S), P(x)), ", gives the sum of", f(x),
+        "for all", x, "in the set", S, "and satisfying the predicate", P(x), ". The sum is required to be absolutely convergent."),
+    Description(SourceForm(Sum(f(x), For(x), P(x))), ", rendered as ", Sum(f(x), For(x), P(x)), ", gives the sum of", f(x),
+        "for all", x, "satisfying the predicate", P(x), ". ",
+        "The predicate", P(x), "should define the domain of", x, "unambiguously; that is, it must include a statement such as",
+        Element(x, S), "where", S, "is a known set.",
+         "The sum is required to be absolutely convergent."),
+    Description("The special expression", SourceForm(For(x)), ", ", SourceForm(For(x, a, b)), " or", SourceForm(ForElement(x)),
+        "declares", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator. ",
+        "Similarly", SourceForm(For(Tuple(x, y))), ", ", SourceForm(ForElement(Tuple(x, y), S)), "etc. defines multiple locally bound variables."))
 
 make_entry(ID("1e2755"),
-    SymbolDefinition(Product, Product(f(n), For(n)), "Product"))
-
-#    Description(SourceForm(Product(f(n), n, P(n))), ", rendered as ",
-#        Product(f(n), n, P(n)), ", represents the product of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-#    Description("The argument", SourceForm(n), "defines a locally bound variable."),
-#    Description("As a special syntax", SourceForm(Product(f(n), Tuple(n, a, b))), ", rendered as ",
-#        Product(f(n), Tuple(n, a, b)), ", represents the product taken over all integers", LessEqual(a, n, b), "."),
-#    Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
+    SymbolDefinition(Product, Product(f(n), For(n)), "Product"),
+    Description(SourceForm(Product(S)), ", rendered as ", Product(S), ", gives the product of the elements of the set", S, ". "
+        "The product is required to be absolutely convergent. The empty product is 1."),
+    Description(SourceForm(Product(f(n), For(n, a, b))), ", rendered as ", Product(f(n), For(n, a, b)), ", gives the product of", f(n),
+        "for integers", n, "from", a, "to", b, ", where", a, "and", b, "should be integers or", -Infinity, "or", Infinity, ". ",
+        "If", Less(a, b), ", the product is 1. The product", Product(f(n), For(n, 0, Infinity)), "is interpreted as",
+        SequenceLimit(Product(f(n), For(n, 0, N)), Var(N), Infinity), "and can be conditionally convergent."),
+    Description(SourceForm(Product(f(n), For(n, a, b), P(n))), ", rendered as ", Product(f(n), For(n, a, b), P(n)), ", is as above but",
+        "only terms satisfying the predicate", P(n), "are included."),
+    Description(SourceForm(Product(f(x), ForElement(x, S))), ", rendered as ", Product(f(x), ForElement(x, S)), ", gives the product of", f(x),
+        "for all", x, "in the set", S, ". The product is required to be absolutely convergent."),
+    Description(SourceForm(Product(f(x), ForElement(x, S), P(x))), ", rendered as ", Product(f(x), ForElement(x, S), P(x)), ", gives the product of", f(x),
+        "for all", x, "in the set", S, "and satisfying the predicate", P(x), ". The product is required to be absolutely convergent."),
+    Description(SourceForm(Product(f(x), For(x), P(x))), ", rendered as ", Product(f(x), For(x), P(x)), ", gives the product of", f(x),
+        "for all", x, "satisfying the predicate", P(x), ". ",
+        "The predicate", P(x), "should define the domain of", x, "unambiguously; that is, it must include a statement such as",
+        Element(x, S), "where", S, "is a known set.",
+         "The product is required to be absolutely convergent."),
+    Description("The special expression", SourceForm(For(x)), ", ", SourceForm(For(x, a, b)), " or", SourceForm(ForElement(x)),
+        "declares", SourceForm(x), "as a locally bound variable within the scope of the arguments to this operator. ",
+        "Similarly", SourceForm(For(Tuple(x, y))), ", ", SourceForm(ForElement(Tuple(x, y), S)), "etc. defines multiple locally bound variables."))
 
 make_entry(ID("9f703a"),
     SymbolDefinition(PrimeSum, PrimeSum(f(p), p), "Sum over primes"),

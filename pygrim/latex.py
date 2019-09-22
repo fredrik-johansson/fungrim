@@ -680,7 +680,7 @@ def tex_Sum_Product(head, args, **kwargs):
             if len(args) == 3:
                 cond = args[2].latex(in_small=True)
                 # todo: substack
-                return ss + ("_{\\textstyle{%s=%s \\atop %s}}^{%s} %s" % (var, cond, low, high, func))
+                return ss + ("_{\\textstyle{%s=%s \\atop %s}}^{%s} %s" % (var, low, cond, high, func))
         if len(forargs) == 1:
             # Sum(f(n), For(n)) -- (non-semantic)
             if len(args) == 2:
