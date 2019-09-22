@@ -20,7 +20,7 @@ make_entry(ID("ea4754"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n)))))
 
 make_entry(ID("47b181"),
-    Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, -1, 1)) - Sum(GaussLegendreWeight(n,k) * f(LegendrePolynomialZero(n,k)), Tuple(k, 1, n))),
+    Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, -1, 1)) - Sum(GaussLegendreWeight(n,k) * f(LegendrePolynomialZero(n,k)), For(k, 1, n))),
         64*M/(15*(1-rho**-2)*rho**(2*n))), Equal(M, Supremum(Abs(f(t)), Var(t), Element(t, BernsteinEllipse(rho)))))),
     Variables(f, n, rho),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(rho, RR), Greater(rho, 1),
@@ -28,7 +28,7 @@ make_entry(ID("47b181"),
     References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67-87. DOI:10.1137/060659831"))
 
 make_entry(ID("545987"),
-    Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, a, b)) - (b-a)/2 * Sum(GaussLegendreWeight(n,k) * f((b-a)/2 * LegendrePolynomialZero(n,k) + (a+b)/2), Tuple(k, 1, n))),
+    Formula(Where(LessEqual(Abs(Integral(f(t), Tuple(t, a, b)) - (b-a)/2 * Sum(GaussLegendreWeight(n,k) * f((b-a)/2 * LegendrePolynomialZero(n,k) + (a+b)/2), For(k, 1, n))),
         (Abs(b-a)/2) * (64*M/(15*(1-rho**-2)*rho**(2*n)))), Equal(M, Supremum(Abs(f((b-a)/2 * t + (a+b)/2)), Var(t), Element(t, BernsteinEllipse(rho)))))),
     Variables(f, a, b, n, rho),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(n, ZZGreaterEqual(1)), Element(rho, RR), Greater(rho, 1),

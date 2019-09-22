@@ -78,28 +78,28 @@ make_entry(ID("b9cc75"),
 
 
 make_entry(ID("4c41ad"),
-    Formula(Equal(Hypergeometric0F1(a,z), Sum(1/RisingFactorial(a,k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric0F1(a,z), Sum(1/RisingFactorial(a,k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,z),
     Assumptions(And(Element(a,SetMinus(CC,ZZLessEqual(0))), Element(z,CC))))
 
 make_entry(ID("0a0aec"),
-    Formula(Equal(Hypergeometric0F1Regularized(a,z), Sum(1/GammaFunction(a+k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric0F1Regularized(a,z), Sum(1/GammaFunction(a+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,z),
     Assumptions(And(Element(a,CC), Element(z,CC))))
 
 make_entry(ID("a61f01"),
-    Formula(Equal(Hypergeometric1F1(a,b,z), Sum(RisingFactorial(a,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric1F1(a,b,z), Sum(RisingFactorial(a,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,b,z),
     Assumptions(And(Element(a,CC), Element(b, SetMinus(CC, ZZLessEqual(0))), Element(z,CC))))
 
 make_entry(ID("dec042"),
-    Formula(Equal(Hypergeometric1F1(-n,b,z), Sum(RisingFactorial(-n,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), Tuple(k, 0, n)))),
+    Formula(Equal(Hypergeometric1F1(-n,b,z), Sum(RisingFactorial(-n,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), For(k, 0, n)))),
     Variables(n,b,z),
     #Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, ZZBetween(-n+1, 0))), Element(z,CC))))
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
 
 make_entry(ID("70111e"),
-    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/GammaFunction(b+k) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/GammaFunction(b+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,b,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(z,CC))))
 
@@ -180,7 +180,7 @@ make_entry(ID("00dfd1"),
 
 make_entry(ID("d1b3b5"),
     Formula(Equal(HypergeometricUStar(a,b,z),
-        Sum(RisingFactorial(a,k) * RisingFactorial(a-b+1,k) / (Factorial(k) * (-z)**k), Tuple(k, 0, n-1))
+        Sum(RisingFactorial(a,k) * RisingFactorial(a-b+1,k) / (Factorial(k) * (-z)**k), For(k, 0, n-1))
         + HypergeometricUStarRemainder(n,a,b,z))),
     Variables(a,b,z,n),
     Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)))))

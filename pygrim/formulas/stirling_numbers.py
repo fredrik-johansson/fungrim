@@ -108,43 +108,43 @@ make_entry(ID("071a94"),
 
 
 make_entry(ID("21241f"),
-    Formula(Equal(RisingFactorial(x, n), Sum(StirlingCycle(n, k) * x**k, Tuple(k, 0, n)))),
+    Formula(Equal(RisingFactorial(x, n), Sum(StirlingCycle(n, k) * x**k, For(k, 0, n)))),
     Variables(x, n),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("f46e0e"),
-    Formula(Equal(RisingFactorial(x-n+1, n), Sum(StirlingS1(n, k) * x**k, Tuple(k, 0, n)))),
+    Formula(Equal(RisingFactorial(x-n+1, n), Sum(StirlingS1(n, k) * x**k, For(k, 0, n)))),
     Variables(x, n),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("b823b0"),
-    Formula(Equal(x**n, Sum(StirlingS2(n, k) * RisingFactorial(x-n+1, n), Tuple(k, 0, n)))),
+    Formula(Equal(x**n, Sum(StirlingS2(n, k) * RisingFactorial(x-n+1, n), For(k, 0, n)))),
     Variables(x, n),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("b01280"),
-    Formula(Equal(Div((Log(1+x))**k, Factorial(k)), Sum((-1)**(n-k) * StirlingCycle(n,k) * Div(x**n, Factorial(n)), Tuple(n, k, Infinity)))),
+    Formula(Equal(Div((Log(1+x))**k, Factorial(k)), Sum((-1)**(n-k) * StirlingCycle(n,k) * Div(x**n, Factorial(n)), For(n, k, Infinity)))),
     Variables(x, k),
     Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(x, CC), Less(Abs(x), 1))))
 
 make_entry(ID("a9a610"),
-    Formula(Equal(Div((Exp(x)-1)**k, Factorial(k)), Sum(StirlingS2(n,k) * Div(x**n, Factorial(n)), Tuple(n, k, Infinity)))),
+    Formula(Equal(Div((Exp(x)-1)**k, Factorial(k)), Sum(StirlingS2(n,k) * Div(x**n, Factorial(n)), For(n, k, Infinity)))),
     Variables(x, k),
     Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(x, CC))))
 
 
 make_entry(ID("6189b9"),
-    Formula(Equal(StirlingS2(n,k), Div(1,Factorial(k)) * Sum((-1)**i * Binomial(k,i) * (k-i)**n, Tuple(i, 0, k)))),
+    Formula(Equal(StirlingS2(n,k), Div(1,Factorial(k)) * Sum((-1)**i * Binomial(k,i) * (k-i)**n, For(i, 0, k)))),
     Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("ea9e2f"),
-    Formula(Equal(Sum(StirlingCycle(n,k), Tuple(k, 0, n)), Factorial(n))),
+    Formula(Equal(Sum(StirlingCycle(n,k), For(k, 0, n)), Factorial(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("255576"),
-    Formula(Equal(Sum(StirlingS2(n,k), Tuple(k, 0, n)), BellNumber(n))),
+    Formula(Equal(Sum(StirlingS2(n,k), For(k, 0, n)), BellNumber(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

@@ -158,7 +158,7 @@ make_entry(ID("85eebc"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("d84519"),
-    Formula(Equal(Sum(LegendrePolynomial(n,x) * z**n, Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(LegendrePolynomial(n,x) * z**n, For(n, 0, Infinity)),
         1 / Sqrt(1 - 2*x*z + z**2))),
     Variables(x, z),
     Assumptions(And(Element(x, ClosedInterval(-1,1)), Element(z, CC), Less(Abs(z), 1))))
@@ -177,17 +177,17 @@ make_entry(ID("e36542"),
 
 
 make_entry(ID("c5dd9b"),
-    Formula(Equal(LegendrePolynomial(n, z), Div(1,2**n) * Sum(Binomial(n,k)**2 * (z-1)**(n-k) * (z+1)**k, Tuple(k, 0, n)))),
+    Formula(Equal(LegendrePolynomial(n, z), Div(1,2**n) * Sum(Binomial(n,k)**2 * (z-1)**(n-k) * (z+1)**k, For(k, 0, n)))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("f0569a"),
-    Formula(Equal(LegendrePolynomial(n, z), Sum(Binomial(n,k) * Binomial(n+k,k) * Div(z-1,2)**k, Tuple(k, 0, n)))),
+    Formula(Equal(LegendrePolynomial(n, z), Sum(Binomial(n,k) * Binomial(n+k,k) * Div(z-1,2)**k, For(k, 0, n)))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("7a85b7"),
-    Formula(Equal(LegendrePolynomial(n, z), Div(1,2**n) * Sum((-1)**k * Binomial(n,k) * Binomial(2*n-2*k,n) * z**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(LegendrePolynomial(n, z), Div(1,2**n) * Sum((-1)**k * Binomial(n,k) * Binomial(2*n-2*k,n) * z**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 

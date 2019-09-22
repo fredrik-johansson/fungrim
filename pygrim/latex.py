@@ -653,32 +653,55 @@ def tex_IndefiniteIntegralEqual(head, args, **kwargs):
 
 @deftex_heads([Sum, Product])
 def tex_Sum_Product(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    # Sum(f(n), Tuple(n, a, b))
-    # Sum(f(n), Tuple(n, a, b), P(n)) ???
-    # Sum(f(n), n, P(n))
+    # Sum(f(n), For(n, a, b), P(n))
+    # Sum(f(n), ForElement(n, S))
+    # Sum(f(n), ForElement(n, S), P(n))
     if head == Sum:
         ss = "\\sum"
     else:
         ss = "\\prod"
-    # todo: auto-parenthesis for Add/...?
-    if len(args) == 2 and not args[1].is_atom() and args[1]._args[0] == Tuple:
-        _, var, low, high = args[1]._args
-        var = var.latex()
-        low = low.latex(in_small=True)
-        high = high.latex(in_small=True)
-        return ss + ("_{%s=%s}^{%s} %s" % (var, low, high, argstr[0]))
-    elif len(args) == 2:
-        func, var = args
-        return ss + ("_{%s} %s" % (var, argstr[0]))
-    elif len(args) == 3:
-        func, var, cond = args
-        cond = cond.latex(in_small=True)
-        return ss + ("_{%s} %s" % (cond, argstr[0]))
-    elif len(args) == 1:
-        return ss + " " + argstr[0]
-    else:
+    if len(args) == 0:
         raise ValueError
+    # todo: auto-parenthesis for Add/...?
+    func = args[0].latex(**kwargs)
+    # Sum(S)
+    if len(args) == 1:
+        return ss + " " + func
+    if args[1].head() == For:
+        forargs = args[1].args()
+        if len(forargs) == 3:
+            var, low, high = forargs
+            var = var.latex()
+            low = low.latex(in_small=True)
+            high = high.latex(in_small=True)
+            # Sum(f(n), For(n, a, b))
+            if len(args) == 2:
+                return ss + ("_{%s=%s}^{%s} %s" % (var, low, high, func))
+            if len(args) == 3:
+                cond = args[2].latex(in_small=True)
+                # todo: substack
+                return ss + ("_{\\textstyle{%s=%s \\atop %s}}^{%s} %s" % (var, cond, low, high, func))
+        if len(forargs) == 1:
+            # Sum(f(n), For(n)) -- (non-semantic)
+            if len(args) == 2:
+                var = forargs[0].latex(in_small=True)
+                return ss + ("_{%s} %s" % (var, func))
+            # Sum(f(n), For(n), P(n))
+            if len(args) == 3:
+                cond = args[2].latex(in_small=True)
+                return ss + ("_{%s} %s" % (cond, func))
+    if args[1].head() == ForElement:
+        var, S = args[1].args()
+        var = Element(var, S).latex(in_small=True)
+        # Sum(f(n), ForElement(n, S))
+        if len(args) == 2:
+            return ss + ("_{%s} %s" % (var, func))
+        # Sum(f(n), ForElement(n, S), P(n))
+        if len(args) == 3:
+            print(head, args)
+            cond = args[2].latex(in_small=True)
+            return ss + ("_{\\textstyle{%s \\atop %s}} %s" % (var, cond, func))
+    raise ValueError
 
 @deftex_heads([DivisorSum, DivisorProduct])
 def tex_DivisorSum_DivisorProduct(head, args, **kwargs):

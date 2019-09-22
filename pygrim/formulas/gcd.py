@@ -663,18 +663,18 @@ make_entry(ID("499cfc"),
     Assumptions(And(Element(p, PP), Element(q, PP), Unequal(p, q), Element(m, ZZGreaterEqual(0)), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("25986e"),
-    Formula(Equal(GCD(Product(PrimeNumber(k)**Subscript(e,k), Tuple(k, 1, m)),
-                      Product(PrimeNumber(k)**Subscript(f,k), Tuple(k, 1, m))),
-                Product(PrimeNumber(k)**Min(Subscript(e,k), Subscript(f,k)), Tuple(k, 1, m)))),
+    Formula(Equal(GCD(Product(PrimeNumber(k)**Subscript(e,k), For(k, 1, m)),
+                      Product(PrimeNumber(k)**Subscript(f,k), For(k, 1, m))),
+                Product(PrimeNumber(k)**Min(Subscript(e,k), Subscript(f,k)), For(k, 1, m)))),
     Variables(e, f, m),
     Assumptions(And(Element(Subscript(e, k), ZZGreaterEqual(0)),
                     Element(Subscript(f, k), ZZGreaterEqual(0)),
                     Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("6cefd7"),
-    Formula(Equal(LCM(Product(PrimeNumber(k)**Subscript(e,k), Tuple(k, 1, m)),
-                      Product(PrimeNumber(k)**Subscript(f,k), Tuple(k, 1, m))),
-                Product(PrimeNumber(k)**Max(Subscript(e,k), Subscript(f,k)), Tuple(k, 1, m)))),
+    Formula(Equal(LCM(Product(PrimeNumber(k)**Subscript(e,k), For(k, 1, m)),
+                      Product(PrimeNumber(k)**Subscript(f,k), For(k, 1, m))),
+                Product(PrimeNumber(k)**Max(Subscript(e,k), Subscript(f,k)), For(k, 1, m)))),
     Variables(e, f, m),
     Assumptions(And(Element(Subscript(e, k), ZZGreaterEqual(0)),
                     Element(Subscript(f, k), ZZGreaterEqual(0)),
@@ -709,12 +709,12 @@ make_entry(ID("4099d2"),
 
 # todo: more formulas? generating functions?
 make_entry(ID("aaef97"),
-    Formula(Equal(Sum(GCD(n,k), Tuple(k,1,n)), DivisorSum(d*Totient(n/d), d, n))),
+    Formula(Equal(Sum(GCD(n,k), For(k,1,n)), DivisorSum(d*Totient(n/d), d, n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("c24323"),
-    Formula(Equal(Sum(LCM(n,k), Tuple(k,1,n)), (n/2)*(1+DivisorSum(d*Totient(d), d, n)))),
+    Formula(Equal(Sum(LCM(n,k), For(k,1,n)), (n/2)*(1+DivisorSum(d*Totient(d), d, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

@@ -243,7 +243,7 @@ make_entry(ID("921f34"),
     References("https://oeis.org/A115977"))
 
 make_entry(ID("e96684"),
-    Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, Tuple(k, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, For(k, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

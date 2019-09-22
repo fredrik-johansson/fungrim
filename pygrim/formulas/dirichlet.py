@@ -160,10 +160,10 @@ make_entry(ID("0ba38f"),
     References("http://oeis.org/A007431"))
 
 make_entry(ID("f88596"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)) / (Div(1,2) * N**2), Var(N), Infinity), 6/ConstPi**2)))
+    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)) / (Div(1,2) * N**2), Var(N), Infinity), 6/ConstPi**2)))
 
 make_entry(ID("3b43b0"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), Tuple(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), Tuple(q, 1, N)), Var(N), Infinity), 6/ConstPi**2)),
+    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), For(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)), Var(N), Infinity), 6/ConstPi**2)),
     References("H. Jager, On the number of Dirichlet characters with modulus not exceeding x, Indagationes Mathematicae, Volume 76, Issue 5, 1973, Pages 452-455, https://doi.org/10.1016/1385-7258(73)90069-3"))
 
 make_entry(ID("d9a187"),
@@ -291,12 +291,12 @@ make_entry(ID("03fbe8"),
 # Orthogonality
 
 make_entry(ID("4877d1"),
-    Formula(Equal(Sum(chi(n), Tuple(n, 0, q-1)), Cases(Tuple(Totient(q), Equal(chi, DirichletCharacter(q, 1))), Tuple(0, Otherwise)))),
+    Formula(Equal(Sum(chi(n), For(n, 0, q-1)), Cases(Tuple(Totient(q), Equal(chi, DirichletCharacter(q, 1))), Tuple(0, Otherwise)))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("3ab92d"),
-    Formula(Equal(Sum(chi(n), chi, Element(chi, DirichletGroup(q))), Cases(Tuple(Totient(q), CongruentMod(n, 1, q)), Tuple(0, Otherwise)))),
+    Formula(Equal(Sum(chi(n), ForElement(chi, DirichletGroup(q))), Cases(Tuple(Totient(q), CongruentMod(n, 1, q)), Tuple(0, Otherwise)))),
     Variables(q, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(n, ZZ))))
 
@@ -304,12 +304,12 @@ chi1 = Subscript(chi, 1)
 chi2 = Subscript(chi, 2)
 
 make_entry(ID("a4e947"),
-    Formula(Equal(Sum(chi1(n)*Conjugate(chi2(n)), Tuple(n, 0, q-1)), Cases(Tuple(Totient(q), Equal(chi1, chi2)), Tuple(0, Otherwise)))),
+    Formula(Equal(Sum(chi1(n)*Conjugate(chi2(n)), For(n, 0, q-1)), Cases(Tuple(Totient(q), Equal(chi1, chi2)), Tuple(0, Otherwise)))),
     Variables(q, chi1, chi2),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi1, DirichletGroup(q)), Element(chi2, DirichletGroup(q)))))
 
 make_entry(ID("f4de66"),
-    Formula(Equal(Sum(chi(m)*Conjugate(chi(n)), chi, Element(chi, DirichletGroup(q))), Cases(Tuple(Totient(q), And(CongruentMod(n, m, q), Equal(GCD(m,q), 1))), Tuple(0, Otherwise)))),
+    Formula(Equal(Sum(chi(m)*Conjugate(chi(n)), ForElement(chi, DirichletGroup(q))), Cases(Tuple(Totient(q), And(CongruentMod(n, m, q), Equal(GCD(m,q), 1))), Tuple(0, Otherwise)))),
     Variables(q, m, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(m, ZZ), Element(n, ZZ))))
 
@@ -501,12 +501,12 @@ make_entry(ID("5e1d3b"),
 # Bounds and inequalities
 
 make_entry(ID("e6deb7"),
-    Formula(LessEqual(Abs(Sum(chi(n), Tuple(n, 0, N))), Totient(q))),
+    Formula(LessEqual(Abs(Sum(chi(n), For(n, 0, N))), Totient(q))),
     Variables(N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("5df909"),
-    Formula(LessEqual(Abs(Sum(chi(n), Tuple(n, M, N))), Sqrt(q)*Log(q)/(2*Log(2)) + 3*Sqrt(q))),
+    Formula(LessEqual(Abs(Sum(chi(n), For(n, M, N))), Sqrt(q)*Log(q)/(2*Log(2)) + 3*Sqrt(q))),
     Variables(q, chi, M, N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(M, ZZ), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))),
     Description("Pólya-Vinogradov inequality, explicit form"),
@@ -629,12 +629,12 @@ make_entry(ID("d5a598"),
 # L-series
 
 make_entry(ID("604c7c"),
-    Formula(Equal(DirichletL(s, chi), Sum(chi(n)/n**s, Tuple(n, 1, Infinity)))),
+    Formula(Equal(DirichletL(s, chi), Sum(chi(n)/n**s, For(n, 1, Infinity)))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("291569"),
-    Formula(Equal(1/DirichletL(s, chi), Sum((MoebiusMu(n) * chi(n))/n**s, Tuple(n, 1, Infinity)))),
+    Formula(Equal(1/DirichletL(s, chi), Sum((MoebiusMu(n) * chi(n))/n**s, For(n, 1, Infinity)))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
 
@@ -656,12 +656,12 @@ make_entry(ID("04217b"),
     SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"))
 
 make_entry(ID("c31c10"),
-    Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), Tuple(k, 1, q)))),
+    Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), For(k, 1, q)))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, SetMinus(CC, Set(1))))))
 
 make_entry(ID("4c3678"),
-    Formula(Equal(HurwitzZeta(s, k/q), (q**s / Totient(q)) * Sum(Conjugate(chi(k)) * DirichletL(s, chi), chi, Element(chi, DirichletGroup(q))))),
+    Formula(Equal(HurwitzZeta(s, k/q), (q**s / Totient(q)) * Sum(Conjugate(chi(k)) * DirichletL(s, chi), ForElement(chi, DirichletGroup(q))))),
     Variables(q, k, s),
     Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, ZZBetween(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
 
@@ -718,7 +718,7 @@ make_entry(ID("23256b"),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
 make_entry(ID("c2750a"),
-    Formula(Equal(DirichletL(1,chi), -((1/q) * Sum(chi(k) * DigammaFunction(k/q), Tuple(k, 1, q-1))))),
+    Formula(Equal(DirichletL(1,chi), -((1/q) * Sum(chi(k) * DigammaFunction(k/q), For(k, 1, q-1))))),
     Variables(q),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
 
@@ -739,7 +739,7 @@ make_entry(ID("a07d28"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)))))
 
 make_entry(ID("789ca4"),
-    Formula(Equal(DirichletL(0,chi), -Div(1,q) * Sum(k * chi(k), Tuple(k, 1, q)))),
+    Formula(Equal(DirichletL(0,chi), -Div(1,q) * Sum(k * chi(k), For(k, 1, q)))),
     Variables(q),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
 
@@ -754,12 +754,12 @@ make_entry(ID("cb5d51"),
     SymbolDefinition(GeneralizedBernoulliB, GeneralizedBernoulliB(n, chi), "Generalized Bernoulli number"))
 
 make_entry(ID("e44796"),
-    Formula(Equal(GeneralizedBernoulliB(n, chi), Sum(chi(a) * Sum(Binomial(n,k) * BernoulliB(k) * a**(n-k) * q**(k-1), Tuple(k, 0, n)), Tuple(a, 1, q)))),
+    Formula(Equal(GeneralizedBernoulliB(n, chi), Sum(chi(a) * Sum(Binomial(n,k) * BernoulliB(k) * a**(n-k) * q**(k-1), For(k, 0, n)), For(a, 1, q)))),
     Variables(q, chi, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("3e0817"),
-    Formula(Equal(GeneralizedBernoulliB(n, chi), q**(n-1) * Sum(chi(a) * BernoulliPolynomial(n, a/q), Tuple(a, 1, q)))),
+    Formula(Equal(GeneralizedBernoulliB(n, chi), q**(n-1) * Sum(chi(a) * BernoulliPolynomial(n, a/q), For(a, 1, q)))),
     Variables(q, chi, n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZGreaterEqual(0)))))
 
@@ -769,8 +769,8 @@ make_entry(ID("f7a866"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("d69b41"),
-    Formula(Equal(Sum(chi(a)* (z*Exp(a*z)/(Exp(q*z)-1)), Tuple(a, 1, q)),
-        Sum(GeneralizedBernoulliB(n, chi) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)))),
+    Formula(Equal(Sum(chi(a)* (z*Exp(a*z)/(Exp(q*z)-1)), For(a, 1, q)),
+        Sum(GeneralizedBernoulliB(n, chi) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(q, chi, z),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), Unequal(z, 0), Less(Abs(z), 2*ConstPi / q))))
 
@@ -873,7 +873,7 @@ make_entry(ID("11a763"),
     SymbolDefinition(GaussSum, GaussSum(q, chi), "Gauss sum"))
 
 make_entry(ID("62f12c"),
-    Formula(Equal(GaussSum(q, chi), Sum(chi(n) * Exp(2*ConstPi*ConstI*n/q), Tuple(n, 1, q)))),
+    Formula(Equal(GaussSum(q, chi), Sum(chi(n) * Exp(2*ConstPi*ConstI*n/q), For(n, 1, q)))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -912,7 +912,7 @@ make_entry(ID("fe4692"),
 # Approximations
 
 make_entry(ID("312147"),
-    Formula(LessEqual(Abs(DirichletL(s,chi) - Sum(chi(k) / k**s, Tuple(k, 1, N-1))), HurwitzZeta(Re(s), N))),
+    Formula(LessEqual(Abs(DirichletL(s,chi) - Sum(chi(k) / k**s, For(k, 1, N-1))), HurwitzZeta(Re(s), N))),
     Variables(q, chi, s, N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
 

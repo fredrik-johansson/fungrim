@@ -747,7 +747,7 @@ BetaFunction IncompleteBeta IncompleteBetaRegularized
 
 
 inject_builtin("""
-Var
+For ForElement Var
 Entry Formula ID Assumptions References Variables DomainCodomain
 Description Table TableRelation TableValueHeadings TableHeadings TableColumnHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference TopicReference

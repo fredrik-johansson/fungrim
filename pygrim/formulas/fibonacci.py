@@ -419,12 +419,12 @@ make_entry(ID("3a9c67"),
 # Generating functions
 
 make_entry(ID("05209f"),
-    Formula(Equal(Sum(Fibonacci(n) * z**n, Tuple(n, 0, Infinity)), z/(1-z-z**2))),
+    Formula(Equal(Sum(Fibonacci(n) * z**n, For(n, 0, Infinity)), z/(1-z-z**2))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), GoldenRatio-1))))
 
 make_entry(ID("d0d91a"),
-    Formula(Equal(Sum(Fibonacci(n) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(Fibonacci(n) * (z**n / Factorial(n)), For(n, 0, Infinity)),
         (2/Sqrt(5)) * Exp(z/2) * Sinh((Sqrt(5)/2) * z))),
     Variables(z),
     Assumptions(Element(z, CC)))
@@ -432,17 +432,17 @@ make_entry(ID("d0d91a"),
 # Sum representations
 
 make_entry(ID("9638c1"),
-    Formula(Equal(Fibonacci(n), Sum(Binomial(n-k-1,k), Tuple(k, 0, n-1)))),
+    Formula(Equal(Fibonacci(n), Sum(Binomial(n-k-1,k), For(k, 0, n-1)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("d7c89c"),
-    Formula(Equal(Fibonacci(n), Sum(Binomial(n-k-1,k), Tuple(k, 0, Floor((n-1)/2))))),
+    Formula(Equal(Fibonacci(n), Sum(Binomial(n-k-1,k), For(k, 0, Floor((n-1)/2))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("b8ed8f"),
-    Formula(Equal(Fibonacci(n), (1/2**(n-1)) * Sum(5**k * Binomial(n,2*k+1), Tuple(k, 0, Floor((n-1)/2))))),
+    Formula(Equal(Fibonacci(n), (1/2**(n-1)) * Sum(5**k * Binomial(n,2*k+1), For(k, 0, Floor((n-1)/2))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
@@ -552,37 +552,37 @@ make_entry(ID("9d26d2"),
 # Finite sums
 
 make_entry(ID("1eb5e7"),
-    Formula(Equal(Sum(Fibonacci(k), Tuple(k, 0, n)), Fibonacci(n+2)-1)),
+    Formula(Equal(Sum(Fibonacci(k), For(k, 0, n)), Fibonacci(n+2)-1)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("3bb7e4"),
-    Formula(Equal(Sum(Fibonacci(2*k), Tuple(k, 0, n)), Fibonacci(2*n+1)-1)),
+    Formula(Equal(Sum(Fibonacci(2*k), For(k, 0, n)), Fibonacci(2*n+1)-1)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("5eb446"),
-    Formula(Equal(Sum(Fibonacci(2*k+1), Tuple(k, 0, n)), Fibonacci(2*n+2))),
+    Formula(Equal(Sum(Fibonacci(2*k+1), For(k, 0, n)), Fibonacci(2*n+2))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("82373a"),
-    Formula(Equal(Sum(Fibonacci(k)**2, Tuple(k, 0, n)), Fibonacci(n)*Fibonacci(n+1))),
+    Formula(Equal(Sum(Fibonacci(k)**2, For(k, 0, n)), Fibonacci(n)*Fibonacci(n+1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("ac4d13"),
-    Formula(Equal(Sum(Binomial(n,k) * Fibonacci(k), Tuple(k, 0, n)), Fibonacci(2*n))),
+    Formula(Equal(Sum(Binomial(n,k) * Fibonacci(k), For(k, 0, n)), Fibonacci(2*n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("f95561"),
-    Formula(Equal(Sum((-1)**(k+1) * Binomial(n,k) * Fibonacci(k), Tuple(k, 0, n)), Fibonacci(n))),
+    Formula(Equal(Sum((-1)**(k+1) * Binomial(n,k) * Fibonacci(k), For(k, 0, n)), Fibonacci(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("d454a3"),
-    Formula(Equal(Sum(Binomial(n,k) * 2**k * Fibonacci(k), Tuple(k, 0, n)), Fibonacci(3*n))),
+    Formula(Equal(Sum(Binomial(n,k) * 2**k * Fibonacci(k), For(k, 0, n)), Fibonacci(3*n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
@@ -619,27 +619,27 @@ make_entry(ID("412334"),
 # Reciprocal series
 
 make_entry(ID("ae9d30"),
-    Formula(Equal(Sum(1/(Fibonacci(2*n+1)+1), Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(1/(Fibonacci(2*n+1)+1), For(n, 0, Infinity)),
         Sqrt(5)/2)),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("344963"),
-    Formula(Equal(Sum((-1)**(n+1)/(Fibonacci(n)*Fibonacci(n+1)), Tuple(n, 1, Infinity)),
+    Formula(Equal(Sum((-1)**(n+1)/(Fibonacci(n)*Fibonacci(n+1)), For(n, 1, Infinity)),
         (Sqrt(5)-1)/2)),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("da1873"),
-    Formula(Equal(Sum(1/Fibonacci(2*n+1), Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(1/Fibonacci(2*n+1), For(n, 0, Infinity)),
         Where((Sqrt(5)/4) * JacobiTheta(2,0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("22b67a"),
-    Formula(Equal(Sum(1/Fibonacci(n)**2, Tuple(n, 1, Infinity)),
+    Formula(Equal(Sum(1/Fibonacci(n)**2, For(n, 1, Infinity)),
         Where(Div(5,24) * (JacobiTheta(2,0, tau)**4 - JacobiTheta(4,0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("6d8bf0"),
-    Formula(Equal(Sum(1/Fibonacci(2**n), Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(1/Fibonacci(2**n), For(n, 0, Infinity)),
         (7-Sqrt(5))/2)),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 

@@ -25,14 +25,6 @@ def_Topic(
     ),
 )
 
-#1353ec
-#cf02c3
-#d2fa1b
-#
-#
-#77ef0c
-#
-
 make_entry(ID("77ef0c"),
     Formula(Equal(CC, SetBuilder(x+y*ConstI, Tuple(x, y), And(Element(x, RR), Element(y, RR))))))
 

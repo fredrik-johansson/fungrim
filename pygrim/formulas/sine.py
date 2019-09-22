@@ -357,7 +357,7 @@ make_entry(ID("729215"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("e3f8a4"),
-    Formula(Equal(Sin(n*z), Sum((-1)**k * Binomial(n, 2*k+1) * Cos(z)**(n-2*k-1) * Sin(z)**(2*k+1), Tuple(k, 0, Floor((n-1)/2))))),
+    Formula(Equal(Sin(n*z), Sum((-1)**k * Binomial(n, 2*k+1) * Cos(z)**(n-2*k-1) * Sin(z)**(2*k+1), For(k, 0, Floor((n-1)/2))))),
     Variables(n, z),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 
@@ -430,12 +430,12 @@ make_entry(ID("2a6702"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("54f420"),
-    Formula(Equal(Sin(z)**(2*n), 1/4**n * Binomial(2*n, n) + 2/4**n * Sum((-1)**(n+k) * Binomial(2*n, k) * Cos(2*(n-k)*z), Tuple(k, 0, n-1)))),
+    Formula(Equal(Sin(z)**(2*n), 1/4**n * Binomial(2*n, n) + 2/4**n * Sum((-1)**(n+k) * Binomial(2*n, k) * Cos(2*(n-k)*z), For(k, 0, n-1)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("71a264"),
-    Formula(Equal(Sin(z)**(2*n+1), 1/4**n * Sum((-1)**(n+k) * Binomial(2*n+1, k) * Sin((2*n-2*k+1)*z), Tuple(k, 0, n)))),
+    Formula(Equal(Sin(z)**(2*n+1), 1/4**n * Sum((-1)**(n+k) * Binomial(2*n+1, k) * Sin((2*n-2*k+1)*z), For(k, 0, n)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 
@@ -457,12 +457,12 @@ make_entry(ID("f6d0c6"),
 # Sums and products
 
 make_entry(ID("b8ab9c"),
-    Formula(Equal(Sum(Sin(2*a*k+b), Tuple(k, 0, n)), Sin(a*(n+1)) * Sin(a*n+b) / Sin(a))),
+    Formula(Equal(Sum(Sin(2*a*k+b), For(k, 0, n)), Sin(a*(n+1)) * Sin(a*n+b) / Sin(a))),
     Variables(a, n),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a / ConstPi, ZZ))))
 
 make_entry(ID("906569"),
-    Formula(Equal(Product(Sin(k*ConstPi/n), Tuple(k, 1, n-1)), n/2**(n-1))),
+    Formula(Equal(Product(Sin(k*ConstPi/n), For(k, 1, n-1)), n/2**(n-1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -569,17 +569,17 @@ make_entry(ID("c93b81"),
 # Series expansions
 
 make_entry(ID("f340cb"),
-    Formula(Equal(Sin(z), Sum((-1)**k * (z**(2*k+1) / Factorial(2*k+1)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Sin(z), Sum((-1)**k * (z**(2*k+1) / Factorial(2*k+1)), For(k, 0, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("6b13be"),
-    Formula(Equal(Sin(z + x), Sum(Sin(z + ConstPi * k / 2) * (x**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Sin(z + x), Sum(Sin(z + ConstPi * k / 2) * (x**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, CC), Element(x, CC))))
 
 make_entry(ID("11687b"),
-    Formula(Equal(Sin(z), z * Product(Parentheses(1 - z**2 / (ConstPi**2 * k**2)), Tuple(k, 1, Infinity)))),
+    Formula(Equal(Sin(z), z * Product(Parentheses(1 - z**2 / (ConstPi**2 * k**2)), For(k, 1, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 

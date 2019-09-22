@@ -157,12 +157,12 @@ make_entry(ID("3131df"),
     )
 
 make_entry(ID("da2fdb"),
-    Formula(Equal(RiemannZeta(s), Sum(1/k**s, Tuple(k, 1, Infinity)))),
+    Formula(Equal(RiemannZeta(s), Sum(1/k**s, For(k, 1, Infinity)))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("1d46d4"),
-    Formula(Equal(1/RiemannZeta(s), Sum(MoebiusMu(k)/k**s, Tuple(k, 1, Infinity)))),
+    Formula(Equal(1/RiemannZeta(s), Sum(MoebiusMu(k)/k**s, For(k, 1, Infinity)))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
@@ -338,8 +338,8 @@ make_entry(ID("3a5eb6"),
 
 make_entry(ID("792f7b"),
     Formula(Equal(RiemannZeta(s),
-        Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
-            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))) -
+        Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
+            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))) -
                 Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), Tuple(t, N, Infinity)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
@@ -348,8 +348,8 @@ make_entry(ID("792f7b"),
 
 make_entry(ID("d31b04"),
     Formula(LessEqual(Abs(RiemannZeta(s) -
-        Parentheses(Sum(1/k**s, Tuple(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
-            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), Tuple(k, 1, M))))),
+        Parentheses(Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
+            Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))))),
         (4 * Abs(RisingFactorial(s, 2*M)) / (2*ConstPi)**(2*M)) * (N**(-Parentheses(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
@@ -358,9 +358,9 @@ make_entry(ID("d31b04"),
 
 make_entry(ID("e37535"),
     Formula(Where(
-        LessEqual(Abs((1-2**(1-s))*RiemannZeta(s) - Div(1,d(n)) * Sum(((-1)**k*(d(n)-d(k)))/(k+1)**s, Tuple(k, 0, n-1))),
+        LessEqual(Abs((1-2**(1-s))*RiemannZeta(s) - Div(1,d(n)) * Sum(((-1)**k*(d(n)-d(k)))/(k+1)**s, For(k, 0, n-1))),
             (3*(1 + 2*Abs(Im(s)))/(3+Sqrt(8))**n) * Exp(Abs(Im(s))*ConstPi/2)),
-            Equal(d(k), n*Sum(Factorial(n+i-1)*4**i/(Factorial(n-i)*Factorial(2*i)), Tuple(i, 0, k))))),
+            Equal(d(k), n*Sum(Factorial(n+i-1)*4**i/(Factorial(n-i)*Factorial(2*i)), For(i, 0, k))))),
     Variables(s, n),
     Assumptions(And(Element(s, CC), GreaterEqual(Re(s), Div(1,2)), Unequal(s, 1), Element(n, ZZGreaterEqual(1)))),
     References("P. Borwein. An efficient algorithm for the Riemann zeta function. Canadian Mathematical Society Conference Proceedings, vol. 27, pp. 29-34. 2000.")
@@ -1162,7 +1162,7 @@ make_entry(ID("fcab61"),
 
 # todo: absolute convergence? need to encode order of summation?
 make_entry(ID("cce75b"),
-    Formula(Equal(KeiperLiLambda(n), (1/n) * Sum(Parentheses(1 - (RiemannZetaZero(k) / (RiemannZetaZero(k) - 1))**n), k, And(Element(k, ZZ), Unequal(k, 0))))),
+    Formula(Equal(KeiperLiLambda(n), (1/n) * Sum(Parentheses(1 - (RiemannZetaZero(k) / (RiemannZetaZero(k) - 1))**n), ForElement(k, ZZ), Unequal(k, 0)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -1236,7 +1236,7 @@ make_entry(ID("e68f82"),
     References("https://doi.org/10.1006/jnth.1997.2137"))
 
 make_entry(ID("a5d65f"),
-    Formula(Equivalent(RiemannHypothesis, Where(Less(Sum(Abs(KeiperLiLambda(n) - a(n))**2, Tuple(n, 1, Infinity)), Infinity),
+    Formula(Equivalent(RiemannHypothesis, Where(Less(Sum(Abs(KeiperLiLambda(n) - a(n))**2, For(n, 1, Infinity)), Infinity),
         Equal(a(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2)))),
     References("https://doi.org/10.7169/facm/1317045228"))
 
@@ -1301,19 +1301,19 @@ make_entry(ID("d10029"),
 # Generating functions
 
 make_entry(ID("b1a2e1"),
-    Formula(Equal(RiemannZeta(s), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n) * (s-1)**n, Tuple(n, 0, Infinity)))),
+    Formula(Equal(RiemannZeta(s), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n) * (s-1)**n, For(n, 0, Infinity)))),
     Variables(s),
     Assumptions(Element(s, CC)))
 
 make_entry(ID("60c6da"),
-    Formula(Equal(HurwitzZeta(s, a), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n, a) * (s-1)**n, Tuple(n, 0, Infinity)))),
+    Formula(Equal(HurwitzZeta(s, a), 1/(s-1) + Sum((-1)**n/Factorial(n) * StieltjesGamma(n, a) * (s-1)**n, For(n, 0, Infinity)))),
     Variables(s, a),
     Assumptions(And(Element(s, CC), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
 
 # Limit representations
 
 make_entry(ID("411f3b"),
-    Formula(Equal(StieltjesGamma(n, a), SequenceLimit(Brackets(Parentheses(Sum(Log(k+a)**n / (k+a), Tuple(k, 0, N))) - Log(N+a)**(n+1)/(n+1)), Var(N), Infinity))),
+    Formula(Equal(StieltjesGamma(n, a), SequenceLimit(Brackets(Parentheses(Sum(Log(k+a)**n / (k+a), For(k, 0, N))) - Log(N+a)**(n+1)/(n+1)), Var(N), Infinity))),
     Variables(n, a),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
 

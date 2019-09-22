@@ -306,7 +306,7 @@ make_entry(ID("72b6ca"),
 # Taylor series
 
 make_entry(ID("58c19a"),
-    Formula(Equal(LambertW(0,z), Sum((-n)**(n-1) / Factorial(n) * z**n, Tuple(n, 1, Infinity)))),
+    Formula(Equal(LambertW(0,z), Sum((-n)**(n-1) / Factorial(n) * z**n, For(n, 1, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 1/ConstE))))
 
@@ -342,7 +342,7 @@ make_entry(ID("d37d0f"),
     Formula(Where(Equal(LambertWPuiseuxCoefficient(k),
         ((k-1)/(k+1))*(LambertWPuiseuxCoefficient(k-2)/2 + Subscript(alpha, k-2)/4) - Subscript(alpha,k)/2 - LambertWPuiseuxCoefficient(k-1)/(k+1)),
         Equal(Subscript(alpha, 0), 2), Equal(Subscript(alpha, 1), -1),
-        Equal(Subscript(alpha, k), Sum(LambertWPuiseuxCoefficient(j)*LambertWPuiseuxCoefficient(k+1-j), Tuple(j, 2, k-1))))),
+        Equal(Subscript(alpha, k), Sum(LambertWPuiseuxCoefficient(j)*LambertWPuiseuxCoefficient(k+1-j), For(j, 2, k-1))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))))
 
@@ -352,13 +352,13 @@ make_entry(ID("adf83a"),
     Assumptions(Element(k, ZZGreaterEqual(0))))
 
 make_entry(ID("e50532"),
-    Formula(Where(Equal(LambertW(0,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, Tuple(n, 0, Infinity))),
+    Formula(Where(Equal(LambertW(0,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
         Equal(v, Sqrt(2*(ConstE*z+1))))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(ConstE*z+1), 1))))
 
 make_entry(ID("99ff4c"),
-    Formula(Where(Equal(LambertW(k,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, Tuple(n, 0, Infinity))),
+    Formula(Where(Equal(LambertW(k,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
         Equal(v, -Sqrt(2*(ConstE*z+1))))),
     Variables(k, z),
     Assumptions(And(Element(z, CC), Less(Abs(ConstE*z+1), 1), Or(And(Equal(k, -1), GreaterEqual(Im(z), 0)), And(Equal(k, 1), Less(Im(z), 0))))))
@@ -368,8 +368,8 @@ make_entry(ID("99ff4c"),
 L1 = Subscript(L, 1)
 L2 = Subscript(L, 2)
 asympdefs = Equal(L1, Log(z) + 2*ConstPi*ConstI*k), Equal(L2, Log(L1)), Equal(sigma, 1/L1), Equal(tau, L2/L1)
-asympser = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, Tuple(m, 1, Infinity)), Tuple(n, 0, Infinity))
-asympsertrunc = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, Tuple(m, 1, M-1)), Tuple(n, 0, N-1))
+asympser = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, Infinity)), For(n, 0, Infinity))
+asympsertrunc = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, M-1)), For(n, 0, N-1))
 
 make_entry(ID("1fc63b"),
     Formula(Equal(LambertW(k,z),

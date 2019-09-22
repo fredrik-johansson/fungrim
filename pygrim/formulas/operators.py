@@ -67,22 +67,24 @@ def_Topic(
 # Sums and products
 
 make_entry(ID("044e42"),
-    SymbolDefinition(Sum, Sum(f(n), n), "Sum"),
-    Description(SourceForm(Sum(f(n), n, P(n))), ", rendered as ",
-        Sum(f(n), n, P(n)), ", represents the sum of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-    Description("The argument", SourceForm(n), "defines a locally bound variable."),
-    Description("As a special syntax", SourceForm(Sum(f(n), Tuple(n, a, b))), ", rendered as ",
-        Sum(f(n), Tuple(n, a, b)), ", represents the sum taken over all integers", LessEqual(a, n, b), "."),
-    Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
+    SymbolDefinition(Sum, Sum(f(n), For(n)), "Sum"))
+
+#    Description(SourceForm(Sum(f(n), For(n), P(n))), ", rendered as ",
+#        Sum(f(n), For(n), P(n)), ", represents the sum of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
+#    Description("The argument", SourceForm(n), "defines a locally bound variable."),
+#    Description("As a special syntax", SourceForm(Sum(f(n), Tuple(n, a, b))), ", rendered as ",
+#        Sum(f(n), Tuple(n, a, b)), ", represents the sum taken over all integers", LessEqual(a, n, b), "."),
+#    Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
 
 make_entry(ID("1e2755"),
-    SymbolDefinition(Product, Product(f(n), n), "Product"),
-    Description(SourceForm(Product(f(n), n, P(n))), ", rendered as ",
-        Product(f(n), n, P(n)), ", represents the product of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
-    Description("The argument", SourceForm(n), "defines a locally bound variable."),
-    Description("As a special syntax", SourceForm(Product(f(n), Tuple(n, a, b))), ", rendered as ",
-        Product(f(n), Tuple(n, a, b)), ", represents the product taken over all integers", LessEqual(a, n, b), "."),
-    Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
+    SymbolDefinition(Product, Product(f(n), For(n)), "Product"))
+
+#    Description(SourceForm(Product(f(n), n, P(n))), ", rendered as ",
+#        Product(f(n), n, P(n)), ", represents the product of", f(n), "taken over all values of", n, "satisfying the predicate", P(n), "."),
+#    Description("The argument", SourceForm(n), "defines a locally bound variable."),
+#    Description("As a special syntax", SourceForm(Product(f(n), Tuple(n, a, b))), ", rendered as ",
+#        Product(f(n), Tuple(n, a, b)), ", represents the product taken over all integers", LessEqual(a, n, b), "."),
+#    Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
 
 make_entry(ID("9f703a"),
     SymbolDefinition(PrimeSum, PrimeSum(f(p), p), "Sum over primes"),

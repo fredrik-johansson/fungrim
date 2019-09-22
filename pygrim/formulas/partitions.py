@@ -185,18 +185,18 @@ make_entry(ID("cd3013"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("599417"),
-    Formula(Equal(Sum(PartitionsP(n) * q**n, Tuple(n, 0, Infinity)),
+    Formula(Equal(Sum(PartitionsP(n) * q**n, For(n, 0, Infinity)),
         1/EulerQSeries(q))),
     Variables(q),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
 make_entry(ID("acdce8"),
-    Formula(Equal(PartitionsP(n), Sum((-1)**(k+1) * (PartitionsP(n - k*(3*k-1)/2) + PartitionsP(n - k*(3*k+1)/2)), Tuple(k, 1, n+1)))),
+    Formula(Equal(PartitionsP(n), Sum((-1)**(k+1) * (PartitionsP(n - k*(3*k-1)/2) + PartitionsP(n - k*(3*k+1)/2)), For(k, 1, n+1)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("4d2e45"),
-    Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(1, n-k) * PartitionsP(k), Tuple(k, 0, n-1)))),
+    Formula(Equal(PartitionsP(n), Div(1,n) * Sum(DivisorSigma(1, n-k) * PartitionsP(k), For(k, 0, n-1)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -244,17 +244,17 @@ make_entry(ID("7697af"),
 hrr_term = Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (ConstPi/k) * Sqrt(Div(2,3) * (n - Div(1,24))))
 
 make_entry(ID("fb7a63"),
-    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, Tuple(k, 1, Infinity)))),
+    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, Infinity)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("5adbc3"),
-    Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(ConstPi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), Tuple(r, 0, k-1)))),
+    Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(ConstPi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), For(r, 0, k-1)))),
     Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZGreaterEqual(1)))))
 
 make_entry(ID("afd27a"),
-    Formula(LessEqual(Abs(PartitionsP(n) - ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, Tuple(k, 1, N))),
+    Formula(LessEqual(Abs(PartitionsP(n) - ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, N))),
         (44*ConstPi**2/(225*Sqrt(3*N))) + (ConstPi * Sqrt(2) / 75) * Sqrt(N / (n - 1)) * Sinh((ConstPi/N) * Sqrt(2*n/3)))),
     Variables(n, N),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(N, ZZGreaterEqual(1)))))

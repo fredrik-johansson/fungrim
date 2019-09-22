@@ -95,12 +95,12 @@ make_entry(ID("82a63c"),
 # Fourier series (q-series)
 
 make_entry(ID("2e7fdb"),
-    Formula(Equal(EulerQSeries(q), Product(Parentheses(1 - q**k), Tuple(k, 1, Infinity)))),
+    Formula(Equal(EulerQSeries(q), Product(Parentheses(1 - q**k), For(k, 1, Infinity)))),
     Variables(q),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
 make_entry(ID("8f10b0"),
-    Formula(Equal(EulerQSeries(q), Sum((-1)**k * q**(k*(3*k-1)/2), Tuple(k, -Infinity, Infinity)))),
+    Formula(Equal(EulerQSeries(q), Sum((-1)**k * q**(k*(3*k-1)/2), For(k, -Infinity, Infinity)))),
     Variables(q),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
@@ -110,7 +110,7 @@ make_entry(ID("ff587a"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1dc520"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product(Parentheses(1 - Exp(2*ConstPi*ConstI*k*tau)), Tuple(k, 1, Infinity)))),
+    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product(Parentheses(1 - Exp(2*ConstPi*ConstI*k*tau)), For(k, 1, Infinity)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -285,7 +285,7 @@ make_entry(ID("7af83f"),
     SymbolDefinition(DedekindSum, DedekindSum(n,k), "Dedekind sum"))
 
 make_entry(ID("23961e"),
-    Formula(Equal(DedekindSum(n,k), Sum((r/k) * ((n*r/k) - Floor(n*r/k) - Div(1,2)), Tuple(r, 1, k-1)))),
+    Formula(Equal(DedekindSum(n,k), Sum((r/k) * ((n*r/k) - Floor(n*r/k) - Div(1,2)), For(r, 1, k-1)))),
     Variables(n,k),
     Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
 

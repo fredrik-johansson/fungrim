@@ -493,49 +493,49 @@ make_entry(ID("5bd0ec"),
 # Product representations
 
 make_entry(ID("305a29"),
-    Formula(Equal(ChebyshevT(n,x), 2**(n-1) * Product(Parentheses(x-Cos((2*k-1)/(2*n) * ConstPi)), Tuple(k,1,n)))),
+    Formula(Equal(ChebyshevT(n,x), 2**(n-1) * Product(Parentheses(x-Cos((2*k-1)/(2*n) * ConstPi)), For(k,1,n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("f5fa23"),
-    Formula(Equal(ChebyshevU(n,x), 2**n * Product(Parentheses(x-Cos(k/(n+1) * ConstPi)), Tuple(k,1,n)))),
+    Formula(Equal(ChebyshevU(n,x), 2**n * Product(Parentheses(x-Cos(k/(n+1) * ConstPi)), For(k,1,n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 # Sum representations
 
 make_entry(ID("ae791d"),
-    Formula(Equal(ChebyshevT(n, x), Sum(Binomial(n,2*k) * (x**2-1)**k * x**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(ChebyshevT(n, x), Sum(Binomial(n,2*k) * (x**2-1)**k * x**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("4f3e30"),
-    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum((-1)**k * Factorial(n-k-1) / (Factorial(k) * Factorial(n-2*k))  * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum((-1)**k * Factorial(n-k-1) / (Factorial(k) * Factorial(n-2*k))  * (2*x)**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("99aa38"),
-    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum(((-1)**k / (n-k)) * Binomial(n-k, k)  * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(ChebyshevT(n, x), (n/2) * Sum(((-1)**k / (n-k)) * Binomial(n-k, k)  * (2*x)**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("e9232b"),
-    Formula(Equal(ChebyshevT(n, x), n * Sum(2**k * Factorial(n+k-1) / (Factorial(n-k) * Factorial(2*k)) * (x-1)**k, Tuple(k, 0, n)))),
+    Formula(Equal(ChebyshevT(n, x), n * Sum(2**k * Factorial(n+k-1) / (Factorial(n-k) * Factorial(2*k)) * (x-1)**k, For(k, 0, n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("4e914f"),
-    Formula(Equal(ChebyshevU(n, x), Sum(Binomial(n+1,2*k+1) * (x**2-1)**k * x**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(ChebyshevU(n, x), Sum(Binomial(n+1,2*k+1) * (x**2-1)**k * x**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("50cb6b"),
-    Formula(Equal(ChebyshevU(n, x), Sum((-1)**k * Binomial(n-k, k) * (2*x)**(n-2*k), Tuple(k, 0, Floor(n/2))))),
+    Formula(Equal(ChebyshevU(n, x), Sum((-1)**k * Binomial(n-k, k) * (2*x)**(n-2*k), For(k, 0, Floor(n/2))))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("a9077a"),
-    Formula(Equal(ChebyshevU(n, x), Sum(2**k * Factorial(n+k+1) / (Factorial(n-k) * Factorial(2*k+1)) * (x-1)**k, Tuple(k, 0, n)))),
+    Formula(Equal(ChebyshevU(n, x), Sum(2**k * Factorial(n+k+1) / (Factorial(n-k) * Factorial(2*k+1)) * (x-1)**k, For(k, 0, n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
@@ -555,27 +555,27 @@ make_entry(ID("ce9a39"),
 # Generating functions
 
 make_entry(ID("685d1a"),
-    Formula(Equal(Sum(ChebyshevT(n,x) * z**n, Tuple(n, 0, Infinity)), (1-x*z)/(1-2*x*z+z**2))),
+    Formula(Equal(Sum(ChebyshevT(n,x) * z**n, For(n, 0, Infinity)), (1-x*z)/(1-2*x*z+z**2))),
     Variables(x, z),
     Assumptions(And(Element(x, ClosedInterval(-1,1)), Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("b5049d"),
-    Formula(Equal(Sum(ChebyshevU(n,x) * z**n, Tuple(n, 0, Infinity)), 1/(1-2*x*z+z**2))),
+    Formula(Equal(Sum(ChebyshevU(n,x) * z**n, For(n, 0, Infinity)), 1/(1-2*x*z+z**2))),
     Variables(x, z),
     Assumptions(And(Element(x, ClosedInterval(-1,1)), Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("27b2bb"),
-    Formula(Equal(Sum(ChebyshevT(n,x) * (z**n / n), Tuple(n, 1, Infinity)), -Div(1,2)*Log(1-2*x*z+z**2))),
+    Formula(Equal(Sum(ChebyshevT(n,x) * (z**n / n), For(n, 1, Infinity)), -Div(1,2)*Log(1-2*x*z+z**2))),
     Variables(x, z),
     Assumptions(And(Element(x, ClosedInterval(-1,1)), Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("9d7c61"),
-    Formula(Equal(Sum(ChebyshevT(n,x) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)), Exp(z*x) * Cosh(z * Sqrt(x**2-1)))),
+    Formula(Equal(Sum(ChebyshevT(n,x) * (z**n / Factorial(n)), For(n, 0, Infinity)), Exp(z*x) * Cosh(z * Sqrt(x**2-1)))),
     Variables(x, z),
     Assumptions(And(Element(x, CC), Element(z, CC))))
 
 make_entry(ID("fff8ff"),
-    Formula(Equal(Sum(ChebyshevU(n,x) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)), Exp(z*x) * (Cosh(z * Sqrt(x**2-1)) + z*x*Sinc(ConstI*z*Sqrt(x**2-1))))),
+    Formula(Equal(Sum(ChebyshevU(n,x) * (z**n / Factorial(n)), For(n, 0, Infinity)), Exp(z*x) * (Cosh(z * Sqrt(x**2-1)) + z*x*Sinc(ConstI*z*Sqrt(x**2-1))))),
     Variables(x, z),
     Assumptions(And(Element(x, CC), Element(z, CC))))
 

@@ -102,20 +102,20 @@ make_entry(ID("a766f2"),
 # Series representations
 
 make_entry(ID("33aa62"),
-    Formula(Equal(ConstCatalan, Sum((-1)**n/(2*n+1)**2, Tuple(n, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, Sum((-1)**n/(2*n+1)**2, For(n, 0, Infinity)))))
 
 make_entry(ID("d43f30"),
-    Formula(Equal(ConstCatalan, Div(1,2) * Sum(4**n / ((2*n+1)**2 * Binomial(2*n,n)), Tuple(n, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, Div(1,2) * Sum(4**n / ((2*n+1)**2 * Binomial(2*n,n)), For(n, 0, Infinity)))))
 
 make_entry(ID("0bd544"),
-    Formula(Equal(ConstCatalan, (ConstPi/8) * Log(2 + Sqrt(3)) + Div(3,8) * Sum(1/((2*n+1)**2*Binomial(2*n,n)), Tuple(n, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, (ConstPi/8) * Log(2 + Sqrt(3)) + Div(3,8) * Sum(1/((2*n+1)**2*Binomial(2*n,n)), For(n, 0, Infinity)))))
 
 make_entry(ID("37fb5f"),
-    Formula(Equal(ConstCatalan, Div(1,64) * Sum((256**n * (580*n**2-184*n+15))/(n**3*(2*n-1)*Binomial(6*n,3*n)*Binomial(6*n,4*n)*Binomial(4*n,2*n)), Tuple(n, 1, Infinity)))),
+    Formula(Equal(ConstCatalan, Div(1,64) * Sum((256**n * (580*n**2-184*n+15))/(n**3*(2*n-1)*Binomial(6*n,3*n)*Binomial(6*n,4*n)*Binomial(4*n,2*n)), For(n, 1, Infinity)))),
     References("https://hal.inria.fr/hal-00990465/"))
 
 make_entry(ID("a8657e"),
-    Formula(Equal(ConstCatalan, 1-Sum((n * RiemannZeta(2*n+1)) / 16**n, Tuple(n, 1, Infinity)))))
+    Formula(Equal(ConstCatalan, 1-Sum((n * RiemannZeta(2*n+1)) / 16**n, For(n, 1, Infinity)))))
 
 # Integral representations
 

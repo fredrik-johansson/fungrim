@@ -250,22 +250,22 @@ make_entry(ID("63f368"),
 # Product representations
 
 make_entry(ID("55bf43"),
-    Equal(Factorial(n), Product(k, Tuple(k, 1, n))),
+    Equal(Factorial(n), Product(k, For(k, 1, n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("788fa4"),
-    Equal(Binomial(z, k), Product((z+1-i)/i, Tuple(i, 1, k)), Product((z-i)/(i+1), Tuple(i, 0, k-1))),
+    Equal(Binomial(z, k), Product((z+1-i)/i, For(i, 1, k)), Product((z-i)/(i+1), For(i, 0, k-1))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("19f13b"),
-    Equal(RisingFactorial(z, k), Product(Parentheses(z+i-1), Tuple(i, 1, k)), Product(Parentheses(z+i), Tuple(i, 0, k-1))),
+    Equal(RisingFactorial(z, k), Product(Parentheses(z+i-1), For(i, 1, k)), Product(Parentheses(z+i), For(i, 0, k-1))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("a5852d"),
-    Equal(FallingFactorial(z, k), Product(Parentheses(z-i+1), Tuple(i, 1, k)), Product(Parentheses(z-i), Tuple(i, 0, k-1))),
+    Equal(FallingFactorial(z, k), Product(Parentheses(z-i+1), For(i, 1, k)), Product(Parentheses(z-i), For(i, 0, k-1))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
@@ -436,43 +436,43 @@ make_entry(ID("30652c"),
 # Sums and generating functions
 
 make_entry(ID("6f7746"),
-    Formula(Equal(Sum(Binomial(n, k) * x**k * y**(n-k), Tuple(k, 0, n)), (x+y)**n)),
+    Formula(Equal(Sum(Binomial(n, k) * x**k * y**(n-k), For(k, 0, n)), (x+y)**n)),
     Variables(x, y, n),
     Assumptions(And(Element(x, CC), Element(y, CC), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("7c014b"),
-    Formula(Equal(Sum(Binomial(z, k) * x**k, Tuple(k, 0, Infinity)), (1+x)**z)),
+    Formula(Equal(Sum(Binomial(z, k) * x**k, For(k, 0, Infinity)), (1+x)**z)),
     Variables(z, x),
     Assumptions(And(Element(z, CC), Element(x, CC), Less(Abs(x), 1)),
                 And(Element(z, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("858c8f"),
-    Formula(Equal(Sum(Binomial(n, k), Tuple(k, 0, n)), 2**n)),
+    Formula(Equal(Sum(Binomial(n, k), For(k, 0, n)), 2**n)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("4d1365"),
-    Formula(Equal(Binomial(z, k), Sum(StirlingS1(k,i) * (z**i / Factorial(k)), Tuple(i, 0, k)))),
+    Formula(Equal(Binomial(z, k), Sum(StirlingS1(k,i) * (z**i / Factorial(k)), For(i, 0, k)))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("65c610"),
-    Formula(Equal(Exp(x+y), Sum(Sum(Binomial(n+k,k) * ((x**k * y**n) / Factorial(n+k)), Tuple(n, 0, Infinity)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Exp(x+y), Sum(Sum(Binomial(n+k,k) * ((x**k * y**n) / Factorial(n+k)), For(n, 0, Infinity)), For(k, 0, Infinity)))),
     Variables(x, y),
     Assumptions(And(Element(x, CC), Element(y, CC))))
 
 make_entry(ID("50f57e"),
-    Formula(Equal(Sum(Binomial(2*n,n) * (x**n / Factorial(n)), Tuple(n, 0, Infinity)), Exp(2*x) * BesselI(0, 2*x))),
+    Formula(Equal(Sum(Binomial(2*n,n) * (x**n / Factorial(n)), For(n, 0, Infinity)), Exp(2*x) * BesselI(0, 2*x))),
     Variables(x),
     Assumptions(Element(x, CC)))
 
 make_entry(ID("2b2066"),
-    Formula(Equal(Sum(Binomial(2*n,n) * x**n, Tuple(n, 0, Infinity)), 1/Sqrt(1-4*x))),
+    Formula(Equal(Sum(Binomial(2*n,n) * x**n, For(n, 0, Infinity)), 1/Sqrt(1-4*x))),
     Variables(x),
     Assumptions(And(Element(x, CC), Less(Abs(x), Div(1,4)))))
 
 make_entry(ID("c9bcf7"),
-    Formula(Equal(Sum((1/Binomial(2*n,n)) * x**n, Tuple(n, 0, Infinity)), Hypergeometric2F1(1,1,Div(1,2),x/4),
+    Formula(Equal(Sum((1/Binomial(2*n,n)) * x**n, For(n, 0, Infinity)), Hypergeometric2F1(1,1,Div(1,2),x/4),
         Where(1/(1-u) + (Sqrt(u) * Asin(Sqrt(u)))/(1-u)**Div(3,2), Equal(u, x/4)))),
     Variables(x),
     Assumptions(And(Element(x, CC), Less(Abs(x), 4))))

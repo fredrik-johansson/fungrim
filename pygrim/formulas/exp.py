@@ -167,12 +167,12 @@ make_entry(ID("bceb84"),
     Formula(Equal(Zeros(Exp(z), Var(z), Element(z, CC)), Set())))
 
 make_entry(ID("1635f5"),
-    Formula(Equal(Exp(z), Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Exp(z), Sum(z**k/Factorial(k), For(k, 0, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("bad502"),
-    Formula(Equal(Exp(c+z), Exp(c) * Sum(z**k/Factorial(k), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Exp(c+z), Exp(c) * Sum(z**k/Factorial(k), For(k, 0, Infinity)))),
     Variables(c, z),
     Assumptions(And(Element(c, CC), Element(z, CC))))
 
@@ -236,7 +236,7 @@ make_entry(ID("52d827"),
 # Approximations
 
 make_entry(ID("3c4480"),
-    Formula(LessEqual(Abs(Exp(z) - Sum(z**k/Factorial(k), Tuple(k, 0, N-1))),
+    Formula(LessEqual(Abs(Exp(z) - Sum(z**k/Factorial(k), For(k, 0, N-1))),
         Abs(z)**N/(Factorial(N)*(1-Abs(z)/N)))),
     Variables(z, N),
     Assumptions(And(Element(z, CC), Element(N, ZZ), Greater(N, Abs(z)))))

@@ -277,7 +277,7 @@ make_entry(ID("40aeb6"),
     ))
 
 make_entry(ID("2488bb"),
-    Formula(Equal(BesselJ(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselJ(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Formula(Equal(BesselJ(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselJ(nu+2*k-r,z), For(k, 0, r)))),
     Variables(nu,z,r),
     Assumptions(
         And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
@@ -285,7 +285,7 @@ make_entry(ID("2488bb"),
     ))
 
 make_entry(ID("68cc2f"),
-    Formula(Equal(BesselY(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselY(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Formula(Equal(BesselY(nu,z,r), Div(1,2**r) * Sum((-1)**k * Binomial(r,k) * BesselY(nu+2*k-r,z), For(k, 0, r)))),
     Variables(nu,z,r),
     Assumptions(
         And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),
@@ -367,7 +367,7 @@ make_entry(ID("a0ff0b"),
     ))
 
 make_entry(ID("e284d7"),
-    Formula(Equal(BesselI(nu,z,r), Div(1,2**r) * Sum(Binomial(r,k) * BesselI(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Formula(Equal(BesselI(nu,z,r), Div(1,2**r) * Sum(Binomial(r,k) * BesselI(nu+2*k-r,z), For(k, 0, r)))),
     Variables(nu,z,r),
     Assumptions(
         And(Element(nu, ZZ), Element(z, CC), Element(r, ZZGreaterEqual(0))),
@@ -375,7 +375,7 @@ make_entry(ID("e284d7"),
     ))
 
 make_entry(ID("807f3f"),
-    Formula(Equal(BesselK(nu,z,r), Div((-1)**r,2**r) * Sum(Binomial(r,k) * BesselK(nu+2*k-r,z), Tuple(k, 0, r)))),
+    Formula(Equal(BesselK(nu,z,r), Div((-1)**r,2**r) * Sum(Binomial(r,k) * BesselK(nu+2*k-r,z), For(k, 0, r)))),
     Variables(nu,z,r),
     Assumptions(
         And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))), Element(r, ZZGreaterEqual(0))),

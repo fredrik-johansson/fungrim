@@ -530,7 +530,7 @@ make_entry(ID("1d3fd7"),
 # Series expansions
 
 make_entry(ID("4e5947"),
-    Formula(Equal(Atan(z), Sum((-1)**k * z**(2*k+1) / (2*k+1), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Atan(z), Sum((-1)**k * z**(2*k+1) / (2*k+1), For(k, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 1)))),
 
@@ -559,12 +559,12 @@ make_entry(ID("466095"),
     Assumptions(Element(x, Union(RR, Set(-Infinity, Infinity)))))
 
 make_entry(ID("3478af"),
-    Formula(LessEqual(Atan(x), Sum((-1)**k * x**(2*k+1) / (2*k+1), Tuple(k, 0, 2*N)))),
+    Formula(LessEqual(Atan(x), Sum((-1)**k * x**(2*k+1) / (2*k+1), For(k, 0, 2*N)))),
     Variables(x, N),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(N, ZZGreaterEqual(0)))))
 
 make_entry(ID("1eeccf"),
-    Formula(GreaterEqual(Atan(x), Sum((-1)**k * x**(2*k+1) / (2*k+1), Tuple(k, 0, 2*N+1)))),
+    Formula(GreaterEqual(Atan(x), Sum((-1)**k * x**(2*k+1) / (2*k+1), For(k, 0, 2*N+1)))),
     Variables(x, N),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(N, ZZGreaterEqual(0)))))
 

@@ -212,7 +212,7 @@ make_entry(ID("a787eb"),
     Assumptions(And(Element(z, CC), NotElement(2*z, ZZLessEqual(0)))))
 
 make_entry(ID("90a1e1"),
-    Formula(Equal(Product(GammaFunction(z+Div(k,m)), Tuple(k, 0, m-1)), (2*pi)**((m-1)/2) * m**(Div(1,2)-m*z) * GammaFunction(m*z))),
+    Formula(Equal(Product(GammaFunction(z+Div(k,m)), For(k, 0, m-1)), (2*pi)**((m-1)/2) * m**(Div(1,2)-m*z) * GammaFunction(m*z))),
     Variables(z),
     Assumptions(And(Element(z, CC), Element(m, ZZGreaterEqual(1)), NotElement(m*z, ZZLessEqual(0)))))
 
@@ -235,13 +235,13 @@ make_entry(ID("4e4e0f"),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
 make_entry(ID("661054"),
-    Formula(Equal(LogGamma(1+z), -(ConstGamma*z) + Sum(RiemannZeta(k)/k * (-z)**k, Tuple(k, 2, Infinity)))),
+    Formula(Equal(LogGamma(1+z), -(ConstGamma*z) + Sum(RiemannZeta(k)/k * (-z)**k, For(k, 2, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("37a95a"),
     Formula(Equal(LogGamma(z), (z-Div(1,2))*Log(z) - z + Log(2*ConstPi)/2
-        + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*z**(2*k-1)), Tuple(k, 1, n-1)) + StirlingSeriesRemainder(n, z))),
+        + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*z**(2*k-1)), For(k, 1, n-1)) + StirlingSeriesRemainder(n, z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
 
@@ -254,7 +254,7 @@ make_entry(ID("53a2a1"),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
 
 make_entry(ID("6d0a95"),
-    Formula(Equal(GammaFunction(z), (2*ConstPi)**Div(1,2) * z**(z-Div(1,2)) * Exp(-z) * Exp(Sum((z+n-Div(1,2))*Log((z+n)/(z+n-1))-1, Tuple(n, 1, Infinity))))),
+    Formula(Equal(GammaFunction(z), (2*ConstPi)**Div(1,2) * z**(z-Div(1,2)) * Exp(-z) * Exp(Sum((z+n-Div(1,2))*Log((z+n)/(z+n-1))-1, For(n, 1, Infinity))))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)))),
     References("B. C. Carlson (1977), Special functions of applied mathematics, Academic Press. Proposition 3.8-1."))
@@ -363,13 +363,13 @@ make_entry(ID("a0ca3e"),
     Assumptions(Element(x, OpenInterval(0, Infinity))))
 
 make_entry(ID("2398a1"),
-    Formula(Greater(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), Tuple(k, 1, 2*n)))),
+    Formula(Greater(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), For(k, 1, 2*n)))),
     Variables(x, n),
     Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, ZZGreaterEqual(0)))),
     References("H. Alzer, On some inequalities for the gamma and psi functions, Math. Comp. 66(217), pp. 373-389. Theorem 8."))
 
 make_entry(ID("99a9c6"),
-    Formula(Less(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), Tuple(k, 1, 2*n+1)))),
+    Formula(Less(LogGamma(x), (x-Div(1,2))*Log(x)-x+Log(2*ConstPi)/2 + Sum(BernoulliB(2*k)/(2*k*(2*k-1)*x**(2*k-1)), For(k, 1, 2*n+1)))),
     Variables(x, n),
     Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, ZZGreaterEqual(0)))),
     References("H. Alzer, On some inequalities for the gamma and psi functions, Math. Comp. 66(217), pp. 373-389. Theorem 8."))
@@ -418,7 +418,7 @@ make_entry(ID("94db60"),
     Assumptions(Element(y, SetMinus(RR, Set(0)))))
 
 make_entry(ID("513a30"),
-    Formula(Equal(Abs(GammaFunction(x+y*ConstI)), Abs(GammaFunction(x)) * Product((1+y**2/(x+k)**2)**(-Div(1,2)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Abs(GammaFunction(x+y*ConstI)), Abs(GammaFunction(x)) * Product((1+y**2/(x+k)**2)**(-Div(1,2)), For(k, 0, Infinity)))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR), NotElement(x+y*ConstI, ZZLessEqual(0)))),
     References("Abramowitz & Stegun 6.1.25"))

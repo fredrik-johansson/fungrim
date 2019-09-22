@@ -58,10 +58,10 @@ make_entry(ID("16a1f4"),
         Greater(a, 0), Greater(c, 0), Greater(z, 0))))
 
 make_entry(ID("b77faf"),
-    Formula(Equal(Integral(x**(-x), Tuple(x, 0, 1)), Sum(n**(-n), Tuple(n, 1, Infinity)))))
+    Formula(Equal(Integral(x**(-x), Tuple(x, 0, 1)), Sum(n**(-n), For(n, 1, Infinity)))))
 
 make_entry(ID("66fefb"),
-    Formula(Equal(Integral(x**x, Tuple(x, 0, 1)), Sum((-1)**(n+1) * n**(-n), Tuple(n, 1, Infinity)))))
+    Formula(Equal(Integral(x**x, Tuple(x, 0, 1)), Sum((-1)**(n+1) * n**(-n), For(n, 1, Infinity)))))
 
 
 

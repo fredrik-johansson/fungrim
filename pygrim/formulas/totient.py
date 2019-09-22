@@ -145,8 +145,8 @@ make_entry(ID("c0e088"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("b9c36d"),
-    Formula(Equal(Totient(Product(Pow(PrimeNumber(k), Subscript(e, k)), Tuple(k, 1, m))),
-        Product(Totient(Pow(PrimeNumber(k), Subscript(e, k))), Tuple(k, 1, m)))),
+    Formula(Equal(Totient(Product(Pow(PrimeNumber(k), Subscript(e, k)), For(k, 1, m))),
+        Product(Totient(Pow(PrimeNumber(k), Subscript(e, k))), For(k, 1, m)))),
     Variables(e, m),
     Assumptions(And(Element(Subscript(e, k), ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
@@ -190,12 +190,12 @@ make_entry(ID("36fe36"),
 # Sum representations
 
 make_entry(ID("3f5711"),
-    Formula(Equal(Totient(n), Sum(GCD(n,k) * Exp(2*ConstPi*ConstI*k/n), Tuple(k, 1, n)))),
+    Formula(Equal(Totient(n), Sum(GCD(n,k) * Exp(2*ConstPi*ConstI*k/n), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("93a877"),
-    Formula(Equal(Totient(n), Sum(GCD(n,k) * Cos(2*ConstPi*k/n), Tuple(k, 1, n)))),
+    Formula(Equal(Totient(n), Sum(GCD(n,k) * Cos(2*ConstPi*k/n), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -206,13 +206,13 @@ make_entry(ID("efd378"),
 
 # todo: better markup for this kind of sum
 make_entry(ID("bb4ce0"),
-    Formula(Equal(Totient(n), (2/n) * Sum(Cases(Tuple(k, Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), Tuple(k, 1, n)))),
+    Formula(Equal(Totient(n), (2/n) * Sum(Cases(Tuple(k, Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 # todo: better markup for this kind of sum
 make_entry(ID("a08583"),
-    Formula(Equal(Totient(n) * DivisorSigma(0,n), Sum(Cases(Tuple(GCD(n,k-1), Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), Tuple(k, 1, n)))),
+    Formula(Equal(Totient(n) * DivisorSigma(0,n), Sum(Cases(Tuple(GCD(n,k-1), Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))),
     Description("Menon's identity"))
@@ -230,12 +230,12 @@ make_entry(ID("cdd7e7"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("90bb4a"),
-    Formula(Equal(DivisorSum(Totient(d) * d, d, n), Parentheses((2/n) * Sum(LCM(n, k), Tuple(k, 1, n))) - 1)),
+    Formula(Equal(DivisorSum(Totient(d) * d, d, n), Parentheses((2/n) * Sum(LCM(n, k), For(k, 1, n))) - 1)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("0fdb94"),
-    Formula(Equal(DivisorSum(Totient(d) * (n / d), d, n), Sum(GCD(n, k), Tuple(k, 1, n)))),
+    Formula(Equal(DivisorSum(Totient(d) * (n / d), d, n), Sum(GCD(n, k), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
@@ -245,7 +245,7 @@ make_entry(ID("a05466"),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("ea27a7"),
-    Formula(Equal(Sum(Totient(k) * Floor(n/k), Tuple(k, 1, n)), (n*(n+1))/2)),
+    Formula(Equal(Sum(Totient(k) * Floor(n/k), For(k, 1, n)), (n*(n+1))/2)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
@@ -253,17 +253,17 @@ make_entry(ID("ea27a7"),
 # Generating functions
 
 make_entry(ID("1a907e"),
-    Formula(Equal(Sum(Totient(n) / n**s, Tuple(n, 1, Infinity)), RiemannZeta(s-1) / RiemannZeta(s))),
+    Formula(Equal(Sum(Totient(n) / n**s, For(n, 1, Infinity)), RiemannZeta(s-1) / RiemannZeta(s))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
 
 make_entry(ID("7f5468"),
-    Formula(Equal(Sum((Totient(n) * q**n) / (1-q**n), Tuple(n, 1, Infinity)), q/(1-q)**2)),
+    Formula(Equal(Sum((Totient(n) * q**n) / (1-q**n), For(n, 1, Infinity)), q/(1-q)**2)),
     Variables(q),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
 make_entry(ID("a9a405"),
-    Formula(Equal(Sum(Totient(n)/n * Log(1-x**n), Tuple(n, 1, Infinity)), x/(x-1))),
+    Formula(Equal(Sum(Totient(n)/n * Log(1-x**n), For(n, 1, Infinity)), x/(x-1))),
     Variables(x),
     Assumptions(And(Element(x, CC), Less(Abs(x), 1))))
 
@@ -287,10 +287,10 @@ make_entry(ID("feb1a0"),
     Formula(Equal(SequenceLimitSuperior(Totient(n+1) / Totient(n), Var(n), Infinity), Infinity)))
 
 make_entry(ID("8d7b3d"),
-    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), Tuple(n, 1, N)), Var(N), Infinity), 3/ConstPi**2)))
+    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), For(n, 1, N)), Var(N), Infinity), 3/ConstPi**2)))
 
 make_entry(ID("9923b7"),
-    Formula(Equal(SequenceLimit(1/Log(N) * Sum(1/Totient(n), Tuple(n, 1, N)), Var(N), Infinity), (RiemannZeta(2)*RiemannZeta(3) / RiemannZeta(6)))))
+    Formula(Equal(SequenceLimit(1/Log(N) * Sum(1/Totient(n), For(n, 1, N)), Var(N), Infinity), (RiemannZeta(2)*RiemannZeta(3) / RiemannZeta(6)))))
 
 # Bounds and inequalities
 

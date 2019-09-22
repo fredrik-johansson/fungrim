@@ -59,12 +59,12 @@ make_entry(ID("c43abd"),
 # Hypergeometric series
 
 make_entry(ID("ad8db2"),
-    Formula(Equal(Hypergeometric2F1(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric2F1(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,b,c,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC), Or(Less(Abs(z), 1), Element(a, ZZLessEqual(0)), Element(b, ZZLessEqual(0))))))
 
 make_entry(ID("306ef7"),
-    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / GammaFunction(c+k)) * (z**k / Factorial(k)), Tuple(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z), Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / GammaFunction(c+k)) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,b,c,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Or(Less(Abs(z), 1), Element(a, ZZLessEqual(0)), Element(b, ZZLessEqual(0)), Element(c, ZZLessEqual(0))))))
 
@@ -177,7 +177,7 @@ make_entry(ID("ca9123"),
 
 # todo: the assumption refers to D which is defined inside the formula; can the markup be improved?
 make_entry(ID("c60679"),
-    Formula(Where(LessEqual(Abs(Hypergeometric2F1(a,b,c,z) - Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), Tuple(k, 0, N-1))),
+    Formula(Where(LessEqual(Abs(Hypergeometric2F1(a,b,c,z) - Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), For(k, 0, N-1))),
         Abs((RisingFactorial(a,N) * RisingFactorial(b,N) / RisingFactorial(c,N)) * (z**N / Factorial(N))) * (1/(1-D))),
             Equal(D, Abs(z) * (1 + Abs(a-c)/Abs(c+N)) * (1 + Abs(b-1)/Abs(1+N)))
             )),

@@ -57,10 +57,10 @@ make_entry(ID("e876e8"),
         RealBall(Decimal("0.57721566490153286060651209008240243104215933593992"), Decimal("3.60e-51")))))
 
 make_entry(ID("4644c0"),
-    Formula(Equal(ConstGamma, SequenceLimit(Brackets(Parentheses(Sum(1/k, Tuple(k, 1, n))) - Log(n)), Var(n), Infinity))))
+    Formula(Equal(ConstGamma, SequenceLimit(Brackets(Parentheses(Sum(1/k, For(k, 1, n))) - Log(n)), Var(n), Infinity))))
 
 make_entry(ID("288da1"),
-    Formula(Equal(Exp(ConstGamma), SequenceLimit(1/Log(PrimeNumber(N)) * Product(PrimeNumber(n)/(PrimeNumber(n)-1), Tuple(n, 1, N)), Var(N), Infinity))))
+    Formula(Equal(Exp(ConstGamma), SequenceLimit(1/Log(PrimeNumber(N)) * Product(PrimeNumber(n)/(PrimeNumber(n)-1), For(n, 1, N)), Var(N), Infinity))))
 
 make_entry(ID("28bf9a"),
     Formula(NotElement(ConstGamma, SetBuilder(p/q, Tuple(p, q), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
@@ -88,7 +88,7 @@ make_entry(ID("e8af68"),
     Formula(Equal(ConstGamma, RightLimit(Brackets(-BesselK(0,x) - Log(x/2)), Var(x), 0))))
 
 make_entry(ID("818008"),
-    Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, Tuple(k, 2, Infinity)))))
+    Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, For(k, 2, Infinity)))))
 
 make_entry(ID("39fe5f"),
     Formula(Equal(ConstGamma, -Integral(Exp(-x)*Log(x), Tuple(x, 0, Infinity)))))
@@ -98,13 +98,13 @@ make_entry(ID("a1ca3e"),
 
 make_entry(ID("014c4e"),
     Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),
-        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, 5*n)),
-                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, 5*n)),
-                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
+        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, For(k, 0, 5*n)),
+                Sum(n**(2*k) / Factorial(k)**2, For(k, 0, 5*n)),
+                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), For(k, 0, 2*n-1)))))),
 #    Formula(Where(Element(ConstGamma, RealBall(Parentheses(S/I - T/I**2 - Log(n)), 24*Exp(-(8*n)))),
-#        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
-#                Sum(n**(2*k) / Factorial(k)**2, Tuple(k, 0, N - 1)),
-#                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), Tuple(k, 0, 2*n-1)))))),
+#        Equal(Tuple(S, I, T), Tuple(Sum(HarmonicNumber(k) * n**(2*k) / Factorial(k)**2, For(k, 0, N - 1)),
+#                Sum(n**(2*k) / Factorial(k)**2, For(k, 0, N - 1)),
+#                Div(1,4*n) * Sum(Factorial(2*k)**3 / (Factorial(k)**4 * 8**(2*k) * (2*n)**(2*k)), For(k, 0, 2*n-1)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))),
     References("R. Brent and F. Johansson. A bound for the error term in the Brent-McMillan algorithm. Mathematics of Computation 2015, 84(295). DOI: 10.1090/S0025-5718-2015-02931-7"))

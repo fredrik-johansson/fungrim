@@ -385,28 +385,28 @@ make_entry(ID("6ddbf4"),
                 And(Element(a, CC), Element(b, CC), no_crossing2)))
 
 make_entry(ID("b14da0"),
-    Formula(Equal(Sqrt(z+x), Sqrt(z) * Sum(((-1)**k * RisingFactorial(-Div(1,2),k)) / (z**k * Factorial(k)) * x**k, Tuple(k, 0, Infinity)))),
+    Formula(Equal(Sqrt(z+x), Sqrt(z) * Sum(((-1)**k * RisingFactorial(-Div(1,2),k)) / (z**k * Factorial(k)) * x**k, For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(x, CC), And(Less(Abs(x), Abs(z)), Or(Greater(Re(z), 0), Equal(Sign(Im(x)), Sign(Im(z)))))),
         And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, FormalPowerSeries(CC, x)))))
 
 make_entry(ID("3c2557"),
-    Formula(Equal(1/Sqrt(z+x), (1/Sqrt(z)) * Sum(((-1)**k * RisingFactorial(Div(1,2),k)) / (z**k * Factorial(k)) * x**k, Tuple(k, 0, Infinity)))),
+    Formula(Equal(1/Sqrt(z+x), (1/Sqrt(z)) * Sum(((-1)**k * RisingFactorial(Div(1,2),k)) / (z**k * Factorial(k)) * x**k, For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(x, CC), And(Less(Abs(x), Abs(z)), Or(Greater(Re(z), 0), Equal(Sign(Im(x)), Sign(Im(z)))))),
         And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, FormalPowerSeries(CC, x)))))
 
 make_entry(ID("6202cb"),
-    Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), Tuple(k, 1, n))),
+    Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
     Assumptions(And(Element(A, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
-    #Formula(Where(Equal(Sqrt(Sum(Subscript(a, n) * x**n, Tuple(n, 0, Infinity))), Sum(Subscript(c, n) * x**n, Tuple(n, 0, Infinity))),
+    #Formula(Where(Equal(Sqrt(Sum(Subscript(a, n) * x**n, For(n, 0, Infinity))), Sum(Subscript(c, n) * x**n, For(n, 0, Infinity))),
     #    Equal(Subscript(c, 0), Sqrt(Subscript(a, 0))),
-    #        Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), Tuple(k, 1, n))))))
+    #        Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))))))
 
 make_entry(ID("5ff181"),
-    Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((k/2-n) * Subscript(a, k) * Subscript(c, n-k), Tuple(k, 1, n))),
+    Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(1/Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
     Assumptions(And(Element(A, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))

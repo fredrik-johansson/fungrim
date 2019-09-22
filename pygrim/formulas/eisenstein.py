@@ -220,19 +220,19 @@ make_entry(ID("0a2120"),
 # todo: Cartesian power
 
 make_entry(ID("2246a7"),
-    Formula(Equal(EisensteinG(2*k, tau), Sum(1/(m*tau+n)**(2*k), Tuple(m, n), 
-        Element(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0))))))),
+    Formula(Equal(EisensteinG(2*k, tau), Sum(1/(m*tau+n)**(2*k),
+        ForElement(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0))))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(2)), Element(tau, HH))))
 
 make_entry(ID("c1ffd4"),
-    Formula(Equal(EisensteinG(2*k, tau), RiemannZeta(2*k) * Sum(1/(m*tau+n)**(2*k), Tuple(m, n), 
-        And(Element(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0)))), Equal(GCD(m,n),1))))),
+    Formula(Equal(EisensteinG(2*k, tau), RiemannZeta(2*k) * Sum(1/(m*tau+n)**(2*k),
+        ForElement(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0)))), Equal(GCD(m,n),1)))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(2)), Element(tau, HH))))
 
 make_entry(ID("b07750"),
-    Formula(Equal(EisensteinG(2*k, tau), 2 * RiemannZeta(2*k) + 2 * Sum(Sum(1/(m*tau+n)**(2*k), n, Element(n, ZZ)), Tuple(m, 1, Infinity)))),
+    Formula(Equal(EisensteinG(2*k, tau), 2 * RiemannZeta(2*k) + 2 * Sum(Sum(1/(m*tau+n)**(2*k), ForElement(n, ZZ)), For(m, 1, Infinity)))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
@@ -276,56 +276,56 @@ make_entry(ID("b1a5e4"),
 # Fourier series (q-series)
 
 make_entry(ID("10cdf4"),
-    Formula(Equal(EisensteinE(2, tau), Where(1 - 24 * Sum(DivisorSigma(1, n) * q**n, Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(2, tau), Where(1 - 24 * Sum(DivisorSigma(1, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("f8dfaf"),
-    Formula(Equal(EisensteinE(4, tau), Where(1 + 240 * Sum(DivisorSigma(3, n) * q**n, Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(4, tau), Where(1 + 240 * Sum(DivisorSigma(3, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("e20db0"),
-    Formula(Equal(EisensteinE(6, tau), Where(1 - 504 * Sum(DivisorSigma(5, n) * q**n, Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(6, tau), Where(1 - 504 * Sum(DivisorSigma(5, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("7c00e6"),
-    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(DivisorSigma(2*k-1, n) * q**n, Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(DivisorSigma(2*k-1, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("848d97"),
-    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(n**(2*k-1) * q**n / (1 - q**n), Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(n**(2*k-1) * q**n / (1 - q**n), For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("15b347"),
     Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) *
-        Sum(Sum(n**(2*k-1) * q**(m*n), Tuple(m, 1, Infinity)), Tuple(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
+        Sum(Sum(n**(2*k-1) * q**(m*n), For(m, 1, Infinity)), For(n, 1, Infinity)), Equal(q, Exp(2*ConstPi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 # Trigonometric series
 
 make_entry(ID("18a4d1"),
-    Formula(Equal(EisensteinE(2, tau), 1 + 6 * Sum(1/Sin(ConstPi * m * tau)**2, Tuple(m, 1, Infinity)))),
+    Formula(Equal(EisensteinE(2, tau), 1 + 6 * Sum(1/Sin(ConstPi * m * tau)**2, For(m, 1, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
 make_entry(ID("7b62e4"),
-    Formula(Equal(EisensteinE(2, tau), 1 - 12 * Sum(1/(Cos(2 * ConstPi * m * tau) - 1), Tuple(m, 1, Infinity)))),
+    Formula(Equal(EisensteinE(2, tau), 1 - 12 * Sum(1/(Cos(2 * ConstPi * m * tau) - 1), For(m, 1, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
 
 make_entry(ID("a92c1a"),
-    Formula(Equal(EisensteinE(4, tau), 1 + 30 * Sum((Cos(ConstPi*m*tau)**2 + 1)/Sin(ConstPi*m*tau)**4, Tuple(m, 1, Infinity)))),
+    Formula(Equal(EisensteinE(4, tau), 1 + 30 * Sum((Cos(ConstPi*m*tau)**2 + 1)/Sin(ConstPi*m*tau)**4, For(m, 1, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
 make_entry(ID("171724"),
-    Formula(Equal(EisensteinE(6, tau), 1 + 63 * Sum((2 * Cos(ConstPi*m*tau)**4 + 11 * Cos(ConstPi*m*tau)**2 + 2)/Sin(ConstPi*m*tau)**6, Tuple(m, 1, Infinity)))),
+    Formula(Equal(EisensteinE(6, tau), 1 + 63 * Sum((2 * Cos(ConstPi*m*tau)**4 + 11 * Cos(ConstPi*m*tau)**2 + 2)/Sin(ConstPi*m*tau)**6, For(m, 1, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
@@ -431,7 +431,7 @@ make_entry(ID("36fff2"),
 
 # todo: alt. forms?
 make_entry(ID("5540a1"),
-    Formula(Equal(EisensteinG(2*k,tau), (3 / ((2*k+1)*(k-3)*(2*k-1)))*Sum((2*r-1)*(2*k-2*r-1)*EisensteinG(2*r,tau)*EisensteinG(2*k-2*r,tau), Tuple(r, 2, k-2)))),
+    Formula(Equal(EisensteinG(2*k,tau), (3 / ((2*k+1)*(k-3)*(2*k-1)))*Sum((2*r-1)*(2*k-2*r-1)*EisensteinG(2*r,tau)*EisensteinG(2*k-2*r,tau), For(r, 2, k-2)))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(4)), Element(tau, HH))),
     References("T. Apostol (1976), Modular Functions and Dirichlet Series in Number Theory, Springer. Theorem 1.13."))
@@ -439,13 +439,13 @@ make_entry(ID("5540a1"),
 # Generating functions
 
 make_entry(ID("9bf0ad"),
-    Formula(Equal(WeierstrassP(z, tau), 1/z**2 + Sum((2*k+1)*EisensteinG(2*k+2,tau) * z**(2*k), Tuple(k, 1, Infinity)))),
+    Formula(Equal(WeierstrassP(z, tau), 1/z**2 + Sum((2*k+1)*EisensteinG(2*k+2,tau) * z**(2*k), For(k, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(z), 
         Infimum(SetBuilder(Abs(s), s, Element(s, SetMinus(Lattice(1, tau), Set(0)))))))))
 
 make_entry(ID("3e84e3"),
-    Formula(Equal(WeierstrassZeta(z, tau), 1/z - Sum(EisensteinG(2*k+2,tau) * z**(2*k+1), Tuple(k, 1, Infinity)))),
+    Formula(Equal(WeierstrassZeta(z, tau), 1/z - Sum(EisensteinG(2*k+2,tau) * z**(2*k+1), For(k, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(z), 
         Infimum(SetBuilder(Abs(s), s, Element(s, SetMinus(Lattice(1, tau), Set(0)))))))))
@@ -542,7 +542,7 @@ make_entry(ID("a50278"),
     References("F. K. C. Rankin and H. P. F. Swinnerton-Dyer, On the zeros of Eisenstein Series, Bull. London Math. Soc., 2(1970),169-170."))
 
 make_entry(ID("13cac5"),
-    Formula(Where(Equal(Sum(w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), tau, Element(tau, ModularGroupFundamentalDomain)), 2*k/12),
+    Formula(Where(Equal(Sum(w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), ForElement(tau, ModularGroupFundamentalDomain)), 2*k/12),
         Equal(w(tau), Cases(Tuple(Div(1,2), Equal(tau, ConstI)), Tuple(Div(1,3), Equal(tau, Exp(2*ConstPi*ConstI/3))), Tuple(1, Otherwise))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))),
@@ -550,7 +550,7 @@ make_entry(ID("13cac5"),
     "S. Garthwaite, L. Long, H. Swisher, S. Treneer. Zeros of classical Eisenstein series and recent developments, Fields Communications Volume 60, WIN - Women In Numbers, Proceedings of the WIN Workshop, (2011), 251-263. http://math.oregonstate.edu/~swisherh/C1P.pdf"))
 
 make_entry(ID("097efc"),
-    Formula(Where(Equal(Sum(ModularJ(tau) * w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), tau, Element(tau, ModularGroupFundamentalDomain)), 120*k - 2/RiemannZeta(1-2*k)),
+    Formula(Where(Equal(Sum(ModularJ(tau) * w(tau) * ComplexZeroMultiplicity(EisensteinE(2*k, z), Var(z), tau), ForElement(tau, ModularGroupFundamentalDomain)), 120*k - 2/RiemannZeta(1-2*k)),
         Equal(w(tau), Cases(Tuple(Div(1,2), Equal(tau, ConstI)), Tuple(1, Otherwise))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))),

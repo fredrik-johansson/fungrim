@@ -166,18 +166,18 @@ Tuple(10, x**10 - 5*x**9 + Div(15,2)*x**8 - 7*x**6 + 5*x**4 - Div(3,2)*x**2 + Di
 
 make_entry(ID("522b04"),
     Formula(Equal(z/(Exp(z)-1),
-        Sum(BernoulliB(n) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)))),
+        Sum(BernoulliB(n) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 2 * ConstPi), Unequal(z, 0))))
 
 make_entry(ID("f79ff0"),
     Formula(Equal(z*Exp(x*z)/(Exp(z)-1),
-        Sum(BernoulliPolynomial(n,x) * (z**n / Factorial(n)), Tuple(n, 0, Infinity)))),
+        Sum(BernoulliPolynomial(n,x) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(x, CC), Element(z, CC), Less(Abs(z), 2 * ConstPi), Unequal(z, 0))))
 
 make_entry(ID("555e10"),
-    Formula(Equal(BernoulliPolynomial(n,x), Sum(Binomial(n,k) * BernoulliB(n-k) * x**k, Tuple(k, 0, n)))),
+    Formula(Equal(BernoulliPolynomial(n,x), Sum(Binomial(n,k) * BernoulliB(n-k) * x**k, For(k, 0, n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
@@ -245,7 +245,7 @@ make_entry(ID("e89eb5"),
 
 # todo: variable lower endpoint??
 make_entry(ID("4aab8a"),
-    Formula(Equal(Sum(k**n, Tuple(k, 1, m)), (BernoulliPolynomial(n+1, m+1) - BernoulliB(m+1)) / (m+1))),
+    Formula(Equal(Sum(k**n, For(k, 1, m)), (BernoulliPolynomial(n+1, m+1) - BernoulliB(m+1)) / (m+1))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
@@ -286,7 +286,7 @@ make_entry(ID("ff190c"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("c33e2b"),
-    Formula(Element(Parentheses(BernoulliB(2*n) * Product(1/p, p, Divides(Parentheses(p-1), 2*n))), ZZ)),
+    Formula(Element(Parentheses(BernoulliB(2*n) * Product(1/p, For(p), Divides(Parentheses(p-1), 2*n))), ZZ)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

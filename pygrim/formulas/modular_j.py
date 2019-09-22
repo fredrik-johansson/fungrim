@@ -201,7 +201,7 @@ make_entry(ID("fd72e0"),
 
 make_entry(ID("dd5681"),
     Formula(Equal(HilbertClassPolynomial(D, x),
-        Product(Parentheses(x - ModularJ((-b+Sqrt(D))/(2*a))), Tuple(a,b,c), Element(Tuple(a,b,c),
+        Product(Parentheses(x - ModularJ((-b+Sqrt(D))/(2*a))), ForElement(Tuple(a,b,c),
             PrimitiveReducedPositiveIntegralBinaryQuadraticForms(D))))),
     Variables(D, x),
     Assumptions(And(Element(D, ZZLessEqual(-3)), Element(Mod(-D, 4), Set(0,3)), Element(x, CC))))
