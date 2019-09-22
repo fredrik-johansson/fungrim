@@ -4,6 +4,7 @@ from ..expr import *
 
 def_Topic(
     Title("Pi"),
+    Section("Definitions"),
     Entries(
         "b5d706",
     ),
@@ -17,6 +18,9 @@ def_Topic(
     Section("Elementary function representations"),
     Entries(
         "0c9939",
+        "3ff35f",
+        "722241",
+        "b89166",
         "f8d280",
         "590136",
     ),
@@ -51,6 +55,8 @@ def_Topic(
 make_entry(ID("b5d706"),
     SymbolDefinition(ConstPi, ConstPi, "The constant pi (3.14...)"),
     Description("The real number giving the ratio of a circle's circumference to its diameter."))
+
+# Numerical value
 
 make_entry(ID("6505a9"),
     Formula(Element(ConstPi,
@@ -114,14 +120,27 @@ make_entry(ID("0c838a"),
 make_entry(ID("155575"),
     Formula(NotElement(ConstPi, AlgebraicNumbers)))
 
+# Elementary function representations
+
 make_entry(ID("0c9939"),
     Formula(Equal(ConstPi, 4*Atan(1))))
+
+make_entry(ID("3ff35f"),
+    Formula(Equal(ConstPi, 2*Acos(0))))
+
+make_entry(ID("722241"),
+    Formula(Equal(ConstPi, 2*Asin(1))))
+
+make_entry(ID("b89166"),
+    Formula(Equal(ConstPi, UniqueZero(Sin(x), Var(x), Element(x, ClosedInterval(3, 4))))))
 
 make_entry(ID("f8d280"),
     Formula(Equal(ConstPi, 16*Acot(5) - 4*Acot(239))))
 
 make_entry(ID("590136"),
     Formula(Equal(ConstPi, -(ConstI * Log(-1)))))
+
+# Integral representations
 
 make_entry(ID("464961"),
     Formula(Equal(ConstPi, 2 * Integral(Sqrt(1-x**2), Tuple(x, -1, 1)))))
@@ -132,6 +151,8 @@ make_entry(ID("04cd99"),
 make_entry(ID("dae4a7"),
     Formula(Equal(ConstPi, Integral(Exp(-x**2), Tuple(x, -Infinity, Infinity))**2)))
 
+# Series representations
+
 make_entry(ID("f617c0"),
     Formula(Equal(ConstPi, 4*Sum((-1)**k / (2*k+1), Tuple(k, 0, Infinity)))))
 
@@ -139,11 +160,17 @@ make_entry(ID("fddfe6"),
     Formula(Equal(ConstPi, Sum((1 / 16**k) * (4/(8*k+1)-2/(8*k+4)-1/(8*k+5)-1/(8*k+6)), Tuple(k, 0, Infinity)))),
     References("D. H. Bailey and P. B. Borwein and S. Plouffe (1997). On the rapid computation of various polylogarithmic constants. Mathematics of Computation. vol 66, no 218, p. 903–913. DOI:10.1090/S0025-5718-97-00856-9"))
 
+# Product representations
+
 make_entry(ID("69fe63"),
     Formula(Equal(ConstPi, 2*Product((4*k**2)/(4*k**2-1), Tuple(k, 1, Infinity)))))
 
+# Limit representations
+
 make_entry(ID("e1e106"),
     Formula(Equal(ConstPi, SequenceLimit(16**k/(k*Binomial(2*k,k)**2), Var(k), Infinity))))
+
+# Approximations
 
 make_entry(ID("2516c2"),
     Formula(Less(Abs(ConstPi - Div(22,7)), Decimal("0.00127"))))
@@ -160,3 +187,4 @@ make_entry(ID("4c0698"),
             Tuple(k, 0, N-1)))), Div(1,151931373056000**N))),
     Variables(N),
     Assumptions(Element(N, ZZGreaterEqual(0))))
+

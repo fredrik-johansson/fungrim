@@ -335,7 +335,7 @@ def tex_Pow(head, args, **kwargs):
     expo = args[1]
     in_small = kwargs.get("in_small", False)
     # todo: more systematic solutions
-    if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, DedekindEta):
+    if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, Log, DedekindEta):
         return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
     if not base.is_atom() and base.head() == Fibonacci:
         return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))

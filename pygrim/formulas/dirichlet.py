@@ -550,6 +550,7 @@ def_Topic(
     Entries(
         "6c3fff",
         "3d5327",
+        "5c4552",
         "23256b",
         "c2750a",
         "d83109",
@@ -704,6 +705,12 @@ make_entry(ID("3d5327"),
     Formula(Unequal(DirichletL(1, chi), 0)),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
+
+make_entry(ID("5c4552"),
+    Formula(NotElement(DirichletL(1,chi), AlgebraicNumbers)),
+    Variables(q, chi),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))),
+    References("https://doi.org/10.4153/CJM-2010-078-9"))
 
 make_entry(ID("23256b"),
     Formula(Equal(ComplexLimit((s-1)*DirichletL(1, DirichletCharacter(q, 1)), Var(s), 1), Totient(q)/q)),
