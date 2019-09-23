@@ -293,7 +293,7 @@ make_entry(ID("df439e"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("0745ee"),
-    Formula(Equal(Zeros(LegendrePolynomial(n,z), Var(z), Element(z, CC)), Set(LegendrePolynomialZero(n,k), ForElement(k, ZZBetween(1, n))))),
+    Formula(Equal(Zeros(LegendrePolynomial(n,z), Var(z), Element(z, CC)), Set(LegendrePolynomialZero(n,k), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
