@@ -238,7 +238,7 @@ make_entry(ID("05202b"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("e89eb5"),
-    Formula(Equal(Derivative(BernoulliPolynomial(n, x), Tuple(x, x, 1)), n * BernoulliPolynomial(n-1, x))),
+    Formula(Equal(ComplexDerivative(BernoulliPolynomial(n, x), For(x, x, 1)), n * BernoulliPolynomial(n-1, x))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 

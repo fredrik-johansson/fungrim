@@ -131,12 +131,12 @@ make_entry(ID("01440f"),
 
 
 make_entry(ID("b5bd5d"),
-    Formula(Equal(Derivative(Erf(z), Tuple(z, z, 1)), 2/Sqrt(ConstPi) * Exp(-(z**2)))),
+    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, 1)), 2/Sqrt(ConstPi) * Exp(-(z**2)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("fae9d3"),
-    Formula(Equal(Derivative(Erf(z), Tuple(z, z, n)), 2/Sqrt(ConstPi) * (-1)**(n+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
+    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, n)), 2/Sqrt(ConstPi) * (-1)**(n+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(1)))))
 

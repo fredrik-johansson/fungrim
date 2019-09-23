@@ -84,7 +84,7 @@ make_entry(ID("65693e"),
 # Differential equations
 
 make_entry(ID("f1bd89"),
-    Formula(Where(Equal(z*(1-z) * Derivative(y(z), Tuple(z, z, 2)) + (c - (a+b+1)*z)*Derivative(y(z), Tuple(z, z, 1)) - a*b*y(z), 0),
+    Formula(Where(Equal(z*(1-z) * ComplexDerivative(y(z), For(z, z, 2)) + (c - (a+b+1)*z)*ComplexDerivative(y(z), For(z, z, 1)) - a*b*y(z), 0),
         Equal(y(z), Hypergeometric2F1(a,b,c,z)))),
     Variables(a, b, c, z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z, SetMinus(CC, ClosedOpenInterval(1, Infinity))))))
@@ -187,10 +187,10 @@ make_entry(ID("c60679"),
 
 
 make_entry(ID("853a62"),
-    Formula(Where(LessEqual(Abs(Derivative(f(z), Tuple(z, z, k)) / Factorial(k)), A * Binomial(N+k, k) * nu**k),
+    Formula(Where(LessEqual(Abs(ComplexDerivative(f(z), For(z, z, k)) / Factorial(k)), A * Binomial(N+k, k) * nu**k),
         Equal(f(z), Hypergeometric2F1Regularized(a,b,c,z)), Equal(nu, Max(1/Abs(z-1),1/Abs(z))),
             Equal(N, 2*Max(Sqrt(nu**(-1)*Abs(a*b)), (Abs(a+b+1)+2*Abs(c)))),
-            Equal(A, Max(Abs(f(z)), Abs(Derivative(f(z), Tuple(z, z, 1)))/(nu*(N+1)))))),
+            Equal(A, Max(Abs(f(z)), Abs(ComplexDerivative(f(z), For(z, z, 1)))/(nu*(N+1)))))),
     # todo: consider formalizing the generalization
     Description("Actually valid when", f(z), "is any branch of any solution of the hypergeometric ODE, away from the branch points", Equal(z, 0), "and", Equal(z, 1), ".",
         "The variables", nu, ",", N, ", and", A, "can be replaced by any upper bounds."),

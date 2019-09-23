@@ -595,14 +595,15 @@ def tex_std_operator(head, args, **kwargs):
 @deftex_heads([Derivative, RealDerivative, ComplexDerivative, ComplexBranchDerivative, MeromorphicDerivative])
 def tex_Derivative(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
-    if len(args) == 2:
-        assert args[1]._args[0] == Tuple
-        _, var, point, order = args[1]._args
-    elif len(args) == 3:
-        _, var, point = args
+    assert len(args) == 2 and args[1].head() == For
+    forargs = args[1].args()
+    if len(forargs) == 2:
+        var, point = forargs
         order = Expr(1)
-    elif len(args) == 4:
-        _, var, point, order = args
+    elif len(forargs) == 3:
+        var, point, order = forargs
+    else:
+        raise ValueError
     if not args[0].is_atom():
         f = args[0].head()
         if f.is_symbol() and f not in (Exp, Sqrt) and args[0].args() == (var,):

@@ -342,7 +342,7 @@ c1 = Subscript(c,1)
 c2 = Subscript(c,2)
 
 make_entry(ID("0ed026"),
-    Formula(Where(Equal((1-x**2) * Derivative(y(x), Tuple(x, x, 2)) - x * Derivative(y(x), Tuple(x, x, 1)) + n**2 * y(x), 0),
+    Formula(Where(Equal((1-x**2) * ComplexDerivative(y(x), For(x, x, 2)) - x * ComplexDerivative(y(x), For(x, x, 1)) + n**2 * y(x), 0),
         Equal(y(x), c1 * ChebyshevT(n,x) + c2 * ChebyshevU(n-1,x) * Sqrt(1-x**2)))),
     Variables(n, x, c1, c2),
     Assumptions(And(Element(n, ZZ), Element(x, CC), Element(c1, CC), Element(c2, CC),
@@ -350,7 +350,7 @@ make_entry(ID("0ed026"),
 
 # todo: x = +-1 doesn't work because 0 * inf is undefined; what is a clean way to fix this?
 make_entry(ID("30b67b"),
-    Formula(Where(Equal((1-x**2) * Derivative(y(x), Tuple(x, x, 2)) - 3 * x * Derivative(y(x), Tuple(x, x, 1)) + n * (n+2) * y(x), 0),
+    Formula(Where(Equal((1-x**2) * ComplexDerivative(y(x), For(x, x, 2)) - 3 * x * ComplexDerivative(y(x), For(x, x, 1)) + n * (n+2) * y(x), 0),
         Equal(y(x), c1 * ChebyshevU(n,x) + c2 * (ChebyshevT(n+1,x) / Sqrt(1-x**2))))),
     Variables(n, x, c1, c2),
     Assumptions(And(Element(n, ZZ), Element(x, CC), Element(c1, CC), Element(c2, CC),
@@ -582,53 +582,53 @@ make_entry(ID("fff8ff"),
 # Derivatives
 
 make_entry(ID("1a0d11"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x), n * ChebyshevU(n-1, x))),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x)), n * ChebyshevU(n-1, x))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
 make_entry(ID("05fe07"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, 2), (n * (n * ChebyshevT(n, x) - x * ChebyshevU(n-1, x))) / (x**2-1))),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x, 2)), (n * (n * ChebyshevT(n, x) - x * ChebyshevU(n-1, x))) / (x**2-1))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, SetMinus(CC, Set(-1, 1))))))
 
 make_entry(ID("35e13b"),
-    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x), ((n+1)*ChebyshevT(n+1, x) - x * ChebyshevU(n,x)) / (x**2-1))),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, x)), ((n+1)*ChebyshevT(n+1, x) - x * ChebyshevU(n,x)) / (x**2-1))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, SetMinus(CC, Set(-1, 1))))))
 
 make_entry(ID("12ce84"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x, r)),
         (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)) * Hypergeometric2F1(r+n, r-n, Div(1,2)+r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
 
 make_entry(ID("9d66de"),
-    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x, r),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, x, r)),
         (RisingFactorial(n+1,r+1) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r+1)) * Hypergeometric2F1(r+n+2, r-n, Div(3,2)+r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
 
 make_entry(ID("a68f0e"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, 1, r),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, 1, r)),
         (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)))),
     Variables(n, r),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("b6b014"),
-    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, 1, r),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, 1, r)),
         (RisingFactorial(n+1,r+1) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r+1)))),
     Variables(n, r),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("6582c4"),
-    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), x, x, r),
+    Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x, r)),
         (Sqrt(ConstPi) / (x-1)**r) * Hypergeometric3F2Regularized(1, -n, n, Div(1,2), 1-r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
     References("http://functions.wolfram.com/Polynomials/ChebyshevT/20/02/01/0002/"))
 
 make_entry(ID("e1797b"),
-    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), x, x, r),
+    Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, x, r)),
         ((Sqrt(ConstPi) * (n+1)) / (2 * (x-1)**r)) * Hypergeometric3F2Regularized(1, -n, n+2, Div(3,2), 1-r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),

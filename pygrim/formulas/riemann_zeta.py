@@ -1156,7 +1156,7 @@ make_entry(ID("432bee"),
     References("https://doi.org/10.2307/2153215", "https://doi.org/10.1006/jnth.1997.2137", "https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("fcab61"),
-    Formula(Equal(KeiperLiLambda(n), (1/Factorial(n)) * Derivative(Log(2 * RiemannXi(s/(s-1))), s, 0, n))),
+    Formula(Equal(KeiperLiLambda(n), (1/Factorial(n)) * ComplexDerivative(Log(2 * RiemannXi(s/(s-1))), For(s, 0, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

@@ -83,13 +83,13 @@ C1 = Subscript(c, 1)
 C2 = Subscript(c, 2)
 
 make_entry(ID("ad8df6"),
-    Formula(Where(Equal(Derivative(y(z), Tuple(z, z, 2)) + (1 - (2*eta)/z - (ell*(ell+1))/z**2)*y(z), 0), Equal(y(z), C1*CoulombF(ell,eta,z) + C2*CoulombG(ell,eta,z)))),
+    Formula(Where(Equal(ComplexDerivative(y(z), For(z, z, 2)) + (1 - (2*eta)/z - (ell*(ell+1))/z**2)*y(z), 0), Equal(y(z), C1*CoulombF(ell,eta,z) + C2*CoulombG(ell,eta,z)))),
     Variables(ell, eta, z, C1, C2),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))), Element(C1, CC), Element(C2, CC))))
 
 make_entry(ID("74274a"),
-    Formula(Equal(CoulombG(ell,eta,z) * Parentheses(Derivative(CoulombF(ell,eta,z), Tuple(z, z, 1))) - 
-                  Parentheses(Derivative(CoulombG(ell,eta,z), Tuple(z, z, 1))) * CoulombF(ell,eta,z), 1)),
+    Formula(Equal(CoulombG(ell,eta,z) * Parentheses(ComplexDerivative(CoulombF(ell,eta,z), For(z, z, 1))) - 
+                  Parentheses(ComplexDerivative(CoulombG(ell,eta,z), For(z, z, 1))) * CoulombF(ell,eta,z), 1)),
     Variables(ell, eta, z),
     Assumptions(And(coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
@@ -149,38 +149,38 @@ make_entry(ID("ed2bf6"),
 # Derivatives
 
 make_entry(ID("a51a4b"),
-    Formula(Equal(Derivative(CoulombF(ell, eta, z), Tuple(z, z, 1)),
+    Formula(Equal(ComplexDerivative(CoulombF(ell, eta, z), For(z, z, 1)),
         ((ell+1)/z + eta/(ell+1)) * CoulombF(ell,eta,z) - ((Sqrt(1+ell+ConstI*eta)*Sqrt(1+ell-ConstI*eta))/(ell+1)) * CoulombF(ell+1,eta,z))),
     Variables(ell, eta),
     Assumptions(And(Element(ell, CC), Unequal(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("2fec14"),
-    Formula(Equal(Derivative(CoulombG(ell, eta, z), Tuple(z, z, 1)),
+    Formula(Equal(ComplexDerivative(CoulombG(ell, eta, z), For(z, z, 1)),
         ((ell+1)/z + eta/(ell+1)) * CoulombG(ell,eta,z) - ((Sqrt(1+ell+ConstI*eta)*Sqrt(1+ell-ConstI*eta))/(ell+1)) * CoulombG(ell+1,eta,z))),
     Variables(ell, eta),
     Assumptions(And(Element(ell, CC), Unequal(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("07a654"),
-    Formula(Where(Equal(Derivative(f(z), Tuple(z, z, 2)),
+    Formula(Where(Equal(ComplexDerivative(f(z), For(z, z, 2)),
         ((2*eta)/z + (ell*(ell+1))/z**2 - 1) * f(z)), Equal(f(z), C1 * CoulombF(ell,eta,z) + C2 * CoulombG(ell,eta,z)))),
     Variables(ell, eta, C1, C2),
     Assumptions(And(Element(C1, CC), Element(C2, CC), Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("faa118"),
-    Formula(Where(Equal(Derivative(f(z), Tuple(z, z, 3)),
-        ((2*eta)/z + (ell*(ell+1))/z**2 - 1) * Derivative(f(z), Tuple(z, z, 1))
+    Formula(Where(Equal(ComplexDerivative(f(z), For(z, z, 3)),
+        ((2*eta)/z + (ell*(ell+1))/z**2 - 1) * ComplexDerivative(f(z), For(z, z, 1))
             - 2*(eta/z**2 + (ell*(ell+1))/z**3) * f(z)), Equal(f(z), C1 * CoulombF(ell,eta,z) + C2 * CoulombG(ell,eta,z)))),
     Variables(ell, eta, C1, C2),
     Assumptions(And(Element(C1, CC), Element(C2, CC), Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("eca10b"),
     Formula(Where(Equal(
-        Derivative(f(z), Tuple(z, z, r+4)) / Factorial(r+4),
+        ComplexDerivative(f(z), For(z, z, r+4)) / Factorial(r+4),
         (-1/(z**2 * (r**2+7*r+12))) *
-        (2*(r**2+5*r+6)*z*(Derivative(f(z), Tuple(z, z, r+3)) / Factorial(r+3)) + 
-         (r**2+3*r + z**2 - 2*z*eta - ell*(ell+1) + 2)*(Derivative(f(z), Tuple(z, z, r+2)) / Factorial(r+2)) + 
-         2*(z-eta) * (Derivative(f(z), Tuple(z, z, r+1)) / Factorial(r+1)) + 
-         (Derivative(f(z), Tuple(z, z, r)) / Factorial(r)))),
+        (2*(r**2+5*r+6)*z*(ComplexDerivative(f(z), For(z, z, r+3)) / Factorial(r+3)) + 
+         (r**2+3*r + z**2 - 2*z*eta - ell*(ell+1) + 2)*(ComplexDerivative(f(z), For(z, z, r+2)) / Factorial(r+2)) + 
+         2*(z-eta) * (ComplexDerivative(f(z), For(z, z, r+1)) / Factorial(r+1)) + 
+         (ComplexDerivative(f(z), For(z, z, r)) / Factorial(r)))),
             Equal(f(z), C1 * CoulombF(ell,eta,z) + C2 * CoulombG(ell,eta,z)))),
     Variables(r, ell, eta, C1, C2),
     Assumptions(And(Element(r, ZZGreaterEqual(0)),

@@ -452,7 +452,7 @@ make_entry(ID("06260c"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("cb5071"),
-    Formula(LessEqual(Abs((1/Factorial(n)) * Derivative(1/GammaFunction(x), Tuple(x, 0, n))), 2/Sqrt(Factorial(n)))),
+    Formula(LessEqual(Abs((1/Factorial(n)) * ComplexDerivative(1/GammaFunction(x), For(x, 0, n))), 2/Sqrt(Factorial(n)))),
     #Formula(Where(LessEqual(Abs(SeriesCoefficient(1/GammaFunction(x), x, n)), 2/Sqrt(Factorial(n))), Equal(x, Gen(FormalPowerSeries(RR, x))))),
     Variables(n),
     Assumptions(And(Element(n, ZZGreaterEqual(0)))),

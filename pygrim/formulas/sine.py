@@ -187,17 +187,17 @@ C_1 = Subscript(c, 1)
 C_2 = Subscript(c, 2)
 
 make_entry(ID("21f156"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, 2)) + Sin(z), 0)),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, 2)) + Sin(z), 0)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("984d9c"),
-    Formula(Where(Equal(Derivative(y(z), Tuple(z, z, 2)) + y(z), 0), Equal(y(z), C_1 * Sin(z) + C_2 * Cos(z)))),
+    Formula(Where(Equal(ComplexDerivative(y(z), For(z, z, 2)) + y(z), 0), Equal(y(z), C_1 * Sin(z) + C_2 * Cos(z)))),
     Variables(z, C_1, C_2),
     Assumptions(And(Element(z, CC), Element(C_1, CC), Element(C_2, CC))))
 
 make_entry(ID("f1691f"),
-    Formula(Where(Equal(Derivative(y(z), Tuple(z, z, 2)) + a**2 * y(z) + b, 0), Equal(y(z), C_1 * Sin(a*z) + C_2 * Cos(a*z) - b/a**2))),
+    Formula(Where(Equal(ComplexDerivative(y(z), For(z, z, 2)) + a**2 * y(z) + b, 0), Equal(y(z), C_1 * Sin(a*z) + C_2 * Cos(a*z) - b/a**2))),
     Variables(z, a, b, C_1, C_2),
     Assumptions(And(Element(z, CC), Element(a, SetMinus(CC, Set(0))), Element(b, CC), Element(C_1, CC), Element(C_2, CC))))
 
@@ -531,27 +531,27 @@ make_entry(ID("abaf91"),
 # Derivatives and integrals
 
 make_entry(ID("f7ab32"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, 1)), Cos(z))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, 1)), Cos(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("297b3c"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, 2)), -Sin(z))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, 2)), -Sin(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("612b21"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, r)), Sin(z + ConstPi*r/2))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, r)), Sin(z + ConstPi*r/2))),
     Variables(z, r),
     Assumptions(And(Element(z, CC), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("a6667d"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, r+2)), -Derivative(Sin(z), Tuple(z, z, r)))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, r+2)), -ComplexDerivative(Sin(z), For(z, z, r)))),
     Variables(z, r),
     Assumptions(And(Element(z, CC), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("d81355"),
-    Formula(Equal(Derivative(Sin(z), Tuple(z, z, r+4)), Derivative(Sin(z), Tuple(z, z, r)))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, r+4)), ComplexDerivative(Sin(z), For(z, z, r)))),
     Variables(z, r),
     Assumptions(And(Element(z, CC), Element(r, ZZGreaterEqual(0)))))
 

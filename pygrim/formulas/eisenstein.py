@@ -363,12 +363,12 @@ make_entry(ID("bd7d8e"),
 # Dedekind eta function representations
 
 make_entry(ID("dbf388"),
-    Formula(Equal(EisensteinG(2, tau), -((4*ConstPi*ConstI) * (ComplexDerivative(DedekindEta(tau), tau, tau) / DedekindEta(tau))))),
+    Formula(Equal(EisensteinG(2, tau), -((4*ConstPi*ConstI) * (ComplexDerivative(DedekindEta(tau), For(tau, tau)) / DedekindEta(tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("03ad5a"),
-    Formula(Equal(EisensteinE(2, tau), -((12*ConstI)/ConstPi * (ComplexDerivative(DedekindEta(tau), tau, tau) / DedekindEta(tau))))),
+    Formula(Equal(EisensteinE(2, tau), -((12*ConstI)/ConstPi * (ComplexDerivative(DedekindEta(tau), For(tau, tau)) / DedekindEta(tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -455,21 +455,21 @@ make_entry(ID("3e84e3"),
 __ref = "B. C. Berndt and A. J. Yee (2002) Ramanujan's Contributions to Eisenstein Series, Especially in His Lost Notebook. In: Kanemitsu S., Jia C. (eds) Number Theoretic Methods. Developments in Mathematics, vol 8. Springer, Boston, MA. https://doi.org/10.1007/978-1-4757-3675-5_3"
 
 make_entry(ID("7cda09"),
-    Formula(Equal(ComplexDerivative(EisensteinE(2, tau), tau, tau),
+    Formula(Equal(ComplexDerivative(EisensteinE(2, tau), For(tau, tau)),
         2 * ConstPi * ConstI * Parentheses((EisensteinE(2,tau)**2 - EisensteinE(4,tau)) / 12))),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References(__ref))
 
 make_entry(ID("af2ea9"),
-    Formula(Equal(ComplexDerivative(EisensteinE(4, tau), tau, tau),
+    Formula(Equal(ComplexDerivative(EisensteinE(4, tau), For(tau, tau)),
         2 * ConstPi * ConstI * Parentheses((EisensteinE(2,tau)*EisensteinE(4,tau) - EisensteinE(6,tau)) / 3))),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References(__ref))
 
 make_entry(ID("3bfced"),
-    Formula(Equal(ComplexDerivative(EisensteinE(6, tau), tau, tau),
+    Formula(Equal(ComplexDerivative(EisensteinE(6, tau), For(tau, tau)),
         2 * ConstPi * ConstI * Parentheses((EisensteinE(2,tau)*EisensteinE(6,tau) - EisensteinE(4,tau)**2) / 2))),
     Variables(tau),
     Assumptions(Element(tau, HH)),

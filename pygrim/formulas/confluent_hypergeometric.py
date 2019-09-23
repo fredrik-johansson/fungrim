@@ -119,14 +119,14 @@ make_entry(ID("9d3147"),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
 
 make_entry(ID("06f229"),
-    Formula(Where(Equal(z * Derivative(y(z), Tuple(z, z, 2)) + (b-z) * Derivative(y(z), Tuple(z, z, 1)) - a*y(z), 0), Equal(y(z),
+    Formula(Where(Equal(z * ComplexDerivative(y(z), For(z, z, 2)) + (b-z) * ComplexDerivative(y(z), For(z, z, 1)) - a*y(z), 0), Equal(y(z),
         C*Hypergeometric1F1Regularized(a,b,z) + D*HypergeometricU(a,b,z)))),
     Variables(z, a, b, C, D),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Element(C, CC), Element(D, CC),
         Or(Equal(D, 0), Unequal(z, 0), Element(-a, ZZGreaterEqual(0))))))
 
 make_entry(ID("bb5d67"),
-    Formula(Where(Equal(z * Derivative(y(z), Tuple(z, z, 2)) + a * Derivative(y(z), Tuple(z, z, 1)) - y(z), 0), Equal(y(z),
+    Formula(Where(Equal(z * ComplexDerivative(y(z), For(z, z, 2)) + a * ComplexDerivative(y(z), For(z, z, 1)) - y(z), 0), Equal(y(z),
         C*Hypergeometric0F1Regularized(a,z) + D*z**(1-a)*Hypergeometric0F1Regularized(2-a,z)))),
     Variables(z, a, C, D),
     Assumptions(And(Element(a, CC), Element(z, CC), Element(C, CC), Element(D, CC),

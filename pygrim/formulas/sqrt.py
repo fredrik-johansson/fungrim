@@ -357,17 +357,17 @@ make_entry(ID("34136c"),
     Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(a, RR), Less(Abs(a), x))))
 
 make_entry(ID("2a11ab"),
-    Formula(Equal(Derivative(Sqrt(z), Tuple(z, z, 1)), 1/(2*Sqrt(z)))),
+    Formula(Equal(ComplexDerivative(Sqrt(z), For(z, z, 1)), 1/(2*Sqrt(z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))))
 
 make_entry(ID("3e71f4"),
-    Formula(Equal(Derivative(Sqrt(z), Tuple(z, z, 2)), -(1/(4*z**Div(3,2))))),
+    Formula(Equal(ComplexDerivative(Sqrt(z), For(z, z, 2)), -(1/(4*z**Div(3,2))))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))))
 
 make_entry(ID("83abff"),
-    Formula(Equal(Derivative(Sqrt(z), Tuple(z, z, r)), (-1)**r * RisingFactorial(-Div(1,2), r) * z**(r-Div(1,2)))),
+    Formula(Equal(ComplexDerivative(Sqrt(z), For(z, z, r)), (-1)**r * RisingFactorial(-Div(1,2), r) * z**(r-Div(1,2)))),
     Variables(z, r),
     Assumptions(And(Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))), Element(r, ZZGreaterEqual(0)))))
 

@@ -331,19 +331,19 @@ make_entry(ID("44a529"),
 # Derivatives
 
 make_entry(ID("27b2c7"),
-    Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
+    Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
         ((ConstPi*ConstI)/3) * (EisensteinE(2,tau/2) + 8*EisensteinE(2,2*tau) - 6*EisensteinE(2,tau)) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c18c95"),
-    Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
+    Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
         ((2*ConstI)/ConstPi) * (WeierstrassZeta(Div(1,2),tau/2) + 8*WeierstrassZeta(Div(1,2),2*tau) - 6*WeierstrassZeta(Div(1,2),tau)) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("38b4f3"),
-    Formula(Equal(Derivative(ModularLambda(tau), tau, tau),
+    Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
         -((4*ConstI)/ConstPi) * EllipticK(ModularLambda(tau))**2 * (ModularLambda(tau)-1) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, Set(tau1+n, For(Tuple(tau1, n)), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))),

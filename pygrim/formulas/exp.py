@@ -182,12 +182,12 @@ make_entry(ID("935b2f"),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("96af56"),
-    Formula(Equal(Derivative(Exp(z), Tuple(z, z, 1)), Exp(z))),
+    Formula(Equal(ComplexDerivative(Exp(z), For(z, z, 1)), Exp(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("4491b8"),
-    Formula(Equal(Derivative(Exp(z), Tuple(z, z, n)), Exp(z))),
+    Formula(Equal(ComplexDerivative(Exp(z), For(z, z, n)), Exp(z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 

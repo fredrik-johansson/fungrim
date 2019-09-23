@@ -151,12 +151,12 @@ make_entry(ID("dc8251"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("f0f53b"),
-    Formula(Equal(Derivative(ModularJ(tau), tau, tau), -(2*ConstPi*ConstI) * (EisensteinE(14,tau) / DedekindEta(tau)**24))),
+    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*ConstPi*ConstI) * (EisensteinE(14,tau) / DedekindEta(tau)**24))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
 make_entry(ID("348b26"),
-    Formula(Equal(Derivative(ModularJ(tau), tau, tau), -(2*ConstPi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
+    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*ConstPi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
     Variables(tau),
     Assumptions(And(Element(tau, HH), Unequal(EisensteinE(4,tau), 0))))
 

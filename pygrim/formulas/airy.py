@@ -71,7 +71,7 @@ make_entry(ID("fa65f3"),
 
 
 make_entry(ID("51b241"),
-    Formula(Where(Equal(Derivative(y(z), Tuple(z, z, 2)) - z*y(z), 0), Equal(y(z), C*AiryAi(z) + D*AiryBi(z)))),
+    Formula(Where(Equal(ComplexDerivative(y(z), For(z, z, 2)) - z*y(z), 0), Equal(y(z), C*AiryAi(z) + D*AiryBi(z)))),
     Variables(z, C, D),
     Assumptions(And(Element(z, CC), Element(C, CC), Element(D, CC))))
 
@@ -103,7 +103,7 @@ make_entry(ID("70ec9f"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("eadca2"),
-    Formula(Where(Equal(Derivative(y(z), Tuple(z, z, n)), z*Derivative(y(z), Tuple(z, z, n-2)) + (n-2)*Derivative(y(z), Tuple(z, z, n-3))),
+    Formula(Where(Equal(ComplexDerivative(y(z), For(z, z, n)), z*ComplexDerivative(y(z), For(z, z, n-2)) + (n-2)*ComplexDerivative(y(z), For(z, z, n-3))),
         Equal(y(z), C*AiryAi(z) + D*AiryBi(z)))),
     Variables(n, z, C, D),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(3)), Element(C, CC), Element(D, CC))))

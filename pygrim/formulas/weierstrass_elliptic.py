@@ -151,12 +151,12 @@ make_entry(ID("7c4457"),
 
 
 make_entry(ID("e677fb"),
-    Formula(Equal(Derivative(WeierstrassZeta(z,tau), Tuple(z, z, 1)), -WeierstrassP(z,tau))),
+    Formula(Equal(ComplexDerivative(WeierstrassZeta(z,tau), For(z, z, 1)), -WeierstrassP(z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 
 make_entry(ID("0e649f"),
-    Formula(Equal(Derivative(WeierstrassSigma(z,tau), Tuple(z, z, 1)), WeierstrassZeta(z,tau) * WeierstrassSigma(z,tau))),
+    Formula(Equal(ComplexDerivative(WeierstrassSigma(z,tau), For(z, z, 1)), WeierstrassZeta(z,tau) * WeierstrassSigma(z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 

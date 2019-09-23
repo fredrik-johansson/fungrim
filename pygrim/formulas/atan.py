@@ -239,7 +239,7 @@ C_2 = Subscript(c, 2)
 
 # todo: complex ray instead of interval?
 make_entry(ID("61d8f3"),
-    Formula(Where(Equal((1+z**2) * Derivative(y(z), Tuple(z, z, 2)) + 2 * z * Derivative(y(z), Tuple(z, z, 1)), 0), Equal(y(z), C_1 + C_2 * Atan(z)))),
+    Formula(Where(Equal((1+z**2) * ComplexDerivative(y(z), For(z, z, 2)) + 2 * z * ComplexDerivative(y(z), For(z, z, 1)), 0), Equal(y(z), C_1 + C_2 * Atan(z)))),
     Variables(z, C_1, C_2),
     Assumptions(And(Element(z, CC), Element(C_1, CC), Element(C_2, CC),
         NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity, -1), ClosedOpenInterval(1, Infinity))))))
@@ -495,35 +495,35 @@ make_entry(ID("b65d19"),
 # Derivatives and integrals
 
 make_entry(ID("8fbf69"),
-    Formula(Equal(Derivative(Atan(z), Tuple(z, z, 1)), 1/(1+z**2))),
+    Formula(Equal(ComplexDerivative(Atan(z), For(z, z, 1)), 1/(1+z**2))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))))
 
 make_entry(ID("a4eb86"),
-    Formula(Equal(Derivative(Atan(z), Tuple(z, z, 2)), -((2*z)/(1+z**2)**2))),
+    Formula(Equal(ComplexDerivative(Atan(z), For(z, z, 2)), -((2*z)/(1+z**2)**2))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))))
 
 make_entry(ID("90631b"),
-    Formula(Equal(Derivative(Atan(z), Tuple(z, z, n)),
+    Formula(Equal(ComplexDerivative(Atan(z), For(z, z, n)),
         Factorial(n-1) / (1+z**2)**((n+1)/2) * ChebyshevU(n-1, -(z/Sqrt(1+z**2))))),
     Variables(z, n),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC), NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))),
     References("M. A. Boutiche and M. Rahmani (2017), On the higher derivatives of the inverse tangent function, https://arxiv.org/abs/1712.03521, Theorem 9"))
 
 make_entry(ID("36171f"),
-    Formula(Equal(Derivative(Atan(z), Tuple(z, z, n)),
+    Formula(Equal(ComplexDerivative(Atan(z), For(z, z, n)),
         (((-1)**n * Factorial(n-1)) / (2 * ConstI)) * (1/(z+ConstI)**n - 1/(z-ConstI)**n))),
     Variables(z, n),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC), NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))))
 
 make_entry(ID("6b8963"),
-    Formula(Equal(Derivative(Atan2(y, x), Tuple(x, x, 1)), -(y/(x**2+y**2)))),
+    Formula(Equal(RealDerivative(Atan2(y, x), For(x, x, 1)), -(y/(x**2+y**2)))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), Unequal(y, 0)))))
 
 make_entry(ID("1d3fd7"),
-    Formula(Equal(Derivative(Atan2(y, x), Tuple(y, y, 1)), x/(x**2+y**2))),
+    Formula(Equal(RealDerivative(Atan2(y, x), For(y, y, 1)), x/(x**2+y**2))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), Unequal(y, 0)))))
 
