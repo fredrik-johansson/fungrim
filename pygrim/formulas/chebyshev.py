@@ -326,13 +326,13 @@ make_entry(ID("78f5bb"),
 # Orthogonality
 
 make_entry(ID("2c26a1"),
-    Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), Tuple(x,-1,1)),
+    Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), For(x,-1,1)),
         Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi, Equal(n, m, 0)), Tuple(ConstPi/2, And(Equal(n, m), Unequal(n, 0)))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("473c36"),
-    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), Tuple(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi/2, Equal(n, m))))),
+    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi/2, Equal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 

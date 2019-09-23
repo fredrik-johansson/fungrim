@@ -143,13 +143,13 @@ make_entry(ID("590136"),
 # Integral representations
 
 make_entry(ID("464961"),
-    Formula(Equal(ConstPi, 2 * Integral(Sqrt(1-x**2), Tuple(x, -1, 1)))))
+    Formula(Equal(ConstPi, 2 * Integral(Sqrt(1-x**2), For(x, -1, 1)))))
 
 make_entry(ID("04cd99"),
-    Formula(Equal(ConstPi, Integral(1/(x**2+1), Tuple(x, -Infinity, Infinity)))))
+    Formula(Equal(ConstPi, Integral(1/(x**2+1), For(x, -Infinity, Infinity)))))
 
 make_entry(ID("dae4a7"),
-    Formula(Equal(ConstPi, Integral(Exp(-x**2), Tuple(x, -Infinity, Infinity))**2)))
+    Formula(Equal(ConstPi, Integral(Exp(-x**2), For(x, -Infinity, Infinity))**2)))
 
 # Series representations
 

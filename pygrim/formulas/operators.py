@@ -115,39 +115,39 @@ make_entry(ID("1e2755"),
         "Similarly", SourceForm(For(Tuple(x, y))), ", ", SourceForm(ForElement(Tuple(x, y), S)), "etc. defines multiple locally bound variables."))
 
 make_entry(ID("9f703a"),
-    SymbolDefinition(PrimeSum, PrimeSum(f(p), p), "Sum over primes"),
-    Description(SourceForm(PrimeSum(f(p), p)), ", rendered as ",
-        PrimeSum(f(p), p), ", represents the sum of", f(p), "taken over all prime numbers", p, "."),
-    Description(SourceForm(PrimeSum(f(p), p, P(p))), ", rendered as ",
-        PrimeSum(f(p), p, P(p)), ", represents the sum of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
-    Description("The argument", SourceForm(p), "defines a locally bound variable."),
+    SymbolDefinition(PrimeSum, PrimeSum(f(p), For(p)), "Sum over primes"),
+    Description(SourceForm(PrimeSum(f(p), For(p))), ", rendered as ",
+        PrimeSum(f(p), For(p)), ", represents the sum of", f(p), "taken over all prime numbers", p, "."),
+    Description(SourceForm(PrimeSum(f(p), For(p), P(p))), ", rendered as ",
+        PrimeSum(f(p), For(p), P(p)), ", represents the sum of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
+    Description("The special expression", SourceForm(For(p)), "defines", SourceForm(p), "as a locally bound variable."),
     Description("The empty sum is equal to zero. Sums taken over an infinite number of terms are required to be absolutely convergent."))
 
 make_entry(ID("2a896d"),
-    SymbolDefinition(PrimeProduct, PrimeProduct(f(p), p), "Product over primes"),
-    Description(SourceForm(PrimeProduct(f(p), p)), ", rendered as ",
-        PrimeProduct(f(p), p), ", represents the product of", f(p), "taken over all prime numbers", p, "."),
-    Description(SourceForm(PrimeProduct(f(p), p, P(p))), ", rendered as ",
-        PrimeProduct(f(p), p, P(p)), ", represents the product of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
-    Description("The argument", SourceForm(p), "defines a locally bound variable."),
+    SymbolDefinition(PrimeProduct, PrimeProduct(f(p), For(p)), "Product over primes"),
+    Description(SourceForm(PrimeProduct(f(p), For(p))), ", rendered as ",
+        PrimeProduct(f(p), For(p)), ", represents the product of", f(p), "taken over all prime numbers", p, "."),
+    Description(SourceForm(PrimeProduct(f(p), For(p), P(p))), ", rendered as ",
+        PrimeProduct(f(p), For(p), P(p)), ", represents the product of", f(p), "taken over all prime numbers", p, "satisfying the predicate", P(p), "."),
+    Description("The special expression", SourceForm(For(p)), "defines", SourceForm(p), "as a locally bound variable."),
     Description("The empty product is equal to one. Products taken over an infinite number of factors are required to be absolutely convergent."))
 
 make_entry(ID("8baf79"),
-    SymbolDefinition(DivisorSum, DivisorSum(f(k), k, n), "Sum over divisors"),
-    Description(SourceForm(DivisorSum(f(k), k, n)), ", rendered as ",
-        DivisorSum(f(k), k, n), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
-    Description(SourceForm(DivisorSum(f(k), k, n, P(k))), ", rendered as ",
-        DivisorSum(f(k), k, n, P(k)), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
-    Description("The argument", SourceForm(k), "defines a locally bound variable."),
+    SymbolDefinition(DivisorSum, DivisorSum(f(k), For(k, n)), "Sum over divisors"),
+    Description(SourceForm(DivisorSum(f(k), For(k, n))), ", rendered as ",
+        DivisorSum(f(k), For(k, n)), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
+    Description(SourceForm(DivisorSum(f(k), For(k, n), P(k))), ", rendered as ",
+        DivisorSum(f(k), For(k, n), P(k)), ", represents the sum of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The special expression", SourceForm(For(k, n)), "defines", SourceForm(k), "as a locally bound variable."),
     Description("The empty sum is equal to zero."))
 
 make_entry(ID("5830eb"),
-    SymbolDefinition(DivisorProduct, DivisorProduct(f(k), k, n), "Product over divisors"),
-    Description(SourceForm(DivisorProduct(f(k), k, n)), ", rendered as ",
-        DivisorProduct(f(k), k, n), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
-    Description(SourceForm(DivisorProduct(f(k), k, n, P(k))), ", rendered as ",
-        DivisorProduct(f(k), k, n, P(k)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
-    Description("The argument", SourceForm(k), "defines a locally bound variable."),
+    SymbolDefinition(DivisorProduct, DivisorProduct(f(k), For(k, n)), "Product over divisors"),
+    Description(SourceForm(DivisorProduct(f(k), For(k, n))), ", rendered as ",
+        DivisorProduct(f(k), For(k, n)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "."),
+    Description(SourceForm(DivisorProduct(f(k), For(k, n), P(k))), ", rendered as ",
+        DivisorProduct(f(k), For(k, n), P(k)), ", represents the product of", f(k), "taken over all positive integers", k, "dividing the integer", n, "and satisfying the predicate", P(k), "."),
+    Description("The special expression", SourceForm(For(k, n)), "defines", SourceForm(k), "as a locally bound variable."),
     Description("The empty product is equal to one."))
 
 # Solutions and zeros
@@ -412,11 +412,15 @@ make_entry(ID("4c6780"),
 # Integrals
 
 make_entry(ID("c285c7"),
-    SymbolDefinition(Integral, Integral(f(x), Tuple(x, a, b)), "Integral"),
-    Description(SourceForm(Integral(f(x), Tuple(x, a, b))), ", rendered as ",
-        Integral(f(x), Tuple(x, a, b)), ", represents the integral of", f(x), "from", a, "to", b, "."),
-    Description("The argument", SourceForm(x), "defines a locally bound variable."),
-    Description("The precise class of integrals allowed by this operator is yet to be defined, but should normally encompass Lebesgue integrals."))
+    SymbolDefinition(Integral, Integral(f(x), For(x, a, b)), "Integral"),
+    Description(SourceForm(Integral(f(x), For(x, a, b))), ", rendered as ",
+        Integral(f(x), For(x, a, b)), ", represents the integral of", f(x), "from", a, "to", b, ". ",
+        "The order is significant: ", Equal(Integral(f(x), For(x, a, b)), Neg(Integral(f(x), For(x, b, a)))), "."),
+    Description(SourceForm(Integral(f(x), ForElement(x, S))), ", rendered as ",
+        Integral(f(x), ForElement(x, S)), ", represents the integral of", f(x), "over the set", S, "."),
+    Description("The special expression", SourceForm(For(x, a, b)), "or", SourceForm(ForElement(x, S)), "defines a locally bound variable."),
+    Description("The precise class of integrals allowed by this operator is yet to be defined, but should normally encompass Lebesgue integrals."),
+    Description("The integrand is allowed to be undefined on a subset of measure of zero."))
 
 # Indefinite integrals
 

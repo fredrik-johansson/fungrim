@@ -45,17 +45,17 @@ make_entry(ID("78bb08"),
         Subset(ClosedDisk(z, R), HolomorphicDomain(f(z), z, CC)))))
 
 EM_rem = (f(N) + f(U))/2 + Sum(BernoulliB(2*k)/Factorial(2*k) * (Derivative(f(t), Tuple(t, U, 2*k-1)) - Derivative(f(t), Tuple(t, N, 2*k-1))), For(k, 1, M))
-EM_tail = Integral(BernoulliPolynomial(2*M,t-Floor(t))/Factorial(2*M) * Derivative(f(t), Tuple(t, t, 2*M)), Tuple(t, N, U))
+EM_tail = Integral(BernoulliPolynomial(2*M,t-Floor(t))/Factorial(2*M) * Derivative(f(t), Tuple(t, t, 2*M)), For(t, N, U))
 EM_assumptions = And(Element(N, ZZ), Element(U, ZZ), LessEqual(N, U), Element(M, ZZGreaterEqual(1)), Subset(ClosedInterval(N, U), HolomorphicDomain(f(t), t, CC)))
 
 make_entry(ID("ce2272"),
-    Formula(Equal(Sum(f(k), For(k, N, U)), Integral(f(t), Tuple(t, N, U)) + EM_rem + EM_tail)),
+    Formula(Equal(Sum(f(k), For(k, N, U)), Integral(f(t), For(t, N, U)) + EM_rem + EM_tail)),
     Variables(f, N, U, M),
     Assumptions(EM_assumptions))
 
 make_entry(ID("af2d4b"),
-    Formula(LessEqual(Abs(Sum(f(k), For(k, N, U)) - Parentheses(Integral(f(t), Tuple(t, N, U)) + EM_rem)),
-            Div(4, (2*ConstPi)**(2*M)) * Integral(Abs(Derivative(f(t), Tuple(t, t, 2 * M))), Tuple(t, N, U)))),
+    Formula(LessEqual(Abs(Sum(f(k), For(k, N, U)) - Parentheses(Integral(f(t), For(t, N, U)) + EM_rem)),
+            Div(4, (2*ConstPi)**(2*M)) * Integral(Abs(Derivative(f(t), Tuple(t, t, 2 * M))), For(t, N, U)))),
     Variables(f, N, U, M),
     Assumptions(EM_assumptions))
 

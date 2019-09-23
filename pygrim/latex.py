@@ -648,12 +648,18 @@ def tex_Derivative(head, args, **kwargs):
 def tex_Integral(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     assert len(args) == 2
-    assert args[1]._args[0] == Tuple
-    _, var, low, high = args[1]._args
-    var = var.latex()
-    low = low.latex(in_small=True)
-    high = high.latex(in_small=True)
-    return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+    if args[1].head() == For:
+        var, low, high = args[1].args()
+        var = var.latex()
+        low = low.latex(in_small=True)
+        high = high.latex(in_small=True)
+        return "\\int_{%s}^{%s} %s \, d%s" % (low, high, argstr[0], var)
+    if args[1].head() == ForElement:
+        var, domain = args[1].args()
+        var = var.latex()
+        domain = domain.latex(in_small=True)
+        return "\\int_{%s \\in %s} %s \, d%s" % (var, domain, argstr[0], var)
+    raise ValueError
 
 @deftex_heads([IndefiniteIntegralEqual, RealIndefiniteIntegralEqual, ComplexIndefiniteIntegralEqual])
 def tex_IndefiniteIntegralEqual(head, args, **kwargs):
@@ -731,15 +737,18 @@ def tex_Sum_Product(head, args, **kwargs):
 @deftex_heads([DivisorSum, DivisorProduct])
 def tex_DivisorSum_DivisorProduct(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
-    if len(args) == 3:
-        formula, var, number = args
+    assert args[1].head() == For and len(args[1].args()) == 2
+    if len(args) == 2:
+        formula, var = args
+        var, number = var.args()
         formula = argstr[0]
         var = var.latex()
         number = number.latex(in_small=True)
         ss = "_{%s \\mid %s} %s" % (var, number, formula)
-    elif len(args) == 4:
-        formula, var, number, cond = args
+    elif len(args) == 3:
+        formula, var, cond = args
         formula = argstr[0]
+        var, number = var.args()
         var = var.latex()
         number = number.latex(in_small=True)
         cond = cond.latex(in_small=True)
@@ -755,10 +764,11 @@ def tex_DivisorSum_DivisorProduct(head, args, **kwargs):
 @deftex_heads([PrimeSum, PrimeProduct])
 def tex_PrimeSum_PrimeProduct(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
+    assert args[1].head() == For and len(args[1].args()) == 1
     if len(args) == 2:
         formula, var = args
         formula = argstr[0]
-        var = var.latex()
+        var = var.args()[0].latex()
         ss = "_{%s} %s" % (var, formula)
     elif len(args) == 3:
         formula, var, cond = args

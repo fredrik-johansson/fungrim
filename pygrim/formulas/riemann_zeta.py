@@ -167,7 +167,7 @@ make_entry(ID("1d46d4"),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("8f5e66"),
-    Formula(Equal(RiemannZeta(s), PrimeProduct(1/(1-1/p**s), p))),
+    Formula(Equal(RiemannZeta(s), PrimeProduct(1/(1-1/p**s), For(p)))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
@@ -340,7 +340,7 @@ make_entry(ID("792f7b"),
     Formula(Equal(RiemannZeta(s),
         Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))) -
-                Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), Tuple(t, N, Infinity)))),
+                Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), For(t, N, Infinity)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
@@ -1106,13 +1106,13 @@ make_entry(ID("a71ddd"),
 
 make_entry(ID("7783f9"),
     Formula(Equivalent(RiemannHypothesis, Equal(
-        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), Tuple(t, 0, Infinity)),
+        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), For(t, 0, Infinity)),
         ConstPi/8 + ConstGamma/4 + Log(8*ConstPi)/4 - 2))),
     References("https://mathoverflow.net/q/279936"))
 
 make_entry(ID("cf70ce"),
     Formula(Equivalent(RiemannHypothesis, Equal(
-        Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), Tuple(sigma, Div(1,2), Infinity)), Tuple(t, 0, Infinity)),
+        Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), For(sigma, Div(1,2), Infinity)), For(t, 0, Infinity)),
         ConstPi * (3-ConstGamma) / 32))),
     References("https://doi.org/10.1007/BF01056314"))
 
@@ -1415,7 +1415,7 @@ make_entry(ID("687b4d"),
 # Integral representations
 
 make_entry(ID("a41c92"),
-    Formula(Equal(StieltjesGamma(n, a), -((ConstPi/(2*(n+1))) * Integral((Log(a-Div(1,2)+ConstI*x)**(n+1) + Log(a-Div(1,2)-ConstI*x)**(n+1))/Cosh(ConstPi*x)**2, Tuple(x, 0, Infinity))))),
+    Formula(Equal(StieltjesGamma(n, a), -((ConstPi/(2*(n+1))) * Integral((Log(a-Div(1,2)+ConstI*x)**(n+1) + Log(a-Div(1,2)-ConstI*x)**(n+1))/Cosh(ConstPi*x)**2, For(x, 0, Infinity))))),
     Variables(n, a),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Greater(Re(a), Div(1,2)))))
 

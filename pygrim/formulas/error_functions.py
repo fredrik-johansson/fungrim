@@ -62,17 +62,17 @@ make_entry(ID("3be335"),
     )
 
 make_entry(ID("2aaba8"),
-    Formula(Equal(Erf(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), Tuple(t, 0, z)))),
+    Formula(Equal(Erf(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), For(t, 0, z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("36ef64"),
-    Formula(Equal(Erfc(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), Tuple(t, z, Infinity)))),
+    Formula(Equal(Erfc(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), For(t, z, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("622772"),
-    Formula(Equal(Erfi(z), 2/Sqrt(ConstPi) * Integral(Exp(t**2), Tuple(t, 0, z)))),
+    Formula(Equal(Erfi(z), 2/Sqrt(ConstPi) * Integral(Exp(t**2), For(t, 0, z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 

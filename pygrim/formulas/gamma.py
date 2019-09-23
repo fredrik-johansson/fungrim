@@ -230,7 +230,7 @@ make_entry(ID("774d37"),
 
 
 make_entry(ID("4e4e0f"),
-    Formula(Equal(GammaFunction(z), Integral(t**(z-1) * Exp(-t), Tuple(t, 0, Infinity)))),
+    Formula(Equal(GammaFunction(z), Integral(t**(z-1) * Exp(-t), For(t, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
@@ -249,7 +249,7 @@ make_entry(ID("8cf1fd"),
     SymbolDefinition(StirlingSeriesRemainder, StirlingSeriesRemainder(n, z), "Remainder term in the Stirling series for the logarithmic gamma function"))
 
 make_entry(ID("53a2a1"),
-    Formula(Equal(StirlingSeriesRemainder(n, z), Integral((BernoulliB(2*n) - BernoulliPolynomial(2*n, t-Floor(t)))/(2*n*(z+t)**(2*n)), Tuple(t, 0, Infinity)))),
+    Formula(Equal(StirlingSeriesRemainder(n, z), Integral((BernoulliB(2*n) - BernoulliPolynomial(2*n, t-Floor(t)))/(2*n*(z+t)**(2*n)), For(t, 0, Infinity)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(n, ZZGreaterEqual(1)))))
 

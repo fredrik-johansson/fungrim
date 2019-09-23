@@ -245,7 +245,7 @@ make_entry(ID("f67fa2"),
     Assumptions(And(Element(c, OpenInterval(0, Infinity)), Element(z, SetMinus(CC, Set(0))))))
 
 make_entry(ID("0ba9b2"),
-    Formula(Equal(Log(z), Integral(1/t, Tuple(t, 1, z)))),
+    Formula(Equal(Log(z), Integral(1/t, For(t, 1, z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Log_branch_cut))))
 

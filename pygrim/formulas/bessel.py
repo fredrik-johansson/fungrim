@@ -582,30 +582,30 @@ make_entry(ID("1dce21"),
 
 
 make_entry(ID("99c077"),
-    Formula(Equal(BesselJ(n,z), (1/ConstPi) * Integral(Cos(n*t - z*Sin(t)), Tuple(t, 0, ConstPi)))),
+    Formula(Equal(BesselJ(n,z), (1/ConstPi) * Integral(Cos(n*t - z*Sin(t)), For(t, 0, ConstPi)))),
     Variables(n, z),
     Assumptions(
         And(Element(n, ZZ), Element(z, CC)),
     ))
 
 make_entry(ID("cac83e"),
-    Formula(Equal(BesselJ(nu,z), (1/ConstPi) * Integral(Cos(nu*t - z*Sin(t)), Tuple(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
-        Integral(Exp(-(z*Sinh(t))-nu*t), Tuple(t, 0, Infinity)))),
+    Formula(Equal(BesselJ(nu,z), (1/ConstPi) * Integral(Cos(nu*t - z*Sin(t)), For(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
+        Integral(Exp(-(z*Sinh(t))-nu*t), For(t, 0, Infinity)))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, CC), Greater(Re(z), 0)),
     ))
 
 make_entry(ID("7ae3ed"),
-    Formula(Equal(BesselI(nu,z), (1/ConstPi) * Integral(Exp(z*Cos(t))*Cos(nu*t), Tuple(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
-        Integral(Exp(-(z*Cosh(t))-nu*t), Tuple(t, 0, Infinity)))),
+    Formula(Equal(BesselI(nu,z), (1/ConstPi) * Integral(Exp(z*Cos(t))*Cos(nu*t), For(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
+        Integral(Exp(-(z*Cosh(t))-nu*t), For(t, 0, Infinity)))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, CC), Greater(Re(z), 0)),
     ))
 
 make_entry(ID("c29d6f"),
-    Formula(Equal(BesselK(nu,z), Integral(Exp(-(z*Cosh(t)))*Cosh(nu*t), Tuple(t, 0, Infinity)))),
+    Formula(Equal(BesselK(nu,z), Integral(Exp(-(z*Cosh(t)))*Cosh(nu*t), For(t, 0, Infinity)))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, CC), Greater(Re(z), 0)),

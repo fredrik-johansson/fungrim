@@ -154,7 +154,7 @@ make_entry(ID("62f7d5"),
     Assumptions(Element(q, ZZGreaterEqual(1))))
 
 make_entry(ID("0ba38f"),
-    Formula(Equal(Cardinality(PrimitiveDirichletCharacters(q)), DivisorSum(Totient(d)*MoebiusMu(q/d), d, q))),
+    Formula(Equal(Cardinality(PrimitiveDirichletCharacters(q)), DivisorSum(Totient(d)*MoebiusMu(q/d), For(d, q)))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))),
     References("http://oeis.org/A007431"))
@@ -641,12 +641,12 @@ make_entry(ID("291569"),
 # Euler product
 
 make_entry(ID("d088ea"),
-    Formula(Equal(DirichletL(s, chi), PrimeProduct(1/(1-chi(p)*p**(-s)), p))),
+    Formula(Equal(DirichletL(s, chi), PrimeProduct(1/(1-chi(p)*p**(-s)), For(p)))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("0f96c3"),
-    Formula(Equal(1/DirichletL(s, chi), PrimeProduct(Parentheses(1-chi(p)/p**s), p))),
+    Formula(Equal(1/DirichletL(s, chi), PrimeProduct(Parentheses(1-chi(p)/p**s), For(p)))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1))))
 
@@ -678,12 +678,12 @@ make_entry(ID("ff8254"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(s, CC))))
 
 make_entry(ID("629f70"),
-    Formula(Equal(DirichletL(s, DirichletCharacter(q, 1)), RiemannZeta(s) * PrimeProduct(Parentheses(1 - 1/p**s), p, Divides(p, q)))),
+    Formula(Equal(DirichletL(s, DirichletCharacter(q, 1)), RiemannZeta(s) * PrimeProduct(Parentheses(1 - 1/p**s), For(p), Divides(p, q)))),
     Variables(q, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(s, CC))))
 
 make_entry(ID("1bd945"),
-    Formula(Where(Equal(DirichletL(s,chi), DirichletL(s, Subscript(chi,0)) * PrimeProduct(Parentheses(1-Call(Subscript(chi,0), p)/p**s), p, Divides(p, q))),
+    Formula(Where(Equal(DirichletL(s,chi), DirichletL(s, Subscript(chi,0)) * PrimeProduct(Parentheses(1-Call(Subscript(chi,0), p)/p**s), For(p), Divides(p, q))),
         Equal(Subscript(chi, 1), DirichletCharacter(q, 1)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
     Variables(q, d, Subscript(chi, 0), s),
     Assumptions(And(
@@ -917,7 +917,7 @@ make_entry(ID("312147"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("4911bd"),
-    Formula(LessEqual(Abs(1/DirichletL(s,chi) - PrimeProduct(Parentheses(1-chi(p) / p**s), p, Less(p, N))), HurwitzZeta(Re(s), N))),
+    Formula(LessEqual(Abs(1/DirichletL(s,chi) - PrimeProduct(Parentheses(1-chi(p) / p**s), For(p), Less(p, N))), HurwitzZeta(Re(s), N))),
     Variables(q, chi, s, N),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
 

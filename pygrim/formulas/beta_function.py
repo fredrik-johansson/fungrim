@@ -98,22 +98,22 @@ make_entry(ID("6bcfa6"),
 # Integral representations
 
 make_entry(ID("542cf7"),
-    Formula(Equal(BetaFunction(a, b), Integral(t**(a-1) * (1-t)**(b-1), Tuple(t, 0, 1)))),
+    Formula(Equal(BetaFunction(a, b), Integral(t**(a-1) * (1-t)**(b-1), For(t, 0, 1)))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 
 make_entry(ID("48910b"),
-    Formula(Equal(BetaFunction(a, b), 2 * Integral(Sin(t)**(2*a-1) * Cos(t)**(2*b-1), Tuple(t, 0, ConstPi / 2)))),
+    Formula(Equal(BetaFunction(a, b), 2 * Integral(Sin(t)**(2*a-1) * Cos(t)**(2*b-1), For(t, 0, ConstPi / 2)))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 
 make_entry(ID("3e08b6"),
-    Formula(Equal(IncompleteBeta(x, a, b), Integral(t**(a-1) * (1-t)**(b-1), Tuple(t, 0, x)))),
+    Formula(Equal(IncompleteBeta(x, a, b), Integral(t**(a-1) * (1-t)**(b-1), For(t, 0, x)))),
     Variables(x, a, b),
     Assumptions(And(Element(x, ClosedInterval(0,1)), Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 
 make_entry(ID("a1941b"),
-    Formula(Equal(IncompleteBetaRegularized(x, a, b), (1/BetaFunction(a,b)) * Integral(t**(a-1) * (1-t)**(b-1), Tuple(t, 0, x)))),
+    Formula(Equal(IncompleteBetaRegularized(x, a, b), (1/BetaFunction(a,b)) * Integral(t**(a-1) * (1-t)**(b-1), For(t, 0, x)))),
     Variables(x, a, b),
     Assumptions(And(Element(x, ClosedInterval(0,1)), Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 

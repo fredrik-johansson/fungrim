@@ -228,12 +228,12 @@ make_entry(ID("f80439"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("7adfd6"),
-    Formula(Equal(Integral(BernoulliPolynomial(n, t), Tuple(t, a, b)), (BernoulliPolynomial(n+1,b) - BernoulliPolynomial(n+1,a)) / (n+1))),
+    Formula(Equal(Integral(BernoulliPolynomial(n, t), For(t, a, b)), (BernoulliPolynomial(n+1,b) - BernoulliPolynomial(n+1,a)) / (n+1))),
     Variables(n, a, b),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Element(b, CC))))
 
 make_entry(ID("05202b"),
-    Formula(Equal(Integral(BernoulliPolynomial(n, t), Tuple(t, z, z+1)), z**n)),
+    Formula(Equal(Integral(BernoulliPolynomial(n, t), For(t, z, z+1)), z**n)),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
@@ -281,7 +281,7 @@ make_entry(ID("4246ae"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, OpenInterval(0, 1)))))
 
 make_entry(ID("ff190c"),
-    Formula(Element(Parentheses(BernoulliB(2*n) + PrimeSum(1/p, p, Divides(Parentheses(p-1), 2*n))), ZZ)),
+    Formula(Element(Parentheses(BernoulliB(2*n) + PrimeSum(1/p, For(p), Divides(Parentheses(p-1), 2*n))), ZZ)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

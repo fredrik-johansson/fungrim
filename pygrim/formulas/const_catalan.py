@@ -122,75 +122,75 @@ make_entry(ID("a8657e"),
 ## Involving elementary functions
 
 make_entry(ID("ba58e0"),
-    Formula(Equal(ConstCatalan, Integral(Atan(x)/x, Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan, Integral(Atan(x)/x, For(x, 0, 1)))))
 
 make_entry(ID("d864b2"),
-    Formula(Equal(ConstCatalan, -Integral(Log(x)/(x**2+1), Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan, -Integral(Log(x)/(x**2+1), For(x, 0, 1)))))
 
 make_entry(ID("49df16"),
-    Formula(Equal(ConstCatalan, Integral(Log(x)/(x**2+1), Tuple(x, 1, Infinity)))))
+    Formula(Equal(ConstCatalan, Integral(Log(x)/(x**2+1), For(x, 1, Infinity)))))
 
 make_entry(ID("997777"),
-    Formula(Equal(ConstCatalan,  ConstPi**2/16 + ConstPi*Log(2)/4 - Integral(Atan(x)**2, Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan,  ConstPi**2/16 + ConstPi*Log(2)/4 - Integral(Atan(x)**2, For(x, 0, 1)))))
 
 make_entry(ID("d6703a"),
-    Formula(Equal(ConstCatalan,  7*RiemannZeta(3)/(4*ConstPi) + (2/ConstPi) * Integral(Atan(x)**2/x, Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan,  7*RiemannZeta(3)/(4*ConstPi) + (2/ConstPi) * Integral(Atan(x)**2/x, For(x, 0, 1)))))
 
 make_entry(ID("fd82ab"),
-    Formula(Equal(ConstCatalan, Integral(Acos(x)/Sqrt(x**2+1), Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan, Integral(Acos(x)/Sqrt(x**2+1), For(x, 0, 1)))))
 
 make_entry(ID("38c2d5"),
-    Formula(Equal(ConstCatalan, Integral(Asinh(x)/Sqrt(1-x**2), Tuple(x, 0, 1)))))
+    Formula(Equal(ConstCatalan, Integral(Asinh(x)/Sqrt(1-x**2), For(x, 0, 1)))))
 
 make_entry(ID("c54c85"),
-    Formula(Equal(ConstCatalan, Div(1,2) * Integral(x/Cosh(x), Tuple(x, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, Div(1,2) * Integral(x/Cosh(x), For(x, 0, Infinity)))))
 
 make_entry(ID("ec1435"),
-    Formula(Equal(ConstCatalan, Div(1,4) * Integral(x/Sin(x), Tuple(x, -(ConstPi/2), ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Div(1,4) * Integral(x/Sin(x), For(x, -(ConstPi/2), ConstPi/2)))))
 
 make_entry(ID("79f20e"),
-    Formula(Equal(ConstCatalan, Integral(x/(Sin(x)*Cos(x)), Tuple(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, Integral(x/(Sin(x)*Cos(x)), For(x, 0, ConstPi/4)))))
 
 ## Involving compositions of elementary functions
 
 make_entry(ID("fc5ea9"),
-    Formula(Equal(ConstCatalan, Integral(Atan(Exp(-x)), Tuple(x, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, Integral(Atan(Exp(-x)), For(x, 0, Infinity)))))
 
 make_entry(ID("08cda4"),
-    Formula(Equal(ConstCatalan, -Integral(Log(Tan(x)), Tuple(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, -Integral(Log(Tan(x)), For(x, 0, ConstPi/4)))))
 
 make_entry(ID("270e67"),
-    Formula(Equal(ConstCatalan, Integral(Log(Cot(x)), Tuple(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, Integral(Log(Cot(x)), For(x, 0, ConstPi/4)))))
 
 make_entry(ID("4dec89"),
-    Formula(Equal(ConstCatalan, Integral(Asinh(Sin(x)), Tuple(x, 0, ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Integral(Asinh(Sin(x)), For(x, 0, ConstPi/2)))))
 
 make_entry(ID("d6415e"),
-    Formula(Equal(ConstCatalan, Integral(Asinh(Cos(x)), Tuple(x, 0, ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Integral(Asinh(Cos(x)), For(x, 0, ConstPi/2)))))
 
 make_entry(ID("e09b77"),
-    Formula(Equal(ConstCatalan, -(2*Integral(Log(2*Sin(x)), Tuple(x, 0, ConstPi/4))))))
+    Formula(Equal(ConstCatalan, -(2*Integral(Log(2*Sin(x)), For(x, 0, ConstPi/4))))))
 
 make_entry(ID("6d3591"),
-    Formula(Equal(ConstCatalan, 2*Integral(Log(2*Cos(x)), Tuple(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, 2*Integral(Log(2*Cos(x)), For(x, 0, ConstPi/4)))))
 
 ## Involving special functions
 
 make_entry(ID("1f1fb4"),
-    Formula(Equal(ConstCatalan, Div(1,2) * Integral(EllipticK(m**2), Tuple(m, 0, 1)))))
+    Formula(Equal(ConstCatalan, Div(1,2) * Integral(EllipticK(m**2), For(m, 0, 1)))))
 
 make_entry(ID("d3cfc2"),
-    Formula(Equal(ConstCatalan, Integral(EllipticE(m**2), Tuple(m, 0, 1)) - Div(1,2))))
+    Formula(Equal(ConstCatalan, Integral(EllipticE(m**2), For(m, 0, 1)) - Div(1,2))))
 
 make_entry(ID("937fa9"),
-    Formula(Equal(ConstCatalan, (ConstPi/2) * Integral(GammaFunction(1+x)*GammaFunction(1-x), Tuple(x, 0, Div(1,2))))))
+    Formula(Equal(ConstCatalan, (ConstPi/2) * Integral(GammaFunction(1+x)*GammaFunction(1-x), For(x, 0, Div(1,2))))))
 
 ## Double integrals
 
 make_entry(ID("5b31ee"),
-    Formula(Equal(ConstCatalan, Integral(Integral(1/(1+x**2*y**2), Tuple(x, 0, 1)), Tuple(y, 0, 1)))))
+    Formula(Equal(ConstCatalan, Integral(Integral(1/(1+x**2*y**2), For(x, 0, 1)), For(y, 0, 1)))))
 
 make_entry(ID("ed4cca"),
-    Formula(Equal(ConstCatalan, Div(1,4) * Integral(Integral(1/(((x+y)*Sqrt(1-x)*Sqrt(1-y))), Tuple(x, 0, 1)), Tuple(y, 0, 1)))))
+    Formula(Equal(ConstCatalan, Div(1,4) * Integral(Integral(1/(((x+y)*Sqrt(1-x)*Sqrt(1-y))), For(x, 0, 1)), For(y, 0, 1)))))
 
 

@@ -247,7 +247,7 @@ make_entry(ID("61d8f3"),
 # Integral representations
 
 make_entry(ID("90a864"),
-    Formula(Equal(Atan(z), Integral(1/(1+t**2), Tuple(t, 0, z)))),
+    Formula(Equal(Atan(z), Integral(1/(1+t**2), For(t, 0, z)))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(ConstI*z, Union(OpenClosedInterval(-Infinity,-1), ClosedOpenInterval(1,Infinity))))))
 

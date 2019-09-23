@@ -177,7 +177,7 @@ make_entry(ID("bad502"),
     Assumptions(And(Element(c, CC), Element(z, CC))))
 
 make_entry(ID("935b2f"),
-    Formula(Equal(Integral(Exp(z), Tuple(z, a, b)), Exp(b) - Exp(a))),
+    Formula(Equal(Integral(Exp(z), For(z, a, b)), Exp(b) - Exp(a))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 

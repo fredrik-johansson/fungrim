@@ -170,7 +170,7 @@ make_entry(ID("4cfeac"),
     Assumptions(And(Element(n, ZZGreaterEqual(0))), Element(z, CC)))
 
 make_entry(ID("e36542"),
-    Formula(Equal(Integral(LegendrePolynomial(n, x) * LegendrePolynomial(m, x), Tuple(x, -1, 1)), Div(2,2*n+1) * KroneckerDelta(n, m))),
+    Formula(Equal(Integral(LegendrePolynomial(n, x) * LegendrePolynomial(m, x), For(x, -1, 1)), Div(2,2*n+1) * KroneckerDelta(n, m))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 

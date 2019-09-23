@@ -379,7 +379,7 @@ no_crossing = Or(And(GreaterEqual(Re(a), 0), GreaterEqual(Re(b), 0)),
 no_crossing2 = Equal(Intersection(OpenInterval(a, b), OpenInterval(-Infinity, 0)), Set())
 
 make_entry(ID("6ddbf4"),
-    Formula(Equal(Integral(Sqrt(z), Tuple(z, a, b)), Div(2,3) * (b**Div(3,2) - a**Div(3,2)))),
+    Formula(Equal(Integral(Sqrt(z), For(z, a, b)), Div(2,3) * (b**Div(3,2) - a**Div(3,2)))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), no_crossing),
                 And(Element(a, CC), Element(b, CC), no_crossing2)))

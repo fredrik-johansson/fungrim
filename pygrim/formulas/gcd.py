@@ -709,12 +709,12 @@ make_entry(ID("4099d2"),
 
 # todo: more formulas? generating functions?
 make_entry(ID("aaef97"),
-    Formula(Equal(Sum(GCD(n,k), For(k,1,n)), DivisorSum(d*Totient(n/d), d, n))),
+    Formula(Equal(Sum(GCD(n,k), For(k,1,n)), DivisorSum(d*Totient(n/d), For(d, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("c24323"),
-    Formula(Equal(Sum(LCM(n,k), For(k,1,n)), (n/2)*(1+DivisorSum(d*Totient(d), d, n)))),
+    Formula(Equal(Sum(LCM(n,k), For(k,1,n)), (n/2)*(1+DivisorSum(d*Totient(d), For(d, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

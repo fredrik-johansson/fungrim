@@ -91,10 +91,10 @@ make_entry(ID("818008"),
     Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, For(k, 2, Infinity)))))
 
 make_entry(ID("39fe5f"),
-    Formula(Equal(ConstGamma, -Integral(Exp(-x)*Log(x), Tuple(x, 0, Infinity)))))
+    Formula(Equal(ConstGamma, -Integral(Exp(-x)*Log(x), For(x, 0, Infinity)))))
 
 make_entry(ID("a1ca3e"),
-    Formula(Equal(ConstGamma, -Integral(Log(Log(1/x)), Tuple(x, 0, 1)))))
+    Formula(Equal(ConstGamma, -Integral(Log(Log(1/x)), For(x, 0, 1)))))
 
 make_entry(ID("014c4e"),
     Formula(Where(Less(Abs(ConstGamma - (S/I - T/I**2 - Log(n))), 24*Exp(-(8*n))),

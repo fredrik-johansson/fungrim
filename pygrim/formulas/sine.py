@@ -556,12 +556,12 @@ make_entry(ID("d81355"),
     Assumptions(And(Element(z, CC), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("c93b81"),
-    Formula(Equal(Integral(Sin(z), Tuple(z, a, b)), Cos(a) - Cos(b))),
+    Formula(Equal(Integral(Sin(z), For(z, a, b)), Cos(a) - Cos(b))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 #make_entry(ID("3c7c4c"),
-#    Formula(Equal(Integral(z * Sin(z), Tuple(z, a, b)), Parentheses(Sin(b)-b*Cos(b)) - (Sin(a)-a*Cos(a)))),
+#    Formula(Equal(Integral(z * Sin(z), For(z, a, b)), Parentheses(Sin(b)-b*Cos(b)) - (Sin(a)-a*Cos(a)))),
 #    Variables(a, b),
 #    Assumptions(And(Element(a, CC), Element(b, CC))))
 

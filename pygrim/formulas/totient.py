@@ -105,7 +105,7 @@ make_entry(ID("c19cd6"),
 # Factorization
 
 make_entry(ID("b9c50f"),
-    Formula(Equal(Totient(n), n * PrimeProduct(Parentheses(1-1/p), p, Divides(p, n)))),
+    Formula(Equal(Totient(n), n * PrimeProduct(Parentheses(1-1/p), For(p), Divides(p, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -200,7 +200,7 @@ make_entry(ID("93a877"),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("efd378"),
-    Formula(Equal(Totient(n), DivisorSum(MoebiusMu(d) * (n/d), d, n))),
+    Formula(Equal(Totient(n), DivisorSum(MoebiusMu(d) * (n/d), For(d, n)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -218,29 +218,29 @@ make_entry(ID("a08583"),
     Description("Menon's identity"))
 
 make_entry(ID("08ff0b"),
-    Formula(Equal(Totient(n), n - DivisorSum(Totient(d), d, n, Less(d, n)))),
+    Formula(Equal(Totient(n), n - DivisorSum(Totient(d), For(d, n), Less(d, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 # Summation
 
 make_entry(ID("cdd7e7"),
-    Formula(Equal(DivisorSum(Totient(d), d, n), n)),
+    Formula(Equal(DivisorSum(Totient(d), For(d, n)), n)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("90bb4a"),
-    Formula(Equal(DivisorSum(Totient(d) * d, d, n), Parentheses((2/n) * Sum(LCM(n, k), For(k, 1, n))) - 1)),
+    Formula(Equal(DivisorSum(Totient(d) * d, For(d, n)), Parentheses((2/n) * Sum(LCM(n, k), For(k, 1, n))) - 1)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("0fdb94"),
-    Formula(Equal(DivisorSum(Totient(d) * (n / d), d, n), Sum(GCD(n, k), For(k, 1, n)))),
+    Formula(Equal(DivisorSum(Totient(d) * (n / d), For(d, n)), Sum(GCD(n, k), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("a05466"),
-    Formula(Equal(DivisorSum(Totient(d) * DivisorSigma(k, n/d), d, n), n*DivisorSigma(k-1,n))),
+    Formula(Equal(DivisorSum(Totient(d) * DivisorSigma(k, n/d), For(d, n)), n*DivisorSigma(k-1,n))),
     Variables(k, n),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(n, ZZGreaterEqual(0)))))
 
