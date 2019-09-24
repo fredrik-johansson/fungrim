@@ -740,6 +740,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Gamma function<ul>""")
 writetopic("Gamma function")
+writetopic("Digamma function", highlight=True)
 writetopic("Beta function")
 frontpage.fp.write("""</ul></li>""")
 

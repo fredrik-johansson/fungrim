@@ -201,6 +201,10 @@ def plots(outdir):
         if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
         raise ValueError
 
+    xrayplot(lambda z: complex(acb(z).digamma()), (-5,5), (-5,5), 400, "digamma", xout=0.1, yout=0.1)
+
+    xrayplot(lambda z: complex(acb(z).polygamma(1)), (-5,5), (-5,5), 400, "trigamma", xout=0.1, yout=0.1)
+
     xrayplot(lambda tau: 0.0 if tau.imag < 0.13 else theta1(1/3.+0.75j,tau), (-2.5,2.5), (0,2), 600, "jacobi_theta_1_tau_b",
         decorations=lambda: coverup_rectangle((-2.5,0),5,0.14), xout=0.1, yout=0.0, xtks=([-2,-1,0,1,2],), ytks=([0,1,2],))
 

@@ -693,7 +693,8 @@ Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
 ConstPi ConstE ConstGamma ConstI GoldenRatio ConstCatalan
-Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction PolyGamma RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
+Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction DigammaFunctionZero PolyGamma
+RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
 BernoulliB BernoulliPolynomial EulerE EulerPolynomial

@@ -82,7 +82,7 @@ make_entry(ID("6a83ad"),
 # Special function representations
 
 make_entry(ID("2744d4"),
-    Formula(Equal(ConstCatalan, Div(1,8)*(PolyGamma(1, Div(1,4)) - ConstPi**2))))
+    Formula(Equal(ConstCatalan, Div(1,8)*(DigammaFunction(Div(1,4), 1) - ConstPi**2))))
 
 make_entry(ID("e85723"),
     Formula(Equal(ConstCatalan, Div(1,16)*(HurwitzZeta(2,Div(1,4))-HurwitzZeta(2,Div(3,4))))))

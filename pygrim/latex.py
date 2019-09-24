@@ -101,6 +101,7 @@ subscript_latex_table = {
     DirichletGroup: "G",
     ConreyGenerator: "g",
     KeiperLiLambda: "\\lambda",
+    DigammaFunctionZero: "x",
 }
 
 subscript_pair_latex_table = {
@@ -122,7 +123,6 @@ subscript_call_latex_table = {
     DivisorSigma: "\\sigma",
     IncompleteBeta: "\\mathrm{B}",
     IncompleteBetaRegularized: "I",
-    PolyGamma: "\\psi",
     PolyLog: "\\operatorname{Li}",
     JacobiThetaEpsilon: "\\varepsilon",
     JacobiThetaPermutation: "S",
@@ -339,6 +339,9 @@ def tex_Pow(head, args, **kwargs):
         return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
     if not base.is_atom() and base.head() == Fibonacci:
         return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
+    if base.head() in subscript_latex_table:
+        assert len(base.args()) == 1
+        return "%s_{%s}^{%s}" % (subscript_latex_table[base.head()], base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
     if not base.is_atom() and base.head() == Subscript:
         assert len(base.args()) == 2
         return "{%s}_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), base.args()[1].latex(in_small=True), expo.latex(in_small=True))
@@ -1044,6 +1047,23 @@ def tex_LambertW(head, args, **kwargs):
             return "W" + "^{(" + rstr + ")}_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
 
 @deftex
+def tex_DigammaFunction(head, args, **kwargs):
+    assert len(args) in (1,2)
+    in_small = kwargs.get("in_small", False)
+    if len(args) == 1:
+        z, = args
+        zstr = z.latex(in_small=in_small)
+        return "\\psi\\!\\left(" + zstr + "\\right)"
+    else:
+        z, r = args
+        zstr = z.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer > 0 and r._integer <= 3:
+            return "\\psi" + ("'" * r._integer) + "\!\\left(" + zstr + "\\right)"
+        else:
+            return "\\psi" + "^{(" + rstr + ")}" + "\!\\left(" + zstr + "\\right)"
+
+@deftex
 def tex_AsymptoticTo(head, args, **kwargs):
     assert len(args) == 4
     argstr = [arg.latex(**kwargs) for arg in args]
@@ -1058,6 +1078,8 @@ def tex_Not(head, args, **kwargs):
 @deftex
 def tex_Implies(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
+    if len(argstr) == 2 and args[0].head() == args[1].head() == Element:
+        return " \\;\\implies\\; ".join("%s" % s for s in argstr)
     return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
 
 @deftex

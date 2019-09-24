@@ -49,6 +49,7 @@ from .beta_function import *
 from .totient import *
 from .landau_function import *
 from .const_catalan import *
+from .digamma_function import *
 
 describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
 describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")

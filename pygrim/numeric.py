@@ -45,7 +45,6 @@ function_arb_method_table = {
     Tanh : "tanh",
     Atan : "atan",
     LogGamma : "lgamma",
-    DigammaFunction : "digamma",
     GammaFunction : "gamma",
     RiemannZeta : "zeta",
     Erf : "erf",
@@ -402,6 +401,20 @@ class ArbNumericalEvaluation(object):
                 if v.is_finite():
                     return v
                 raise ArbFiniteError
+
+        if head == DigammaFunction:
+            if len(args) == 1:
+                z, = args
+                z = self.eval(z, **kwargs)
+                z = acb(z)
+                v = z.digamma()
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
+            if len(args) == 2:
+                z, n = args
+                if n.is_integer() and int(n) >= 0:
+                    return self.eval(PolyGamma(n, z), **kwargs)
 
         if head in (PolyGamma, PolyLog):
             if len(args) == 2:
