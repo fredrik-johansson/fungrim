@@ -727,6 +727,7 @@ writetopic("Lambert W-function")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Combinatorial and integer functions<ul>""")
+writetopic("Integer sequences")
 writetopic("Greatest common divisor", highlight=True)
 writetopic("Totient function")
 writetopic("Factorials and binomial coefficients")

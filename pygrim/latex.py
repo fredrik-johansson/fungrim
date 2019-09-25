@@ -1249,6 +1249,20 @@ def tex_NearestDecimal(head, args, **kwargs):
     return "%s \\; (\\text{nearest } %s \\text{D})" % (argstr[0], argstr[1])
 
 @deftex
+def tex_SloaneA(head, args, **kwargs):
+    assert len(args) == 2
+    if args[0].is_integer():
+        X = "A%06i" % int(args[0])
+    elif args[0].is_text():
+        X = args[0]._text
+        if not X.startswith("A"):
+            X = "A" + X
+    else:
+        X = "A00000%s" % args[0].latex(**kwargs)
+    n = args[1].latex(**kwargs)
+    return "\\text{%s}\\!\\left(%s\\right)" % (X, n)
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:

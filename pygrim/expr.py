@@ -252,6 +252,14 @@ class Expr(object):
                     for expr in arg.subexpressions():
                         yield expr
 
+    def subexpressions_with_head(self, head):
+        if self.head() == head:
+            yield self
+        if not self.is_atom():
+            for arg in self._args:
+                for expr in arg.subexpressions_with_head(head):
+                    yield expr
+
     def replace(self, rules):
         """
         Replace subexpressions of self with exact matches in the given
@@ -566,6 +574,32 @@ class Expr(object):
             s += """<a href="../../img/%s.svg">svg (medium/large)</a>""" % src
             s += """</div>"""
 
+        # Link SloaneA to OEIS references
+        oeisrefs = set()
+        for arg in args:
+            refs = list(arg.subexpressions_with_head(SloaneA))
+            for r in refs:
+                X = r.args()[0]
+                if X.is_integer():
+                    oeisrefs.add(X)
+                elif X.is_text():
+                    X = X._text.lstrip("A")
+                    if X.isdigit():
+                        oeisrefs.add(int(X))
+
+        if oeisrefs:
+            oeisrefs = sorted(list(oeisrefs))
+            oeisrefs = tuple("""Sequence <a href="https://oeis.org/A%06i">A%06i</a> in Sloane's On-Line Encyclopedia of Integer Sequences (OEIS)</a>""" % (r, r) for r in oeisrefs)
+            refarg = -1
+            for i in range(1,len(args)):
+                if args[i].head() == References:
+                    refarg = i
+                    break
+            if refarg == -1:
+                args.append(References(*oeisrefs))
+            else:
+                args[refarg] = References(*(args[refarg].args() + oeisrefs))
+
         # Remaining items
         for arg in args[1:]:
             s += arg.html(display=True)
@@ -743,6 +777,7 @@ EisensteinG EisensteinE
 EllipticK EllipticE
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
+SloaneA
 """)
 
 
