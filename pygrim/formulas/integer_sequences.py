@@ -99,9 +99,7 @@ make_entry(ID("6af603"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("483547"),
-    Formula(Equal(ConstPi, Sum(SloaneA("A000796", n) * 10**(1-n), For(n, 1, Infinity)))),
-    Variables(n),
-    Assumptions(Element(n, ZZGreaterEqual(0))))
+    Formula(Equal(ConstPi, Sum(SloaneA("A000796", n) * 10**(1-n), For(n, 1, Infinity)))))
 
 make_entry(ID("b6111c"),
     Formula(Equal(BernoulliB(n), SloaneA("A027641", n) / SloaneA("A027642", n))),
