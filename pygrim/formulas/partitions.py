@@ -6,6 +6,7 @@ def_Topic(
     Title("Partition function"),
     Entries(
         "f5e153",
+        "8eed2c", # OEIS
     ),
     Section("Specific values"),
     Entries(

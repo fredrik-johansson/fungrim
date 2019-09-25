@@ -11,6 +11,7 @@ def_Topic(
         "2e9d0c",
         "4c6c43",
         "1706bb",
+        "60dc3e",
     ),
     Section("Tables"),
     Entries(

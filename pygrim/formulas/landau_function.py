@@ -7,6 +7,7 @@ def_Topic(
     Section("Definitions"),
     Entries(
         "32e430",
+        "6af603", # OEIS
     ),
     Section("Tables"),
     Entries(

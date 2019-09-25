@@ -7,6 +7,7 @@ def_Topic(
     Entries(
         "ac8eca",
         "1f88a4",
+        "b6111c",
     ),
     Section("Tables"),
     Entries(

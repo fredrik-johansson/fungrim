@@ -7,6 +7,7 @@ def_Topic(
     Section("Definitions"),
     Entries(
         "fe11ce",
+        "373aa1", # OEIS
     ),
     Section("Tables"),
     Entries(

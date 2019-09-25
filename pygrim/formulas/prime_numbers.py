@@ -9,6 +9,8 @@ def_Topic(
         "0b643d",
         "6c22c8",
         "c03de4",  # included from zeta
+        "9d0839",  # OEIS
+        "4fa169",  # OEIS
     ),
     Section("Basic formulas"),
     Entries(

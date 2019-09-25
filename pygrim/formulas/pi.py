@@ -14,6 +14,7 @@ def_Topic(
         "47acde",
         "0c838a",
         "155575",
+        "483547", # OEIS
     ),
     Section("Elementary function representations"),
     Entries(
