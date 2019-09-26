@@ -1263,6 +1263,30 @@ def tex_SloaneA(head, args, **kwargs):
     return "\\text{%s}\\!\\left(%s\\right)" % (X, n)
 
 @deftex
+def tex_Repeat(head, args, **kwargs):
+    pattern = args[:-1]
+    num = args[-1]
+    num = num.latex(**kwargs)
+    patternstr = ", ".join(arg.latex(**kwargs) for arg in pattern)
+    if len(pattern) == 1:
+        return "\\underbrace{%s, \\ldots, %s}_{%s \\text{ times}}" % (patternstr, patternstr, num)
+    else:
+        return "\\underbrace{%s, \\ldots, %s}_{\\left(%s\\right) \\; %s \\text{ times}}" % (patternstr, patternstr, patternstr, num)
+
+@deftex
+def tex_Step(head, args, **kwargs):
+    expr, forexpr = args
+    n, a, b = forexpr.args()
+    # todo: semantic substitution?
+    na = expr.replace({n:a})
+    na1 = expr.replace({n:a+1})
+    nb = expr.replace({n:b})
+    na = na.latex(**kwargs)
+    na1 = na1.latex(**kwargs)
+    nb = nb.latex(**kwargs)
+    return "%s, %s, \\ldots, %s" % (na, na1, nb)
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:

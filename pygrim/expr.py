@@ -680,6 +680,7 @@ inject_builtin("""
 True_ False_
 Parentheses Brackets Braces
 Ellipsis Call Subscript
+Repeat Step
 Unknown Undefined
 Where
 Set List Tuple
@@ -790,8 +791,13 @@ SourceForm SymbolDefinition
 Image ImageSource
 """)
 
-# symbols we don't want to show in entry definition listings
-exclude_symbols = set([Set, List, Tuple, And, Or, Implies, Equivalent, Not, Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual])
+# symbols we don't want to show in entry definition listings, because they are too common/generic
+# todo: a better solution may be to hide long tables
+exclude_symbols = set([Set, List, Tuple, And, Or, Implies, Equivalent, Not,
+    Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual, For, ForElement,
+    Repeat, Step, Parentheses, Brackets, Braces, Entry, ID, Formula, Variables,
+    Assumptions, References, Description])
+
 
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")

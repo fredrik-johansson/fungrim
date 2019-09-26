@@ -2,6 +2,7 @@
 
 from ..expr import *
 
+from .symbolic_expressions import *
 from .logic import *
 from .numbers import *
 from .operators import *

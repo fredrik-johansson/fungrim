@@ -702,6 +702,7 @@ frontpage.fp.write("""<div class="topiclist"><ul>""")
 frontpage.fp.write("""<li><a href="topic/">All topics in alphabetical order</a></li>""")
 
 frontpage.fp.write("""<li>Fundamentals<ul>""")
+writetopic("Symbolic expressions")
 writetopic("Elementary logic and set theory")
 writetopic("Numbers and infinities")
 writetopic("Operators")
