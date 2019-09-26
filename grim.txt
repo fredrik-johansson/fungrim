@@ -1,0 +1,438 @@
+
+                             ---  DRAFT  ---
+
+
+(GRIM = GRIM Represents Intelligible Mathematics?)
+===============================================================================
+
+Grim is the formal language used to represent mathematical formulas
+in the Mathematical Functions Grimoire (Fungrim).
+
+Grim consists of symbolic expressions (similar to Lisp S-expressions
+and Wolfram language M-expressions) and a vocabulary of common mathematical
+objects, functions and operators.
+
+Grim is designed to be easy to write and relatively easy to parse. It is
+intended to be sufficiently powerful to express typical theorems in calculus
+in a fully semantic way, without being much more difficult to write than LaTeX.
+(However, semantic correctness is optional: it is possible to write purely
+"syntactical" formulas in Grim just for the purpose of rendering to LaTeX,
+and this is sometimes necessary due to the limitations of the language.
+Hopefully, future improvements will make such situations less common.)
+
+Grim is not designed to be a programming language (although it can be used
+to encode simple programs). The most important limitation compared to
+full-blown Lisp-like programming languages is that Grim provides very
+few (if any) tools for inspecting and manipulating symbolic expressions
+"from within". Grim is meant to be embedded in some other programming
+language whenever the expression trees need to be parsed or manipulated.
+
+
+Syntax and representation of expressions
+-------------------------------------------------------------------------------
+
+An entry in Fungrim is represented by a single Grim expression, which
+may look as follows:
+
+    Entry(ID("22dc6e"),
+        Formula(Equal(Fibonacci(n),
+            Add(Fibonacci(Sub(n, 1)), Fibonacci(Sub(n, 2))))),
+        Variables(n),
+        Assumptions(Element(n, ZZ)))
+
+A Grim expression is either:
+
++ An atom (atomic expression), being either:
+    * An integer literal, like 0, 1 or -42.
+    * A symbol, like n, Fibonacci or Entry
+    * A (Unicode) text string, like "Hello, world!".
++ A non-atom (non-atomic expression), having the form f(x, y, ...) where
+  f, x, y, ... are expressions. The expression f is called the head and
+  x, y, ... are called arguments.
+
+[Caution:
+
+* Contrary to some other S-expression languages, Grim distinguishes between
+  the expression f and the expression f() with an empty argument list.
+
+    TODO: is this important?
+    TODO: Should atoms also have a head (e.g. Integer, Symbol, Text)?
+
+* The head of an expression need not be an atom; f(g(a))(x, y) is valid.
+
+    TODO: is this important?
+
+* Symbol names are limited to ASCII latin letters, digits and underscores,
+  where a digit may not appear as the first character. Since symbol names
+  cannot start with digits or the minus symbol, integer literals can also just
+  be thought of as a distinguished class of symbols.
+
+    TODO: should Unicode be allowed? or leave this to pretty-printing?
+]
+
+Every Grim expression has a canonical string representation, for example
+Add(3, Mul(-5, x)). The minimal syntax was chosen so that Grim expressions
+are syntactically valid in many common programming languages; indeed, the
+current backend code for Fungrim simply embeds Grim as a domain-specific
+language within Python. However, the syntactical representation is unimportant
+and the same Grim expression could be represented as a string in other ways
+where this is convenient, for example in Lisp syntax as (Add 3 (Mul -5 x)) or
+with infix arithmetic operators as 3 + (-5 * x) (with the caveat that more
+advanced syntax easily can introduce ambiguities). Some of the following code
+examples will employ infix arithmetic.
+
+Subexpressions of a Grim expression may represent the following:
+
+* Constant values: objects in an imagined mathematical universe,
+  such as 5, ConstPi, False, ZZ, or the set {Exp(ConstPi), Infinity}.
+
+* Variables: placeholders for constants. Variables should always be bound by
+  operators (more on this below).
+
+* Function applications: in a function call f(x, y, ...), the arguments are
+  interpreted as representing values (elements of the mathematical universe).
+  Any variables representing values can be substituted for other expressions
+  representing values.
+
+* Operator applications: in an operator application op(x, y, ...), some of
+  the arguments may need to be processed as symbolic expressions (for example,
+  creating bound variables).
+
+    TODO: the rules for distinguishing between ordinary function calls and
+    operator applications are not fully defined yet, but should eventually be
+    unified to a small set of special "generator" expressions such as the For()
+    and Repeat() expressions discussed below. This will allow algorithms to
+    parse Grim expressions semantically and do simple manipulations (such as
+    semantically correct variable substitution) without needing knowledge about
+    each mathematical function/operator.
+
+
+Formalisation of mathematics
+-------------------------------------------------------------------------------
+
+Most of the discussion in this section concerns the mathematical objects in
+Fungrim and is independent of the basic semantics of Grim expressions.
+Since symbolic expressions are a universal language, a third-party user could
+add on custom symbols, functions and operators with different mathematical
+interpretation.
+
+Fungrim is meant to represent mathematical knowledge quasi-formally,
+meaning on a level of rigor that at least principle should allow mechanical
+translation into a formal theorem proving environment, 
+
+Conceptually, Fungrim works over a single universe of objects (5, False,
+Infinity, Set(ConstPi, Tuple(2, Set(3, 4))), etc.). The complex number 1 is
+the same object as the integer 1. More generally, the usual field isomorphisms
+are actually subset relations: for example, ZZ is a subset of QQ ... is a
+subset of CC .. is a subset of CC((x)), etc. "Types" are just restrictions
+to arbitrary subsets of this universe, designated by predicates. For example,
+the predicate
+
+    Or(And(Element(x, RR), Greater(x, 0)), Equal(x, Infinity)))
+
+can be viewed as a type declaration for x meaning "x is a positive real
+number or infinity". Such predicates can involve relations between
+multiple variables (e.g.
+
+    And(Element(x, RR), Element(y, CC), Unequal(Add(x, y), 0))
+
+        x is a real number and y is a complex number such that x + y != 0
+
+This "classical" approach to representing mathematics is a bit old-fashioned;
+modern mathematics tends to gravitate toward a more "typeful" or categorical
+view of mathematical objects and operations which lends itself better to
+working with abstract algebraic structures, non-standard models, etc. Since
+Fungrim mainly is concerned with concrete statements involving real and complex
+numbers and the functions of classical mathematical analysis and number theory,
+it makes sense work with a model of mathematics that keeps things simple in
+this context.
+
+
+Local variables and generators
+-------------------------------------------------------------------------------
+
+Symbols occurring in a formula either denote constants in the surrounding
+universe (like ConstPi, Sin, ZZ), or expression-level variables (like x).
+Variables are always locally bound and must be declared explicitly
+using one of the special generator expressions described in this section.
+
+    TODO: this is not done consistently; many old entries need fixing.
+
+    NOTE: In principle, we could detect local variables automatically.
+    However, explicit markup for variables hardly makes the language more
+    verbose, and it makes semantically correct parsing much easier.
+
+Variables()
+
+    Declares the given symbols as locally bound variables in the scope of
+    the parent call. For example,
+
+        f(expr1, Variables(x, y, z), expr2)
+
+    declares x, y and z as locally bound variables that may be used within
+    expr1 and expr2. The interpretation of the variables is left to the
+    parent operator f.
+
+    Variables() is currently only used at the top level of Fungrim entries to
+    declare the free variables in a formula (which become bound to a specific
+    domain through the corresponding Assumptions()).
+
+For()
+
+    For(x) declares the given single symbol as locally bound variable in the
+    scope of the parent call. For example,
+
+        f(expr1, For(x), expr2)
+
+    declares x as a locally bound variable that may be used within
+    expr1 and expr2. The interpretation of the variable is left to the
+    parent operator f.
+
+    Called with a tuple of symbols, For(Tuple(x, y, z)), each symbol
+    becomes a locally bound variable.
+
+    Called with several arguments For(x, param1, param2, ...), the values
+    param1, param2, ... specify information about the range of x.
+    The interpretation of the parameters is up to the parent operator f.
+    Most operators recognize For() with two additional parameters as
+    specifying an iteration range:
+
+        Sum(Factorial(n), For(n, 2, 10))
+
+            2! + 3! + ... + 10!
+
+    (When For(n, a, b) is used in this sense, the endpoints a and b must be
+    integers or possibly a = -Infinity and/or b = Infinity where an infinite
+    sequence makes sense. The iteration sequence is empty if b < a.)
+
+    There are some exceptions. For example, Integral() understands two
+    parameters as representing the endpoints (not necessarily integers)
+    of a directed line segment to integrate over:
+
+        Integral(Cos(x), For(x, -ConstPi, ConstPi))
+
+    Derivative() takes one or two parameters, denoting the evaluation
+    point and optionally the order of differentiation:
+
+        Derivative(Sin(x), For(x, y))
+
+            sin'(y)
+
+        Derivative(Sin(x), For(x, y, 2))
+
+            sin''(y)
+
+    A subtle point is that the symbol declared in For() overrides any
+    meaning of the same symbol from the surrounding context, but *not* in the
+    evaluation of param1, param2, .... For example,
+
+        ( ... For(x), ... Derivative(Sin(x), For(x, x)))
+
+    is equivalent to
+
+        ( ... For(x), ... Derivative(Sin(x_), For(x_, x))).
+
+ForElement()
+
+    ForElement(x, S) declares the variable x just like For(x), but
+    additionally tells the parent operator that x is to range over the
+    elements of the set S.
+
+Here are some examples of iteration with For() and ForElement():
+
+    Tuple(n, For(n, 2, 5))
+
+        (2, 3, 4, 5)
+
+    Tuple(n, For(n, 1, 0))
+
+        ()
+
+    Set(n, For(n, 0, Infinity))
+
+        {0, 1, 2, ...}
+
+    Set(n, For(n, -Infinity, Infinity))
+
+        {..., -2, -1, 0, 1, 2, ...}
+
+    Set(PrimeNumber(n), For(n, 1, Infinity))
+
+        {2, 3, 5, 7, 11, ...}
+
+    Set(Pow(-1, n), ForElement(n, ZZ))
+
+        {1, -1}
+
+Calling an operator with a sequence of For() and ForElement() expressions
+usually represents iteration over the Cartesian product of values.
+For example:
+
+    Set(Tuple(x, y), For(x, -5, 5), For(y, 0, 10))
+
+    Sum(Sin(x+y)/(1+y**2), For(x, -5, 5), ForElement(y, ZZ))
+
+The For/ForElement expressions are parsed left to right, and variables can
+be used as nested iteration parameters:
+
+    Sum(1/(1+i+j+k), For(i, 0, 10), For(j, 1, i), For(k, i+j, 10))
+
+    TODO:
+
+    * Standardized filter predicates for use with generators?
+    * Fix the Where() construct, among others.
+    * Formal variables (like the generator of CC[[x]]) need special treatment,
+      perhaps by adding them as objects in the mathematical universe.
+    * The variable-binding semantics are not yet fully defined or consistent;
+      more work is needed here.
+
+
+Variable-length argument lists
+-------------------------------------------------------------------------------
+
+Complicated variable-length argument lists can be constructed using Repeat()
+and Step() expressions. This is typically useful for functions that construct
+"container" objects (like Tuple(), List(), Set(), Matrix()) and for
+fold-type operators or functions (like Sum(), Max(), GCD()).
+
+Repeat()
+
+    Generates a repeating sequence:
+
+        Repeat(1, n)
+
+            1, ..., 1
+            ---------
+             n times
+
+        Repeat(1, 2, 3, n)
+
+            1, 2, 3, ..., 1, 2, 3
+            ---------------------
+              (1, 2, 3)  n times
+
+Step()
+
+    Generates a sequence between two integer endpoints:
+
+        Step(k^2, For(k, a, b))
+
+            a^2, (a+1)^2, ..., b^2
+
+        (The sequence is empty if b < a, and undefined if a and b
+        are not integers.)
+
+These generators do not represent mathematical objects; they only exist
+at the expression level. To construct a mathematical object, we must pass
+the generator expression to a function such as Tuple:
+
+    Tuple(Repeat(3, n))
+
+        (3, ..., 3)
+         ---------
+          n times
+
+    Tuple(Step(1/k, For(k, a, b)))
+
+        (1/a, 1/(a+1) ..., 1/b)
+
+Some functions such as Tuple() recognize the For() generator as a stepping
+generator, so that Step() may be omitted entirely:
+
+    Tuple(1/k, For(k, a, b))
+
+        (1/a, 1/(a+1), ..., 1/b)
+
+The Repeat() and Step() operators generate runs of arguments that can be
+placed in arbitrary locations among other arguments:
+
+    Tuple(Repeat(-1, n), 0, Step(1/k, For(k, 1, 10)), 2)
+
+          (-1, ..., -1, 0, 1/1, 1/2, ..., 1/10, 2)
+           -----------
+             n times
+
+Generators can be composed:
+
+    Tuple(Step(Repeat(n, n), For(n, 0, N)))
+
+        (0, ..., 0, 1, ..., 1, ..., N, ..., N)
+         ---------  ---------       ---------
+           0 times   1 times         N times
+
+In this example, explicitly listing the first few items makes the pattern
+clearer:
+
+    Tuple(1, 2, 2, Step(Repeat(n, n), For(n, 3, N)))
+
+        (1, 2, 2, 3, ..., 3, 4, ..., 4, ..., N, ..., N)
+                  ---------  ---------       ---------
+                   3 times    4 times         N times
+
+Watch out -- this version is not equivalent to the first version when
+N = 0 or N = 1 since the second version always includes the leading 1, 2, 2.
+Visual pattern matching can be dangerous!
+
+    TODO: add a sequence concatenation operator?
+
+
+Constructing matrices
+-------------------------------------------------------------------------------
+
+    TODO: everything here. Basic examples?
+
+        Row(1, 2, 3)
+        Column(1, 2, 3)
+        Diagonal(1, 2, 3)
+
+        Matrix2x2(1, 2, 3, 4)
+
+        Matrix from rows?
+        Matrix from columns?
+
+        Matrix(1/(i+j+1), For(i, 1, N), For(j, 1, N))
+
+        Matrices(CC, n, n)
+
+    TODO: block matrices; matrices within matrices flatten, or can matrices
+    contain matrices? Relation between matrices, vectors, lists/tuples.
+
+
+Constructing functions
+-------------------------------------------------------------------------------
+
+Grim functions are not a priori mathematical functions that belong to a
+particular function space, but rather should be thought of as variadic
+multimethods that may be defined for any number of separate cases; indeed,
+functions can be thought of as total functions on the whole mathematical
+universe, where undefined cases map to the special constant Undefined. For
+example, the function Exp is not only defined on the complex numbers CC but
+also at -Infinity and Infinity among other cases.
+
+    TODO: rules for defining expression-level functions and assigning them
+    to local variables
+
+    TODO: Function spaces and their elements as mathematical objects
+
+Non-semantic expressions
+-------------------------------------------------------------------------------
+
+The Grim to LaTeX converter is intended to produce beautifully rendered,
+natural-looking formulas from semantically natural expressions.
+Nevertheless, the results are not always perfect, and sometimes manual
+rendering hints are needed. Some examples:
+
+Parentheses()
+
+Brackets()
+
+Braces()
+
+    Semantically, these functions represent the identity function. They
+    provide hints to the LaTeX renderer to surround the enclosed expression
+    by (), [], and {} respectively.
+
+    TODO: other hints: small/large display style? Some evaluation hint to do
+    constant folding / trivial simplifications?
+
+
