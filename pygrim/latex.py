@@ -37,7 +37,28 @@ def _latex(expr, in_small=False):
     args = expr._args[1:]
 
     if head in infix_latex_table:
-        argstr = [latex(arg, in_small=in_small) for arg in args]
+        argstr = []
+        for arg in args:
+            # todo: combine code
+            if arg.head() == Step:
+                expr, forexpr = arg.args()
+                n, a, b = forexpr.args()
+                # todo: semantic substitution?
+                na = expr.replace({n:a})
+                if a.is_integer():
+                    na1 = expr.replace({n:Expr(int(a)+1)})
+                else:
+                    na1 = expr.replace({n:a+1})
+                nb = expr.replace({n:b})
+                na = na.latex(in_small=in_small)
+                na1 = na1.latex(in_small=in_small)
+                nb = nb.latex(in_small=in_small)
+                argstr.append(na)
+                argstr.append(na1)
+                argstr.append("\\ldots")
+                argstr.append(nb)
+            else:
+                argstr.append(latex(arg, in_small=in_small))
         return (" " + infix_latex_table[head] + " ").join(argstr)
 
     # F(n,x,...) -> F_n(x,...)
@@ -246,6 +267,7 @@ symbol_latex_table = {
     DeBruijnNewmanLambda: "\\Lambda",
     RiemannXi: "\\xi",
     LerchPhi: "\\Phi",
+    MultiZetaValue: "\\zeta",
 }
 
 def deftex(f):
@@ -1279,7 +1301,10 @@ def tex_Step(head, args, **kwargs):
     n, a, b = forexpr.args()
     # todo: semantic substitution?
     na = expr.replace({n:a})
-    na1 = expr.replace({n:a+1})
+    if a.is_integer():
+        na1 = expr.replace({n:Expr(int(a)+1)})
+    else:
+        na1 = expr.replace({n:a+1})
     nb = expr.replace({n:b})
     na = na.latex(**kwargs)
     na1 = na1.latex(**kwargs)

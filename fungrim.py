@@ -767,6 +767,7 @@ writetopic("Riemann hypothesis")
 writetopic("Stieltjes constants")
 writetopic("Dirichlet characters")
 writetopic("Dirichlet L-functions")
+writetopic("Multiple zeta values")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Modular and elliptic functions<ul>""")

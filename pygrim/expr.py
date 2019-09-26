@@ -774,6 +774,7 @@ RiemannXi StieltjesGamma KeiperLiLambda DeBruijnNewmanLambda
 DirichletLZero
 GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
+MultiZetaValue
 EisensteinG EisensteinE
 EllipticK EllipticE
 QSeriesCoefficient EqualQSeriesEllipsis

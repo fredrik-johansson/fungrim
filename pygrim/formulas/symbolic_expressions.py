@@ -43,8 +43,6 @@ details are subject to change.
     ),
 )
 
-#
-
 make_entry(ID("6db9b2"),
     SymbolDefinition(Entry, Ellipsis, "Entry"))
 
@@ -114,7 +112,7 @@ make_entry(ID("43cc72"),
         "and",
             SourceForm(Derivative(Sin(x), For(x, y, 2))),
         "becomes",
-            Derivative(Sin(x), For(x, y, 2)),
+            Derivative(Sin(x), For(x, y, 2)), "."
     ),
 )
 
