@@ -10,6 +10,7 @@ from .complex_parts import *
 from .const_gamma import *
 from .pi import *
 from .golden_ratio import *
+from .imaginary_unit import *
 from .exp import *
 from .powers import *
 from .sqrt import *
