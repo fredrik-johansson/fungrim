@@ -380,7 +380,7 @@ make_entry(ID("a4d6fc"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZBetween(2, 6)))))
 
 make_entry(ID("b7e899"),
-    Formula(Where(CongruentMod(BellNumber(n+a), BellNumber(n), m), Equal(a, SloaneA("A054767", n)))),
+    Formula(Where(CongruentMod(BellNumber(n+a), BellNumber(n), m), Equal(a, SloaneA("A054767", m)))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(1)))))
 
