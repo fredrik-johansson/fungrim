@@ -53,6 +53,7 @@ from .const_catalan import *
 from .digamma_function import *
 from .integer_sequences import *
 from .multiple_zeta_values import *
+from .bell_numbers import *
 
 describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
 describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")

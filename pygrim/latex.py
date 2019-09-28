@@ -1312,6 +1312,35 @@ def tex_Step(head, args, **kwargs):
     return "%s, %s, \\ldots, %s" % (na, na1, nb)
 
 @deftex
+def tex_Matrix(head, args, **kwargs):
+    if len(args) == 3 and args[1].head() == For and args[2].head() == For:
+        i, a, b = args[1].args()
+        j, c, d = args[2].args()
+        expr = args[0]
+        if a.is_integer():
+            a1 = Expr(int(a)+1)
+        else:
+            a1 = a+1
+        if c.is_integer():
+            c1 = Expr(int(c)+1)
+        else:
+            c1 = c+1
+        xac = expr.replace({i:a, j:c}).latex(**kwargs)
+        xac1 = expr.replace({i:a, j:c1}).latex(**kwargs)
+        xad = expr.replace({i:a, j:d}).latex(**kwargs)
+        xa1c = expr.replace({i:a1, j:c}).latex(**kwargs)
+        xa1c1 = expr.replace({i:a1, j:c1}).latex(**kwargs)
+        xa1d = expr.replace({i:a1, j:d}).latex(**kwargs)
+        xbc = expr.replace({i:b, j:c}).latex(**kwargs)
+        xbc1 = expr.replace({i:b, j:c1}).latex(**kwargs)
+        xbd = expr.replace({i:b, j:d}).latex(**kwargs)
+        s = r"\displaystyle{\begin{pmatrix} %s & %s & \cdots & %s \\ %s & %s & \cdots & %s \\ \vdots & \vdots & \ddots & \vdots \\ %s & %s & \ldots & %s \end{pmatrix}}"
+        s = s % (xac, xac1, xad, xa1c, xa1c1, xa1d, xbc, xbc1, xbd)
+        return s
+    return Call(Matrix, args).latex(**kwargs)
+
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:

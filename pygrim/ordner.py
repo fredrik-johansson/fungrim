@@ -265,6 +265,14 @@ class Ordner(object):
 
             exprs = sorted(self.values_expressions[decimal], key=sort_key)
 
+            # strip unnecessary Decimal(...) from the tables
+            if exprs[-1].startswith('Decimal("') or exprs[-1].startswith('Neg(Decimal("'):
+                decimal_entry = self.expressions_entries[exprs[-1]]
+                if len(decimal_entry) == 1:
+                    decimal_entry = list(decimal_entry)[0]
+                    if any(decimal_entry in self.expressions_entries[e] for e in exprs[:-1]):
+                        exprs = exprs[:-1]
+
             nmax = max_entries
 
             want_details = num_shown < num_expr

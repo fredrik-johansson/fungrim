@@ -737,6 +737,7 @@ writetopic("Prime numbers")
 writetopic("Partition function")
 writetopic("Bernoulli numbers and polynomials")
 writetopic("Stirling numbers")
+writetopic("Bell numbers", highlight=True)
 writetopic("Landau's function")
 frontpage.fp.write("""</ul></li>""")
 

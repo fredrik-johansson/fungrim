@@ -444,6 +444,8 @@ class Expr(object):
         s += """<div class="entrysubhead">References:</div>"""
         s += "<ul>"
         for ref in self._args[1:]:
+            if ref.head() == SloaneA:
+                continue
             s += "<li>%s</li>" % ref._text
         s += "</ul>"
         return s
@@ -758,7 +760,7 @@ WeierstrassP WeierstrassZeta WeierstrassSigma
 PrimeNumber PrimePi
 RiemannHypothesis
 LogIntegral LandauG
-Matrix2x2 Matrix2x1
+Matrix2x2 Matrix2x1 Matrix
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularLambdaFundamentalDomain

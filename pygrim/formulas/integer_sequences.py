@@ -22,7 +22,7 @@ def_Topic(
     Entries(
         "373aa1",
     ),
-    Description("Bell numbers - Main topic: ", TopicReference("Stirling numbers")),
+    Description("Main topic: ", TopicReference("Bell numbers")),
     Entries(
         "60dc3e",
     ),
