@@ -166,7 +166,7 @@ make_entry(ID("a7dbf6"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC))))
 
 make_entry(ID("1f72e9"),
-    Formula(Equal(Residue(BetaFunction(z, b), Var(z), a),
+    Formula(Equal(Residue(BetaFunction(z, b), For(z, a)),
         Where(Cases(Tuple(Binomial(n-b, n), Element(n, ZZGreaterEqual(0))),
               Tuple(0, Otherwise)), Equal(n, -a)))),
     Variables(a, b),

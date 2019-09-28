@@ -270,27 +270,27 @@ make_entry(ID("a9a405"),
 # Asymptotics
 
 make_entry(ID("cd7877"),
-    Formula(Equal(SequenceLimitSuperior(Totient(n) / n, Var(n), Infinity), 1)))
+    Formula(Equal(SequenceLimitSuperior(Totient(n) / n, For(n, Infinity)), 1)))
 
 make_entry(ID("acfc1f"),
-    Formula(Equal(SequenceLimitInferior((Totient(n) * Log(Log(n))) / n, Var(n), Infinity), Exp(-ConstGamma))))
+    Formula(Equal(SequenceLimitInferior((Totient(n) * Log(Log(n))) / n, For(n, Infinity)), Exp(-ConstGamma))))
 
 make_entry(ID("4b5b44"),
-    Formula(Equal(SequenceLimit(Totient(n) / n**(1-delta), Var(n), Infinity), Infinity)),
+    Formula(Equal(SequenceLimit(Totient(n) / n**(1-delta), For(n, Infinity)), Infinity)),
     Variables(delta),
     Assumptions(Element(delta, OpenInterval(0, Infinity))))
 
 make_entry(ID("33139b"),
-    Formula(Equal(SequenceLimitInferior(Totient(n+1) / Totient(n), Var(n), Infinity), 0)))
+    Formula(Equal(SequenceLimitInferior(Totient(n+1) / Totient(n), For(n, Infinity)), 0)))
 
 make_entry(ID("feb1a0"),
-    Formula(Equal(SequenceLimitSuperior(Totient(n+1) / Totient(n), Var(n), Infinity), Infinity)))
+    Formula(Equal(SequenceLimitSuperior(Totient(n+1) / Totient(n), For(n, Infinity)), Infinity)))
 
 make_entry(ID("8d7b3d"),
-    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), For(n, 1, N)), Var(N), Infinity), 3/ConstPi**2)))
+    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), For(n, 1, N)), For(N, Infinity)), 3/ConstPi**2)))
 
 make_entry(ID("9923b7"),
-    Formula(Equal(SequenceLimit(1/Log(N) * Sum(1/Totient(n), For(n, 1, N)), Var(N), Infinity), (RiemannZeta(2)*RiemannZeta(3) / RiemannZeta(6)))))
+    Formula(Equal(SequenceLimit(1/Log(N) * Sum(1/Totient(n), For(n, 1, N)), For(N, Infinity)), (RiemannZeta(2)*RiemannZeta(3) / RiemannZeta(6)))))
 
 # Bounds and inequalities
 

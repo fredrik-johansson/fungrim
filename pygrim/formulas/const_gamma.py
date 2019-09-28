@@ -57,10 +57,10 @@ make_entry(ID("e876e8"),
         RealBall(Decimal("0.57721566490153286060651209008240243104215933593992"), Decimal("3.60e-51")))))
 
 make_entry(ID("4644c0"),
-    Formula(Equal(ConstGamma, SequenceLimit(Brackets(Parentheses(Sum(1/k, For(k, 1, n))) - Log(n)), Var(n), Infinity))))
+    Formula(Equal(ConstGamma, SequenceLimit(Brackets(Parentheses(Sum(1/k, For(k, 1, n))) - Log(n)), For(n, Infinity)))))
 
 make_entry(ID("288da1"),
-    Formula(Equal(Exp(ConstGamma), SequenceLimit(1/Log(PrimeNumber(N)) * Product(PrimeNumber(n)/(PrimeNumber(n)-1), For(n, 1, N)), Var(N), Infinity))))
+    Formula(Equal(Exp(ConstGamma), SequenceLimit(1/Log(PrimeNumber(N)) * Product(PrimeNumber(n)/(PrimeNumber(n)-1), For(n, 1, N)), For(N, Infinity)))))
 
 make_entry(ID("28bf9a"),
     Formula(NotElement(ConstGamma, Set(p/q, For(Tuple(p, q)), And(Element(p,ZZ), Element(q, ZZGreaterEqual(1)), LessEqual(q, Pow(10,242080)))))),
@@ -73,19 +73,19 @@ make_entry(ID("d17d0b"),
     Formula(Equal(ConstGamma, -DigammaFunction(1))))
 
 make_entry(ID("a1f1ec"),
-    Formula(Equal(ConstGamma, ComplexLimit(Brackets(RiemannZeta(s) - 1/(s-1)), Var(s), 1))))
+    Formula(Equal(ConstGamma, ComplexLimit(Brackets(RiemannZeta(s) - 1/(s-1)), For(s, 1)))))
 
 make_entry(ID("79d6ba"),
-    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(GammaFunction(z) - 1/z), Var(z), 0))))
+    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(GammaFunction(z) - 1/z), For(z, 0)))))
 
 make_entry(ID("9d5c86"),
-    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(DigammaFunction(z) + 1/z), Var(z), 0))))
+    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(DigammaFunction(z) + 1/z), For(z, 0)))))
 
 make_entry(ID("0888b3"),
-    Formula(Equal(ConstGamma, RightLimit(Brackets((ConstPi/2) * BesselY(0,x) - Log(x/2)), Var(x), 0))))
+    Formula(Equal(ConstGamma, RightLimit(Brackets((ConstPi/2) * BesselY(0,x) - Log(x/2)), For(x, 0)))))
 
 make_entry(ID("e8af68"),
-    Formula(Equal(ConstGamma, RightLimit(Brackets(-BesselK(0,x) - Log(x/2)), Var(x), 0))))
+    Formula(Equal(ConstGamma, RightLimit(Brackets(-BesselK(0,x) - Log(x/2)), For(x, 0)))))
 
 make_entry(ID("818008"),
     Formula(Equal(ConstGamma, 1-Sum((RiemannZeta(k)-1) / k, For(k, 2, Infinity)))))

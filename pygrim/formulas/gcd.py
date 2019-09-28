@@ -703,7 +703,7 @@ make_entry(ID("7b27cd"),
 make_entry(ID("4099d2"),
     Formula(Equal(SequenceLimit(
         (1/N**n) * Cardinality(Set(T, For(T), And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
-        Var(N), Infinity), 1/RiemannZeta(n))),
+        For(N, Infinity)), 1/RiemannZeta(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(2))))
 

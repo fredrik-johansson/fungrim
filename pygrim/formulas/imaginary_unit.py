@@ -72,7 +72,7 @@ make_entry(ID("a08fb9"),
 # Quadratic equations
 
 make_entry(ID("08ad28"),
-    Formula(Equal(Solutions(Brackets(Equal(x**2 + 1, 0)), Var(x), Element(x, CC)), Set(ConstI, -ConstI))))
+    Formula(Equal(Solutions(Brackets(Equal(x**2 + 1, 0)), ForElement(x, CC)), Set(ConstI, -ConstI))))
 
 # Numerical value
 

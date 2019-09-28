@@ -170,7 +170,7 @@ make_entry(ID("4538ba"),
     Formula(Equal(HolomorphicDomain(Log(z), z, Union(CC, Set(UnsignedInfinity))), Log_holomorphic_domain)))
 
 make_entry(ID("c464e3"),
-    Formula(Equal(Poles(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+    Formula(Equal(Poles(Log(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))
 
 make_entry(ID("ddc8a1"),
     Formula(Equal(EssentialSingularities(Log(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
@@ -192,7 +192,7 @@ make_entry(ID("c1bee1"),
     Assumptions(And(Element(a, CC), Element(b, CC), Less(Im(a), 0), Greater(Im(b), 0), Less(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
 make_entry(ID("1d447b"),
-    Formula(Equal(Zeros(Log(z), Var(z), Element(z, CC)), Set(1))))
+    Formula(Equal(Zeros(Log(z), ForElement(z, CC)), Set(1))))
 
 make_entry(ID("13895b"),
     Formula(Equal(Log(Conjugate(z)), Conjugate(Log(z)))),

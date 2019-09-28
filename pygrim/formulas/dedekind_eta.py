@@ -119,10 +119,10 @@ make_entry(ID("1dc520"),
 # Limiting values
 
 make_entry(ID("6b9935"),
-    Formula(Equal(DedekindEta(ConstI*Infinity), ComplexLimit(DedekindEta(tau), Var(tau), ConstI*Infinity), 0)))
+    Formula(Equal(DedekindEta(ConstI*Infinity), ComplexLimit(DedekindEta(tau), For(tau, ConstI*Infinity)), 0)))
 
 make_entry(ID("d8025b"),
-    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), Var(epsilon), 0), 0)))
+    Formula(Equal(RightLimit(DedekindEta(ConstI*epsilon), For(epsilon, 0)), 0)))
 
 # Imaginary points
 
@@ -268,7 +268,7 @@ make_entry(ID("e06d87"),
     Formula(Equal(HolomorphicDomain(DedekindEta(tau), tau, HH), HH)))
 
 make_entry(ID("04f4a0"),
-    Formula(Equal(Poles(DedekindEta(tau), tau, Union(HH, Set(UnsignedInfinity))), Set())))
+    Formula(Equal(Poles(DedekindEta(tau), ForElement(tau, Union(HH, Set(UnsignedInfinity)))), Set())))
 
 make_entry(ID("f2e2c2"),
     Formula(Equal(BranchPoints(DedekindEta(tau), tau, Union(HH, Set(UnsignedInfinity))), Set())))
@@ -277,7 +277,7 @@ make_entry(ID("6d7668"),
     Formula(Equal(BranchCuts(DedekindEta(tau), tau, HH), Set())))
 
 make_entry(ID("39fb36"),
-    Formula(Equal(Zeros(DedekindEta(tau), Var(tau), Element(tau, HH)), Set())))
+    Formula(Equal(Zeros(DedekindEta(tau), ForElement(tau, HH)), Set())))
 
 # Dedekind sums
 

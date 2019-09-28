@@ -133,7 +133,7 @@ make_entry(ID("722241"),
     Formula(Equal(ConstPi, 2*Asin(1))))
 
 make_entry(ID("b89166"),
-    Formula(Equal(ConstPi, UniqueZero(Sin(x), Var(x), Element(x, ClosedInterval(3, 4))))))
+    Formula(Equal(ConstPi, UniqueZero(Sin(x), ForElement(x, ClosedInterval(3, 4))))))
 
 make_entry(ID("f8d280"),
     Formula(Equal(ConstPi, 16*Acot(5) - 4*Acot(239))))
@@ -169,7 +169,7 @@ make_entry(ID("69fe63"),
 # Limit representations
 
 make_entry(ID("e1e106"),
-    Formula(Equal(ConstPi, SequenceLimit(16**k/(k*Binomial(2*k,k)**2), Var(k), Infinity))))
+    Formula(Equal(ConstPi, SequenceLimit(16**k/(k*Binomial(2*k,k)**2), For(k, Infinity)))))
 
 # Approximations
 

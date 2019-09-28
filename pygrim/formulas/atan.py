@@ -218,16 +218,14 @@ make_entry(ID("f516e3"),
     Assumptions(And(Element(theta, CC), Less(-(ConstPi/2), Re(theta), ConstPi/2))))
 
 make_entry(ID("cbce7f"),
-    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), Var(w), Element(w, CC)), Set(Atan(z) + ConstPi*n, ForElement(n, ZZ)))),
+    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), ForElement(w, CC)), Set(Atan(z) + ConstPi*n, ForElement(n, ZZ)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(-ConstI, ConstI)))))
 
 make_entry(ID("a2af66"),
-#    Formula(Where(Equal(UniqueSolution(Brackets(Equal(r*Exp(ConstI*theta), z)), Var(theta), Element(theta, OpenClosedInterval(-ConstPi, ConstPi))), Atan2(y, x)),
-#        Equal(z, x+ConstI*y), Equal(r, Abs(z)))),
     Formula(Equal(Atan2(y, x), UniqueSolution(Brackets(Where(
         Equal(Tuple(x,y), Tuple(r*Cos(theta), r*Sin(theta))),
-            Equal(r, Sqrt(x**2+y**2)))), Var(theta), Element(theta, OpenClosedInterval(-ConstPi, ConstPi))))),
+            Equal(r, Sqrt(x**2+y**2)))), ForElement(theta, OpenClosedInterval(-ConstPi, ConstPi))))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR), Or(Unequal(x, 0), Unequal(y, 0)))))
 
@@ -299,7 +297,7 @@ make_entry(ID("30ba67"),
     Formula(Equal(EssentialSingularities(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
 
 make_entry(ID("48031d"),
-    Formula(Equal(Poles(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+    Formula(Equal(Poles(Atan(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))
 
 make_entry(ID("26c47c"),
     Formula(Equal(BranchPoints(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set(-ConstI, ConstI, UnsignedInfinity))))
@@ -309,7 +307,7 @@ make_entry(ID("3b11d3"),
         Set(OpenClosedInterval(-Infinity,-1)*ConstI, ClosedOpenInterval(1,Infinity)*ConstI))))
 
 make_entry(ID("718a9b"),
-    Formula(Equal(Zeros(Atan(z), Var(z), Element(z, CC)), Set(0))))
+    Formula(Equal(Zeros(Atan(z), ForElement(z, CC)), Set(0))))
 
 # Cases for atan2
 

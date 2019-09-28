@@ -316,7 +316,7 @@ make_entry(ID("394cdc"),
     Assumptions(Element(m, ZZGreaterEqual(0))))
 
 make_entry(ID("86333d"),
-    Formula(Equal(Poles(DigammaFunction(z, m), z, CC), ZZLessEqual(0))),
+    Formula(Equal(Poles(DigammaFunction(z, m), ForElement(z, CC)), ZZLessEqual(0))),
     Variables(m),
     Assumptions(Element(m, ZZGreaterEqual(0))))
 
@@ -432,11 +432,11 @@ make_entry(ID("a6bdf5"),
 # Zeros
 
 make_entry(ID("6000d0"),
-    Formula(Equal(Zeros(DigammaFunction(z), Var(z), Element(z, CC)), Set(DigammaFunctionZero(n), ForElement(n, ZZGreaterEqual(0))))))
+    Formula(Equal(Zeros(DigammaFunction(z), ForElement(z, CC)), Set(DigammaFunctionZero(n), ForElement(n, ZZGreaterEqual(0))))))
 
 make_entry(ID("233814"),
     Formula(Equal(DigammaFunctionZero(n),
-        Where(UniqueZero(DigammaFunction(x), Var(x), Element(x, S)),
+        Where(UniqueZero(DigammaFunction(x), ForElement(x, S)),
             Equal(S,
                 Cases(Tuple(OpenInterval(0, Infinity), Equal(n, 0)),
                       Tuple(OpenInterval(-n,-n+1), Less(n, 0))))))),
@@ -486,13 +486,13 @@ make_entry(ID("78c19c"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("1cbe83"),
-    Formula(Equal(DigammaFunction(Infinity, m), RealLimit(DigammaFunction(x), Var(x), Infinity),
+    Formula(Equal(DigammaFunction(Infinity, m), RealLimit(DigammaFunction(x), For(x, Infinity)),
         Cases(Tuple(Infinity, Equal(m, 0)), Tuple(0, Greater(m, 0))))),
     Variables(m),
     Assumptions(Element(m, ZZGreaterEqual(0))))
 
 make_entry(ID("dce62c"),
-    Formula(Equal(RightLimit(DigammaFunction(x), Var(x), 0), (-1)**(m+1) * Infinity)),
+    Formula(Equal(RightLimit(DigammaFunction(x), For(x, 0)), (-1)**(m+1) * Infinity)),
     Variables(m),
     Assumptions(Element(m, ZZGreaterEqual(0))))
 
@@ -788,7 +788,7 @@ make_entry(ID("a4f9c9"),
 make_entry(ID("6547da"),
     Formula(Equal(Sum(1/DigammaFunctionZero(n)**(r+1), For(n, 0, Infinity)), 
         Where(ComplexDerivative(f(z), For(z, 0, r)) / Factorial(r),
-            Equal(f(z), ComplexLimit(Parentheses(DigammaFunction(t) - DigammaFunction(t,1)/DigammaFunction(t)), Var(t), z))))),
+            Equal(f(z), ComplexLimit(Parentheses(DigammaFunction(t) - DigammaFunction(t,1)/DigammaFunction(t)), For(t, z)))))),
     Variables(r),
     Assumptions(Element(r, ZZGreaterEqual(1))),
     References("https://doi.org/10.1080%2F10652469.2017.1376193"))

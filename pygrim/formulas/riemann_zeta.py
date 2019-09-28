@@ -375,7 +375,7 @@ make_entry(ID("8b5ddb"),
     Formula(Equal(HolomorphicDomain(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), SetMinus(CC, Set(1)))))
 
 make_entry(ID("52c4ab"),
-    Formula(Equal(Poles(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set(1))))
+    Formula(Equal(Poles(RiemannZeta(s), ForElement(s, Union(CC, Set(UnsignedInfinity)))), Set(1))))
 
 make_entry(ID("fdb94b"),
     Formula(Equal(EssentialSingularities(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))
@@ -387,13 +387,13 @@ make_entry(ID("9a258f"),
     Formula(Equal(BranchCuts(RiemannZeta(s), s, Union(CC)), Set())))
 
 make_entry(ID("2e1ff3"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, RR)), Set(-(2*n), ForElement(n, ZZGreaterEqual(1))))))
+    Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, RR)), Set(-(2*n), ForElement(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("a78abc"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), And(Element(s, CC), LessEqual(0, Re(s), 1))), Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0))))))
+    Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, CC), LessEqual(0, Re(s), 1)), Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0))))))
 
 make_entry(ID("692e42"),
-    Formula(Equal(Zeros(RiemannZeta(s), Var(s), Element(s, CC)), Union(Set(-(2*n), ForElement(n, ZZGreaterEqual(1))),
+    Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, CC)), Union(Set(-(2*n), ForElement(n, ZZGreaterEqual(1))),
         Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0)))))))
 
 make_entry(ID("cbbf16"),
@@ -1313,7 +1313,7 @@ make_entry(ID("60c6da"),
 # Limit representations
 
 make_entry(ID("411f3b"),
-    Formula(Equal(StieltjesGamma(n, a), SequenceLimit(Brackets(Parentheses(Sum(Log(k+a)**n / (k+a), For(k, 0, N))) - Log(N+a)**(n+1)/(n+1)), Var(N), Infinity))),
+    Formula(Equal(StieltjesGamma(n, a), SequenceLimit(Brackets(Parentheses(Sum(Log(k+a)**n / (k+a), For(k, 0, N))) - Log(N+a)**(n+1)/(n+1)), For(N, Infinity)))),
     Variables(n, a),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a, ZZLessEqual(0)))))
 

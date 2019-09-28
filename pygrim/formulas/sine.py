@@ -251,19 +251,19 @@ make_entry(ID("056c0e"),
     References("Niven's theorem"))
 
 make_entry(ID("2f6818"),
-    Formula(Equal(Zeros(Brackets(Sin(z)), Var(z), Element(z, CC)), Set(ConstPi * n, ForElement(n, ZZ)))))
+    Formula(Equal(Zeros(Brackets(Sin(z)), ForElement(z, CC)), Set(ConstPi * n, ForElement(n, ZZ)))))
 
 make_entry(ID("c5bdcc"),
-    Formula(Equal(ArgMax(Brackets(Sin(x)), Var(x), Element(x, RR)), Set(ConstPi * (2 * n + Div(1,2)), ForElement(n, ZZ)))))
+    Formula(Equal(ArgMax(Brackets(Sin(x)), ForElement(x, RR)), Set(ConstPi * (2 * n + Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("ad04bd"),
-    Formula(Equal(ArgMin(Brackets(Sin(x)), Var(x), Element(x, RR)), Set(ConstPi * (2 * n - Div(1,2)), ForElement(n, ZZ)))))
+    Formula(Equal(ArgMin(Brackets(Sin(x)), ForElement(x, RR)), Set(ConstPi * (2 * n - Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("bfe28b"),
-    Formula(Equal(Maximum(Brackets(Sin(x)), Var(x), Element(x, RR)), 1)))
+    Formula(Equal(Maximum(Brackets(Sin(x)), ForElement(x, RR)), 1)))
 
 make_entry(ID("27766c"),
-    Formula(Equal(Minimum(Brackets(Sin(x)), Var(x), Element(x, RR)), -1)))
+    Formula(Equal(Minimum(Brackets(Sin(x)), ForElement(x, RR)), -1)))
 
 # Analytic properties
 
@@ -271,7 +271,7 @@ make_entry(ID("114913"),
     Formula(Equal(HolomorphicDomain(Sin(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
 
 make_entry(ID("f4cc9e"),
-    Formula(Equal(Poles(Sin(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+    Formula(Equal(Poles(Sin(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))
 
 make_entry(ID("6aa0bc"),
     Formula(Equal(EssentialSingularities(Sin(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))

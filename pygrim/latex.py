@@ -562,20 +562,29 @@ def tex_Var(head, args, **kwargs):
 
 @deftex_heads([Limit, SequenceLimit, RealLimit, LeftLimit, RightLimit, ComplexLimit, MeromorphicLimit, SequenceLimitInferior, SequenceLimitSuperior])
 def tex_Limit(head, args, **kwargs):
-    if len(args) == 3:
-        formula, var, point = args
+    if len(args) == 2:
+        formula, var = args
+        assert var.head() == For
+        var, point = var.args()
         cond = ""
+    elif len(args) == 3:
+        if args[1].head() == For:
+            formula, var, cond = args
+            var, point = var.args()
+        else:
+            formula, var, point = args
+            cond = ""
     elif len(args) == 4:
         formula, var, point, cond = args
+        assert var.head() == Var
         cond = ", " + cond.latex(in_small=True)
     else:
         raise ValueError
-    assert var.head() == Var
     var = var.latex()
     point = point.latex(in_small=True)
     formula = formula.latex()
-    if (not args[2].is_atom() and args[2].head() not in [Abs]):
-        formula = "\\left[ %s \\right]" % formula
+    #if (not args[2].is_atom() and args[2].head() not in [Abs]):
+    #    formula = "\\left[ %s \\right]" % formula
     if head == LeftLimit:
         s = "\\lim_{%s \\to {%s}^{-}%s} %s" % (var, point, cond, formula)
     elif head == RightLimit:
@@ -588,7 +597,7 @@ def tex_Limit(head, args, **kwargs):
         s = "\\lim_{%s \\to %s%s} %s" % (var, point, cond, formula)
     return s
 
-@deftex_heads([Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, UniqueZero, Solutions, UniqueSolution])
+@deftex_heads([Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique, Supremum, Infimum, Zeros, UniqueZero, Solutions, UniqueSolution, Poles])
 def tex_std_operator(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     opname = {Minimum:"\\min", Maximum:"\\max",
@@ -596,15 +605,28 @@ def tex_std_operator(head, args, **kwargs):
               ArgMax:"\\operatorname{arg\,max}",ArgMaxUnique:"\\operatorname{arg\,max*}",
               Infimum:"\\operatorname{inf}", Supremum:"\\operatorname{sup}",
               Zeros:"\\operatorname{zeros}\\,", UniqueZero:"\\operatorname{zero*}\\,",
+              Poles:"\\operatorname{poles}\\,",
               Solutions:"\\operatorname{solutions}\\,", UniqueSolution:"\\operatorname{solution*}\\,"}[head]
     if head in (Minimum, Maximum, Supremum, Infimum) and len(args) == 1:
         if args[0].head() == Set:
             return opname + " " + argstr[0]
         else:
             return "%s\\left(%s\\right)" % (opname, argstr[0])
-    assert len(args) == 3
-    formula, var, predicate = args
-    assert var.head() == Var
+    if len(args) == 2:
+        assert args[1].head() == ForElement
+        formula = args[0]
+        var, S = args[1].args()
+        predicate = Element(var, S)
+    elif len(args) == 3:
+        formula, var, predicate = args
+        assert var.head() in (For, ForElement)
+        if len(var.args()) == 2:
+            var, S = args[1].args()
+            predicate = And(Element(var, S), predicate)
+        else:
+            var, = args[1].args()
+    else:
+        raise ValueError
     #var = var.latex()
     if 0 and predicate.head() == And and len(predicate.args()) > 1:
         # katex does not support substack
@@ -811,21 +833,27 @@ def tex_PrimeSum_PrimeProduct(head, args, **kwargs):
 
 @deftex
 def tex_ComplexZeroMultiplicity(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    assert len(args) == 3
-    assert args[1].head() == Var
-    f, var, point = argstr
-    #if args[1] == args[2]:
+    assert len(args) == 2
+    assert args[1].head() == For
+    f, forarg = args
+    var, point = forarg.args()
+    f = f.latex(**kwargs)
+    var = var.latex(**kwargs)
+    point = point.latex(**kwargs)
+    #if var == point:
     #    return "\\mathop{\\operatorname{ord}}\\limits_{%s} %s" % (point, f)
     #else:
     return "\\mathop{\\operatorname{ord}}\\limits_{%s=%s} %s" % (var, point, f)
 
 @deftex
 def tex_Residue(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    assert len(args) == 3
-    assert args[1].head() == Var
-    f, var, point = argstr
+    assert len(args) == 2
+    assert args[1].head() == For
+    f, var = args
+    var, point = var.args()
+    f = f.latex(**kwargs)
+    var = var.latex(**kwargs)
+    point = point.latex(**kwargs)
     #if args[1] == args[2]:
     #    return "\\mathop{\\operatorname{Res}}\\limits_{%s} %s" % (point, f)
     #else:

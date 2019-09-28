@@ -152,7 +152,7 @@ make_entry(ID("28d158"),
     Formula(Equal(HolomorphicDomain(Exp(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
 
 make_entry(ID("0901a1"),
-    Formula(Equal(Poles(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set())))
+    Formula(Equal(Poles(Exp(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))
 
 make_entry(ID("be4b28"),
     Formula(Equal(EssentialSingularities(Exp(z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))))
@@ -164,7 +164,7 @@ make_entry(ID("b62d05"),
     Formula(Equal(BranchCuts(Exp(z), z, CC), Set())))
 
 make_entry(ID("bceb84"),
-    Formula(Equal(Zeros(Exp(z), Var(z), Element(z, CC)), Set())))
+    Formula(Equal(Zeros(Exp(z), ForElement(z, CC)), Set())))
 
 make_entry(ID("1635f5"),
     Formula(Equal(Exp(z), Sum(z**k/Factorial(k), For(k, 0, Infinity)))),

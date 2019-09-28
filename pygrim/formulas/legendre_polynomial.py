@@ -263,7 +263,7 @@ make_entry(ID("40fa59"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("d36fd7"),
-    Formula(Equal(Poles(LegendrePolynomial(n,z), z, Union(CC, Set(UnsignedInfinity))), Set(UnsignedInfinity))),
+    Formula(Equal(Poles(LegendrePolynomial(n,z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set(UnsignedInfinity))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -283,17 +283,17 @@ make_entry(ID("22a42f"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("415911"),
-    Formula(Equal(Cardinality(Zeros(LegendrePolynomial(n,z), Var(z), Element(z, CC))), n)),
+    Formula(Equal(Cardinality(Zeros(LegendrePolynomial(n,z), ForElement(z, CC))), n)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("df439e"),
-    Formula(Subset(Zeros(LegendrePolynomial(n,z), Var(z), Element(z, CC)), OpenInterval(-1,1))),
+    Formula(Subset(Zeros(LegendrePolynomial(n,z), ForElement(z, CC)), OpenInterval(-1,1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("0745ee"),
-    Formula(Equal(Zeros(LegendrePolynomial(n,z), Var(z), Element(z, CC)), Set(LegendrePolynomialZero(n,k), For(k, 1, n)))),
+    Formula(Equal(Zeros(LegendrePolynomial(n,z), ForElement(z, CC)), Set(LegendrePolynomialZero(n,k), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 

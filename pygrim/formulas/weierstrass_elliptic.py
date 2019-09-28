@@ -227,22 +227,22 @@ make_entry(ID("de9f42"),
 
 
 make_entry(ID("ae2c5d"),
-    Formula(Equal(Poles(WeierstrassP(z,tau), Var(z), CC), Lattice(1, tau))),
+    Formula(Equal(Poles(WeierstrassP(z,tau), ForElement(z, CC)), Lattice(1, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("6021ba"),
-    Formula(Equal(Poles(WeierstrassZeta(z,tau), Var(z), CC), Lattice(1, tau))),
+    Formula(Equal(Poles(WeierstrassZeta(z,tau), ForElement(z, CC)), Lattice(1, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1da705"),
-    Formula(Equal(Zeros(WeierstrassSigma(z,tau), Var(z), Element(z, CC)), Lattice(1, tau))),
+    Formula(Equal(Zeros(WeierstrassSigma(z,tau), ForElement(z, CC)), Lattice(1, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c6234b"),
-    Formula(Equal(Zeros(WeierstrassP(z,ConstI), Var(z), Element(z, CC)), Set(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, For(Tuple(m, n)), And(Element(m, ZZ), Element(n, ZZ))))))
+    Formula(Equal(Zeros(WeierstrassP(z,ConstI), ForElement(z, CC)), Set(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, For(Tuple(m, n)), And(Element(m, ZZ), Element(n, ZZ))))))
 
 make_entry(ID("69eb9b"),
     Formula(Equal(HolomorphicDomain(WeierstrassP(z,tau),z,CC), SetMinus(CC, Lattice(1, tau)))),
