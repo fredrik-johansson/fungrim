@@ -93,29 +93,3 @@ make_entry(ID("70c42b"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
-
-"""
-
-
-
-
-
-
-b19e3a
-633649
-549042
-020d39
-38b405
-
-
-def mzv(s,t):
-    S = 0.0
-    for n2 in range(1,1000):
-        for n1 in range(n2+1,1000):
-            S += 1.0 / (n1**s * n2**t)
-    return S
-
-
-
-
-"""
