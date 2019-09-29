@@ -712,6 +712,7 @@ Supremum Infimum
 Limit SequenceLimit RealLimit LeftLimit RightLimit ComplexLimit MeromorphicLimit
 SequenceLimitInferior SequenceLimitSuperior
 Derivative RealDerivative ComplexDerivative ComplexBranchDerivative MeromorphicDerivative
+IsHolomorphic IsMeromorphic
 Sum Product
 PrimeSum DivisorSum PrimeProduct DivisorProduct
 Integral
@@ -719,7 +720,7 @@ IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqu
 AsymptoticTo
 FormalGenerator
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
-HolomorphicDomain Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
+Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
 Residue
 Infinity UnsignedInfinity

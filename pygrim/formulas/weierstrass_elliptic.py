@@ -245,17 +245,17 @@ make_entry(ID("c6234b"),
     Formula(Equal(Zeros(WeierstrassP(z,ConstI), ForElement(z, CC)), Set(Parentheses(m+Div(1,2))+(n+Div(1,2))*ConstI, For(Tuple(m, n)), And(Element(m, ZZ), Element(n, ZZ))))))
 
 make_entry(ID("69eb9b"),
-    Formula(Equal(HolomorphicDomain(WeierstrassP(z,tau),z,CC), SetMinus(CC, Lattice(1, tau)))),
+    Formula(IsHolomorphic(WeierstrassP(z,tau), ForElement(z, SetMinus(CC, Lattice(1, tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("151e42"),
-    Formula(Equal(HolomorphicDomain(WeierstrassZeta(z,tau),z,CC), SetMinus(CC, Lattice(1, tau)))),
+    Formula(IsHolomorphic(WeierstrassZeta(z,tau), ForElement(z, SetMinus(CC, Lattice(1, tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("881aee"),
-    Formula(Equal(HolomorphicDomain(WeierstrassSigma(z,tau),z,CC), CC)),
+    Formula(IsHolomorphic(WeierstrassSigma(z,tau), ForElement(z, CC))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

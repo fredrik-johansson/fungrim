@@ -258,7 +258,7 @@ make_entry(ID("6476bd"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(r, ZZGreaterEqual(0)), Less(-1, x, 1))))
 
 make_entry(ID("40fa59"),
-    Formula(Equal(HolomorphicDomain(LegendrePolynomial(n,z), z, Union(CC, Set(UnsignedInfinity))), CC)),
+    Formula(IsHolomorphic(LegendrePolynomial(n,z), ForElement(z, CC))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

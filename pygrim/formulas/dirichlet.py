@@ -905,7 +905,7 @@ make_entry(ID("ea8c55"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("fe4692"),
-    Formula(Equal(HolomorphicDomain(DirichletL(s,chi), s, Union(CC, Set(UnsignedInfinity))), Cases(Tuple(SetMinus(CC, Set(1)), Equal(chi, DirichletCharacter(q, 1))), Tuple(CC, Otherwise)))),
+    Formula(IsHolomorphic(DirichletL(s,chi), ForElement(s, Cases(Tuple(SetMinus(CC, Set(1)), Equal(chi, DirichletCharacter(q, 1))), Tuple(CC, Otherwise))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 

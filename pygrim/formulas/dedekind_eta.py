@@ -265,7 +265,7 @@ make_entry(ID("df5f38"),
 # Analytic properties
 
 make_entry(ID("e06d87"),
-    Formula(Equal(HolomorphicDomain(DedekindEta(tau), tau, HH), HH)))
+    Formula(IsHolomorphic(DedekindEta(tau), ForElement(tau, HH))))
 
 make_entry(ID("04f4a0"),
     Formula(Equal(Poles(DedekindEta(tau), ForElement(tau, Union(HH, Set(UnsignedInfinity)))), Set())))

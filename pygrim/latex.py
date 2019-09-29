@@ -855,9 +855,9 @@ def tex_Residue(head, args, **kwargs):
     var = var.latex(**kwargs)
     point = point.latex(**kwargs)
     #if args[1] == args[2]:
-    #    return "\\mathop{\\operatorname{Res}}\\limits_{%s} %s" % (point, f)
+    #    return "\\mathop{\\operatorname{res}}\\limits_{%s} %s" % (point, f)
     #else:
-    return "\\mathop{\\operatorname{Res}}\\limits_{%s=%s} %s" % (var, point, f)
+    return "\\mathop{\\operatorname{res}}\\limits_{%s=%s} %s" % (var, point, f)
 
 @deftex
 def tex_CongruentMod(head, args, **kwargs):
@@ -1367,6 +1367,23 @@ def tex_Matrix(head, args, **kwargs):
         return s
     return Call(Matrix, args).latex(**kwargs)
 
+@deftex_heads([IsHolomorphic, IsMeromorphic])
+def tex_is_morphic(head, args, **kwargs):
+    func, forexpr = args
+    word = {IsHolomorphic:"holomorphic", IsMeromorphic:"meromorphic"}[head]
+    if forexpr.head() == For:
+        var, point = forexpr.args()
+        func = func.latex(**kwargs)
+        var = var.latex(**kwargs)
+        point = point.latex(**kwargs)
+        return "%s \\text{ is %s at } %s = %s" % (func, word, var, point)
+    elif forexpr.head() == ForElement:
+        var, domain = forexpr.args()
+        func = func.latex(**kwargs)
+        var = var.latex(**kwargs)
+        domain = domain.latex(**kwargs)
+        return "%s \\text{ is %s on } %s \\in %s" % (func, word, var, domain)
+    raise ValueError
 
 @deftex
 def tex_Description(head, args, **kwargs):

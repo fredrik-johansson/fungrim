@@ -268,7 +268,7 @@ make_entry(ID("27766c"),
 # Analytic properties
 
 make_entry(ID("114913"),
-    Formula(Equal(HolomorphicDomain(Sin(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
+    Formula(IsHolomorphic(Sin(z), ForElement(z, CC))))
 
 make_entry(ID("f4cc9e"),
     Formula(Equal(Poles(Sin(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))

@@ -261,7 +261,7 @@ make_entry(ID("6d0a95"),
 
 
 make_entry(ID("798c5d"),
-    Formula(Equal(HolomorphicDomain(GammaFunction(z), z, Union(CC, Set(UnsignedInfinity))), GammaFunction_domain)))
+    Formula(IsHolomorphic(GammaFunction(z), ForElement(z, GammaFunction_domain))))
 
 make_entry(ID("2870f0"),
     Formula(Equal(Poles(GammaFunction(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), ZZLessEqual(0))))

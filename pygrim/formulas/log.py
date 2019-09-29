@@ -167,7 +167,7 @@ make_entry(ID("2f1f7b"),
     Formula(Equal(Log(-1), ConstPi*ConstI)))
 
 make_entry(ID("4538ba"),
-    Formula(Equal(HolomorphicDomain(Log(z), z, Union(CC, Set(UnsignedInfinity))), Log_holomorphic_domain)))
+    Formula(IsHolomorphic(Log(z), ForElement(z, Log_holomorphic_domain))))
 
 make_entry(ID("c464e3"),
     Formula(Equal(Poles(Log(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))

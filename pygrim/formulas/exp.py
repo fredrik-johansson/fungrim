@@ -149,7 +149,7 @@ make_entry(ID("1fa6b7"),
     Assumptions(And(Element(z, CC), Element(n, ZZ))))
 
 make_entry(ID("28d158"),
-    Formula(Equal(HolomorphicDomain(Exp(z), z, Union(CC, Set(UnsignedInfinity))), CC)))
+    Formula(IsHolomorphic(Exp(z), ForElement(z, CC))))
 
 make_entry(ID("0901a1"),
     Formula(Equal(Poles(Exp(z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())))

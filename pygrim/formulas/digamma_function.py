@@ -16,6 +16,24 @@ def_Topic(
         "cf93bc",
         "a20761",
     ),
+    Section("Domain and singularities"),
+    Subsection("Digamma function"),
+    Entries(
+        "03d70f",
+        "a0845d",
+        "e7aef3",
+        "f29019",
+        "453c11",
+    ),
+    Subsection("Polygamma functions"),
+    Entries(
+        "9ee737",
+        "d0bba3",
+        "a8ab81",
+        "394cdc",
+        "d9403e",
+        "86333d",
+    ),
     Section("Specific values"),
     Description("Main topic: ", TopicReference("Specific values of the digamma function")),
     Subsection("Zeros"),
@@ -40,16 +58,12 @@ def_Topic(
         "5ce30b",
         "807c7d",
     ),
-    Section("Domain and singularities"),
+    Section("Zeros"),
     Entries(
-        "9ee737",
-        "03d70f",
-        "a0845d",
-        "d0bba3",
-        "a8ab81",
         "d0b65a",
-        "394cdc",
-        "86333d",
+        "6000d0",
+        "233814",
+        "fb9942",
     ),
     Section("Derivatives and differential equations"),
     Description("Related topic:", TopicReference("Gamma function")),
@@ -91,12 +105,6 @@ def_Topic(
         "d6fbc8",
         "ee3dc5",
         "a6bdf5",
-    ),
-    Section("Zeros"),
-    Entries(
-        "6000d0",
-        "233814",
-        "fb9942",
     ),
     Section("Functional equations"),
     Subsection("Recurrence relations"),
@@ -286,10 +294,7 @@ make_entry(ID("a20761"),
 
 # Domain and singularities
 
-make_entry(ID("9ee737"),
-    Formula(Equal(DigammaFunction(z), DigammaFunction(z,0))),
-    Variables(z),
-    Assumptions(Element(z, CC)))
+## Digamma function
 
 make_entry(ID("03d70f"),
     Formula(Implies(Element(x, SetMinus(RR, ZZLessEqual(0))), Element(DigammaFunction(x), RR))),
@@ -299,6 +304,22 @@ make_entry(ID("a0845d"),
     Formula(Implies(Element(z, SetMinus(CC, ZZLessEqual(0))), Element(DigammaFunction(z), CC))),
     Variables(z))
 
+make_entry(ID("e7aef3"),
+    Formula(IsHolomorphic(DigammaFunction(z), ForElement(z, SetMinus(CC, ZZLessEqual(0))))))
+
+make_entry(ID("f29019"),
+    Formula(IsMeromorphic(DigammaFunction(z), ForElement(z, CC))))
+
+make_entry(ID("453c11"),
+    Formula(Equal(Poles(DigammaFunction(z), ForElement(z, CC)), ZZLessEqual(0))))
+
+## Polygamma functions
+
+make_entry(ID("9ee737"),
+    Formula(Equal(DigammaFunction(z,0), DigammaFunction(z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
 make_entry(ID("d0bba3"),
     Formula(Implies(And(Element(m, ZZGreaterEqual(0)), Element(x, SetMinus(RR, ZZLessEqual(0)))), Element(DigammaFunction(x, m), RR))),
     Variables(x, m))
@@ -307,11 +328,13 @@ make_entry(ID("a8ab81"),
     Formula(Implies(And(Element(m, ZZGreaterEqual(0)), Element(z, SetMinus(CC, ZZLessEqual(0)))), Element(DigammaFunction(z, m), CC))),
     Variables(z, m))
 
-make_entry(ID("d0b65a"),
-    Formula(Implies(Element(n, ZZGreaterEqual(0)), Element(DigammaFunctionZero(n), RR))))
-
 make_entry(ID("394cdc"),
-    Formula(Equal(HolomorphicDomain(DigammaFunction(z, m), z, CC), SetMinus(CC, ZZLessEqual(0)))),
+    Formula(IsHolomorphic(DigammaFunction(z, m), ForElement(z, SetMinus(CC, ZZLessEqual(0))))),
+    Variables(m),
+    Assumptions(Element(m, ZZGreaterEqual(0))))
+
+make_entry(ID("d9403e"),
+    Formula(IsMeromorphic(DigammaFunction(z, m), ForElement(z, CC))),
     Variables(m),
     Assumptions(Element(m, ZZGreaterEqual(0))))
 
@@ -430,6 +453,9 @@ make_entry(ID("a6bdf5"),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
 # Zeros
+
+make_entry(ID("d0b65a"),
+    Formula(Implies(Element(n, ZZGreaterEqual(0)), Element(DigammaFunctionZero(n), RR))))
 
 make_entry(ID("6000d0"),
     Formula(Equal(Zeros(DigammaFunction(z), ForElement(z, CC)), Set(DigammaFunctionZero(n), ForElement(n, ZZGreaterEqual(0))))))

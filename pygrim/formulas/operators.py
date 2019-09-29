@@ -19,7 +19,6 @@ def_Topic(
         "d2714b",
         "5862bb",
         "f5ae93",
-        "231a99",
     ),
     Section("Extreme values"),
     Entries(
@@ -61,6 +60,13 @@ def_Topic(
         "2e4fbc",
         "0be77d",
         "fb2790",
+    ),
+    Section("Holomorphic functions"),
+    Entries(
+        "499bdf",
+        "0895b1",
+        "231a99",
+        "c54261",
     ),
 )
 
@@ -209,15 +215,6 @@ make_entry(ID("f5ae93"),
         Tuple(x, y), "satisfying", P(x, y), "and", Q(x,y), ", and similarly for any number", GreaterEqual(n, 2), "of variables."),
     description_var_xyz)
 
-
-make_entry(ID("231a99"),
-    SymbolDefinition(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), For(z, c)), "Multiplicity (order) of complex zero"),
-    Description(SourceForm(ComplexZeroMultiplicity(f(z), For(z, c))), ", rendered", ComplexZeroMultiplicity(f(z), For(z, c)),
-        ", gives the root multiplicity (order of vanishing) of", f(z), "at the point", Equal(z, c), "."),
-    Description("If", Unequal(f(c), 0), ", the multiplicity is zero."),
-    Description("It is required that", f(z), "is holomorphic and not identically zero in a neighborhood of", c, "."),
-    Description("The special expression", SourceForm(For(z, c)), "declares", SourceForm(z), "as a locally bound variable within the scope of the arguments to this operator."),
-)
 
 # Extreme values
 
@@ -510,3 +507,66 @@ make_entry(ID("fb2790"),
             "appearing in",  f(x), "and", g(x), "is understood as a new dummy variable. This dummy variable is evaluated at the value",
             SourceForm(x), "defined in the surrounding context only after the functions have been constructed."))
 
+# Holomorphic functions
+
+make_entry(ID("499bdf"),
+    SymbolDefinition(IsHolomorphic, IsHolomorphic(f(z), For(z, c)), "Holomorphic predicate"),
+    Description(SourceForm(IsHolomorphic(f(z), For(z, c))), ", rendered", IsHolomorphic(f(z), For(z, c)), ", represents the predicate",
+        "that", f(z), "is complex differentiable in some open neighborhood of the point", c, "."),
+    Description(SourceForm(IsHolomorphic(f(z), ForElement(z, S))), ", rendered", IsHolomorphic(f(z), ForElement(z, S)), ", represents the predicate",
+        "that", f(z), "is complex differentiable in some open neighborhood of every point in the set", S, "."),
+    Description("As a special case", IsHolomorphic(f(z), For(z, UnsignedInfinity)), " is equivalent to", IsHolomorphic(f(1/z), For(z, 0)), "."),
+    Description("As a special case", IsHolomorphic(f(z), For(z, ConstI*Infinity)), " represents the predicate that",
+        f(z), "is a periodic function on the upper half plane that is holomorphic at infinity (in the sense of modular function theory)"))
+
+make_entry(ID("0895b1"),
+    SymbolDefinition(IsMeromorphic, IsMeromorphic(f(z), For(z, c)), "Meromorphic predicate"),
+    Description(SourceForm(IsMeromorphic(f(z), For(z, c))), ", rendered", IsMeromorphic(f(z), For(z, c)), ", represents the predicate",
+        "that", f(z), "is meromorphic in some open neighborhood of the point", c, "."),
+    Description(SourceForm(IsMeromorphic(f(z), ForElement(z, S))), ", rendered", IsMeromorphic(f(z), ForElement(z, S)), ", represents the predicate",
+        "that", f(z), "is meromorphic in some open neighborhood of every point in the set", S, "."),
+    Description("As a special case", IsMeromorphic(f(z), For(z, UnsignedInfinity)), " is equivalent to", IsMeromorphic(f(1/z), For(z, 0)), "."),
+    Description("As a special case", IsMeromorphic(f(z), For(z, ConstI*Infinity)), " represents the predicate that",
+        f(z), "is a periodic function on the upper half plane that is meromorphic at infinity (in the sense of modular function theory)"))
+
+make_entry(ID("231a99"),
+    SymbolDefinition(ComplexZeroMultiplicity, ComplexZeroMultiplicity(f(z), For(z, c)), "Multiplicity (order) of complex zero"),
+    Description(SourceForm(ComplexZeroMultiplicity(f(z), For(z, c))), ", rendered", ComplexZeroMultiplicity(f(z), For(z, c)),
+        ", gives the root multiplicity (order of vanishing) of", f(z), "at the point", Equal(z, c), "."),
+    Description("If", f, "is holomorphic at", c, "and", Unequal(f(c), 0), ", the multiplicity is zero."),
+    Description("If", Equal(z, c), "is a pole of", f(z), ", returns", -n, "where", n, "is the order of the pole."),
+    Description("In other words, this operator returns the order of the first nonzero term in the Laurent series of", f(z), "at", Equal(z, c), "."),
+    Description("In the special case where", Equal(f(z), 0), "in a neighborhood of", c, ", the order is", Infinity, "."),
+    Description("The result is undefined if", f(z), "is not meromorphic at", c, "."),
+    Description("The special expression", SourceForm(For(z, c)), "declares", SourceForm(z), "as a locally bound variable within the scope of the arguments to this operator."),
+)
+
+make_entry(ID("c54261"),
+    SymbolDefinition(Residue, Residue(f(z), For(z, c)), "Complex residue"),
+    Description(SourceForm(Residue(f(z), For(z, c))), ", rendered", Residue(f(z), For(z, c)),
+        ", gives the complex residue of", f(z), "at the point", Equal(z, c), "."))
+
+"""
+
+
+
+a8925e
+099c19
+72f0a1
+35da87
+0ebc47
+7e1857
+6b8db1
+ce95c3
+2a225b
+a18ad5
+7b8397
+e8d4fd
+
+
+IsHolomorphic(f(z), For(z, a))
+IsHolomorphic(f(z), ForElement(z, S))
+
+IsMeromorphic(f(z), For(z, a))
+IsMeromorphic(f(z), ForElement(z, S))
+"""

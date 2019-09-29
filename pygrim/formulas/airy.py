@@ -129,7 +129,7 @@ make_entry(ID("4d65e5"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("def37e"),
-    Formula(Equal(HolomorphicDomain(C*AiryAi(z) + D*AiryBi(z), z, Union(CC, Set(UnsignedInfinity))), CC)),
+    Formula(IsHolomorphic(C*AiryAi(z) + D*AiryBi(z), ForElement(z, CC))),
     Variables(C, D),
     Assumptions(And(Element(C, CC), Element(D, CC), Not(And(Equal(C,0), Equal(D,0))))))
 

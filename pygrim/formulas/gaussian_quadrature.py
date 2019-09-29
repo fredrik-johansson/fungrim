@@ -24,7 +24,7 @@ make_entry(ID("47b181"),
         64*M/(15*(1-rho**-2)*rho**(2*n))), Equal(M, Supremum(Abs(f(t)), ForElement(t, BernsteinEllipse(rho)))))),
     Variables(f, n, rho),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(rho, RR), Greater(rho, 1),
-        Subset(InteriorClosure(BernsteinEllipse(rho)), HolomorphicDomain(f(z), z, CC)))),
+        IsHolomorphic(f(z), ForElement(z, InteriorClosure(BernsteinEllipse(rho)))))),
     References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67-87. DOI:10.1137/060659831"))
 
 make_entry(ID("545987"),
@@ -32,6 +32,6 @@ make_entry(ID("545987"),
         (Abs(b-a)/2) * (64*M/(15*(1-rho**-2)*rho**(2*n)))), Equal(M, Supremum(Abs(f((b-a)/2 * t + (a+b)/2)), ForElement(t, BernsteinEllipse(rho)))))),
     Variables(f, a, b, n, rho),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(n, ZZGreaterEqual(1)), Element(rho, RR), Greater(rho, 1),
-        Subset(InteriorClosure(BernsteinEllipse(rho)), HolomorphicDomain(f(z), z, CC)))),
+        IsHolomorphic(f(z), ForElement(z, Subset(InteriorClosure(BernsteinEllipse(rho))))))),
     References("L. N. Trefethen, Is Gauss Quadrature Better than Clenshaw-Curtis? SIAM Rev., 50(1), 67-87. DOI:10.1137/060659831"))
 

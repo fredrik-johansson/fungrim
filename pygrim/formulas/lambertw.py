@@ -235,10 +235,10 @@ make_entry(ID("6d936e"),
 # Analytic properties
 
 make_entry(ID("0d3b91"),
-    Formula(Equal(HolomorphicDomain(LambertW(0,z), z, Union(CC, Set(UnsignedInfinity))), SetMinus(CC, OpenClosedInterval(-Infinity, -Exp(-1))))))
+    Formula(IsHolomorphic(LambertW(0,z), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, -Exp(-1)))))))
 
 make_entry(ID("2caf78"),
-    Formula(Equal(HolomorphicDomain(LambertW(k,z), z, Union(CC, Set(UnsignedInfinity))), SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+    Formula(IsHolomorphic(LambertW(k,z), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 

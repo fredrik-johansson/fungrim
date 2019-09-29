@@ -26,7 +26,7 @@ make_entry(ID("1b1ec5"),
     Formula(Equal(f(z+x), Sum(ComplexDerivative(f(z), For(z, z, k)) / Factorial(k) * x**k, For(k, 0, Infinity)))),
     Variables(f, z, x),
     Assumptions(And(Element(z, CC), Element(x, CC),
-        Subset(ClosedDisk(z, Abs(x)), HolomorphicDomain(f(z), z, CC)))))
+        IsHolomorphic(f(t), ForElement(t, ClosedDisk(z, Abs(x)))))))
 
 make_entry(ID("b6582a"),
     Formula(Where(LessEqual(Abs(ComplexDerivative(f(z), For(z, z, k)) / Factorial(k)), C / R**k),
@@ -34,7 +34,7 @@ make_entry(ID("b6582a"),
     Variables(f, z, k, R),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)),
         Element(R, RR), Greater(R, 0),
-        Subset(ClosedDisk(z, R), HolomorphicDomain(f(z), z, CC)))))
+        IsHolomorphic(f(t), ForElement(t, Subset(ClosedDisk(z, R)))))))
 
 make_entry(ID("78bb08"),
     Formula(Where(LessEqual(Abs(f(z+x) - Sum(ComplexDerivative(f(z), For(z, z, k)) / Factorial(k) * x**k, For(k, 0, N - 1))), C * D**N / (1 - D)),
@@ -42,11 +42,11 @@ make_entry(ID("78bb08"),
     Variables(f, z, x, N, R),
     Assumptions(And(Element(z, CC), Element(x, CC), Element(N, ZZGreaterEqual(1)),
         Element(R, RR), Less(Abs(x), R),
-        Subset(ClosedDisk(z, R), HolomorphicDomain(f(z), z, CC)))))
+        IsHolomorphic(f(t), ForElement(t, Subset(ClosedDisk(z, R)))))))
 
 EM_rem = (f(N) + f(U))/2 + Sum(BernoulliB(2*k)/Factorial(2*k) * (ComplexDerivative(f(t), For(t, U, 2*k-1)) - ComplexDerivative(f(t), For(t, N, 2*k-1))), For(k, 1, M))
 EM_tail = Integral(BernoulliPolynomial(2*M,t-Floor(t))/Factorial(2*M) * ComplexDerivative(f(t), For(t, t, 2*M)), For(t, N, U))
-EM_assumptions = And(Element(N, ZZ), Element(U, ZZ), LessEqual(N, U), Element(M, ZZGreaterEqual(1)), Subset(ClosedInterval(N, U), HolomorphicDomain(f(t), t, CC)))
+EM_assumptions = And(Element(N, ZZ), Element(U, ZZ), LessEqual(N, U), Element(M, ZZGreaterEqual(1)), IsHolomorphic(f(t), ForElement(t, Subset(ClosedInterval(N, U)))))
 
 make_entry(ID("ce2272"),
     Formula(Equal(Sum(f(k), For(k, N, U)), Integral(f(t), For(t, N, U)) + EM_rem + EM_tail)),

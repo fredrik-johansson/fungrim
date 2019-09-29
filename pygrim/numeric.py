@@ -17,7 +17,7 @@ dangerous_operators = set([
     AsymptoticTo,
     FormalGenerator,
     FormalPowerSeries, FormalLaurentSeries, SeriesCoefficient,
-    HolomorphicDomain, Poles, BranchPoints, BranchCuts, EssentialSingularities, Zeros, UniqueZero, AnalyticContinuation,
+    Poles, BranchPoints, BranchCuts, EssentialSingularities, Zeros, UniqueZero, AnalyticContinuation,
     ComplexZeroMultiplicity,
     Residue,
     QSeriesCoefficient, EqualQSeriesEllipsis])

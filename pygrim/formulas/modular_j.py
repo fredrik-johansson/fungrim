@@ -163,7 +163,7 @@ make_entry(ID("348b26"),
 
 
 make_entry(ID("27f9d2"),
-    Formula(Equal(HolomorphicDomain(ModularJ(tau), tau, HH), HH)))
+    Formula(IsHolomorphic(ModularJ(tau), ForElement(tau, HH))))
 
 make_entry(ID("ea3e3c"),
     Formula(Equal(Zeros(ModularJ(tau), ForElement(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))

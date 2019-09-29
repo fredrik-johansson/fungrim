@@ -372,7 +372,7 @@ make_entry(ID("69348a"),
     Assumptions(And(Element(s, CC), Unequal(s, 1))))
 
 make_entry(ID("8b5ddb"),
-    Formula(Equal(HolomorphicDomain(RiemannZeta(s), s, Union(CC, Set(UnsignedInfinity))), SetMinus(CC, Set(1)))))
+    Formula(IsHolomorphic(RiemannZeta(s), ForElement(s, SetMinus(CC, Set(1))))))
 
 make_entry(ID("52c4ab"),
     Formula(Equal(Poles(RiemannZeta(s), ForElement(s, Union(CC, Set(UnsignedInfinity)))), Set(1))))
