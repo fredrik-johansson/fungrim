@@ -160,6 +160,7 @@ symbol_latex_table = {
     ConstE: "e",
     ConstGamma: "\\gamma",
     ConstCatalan: "G",
+    ConstGlaisher: "A",
     GoldenRatio: "\\varphi",
     Infinity: "\\infty",
     UnsignedInfinity: "{\\tilde \\infty}",
@@ -268,6 +269,8 @@ symbol_latex_table = {
     RiemannXi: "\\xi",
     LerchPhi: "\\Phi",
     MultiZetaValue: "\\zeta",
+    BarnesG: "G",
+    LogBarnesG: "\\log G",
 }
 
 def deftex(f):

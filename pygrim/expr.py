@@ -730,7 +730,7 @@ Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
-ConstPi ConstE ConstGamma ConstI GoldenRatio ConstCatalan
+ConstPi ConstE ConstGamma ConstI GoldenRatio ConstCatalan ConstGlaisher
 Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction DigammaFunctionZero PolyGamma
 RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
@@ -782,6 +782,7 @@ EisensteinG EisensteinE
 EllipticK EllipticE
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
+BarnesG LogBarnesG
 SloaneA
 """)
 

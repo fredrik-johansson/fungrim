@@ -137,6 +137,8 @@ class ArbNumericalEvaluation(object):
                     return (1+arb(5).sqrt())/2
                 if expr == ConstCatalan:
                     return arb.const_catalan()
+                if expr == ConstGlaisher:
+                    return arb.const_glaisher()
                 stack = kwargs.get("symbol_stack")
                 if stack is not None:
                     for (sym, val) in reversed(stack):

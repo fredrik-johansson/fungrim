@@ -201,6 +201,21 @@ def plots(outdir):
         if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
         raise ValueError
 
+    xrayplot(lambda z: complex(acb(z).barnes_g()), (-4,6), (-5,5), 400, "barnes_g", xout=0.1, yout=0.1, xtks=([-4,-2,0,2,4,6],), )
+
+    def lgamma_decor():
+        branchcutline(0, -1, offset=0.07)
+        branchcutline(-1, -2, offset=0.07)
+        branchcutline(-2, -3, offset=0.07)
+        branchcutline(-3, -4, offset=0.07)
+        branchcutline(-4, -5, offset=0.07)
+
+    xrayplot(lambda z: complex(acb(z).log_barnes_g()), (-4,6), (-5,5), 400, "log_barnes_g", xout=0.1, yout=0.1,
+        decorations=lgamma_decor, xtks=([-4,-2,0,2,4,6],), )
+
+    xrayplot(lambda z: complex(acb(z).lgamma()), (-5,5), (-5,5), 400, "log_gamma", xout=0.1, yout=0.1,
+        decorations=lgamma_decor)
+
     xrayplot(lambda z: complex(acb(z).digamma()), (-5,5), (-5,5), 400, "digamma", xout=0.1, yout=0.1)
 
     xrayplot(lambda z: complex(acb(z).polygamma(1)), (-5,5), (-5,5), 400, "trigamma", xout=0.1, yout=0.1)
@@ -305,16 +320,6 @@ def plots(outdir):
     xrayplot(lambda z: complex(acb(z).airy_bi()), (-6,6), (-6,6), 400, "airy_bi", xout=0.1, yout=0.1)
 
     xrayplot(lambda z: complex(acb(z).erf()), (-4,4), (-4,4), 400, "erf", xout=0.1, yout=0.1)
-
-    def lgamma_decor():
-        branchcutline(0, -1, offset=0.07)
-        branchcutline(-1, -2, offset=0.07)
-        branchcutline(-2, -3, offset=0.07)
-        branchcutline(-3, -4, offset=0.07)
-        branchcutline(-4, -5, offset=0.07)
-
-    xrayplot(lambda z: complex(acb(z).lgamma()), (-5,5), (-5,5), 400, "log_gamma", xout=0.1, yout=0.1,
-        decorations=lgamma_decor)
 
     def atan_decor():
         branchcutline(1j, 10j)
