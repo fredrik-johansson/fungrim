@@ -144,7 +144,7 @@ make_entry(ID("c6038c"),
 
 
 make_entry(ID("b0f293"),
-    Image(Description("X-ray of", Gamma(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+    Image(Description("X-ray of", GammaFunction(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
         ImageSource("xray_gamma")),
     description_xray,
     )

@@ -782,7 +782,7 @@ EisensteinG EisensteinE
 EllipticK EllipticE
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
-BarnesG LogBarnesG
+BarnesG LogBarnesG LogBarnesGRemainder
 SloaneA
 """)
 

@@ -399,9 +399,8 @@ make_entry(ID("b5a382"),
     Assumptions(And(Element(N, ZZGreaterEqual(0)), Element(n, ZZBetween(0, N)))))
 
 # todo: printing
-# also: Barnes G-function
 make_entry(ID("dc6806"),
-    Formula(Equal(Det(Matrix(BellNumber(i+j), For(i, 0, n), For(j, 0, n))), Product(Factorial(k), For(k, 1, n)))),
+    Formula(Equal(Det(Matrix(BellNumber(i+j), For(i, 0, n), For(j, 0, n))), Product(Factorial(k), For(k, 1, n)), BarnesG(n+2))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
