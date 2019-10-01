@@ -184,12 +184,12 @@ make_entry(ID("b5ded1"),
     Formula(Equal(BranchCuts(Log(z), z, CC), Set(Log_branch_cut))))
 
 make_entry(ID("ed6590"),
-    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-z) + ConstPi*ConstI)),
+    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) + ConstPi*ConstI)),
     Variables(a,b),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Im(a), 0), Less(Im(b), 0), Greater(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
 make_entry(ID("c1bee1"),
-    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-z) - ConstPi*ConstI)),
+    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) - ConstPi*ConstI)),
     Variables(a,b),
     Assumptions(And(Element(a, CC), Element(b, CC), Less(Im(a), 0), Greater(Im(b), 0), Less(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 

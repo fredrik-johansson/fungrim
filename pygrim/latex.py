@@ -945,7 +945,8 @@ def tex_AnalyticContinuation(head, args, **kwargs):
     expr = expr.latex(**kwargs)
     var = var.latex(**kwargs)
     path = path.latex(**kwargs)
-    return "\\text{Continuation of } %s, \, %s : %s" % (expr, var, path)
+    #return "\\text{Continuation of } %s, \\, %s : %s" % (expr, var, path)
+    return "\\mathop{\\text{Continuation}}\\limits_{\\displaystyle{%s: %s}} \\, %s" % (var, path, expr)
 
 @deftex
 def tex_RealBall(head, args, **kwargs):
