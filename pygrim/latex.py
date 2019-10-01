@@ -902,9 +902,9 @@ def tex_Range(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     if args[0].is_integer():
-        return "\{%s, %s, \ldots %s\}" % (argstr[0], args[0]._integer + 1, argstr[1])
+        return r"\{%s, %s, \ldots, %s\}" % (argstr[0], args[0]._integer + 1, argstr[1])
     else:
-        return "\{%s, %s + 1, \ldots %s\}" % (argstr[0], argstr[0], argstr[1])
+        return r"\{%s, %s + 1, \ldots, %s\}" % (argstr[0], argstr[0], argstr[1])
 
 @deftex_heads([ClosedInterval, OpenInterval, ClosedOpenInterval, OpenClosedInterval])
 def tex_Interval(head, args, **kwargs):
@@ -922,6 +922,30 @@ def tex_Interval(head, args, **kwargs):
         return "\\left[%s, %s\\right)" % (arg0, arg1)
     if head == OpenClosedInterval:
         return "\\left(%s, %s\\right]" % (arg0, arg1)
+
+@deftex
+def tex_CurvePath(head, args, **kwargs):
+    argstr = [arg.latex(**kwargs) for arg in args]
+    assert len(args) == 2
+    var, a, b = args[1].args()
+    var = var.latex()
+    a = a.latex(in_small=True)
+    b = b.latex(in_small=True)
+    return "\\left(%s,\, %s : %s \\rightsquigarrow %s\\right)" % (argstr[0], var, a, b)
+
+@deftex
+def tex_AnalyticContinuation(head, args, **kwargs):
+    assert len(args) == 2
+    expr, forexpr = args
+    if len(forexpr.args()) == 3:
+        var, a, b = forexpr.args()
+        path = Path(a, b)
+    else:
+        var, path = forexpr.args()
+    expr = expr.latex(**kwargs)
+    var = var.latex(**kwargs)
+    path = path.latex(**kwargs)
+    return "\\text{Continuation of } %s, \, %s : %s" % (expr, var, path)
 
 @deftex
 def tex_RealBall(head, args, **kwargs):

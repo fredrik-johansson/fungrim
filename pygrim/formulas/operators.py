@@ -68,6 +68,13 @@ def_Topic(
         "231a99",
         "c54261",
     ),
+    Section("Paths and analytic continuation"),
+    Entries(
+        "4d0e14",
+        "bf8f37",
+        "457aaa",
+        "a2189a",
+    ),
 )
 
 # Sums and products
@@ -546,27 +553,51 @@ make_entry(ID("c54261"),
     Description(SourceForm(Residue(f(z), For(z, c))), ", rendered", Residue(f(z), For(z, c)),
         ", gives the complex residue of", f(z), "at the point", Equal(z, c), "."))
 
-"""
+# Paths and analytic continuation
+
+# todo: Cartesian powers
+make_entry(ID("4d0e14"),
+    SymbolDefinition(Path, Path(a, b, c), "Line path"),
+    Description("This object represents the path formed by connecting the given points or paths by line segments. ",
+        "A path is a formal object, semantically different from a set of points: for a path object, the direction is significant, "
+        "and it is undefined whether a path segment corresponds to an open interval or a closed interval between the points.",
+        "The typical application is to represent a path of integration."),
+    CodeExample(Path(1, -1), "Represents the path going left from", 1, "to", -1, "."),
+    CodeExample(Path(a, Path(b, c)), "Equivalent to", SourceForm(Path(a, b, c)), "."),
+    CodeExample(Path(1, ConstI, -1, -ConstI, 1),
+        "Represents a diamond-shaped loop around the origin in the counterclockwise direction."),
+    CodeExample(Path(-(ConstI*Infinity), ConstI*Infinity),
+        "Represents the imaginary axis traversed upwards."),
+    CodeExample(Path(1, Exp(ConstPi*ConstI/4)*Infinity),
+        "Represents the ray from", 1, "to infinity along a 45 degree angle."),
+    CodeExample(Path(Tuple(2, 1), Tuple(0, 0)),
+        "Represents the line segment from", Tuple(2, 1), "to the origin in", Pow(RR, 2), "."))
+
+make_entry(ID("bf8f37"),
+    SymbolDefinition(CurvePath, CurvePath(f(t), For(t, a, b)), "Path along a curve"),
+    CodeExample(CurvePath(f(t), For(t, a, b)), "Represents the path traced by", f(t), "as", t, "follows the path", Path(a, b), "."),
+    CodeExample(CurvePath(R*Exp(ConstI*t), For(t, 0, 2*ConstPi)), "Represents the circular path counterclockwise around the origin, starting at", R, "."),
+    CodeExample(CurvePath(R*Exp(ConstI*t), For(t, 0, -(2*ConstPi))), "Represents the circular path clockwise around the origin, starting at", R, "."),
+    CodeExample(Path(+Infinity, CurvePath(Exp(ConstI*t), For(t, ConstPi/2, 3*ConstPi/2)), +Infinity), "Represents the Hankel contour starting at",
+        +Infinity, ", moving along a straight line above the real axis to", i, ", moving in a half-circle around the origin to", -i,
+        ", and returning to", +Infinity, "along a straight line below the real axis."),
+    )
+
+make_entry(ID("457aaa"),
+    SymbolDefinition(AnalyticContinuation, AnalyticContinuation(f(z), For(z, a, b)), "Analytic continuation"),
+    Description("Represents the value (or limiting value)", g(b), "where", g(z), "is the unique analytic continuation along the path from", a, "to", b,
+        "for the function initially represented by", f(z), ". ",
+        "It is assumed that the expression", f(z), "represents a holomorphic function of", z, "in a neighborhood of the initial point", a, ". ",
+        "More generally, ", a, "is allowed to be a pole, branch point or even an essential singularity as long as", f(z), "is holomorphic locally in a cone around",
+        "the path radiating from", a, ". ",
+        "Infinite endpoints are allowed, with the obvious interpretation. "
+        "Analytic continuation paths are allowed to pass through (isolated) poles of the analytically continued function. ",
+        "The path is not allowed to pass through intermediate branch points, but may end at a branch point."),
+    CodeExample(AnalyticContinuation(f(z), For(z, a, b)), "Represents the analytic continuation of", f(z), "along the straight-line path from", a, "to", b, "."),
+    CodeExample(AnalyticContinuation(f(z), For(z, P)), "Represents the analytic continuation of", f(z), "along the path object", P, "."),
+    CodeExample(AnalyticContinuation(f(z), For(z, Path(a, b, c))), "Represents the analytic continuation of", f(z), "along the straight-line path", Path(a, b, c), "."),
+    CodeExample(AnalyticContinuation(f(z), For(z, CurvePath(Exp(ConstI*t), For(t, 0, theta)))),
+        "Represents the analytic continuation of", f(z), "along the circular path starting at", Equal(z, 1), "and rotating ",
+        "counterclockwise by the phase", theta, "."))
 
 
-
-a8925e
-099c19
-72f0a1
-35da87
-0ebc47
-7e1857
-6b8db1
-ce95c3
-2a225b
-a18ad5
-7b8397
-e8d4fd
-
-
-IsHolomorphic(f(z), For(z, a))
-IsHolomorphic(f(z), ForElement(z, S))
-
-IsMeromorphic(f(z), For(z, a))
-IsMeromorphic(f(z), ForElement(z, S))
-"""

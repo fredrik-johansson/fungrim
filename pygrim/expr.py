@@ -715,7 +715,7 @@ Rings CommutativeRings Fields
 PP ZZ QQ RR CC HH AlgebraicNumbers
 ZZGreaterEqual ZZLessEqual Range
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
-Path
+Path CurvePath
 RealBall
 UnitCircle
 OpenDisk ClosedDisk BernsteinEllipse

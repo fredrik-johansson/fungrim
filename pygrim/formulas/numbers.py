@@ -50,8 +50,8 @@ def_Topic(
         "3fe68f",
         "b2162a",
         "ed302a",
-        "4d0e14",
     ),
+
 )
 
 make_entry(ID("298e9e"),
@@ -171,22 +171,4 @@ make_entry(ID("ed302a"),
         SourceForm(OpenClosedInterval(a, b)), "should only be used with extended real number", a, "and", b,
         "as endpoints, but line segments in the complex plane can be constructed by applying arithmetic operations to a set of real numbers (acting pointwise)."),
     CodeExample(OpenClosedInterval(1, 4) + OpenClosedInterval(0, 1) * ConstI, "Represents a rectangle in the complex plane. "))
-
-# todo: Cartesian powers
-make_entry(ID("4d0e14"),
-    SymbolDefinition(Path, Path(a, b, c), "Line path"),
-    Description("This object represents the path formed by connecting the given points or paths by line segments. ",
-        "A path is a formal object, semantically different from a set of points: for a path object, the direction is significant, "
-        "and it is undefined whether a path segment corresponds to an open interval or a closed interval between the points.",
-        "The typical application is to represent a path of integration."),
-    CodeExample(Path(1, -1), "Represents the path going left from", 1, "to", -1, "."),
-    CodeExample(Path(a, Path(b, c)), "Equivalent to", SourceForm(Path(a, b, c)), "."),
-    CodeExample(Path(1, ConstI, -1, -ConstI, 1),
-        "Represents a diamond-shaped loop around the origin in the counterclockwise direction."),
-    CodeExample(Path(-(ConstI*Infinity), ConstI*Infinity),
-        "Represents the imaginary axis traversed upwards."),
-    CodeExample(Path(1, Exp(ConstPi*ConstI/4)*Infinity),
-        "Represents the ray from", 1, "to infinity along a 45 degree angle."),
-    CodeExample(Path(Tuple(2, 1), Tuple(0, 0)),
-        "Represents the line segment from", Tuple(2, 1), "to the origin in", Pow(RR, 2), "."))
 
