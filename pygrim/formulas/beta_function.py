@@ -155,13 +155,13 @@ make_entry(ID("bb4f41"),
     Assumptions(And(Element(m, ZZGreaterEqual(1)), Element(n, ZZGreaterEqual(1)))))
 
 make_entry(ID("72db94"),
-    Formula(Equal(BetaFunction(n, b), Cases(Tuple(UnsignedInfinity, Element(-b, ZZBetween(0, n-1))),
+    Formula(Equal(BetaFunction(n, b), Cases(Tuple(UnsignedInfinity, Element(-b, Range(0, n-1))),
             Tuple(1/(n * Binomial(n+b-1,n)), Otherwise)))),
     Variables(n, b),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(b, CC))))
 
 make_entry(ID("a7dbf6"),
-    Formula(Equal(BetaFunction(-n, b), Cases(Tuple((-1)**b / (b * Binomial(n,b)), Element(b, ZZBetween(1, n))), Tuple(UnsignedInfinity, Otherwise)))),
+    Formula(Equal(BetaFunction(-n, b), Cases(Tuple((-1)**b / (b * Binomial(n,b)), Element(b, Range(1, n))), Tuple(UnsignedInfinity, Otherwise)))),
     Variables(n, b),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC))))
 

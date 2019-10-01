@@ -95,7 +95,7 @@ make_entry(ID("a61f01"),
 make_entry(ID("dec042"),
     Formula(Equal(Hypergeometric1F1(-n,b,z), Sum(RisingFactorial(-n,k)/RisingFactorial(b,k) * (z**k / Factorial(k)), For(k, 0, n)))),
     Variables(n,b,z),
-    #Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, ZZBetween(-n+1, 0))), Element(z,CC))))
+    #Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, SetMinus(CC, Range(-n+1, 0))), Element(z,CC))))
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
 
 make_entry(ID("70111e"),

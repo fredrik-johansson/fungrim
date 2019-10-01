@@ -570,7 +570,7 @@ make_entry(ID("3fe553"),
     Formula(Equal(DigammaFunction(Div(p,q)),
         -ConstGamma - Log(2*q) - ConstPi/2 * Cot(ConstPi * p / q) + 2 * Sum(Cos((2*ConstPi*k*p)/q) * Log(Sin(ConstPi*k/q)), For(k, 1, Floor((q-1)/2))))),
     Variables(p, q),
-    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(p, ZZBetween(1, q-1)))))
+    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(p, Range(1, q-1)))))
 
 ## Polygamma functions at integers and simple fractions
 
@@ -785,17 +785,17 @@ make_entry(ID("1e47db"),
 make_entry(ID("458a97"),
     Formula(Equal(Sum(DigammaFunction(k) * Exp(2*ConstPi*r*k*ConstI/n), For(k, 1, n)), n*Log(1-Exp(2*ConstPi*r*ConstI/n)))),
     Variables(r, n),
-    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, ZZBetween(1, n-1)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("739819"),
     Formula(Equal(Sum(DigammaFunction(k) * Cos(2*ConstPi*r*k/n), For(k, 1, n)), n*Log(2*Sin(ConstPi*r/n)))),
     Variables(r, n),
-    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, ZZBetween(1, n-1)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("bb9eb6"),
     Formula(Equal(Sum(DigammaFunction(k) * Sin(2*ConstPi*r*k/n), For(k, 1, n)), ConstPi*(r-n/2))),
     Variables(r, n),
-    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, ZZBetween(1, n-1)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 ## Infinite sums over zeros
 
@@ -934,5 +934,5 @@ make_entry(ID("b7f13b"),
 make_entry(ID("19e67f"),
     Formula(Equal(Sum(1 / (n+a), For(n, A, B)), DigammaFunction(a+B+1) - DigammaFunction(a+A))),
     Variables(a, A, B),
-    Assumptions(And(Element(a, CC), Element(A, ZZ), Element(B, ZZ), LessEqual(A,B), NotElement(-a, ZZBetween(A,B)))))
+    Assumptions(And(Element(a, CC), Element(A, ZZ), Element(B, ZZ), LessEqual(A,B), NotElement(-a, Range(A,B)))))
 

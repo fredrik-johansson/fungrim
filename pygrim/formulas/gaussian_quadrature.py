@@ -17,7 +17,7 @@ def_Topic(
 make_entry(ID("ea4754"),
     Formula(Equal(GaussLegendreWeight(n, k), 2 / ((1 - LegendrePolynomialZero(n,k)**2) * ComplexDerivative(LegendrePolynomial(n, t), For(t, LegendrePolynomialZero(n, k), 1))**2))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZBetween(1, n)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, Range(1, n)))))
 
 make_entry(ID("47b181"),
     Formula(Where(LessEqual(Abs(Integral(f(t), For(t, -1, 1)) - Sum(GaussLegendreWeight(n,k) * f(LegendrePolynomialZero(n,k)), For(k, 1, n))),

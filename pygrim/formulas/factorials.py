@@ -345,12 +345,12 @@ make_entry(ID("4f20ff"),
 make_entry(ID("2362af"),
     Formula(Equal(Binomial(n, k), Binomial(n, n-k))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZBetween(0, n)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, Range(0, n)))))
 
 make_entry(ID("081188"),
     Formula(Equal(Binomial(z + 1, k + 1), Binomial(z, k) + Binomial(z, k + 1))),
     Variables(z, k),
-    Assumptions(And(Element(z, CC), Element(k, ZZBetween(0, n)))))
+    Assumptions(And(Element(z, CC), Element(k, Range(0, n)))))
 
 make_entry(ID("209fc8"),
     Formula(Equal(Binomial(z, k + 1), ((z - k) / (k + 1)) * Binomial(z, k))),
@@ -505,7 +505,7 @@ make_entry(ID("6b3af0"),
 make_entry(ID("001a0b"),
     Formula(GreaterEqual(Binomial(n, k), n**k / k**k)),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZBetween(0, n)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, Range(0, n)))))
 
 make_entry(ID("5d6f99"),
     Formula(LessEqual(Binomial(n, k), (n*ConstE)**k / k**k)),
@@ -515,7 +515,7 @@ make_entry(ID("5d6f99"),
 make_entry(ID("4e7120"),
     Formula(LessEqual(Binomial(n, k), (n**n / (k**k * (n-k)**(n-k))))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZBetween(0, n)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, Range(0, n)))))
 
 make_entry(ID("fc8d5d"),
     Formula(Less(Factorial(n), Sqrt(2*ConstPi) * n**(n+Div(1,2)) * Exp(-n) * Exp(1/(12*n)))),
@@ -532,12 +532,12 @@ make_entry(ID("1745f5"),
 make_entry(ID("d3baaf"),
     Formula(Less(Binomial(n, k), (1/Sqrt(2*ConstPi)) * Sqrt(n/(k*(n-k))) * (n**n / (k**k * (n-k)**(n-k))))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, ZZBetween(1, n-1)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, Range(1, n-1)))))
 
 make_entry(ID("5f7334"),
     Formula(GreaterEqual(Binomial(n, k), (1/Sqrt(8)) * Sqrt(n/(k*(n-k))) * (n**n / (k**k * (n-k)**(n-k))))),
     Variables(n, k),
-    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, ZZBetween(1, n-1)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, Range(1, n-1)))))
 
 make_entry(ID("433d8b"),
     Formula(Less(Binomial(2*n, n), 4**n / Sqrt(ConstPi * n))),

@@ -377,7 +377,7 @@ make_entry(ID("a4d6fc"),
     Formula(Where(CongruentMod(BellNumber(n+a), BellNumber(n), m), Equal(a,
         Cases(Tuple(3, Equal(m, 2)), Tuple(13, Equal(m, 3)), Tuple(12, Equal(m, 4)), Tuple(781, Equal(m, 5)), Tuple(39, Equal(m, 6)))))),
     Variables(n, m),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZBetween(2, 6)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, Range(2, 6)))))
 
 make_entry(ID("b7e899"),
     Formula(Where(CongruentMod(BellNumber(n+a), BellNumber(n), m), Equal(a, SloaneA("A054767", m)))),
@@ -396,7 +396,7 @@ make_entry(ID("a1108d"),
 make_entry(ID("b5a382"),
     Formula(Equal(BellNumber(n), Subscript(Exp(Matrix(Binomial(i,j), For(i, 0, N), For(j, 0, N)) - Subscript(I, N+1)), Tuple(n, 0)))),
     Variables(N, n),
-    Assumptions(And(Element(N, ZZGreaterEqual(0)), Element(n, ZZBetween(0, N)))))
+    Assumptions(And(Element(N, ZZGreaterEqual(0)), Element(n, Range(0, N)))))
 
 # todo: printing
 make_entry(ID("dc6806"),

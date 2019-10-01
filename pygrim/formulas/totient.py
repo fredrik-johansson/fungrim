@@ -98,7 +98,7 @@ make_entry(ID("2c46dc"),
 # Counting
 
 make_entry(ID("c19cd6"),
-    Formula(Equal(Totient(n), Cardinality(Set(k, For(k), And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))))),
+    Formula(Equal(Totient(n), Cardinality(Set(k, For(k), And(Element(k, Range(1, n)), Equal(GCD(n,k), 1)))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 

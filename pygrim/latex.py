@@ -109,6 +109,7 @@ infix_latex_table = {
     Subset: "\\subset",
     SubsetEqual: "\\subseteq",
     Divides: "\\mid",
+    Path: "\\rightsquigarrow",
 }
 
 subscript_latex_table = {
@@ -897,7 +898,7 @@ def tex_ZZLessEqual(head, args, **kwargs):
     return "\\mathbb{Z}_{\le %s}" % argstr[0]
 
 @deftex
-def tex_ZZBetween(head, args, **kwargs):
+def tex_Range(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     if args[0].is_integer():
@@ -1226,6 +1227,12 @@ def tex_FormalPowerSeries(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     return "%s[[%s]]" % tuple(argstr)
+
+@deftex
+def tex_FormalPolynomialRing(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s[%s]" % tuple(argstr)
 
 @deftex
 def tex_FormalLaurentSeries(head, args, **kwargs):

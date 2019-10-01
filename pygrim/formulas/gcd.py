@@ -695,14 +695,14 @@ make_entry(ID("da45c0"),
 # Summation and counting
 
 make_entry(ID("7b27cd"),
-    Formula(Equal(Cardinality(Set(k, For(k), And(Element(k, ZZBetween(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
+    Formula(Equal(Cardinality(Set(k, For(k), And(Element(k, Range(1, n)), Equal(GCD(n,k), 1)))), Totient(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 # fixme: should be CartesianPower, not Pow
 make_entry(ID("4099d2"),
     Formula(Equal(SequenceLimit(
-        (1/N**n) * Cardinality(Set(T, For(T), And(Element(T, Pow(ZZBetween(1, N), n)), Equal(GCD(T), 1)))),
+        (1/N**n) * Cardinality(Set(T, For(T), And(Element(T, Pow(Range(1, N), n)), Equal(GCD(T), 1)))),
         For(N, Infinity)), 1/RiemannZeta(n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(2))))

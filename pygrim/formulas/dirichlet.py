@@ -113,7 +113,7 @@ make_entry(ID("2f52bc"),
         ", represents the set of primitive Dirichlet characters modulo", q, ", given", Element(q, ZZGreaterEqual(1)),
         ". Primitive characters are defined in ", EntryReference("ed65c8"), "."))
 
-ellrange = Element(ell, ZZBetween(1, Max(q,2)-1))
+ellrange = Element(ell, Range(1, Max(q,2)-1))
 
 make_entry(ID("c7e2fb"),
     SymbolDefinition(DirichletCharacter, DirichletCharacter(q,ell), "Dirichlet character"),
@@ -123,7 +123,7 @@ make_entry(ID("c7e2fb"),
         "A character represents an object", chi, " that can be called (", chi(n), ") as a function from", ZZ, "to", CC, "."),
     Description(SourceForm(DirichletCharacter(q,ell,n)), ", rendered as",
         DirichletCharacter(q,ell,n), ", represents the Dirichlet character with Conrey label", Tuple(q, ell), "evaluated at the integer", n, "."),
-    Description("The Conrey label consists of integers", Element(q, ZZGreaterEqual(1)), "and", Element(ell, ZZBetween(1, Max(q,2)-1)),
+    Description("The Conrey label consists of integers", Element(q, ZZGreaterEqual(1)), "and", Element(ell, Range(1, Max(q,2)-1)),
         "such that", Equal(GCD(ell,q), 1), ". ",
         "In this scheme", DirichletCharacter(q,1), "always represents the trivial/principal character (taking only values 0 and 1) modulo", q, ". ",
         "Non-principal characters are defined by", EntryReference("4cf4e4"), "when", q, "is an odd prime power, by",
@@ -142,8 +142,8 @@ make_entry(ID("47d430"),
 make_entry(ID("ed65c8"),
     Formula(Equal(PrimitiveDirichletCharacters(q),
         Set(chi, For(chi), And(Element(chi, DirichletGroup(q)),
-            Brackets(ForAll(d, And(Element(d, ZZBetween(1, q-1)), Divides(d, q)),
-                Exists(a, And(Element(a, ZZBetween(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1))))))))),
+            Brackets(ForAll(d, And(Element(d, Range(1, q-1)), Divides(d, q)),
+                Exists(a, And(Element(a, Range(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1))))))))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))),
     References("T. Apostol (1976), Introduction to Analytic Number Theory, Springer. Chapter 8.7."))
@@ -217,7 +217,7 @@ make_entry(ID("d8c6d1"),
 # Primitive decomposition
 
 make_entry(ID("a7d592"),
-    Formula(Where(Exists(Tuple(d, Subscript(chi, 0)), And(Element(d, ZZBetween(1, q)), Divides(d, q),
+    Formula(Where(Exists(Tuple(d, Subscript(chi, 0)), And(Element(d, Range(1, q)), Divides(d, q),
         Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
             Equal(Subscript(chi, 1), DirichletCharacter(q, 1)))),
     Variables(q, Subscript(chi, 0)),
@@ -263,14 +263,14 @@ make_entry(ID("2a48bd"),
     Formula(Equal(DirichletCharacter(q1 * q2, ell), DirichletCharacter(q1, Mod(ell, q1)) * DirichletCharacter(q2, Mod(ell, q2)))),
     Variables(q1,q2,ell),
     Assumptions(And(Element(q1, ZZGreaterEqual(1)), Element(q2, ZZGreaterEqual(1)),
-        Element(ell, ZZBetween(1, Max(q1*q2, 2)-1)), Equal(GCD(ell,q1), GCD(ell,q2), GCD(q1,q2), 1))))
+        Element(ell, Range(1, Max(q1*q2, 2)-1)), Equal(GCD(ell,q1), GCD(ell,q2), GCD(q1,q2), 1))))
 
 make_entry(ID("4cf4e4"),
     Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*a*b/Totient(q))),
         Equal(q, p**e), Equal(g, ConreyGenerator(p)), Equal(a, DiscreteLog(ell, g, q)), Equal(b, DiscreteLog(n, g, q)))),
     Variables(p, e, ell, n),
     Assumptions(And(Element(p, PP), GreaterEqual(p, 3), Element(e, ZZGreaterEqual(1)),
-        Element(ell, ZZBetween(1, p**e-1)), Element(n, ZZ), Equal(GCD(ell, p**e), GCD(n, p**e), 1))))
+        Element(ell, Range(1, p**e-1)), Element(n, ZZ), Equal(GCD(ell, p**e), GCD(n, p**e), 1))))
 
 make_entry(ID("fc4f6a"),
     Formula(Equal(DirichletCharacter(4, 3, n), Cases(Tuple(1,CongruentMod(n,1,4)), Tuple(-1,CongruentMod(n,3,4)), Tuple(0, Otherwise)))),
@@ -286,7 +286,7 @@ make_entry(ID("03fbe8"),
                 Tuple(-1, DiscreteLog(-k, 5, q)), Element(k, Set(Mod(-5**i, q), For(i), Element(i, ZZGreaterEqual(1))))))),
     Equal(Tuple(x, a), L(ell)), Equal(Tuple(y, b), L(n)))),
     Variables(e, ell, n),
-    Assumptions(And(Element(e, ZZGreaterEqual(3)), Element(ell, ZZBetween(1, 2**e-1)), Element(n, ZZ), Equal(GCD(ell, 2), GCD(n, 2), 1))))
+    Assumptions(And(Element(e, ZZGreaterEqual(3)), Element(ell, Range(1, 2**e-1)), Element(n, ZZ), Equal(GCD(ell, 2), GCD(n, 2), 1))))
 
 # Orthogonality
 
@@ -663,7 +663,7 @@ make_entry(ID("c31c10"),
 make_entry(ID("4c3678"),
     Formula(Equal(HurwitzZeta(s, k/q), (q**s / Totient(q)) * Sum(Conjugate(chi(k)) * DirichletL(s, chi), ForElement(chi, DirichletGroup(q))))),
     Variables(q, k, s),
-    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, ZZBetween(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
+    Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(k, Range(1,q-1)), Equal(GCD(k,q), 1), Element(s, SetMinus(CC, Set(1))))))
 
 # Principal and non-primitive characters
 
@@ -688,7 +688,7 @@ make_entry(ID("1bd945"),
     Variables(q, d, Subscript(chi, 0), s),
     Assumptions(And(
         Element(q, ZZGreaterEqual(1)),
-        Element(d, ZZBetween(1,q)),
+        Element(d, Range(1,q)),
         Divides(d, q),
         Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)),
         Element(s, CC))),

@@ -348,6 +348,8 @@ class Expr(object):
             return self.html_Assumptions()
         if self.head() == Description:
             return self.html_Description(display=display)
+        if self.head() == CodeExample:
+            return self.html_CodeExample()
         if self.head() == SymbolDefinition:
             return self.html_SymbolDefinition()
         if self.head() == Image:
@@ -470,17 +472,15 @@ class Expr(object):
             num += 1
         return s
 
-    def html_Description(self, display=False):
+    def _html_Description(self):
         s = ""
-        if display:
-            s += """<div style="text-align:center; margin:0.6em">"""
         for arg in self.args():
             if arg.is_text():
                 if arg._text and arg._text[0] in (",", ".", ";"):
                     s = s.rstrip()
                 s += arg._text
             elif (not arg.is_atom()) and arg.head() == SourceForm:
-                s += "<tt>%s</tt>" % str(arg.args()[0])
+                s += """<span style="border: 1px solid #ddd; padding-left:0.3em; padding-right:0.2em"><tt>%s</tt></span>""" % str(arg.args()[0])
             elif (not arg.is_atom()) and arg.head() == EntryReference:
                 id = arg.args()[0]._text
                 s += """<a href="../../entry/%s/">%s</a>""" % (id, id)
@@ -490,8 +490,27 @@ class Expr(object):
             else:
                 s += arg.html(avoid_latex=True)
             s += " "
+        return s
+
+    def html_Description(self, display=False):
+        s = ""
+        if display:
+            s += """<div style="text-align:center; margin:0.6em">"""
+        s += self._html_Description()
         if display:
             s += """</div>"""
+        return s
+
+    def html_CodeExample(self):
+        expr, *args = self.args()
+        s = ""
+        s += """<div style="text-align:left; margin:1em"><span style="margin-right:0.5em">&#9658;</span>"""
+        s += Description(SourceForm(expr))._html_Description()
+        s += """ <span style="color:#888; margin:0.5em">&mdash;</span> """
+        s += Description(expr)._html_Description()
+        s += """ <span style="color:#888; margin:0.5em">&mdash;</span> """
+        s += Description(*args)._html_Description()
+        s += "</div>"
         return s
 
     def html_SymbolDefinition(self):
@@ -694,8 +713,9 @@ ForAll Exists
 EqualAndElement
 Rings CommutativeRings Fields
 PP ZZ QQ RR CC HH AlgebraicNumbers
-ZZGreaterEqual ZZLessEqual ZZBetween
+ZZGreaterEqual ZZLessEqual Range
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
+Path
 RealBall
 UnitCircle
 OpenDisk ClosedDisk BernsteinEllipse
@@ -719,6 +739,7 @@ Integral
 IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqual
 AsymptoticTo
 FormalGenerator
+FormalPolynomialRing
 FormalPowerSeries FormalLaurentSeries SeriesCoefficient
 Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
@@ -790,6 +811,7 @@ SloaneA
 inject_builtin("""
 For ForElement Var
 Entry Formula ID Assumptions References Variables DomainCodomain
+CodeExample
 Description Table TableRelation TableValueHeadings TableHeadings TableColumnHeadings TableSplit TableSection
 Topic Title DefinitionsTable Section Subsection SeeTopics Entries EntryReference TopicReference
 SourceForm SymbolDefinition
