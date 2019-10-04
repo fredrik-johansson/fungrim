@@ -364,21 +364,14 @@ class Expr(object):
         s += """<span style="font-size:85%; color:#888">Image:</span> """
         s += description.html()
 
-        imgid = path
-
         # hack: duplicated constants in html head
         thumb_size = "140px"
-        full_size = "400px"
+        full_size = "500px"
 
-        if single and 0:
-            s += """<div style="text-align:center; padding-right:1em">"""
-            s += """<img id="%s", src="../../img/%s.svg" style="height:%s; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, full_size)
-            s += """</div>"""
-        else:
-            s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../../img/%s_small.svg', '../../img/%s.svg')">Big &#x1F50D;</button>""" % (imgid, path, path)
-            s += """<div style="text-align:center; padding-right:1em;">"""
-            s += """<img id="%s", src="../../img/%s_small.svg" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (imgid, path, thumb_size)
-            s += """</div>"""
+        s += """<button style="margin:0 0 0 0.3em" onclick="toggleBig('%s', '../../img/%s/%s_small.svg', '../../img/%s/%s.svg')">Big &#x1F50D;</button>""" % (path, path, path, path, path)
+        s += """<div style="text-align:center; padding-right:1em;">"""
+        s += """<img id="%s", src="../../img/%s/%s_small.svg" style="width:%s; max-width:100%%; margin-top:0.3em; margin-bottom:0px"/>""" % (path, path, path, thumb_size)
+        s += """</div>"""
 
         s += """</div>"""
         return s
@@ -580,19 +573,19 @@ class Expr(object):
             src = image_downloads[0]
             s += """<div style="text-align:center; margin-top:0; margin-bottom:1.1em">"""
             s += """<span style="font-size:85%; color:#888">Download:</span> """
-            s += """<a href="../../img/%s_small.png">png (small)</a>""" % src
+            s += """<a href="../../img/%s/%s_small.png">png (small)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s_medium.png">png (medium)</a>""" % src
+            s += """<a href="../../img/%s/%s_medium.png">png (medium)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s_large.png">png (large)</a>""" % src
+            s += """<a href="../../img/%s/%s_large.png">png (large)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s_small.pdf">pdf (small)</a>""" % src
+            s += """<a href="../../img/%s/%s_small.pdf">pdf (small)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s.pdf">pdf (medium/large)</a>""" % src
+            s += """<a href="../../img/%s/%s.pdf">pdf (medium/large)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s_small.svg">svg (small)</a>""" % src
+            s += """<a href="../../img/%s/%s_small.svg">svg (small)</a>""" % (src, src)
             s += """ <span style="color:#888">&mdash;</span> """
-            s += """<a href="../../img/%s.svg">svg (medium/large)</a>""" % src
+            s += """<a href="../../img/%s/%s.svg">svg (medium/large)</a>""" % (src, src)
             s += """</div>"""
 
         # Link SloaneA to OEIS references
@@ -726,6 +719,7 @@ Pos Neg Add Sub Mul Div Mod Inv Pow
 CongruentMod Odd Even
 Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
 NearestDecimal
+EqualNearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique
 Solutions UniqueSolution
 Supremum Infimum
@@ -760,6 +754,7 @@ BernoulliB BernoulliPolynomial EulerE EulerPolynomial
 StirlingCycle StirlingS1 StirlingS2 BellNumber
 RiemannZeta RiemannZetaZero
 BesselJ BesselI BesselY BesselK HankelH1 HankelH2
+BesselJZero BesselYZero
 CoulombF CoulombG CoulombH CoulombC CoulombSigma
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0 Hypergeometric3F2
 HypergeometricU HypergeometricUStar
@@ -781,7 +776,7 @@ Lattice
 WeierstrassP WeierstrassZeta WeierstrassSigma
 PrimeNumber PrimePi
 RiemannHypothesis
-LogIntegral LandauG
+SinIntegral LogIntegral LandauG
 Matrix2x2 Matrix2x1 Matrix
 Spectrum Det
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain

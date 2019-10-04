@@ -725,6 +725,7 @@ writetopic("Square roots")
 writetopic("Powers")
 writetopic("Sine", highlight=True)
 writetopic("Inverse tangent", highlight=True)
+writetopic("Sinc function", highlight=True)
 writetopic("Lambert W-function")
 frontpage.fp.write("""</ul></li>""")
 

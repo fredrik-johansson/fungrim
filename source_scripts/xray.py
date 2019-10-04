@@ -34,7 +34,114 @@ def use_grayscale():
 
 use_colors()
 
+#spinecolor = (0.333,0.333,0.333)
+spinecolor = (0.0,0.0,0.0)
+
+colorcycle = [(0.1,0.2,0.8), (1.0,0.5,0.0), (0.2,0.8,0.2)]
+#del colorcycle[1]
+
 directory = [""]
+
+def ticklabel(x):
+    if x == int(x):
+        return "$" + str(x) + "$"
+    if x*2 == int(x*2):
+        if x < 0:
+            return "$-\\frac{%s}{%s}$" % (str(-int(x*2)), 2)
+        else:
+            return "$\\frac{%s}{%s}$" % (str(int(x*2)), 2)
+    npi = x/pi
+    if abs(npi-round(npi)) < 1e-12:
+        n = int(round(npi))
+        if n == 1:
+            return "$\\pi$"
+        elif n == -1:
+            return "$-\\pi$"
+        elif n < 0:
+            return "$-%i \\pi$" % (-n)
+        else:
+            return "$%i \\pi$" % n
+    npi = 2.0*x/pi
+    if abs(npi-round(npi)) < 1e-12:
+        n = int(round(npi))
+        if n < 0:
+            return "$-\\frac{%i}{%i} \\pi$" % (-n, 2)
+        else:
+            return "$\\frac{%i}{%i} \\pi$" % (n, 2)
+    return "$" + str(x) + "$"
+
+def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty=1.0, legends=None, decorations=None, xtks=None, ytks=None, xout=0.0, yout=0.0):
+    print(filename)
+    xa, xb = xaxb
+    xs = linspace(xa-xout, xb+xout, N)
+    ys = []
+    for func in funcs:
+        ysf = [func(x) for x in xs]
+        ys.append(ysf)
+
+    clf()
+    dpi=100
+
+    for scaling in (4.0, 2.0):
+        figure(figsize=(aspectx*scaling, aspecty*scaling), dpi=dpi)
+
+        axhline(color="gray", linewidth=0.5, linestyle="--")
+        axvline(color="gray", linewidth=0.5, linestyle="--")
+
+        for i, ysf in enumerate(ys):
+            if legends is not None:
+                lbl = legends[i]
+            else:
+                lbl = None
+            plot(xs, ysf, label=lbl, zorder=2.0-0.1*i, color=colorcycle[i])
+
+        if decorations is not None:
+            decorations()
+
+        #axis("scaled")
+        xlim([xa,xb])
+        if yayb is not None:
+            ya, yb = yayb
+            ylim([ya,yb])
+        if xtks is not None:
+            if len(xtks) == 1:
+                xtks = (xtks[0], list(map(ticklabel, xtks[0])))
+            xticks(*xtks)
+        if ytks is not None:
+            if len(ytks) == 1:
+                ytks = (ytks[0], list(map(ticklabel, ytks[0])))
+            yticks(*ytks)
+
+        if scaling == 4.0:
+            legend(loc='upper right', prop={'size': 9}, frameon=False, handlelength=1.5)
+        else:
+            legend(loc='upper right', prop={'size': 7}, frameon=False, borderpad=0.08, handlelength=0.75)
+
+        ax = gca()
+        for pos in ['top', 'bottom', 'right', 'left']:
+            ax.spines[pos].set_edgecolor(spinecolor)
+        for ticks in ax.xaxis.get_ticklines() + ax.yaxis.get_ticklines():
+            ticks.set_color(spinecolor)
+
+        savedpi = 100
+        import os
+        filename2 = "plot_" + filename
+        directory2 = os.path.join(directory[0], filename2)
+        if not os.path.exists(directory2):
+            os.makedirs(directory2)
+        prefix = os.path.join(directory2, filename2)
+
+        if scaling == 4.0:
+            savefig(prefix + ".svg", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
+            savefig(prefix + ".pdf", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
+            savefig(prefix + "_large.png", bbox_inches="tight", dpi=2*savedpi, pad_inches=0.02)
+            savefig(prefix + "_medium.png", bbox_inches="tight", dpi=1*savedpi, pad_inches=0.02)
+        else:
+            savefig(prefix + "_small.png", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + "_small.svg", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + "_small.pdf", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+
+
 
 def xrayplot(func, xaxb, yayb, N, filename, decorations=None, xtks=None, ytks=None, xout=0.0, yout=0.0):
     print(filename)
@@ -94,16 +201,6 @@ def xrayplot(func, xaxb, yayb, N, filename, decorations=None, xtks=None, ytks=No
         if decorations is not None:
             decorations()
 
-        def ticklabel(x):
-            if x == int(x):
-                return "$" + str(x) + "$"
-            if x*2 == int(x*2):
-                if x < 0:
-                    return "$-\\frac{%s}{%s}$" % (str(-int(x*2)), 2)
-                else:
-                    return "$\\frac{%s}{%s}$" % (str(int(x*2)), 2)
-            return "$" + str(x) + "$"
-
         axis("scaled")
         xlim([xa,xb]); ylim([ya,yb])
         if xtks is not None:
@@ -115,21 +212,29 @@ def xrayplot(func, xaxb, yayb, N, filename, decorations=None, xtks=None, ytks=No
                 ytks = (ytks[0], list(map(ticklabel, ytks[0])))
             yticks(*ytks)
 
+        ax = gca()
+        for pos in ['top', 'bottom', 'right', 'left']:
+            ax.spines[pos].set_edgecolor(spinecolor)
+        for ticks in ax.xaxis.get_ticklines() + ax.yaxis.get_ticklines():
+            ticks.set_color(spinecolor)
+
         savedpi = 100
         import os
-        prefix = os.path.join(directory[0], "xray_")
+        filename2 = "xray_" + filename
+        directory2 = os.path.join(directory[0], filename2)
+        if not os.path.exists(directory2):
+            os.makedirs(directory2)
+        prefix = os.path.join(directory2, filename2)
 
         if scaling == 4.0:
-            savefig(prefix + filename + ".svg", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
-            savefig(prefix + filename + ".pdf", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
-            savefig(prefix + filename + "_large.png", bbox_inches="tight", dpi=2*savedpi, pad_inches=0.02)
-            savefig(prefix + filename + "_medium.png", bbox_inches="tight", dpi=1*savedpi, pad_inches=0.02)
+            savefig(prefix + ".svg", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
+            savefig(prefix + ".pdf", bbox_inches="tight", dpi=4*savedpi, pad_inches=0.02)
+            savefig(prefix + "_large.png", bbox_inches="tight", dpi=2*savedpi, pad_inches=0.02)
+            savefig(prefix + "_medium.png", bbox_inches="tight", dpi=1*savedpi, pad_inches=0.02)
         else:
-            savefig(prefix + filename + "_small.png", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
-            savefig(prefix + filename + "_small.svg", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
-            savefig(prefix + filename + "_small.pdf", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
-
-    # os.system("convert " + "img/" + "xray_" + filename + "_large.png " + " -resize x120 " +"img/" + "xray_" + filename + "_thumb2.png")
+            savefig(prefix + "_small.png", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + "_small.svg", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
+            savefig(prefix + "_small.pdf", bbox_inches="tight", dpi=savedpi, pad_inches=0.01)
 
 
 def rectangle(xy,w,h,**kwargs):
@@ -163,6 +268,11 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    curveplot([lambda x: fp.sinc(x), lambda x: fp.sinc(pi*x)],
+        (-3*pi,3*pi), yayb=[-0.4,1.22], N=400, filename="sinc", xout=0.1, yout=0.1,
+            legends=["$\\mathrm{sinc}(x)$", "$\\mathrm{sinc}(\\pi x)$"],
+            xtks=([-2*pi,-pi,0,pi,2*pi],), ytks=([0,0.5,1],),)
 
     def coverup_rectangle(xy,w,h):
         gca().add_patch(patches.Rectangle(xy,w,h,linewidth=0,facecolor=realcolor,zorder=2))
@@ -200,6 +310,9 @@ def plots(outdir):
         if k == 14: return E4**2 * E6
         if k == 16: return (1617*E4**4 + 2000*E4*E6**2)/3617
         raise ValueError
+
+    #xrayplot(lambda z: complex(acb(z).sinc()), (-8,8), (-8,8), 400, "sinc", xout=0.1, yout=0.1, xtks=([-6,-3,0,3,6],), ytks=([-6,-3,0,3,6],),)
+    xrayplot(lambda z: complex(acb(z).sinc()), (-8,8), (-8,8), 400, "sinc", xout=0.1, yout=0.1, xtks=([-2*pi,-pi,0,pi,2*pi],), ytks=([-2*pi,-pi,0,pi,2*pi],),)
 
     xrayplot(lambda z: complex(acb(z).barnes_g()), (-4,6), (-5,5), 400, "barnes_g", xout=0.1, yout=0.1, xtks=([-4,-2,0,2,4,6],), )
 

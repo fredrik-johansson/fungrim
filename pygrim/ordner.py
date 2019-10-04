@@ -106,6 +106,24 @@ class Ordner(object):
                         # todo ...
                         insert_arb(expr, val, eid)
 
+        print("Evaluating declared constant values...")
+        for entry in entries:
+            # only look for constant equations
+            variables = entry.get_arg_with_head(Variables)
+            if variables is not None:
+                continue
+            formula = entry.get_arg_with_head(Formula)
+            if formula is None:
+                continue
+            eid = entry.id()
+            content = formula.args()[0]
+            if content.head() == EqualNearestDecimal:
+                expr, val, numdigits = content.args()
+                if numdigits.is_integer() and int(numdigits) >= digits:
+                    print(expr, val, numdigits)
+                    val = val.n(eval_digits, as_arb=True)
+                    insert_arb(expr, val, eid)
+
         print("Evaluating expressions...")
         for entry in entries:
             eid = entry.id()

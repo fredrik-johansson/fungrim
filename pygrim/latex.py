@@ -82,11 +82,16 @@ def _latex(expr, in_small=False):
 
     argstr = [latex(arg, in_small=in_small) for arg in args]
     fstr = latex(expr._args[0])
-    if in_small:
+    if len(args) == 1 and args[0].is_atom():
+        lpar, rpar = "(", ")"
         spacer = ""
     else:
-        spacer = "\\!"
-    s = fstr + spacer + "\\left(" + ", ".join(argstr) + "\\right)"
+        lpar, rpar = "\\left(", "\\right)"
+        if in_small:
+            spacer = ""
+        else:
+            spacer = "\\!"
+    s = fstr + spacer + lpar + ", ".join(argstr) + rpar
     return s
 
 
@@ -131,6 +136,8 @@ subscript_pair_latex_table = {
     LegendrePolynomialZero: "x",
     GaussLegendreWeight: "w",
     GeneralizedBernoulliB: "B",
+    BesselJZero: "j",
+    BesselYZero: "y",
 }
 
 subscript_call_latex_table = {
@@ -232,6 +239,7 @@ symbol_latex_table = {
     AiryAi: "\\operatorname{Ai}",
     AiryBi: "\\operatorname{Bi}",
     LogIntegral: "\\operatorname{li}",
+    SinIntegral: "\\operatorname{Si}",
     GCD: "\\gcd",
     LCM: "\\operatorname{lcm}",
     XGCD: "\\operatorname{xgcd}",
@@ -362,7 +370,7 @@ def tex_Pow(head, args, **kwargs):
     expo = args[1]
     in_small = kwargs.get("in_small", False)
     # todo: more systematic solutions
-    if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, Log, DedekindEta, Sec, Sech):
+    if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, Log, DedekindEta, Sec, Sech, Sinc):
         return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
     if not base.is_atom() and base.head() == Fibonacci:
         return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
@@ -427,6 +435,8 @@ def tex_JacobiTheta(head, args, **kwargs):
 def tex_Cases(head, args, **kwargs):
     in_small = kwargs.get("in_small", False)
     s = "\\begin{cases} "
+    # displaystyle = len(args) <= 2
+    displaystyle = False
     for arg in args:
         assert arg.head() == Tuple
         v, c = arg.args()
@@ -437,7 +447,10 @@ def tex_Cases(head, args, **kwargs):
         else:
             #c = c.latex(in_small=True)
             c = c.latex(in_small=in_small)
-        s += "%s, & %s\\\\" % (v, c)
+        if displaystyle:
+            s += "\\displaystyle{%s}, & \\displaystyle{%s}\\\\" % (v, c)
+        else:
+            s += "%s, & %s\\\\" % (v, c)
     s += " \\end{cases}"
     return s
 
@@ -1333,6 +1346,12 @@ def tex_NearestDecimal(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     return "%s \\; (\\text{nearest } %s \\text{D})" % (argstr[0], argstr[1])
+
+@deftex
+def tex_EqualNearestDecimal(head, args, **kwargs):
+    assert len(args) == 3
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s = %s \\;\\, {\\scriptstyle (\\text{nearest } %s \\text{ digits})}" % (argstr[0], argstr[1], argstr[2])
 
 @deftex
 def tex_SloaneA(head, args, **kwargs):

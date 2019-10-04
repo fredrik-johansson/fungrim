@@ -15,6 +15,7 @@ from .exp import *
 from .powers import *
 from .sqrt import *
 from .sine import *
+from .sinc import *
 from .atan import *
 from .lambertw import *
 from .gcd import *
