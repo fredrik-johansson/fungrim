@@ -179,6 +179,7 @@ def_Topic(
     Subsection("Complex variable"),
     Entries(
         "c7c483",
+        "51f9b4",
     ),
 )
 
@@ -598,7 +599,12 @@ make_entry(ID("5d16e5"),
 
 make_entry(ID("c7c483"),
     Formula(LessEqual(Abs(Sinc(z)), Exp(Abs(Im(z))))),
-    Variables(x),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("51f9b4"),
+    Formula(LessEqual(Abs(Sinc(z)), Sinc(ConstI*Abs(z)))),
+    Variables(z),
     Assumptions(Element(z, CC)))
 
 # Summation
