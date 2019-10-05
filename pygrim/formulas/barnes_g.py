@@ -11,6 +11,7 @@ def_Topic(
     ),
     Section("Illustrations"),
     Entries(
+        "488c5c",
         "106bf7",
         "e1497f",
     ),
@@ -161,6 +162,11 @@ make_entry(ID("da1509"),
     Description(SourceForm(LogBarnesG(z)), ", rendered as", LogBarnesG(z), ", represents the logarithmic Barnes G-function of argument", z, "."))
 
 # Illustrations
+
+make_entry(ID("488c5c"),
+    Image(Description("Plot of", BarnesG(x), "on", Element(x, ClosedInterval(-4,6))),
+        ImageSource("plot_barnes_g")),
+    )
 
 make_entry(ID("106bf7"),
     Image(Description("X-ray of", BarnesG(z), "on", Element(z, ClosedInterval(-4,6) + ClosedInterval(-5,5)*ConstI)),

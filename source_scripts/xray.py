@@ -112,10 +112,11 @@ def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty
                 ytks = (ytks[0], list(map(ticklabel, ytks[0])))
             yticks(*ytks)
 
-        if scaling == 4.0:
-            legend(loc='upper right', prop={'size': 9}, frameon=False, handlelength=1.5)
-        else:
-            legend(loc='upper right', prop={'size': 7}, frameon=False, borderpad=0.08, handlelength=0.75)
+        if legends is not None:
+            if scaling == 4.0:
+                legend(loc='upper right', prop={'size': 9}, frameon=False, handlelength=1.5)
+            else:
+                legend(loc='upper right', prop={'size': 7}, frameon=False, borderpad=0.08, handlelength=0.75)
 
         ax = gca()
         for pos in ['top', 'bottom', 'right', 'left']:
@@ -268,6 +269,11 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    curveplot([lambda x: fp.barnesg(x)],
+        (-4,6), yayb=[-0.5,2.5], N=400, filename="barnes_g", xout=0.1, yout=0.1,
+            xtks=([-4,-2,0,2,4,6],),
+            ytks=([0,1,2],),)
 
     curveplot([lambda x: fp.sinc(x), lambda x: fp.sinc(pi*x)],
         (-3*pi,3*pi), yayb=[-0.4,1.22], N=400, filename="sinc", xout=0.1, yout=0.1,
