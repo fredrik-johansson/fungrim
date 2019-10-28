@@ -561,7 +561,7 @@ make_entry(ID("1c770c"),
             Tuple(Decimal("1.898850"), Equal(n, 2)),
             Tuple(Decimal("0.788740"), Equal(n, 3)))))),
     Variables(x, n),
-    Assumptions(Element(x, OpenInterval(0, Infinity)), Element(n, Set(0, 1, 2, 3))))
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, Set(0, 1, 2, 3)))))
 
 make_entry(ID("306699"),
     Formula(Where(Implies(Greater(x, Subscript(x, 0)), Greater(RealDerivative(Brackets(LogBarnesG(x)), For(x, x, n)), 0)),
@@ -571,6 +571,6 @@ make_entry(ID("306699"),
             Tuple(Decimal("1.925864"), Equal(n, 2)),
             Tuple(0, Equal(n, 3)))))),
     Variables(x, n),
-    Assumptions(Element(x, OpenInterval(0, Infinity)), Element(n, Set(0, 1, 2, 3))))
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, Set(0, 1, 2, 3)))))
 
 

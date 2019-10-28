@@ -25,6 +25,10 @@ def _latex(expr, in_small=False):
                 else:
                     if expr._symbol == "epsilon":
                         return "\\varepsilon"
+                    if expr._symbol == "lamda":
+                        return "\\lambda"
+                    if expr._symbol == "Lamda":
+                        return "\\Lambda"
                     return "\\" + expr._symbol
             return "\\operatorname{" + expr._symbol + "}"
         if expr._integer is not None:
@@ -281,6 +285,8 @@ symbol_latex_table = {
     MultiZetaValue: "\\zeta",
     BarnesG: "G",
     LogBarnesG: "\\log G",
+    HalphenConstant: "\\Lambda",
+    RationalFunctionDegree: "\\deg",
 }
 
 def deftex(f):
@@ -1439,6 +1445,13 @@ def tex_is_morphic(head, args, **kwargs):
         domain = domain.latex(**kwargs)
         return "%s \\text{ is %s on } %s \\in %s" % (func, word, var, domain)
     raise ValueError
+
+@deftex
+def tex_RationalFunctions(head, args, **kwargs):
+    R, var = args
+    R = R.latex(**kwargs)
+    var = var.latex(**kwargs)
+    return "%s\\!\\left(%s\\right)" % (R, var)
 
 @deftex
 def tex_Description(head, args, **kwargs):

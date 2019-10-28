@@ -57,6 +57,7 @@ from .integer_sequences import *
 from .multiple_zeta_values import *
 from .bell_numbers import *
 from .barnes_g import *
+from .halphen_constant import *
 
 describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
 describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")
