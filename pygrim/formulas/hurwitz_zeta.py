@@ -20,7 +20,7 @@ def_Topic(
         "d0b234",
         "c5d844",
     ),
-    Subsection("As a function of the variable"),
+    Subsection("As a function of the argument"),
     Entries(
         "4bf3da",
         "ea271f",
@@ -62,6 +62,7 @@ def_Topic(
     Subsection("Polygamma and related functions"),
     Description("Related topics: ", TopicReference("Digamma function"), ", ", TopicReference("Barnes G-function")),
     Entries(
+        "693e0e",
         "bba4ec",  # included from digamma
         "e05807",  # included from barnes_g
     ),
@@ -164,7 +165,7 @@ make_entry(ID("448d90"),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(a, SetMinus(CC, ZZLessEqual(0))))))
 
 make_entry(ID("77e507"),
-    Formula(Equal(HurwitzZeta(s, a, r), Sum(((-1)**r * Log(n+a)**r)/(n+a)**s, For(n, 0, Infinity)))),
+    Formula(Equal(HurwitzZeta(s, a, r), (-1)**r * Sum(Log(n+a)**r/(n+a)**s, For(n, 0, Infinity)))),
     Variables(s, a, r),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(a, SetMinus(CC, ZZLessEqual(0))), Element(r, ZZGreaterEqual(0)))))
 
@@ -185,6 +186,10 @@ make_entry(ID("febdd2"),
 make_entry(ID("4228cd"),
     Formula(Equal(BernoulliPolynomial(n,z), -(n*HurwitzZeta(1-n,z)))),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC))))
 
+make_entry(ID("693e0e"),
+    Formula(Equal(DigammaFunction(z), ComplexLimit(Brackets(1/(s-1) - HurwitzZeta(s,z)), For(s, 1)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
 
