@@ -450,8 +450,9 @@ make_entry(ID("af31ae"),
 
 # Representation by other functions
 
+# todo: builtin derivative of zeta
 make_entry(ID("e05807"),
-    Formula(Equal(LogBarnesG(z), (z-1)*LogGamma(z) - Derivative(HurwitzZeta(s,z), For(s,-1)) + Derivative(RiemannZeta(s), For(s,-1)))),
+    Formula(Equal(LogBarnesG(z), (z-1)*LogGamma(z) - HurwitzZeta(-1,z,1) + ComplexDerivative(RiemannZeta(s), For(s,-1)))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 

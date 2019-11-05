@@ -26,6 +26,7 @@ def_Topic(
     Section("Representations by special functions"),
     Entries(
         "14ecc4",
+        "4228cd",   # included from hurwitz_zeta
     ),
     Section("Specific values"),
     Entries(

@@ -652,9 +652,6 @@ make_entry(ID("0f96c3"),
 
 # Hurwitz zeta representation
 
-make_entry(ID("04217b"),
-    SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"))
-
 make_entry(ID("c31c10"),
     Formula(Equal(DirichletL(s, chi), (1/q**s) * Sum(chi(k) * HurwitzZeta(s, k/q), For(k, 1, q)))),
     Variables(q, chi, s),

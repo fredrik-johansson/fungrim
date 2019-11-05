@@ -89,26 +89,3 @@ make_entry(ID("06c468"),
     Formula(Equal(HalphenConstant,
         UniqueZero(Brackets(JacobiTheta(2, 0, Log(-x)/(2*ConstPi*ConstI), 2)), ForElement(x, OpenInterval(0, 1))))))
 
-
-
-"""
-
-RationalFunctions(
-
-
- PolynomialFunctions  EntireFunctions
-
-
-
-
-
-
-e7bd27
-
-667e52
-177846
-aad05c
-350d36
-9ddf91
-"""
-

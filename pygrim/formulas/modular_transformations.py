@@ -26,6 +26,11 @@ def_Topic(
         "e28209",
         "fd53ab",   # H from copies of F
     ),
+    Section("Ford circles"),
+    Subsection("Area of Ford circles on the unit square"),
+    Entries(
+        "8a9884",
+    ),
 )
 
 make_entry(ID("094772"),
@@ -88,4 +93,9 @@ make_entry(ID("e28209"),
 
 make_entry(ID("fd53ab"),
     Formula(Equal(Set(ModularGroupAction(gamma, tau), For(Tuple(gamma, tau)), And(Element(tau, ModularGroupFundamentalDomain), Element(gamma, PSL2Z))), HH)))
+
+# Ford circles
+
+make_entry(ID("8a9884"),
+    Formula(Equal((ConstPi/4) * Sum(Totient(q) / q**4, For(q, 1, Infinity)), (ConstPi/4) * (RiemannZeta(3)/RiemannZeta(4)), 45 * RiemannZeta(3) / (2 * ConstPi**3))))
 

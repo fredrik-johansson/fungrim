@@ -1454,6 +1454,27 @@ def tex_RationalFunctions(head, args, **kwargs):
     return "%s\\!\\left(%s\\right)" % (R, var)
 
 @deftex
+def tex_HurwitzZeta(head, args, **kwargs):
+    assert len(args) in (2, 3)
+    fsym = symbol_latex_table[head]
+    if len(args) == 2:
+        in_small = kwargs.get("in_small", False)
+        s, a = args
+        sstr = s.latex(in_small=in_small)
+        astr = a.latex(in_small=in_small)
+        return fsym + "\!\\left(" + sstr + ", " + astr + "\\right)"
+    else:
+        s, a, r = args
+        in_small = kwargs.get("in_small", False)
+        sstr = s.latex(in_small=in_small)
+        astr = a.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+            return fsym + ("'" * r._integer) + "\!\\left(" + sstr + ", " + astr + "\\right)"
+        else:
+            return fsym + "^{(" + rstr + ")}" + "\!\\left(" + sstr + ", " + astr + "\\right)"
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:

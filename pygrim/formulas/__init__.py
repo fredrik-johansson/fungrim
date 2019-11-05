@@ -3,6 +3,7 @@
 from ..expr import *
 
 from .symbolic_expressions import *
+from .hurwitz_zeta import *
 from .logic import *
 from .numbers import *
 from .operators import *
