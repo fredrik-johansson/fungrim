@@ -2,8 +2,12 @@ from mpmath import *
 from numpy import *
 from matplotlib.pyplot import *
 import matplotlib.patches as patches
-from flint import acb
+from flint import acb, arb, good
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+
+
+params= {'text.latex.preamble' : [r'\usepackage{amsmath}']}
+rcParams.update(params)
 
 rc('text', usetex=True)
 
@@ -70,13 +74,22 @@ def ticklabel(x):
             return "$\\frac{%i}{%i} \\pi$" % (n, 2)
     return "$" + str(x) + "$"
 
-def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty=1.0, legends=None, decorations=None, xtks=None, ytks=None, xout=0.0, yout=0.0):
+def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty=1.0, legends=None, decorations=None, xtks=None, ytks=None, xout=0.0, yout=0.0, singularities=[],
+        legend_loc='upper right'):
     print(filename)
     xa, xb = xaxb
     xs = linspace(xa-xout, xb+xout, N)
+    for v in singularities:
+        i = searchsorted(xs, v)
+        xs = insert(xs, i, v)
     ys = []
     for func in funcs:
-        ysf = [func(x) for x in xs]
+        ysf = []
+        for x in xs:
+            if x in singularities:
+                ysf.append(nan)
+            else:
+                ysf.append(func(x))
         ys.append(ysf)
 
     clf()
@@ -114,9 +127,9 @@ def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty
 
         if legends is not None:
             if scaling == 4.0:
-                legend(loc='upper right', prop={'size': 9}, frameon=False, handlelength=1.5)
+                legend(loc=legend_loc, prop={'size': 9}, frameon=False, handlelength=1.5)
             else:
-                legend(loc='upper right', prop={'size': 7}, frameon=False, borderpad=0.08, handlelength=0.75)
+                legend(loc=legend_loc, prop={'size': 7}, frameon=False, borderpad=0.08, handlelength=0.75)
 
         ax = gca()
         for pos in ['top', 'bottom', 'right', 'left']:
@@ -270,6 +283,27 @@ def plots(outdir):
 
     directory[0] = outdir
 
+    curveplot([lambda s: good(lambda: acb(s).zeta(0.6).real, prec=20),
+                lambda s: good(lambda: acb(s).zeta(0.8).real, prec=20),
+                    lambda s: good(lambda: acb(s).zeta(1.4).real, prec=20)],
+        (-25,11), yayb=[-6.5,6.5], N=400, filename="hurwitz_zeta", xout=0.1, yout=0.1,
+            singularities=[1],
+            legends=["$\\zeta(s,0.6)$", "$\\zeta(s,0.8)$", "$\\zeta(s,1.4)$"],
+            legend_loc='upper center',
+            xtks=([-20,-10,0,10],), ytks=([-5,0,5],),)
+
+    def lgamma_decor():
+        branchcutline(0, -1, offset=0.07)
+        branchcutline(-1, -2, offset=0.07)
+        branchcutline(-2, -3, offset=0.07)
+        branchcutline(-3, -4, offset=0.07)
+        branchcutline(-4, -5, offset=0.07)
+
+    xrayplot(lambda z: complex(good(lambda: acb(2+3j).zeta(z), prec=20, parts=False)), (-5,5), (-5,5), 400, "hurwitz_zeta_param", decorations=lgamma_decor, xout=0.1, yout=0.1)
+
+    xrayplot(lambda z: complex(good(lambda: acb(z).zeta(1+0.5j), prec=20, parts=False)), (-20,20), (-20,20), 400, "hurwitz_zeta", xout=0.1, yout=0.1,
+        xtks=([-20,-10,0,10,20],), ytks=([-20,-10,0,10,20],))
+
     curveplot([lambda x: fp.barnesg(x)],
         (-4,6), yayb=[-0.5,2.5], N=400, filename="barnes_g", xout=0.1, yout=0.1,
             xtks=([-4,-2,0,2,4,6],),
@@ -321,13 +355,6 @@ def plots(outdir):
     xrayplot(lambda z: complex(acb(z).sinc()), (-8,8), (-8,8), 400, "sinc", xout=0.1, yout=0.1, xtks=([-2*pi,-pi,0,pi,2*pi],), ytks=([-2*pi,-pi,0,pi,2*pi],),)
 
     xrayplot(lambda z: complex(acb(z).barnes_g()), (-4,6), (-5,5), 400, "barnes_g", xout=0.1, yout=0.1, xtks=([-4,-2,0,2,4,6],), )
-
-    def lgamma_decor():
-        branchcutline(0, -1, offset=0.07)
-        branchcutline(-1, -2, offset=0.07)
-        branchcutline(-2, -3, offset=0.07)
-        branchcutline(-3, -4, offset=0.07)
-        branchcutline(-4, -5, offset=0.07)
 
     xrayplot(lambda z: complex(acb(z).log_barnes_g()), (-4,6), (-5,5), 400, "log_barnes_g", xout=0.1, yout=0.1,
         decorations=lgamma_decor, xtks=([-4,-2,0,2,4,6],), )

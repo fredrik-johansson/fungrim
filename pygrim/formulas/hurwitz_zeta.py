@@ -8,6 +8,12 @@ def_Topic(
     Entries(
         "04217b",
     ),
+    Section("Illustrations"),
+    Entries(
+        "855201",
+        "583bf9",
+        "0e2bcb",
+    ),
     Section("Domain and range"),
     Entries(
         "56dcbd",
@@ -47,6 +53,35 @@ def_Topic(
     Section("Integral representations"),
     Entries(
         "1699a9",
+        "498036",
+    ),
+    Section("Functional equations"),
+    Subsection("Recurrence relations"),
+    Entries(
+        "ed4f6f",
+        "bed7ee",
+        "95e270",
+    ),
+    Subsection("Multiplication formula"),
+    Entries(
+        "ba7f85",
+        "ebc49c",
+        "7d9feb",
+    ),
+    Subsection("Reflection formula"),
+    Entries(
+        "69a1a9",
+    ),
+    Section("Derivatives and differential equations"),
+    Entries(
+        "3ba544",
+        "d0d03b",
+        "83065e",
+        "40c3e2",
+    ),
+    Section("Euler-Maclaurin formula"),
+    Entries(
+        "d25d10",
     ),
     Section("Representation of other functions"),
     Subsection("Riemann zeta function"),
@@ -59,9 +94,11 @@ def_Topic(
     Entries(
         "4228cd",
     ),
-    Subsection("Polygamma and related functions"),
+    Subsection("Gamma and related functions"),
     Description("Related topics: ", TopicReference("Digamma function"), ", ", TopicReference("Barnes G-function")),
     Entries(
+        "53026a",
+        "f3b870",
         "693e0e",
         "bba4ec",  # included from digamma
         "e05807",  # included from barnes_g
@@ -80,7 +117,26 @@ make_entry(ID("04217b"),
     SymbolDefinition(HurwitzZeta, HurwitzZeta(s, a), "Hurwitz zeta function"),
     CodeExample(HurwitzZeta(s, a), "represents the Hurwitz zeta function of argument", s, "and parameter", a, "."),
     CodeExample(HurwitzZeta(s, a, 1), "represents the Hurwitz zeta function of argument", s, "and parameter", a, ", differentiated once with respect to", s, "."),
-    CodeExample(HurwitzZeta(s, a, r), "represents the Hurwitz zeta function of argument", s, "and parameter", a, ", differentiated to order", r, "with respect to", s, "."))
+    CodeExample(HurwitzZeta(s, a, r), "represents the Hurwitz zeta function of argument", s, "and parameter", a, ", differentiated to order", r, "with respect to", s, "."),
+    References("https://dlmf.nist.gov/25.11", "http://functions.wolfram.com/ZetaFunctionsandPolylogarithms/Zeta2/"))
+
+# Illustrations
+
+make_entry(ID("855201"),
+    Image(Description("Plot of", HurwitzZeta(s, a), "on", Element(s, ClosedInterval(-25,11)), "for",  Element(a, Set(Decimal("0.6"), Decimal("0.8"), Decimal("1.4")))),
+        ImageSource("plot_hurwitz_zeta")))
+
+make_entry(ID("583bf9"),
+    Image(Description("X-ray of", HurwitzZeta(s, 1+ConstI/2), "on", Element(s, ClosedInterval(-20,20) + ClosedInterval(-20,20)*ConstI)),
+        ImageSource("xray_hurwitz_zeta")),
+    description_xray,
+    )
+
+make_entry(ID("0e2bcb"),
+    Image(Description("X-ray of", HurwitzZeta(2+3*ConstI, a), "on", Element(a, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
+        ImageSource("xray_hurwitz_zeta_param")),
+    description_xray,
+    )
 
 # Domain and range
 
@@ -153,8 +209,6 @@ make_entry(ID("f045b3"),
     Formula(Implies(Element(s, ZZLessEqual(0)), IsHolomorphic(HurwitzZeta(s, a), ForElement(a, CC)))),
     Variables(s))
 
-
-
 # Specific values
 
 # Series representations
@@ -174,7 +228,98 @@ make_entry(ID("77e507"),
 make_entry(ID("1699a9"),
     Formula(Equal(HurwitzZeta(s, a), (ConstPi/(2*(s-1))) * Integral((a-Div(1,2)+ConstI*x)**(1-s) / Cosh(ConstPi*x)**2, For(x, -Infinity, Infinity)))),
     Variables(s, a),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), Div(1,2)))))
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), Div(1,2)))),
+    References("https://doi.org/10.1090/mcom/3401"))
+
+make_entry(ID("498036"),
+    Formula(Equal(HurwitzZeta(s, a), (1/GammaFunction(s)) * Integral((x**(s-1) * Exp(-(a*x))) / (1 - Exp(-x)), For(x, 0, Infinity)))),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(a, CC), Greater(Re(a), 0))))
+
+# Functional equatons
+
+## Recurrence relations
+
+# note: 1/a**s vs a**-s -- assumes 0**(negative + c*i) = some infinity
+make_entry(ID("ed4f6f"),
+    Formula(Equal(HurwitzZeta(s, a+1), HurwitzZeta(s, a) - 1/a**s)),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)))))
+
+make_entry(ID("bed7ee"),
+    Formula(Equal(HurwitzZeta(s, a+N), HurwitzZeta(s, a) - Sum(1/(n+a)**s, For(n, 0, N-1)))),
+    Variables(s, a, N),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("95e270"),
+    Formula(Equal(HurwitzZeta(s, a+N, r), HurwitzZeta(s, a, r) + (-1)**(r+1) * Sum(Log(a+k)**r / (a+k)**s, For(k, 0, N-1)))),
+    Variables(s, a, N, r),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0)), Element(N, ZZGreaterEqual(1)), Element(r, ZZGreaterEqual(0)))))
+
+## Multiplication formula
+
+# todo: relax assumptions on a
+make_entry(ID("ebc49c"),
+    Formula(Equal(HurwitzZeta(s, a), 2**(-s) * (HurwitzZeta(s, a/2) + HurwitzZeta(s, (a+1)/2)))),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0))))
+
+make_entry(ID("7d9feb"),
+    Formula(Equal(HurwitzZeta(s, a), N**(-s) * Sum(HurwitzZeta(s, (a + k)/N), For(k, 0, N-1)))),
+    Variables(s, a, N),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
+
+make_entry(ID("ba7f85"),
+    Formula(Equal(HurwitzZeta(s, N*a), N**(-s) * Sum(HurwitzZeta(s, a + k/N), For(k, 0, N-1)))),
+    Variables(s, a, N),
+    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
+
+## Reflection formula
+
+# todo: relax assumptions on a
+make_entry(ID("69a1a9"),
+    Formula(Equal(HurwitzZeta(1-s, p/q), (2*GammaFunction(s))/(2*ConstPi*q)**s * Sum(Cos(ConstPi*s/2 - 2*ConstPi*k*p/q) * HurwitzZeta(s, k/q), For(k, 1, q)))),
+    Variables(s, p, q),
+    Assumptions(And(Element(s, CC), NotElement(s, ZZ), Element(q, ZZGreaterEqual(1)), Element(p, Range(1, q)))))
+
+# Derivatives and differential equations
+
+# todo: relax assumptions on a
+make_entry(ID("3ba544"),
+    Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s)), HurwitzZeta(s, a, 1))),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), 0))))
+
+# todo: relax assumptions on a
+make_entry(ID("d0d03b"),
+    Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s, r)), HurwitzZeta(s, a, r))),
+    Variables(s, a, r),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
+
+# todo: relax assumptions on a
+make_entry(ID("83065e"),
+    Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(a, a)), -(s*HurwitzZeta(s+1, a)))),
+    Variables(s, a),
+    Assumptions(And(Element(s, CC), NotElement(s, Set(0, 1)), Element(a, CC), Greater(Re(a), 0))))
+
+# todo: relax assumptions on a
+make_entry(ID("40c3e2"),
+    Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(a, a, r)), RisingFactorial(1-s-r, r) * HurwitzZeta(s+r, a))),
+    Variables(s, a, r),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Unequal(s+r, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
+
+# Euler-Maclaurin formula
+
+make_entry(ID("d25d10"),
+    Formula(Equal(HurwitzZeta(s, a),
+        Sum(1/(a+k)**s, For(k, 0, N-1)) +
+        (a+N)**(1-s) / (s-1) +
+        1/(a+N)**s * (Div(1,2) + Sum((BernoulliB(2*k)/Factorial(2*k)) * (RisingFactorial(s,2*k-1)/(a+N)**(2*k-1)), For(k, 1, M))) -
+        Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2*M)) * (RisingFactorial(s, 2*M) / (a+t)**(s+2*M)), For(t, N, Infinity)))),
+    Variables(s, a, N, M),
+    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Element(N, ZZGreaterEqual(1)), Element(M, ZZGreaterEqual(1)),
+        Greater(Re(a+N), 0), Greater(Re(s+2*M-1), 0), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)))),
+    References("http://dx.doi.org/10.1007/s11075-014-9893-1"))
 
 # Representation of other functions
 
@@ -187,6 +332,16 @@ make_entry(ID("4228cd"),
     Formula(Equal(BernoulliPolynomial(n,z), -(n*HurwitzZeta(1-n,z)))),
     Variables(n, z),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC))))
+
+make_entry(ID("f3b870"),
+    Formula(Equal(LogGamma(z), HurwitzZeta(0, z, 1) + Log(2*ConstPi)/2)),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
+
+make_entry(ID("53026a"),
+    Formula(Equal(GammaFunction(z), Sqrt(2*ConstPi) * Exp(HurwitzZeta(0, z, 1)))),
+    Variables(z),
+    Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
 
 make_entry(ID("693e0e"),
     Formula(Equal(DigammaFunction(z), ComplexLimit(Brackets(1/(s-1) - HurwitzZeta(s,z)), For(s, 1)))),
