@@ -41,7 +41,7 @@ use_colors()
 #spinecolor = (0.333,0.333,0.333)
 spinecolor = (0.0,0.0,0.0)
 
-colorcycle = [(0.1,0.2,0.8), (1.0,0.5,0.0), (0.2,0.8,0.2)]
+colorcycle = [(0.1,0.2,0.8), (1.0,0.5,0.1), (0.9,0.8,0.2)]
 #del colorcycle[1]
 
 directory = [""]

@@ -39,6 +39,38 @@ def_Topic(
         "05c2dd",
         "f045b3",
     ),
+    Section("Specific values"),
+    Entries(
+        "af23f7",
+        "b721b4",
+        "fc6fe0",
+        "6e69fc",
+        "af7d3d",
+        "c6d6e2",
+        "6c3523",
+        "575b8f",
+        "ac8d3c",
+        "b4ed44",
+        "4dd87c",
+        "2d4828",
+        "33690e",
+        "868061",
+        "9417f4",
+        "4064f5",
+        "3e82c3",
+        "951f86",
+        "eda0f3",
+        "b347d3",
+        "2fabeb",
+        "edad97",
+        "84196a",
+        "532f31",
+        "5bdba2",
+        "7dab87",
+        "d99808",
+        "150b3e",
+        "3db90c",
+    ),
     Section("Series representations"),
     Subsection("Dirichlet series"),
     Entries(
@@ -73,9 +105,13 @@ def_Topic(
         "69a1a9",
     ),
     Section("Derivatives and differential equations"),
+    Subsection("Argument derivatives"),
     Entries(
         "3ba544",
         "d0d03b",
+    ),
+    Subsection("Parameter derivatives"),
+    Entries(
         "83065e",
         "40c3e2",
     ),
@@ -210,6 +246,119 @@ make_entry(ID("f045b3"),
     Variables(s))
 
 # Specific values
+
+make_entry(ID("af23f7"),
+    Formula(Equal(HurwitzZeta(s, 1), RiemannZeta(s))),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("b721b4"),
+    Formula(Equal(HurwitzZeta(s, 2), RiemannZeta(s) - 1)),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("fc6fe0"),
+    Formula(Equal(HurwitzZeta(s, 3), RiemannZeta(s) - 1 - 1/2**s)),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("6e69fc"),
+    Formula(Equal(HurwitzZeta(s, n), RiemannZeta(s) - Sum(1/k**s, For(k, 1, n-1)))),
+    Variables(s, n),
+    Assumptions(And(Element(s, CC), Element(n, ZZGreaterEqual(1)))))
+
+make_entry(ID("af7d3d"),
+    Formula(Equal(HurwitzZeta(s, Div(1,2)), (2**s-1) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("c6d6e2"),
+    Formula(Equal(HurwitzZeta(s, Div(3,2)), (2**s-1) * RiemannZeta(s) - 2**s)),
+    Variables(s),
+    Assumptions(Element(s, CC)))
+
+make_entry(ID("6c3523"),
+    Formula(Equal(HurwitzZeta(s, Div(1,2) + n), (2**s-1) * RiemannZeta(s) - 2**s * Sum(1/(2*k+1)**s, For(k, 0, n-1)))),
+    Variables(s, n),
+    Assumptions(And(Element(s, CC), Element(n, ZZGreaterEqual(0)))))
+
+make_entry(ID("575b8f"),
+    Formula(Equal(HurwitzZeta(2, 1), ConstPi**2 / 6)))
+
+make_entry(ID("ac8d3c"),
+    Formula(Equal(HurwitzZeta(2, 2), ConstPi**2 / 6 - 1)))
+
+make_entry(ID("b4ed44"),
+    Formula(Equal(HurwitzZeta(3, 1), RiemannZeta(3))))
+
+make_entry(ID("4dd87c"),
+    Formula(Equal(HurwitzZeta(3, 2), RiemannZeta(3) - 1)))
+
+make_entry(ID("2d4828"),
+    Formula(Equal(HurwitzZeta(4, 1), ConstPi**4/90)))
+
+make_entry(ID("33690e"),
+    Formula(Equal(HurwitzZeta(4, 2), ConstPi**4/90 - 1)))
+
+make_entry(ID("868061"),
+    Formula(Equal(HurwitzZeta(2, Div(1,2)), ConstPi**2 / 2)))
+
+make_entry(ID("9417f4"),
+    Formula(Equal(HurwitzZeta(3, Div(1,2)), 7 * RiemannZeta(3))))
+
+make_entry(ID("4064f5"),
+    Formula(Equal(HurwitzZeta(4, Div(1,2)), ConstPi**4 / 6)))
+
+make_entry(ID("3e82c3"),
+    Formula(Equal(HurwitzZeta(2, Div(1,4)), ConstPi**2 + 8*ConstCatalan)))
+
+make_entry(ID("951f86"),
+    Formula(Equal(HurwitzZeta(2, Div(3,4)), ConstPi**2 - 8*ConstCatalan)))
+
+make_entry(ID("eda0f3"),
+    Formula(Equal(HurwitzZeta(3, Div(1,4)), 28*RiemannZeta(3)+ConstPi**3)))
+
+make_entry(ID("b347d3"),
+    Formula(Equal(HurwitzZeta(3, Div(3,4)), 28*RiemannZeta(3)-ConstPi**3)))
+
+make_entry(ID("2fabeb"),
+    Formula(Equal(HurwitzZeta(3, Div(1,6)), 91*RiemannZeta(3)+2*Sqrt(3)*ConstPi**3)))
+
+make_entry(ID("edad97"),
+    Formula(Equal(HurwitzZeta(3, Div(5,6)), 91*RiemannZeta(3)-2*Sqrt(3)*ConstPi**3)))
+
+make_entry(ID("84196a"),
+    Formula(Equal(HurwitzZeta(n, a), (-1)**n / Factorial(n-1) * DigammaFunction(a, n-1))),
+    Variables(n, a),
+    Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(a, CC))))
+
+make_entry(ID("532f31"),
+    Formula(Equal(HurwitzZeta(1, a), UnsignedInfinity)),
+    Variables(a),
+    Assumptions(Element(a, SetMinus(CC, ZZLessEqual(0)))))
+
+make_entry(ID("5bdba2"),
+    Formula(Equal(HurwitzZeta(-n, a), -(BernoulliPolynomial(n+1, a)/(n+1)))),
+    Variables(n, a),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC))))
+
+make_entry(ID("7dab87"),
+    Formula(Equal(HurwitzZeta(-n, 0), -(BernoulliB(n+1)/(n+1)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
+make_entry(ID("d99808"),
+    Formula(Equal(HurwitzZeta(0, a), Div(1,2)-a)),
+    Variables(a),
+    Assumptions(Element(a, CC)))
+
+make_entry(ID("150b3e"),
+    Formula(Equal(HurwitzZeta(0, 0), Div(1,2))))
+
+make_entry(ID("3db90c"),
+    Formula(Equal(HurwitzZeta(0, Div(1,2)), 0)))
+
+
 
 # Series representations
 
