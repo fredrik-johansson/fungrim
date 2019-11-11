@@ -70,6 +70,7 @@ def_Topic(
         "d99808",
         "150b3e",
         "3db90c",
+        "6419ac",
     ),
     Section("Series representations"),
     Subsection("Dirichlet series"),
@@ -363,7 +364,10 @@ make_entry(ID("150b3e"),
 make_entry(ID("3db90c"),
     Formula(Equal(HurwitzZeta(0, Div(1,2)), 0)))
 
-
+make_entry(ID("6419ac"),
+    Formula(Equal(HurwitzZeta(2, a), a**(-2) * Hypergeometric3F2(1, a, a, a+1, a+1, 1))),
+    Variables(a),
+    Assumptions(Element(a, SetMinus(CC, ZZLessEqual(0)))))
 
 # Series representations
 
