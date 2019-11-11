@@ -48,6 +48,8 @@ def_Topic(
         "af7d3d",
         "c6d6e2",
         "6c3523",
+        "8bbb6f",
+        "4d1f6b",
         "575b8f",
         "ac8d3c",
         "b4ed44",
@@ -287,6 +289,16 @@ make_entry(ID("6c3523"),
     Formula(Equal(HurwitzZeta(s, Div(1,2) + n), (2**s-1) * RiemannZeta(s) - 2**s * Sum(1/(2*k+1)**s, For(k, 0, n-1)))),
     Variables(s, n),
     Assumptions(And(Element(s, CC), Element(n, ZZGreaterEqual(0)))))
+
+make_entry(ID("8bbb6f"),
+    Formula(Equal(HurwitzZeta(s, Div(1,4)) + HurwitzZeta(s, Div(3,4)), 2**s * (2**s-1) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Unequal(s, 1))))
+
+make_entry(ID("4d1f6b"),
+    Formula(Equal(HurwitzZeta(s, Div(1,6)) + HurwitzZeta(s, Div(5,6)), (2**s-1) * (3**s-1) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(And(Element(s, CC), Unequal(s, 1))))
 
 make_entry(ID("575b8f"),
     Formula(Equal(HurwitzZeta(2, 1), Pi**2 / 6)))
