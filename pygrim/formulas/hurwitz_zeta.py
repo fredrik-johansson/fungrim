@@ -76,6 +76,7 @@ def_Topic(
     Entries(
         "448d90",
         "77e507",
+        "0bd6aa",
     ),
     Subsection("Laurent series"),
     Description("Related topic: ", TopicReference("Stieltjes constants")),
@@ -144,6 +145,10 @@ def_Topic(
     Entries(
         "c31c10",  # included from dirichlet...
         "4c3678",  # included from dirichlet...
+    ),
+    Subsection("Polylogarithms"),
+    Entries(
+        "52ea5f",
     ),
 )
 
@@ -372,6 +377,11 @@ make_entry(ID("77e507"),
     Variables(s, a, r),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(a, SetMinus(CC, ZZLessEqual(0))), Element(r, ZZGreaterEqual(0)))))
 
+make_entry(ID("0bd6aa"),
+    Formula(Equal(HurwitzZeta(s, N), Sum(1/n**s, For(n, N, Infinity)))),
+    Variables(s, N),
+    Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(N, ZZGreaterEqual(1)))))
+
 # Integral representations
 
 make_entry(ID("1699a9"),
@@ -409,17 +419,17 @@ make_entry(ID("95e270"),
 
 # todo: relax assumptions on a
 make_entry(ID("ebc49c"),
-    Formula(Equal(HurwitzZeta(s, a), 2**(-s) * (HurwitzZeta(s, a/2) + HurwitzZeta(s, (a+1)/2)))),
+    Formula(Equal(HurwitzZeta(s, a), (1/2**s) * (HurwitzZeta(s, a/2) + HurwitzZeta(s, (a+1)/2)))),
     Variables(s, a),
     Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0))))
 
 make_entry(ID("7d9feb"),
-    Formula(Equal(HurwitzZeta(s, a), N**(-s) * Sum(HurwitzZeta(s, (a + k)/N), For(k, 0, N-1)))),
+    Formula(Equal(HurwitzZeta(s, a), (1/N**s) * Sum(HurwitzZeta(s, (a + k)/N), For(k, 0, N-1)))),
     Variables(s, a, N),
     Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("ba7f85"),
-    Formula(Equal(HurwitzZeta(s, N*a), N**(-s) * Sum(HurwitzZeta(s, a + k/N), For(k, 0, N-1)))),
+    Formula(Equal(HurwitzZeta(s, N*a), (1/N**s) * Sum(HurwitzZeta(s, a + k/N), For(k, 0, N-1)))),
     Variables(s, a, N),
     Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
 
@@ -496,4 +506,12 @@ make_entry(ID("693e0e"),
     Formula(Equal(DigammaFunction(z), ComplexLimit(Brackets(1/(s-1) - HurwitzZeta(s,z)), For(s, 1)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
+
+make_entry(ID("52ea5f"),
+    Formula(Equal(PolyLog(s, z), (Gamma(1-s) / (2*Pi)**(1-s)) * (ConstI**(1-s) * HurwitzZeta(s, Div(1,2) + Log(-z) / (2*Pi*ConstI))
+        + ConstI**(s-1) * HurwitzZeta(1-s, Div(1,2) - Log(-z) / (2*Pi*ConstI))))),
+    Variables(s, z),
+    Assumptions(And(Element(s, CC), Element(z, CC), NotElement(z, Set(0, 1)), NotElement(s, ZZGreaterEqual(0)))))
+
+
 
