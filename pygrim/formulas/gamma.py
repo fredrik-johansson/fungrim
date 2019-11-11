@@ -11,6 +11,8 @@ def_Topic(
     ),
     Section("Illustrations"),
     Entries(
+        "7ddf69",
+        "aa967b",
         "b0f293",
         "c7d4c2",
     ),
@@ -142,6 +144,16 @@ make_entry(ID("c6038c"),
       )),
     )
 
+
+make_entry(ID("7ddf69"),
+    Image(Description("Plot of", Gamma(x), "on", Element(x, ClosedInterval(-4,4))),
+        ImageSource("plot_gamma"))
+    )
+
+make_entry(ID("aa967b"),
+    Image(Description("Plot of", LogGamma(x), "on", Element(x, ClosedInterval(-4,4))),
+        ImageSource("plot_log_gamma"))
+    )
 
 make_entry(ID("b0f293"),
     Image(Description("X-ray of", Gamma(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),

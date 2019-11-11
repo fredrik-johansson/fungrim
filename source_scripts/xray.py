@@ -101,6 +101,9 @@ def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty
         axhline(color="gray", linewidth=0.5, linestyle="--")
         axvline(color="gray", linewidth=0.5, linestyle="--")
 
+        for sing in singularities:
+            axvline(sing, color="gray", linewidth=0.5, linestyle="--")
+
         for i, ysf in enumerate(ys):
             if legends is not None:
                 lbl = legends[i]
@@ -282,6 +285,15 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    curveplot([lambda x: fp.gamma(x)], (-4,4), yayb=(-6,6), N=400, filename="gamma", xout=0.1, yout=0.1, singularities=[-4,-3,-2,-1,0],
+        xtks=([-4,-2,0,2,4],), ytks=([-6,-4,-2,0,2,4,6],))
+
+    curveplot([lambda x: fp.re(fp.loggamma(x)), lambda x: fp.im(fp.loggamma(x))],
+        (-4,4), yayb=(-7,4), N=2000, filename="log_gamma", xout=0.1, yout=0.1, singularities=[-4,-3,-2,-1,0],
+            #legends=["$\\operatorname{Re}(\\log \\Gamma(x))$", "$\\operatorname{Im}(\\log \\Gamma(x))$"],
+            legends=["$\\operatorname{Re}$", "$\\operatorname{Im}$"],
+            legend_loc="lower right", xtks=([-4,-2,0,2,4],), ytks=([-6,-4,-2,0,2,4],))
 
     curveplot([lambda s: good(lambda: acb(s).zeta(0.6).real, prec=20),
                 lambda s: good(lambda: acb(s).zeta(0.8).real, prec=20),
