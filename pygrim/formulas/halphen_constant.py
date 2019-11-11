@@ -82,10 +82,10 @@ make_entry(ID("831ea4"),
 
 make_entry(ID("c26bc9"),
     Formula(Equal(HalphenConstant,
-        Where(Exp(-(ConstPi*EllipticK(1-c)/EllipticK(c))),
+        Where(Exp(-(Pi*EllipticK(1-c)/EllipticK(c))),
             Equal(c, UniqueZero(EllipticK(m) - 2*EllipticE(m), ForElement(m, OpenInterval(0, 1))))))))
 
 make_entry(ID("06c468"),
     Formula(Equal(HalphenConstant,
-        UniqueZero(Brackets(JacobiTheta(2, 0, Log(-x)/(2*ConstPi*ConstI), 2)), ForElement(x, OpenInterval(0, 1))))))
+        UniqueZero(Brackets(JacobiTheta(2, 0, Log(-x)/(2*Pi*ConstI), 2)), ForElement(x, OpenInterval(0, 1))))))
 

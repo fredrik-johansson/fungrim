@@ -66,7 +66,7 @@ make_entry(ID("6bd011"),
 # Main formulas
 
 make_entry(ID("888581"),
-    Formula(Equal(BetaFunction(a, b), (GammaFunction(a) * GammaFunction(b)) / GammaFunction(a + b))),
+    Formula(Equal(BetaFunction(a, b), (Gamma(a) * Gamma(b)) / Gamma(a + b))),
     Variables(a, b),
     Assumptions(And(Element(a, SetMinus(CC, ZZLessEqual(0))), Element(b, SetMinus(CC, ZZLessEqual(0))))))
 
@@ -103,7 +103,7 @@ make_entry(ID("542cf7"),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 
 make_entry(ID("48910b"),
-    Formula(Equal(BetaFunction(a, b), 2 * Integral(Sin(t)**(2*a-1) * Cos(t)**(2*b-1), For(t, 0, ConstPi / 2)))),
+    Formula(Equal(BetaFunction(a, b), 2 * Integral(Sin(t)**(2*a-1) * Cos(t)**(2*b-1), For(t, 0, Pi / 2)))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Re(a), 0), Greater(Re(b), 0))))
 

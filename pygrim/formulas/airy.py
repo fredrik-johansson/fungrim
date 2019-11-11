@@ -76,21 +76,21 @@ make_entry(ID("51b241"),
     Assumptions(And(Element(z, CC), Element(C, CC), Element(D, CC))))
 
 make_entry(ID("de9800"),
-    Formula(Equal(AiryAi(z)*AiryBi(z,1)-AiryAi(z,1)*AiryBi(z), 1/ConstPi)),
+    Formula(Equal(AiryAi(z)*AiryBi(z,1)-AiryAi(z,1)*AiryBi(z), 1/Pi)),
     Variables(z),
     Element(z, CC))
 
 make_entry(ID("693cfe"),
-    Formula(EqualAndElement(AiryAi(0), Div(1, Pow(3,Div(2,3))*GammaFunction(Div(2,3))), RealBall(Decimal("0.355028053887817239260063186004"), Decimal("1.84e-31")))))
+    Formula(EqualAndElement(AiryAi(0), Div(1, Pow(3,Div(2,3))*Gamma(Div(2,3))), RealBall(Decimal("0.355028053887817239260063186004"), Decimal("1.84e-31")))))
 
 make_entry(ID("807917"),
-    Formula(EqualAndElement(AiryAi(0,1), -Div(1, Pow(3,Div(1,3))*GammaFunction(Div(1,3))), RealBall(Decimal("-0.258819403792806798405183560189"), Decimal("2.04e-31")))))
+    Formula(EqualAndElement(AiryAi(0,1), -Div(1, Pow(3,Div(1,3))*Gamma(Div(1,3))), RealBall(Decimal("-0.258819403792806798405183560189"), Decimal("2.04e-31")))))
 
 make_entry(ID("9a8d4d"),
-    Formula(EqualAndElement(AiryBi(0), Div(1, Pow(3,Div(1,6))*GammaFunction(Div(2,3))), RealBall(Decimal("0.614926627446000735150922369094"), Decimal("3.87e-31")))))
+    Formula(EqualAndElement(AiryBi(0), Div(1, Pow(3,Div(1,6))*Gamma(Div(2,3))), RealBall(Decimal("0.614926627446000735150922369094"), Decimal("3.87e-31")))))
 
 make_entry(ID("fba07c"),
-    Formula(EqualAndElement(AiryBi(0,1), Div(Pow(3,Div(1,6)), GammaFunction(Div(1,3))), RealBall(Decimal("0.448288357353826357914823710399"), Decimal("1.72e-31")))))
+    Formula(EqualAndElement(AiryBi(0,1), Div(Pow(3,Div(1,6)), Gamma(Div(1,3))), RealBall(Decimal("0.448288357353826357914823710399"), Decimal("1.72e-31")))))
 
 make_entry(ID("b2e9d0"),
     Formula(Equal(AiryAi(z,2), z*AiryAi(z))),

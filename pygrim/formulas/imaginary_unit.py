@@ -123,28 +123,28 @@ make_entry(ID("67c262"),
     Formula(Equal(1/ConstI, -ConstI)))
 
 make_entry(ID("f8a56f"),
-    Formula(Equal(ConstI**z, Exp(ConstPi*ConstI*z/2))),
+    Formula(Equal(ConstI**z, Exp(Pi*ConstI*z/2))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("15f92d"),
-    Formula(Equal(ConstI**z, Cos(ConstPi/2 * z) + Sin(ConstPi/2 * z) * ConstI)),
+    Formula(Equal(ConstI**z, Cos(Pi/2 * z) + Sin(Pi/2 * z) * ConstI)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("a39534"),
-    Formula(Equal(ConstI**ConstI, Exp(-(ConstPi/2)))))
+    Formula(Equal(ConstI**ConstI, Exp(-(Pi/2)))))
 
 # Special functions at this value
 
 make_entry(ID("9c93bb"),
-    Formula(Equal(Abs(GammaFunction(ConstI)), Sqrt(ConstPi/Sinh(ConstPi)))))
+    Formula(Equal(Abs(Gamma(ConstI)), Sqrt(Pi/Sinh(Pi)))))
 
 make_entry(ID("3ac0ce"),
-    Formula(Equal(Im(DigammaFunction(ConstI)), Div(1,2)*(ConstPi*Coth(ConstPi) + 1))))
+    Formula(Equal(Im(DigammaFunction(ConstI)), Div(1,2)*(Pi*Coth(Pi) + 1))))
 
 make_entry(ID("208da7"),
-    Formula(Equal(PolyLog(2, ConstI), -(ConstPi**2/48) + ConstCatalan*ConstI)))
+    Formula(Equal(PolyLog(2, ConstI), -(Pi**2/48) + ConstCatalan*ConstI)))
 
 
 

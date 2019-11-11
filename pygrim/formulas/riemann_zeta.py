@@ -172,14 +172,14 @@ make_entry(ID("8f5e66"),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("a01b6e"),
-    Formula(Equal(RiemannZeta(2), ConstPi**2 / 6)))
+    Formula(Equal(RiemannZeta(2), Pi**2 / 6)))
 
 make_entry(ID("e84983"),
     Formula(NotElement(RiemannZeta(3), QQ)),
     References("R. Apéry (1979), Irrationalité de ζ(2) et ζ(3), Astérisque, 61: 11-13."))
 
 make_entry(ID("72ccda"),
-    Formula(Equal(RiemannZeta(2*n), (-1)**(n+1) * BernoulliB(2*n) * (2*ConstPi)**(2*n) / (2 * Factorial(2*n)))),
+    Formula(Equal(RiemannZeta(2*n), (-1)**(n+1) * BernoulliB(2*n) * (2*Pi)**(2*n) / (2 * Factorial(2*n)))),
     Variables(n),
     Assumptions(And(Element(n, ZZ), GreaterEqual(n, 1))))
 
@@ -189,7 +189,7 @@ make_entry(ID("51fd98"),
     Assumptions(And(Element(n, ZZ), GreaterEqual(n, 0))))
 
 make_entry(ID("9ee8bc"),
-    Formula(Equal(RiemannZeta(s), 2 * (2*ConstPi)**(s-1) * Sin(ConstPi*s/2) * GammaFunction(1-s) * RiemannZeta(1-s))),
+    Formula(Equal(RiemannZeta(s), 2 * (2*Pi)**(s-1) * Sin(Pi*s/2) * Gamma(1-s) * RiemannZeta(1-s))),
     Variables(s),
     Assumptions(
         And(Element(s, CC), NotElement(s, ZZGreaterEqual(1))),
@@ -204,26 +204,26 @@ make_entry(ID("7cb17f"),
       TableValueHeadings(n, RiemannZeta(n)),
       TableSplit(2),
       List(
-    Tuple(2, Div(1, 6) * ConstPi**2),
-    Tuple(4, Div(1, 90) * ConstPi**4),
-    Tuple(6, Div(1, 945) * ConstPi**6),
-    Tuple(8, Div(1, 9450) * ConstPi**8),
-    Tuple(10, Div(1, 93555) * ConstPi**10),
-    Tuple(12, Div(691, 638512875) * ConstPi**12),
-    Tuple(14, Div(2, 18243225) * ConstPi**14),
-    Tuple(16, Div(3617, 325641566250) * ConstPi**16),
-    Tuple(18, Div(43867, 38979295480125) * ConstPi**18),
-    Tuple(20, Div(174611, 1531329465290625) * ConstPi**20),
-    Tuple(22, Div(155366, 13447856940643125) * ConstPi**22),
-    Tuple(24, Div(236364091, 201919571963756521875) * ConstPi**24),
-    Tuple(26, Div(1315862, 11094481976030578125) * ConstPi**26),
-    Tuple(28, Div(6785560294, 564653660170076273671875) * ConstPi**28),
-    Tuple(30, Div(6892673020804, 5660878804669082674070015625) * ConstPi**30),
-    Tuple(32, Div(7709321041217, 62490220571022341207266406250) * ConstPi**32),
-    Tuple(34, Div(151628697551, 12130454581433748587292890625) * ConstPi**34),
-    Tuple(36, Div(26315271553053477373, 20777977561866588586487628662044921875) * ConstPi**36),
-    Tuple(38, Div(308420411983322, 2403467618492375776343276883984375) * ConstPi**38),
-    Tuple(40, Div(261082718496449122051, 20080431172289638826798401128390556640625) * ConstPi**40))))
+    Tuple(2, Div(1, 6) * Pi**2),
+    Tuple(4, Div(1, 90) * Pi**4),
+    Tuple(6, Div(1, 945) * Pi**6),
+    Tuple(8, Div(1, 9450) * Pi**8),
+    Tuple(10, Div(1, 93555) * Pi**10),
+    Tuple(12, Div(691, 638512875) * Pi**12),
+    Tuple(14, Div(2, 18243225) * Pi**14),
+    Tuple(16, Div(3617, 325641566250) * Pi**16),
+    Tuple(18, Div(43867, 38979295480125) * Pi**18),
+    Tuple(20, Div(174611, 1531329465290625) * Pi**20),
+    Tuple(22, Div(155366, 13447856940643125) * Pi**22),
+    Tuple(24, Div(236364091, 201919571963756521875) * Pi**24),
+    Tuple(26, Div(1315862, 11094481976030578125) * Pi**26),
+    Tuple(28, Div(6785560294, 564653660170076273671875) * Pi**28),
+    Tuple(30, Div(6892673020804, 5660878804669082674070015625) * Pi**30),
+    Tuple(32, Div(7709321041217, 62490220571022341207266406250) * Pi**32),
+    Tuple(34, Div(151628697551, 12130454581433748587292890625) * Pi**34),
+    Tuple(36, Div(26315271553053477373, 20777977561866588586487628662044921875) * Pi**36),
+    Tuple(38, Div(308420411983322, 2403467618492375776343276883984375) * Pi**38),
+    Tuple(40, Div(261082718496449122051, 20080431172289638826798401128390556640625) * Pi**40))))
 
 make_entry(ID("e50a56"),
     Description("Table of", RiemannZeta(-n), "for", LessEqual(0, n, 30)),
@@ -330,7 +330,7 @@ make_entry(ID("809bc0"),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("3a5eb6"),
-    Formula(Less(Abs(RiemannZeta(s)), 3 * Abs((1+s)/(1-s)) * Abs((1+s)/(2*ConstPi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
+    Formula(Less(Abs(RiemannZeta(s)), 3 * Abs((1+s)/(1-s)) * Abs((1+s)/(2*Pi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
     Variables(s, eta),
     Assumptions(
         And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Element(eta, OpenClosedInterval(0, Div(1,2))), LessEqual(-eta, Re(s), 1 + eta))),
@@ -350,7 +350,7 @@ make_entry(ID("d31b04"),
     Formula(LessEqual(Abs(RiemannZeta(s) -
         Parentheses(Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))))),
-        (4 * Abs(RisingFactorial(s, 2*M)) / (2*ConstPi)**(2*M)) * (N**(-Parentheses(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
+        (4 * Abs(RisingFactorial(s, 2*M)) / (2*Pi)**(2*M)) * (N**(-Parentheses(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
@@ -359,7 +359,7 @@ make_entry(ID("d31b04"),
 make_entry(ID("e37535"),
     Formula(Where(
         LessEqual(Abs((1-2**(1-s))*RiemannZeta(s) - Div(1,d(n)) * Sum(((-1)**k*(d(n)-d(k)))/(k+1)**s, For(k, 0, n-1))),
-            (3*(1 + 2*Abs(Im(s)))/(3+Sqrt(8))**n) * Exp(Abs(Im(s))*ConstPi/2)),
+            (3*(1 + 2*Abs(Im(s)))/(3+Sqrt(8))**n) * Exp(Abs(Im(s))*Pi/2)),
             Equal(d(k), n*Sum(Factorial(n+i-1)*4**i/(Factorial(n-i)*Factorial(2*i)), For(i, 0, k))))),
     Variables(s, n),
     Assumptions(And(Element(s, CC), GreaterEqual(Re(s), Div(1,2)), Unequal(s, 1), Element(n, ZZGreaterEqual(1)))),
@@ -1106,14 +1106,14 @@ make_entry(ID("a71ddd"),
 
 make_entry(ID("7783f9"),
     Formula(Equivalent(RiemannHypothesis, Equal(
-        (1/ConstPi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), For(t, 0, Infinity)),
-        ConstPi/8 + ConstGamma/4 + Log(8*ConstPi)/4 - 2))),
+        (1/Pi) * Integral(Log(Abs(RiemannZeta(Div(1,2)+ConstI*t)/RiemannZeta(Div(1,2)))) * Div(1,t**2), For(t, 0, Infinity)),
+        Pi/8 + ConstGamma/4 + Log(8*Pi)/4 - 2))),
     References("https://mathoverflow.net/q/279936"))
 
 make_entry(ID("cf70ce"),
     Formula(Equivalent(RiemannHypothesis, Equal(
         Integral((1-12*t**2)/(1+4*t**2)**3 * Integral(Log(Abs(RiemannZeta(sigma + ConstI*t))), For(sigma, Div(1,2), Infinity)), For(t, 0, Infinity)),
-        ConstPi * (3-ConstGamma) / 32))),
+        Pi * (3-ConstGamma) / 32))),
     References("https://doi.org/10.1007/BF01056314"))
 
 
@@ -1170,7 +1170,7 @@ make_entry(ID("081205"),
     Formula(Equal(KeiperLiLambda(0), 0)))
 
 make_entry(ID("d8d820"),
-    Formula(Equal(KeiperLiLambda(1), (ConstGamma/2 + 1) - Log(4*ConstPi)/2)))
+    Formula(Equal(KeiperLiLambda(1), (ConstGamma/2 + 1) - Log(4*Pi)/2)))
 
 make_entry(ID("faf448"),
     Description("Table of", KeiperLiLambda(n), "to 50 digits for", LessEqual(0, n, 30)),
@@ -1228,7 +1228,7 @@ make_entry(ID("706f66"),
     )))
 
 make_entry(ID("64bd32"),
-    Formula(Implies(RiemannHypothesis, AsymptoticTo(KeiperLiLambda(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2, n, Infinity))),
+    Formula(Implies(RiemannHypothesis, AsymptoticTo(KeiperLiLambda(n), Log(n)/2 - (Log(2*Pi) + 1 - ConstGamma)/2, n, Infinity))),
     References("https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("e68f82"),
@@ -1237,7 +1237,7 @@ make_entry(ID("e68f82"),
 
 make_entry(ID("a5d65f"),
     Formula(Equivalent(RiemannHypothesis, Where(Less(Sum(Abs(KeiperLiLambda(n) - a(n))**2, For(n, 1, Infinity)), Infinity),
-        Equal(a(n), Log(n)/2 - (Log(2*ConstPi) + 1 - ConstGamma)/2)))),
+        Equal(a(n), Log(n)/2 - (Log(2*Pi) + 1 - ConstGamma)/2)))),
     References("https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("8f8fb7"),
@@ -1415,7 +1415,7 @@ make_entry(ID("687b4d"),
 # Integral representations
 
 make_entry(ID("a41c92"),
-    Formula(Equal(StieltjesGamma(n, a), -((ConstPi/(2*(n+1))) * Integral((Log(a-Div(1,2)+ConstI*x)**(n+1) + Log(a-Div(1,2)-ConstI*x)**(n+1))/Cosh(ConstPi*x)**2, For(x, 0, Infinity))))),
+    Formula(Equal(StieltjesGamma(n, a), -((Pi/(2*(n+1))) * Integral((Log(a-Div(1,2)+ConstI*x)**(n+1) + Log(a-Div(1,2)-ConstI*x)**(n+1))/Cosh(Pi*x)**2, For(x, 0, Infinity))))),
     Variables(n, a),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Greater(Re(a), Div(1,2)))))
 

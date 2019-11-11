@@ -745,8 +745,8 @@ Asin Acos Atan Atan2 Asec Acot Acsc
 Sinh Cosh Tanh Sech Coth Csch
 Asinh Acosh Atanh Asech Acoth Acsch
 Sinc LambertW LambertWPuiseuxCoefficient
-ConstPi ConstE ConstGamma ConstI GoldenRatio ConstCatalan ConstGlaisher
-Binomial Factorial DoubleFactorial GammaFunction LogGamma DigammaFunction DigammaFunctionZero PolyGamma
+Pi ConstE ConstGamma ConstI GoldenRatio ConstCatalan ConstGlaisher
+Binomial Factorial DoubleFactorial Gamma LogGamma DigammaFunction DigammaFunctionZero PolyGamma
 RisingFactorial FallingFactorial HarmonicNumber StirlingSeriesRemainder
 Erf Erfc Erfi
 UpperGamma LowerGamma
@@ -825,7 +825,7 @@ exclude_symbols = set([Set, List, Tuple, And, Or, Implies, Equivalent, Not,
 inject_vars("""a b c d e f g h i j k l m n o p q r s t u v w x y z""")
 inject_vars("""A B C D E F G H I J K L M N O P Q R S T U V W X Y Z""")
 inject_vars("""alpha beta gamma delta epsilon zeta eta theta iota kappa lamda mu nu xi pi rho sigma tau phi chi psi omega ell""")
-inject_vars("""Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Lamda Mu Nu Xi Pi Rho Sigma Tau Phi Chi Psi Omega""")
+inject_vars("""Alpha Beta GreekGamma Delta Epsilon Zeta Eta Theta Iota Kappa Lamda Mu Nu Xi GreekPi Rho Sigma Tau Phi Chi Psi Omega""")
 
 described_symbols = []
 descriptions = {}

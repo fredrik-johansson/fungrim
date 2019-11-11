@@ -82,7 +82,7 @@ make_entry(ID("6a83ad"),
 # Special function representations
 
 make_entry(ID("2744d4"),
-    Formula(Equal(ConstCatalan, Div(1,8)*(DigammaFunction(Div(1,4), 1) - ConstPi**2))))
+    Formula(Equal(ConstCatalan, Div(1,8)*(DigammaFunction(Div(1,4), 1) - Pi**2))))
 
 make_entry(ID("e85723"),
     Formula(Equal(ConstCatalan, Div(1,16)*(HurwitzZeta(2,Div(1,4))-HurwitzZeta(2,Div(3,4))))))
@@ -108,7 +108,7 @@ make_entry(ID("d43f30"),
     Formula(Equal(ConstCatalan, Div(1,2) * Sum(4**n / ((2*n+1)**2 * Binomial(2*n,n)), For(n, 0, Infinity)))))
 
 make_entry(ID("0bd544"),
-    Formula(Equal(ConstCatalan, (ConstPi/8) * Log(2 + Sqrt(3)) + Div(3,8) * Sum(1/((2*n+1)**2*Binomial(2*n,n)), For(n, 0, Infinity)))))
+    Formula(Equal(ConstCatalan, (Pi/8) * Log(2 + Sqrt(3)) + Div(3,8) * Sum(1/((2*n+1)**2*Binomial(2*n,n)), For(n, 0, Infinity)))))
 
 make_entry(ID("37fb5f"),
     Formula(Equal(ConstCatalan, Div(1,64) * Sum((256**n * (580*n**2-184*n+15))/(n**3*(2*n-1)*Binomial(6*n,3*n)*Binomial(6*n,4*n)*Binomial(4*n,2*n)), For(n, 1, Infinity)))),
@@ -131,10 +131,10 @@ make_entry(ID("49df16"),
     Formula(Equal(ConstCatalan, Integral(Log(x)/(x**2+1), For(x, 1, Infinity)))))
 
 make_entry(ID("997777"),
-    Formula(Equal(ConstCatalan,  ConstPi**2/16 + ConstPi*Log(2)/4 - Integral(Atan(x)**2, For(x, 0, 1)))))
+    Formula(Equal(ConstCatalan,  Pi**2/16 + Pi*Log(2)/4 - Integral(Atan(x)**2, For(x, 0, 1)))))
 
 make_entry(ID("d6703a"),
-    Formula(Equal(ConstCatalan,  7*RiemannZeta(3)/(4*ConstPi) + (2/ConstPi) * Integral(Atan(x)**2/x, For(x, 0, 1)))))
+    Formula(Equal(ConstCatalan,  7*RiemannZeta(3)/(4*Pi) + (2/Pi) * Integral(Atan(x)**2/x, For(x, 0, 1)))))
 
 make_entry(ID("fd82ab"),
     Formula(Equal(ConstCatalan, Integral(Acos(x)/Sqrt(x**2+1), For(x, 0, 1)))))
@@ -146,10 +146,10 @@ make_entry(ID("c54c85"),
     Formula(Equal(ConstCatalan, Div(1,2) * Integral(x/Cosh(x), For(x, 0, Infinity)))))
 
 make_entry(ID("ec1435"),
-    Formula(Equal(ConstCatalan, Div(1,4) * Integral(x/Sin(x), For(x, -(ConstPi/2), ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Div(1,4) * Integral(x/Sin(x), For(x, -(Pi/2), Pi/2)))))
 
 make_entry(ID("79f20e"),
-    Formula(Equal(ConstCatalan, Integral(x/(Sin(x)*Cos(x)), For(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, Integral(x/(Sin(x)*Cos(x)), For(x, 0, Pi/4)))))
 
 ## Involving compositions of elementary functions
 
@@ -157,22 +157,22 @@ make_entry(ID("fc5ea9"),
     Formula(Equal(ConstCatalan, Integral(Atan(Exp(-x)), For(x, 0, Infinity)))))
 
 make_entry(ID("08cda4"),
-    Formula(Equal(ConstCatalan, -Integral(Log(Tan(x)), For(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, -Integral(Log(Tan(x)), For(x, 0, Pi/4)))))
 
 make_entry(ID("270e67"),
-    Formula(Equal(ConstCatalan, Integral(Log(Cot(x)), For(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, Integral(Log(Cot(x)), For(x, 0, Pi/4)))))
 
 make_entry(ID("4dec89"),
-    Formula(Equal(ConstCatalan, Integral(Asinh(Sin(x)), For(x, 0, ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Integral(Asinh(Sin(x)), For(x, 0, Pi/2)))))
 
 make_entry(ID("d6415e"),
-    Formula(Equal(ConstCatalan, Integral(Asinh(Cos(x)), For(x, 0, ConstPi/2)))))
+    Formula(Equal(ConstCatalan, Integral(Asinh(Cos(x)), For(x, 0, Pi/2)))))
 
 make_entry(ID("e09b77"),
-    Formula(Equal(ConstCatalan, -(2*Integral(Log(2*Sin(x)), For(x, 0, ConstPi/4))))))
+    Formula(Equal(ConstCatalan, -(2*Integral(Log(2*Sin(x)), For(x, 0, Pi/4))))))
 
 make_entry(ID("6d3591"),
-    Formula(Equal(ConstCatalan, 2*Integral(Log(2*Cos(x)), For(x, 0, ConstPi/4)))))
+    Formula(Equal(ConstCatalan, 2*Integral(Log(2*Cos(x)), For(x, 0, Pi/4)))))
 
 ## Involving special functions
 
@@ -183,7 +183,7 @@ make_entry(ID("d3cfc2"),
     Formula(Equal(ConstCatalan, Integral(EllipticE(m**2), For(m, 0, 1)) - Div(1,2))))
 
 make_entry(ID("937fa9"),
-    Formula(Equal(ConstCatalan, (ConstPi/2) * Integral(GammaFunction(1+x)*GammaFunction(1-x), For(x, 0, Div(1,2))))))
+    Formula(Equal(ConstCatalan, (Pi/2) * Integral(Gamma(1+x)*Gamma(1-x), For(x, 0, Div(1,2))))))
 
 ## Double integrals
 

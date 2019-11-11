@@ -83,11 +83,11 @@ make_entry(ID("1d1028"),
     Formula(Element(ConstI, ModularGroupFundamentalDomain)))
 
 make_entry(ID("21b67f"),
-    Formula(EqualAndElement(Exp(2*ConstPi*ConstI/3), (-1+Sqrt(3)*ConstI)/2, ModularGroupFundamentalDomain)),
+    Formula(EqualAndElement(Exp(2*Pi*ConstI/3), (-1+Sqrt(3)*ConstI)/2, ModularGroupFundamentalDomain)),
     Description("Corner of the fundamental domain."))
 
 make_entry(ID("e28209"),
-    Formula(Less(Abs(Exp(2*ConstPi*ConstI*tau)), Decimal("0.004334"))),   # exp(-pi sqrt(3)) ...
+    Formula(Less(Abs(Exp(2*Pi*ConstI*tau)), Decimal("0.004334"))),   # exp(-pi sqrt(3)) ...
     Variables(tau),
     Assumptions(Element(tau, ModularGroupFundamentalDomain)))
 
@@ -97,5 +97,5 @@ make_entry(ID("fd53ab"),
 # Ford circles
 
 make_entry(ID("8a9884"),
-    Formula(Equal((ConstPi/4) * Sum(Totient(q) / q**4, For(q, 1, Infinity)), (ConstPi/4) * (RiemannZeta(3)/RiemannZeta(4)), 45 * RiemannZeta(3) / (2 * ConstPi**3))))
+    Formula(Equal((Pi/4) * Sum(Totient(q) / q**4, For(q, 1, Infinity)), (Pi/4) * (RiemannZeta(3)/RiemannZeta(4)), 45 * RiemannZeta(3) / (2 * Pi**3))))
 

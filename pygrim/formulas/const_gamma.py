@@ -67,7 +67,7 @@ make_entry(ID("28bf9a"),
     References("J. Havil (2003): Exploring Euler's Constant. Princeton University Press. Page 97."))
 
 make_entry(ID("cf3977"),
-    Formula(Equal(ConstGamma, -ComplexDerivative(GammaFunction(z), For(z, 1, 1)))))
+    Formula(Equal(ConstGamma, -ComplexDerivative(Gamma(z), For(z, 1, 1)))))
 
 make_entry(ID("d17d0b"),
     Formula(Equal(ConstGamma, -DigammaFunction(1))))
@@ -76,13 +76,13 @@ make_entry(ID("a1f1ec"),
     Formula(Equal(ConstGamma, ComplexLimit(Brackets(RiemannZeta(s) - 1/(s-1)), For(s, 1)))))
 
 make_entry(ID("79d6ba"),
-    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(GammaFunction(z) - 1/z), For(z, 0)))))
+    Formula(Equal(ConstGamma, -ComplexLimit(Brackets(Gamma(z) - 1/z), For(z, 0)))))
 
 make_entry(ID("9d5c86"),
     Formula(Equal(ConstGamma, -ComplexLimit(Brackets(DigammaFunction(z) + 1/z), For(z, 0)))))
 
 make_entry(ID("0888b3"),
-    Formula(Equal(ConstGamma, RightLimit(Brackets((ConstPi/2) * BesselY(0,x) - Log(x/2)), For(x, 0)))))
+    Formula(Equal(ConstGamma, RightLimit(Brackets((Pi/2) * BesselY(0,x) - Log(x/2)), For(x, 0)))))
 
 make_entry(ID("e8af68"),
     Formula(Equal(ConstGamma, RightLimit(Brackets(-BesselK(0,x) - Log(x/2)), For(x, 0)))))

@@ -88,13 +88,13 @@ make_entry(ID("ebfcd8"),
 # Trigonometric formulas
 
 make_entry(ID("98a765"),
-    Formula(Equal(GoldenRatio, 2*Cos(ConstPi/5))))
+    Formula(Equal(GoldenRatio, 2*Cos(Pi/5))))
 
 make_entry(ID("487e35"),
-    Formula(Equal(GoldenRatio, 2*Sin(3*ConstPi/10))))
+    Formula(Equal(GoldenRatio, 2*Sin(3*Pi/10))))
 
 make_entry(ID("fad16f"),
-    Formula(Equal(GoldenRatio, 2*Sin(ConstPi/10)+1)))
+    Formula(Equal(GoldenRatio, 2*Sin(Pi/10)+1)))
 
 # Recurrence relations
 

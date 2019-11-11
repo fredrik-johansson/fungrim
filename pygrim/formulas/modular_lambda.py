@@ -237,19 +237,19 @@ make_entry(ID("166402"),
 # Fourier series (q-series)
 
 make_entry(ID("921f34"),
-    Formula(EqualQSeriesEllipsis(ModularLambda(tau), tau, q, 16*q - 128*q**2 + 704*q**3 - 3072*q**4 + 11488*q**5 - 38400*q**6, Equal(q, Exp(ConstPi*ConstI*tau)))),
+    Formula(EqualQSeriesEllipsis(ModularLambda(tau), tau, q, 16*q - 128*q**2 + 704*q**3 - 3072*q**4 + 11488*q**5 - 38400*q**6, Equal(q, Exp(Pi*ConstI*tau)))),
     Variables(tau),
     Assumptions(Element(tau, HH)),
     References("https://oeis.org/A115977"))
 
 make_entry(ID("e96684"),
-    Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, For(k, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(ModularLambda(tau), Where(16*q*Product(((1+q**(2*k))/(1+q**(2*k-1)))**8, For(k, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("ac236f"),
-    Formula(Where(AsymptoticTo(a(n), (-1)**(n+1) * (Exp(2*ConstPi*Sqrt(n)) / (32 * n**Div(3,4))),
-        n, Infinity), Equal(a(n), QSeriesCoefficient(ModularLambda(tau), tau, q, n, Equal(q, Exp(ConstPi*ConstI*tau)))))),
+    Formula(Where(AsymptoticTo(a(n), (-1)**(n+1) * (Exp(2*Pi*Sqrt(n)) / (32 * n**Div(3,4))),
+        n, Infinity), Equal(a(n), QSeriesCoefficient(ModularLambda(tau), tau, q, n, Equal(q, Exp(Pi*ConstI*tau)))))),
     References("https://oeis.org/A115977"))
 
 # Range
@@ -291,7 +291,7 @@ make_entry(ID("ea56d1"),
     Assumptions(Element(Matrix2x2(a,b,c,d), SL2Z)))
 
 make_entry(ID("b0e1cb"),
-    Formula(Where(Equal(ModularLambda(omega), -omega), Equal(omega, Exp(2*ConstPi*ConstI/3)))))
+    Formula(Where(Equal(ModularLambda(omega), -omega), Equal(omega, Exp(2*Pi*ConstI/3)))))
 
 make_entry(ID("4877f2"),
     Formula(Equal(ModularLambda(ConstI/2), 12*Sqrt(2)-16)))
@@ -332,19 +332,19 @@ make_entry(ID("44a529"),
 
 make_entry(ID("27b2c7"),
     Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
-        ((ConstPi*ConstI)/3) * (EisensteinE(2,tau/2) + 8*EisensteinE(2,2*tau) - 6*EisensteinE(2,tau)) * ModularLambda(tau))),
+        ((Pi*ConstI)/3) * (EisensteinE(2,tau/2) + 8*EisensteinE(2,2*tau) - 6*EisensteinE(2,tau)) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c18c95"),
     Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
-        ((2*ConstI)/ConstPi) * (WeierstrassZeta(Div(1,2),tau/2) + 8*WeierstrassZeta(Div(1,2),2*tau) - 6*WeierstrassZeta(Div(1,2),tau)) * ModularLambda(tau))),
+        ((2*ConstI)/Pi) * (WeierstrassZeta(Div(1,2),tau/2) + 8*WeierstrassZeta(Div(1,2),2*tau) - 6*WeierstrassZeta(Div(1,2),tau)) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("38b4f3"),
     Formula(Equal(ComplexDerivative(ModularLambda(tau), For(tau, tau)),
-        -((4*ConstI)/ConstPi) * EllipticK(ModularLambda(tau))**2 * (ModularLambda(tau)-1) * ModularLambda(tau))),
+        -((4*ConstI)/Pi) * EllipticK(ModularLambda(tau))**2 * (ModularLambda(tau)-1) * ModularLambda(tau))),
     Variables(tau),
     Assumptions(Element(tau, Set(tau1+n, For(Tuple(tau1, n)), And(Element(tau1, Interior(ModularLambdaFundamentalDomain)), Element(n, ZZ))))),
     References("http://functions.wolfram.com/EllipticFunctions/ModularLambda/20/01/0001/ Note: because of the branch cut of the elliptic integral, only valid on part of the domain."))

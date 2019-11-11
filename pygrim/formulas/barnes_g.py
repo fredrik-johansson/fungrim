@@ -223,7 +223,7 @@ make_entry(ID("b4355e"),
 # todo: all R if -inf + c = -inf defined (...)
 make_entry(ID("5a11eb"),
     Formula(Equal(LogBarnesG(x), Where(Cases(Tuple(Log(BarnesG(x)), Greater(x, 0)),
-        Tuple(Log(Abs(BarnesG(x))) + Div(1,2)*n*(n-1)*ConstPi*ConstI, Otherwise)), Equal(n, Floor(x))))),
+        Tuple(Log(Abs(BarnesG(x))) + Div(1,2)*n*(n-1)*Pi*ConstI, Otherwise)), Equal(n, Floor(x))))),
     Variables(x),
     Assumptions(And(Element(x, RR), NotElement(x, ZZLessEqual(0)))))
 
@@ -258,7 +258,7 @@ make_entry(ID("e1f73d"),
     Formula(Equal(BranchCuts(LogBarnesG(z), z, CC), Set(OpenInterval(-n-1,-n), ForElement(n, ZZGreaterEqual(0))))))
 
 make_entry(ID("a044e1"),
-    Formula(Equal(Im(LogBarnesG(x)), Where((n*(n-1))/2 * ConstPi, Equal(n, Floor(x))))),
+    Formula(Equal(Im(LogBarnesG(x)), Where((n*(n-1))/2 * Pi, Equal(n, Floor(x))))),
     Variables(x),
     Assumptions(And(Element(x, RR), Less(x, 0), NotElement(x, ZZ))))
 
@@ -268,7 +268,7 @@ make_entry(ID("cc3a51"),
     Assumptions(And(Element(x, RR), Less(x, 0), NotElement(x, ZZ))))
 
 make_entry(ID("d35c54"),
-    Formula(Equal(RightLimit(Brackets(LogBarnesG(x-epsilon*ConstI)), For(epsilon, 0)), Conjugate(LogBarnesG(x)), Where(LogBarnesG(x) - n*(n-1)*ConstPi*ConstI, Equal(n, Floor(x))))),
+    Formula(Equal(RightLimit(Brackets(LogBarnesG(x-epsilon*ConstI)), For(epsilon, 0)), Conjugate(LogBarnesG(x)), Where(LogBarnesG(x) - n*(n-1)*Pi*ConstI, Equal(n, Floor(x))))),
     Variables(x),
     Assumptions(And(Element(x, RR), Less(x, 0), NotElement(x, ZZ))))
 
@@ -332,29 +332,29 @@ make_entry(ID("dbc117"),
     )))
 
 make_entry(ID("8b7991"),
-    Formula(Equal(BarnesG(Div(1,2)), (2**Div(1,24) * Exp(Div(1,8))) / (ConstPi**Div(1,4) * ConstGlaisher**Div(3,2)))))
+    Formula(Equal(BarnesG(Div(1,2)), (2**Div(1,24) * Exp(Div(1,8))) / (Pi**Div(1,4) * ConstGlaisher**Div(3,2)))))
 
 make_entry(ID("ce66a9"),
-    Formula(Equal(BarnesG(Div(1,4)), ConstE**(Div(3,32)-ConstCatalan/(4*ConstPi))/(ConstGlaisher**Div(9,8)*GammaFunction(Div(1,4))**Div(3,4)))))
+    Formula(Equal(BarnesG(Div(1,4)), ConstE**(Div(3,32)-ConstCatalan/(4*Pi))/(ConstGlaisher**Div(9,8)*Gamma(Div(1,4))**Div(3,4)))))
 
 make_entry(ID("dc507f"),
-    Formula(Equal(BarnesG(Div(3,4)), (ConstE**(Div(3,32)+ConstCatalan/(4*ConstPi)) * GammaFunction(Div(1,4))**Div(1,4)) / (2**Div(1,8)*ConstPi**Div(1,4)*ConstGlaisher**Div(9,8)))))
+    Formula(Equal(BarnesG(Div(3,4)), (ConstE**(Div(3,32)+ConstCatalan/(4*Pi)) * Gamma(Div(1,4))**Div(1,4)) / (2**Div(1,8)*Pi**Div(1,4)*ConstGlaisher**Div(9,8)))))
 
 make_entry(ID("90b367"),
     Formula(Equal(ComplexDerivative(BarnesG(z), For(z, 0)), 1)))
 
 make_entry(ID("dbfd5b"),
-    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, 1)), (Log(2*ConstPi)-1)/2)))
+    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, 1)), (Log(2*Pi)-1)/2)))
 
 make_entry(ID("a54fb0"),
-    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, 2)), (Log(2*ConstPi)-1)/2 - ConstGamma)))
+    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, 2)), (Log(2*Pi)-1)/2 - ConstGamma)))
 
 make_entry(ID("f50c74"),
     Formula(Equal(ComplexDerivative(BarnesG(z), For(z, n)), Cases(
         Tuple(0, Less(n, 0)),
         Tuple(1, Equal(n, 0)),
-        Tuple(Div(1,2)*(Log(2*ConstPi)-1), Equal(n, 1)),
-        Tuple(BarnesG(n)*((Div(1,2)*Log(2*ConstPi)+(n-1)*(HarmonicNumber(n-2)-ConstGamma-1)+Div(1,2))), GreaterEqual(n, 2))))),
+        Tuple(Div(1,2)*(Log(2*Pi)-1), Equal(n, 1)),
+        Tuple(BarnesG(n)*((Div(1,2)*Log(2*Pi)+(n-1)*(HarmonicNumber(n-2)-ConstGamma-1)+Div(1,2))), GreaterEqual(n, 2))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -363,7 +363,7 @@ make_entry(ID("f50c74"),
 ## Recurrence relation
 
 make_entry(ID("86b3ec"),
-    Formula(Equal(BarnesG(z+1), GammaFunction(z) * BarnesG(z))),
+    Formula(Equal(BarnesG(z+1), Gamma(z) * BarnesG(z))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
@@ -373,33 +373,33 @@ make_entry(ID("5261e3"),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
 make_entry(ID("7a36e5"),
-    Formula(Equal(BarnesG(z+n), Brackets(Product((z+k-1)**(n-k), For(k, 1, n))) * GammaFunction(z)**n * BarnesG(z))),
+    Formula(Equal(BarnesG(z+n), Brackets(Product((z+k-1)**(n-k), For(k, 1, n))) * Gamma(z)**n * BarnesG(z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)), Element(n, ZZGreaterEqual(0)))))
 
 ## Reflection formula
 
 make_entry(ID("541e2e"),
-    Formula(Equal(BarnesG(1-x), (-1)**(Floor((x-1)/2)+1) * BarnesG(1+x) * (Abs(Sin(ConstPi*x))/ConstPi)**x * Exp((1/(2*ConstPi)) * Im(PolyLog(2, Exp(2*ConstPi*ConstI*x)))))),
+    Formula(Equal(BarnesG(1-x), (-1)**(Floor((x-1)/2)+1) * BarnesG(1+x) * (Abs(Sin(Pi*x))/Pi)**x * Exp((1/(2*Pi)) * Im(PolyLog(2, Exp(2*Pi*ConstI*x)))))),
     Variables(x),
     Assumptions(And(Element(x, RR), NotElement(x, ZZLessEqual(-1)))),
     References("https://doi.org/10.1145/384101.384104"))
 
 make_entry(ID("d1a0ec"),
-    Formula(Equal(LogBarnesG(1-x), LogBarnesG(1+x) + Log(Abs(Sin(ConstPi*x))/ConstPi) * (1/(2*ConstPi)) * Im(PolyLog(2, Exp(2*ConstPi*ConstI*x)))
-        + Where(Sign(x) * (n*(n+1)) * (ConstPi * ConstI / 2), Equal(n, Floor(x))))),
+    Formula(Equal(LogBarnesG(1-x), LogBarnesG(1+x) + Log(Abs(Sin(Pi*x))/Pi) * (1/(2*Pi)) * Im(PolyLog(2, Exp(2*Pi*ConstI*x)))
+        + Where(Sign(x) * (n*(n+1)) * (Pi * ConstI / 2), Equal(n, Floor(x))))),
     Variables(x),
     Assumptions(And(Element(x, RR), NotElement(x, ZZ))))
 
 make_entry(ID("b6017f"),
-    Formula(Equal(LogBarnesG(1-z), LogBarnesG(1+z) - Log(2*ConstPi)*z + Integral(ConstPi*x*Cot(ConstPi*x), For(x, 0, z)))),
+    Formula(Equal(LogBarnesG(1-z), LogBarnesG(1+z) - Log(2*Pi)*z + Integral(Pi*x*Cot(Pi*x), For(x, 0, z)))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, Union(OpenClosedInterval(-Infinity, -1), ClosedOpenInterval(1, Infinity))))))
 
 make_entry(ID("23ed69"),
-    Formula(Equal(LogBarnesG(1-z), LogBarnesG(1+z) - Log(2*ConstPi)*z + Cases(
-        Tuple(Integral(ConstPi*x*Cot(ConstPi*x), For(x, 0, ConstI)) + Integral(ConstPi*x*Cot(ConstPi*x), For(x, ConstI, z)), Or(Less(-1, Re(z), 1), Greater(Im(z), 0), And(Equal(Im(z), 0), Less(Re(z), 1)))),
-        Tuple(Integral(ConstPi*x*Cot(ConstPi*x), For(x, 0, -ConstI)) + Integral(ConstPi*x*Cot(ConstPi*x), For(x, -ConstI, z)), Or(Less(-1, Re(z), 1), Less(Im(z), 0), And(Equal(Im(z), 0), Greater(Re(z), -1)))))
+    Formula(Equal(LogBarnesG(1-z), LogBarnesG(1+z) - Log(2*Pi)*z + Cases(
+        Tuple(Integral(Pi*x*Cot(Pi*x), For(x, 0, ConstI)) + Integral(Pi*x*Cot(Pi*x), For(x, ConstI, z)), Or(Less(-1, Re(z), 1), Greater(Im(z), 0), And(Equal(Im(z), 0), Less(Re(z), 1)))),
+        Tuple(Integral(Pi*x*Cot(Pi*x), For(x, 0, -ConstI)) + Integral(Pi*x*Cot(Pi*x), For(x, -ConstI, z)), Or(Less(-1, Re(z), 1), Less(Im(z), 0), And(Equal(Im(z), 0), Greater(Re(z), -1)))))
     )),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZ))))
@@ -408,7 +408,7 @@ make_entry(ID("82b410"),
     Formula(Equal(LogBarnesG(1-z), LogBarnesG(1+z) + Where(Cases(
         Tuple(F(z), Or(Less(0, Re(z), 1), Greater(Im(z), 0), And(Equal(Im(z), 0), Less(Re(z), 1)))),
         Tuple(-F(-z), Or(Less(-1, Re(z), 0), Less(Im(z), 0), And(Equal(Im(z), 0), Greater(Re(z), -1))))),
-            Equal(F(z), ((ConstPi*ConstI)/2)*(z**2-z+Div(1,6)) - z*(LogGamma(z)+LogGamma(1-z)) - (ConstI/(2*ConstPi)) * PolyLog(2, Exp(2*ConstPi*ConstI*z)))),
+            Equal(F(z), ((Pi*ConstI)/2)*(z**2-z+Div(1,6)) - z*(LogGamma(z)+LogGamma(1-z)) - (ConstI/(2*Pi)) * PolyLog(2, Exp(2*Pi*ConstI*z)))),
     )),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZ))))
@@ -416,7 +416,7 @@ make_entry(ID("82b410"),
 ## Multiplication theorem
 
 make_entry(ID("ea26d4"),
-    Formula(Equal(BarnesG(n*z), ConstE**((Log(ConstGlaisher)-Div(1,12))*(n**2-1))*n**(n**2*z**2/2-n*z+Div(5,12))*(2*ConstPi)**((n-1)*(1-n*z)/2) *
+    Formula(Equal(BarnesG(n*z), ConstE**((Log(ConstGlaisher)-Div(1,12))*(n**2-1))*n**(n**2*z**2/2-n*z+Div(5,12))*(2*Pi)**((n-1)*(1-n*z)/2) *
         Product(Product(BarnesG(z+(i+j)/n), For(j, 0, n-1)), For(i, 0, n-1)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(1)))),
@@ -439,12 +439,12 @@ make_entry(ID("6c6d3e"),
 # Derivatives and differential equations
 
 make_entry(ID("5babc2"),
-    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, z)), BarnesG(z) * ((z-1)*DigammaFunction(z) - z + (Log(2*ConstPi) + 1)/2))),
+    Formula(Equal(ComplexDerivative(BarnesG(z), For(z, z)), BarnesG(z) * ((z-1)*DigammaFunction(z) - z + (Log(2*Pi) + 1)/2))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
 make_entry(ID("af31ae"),
-    Formula(Equal(ComplexBranchDerivative(Brackets(LogBarnesG(z)), For(z, z)), (z-1)*DigammaFunction(z) - z + (Log(2*ConstPi) + 1)/2)),
+    Formula(Equal(ComplexBranchDerivative(Brackets(LogBarnesG(z)), For(z, z)), (z-1)*DigammaFunction(z) - z + (Log(2*Pi) + 1)/2)),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
@@ -459,12 +459,12 @@ make_entry(ID("e05807"),
 # Series representations
 
 make_entry(ID("0ad263"),
-    Formula(Equal(LogBarnesG(1+z), (Log(2*ConstPi)-1)/2 * z - (1+ConstGamma)/2 * z**2 + Sum((-1)**(n+1) * RiemannZeta(n-1) / n * z**n, For(n, 3, Infinity)))),
+    Formula(Equal(LogBarnesG(1+z), (Log(2*Pi)-1)/2 * z - (1+ConstGamma)/2 * z**2 + Sum((-1)**(n+1) * RiemannZeta(n-1) / n * z**n, For(n, 3, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 1))))
 
 make_entry(ID("54d4e2"),
-    Formula(Equal(BarnesG(z+1), (2*ConstPi)**(z/2) * Exp(-((z+(ConstGamma+1)*z**2)/2)) * Product(Brackets((1+z/k)**k * Exp(z**2/(2*k)-z)), For(k, 1, Infinity)))),
+    Formula(Equal(BarnesG(z+1), (2*Pi)**(z/2) * Exp(-((z+(ConstGamma+1)*z**2)/2)) * Product(Brackets((1+z/k)**k * Exp(z**2/(2*k)-z)), For(k, 1, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -489,7 +489,7 @@ make_entry(ID("b16d00"),
 
 make_entry(ID("092cee"),
     Formula(Equal(LogBarnesGRemainder(N, z),
-        (1/z**(2*N)) * ((-1)**(N+1) / ConstPi) * Integral((t**(2*N-1)/(1+(t/z)**2)) * PolyLog(2, Exp(-(2*ConstPi*t))), For(t, 0, Infinity)))),
+        (1/z**(2*N)) * ((-1)**(N+1) / Pi) * Integral((t**(2*N-1)/(1+(t/z)**2)) * PolyLog(2, Exp(-(2*Pi*t))), For(t, 0, Infinity)))),
     Variables(z, N),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0), Element(N, ZZGreaterEqual(1)))),
     References("https://dx.doi.org/10.1098/rspa.2014.0534"))
@@ -504,7 +504,7 @@ make_entry(ID("645c98"),
 
 make_entry(ID("1d4638"),
     Formula(LessEqual(Abs(LogBarnesGRemainder(N, z)),
-        Abs(BernoulliB(2*N+2))/(2*N*(2*N+1)*(2*N+2)*Abs(z)**(2*N)) * Cases(Tuple(1, LessEqual(Abs(Arg(z)), ConstPi/4)), Tuple(Sec(Div(1,2)*Arg(z))**(2*N+1), Less(Abs(Arg(z)), ConstPi))))),
+        Abs(BernoulliB(2*N+2))/(2*N*(2*N+1)*(2*N+2)*Abs(z)**(2*N)) * Cases(Tuple(1, LessEqual(Abs(Arg(z)), Pi/4)), Tuple(Sec(Div(1,2)*Arg(z))**(2*N+1), Less(Abs(Arg(z)), Pi))))),
     Variables(z, N),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), Element(N, ZZGreaterEqual(1)))),
     References("https://dx.doi.org/10.1098/rspa.2014.0534"))
@@ -512,19 +512,19 @@ make_entry(ID("1d4638"),
 # Integral representations
 
 make_entry(ID("8c96a5"),
-    Formula(Equal(LogBarnesG(z+1), z*(1-z)/2 + z/2*Log(2*ConstPi) + z*LogGamma(z) - Integral(LogGamma(x), For(x, 0, z)))),
+    Formula(Equal(LogBarnesG(z+1), z*(1-z)/2 + z/2*Log(2*Pi) + z*LogGamma(z) - Integral(LogGamma(x), For(x, 0, z)))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, -1)))),
     References("https://arxiv.org/abs/math/0308086"))
 
 make_entry(ID("95f771"),
-    Formula(Equal(LogBarnesG(z+1), z*(1-z)/2 + z/2*Log(2*ConstPi) + Integral(x*DigammaFunction(x), For(x, 0, z)))),
+    Formula(Equal(LogBarnesG(z+1), z*(1-z)/2 + z/2*Log(2*Pi) + Integral(x*DigammaFunction(x), For(x, 0, z)))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, OpenClosedInterval(-Infinity, -1)))),
     References("https://arxiv.org/abs/math/0308086"))
 
 make_entry(ID("b64782"),
-    Formula(Equal(LogBarnesG(z+1), z**2/4*(2*Log(z)-3)+z*Log(2*ConstPi)/2+Div(1,12)-Log(ConstGlaisher)-Integral(x*Log(x**2+z**2)/(Exp(2*ConstPi*x)-1), For(x, 0, Infinity)))),
+    Formula(Equal(LogBarnesG(z+1), z**2/4*(2*Log(z)-3)+z*Log(2*Pi)/2+Div(1,12)-Log(ConstGlaisher)-Integral(x*Log(x**2+z**2)/(Exp(2*Pi*x)-1), For(x, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))),
     References("https://arxiv.org/abs/math/0308086"))
@@ -538,13 +538,13 @@ make_entry(ID("6395ee"),
 # Bounds and inequalities
 
 make_entry(ID("4a3612"),
-    Formula(Less(LogBarnesG(x+1), (x**2/2-Div(1,12))*Log(x) - 3*x**2/4 + (Log(2*ConstPi)/2)*x + Div(1,12) - Log(ConstGlaisher))),
+    Formula(Less(LogBarnesG(x+1), (x**2/2-Div(1,12))*Log(x) - 3*x**2/4 + (Log(2*Pi)/2)*x + Div(1,12) - Log(ConstGlaisher))),
     Variables(x),
     Assumptions(Element(x, OpenInterval(0, Infinity))),
     References("https://dx.doi.org/10.1098/rspa.2014.0534"))
 
 make_entry(ID("3544a0"),
-    Formula(Greater(LogBarnesG(x+1), (x**2/2-Div(1,12))*Log(x) - 3*x**2/4 + (Log(2*ConstPi)/2)*x + Div(1,12) - Log(ConstGlaisher) - 1/(240*x**2))),
+    Formula(Greater(LogBarnesG(x+1), (x**2/2-Div(1,12))*Log(x) - 3*x**2/4 + (Log(2*Pi)/2)*x + Div(1,12) - Log(ConstGlaisher) - 1/(240*x**2))),
     Variables(x),
     Assumptions(Element(x, OpenInterval(0, Infinity))),
     References("https://dx.doi.org/10.1098/rspa.2014.0534"))

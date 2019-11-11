@@ -237,26 +237,26 @@ make_entry(ID("e1f15b"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("7697af"),
-    Formula(AsymptoticTo(PartitionsP(n), Exp(ConstPi*Sqrt(2*n/3)) / (4 * n * Sqrt(3)), n, Infinity)),
+    Formula(AsymptoticTo(PartitionsP(n), Exp(Pi*Sqrt(2*n/3)) / (4 * n * Sqrt(3)), n, Infinity)),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 # todo: fix bessel subscript printing
-hrr_term = Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (ConstPi/k) * Sqrt(Div(2,3) * (n - Div(1,24))))
+hrr_term = Div(HardyRamanujanA(n,k), k) * BesselI(Div(3,2), (Pi/k) * Sqrt(Div(2,3) * (n - Div(1,24))))
 
 make_entry(ID("fb7a63"),
-    Formula(Equal(PartitionsP(n), ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, Infinity)))),
+    Formula(Equal(PartitionsP(n), ((2*Pi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, Infinity)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("5adbc3"),
-    Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(ConstPi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), For(r, 0, k-1)))),
+    Formula(Equal(HardyRamanujanA(n,k), Sum(KroneckerDelta(GCD(r,k), 1) * Exp(Pi*ConstI*(DedekindSum(r,k) - 2*n*r/k)), For(r, 0, k-1)))),
     Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(k, ZZGreaterEqual(1)))))
 
 make_entry(ID("afd27a"),
-    Formula(LessEqual(Abs(PartitionsP(n) - ((2*ConstPi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, N))),
-        (44*ConstPi**2/(225*Sqrt(3*N))) + (ConstPi * Sqrt(2) / 75) * Sqrt(N / (n - 1)) * Sinh((ConstPi/N) * Sqrt(2*n/3)))),
+    Formula(LessEqual(Abs(PartitionsP(n) - ((2*Pi) / Pow(24*n-1, Div(3,4))) * Sum(hrr_term, For(k, 1, N))),
+        (44*Pi**2/(225*Sqrt(3*N))) + (Pi * Sqrt(2) / 75) * Sqrt(N / (n - 1)) * Sinh((Pi/N) * Sqrt(2*n/3)))),
     Variables(n, N),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(N, ZZGreaterEqual(1)))))
 

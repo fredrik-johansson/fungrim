@@ -29,19 +29,19 @@ Run `python setup.py install` to install the `pygrim` Python library. This is th
     >>> import pygrim
     >>> pygrim.Equal
     Equal
-    >>> pygrim.ConstPi
-    ConstPi
-    >>> pygrim.Equal(pygrim.ConstPi - pygrim.ConstPi, 0)
-    Equal(Sub(ConstPi, ConstPi), 0)
+    >>> pygrim.Pi
+    Pi
+    >>> pygrim.Equal(pygrim.Pi - pygrim.Pi, 0)
+    Equal(Sub(Pi, Pi), 0)
     >>> import pygrim.formulas
     >>> e = pygrim.formulas.entries_dict["590136"]
     >>> e
     Entry(ID("590136"),
-        Formula(Equal(ConstPi, Neg(Mul(ConstI, Log(-1))))))
+        Formula(Equal(Pi, Neg(Mul(ConstI, Log(-1))))))
     >>> e.args()[1].args()[0].head()
     Equal
     >>> e.args()[1].args()[0].args()
-    (ConstPi, Neg(Mul(ConstI, Log(-1))))
+    (Pi, Neg(Mul(ConstI, Log(-1))))
 
 The Python library is a work in progress and the API will certainly change.
 

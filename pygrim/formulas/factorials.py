@@ -395,12 +395,12 @@ make_entry(ID("fe9fb7"),
 # Connection formulas
 
 make_entry(ID("62c6c9"),
-    Formula(Equal(Factorial(n), GammaFunction(n+1))),
+    Formula(Equal(Factorial(n), Gamma(n+1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("e87c43"),
-    Formula(Equal(Binomial(z,k), GammaFunction(z+1) / (GammaFunction(k + 1) * GammaFunction(z - k + 1)))),
+    Formula(Equal(Binomial(z,k), Gamma(z+1) / (Gamma(k + 1) * Gamma(z - k + 1)))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)), NotElement(z-k, ZZLessEqual(-1)))))
 
@@ -420,7 +420,7 @@ make_entry(ID("22ee07"),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("c733f7"),
-    Formula(Equal(RisingFactorial(z, k), GammaFunction(z+k)/GammaFunction(z))),
+    Formula(Equal(RisingFactorial(z, k), Gamma(z+k)/Gamma(z))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)), NotElement(z+k, ZZLessEqual(0)))))
 
@@ -518,19 +518,19 @@ make_entry(ID("4e7120"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, Range(0, n)))))
 
 make_entry(ID("fc8d5d"),
-    Formula(Less(Factorial(n), Sqrt(2*ConstPi) * n**(n+Div(1,2)) * Exp(-n) * Exp(1/(12*n)))),
+    Formula(Less(Factorial(n), Sqrt(2*Pi) * n**(n+Div(1,2)) * Exp(-n) * Exp(1/(12*n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))),
     References("H. Robbins (1955), A remark on Stirling's formula, Am. Math. Monthly 62(1), pp. 26-29."))
 
 make_entry(ID("1745f5"),
-    Formula(Greater(Factorial(n), Sqrt(2*ConstPi) * n**(n+Div(1,2)) * Exp(-n) * Exp(1/(12*n+1)))),
+    Formula(Greater(Factorial(n), Sqrt(2*Pi) * n**(n+Div(1,2)) * Exp(-n) * Exp(1/(12*n+1)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))),
     References("H. Robbins (1955), A remark on Stirling's formula, Am. Math. Monthly 62(1), pp. 26-29."))
 
 make_entry(ID("d3baaf"),
-    Formula(Less(Binomial(n, k), (1/Sqrt(2*ConstPi)) * Sqrt(n/(k*(n-k))) * (n**n / (k**k * (n-k)**(n-k))))),
+    Formula(Less(Binomial(n, k), (1/Sqrt(2*Pi)) * Sqrt(n/(k*(n-k))) * (n**n / (k**k * (n-k)**(n-k))))),
     Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, Range(1, n-1)))))
 
@@ -540,7 +540,7 @@ make_entry(ID("5f7334"),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(k, Range(1, n-1)))))
 
 make_entry(ID("433d8b"),
-    Formula(Less(Binomial(2*n, n), 4**n / Sqrt(ConstPi * n))),
+    Formula(Less(Binomial(2*n, n), 4**n / Sqrt(Pi * n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

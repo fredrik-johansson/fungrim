@@ -106,8 +106,8 @@ make_entry(ID("21d9b8"),
         Tuple(Element(z, CC), Element(Sqrt(z), CC)),
         TableSection("Infinities"),
         Tuple(Element(z, Set(UnsignedInfinity)), Element(Sqrt(z), Set(UnsignedInfinity))),
-        Tuple(Element(z, Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-ConstPi,ConstPi)))),
-                Element(Sqrt(z), Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-ConstPi/2,ConstPi/2))))),
+        Tuple(Element(z, Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-Pi,Pi)))),
+                Element(Sqrt(z), Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-Pi/2,Pi/2))))),
         TableSection("Formal power series"),
         Tuple(And(Element(z, FormalPowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
             And(Element(Sqrt(z), FormalPowerSeries(RR, x)))),
@@ -214,7 +214,7 @@ make_entry(ID("9dec73"),
 make_entry(ID("f9f31d"),
     Formula(Equal(Sqrt(Exp(ConstI*theta) * Infinity), Exp(ConstI*theta/2) * Infinity)),
     Variables(theta),
-    Assumptions(Element(theta, OpenClosedInterval(-ConstPi, ConstPi))))
+    Assumptions(Element(theta, OpenClosedInterval(-Pi, Pi))))
 
 
 
@@ -243,7 +243,7 @@ make_entry(ID("0984ef"),
 make_entry(ID("d8791e"),
     Formula(Equal(Sqrt(z**2), z)),
     Variables(z),
-    Assumptions(And(Element(z, CC), Element(Arg(z), OpenClosedInterval(-ConstPi/2, ConstPi/2)))))
+    Assumptions(And(Element(z, CC), Element(Arg(z), OpenClosedInterval(-Pi/2, Pi/2)))))
 
 make_entry(ID("3cc884"),
     Formula(Equal(Sqrt(x**2), Abs(x))),
@@ -270,7 +270,7 @@ make_entry(ID("73b76c"),
     Variables(a, b),
     Assumptions(Or(And(Element(a, CC), Element(b, ClosedOpenInterval(0, Infinity))),
                    And(Element(b, CC), Element(a, ClosedOpenInterval(0, Infinity)))),
-        And(Element(a, CC), Element(b, CC), Element(Arg(a) + Arg(b), OpenClosedInterval(-ConstPi, ConstPi)))))
+        And(Element(a, CC), Element(b, CC), Element(Arg(a) + Arg(b), OpenClosedInterval(-Pi, Pi)))))
 
 make_entry(ID("d0a331"),
     Formula(Equal(Sqrt(1/z), 1/Sqrt(z))),
@@ -282,12 +282,12 @@ make_entry(ID("0d8e03"),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, OpenInterval(0, Infinity))),
         And(Element(a, ClosedOpenInterval(0, Infinity)), Element(b, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
-        And(Element(a, CC), Element(b, SetMinus(CC, Set(0))), Element(Arg(a) - Arg(b), OpenClosedInterval(-ConstPi, ConstPi)))))
+        And(Element(a, CC), Element(b, SetMinus(CC, Set(0))), Element(Arg(a) - Arg(b), OpenClosedInterval(-Pi, Pi)))))
 
 make_entry(ID("1232f7"),
     Formula(Equal(Sqrt(r*Exp(ConstI*theta)), Sqrt(r) * Exp(ConstI*theta/2))),
     Variables(r, theta),
-    Assumptions(And(Element(r, ClosedOpenInterval(0, Infinity)), Element(theta, OpenClosedInterval(-ConstPi, ConstPi)))))
+    Assumptions(And(Element(r, ClosedOpenInterval(0, Infinity)), Element(theta, OpenClosedInterval(-Pi, Pi)))))
 
 make_entry(ID("99c0b3"),
     Formula(Equal(Sqrt(z-c*z**2), Sqrt(z)*Sqrt(1-c*z))),

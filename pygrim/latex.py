@@ -168,7 +168,7 @@ subscript_call_latex_table = {
 symbol_latex_table = {
     True_: "\\operatorname{True}",
     False_: "\\operatorname{False}",
-    ConstPi: "\\pi",
+    Pi: "\\pi",
     ConstI: "i",
     ConstE: "e",
     ConstGamma: "\\gamma",
@@ -177,7 +177,7 @@ symbol_latex_table = {
     GoldenRatio: "\\varphi",
     Infinity: "\\infty",
     UnsignedInfinity: "{\\tilde \\infty}",
-    GammaFunction: "\\Gamma",
+    Gamma: "\\Gamma",
     LogGamma: "\\log \\Gamma",
     UpperGamma: "\\Gamma",
     Erf: "\\operatorname{erf}",

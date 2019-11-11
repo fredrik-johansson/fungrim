@@ -448,7 +448,7 @@ make_entry(ID("81eec6"),
 
 make_entry(ID("b049dc"),
     Formula(Equal(BesselY(nu, z),
-        (1/Sin(ConstPi*nu)) * (Cos(ConstPi*nu) * (z/2)**nu * Hypergeometric0F1Regularized(nu+1, -(z**2/4))
+        (1/Sin(Pi*nu)) * (Cos(Pi*nu) * (z/2)**nu * Hypergeometric0F1Regularized(nu+1, -(z**2/4))
             - (z/2)**(-nu) * Hypergeometric0F1Regularized(1-nu, -(z**2/4))))),
     Variables(nu, z),
     Assumptions(
@@ -456,7 +456,7 @@ make_entry(ID("b049dc"),
     ))
 
 make_entry(ID("7efe21"),
-    Formula(Equal(BesselK(nu, z), ((2*z)/ConstPi)**(-Div(1,2)) * Exp(-z) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, 2*z))),
+    Formula(Equal(BesselK(nu, z), ((2*z)/Pi)**(-Div(1,2)) * Exp(-z) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, 2*z))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
@@ -464,7 +464,7 @@ make_entry(ID("7efe21"),
 
 make_entry(ID("98703d"),
     Formula(Equal(BesselK(nu, z),
-        Div(1,2) * (ConstPi/Sin(ConstPi*nu)) * (Div(z,2)**(-nu) * Hypergeometric0F1Regularized(1-nu, z**2/4)
+        Div(1,2) * (Pi/Sin(Pi*nu)) * (Div(z,2)**(-nu) * Hypergeometric0F1Regularized(1-nu, z**2/4)
             - Div(z,2)**nu * Hypergeometric0F1Regularized(1+nu, z**2/4)))),
     Variables(nu, z),
     Assumptions(
@@ -473,7 +473,7 @@ make_entry(ID("98703d"),
 
 make_entry(ID("9ad254"),
     Formula(Equal(BesselJ(nu, z),
-            (z/2)**nu * (Exp(-(ConstI*z)) / GammaFunction(nu+1)) * Hypergeometric1F1(nu+Div(1,2), 2*nu+1, 2*ConstI*z))),
+            (z/2)**nu * (Exp(-(ConstI*z)) / Gamma(nu+1)) * Hypergeometric1F1(nu+Div(1,2), 2*nu+1, 2*ConstI*z))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, ZZGreaterEqual(0)), Element(z, CC)),
@@ -486,7 +486,7 @@ _Bp = Exp(ConstI*z) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, -(2*ConstI*z))
 _Bm = Exp(-(ConstI*z)) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, (2*ConstI*z))
 
 make_entry(ID("32e162"),
-    Formula(Equal(BesselJ(nu, z), (z**nu / (2*ConstPi)**(Div(1,2))) * (_Ap*_Bp + _Am*_Bm))),
+    Formula(Equal(BesselJ(nu, z), (z**nu / (2*Pi)**(Div(1,2))) * (_Ap*_Bp + _Am*_Bm))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
@@ -494,8 +494,8 @@ make_entry(ID("32e162"),
 
 make_entry(ID("127f05"),
     Formula(Where(Equal(BesselJ(nu, z),
-        (2*ConstPi*z)**(-Div(1,2)) * (Exp(-(ConstI*theta)) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, -(2*ConstI*z))
-            + Exp(ConstI*theta) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, (2*ConstI*z)))), Equal(theta, ConstPi*(2*nu+1)/4-z))),
+        (2*Pi*z)**(-Div(1,2)) * (Exp(-(ConstI*theta)) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, -(2*ConstI*z))
+            + Exp(ConstI*theta) * HypergeometricUStar(nu+Div(1,2), 2*nu+1, (2*ConstI*z)))), Equal(theta, Pi*(2*nu+1)/4-z))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, CC), Element(z, CC), Greater(Re(z), 0)),
@@ -531,14 +531,14 @@ make_entry(ID("15bbb1"),
     ))
 
 make_entry(ID("2a4195"),
-    Formula(Equal(BesselY(nu, z), ((Cos(ConstPi*nu)*BesselJ(nu,z) - BesselJ(-nu,z))/Sin(ConstPi*nu)))),
+    Formula(Equal(BesselY(nu, z), ((Cos(Pi*nu)*BesselJ(nu,z) - BesselJ(-nu,z))/Sin(Pi*nu)))),
     Variables(nu, z),
     Assumptions(
         And(Element(nu, SetMinus(CC, ZZ)), Element(z, SetMinus(CC, Set(0))))
     ))
 
 make_entry(ID("d5b7e8"),
-    Formula(Equal(BesselY(n, z), -(2/ConstPi) * (ConstI**n * BesselK(n, ConstI*z) + (Log(ConstI*z)-Log(z))*BesselJ(n,z)))),
+    Formula(Equal(BesselY(n, z), -(2/Pi) * (ConstI**n * BesselK(n, ConstI*z) + (Log(ConstI*z)-Log(z))*BesselJ(n,z)))),
     Variables(n, z),
     Assumptions(
         And(Element(n, ZZ), Element(z, SetMinus(CC, Set(0))))
@@ -582,14 +582,14 @@ make_entry(ID("1dce21"),
 
 
 make_entry(ID("99c077"),
-    Formula(Equal(BesselJ(n,z), (1/ConstPi) * Integral(Cos(n*t - z*Sin(t)), For(t, 0, ConstPi)))),
+    Formula(Equal(BesselJ(n,z), (1/Pi) * Integral(Cos(n*t - z*Sin(t)), For(t, 0, Pi)))),
     Variables(n, z),
     Assumptions(
         And(Element(n, ZZ), Element(z, CC)),
     ))
 
 make_entry(ID("cac83e"),
-    Formula(Equal(BesselJ(nu,z), (1/ConstPi) * Integral(Cos(nu*t - z*Sin(t)), For(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
+    Formula(Equal(BesselJ(nu,z), (1/Pi) * Integral(Cos(nu*t - z*Sin(t)), For(t, 0, Pi)) - Sin(Pi*nu)/Pi *
         Integral(Exp(-(z*Sinh(t))-nu*t), For(t, 0, Infinity)))),
     Variables(nu, z),
     Assumptions(
@@ -597,7 +597,7 @@ make_entry(ID("cac83e"),
     ))
 
 make_entry(ID("7ae3ed"),
-    Formula(Equal(BesselI(nu,z), (1/ConstPi) * Integral(Exp(z*Cos(t))*Cos(nu*t), For(t, 0, ConstPi)) - Sin(ConstPi*nu)/ConstPi *
+    Formula(Equal(BesselI(nu,z), (1/Pi) * Integral(Exp(z*Cos(t))*Cos(nu*t), For(t, 0, Pi)) - Sin(Pi*nu)/Pi *
         Integral(Exp(-(z*Cosh(t))-nu*t), For(t, 0, Infinity)))),
     Variables(nu, z),
     Assumptions(
@@ -636,7 +636,7 @@ make_entry(ID("0836b4"),
     Assumptions(And(Element(n, ZZ), Element(z, CC))))
 
 make_entry(ID("cc4572"),
-    Formula(LessEqual(Abs(BesselJ(nu,z)), (1/GammaFunction(nu+1)) * Abs(z/2)**nu * Exp(Abs(Im(z))))),
+    Formula(LessEqual(Abs(BesselJ(nu,z)), (1/Gamma(nu+1)) * Abs(z/2)**nu * Exp(Abs(Im(z))))),
     Variables(nu, z),
     Assumptions(And(Element(nu, ClosedOpenInterval(-Div(1,2), Infinity)), Element(z, SetMinus(CC, Set(0))))))
 
@@ -678,63 +678,63 @@ def_Topic(
 
 
 make_entry(ID("621a9b"),
-    Formula(Equal(BesselJ(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z) / z))),
+    Formula(Equal(BesselJ(-Div(1,2),z), Pow((2*z)/Pi, Div(1,2)) * (Cos(z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("121b21"),
-    Formula(Equal(BesselJ(Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sin(z) / z))),
+    Formula(Equal(BesselJ(Div(1,2),z), Pow((2*z)/Pi, Div(1,2)) * (Sin(z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("a2a294"),
-    Formula(Equal(BesselJ(Div(3,2),z), Pow((2*z)/ConstPi, Div(1,2)) * ((Sin(z)/z**2 - Cos(z)/z)))),
+    Formula(Equal(BesselJ(Div(3,2),z), Pow((2*z)/Pi, Div(1,2)) * ((Sin(z)/z**2 - Cos(z)/z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("5679f2"),
-    Formula(Equal(BesselY(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sin(z) / z))),
+    Formula(Equal(BesselY(-Div(1,2),z), Pow((2*z)/Pi, Div(1,2)) * (Sin(z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("4dfd41"),
-    Formula(Equal(BesselY(Div(1,2),z), -(Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z) / z)))),
+    Formula(Equal(BesselY(Div(1,2),z), -(Pow((2*z)/Pi, Div(1,2)) * (Cos(z) / z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("8472cc"),
-    Formula(Equal(BesselY(Div(3,2),z), -(Pow((2*z)/ConstPi, Div(1,2)) * (Cos(z)/z**2 + Sin(z)/z)))),
+    Formula(Equal(BesselY(Div(3,2),z), -(Pow((2*z)/Pi, Div(1,2)) * (Cos(z)/z**2 + Sin(z)/z)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 
 make_entry(ID("5d9c43"),
-    Formula(Equal(BesselI(-Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Cosh(z) / z))),
+    Formula(Equal(BesselI(-Div(1,2),z), Pow((2*z)/Pi, Div(1,2)) * (Cosh(z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("a59981"),
-    Formula(Equal(BesselI(Div(1,2),z), Pow((2*z)/ConstPi, Div(1,2)) * (Sinh(z) / z))),
+    Formula(Equal(BesselI(Div(1,2),z), Pow((2*z)/Pi, Div(1,2)) * (Sinh(z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("65647f"),
-    Formula(Equal(BesselI(Div(3,2),z), Pow((2*z)/ConstPi, Div(1,2)) * ((Cosh(z)/z - Sinh(z)/z**2)))),
+    Formula(Equal(BesselI(Div(3,2),z), Pow((2*z)/Pi, Div(1,2)) * ((Cosh(z)/z - Sinh(z)/z**2)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("7ac286"),
-    Formula(Equal(BesselK(-Div(1,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) / z))),
+    Formula(Equal(BesselK(-Div(1,2),z), Pow((Pi*z)/2, Div(1,2)) * (Exp(-z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("d1f5c5"),
-    Formula(Equal(BesselK(Div(1,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) / z))),
+    Formula(Equal(BesselK(Div(1,2),z), Pow((Pi*z)/2, Div(1,2)) * (Exp(-z) / z))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("0c09cc"),
-    Formula(Equal(BesselK(Div(3,2),z), Pow((ConstPi*z)/2, Div(1,2)) * (Exp(-z) * (1/z + 1/z**2)))),
+    Formula(Equal(BesselK(Div(3,2),z), Pow((Pi*z)/2, Div(1,2)) * (Exp(-z) * (1/z + 1/z**2)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
@@ -754,17 +754,17 @@ make_entry(ID("e72e96"),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("fda595"),
-    Formula(Equal(BesselK(-Div(1,3),z), Where((Sqrt(3)*ConstPi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
+    Formula(Equal(BesselK(-Div(1,3),z), Where((Sqrt(3)*Pi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("49d754"),
-    Formula(Equal(BesselK(Div(1,3),z), Where((Sqrt(3)*ConstPi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
+    Formula(Equal(BesselK(Div(1,3),z), Where((Sqrt(3)*Pi/omega) * AiryAi(omega**2), Equal(omega, (3*z/2)**Div(1,3))))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("c362e8"),
-    Formula(Equal(BesselK(Div(2,3),z), Where(-((Sqrt(3)*ConstPi/omega**2) * AiryAi(omega**2,1)), Equal(omega, (3*z/2)**Div(1,3))))),
+    Formula(Equal(BesselK(Div(2,3),z), Where(-((Sqrt(3)*Pi/omega**2) * AiryAi(omega**2,1)), Equal(omega, (3*z/2)**Div(1,3))))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 

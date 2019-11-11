@@ -83,7 +83,7 @@ make_entry(ID("4c41ad"),
     Assumptions(And(Element(a,SetMinus(CC,ZZLessEqual(0))), Element(z,CC))))
 
 make_entry(ID("0a0aec"),
-    Formula(Equal(Hypergeometric0F1Regularized(a,z), Sum(1/GammaFunction(a+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric0F1Regularized(a,z), Sum(1/Gamma(a+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,z),
     Assumptions(And(Element(a,CC), Element(z,CC))))
 
@@ -99,7 +99,7 @@ make_entry(ID("dec042"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(b, CC), Not(And(Element(b, ZZLessEqual(0)), Greater(b, -n))), Element(z,CC))))
 
 make_entry(ID("70111e"),
-    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/GammaFunction(b+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
+    Formula(Equal(Hypergeometric1F1Regularized(a,b,z), Sum(RisingFactorial(a,k)/Gamma(b+k) * (z**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(a,b,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(z,CC))))
 
@@ -145,20 +145,20 @@ make_entry(ID("4cf1e9"),
 # todo: requires reciprocal gamma function
 make_entry(ID("f7f84e"),
     Formula(Equal(Hypergeometric1F1Regularized(a,b,z),
-        Div((-z)**(-a), GammaFunction(b-a)) * HypergeometricUStar(a,b,z) + Div(z**(a-b) * Exp(z), GammaFunction(a)) * HypergeometricUStar(b-a, b, -z))),
+        Div((-z)**(-a), Gamma(b-a)) * HypergeometricUStar(a,b,z) + Div(z**(a-b) * Exp(z), Gamma(a)) * HypergeometricUStar(b-a, b, -z))),
     Variables(a, b, z),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
 
 make_entry(ID("6cf802"),
     Formula(Equal(HypergeometricU(a,b,z),
-        GammaFunction(1-b) / GammaFunction(a-b+1) * Hypergeometric1F1(a,b,z) + GammaFunction(b-1)/GammaFunction(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z))),
+        Gamma(1-b) / Gamma(a-b+1) * Hypergeometric1F1(a,b,z) + Gamma(b-1)/Gamma(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z))),
     Variables(a, b, z),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0), NotElement(b, ZZ))))
 
 make_entry(ID("18ef23"),
     Formula(Equal(HypergeometricU(a,n,z),
         ComplexLimit(
-        GammaFunction(1-b) / GammaFunction(a-b+1) * Hypergeometric1F1(a,b,z) + GammaFunction(b-1)/GammaFunction(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z),
+        Gamma(1-b) / Gamma(a-b+1) * Hypergeometric1F1(a,b,z) + Gamma(b-1)/Gamma(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z),
             For(b, n)))),
     Variables(a, n, z),
     Assumptions(And(Element(a, CC), Element(n, ZZ), Element(z, CC), Unequal(z, 0))))
@@ -206,7 +206,7 @@ make_entry(ID("279e4f"),
 make_entry(ID("461a54"),
     Formula(Where(LessEqual(Abs(HypergeometricUStarRemainder(n,a,b,z)),
         Abs((RisingFactorial(a,n) * RisingFactorial(a-b+1,n)) / (Factorial(n) * z**n)) *
-        (2 * Sqrt(1 + Div(1,2)*ConstPi*n) / (1 - sigma)) * Exp((ConstPi * rho) / ((1 - sigma) * Abs(z)))),
+        (2 * Sqrt(1 + Div(1,2)*Pi*n) / (1 - sigma)) * Exp((Pi * rho) / ((1 - sigma) * Abs(z)))),
         Equal(sigma, Abs(b-2*a)/Abs(z)),
         Equal(rho, Abs(a**2-a*b+b/2) + sigma*(1+sigma/4)/(1-sigma)**(2)))),
     Variables(a,b,z,n),
@@ -221,7 +221,7 @@ make_entry(ID("7b91b4"),
         Equal(nu, 1+2*sigma**2),
         Equal(tau, nu * sigma),
         Equal(rho, Abs(a**2-a*b+b/2) + tau*(1+tau/4)/(1-tau)**(2)),
-        Equal(C(m), (Sqrt(1+ConstPi*m/2) + sigma*nu**2*m) * nu**m))),
+        Equal(C(m), (Sqrt(1+Pi*m/2) + sigma*nu**2*m) * nu**m))),
     Variables(a,b,z,n),
     Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Greater(Abs(z), 2*Abs(b-2*a)))),
     References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))

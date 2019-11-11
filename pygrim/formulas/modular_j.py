@@ -93,7 +93,7 @@ make_entry(ID("d5f569"),
     Assumptions(And(Element(tau, HH), Element(Matrix2x2(a, b, c, d), SL2Z))))
 
 make_entry(ID("9aa62c"),
-    Formula(Equal(ModularJ(Exp(ConstPi*ConstI/3)), 0)))
+    Formula(Equal(ModularJ(Exp(Pi*ConstI/3)), 0)))
 
 make_entry(ID("ad228f"),
     Formula(Equal(ModularJ(ConstI), 1728)))
@@ -151,12 +151,12 @@ make_entry(ID("dc8251"),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("f0f53b"),
-    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*ConstPi*ConstI) * (EisensteinE(14,tau) / DedekindEta(tau)**24))),
+    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*Pi*ConstI) * (EisensteinE(14,tau) / DedekindEta(tau)**24))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
 make_entry(ID("348b26"),
-    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*ConstPi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
+    Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*Pi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
     Variables(tau),
     Assumptions(And(Element(tau, HH), Unequal(EisensteinE(4,tau), 0))))
 
@@ -166,10 +166,10 @@ make_entry(ID("27f9d2"),
     Formula(IsHolomorphic(ModularJ(tau), ForElement(tau, HH))))
 
 make_entry(ID("ea3e3c"),
-    Formula(Equal(Zeros(ModularJ(tau), ForElement(tau, ModularGroupFundamentalDomain)), Set(Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(Zeros(ModularJ(tau), ForElement(tau, ModularGroupFundamentalDomain)), Set(Exp(2*Pi*ConstI/3)))))
 
 make_entry(ID("1b2d8a"),
-    Formula(Equal(Zeros(ModularJ(tau), ForElement(tau, HH)), Set(ModularGroupAction(gamma, Exp(2*ConstPi*ConstI/3)), ForElement(gamma, PSL2Z)))))
+    Formula(Equal(Zeros(ModularJ(tau), ForElement(tau, HH)), Set(ModularGroupAction(gamma, Exp(2*Pi*ConstI/3)), ForElement(gamma, PSL2Z)))))
 
 make_entry(ID("dcc8b1"),
     Formula(Equal(Set(ModularJ(tau), ForElement(tau, ModularGroupFundamentalDomain)), CC)))

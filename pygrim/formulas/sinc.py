@@ -192,7 +192,7 @@ make_entry(ID("4cbfd4"),
 # Illustrations
 
 make_entry(ID("639d7b"),
-    Image(Description("Plot of", Sinc(x), "and", Sinc(ConstPi*x), "on", Element(x, ClosedInterval(-(3*ConstPi), 3*ConstPi))),
+    Image(Description("Plot of", Sinc(x), "and", Sinc(Pi*x), "on", Element(x, ClosedInterval(-(3*Pi), 3*Pi))),
         ImageSource("plot_sinc")),
     )
 
@@ -237,29 +237,29 @@ make_entry(ID("01422b"),
 # Zeros
 
 make_entry(ID("af4516"),
-    Formula(Equal(Zeros(Sinc(z), ForElement(z, CC)), Set(ConstPi*n, ForElement(n, ZZ), Unequal(n, 0)))))
+    Formula(Equal(Zeros(Sinc(z), ForElement(z, CC)), Set(Pi*n, ForElement(n, ZZ), Unequal(n, 0)))))
 
 make_entry(ID("1349b5"),
-    Formula(Equal(Zeros(Sinc(ConstPi*z), ForElement(z, CC)), Set(n, ForElement(n, ZZ), Unequal(n, 0)))))
+    Formula(Equal(Zeros(Sinc(Pi*z), ForElement(z, CC)), Set(n, ForElement(n, ZZ), Unequal(n, 0)))))
 
 # Specific values
 
 make_entry(ID("593e63"),
-    Formula(Equal(Sinc(ConstPi*n), Cases(Tuple(1, Equal(n, 0)), Tuple(0, Unequal(n, 0))))),
+    Formula(Equal(Sinc(Pi*n), Cases(Tuple(1, Equal(n, 0)), Tuple(0, Unequal(n, 0))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("fdc94c"),
-    Formula(Equal(Sinc(ConstPi/2), 2/ConstPi)))
+    Formula(Equal(Sinc(Pi/2), 2/Pi)))
 
 make_entry(ID("340936"),
-    Formula(Equal(Sinc(ConstPi/3), 3*Sqrt(3)/(2*ConstPi))))
+    Formula(Equal(Sinc(Pi/3), 3*Sqrt(3)/(2*Pi))))
 
 make_entry(ID("c9ead2"),
-    Formula(Equal(Sinc(ConstPi/4), 2*Sqrt(2)/ConstPi)))
+    Formula(Equal(Sinc(Pi/4), 2*Sqrt(2)/Pi)))
 
 make_entry(ID("45740a"),
-    Formula(Equal(Sinc(ConstPi/6), 3/ConstPi)))
+    Formula(Equal(Sinc(Pi/6), 3/Pi)))
 
 # Functional equations
 
@@ -332,7 +332,7 @@ make_entry(ID("4f9844"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("f64eef"),
-    Formula(Equal(Sinc(ConstPi*z), Product(Parentheses(1-z**2/n**2), For(n, 1, Infinity)))),
+    Formula(Equal(Sinc(Pi*z), Product(Parentheses(1-z**2/n**2), For(n, 1, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -356,7 +356,7 @@ make_entry(ID("50f72f"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("19d7d9"),
-    Formula(Equal(Sinc(z), ((2*z)/ConstPi)**(-(Div(1,2))) * (BesselJ(Div(1,2), z)))),
+    Formula(Equal(Sinc(z), ((2*z)/Pi)**(-(Div(1,2))) * (BesselJ(Div(1,2), z)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Unequal(z, 0))))
 
@@ -373,7 +373,7 @@ make_entry(ID("e2c10d"),
     Assumptions(And(Element(z, CC), Element(a, CC), Unequal(a, 0))))
 
 make_entry(ID("729c78"),
-    Formula(Equal(Sinc(ConstPi*z), Integral(Cos(ConstPi*z*x), For(x, 0, 1)))),
+    Formula(Equal(Sinc(Pi*z), Integral(Cos(Pi*z*x), For(x, 0, 1)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -389,12 +389,12 @@ make_entry(ID("b1d132"),
     Assumptions(And(Element(z, CC), Element(a, CC), Unequal(a, 0))))
 
 make_entry(ID("99ad29"),
-    Formula(Equal(Sinc(ConstPi*z), Integral(Exp(2*ConstPi*ConstI*z*x), For(x, -Div(1,2), Div(1,2))))),
+    Formula(Equal(Sinc(Pi*z), Integral(Exp(2*Pi*ConstI*z*x), For(x, -Div(1,2), Div(1,2))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("45f05f"),
-    Formula(Equal(1/Sinc(ConstPi/z), Integral(1/(x**z+1), For(x, 0, Infinity)))),
+    Formula(Equal(1/Sinc(Pi/z), Integral(1/(x**z+1), For(x, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 1))))
 
@@ -412,44 +412,44 @@ make_entry(ID("d6c29e"),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("8ef3d7"),
-    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, z)), SinIntegral(z) + ConstPi/2)),
+    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, z)), SinIntegral(z) + Pi/2)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("2b7b1d"),
-    Formula(Equal(Integral(Sinc(x), For(x, z, Infinity)), ConstPi/2 - SinIntegral(z))),
+    Formula(Equal(Integral(Sinc(x), For(x, z, Infinity)), Pi/2 - SinIntegral(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("f0f0a6"),
-    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, Infinity)), ConstPi)),
+    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, Infinity)), Pi)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("81f531"),
-    Formula(EqualNearestDecimal(Integral(Sinc(x), For(x, 0, ConstPi)), 
+    Formula(EqualNearestDecimal(Integral(Sinc(x), For(x, 0, Pi)), 
         Decimal("1.85193705198246617036105337016"), 30)))
 
 make_entry(ID("f5887b"),
-    Formula(Equal(Integral(Sinc(x + ConstPi*n) * Sinc(x + ConstPi*m), For(x, -Infinity, Infinity)), Cases(Tuple(ConstPi, Equal(n, m)), Tuple(0, Unequal(n, m))))),
+    Formula(Equal(Integral(Sinc(x + Pi*n) * Sinc(x + Pi*m), For(x, -Infinity, Infinity)), Cases(Tuple(Pi, Equal(n, m)), Tuple(0, Unequal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZ), Element(m, ZZ))))
 
 make_entry(ID("108daa"),
-    Formula(Equal(Integral(Sinc(a*x) * Sinc(b*x), For(x, -Infinity, Infinity)), (ConstPi/2) * ((Abs(a+b)-Abs(a-b))/(a*b)))),
+    Formula(Equal(Integral(Sinc(a*x) * Sinc(b*x), For(x, -Infinity, Infinity)), (Pi/2) * ((Abs(a+b)-Abs(a-b))/(a*b)))),
     Variables(a, b),
     Assumptions(And(Element(a, RR), Element(b, RR), Unequal(a, 0), Unequal(b, 0))))
 
 make_entry(ID("3fe2b0"),
-    Formula(Equal(Integral(Sinc(x+a) * Sinc(x+b), For(x, -Infinity, Infinity)), ConstPi * Sinc(a-b))),
+    Formula(Equal(Integral(Sinc(x+a) * Sinc(x+b), For(x, -Infinity, Infinity)), Pi * Sinc(a-b))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("2a69ce"),
     Formula(Equal(Integral(Exp(ConstI*a*x) * Sinc(x), For(x, -Infinity, Infinity)),
             Integral(Cos(a*x) * Sinc(x), For(x, -Infinity, Infinity)),
-        Cases(Tuple(ConstPi, Less(Abs(a), 1)),
-            Tuple(ConstPi/2, Equal(Abs(a), 1)),
+        Cases(Tuple(Pi, Less(Abs(a), 1)),
+            Tuple(Pi/2, Equal(Abs(a), 1)),
             Tuple(0, Greater(Abs(a), 1))))),
     Variables(a),
     Assumptions(Element(a, RR)))
@@ -460,7 +460,7 @@ make_entry(ID("38dc04"),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))))
 
 make_entry(ID("78fca3"),
-    Formula(Equal(Integral(Exp(-(a*x**2)) * Sinc(x), For(x, 0, Infinity)), (ConstPi/2) * Erf(1/(2*Sqrt(a))))),
+    Formula(Equal(Integral(Exp(-(a*x**2)) * Sinc(x), For(x, 0, Infinity)), (Pi/2) * Erf(1/(2*Sqrt(a))))),
     Variables(a),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))))
 
@@ -468,38 +468,38 @@ make_entry(ID("a0b0b3"),
     Formula(Equal(Integral(Abs(Sinc(x)), For(x, 0, Infinity)), +Infinity)))
 
 make_entry(ID("cb152f"),
-    Formula(Equal(Integral(Sinc(x), For(x, 0, Infinity)), ConstPi/2)))
+    Formula(Equal(Integral(Sinc(x), For(x, 0, Infinity)), Pi/2)))
 
 make_entry(ID("1a7e22"),
-    Formula(Equal(Integral(Sinc(x)**2, For(x, 0, Infinity)), ConstPi/2)))
+    Formula(Equal(Integral(Sinc(x)**2, For(x, 0, Infinity)), Pi/2)))
 
 make_entry(ID("be0f54"),
-    Formula(Equal(Integral(Sinc(x)**3, For(x, 0, Infinity)), 3*ConstPi/8)))
+    Formula(Equal(Integral(Sinc(x)**3, For(x, 0, Infinity)), 3*Pi/8)))
 
 make_entry(ID("1596d2"),
-    Formula(Equal(Integral(Sinc(x)**n, For(x, 0, Infinity)), (ConstPi / (2**n * Factorial(n-1))) * Sum((-1)**k * Binomial(n,k) * (n-2*k)**(n-1), For(k, 0, Floor(n/2))))),
+    Formula(Equal(Integral(Sinc(x)**n, For(x, 0, Infinity)), (Pi / (2**n * Factorial(n-1))) * Sum((-1)**k * Binomial(n,k) * (n-2*k)**(n-1), For(k, 0, Floor(n/2))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("af8328"),
     Formula(Equal(Integral(Product(Sinc(x/(2*k+1)), For(k, 0, n)), For(x, 0, Infinity)),
-        Cases(Tuple(ConstPi/2, Element(n, Range(0, 6))), Tuple(
-            Div(467807924713440738696537864469,467807924720320453655260875000)*(ConstPi/2), Equal(n, 7))))),
+        Cases(Tuple(Pi/2, Element(n, Range(0, 6))), Tuple(
+            Div(467807924713440738696537864469,467807924720320453655260875000)*(Pi/2), Equal(n, 7))))),
     Variables(n),
     Assumptions(Element(n, Range(0, 7))))
 
 
 make_entry(ID("c2976e"),
-    Formula(Equal(Integral(1/Sinc(x), For(x, 0, ConstPi/2)), 2*ConstCatalan)))
+    Formula(Equal(Integral(1/Sinc(x), For(x, 0, Pi/2)), 2*ConstCatalan)))
 
 make_entry(ID("4a5b9a"),
-    Formula(Equal(Integral(x/Sinc(x), For(x, 0, ConstPi/2)), 2*ConstPi*ConstCatalan - 7*RiemannZeta(3)/2)))
+    Formula(Equal(Integral(x/Sinc(x), For(x, 0, Pi/2)), 2*Pi*ConstCatalan - 7*RiemannZeta(3)/2)))
 
 make_entry(ID("dad27b"),
-    Formula(Equal(Integral(1/Sinc(x)**2, For(x, 0, ConstPi/2)), ConstPi*Log(2))))
+    Formula(Equal(Integral(1/Sinc(x)**2, For(x, 0, Pi/2)), Pi*Log(2))))
 
 make_entry(ID("5c9675"),
-    Formula(Equal(Integral(1/Sinc(x)**2, For(x, 0, ConstPi/4)), ConstPi*Log(2)/4 + ConstCatalan - ConstPi**2/16)))
+    Formula(Equal(Integral(1/Sinc(x)**2, For(x, 0, Pi/4)), Pi*Log(2)/4 + ConstCatalan - Pi**2/16)))
 
 # Extreme points
 
@@ -613,8 +613,8 @@ make_entry(ID("51f9b4"),
 make_entry(ID("2a8ec9"),
     Formula(Implies(
         Cases(
-            Tuple(Less(Sum(Subscript(a,k), For(k,0,N)), 2*ConstPi), Equal(N, 0)),
-            Tuple(LessEqual(Sum(Subscript(a,k), For(k,0,N)), 2*ConstPi), GreaterEqual(N, 1)),
+            Tuple(Less(Sum(Subscript(a,k), For(k,0,N)), 2*Pi), Equal(N, 0)),
+            Tuple(LessEqual(Sum(Subscript(a,k), For(k,0,N)), 2*Pi), GreaterEqual(N, 1)),
         ),
         Equal(Sum(Product(Sinc(Subscript(a,k)*n), For(k, 0, N)), For(n, -Infinity, Infinity)),
         Integral(Product(Sinc(Subscript(a,k)*x), For(k, 0, N)), For(x, -Infinity, Infinity))))),
@@ -626,8 +626,8 @@ make_entry(ID("2a8ec9"),
 make_entry(ID("005478"),
     Formula(Implies(
         Cases(
-            Tuple(Less(Sum(Subscript(a,k), For(k,0,N)), 2*ConstPi), Equal(N, 0)),
-            Tuple(LessEqual(Sum(Subscript(a,k), For(k,0,N)), 2*ConstPi), GreaterEqual(N, 1)),
+            Tuple(Less(Sum(Subscript(a,k), For(k,0,N)), 2*Pi), Equal(N, 0)),
+            Tuple(LessEqual(Sum(Subscript(a,k), For(k,0,N)), 2*Pi), GreaterEqual(N, 1)),
         ),
         Equal(Sum(Product(Sinc(Subscript(a,k)*n), For(k, 0, N)), For(n, 1, Infinity)),
         -Div(1,2) + Integral(Product(Sinc(Subscript(a,k)*x), For(k, 0, N)), For(x, 0, Infinity))))),
@@ -636,24 +636,24 @@ make_entry(ID("005478"),
     References("https://www.carma.newcastle.edu.au/resources/jon/sinc-sums.pdf"))
 
 make_entry(ID("4d5410"),
-    Formula(Equal(Sum(Sinc(n), For(n, -Infinity, Infinity)), ConstPi)))
+    Formula(Equal(Sum(Sinc(n), For(n, -Infinity, Infinity)), Pi)))
 
 make_entry(ID("1f9beb"),
-    Formula(Equal(Sum(Sinc(n)**2, For(n, -Infinity, Infinity)), ConstPi)))
+    Formula(Equal(Sum(Sinc(n)**2, For(n, -Infinity, Infinity)), Pi)))
 
 make_entry(ID("8814ad"),
-    Formula(Equal(Sum(Sinc(n)**3, For(n, -Infinity, Infinity)), 3*ConstPi/4)))
+    Formula(Equal(Sum(Sinc(n)**3, For(n, -Infinity, Infinity)), 3*Pi/4)))
 
 make_entry(ID("49514d"),
-    Formula(Equal(Sum(Sinc(n)**4, For(n, -Infinity, Infinity)), 2*ConstPi/3)))
+    Formula(Equal(Sum(Sinc(n)**4, For(n, -Infinity, Infinity)), 2*Pi/3)))
 
 make_entry(ID("0c847f"),
-    Formula(Equal(Sum(Sinc(n)**5, For(n, -Infinity, Infinity)), 115*ConstPi/192)))
+    Formula(Equal(Sum(Sinc(n)**5, For(n, -Infinity, Infinity)), 115*Pi/192)))
 
 make_entry(ID("b894a3"),
-    Formula(Equal(Sum(Sinc(n)**6, For(n, -Infinity, Infinity)), 11*ConstPi/20)))
+    Formula(Equal(Sum(Sinc(n)**6, For(n, -Infinity, Infinity)), 11*Pi/20)))
 
 make_entry(ID("4a1b00"),
     Formula(Equal(Sum(Sinc(n)**7, For(n, -Infinity, Infinity)),
-        (129423*ConstPi-201684*ConstPi**2+144060*ConstPi**3-54880*ConstPi**4+11760*ConstPi**5-1344*ConstPi**6+64*ConstPi**7)/23040)))
+        (129423*Pi-201684*Pi**2+144060*Pi**3-54880*Pi**4+11760*Pi**5-1344*Pi**6+64*Pi**7)/23040)))
 

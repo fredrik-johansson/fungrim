@@ -283,10 +283,10 @@ make_entry(ID("6c3523"),
     Assumptions(And(Element(s, CC), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("575b8f"),
-    Formula(Equal(HurwitzZeta(2, 1), ConstPi**2 / 6)))
+    Formula(Equal(HurwitzZeta(2, 1), Pi**2 / 6)))
 
 make_entry(ID("ac8d3c"),
-    Formula(Equal(HurwitzZeta(2, 2), ConstPi**2 / 6 - 1)))
+    Formula(Equal(HurwitzZeta(2, 2), Pi**2 / 6 - 1)))
 
 make_entry(ID("b4ed44"),
     Formula(Equal(HurwitzZeta(3, 1), RiemannZeta(3))))
@@ -295,37 +295,37 @@ make_entry(ID("4dd87c"),
     Formula(Equal(HurwitzZeta(3, 2), RiemannZeta(3) - 1)))
 
 make_entry(ID("2d4828"),
-    Formula(Equal(HurwitzZeta(4, 1), ConstPi**4/90)))
+    Formula(Equal(HurwitzZeta(4, 1), Pi**4/90)))
 
 make_entry(ID("33690e"),
-    Formula(Equal(HurwitzZeta(4, 2), ConstPi**4/90 - 1)))
+    Formula(Equal(HurwitzZeta(4, 2), Pi**4/90 - 1)))
 
 make_entry(ID("868061"),
-    Formula(Equal(HurwitzZeta(2, Div(1,2)), ConstPi**2 / 2)))
+    Formula(Equal(HurwitzZeta(2, Div(1,2)), Pi**2 / 2)))
 
 make_entry(ID("9417f4"),
     Formula(Equal(HurwitzZeta(3, Div(1,2)), 7 * RiemannZeta(3))))
 
 make_entry(ID("4064f5"),
-    Formula(Equal(HurwitzZeta(4, Div(1,2)), ConstPi**4 / 6)))
+    Formula(Equal(HurwitzZeta(4, Div(1,2)), Pi**4 / 6)))
 
 make_entry(ID("3e82c3"),
-    Formula(Equal(HurwitzZeta(2, Div(1,4)), ConstPi**2 + 8*ConstCatalan)))
+    Formula(Equal(HurwitzZeta(2, Div(1,4)), Pi**2 + 8*ConstCatalan)))
 
 make_entry(ID("951f86"),
-    Formula(Equal(HurwitzZeta(2, Div(3,4)), ConstPi**2 - 8*ConstCatalan)))
+    Formula(Equal(HurwitzZeta(2, Div(3,4)), Pi**2 - 8*ConstCatalan)))
 
 make_entry(ID("eda0f3"),
-    Formula(Equal(HurwitzZeta(3, Div(1,4)), 28*RiemannZeta(3)+ConstPi**3)))
+    Formula(Equal(HurwitzZeta(3, Div(1,4)), 28*RiemannZeta(3)+Pi**3)))
 
 make_entry(ID("b347d3"),
-    Formula(Equal(HurwitzZeta(3, Div(3,4)), 28*RiemannZeta(3)-ConstPi**3)))
+    Formula(Equal(HurwitzZeta(3, Div(3,4)), 28*RiemannZeta(3)-Pi**3)))
 
 make_entry(ID("2fabeb"),
-    Formula(Equal(HurwitzZeta(3, Div(1,6)), 91*RiemannZeta(3)+2*Sqrt(3)*ConstPi**3)))
+    Formula(Equal(HurwitzZeta(3, Div(1,6)), 91*RiemannZeta(3)+2*Sqrt(3)*Pi**3)))
 
 make_entry(ID("edad97"),
-    Formula(Equal(HurwitzZeta(3, Div(5,6)), 91*RiemannZeta(3)-2*Sqrt(3)*ConstPi**3)))
+    Formula(Equal(HurwitzZeta(3, Div(5,6)), 91*RiemannZeta(3)-2*Sqrt(3)*Pi**3)))
 
 make_entry(ID("84196a"),
     Formula(Equal(HurwitzZeta(n, a), (-1)**n / Factorial(n-1) * DigammaFunction(a, n-1))),
@@ -375,13 +375,13 @@ make_entry(ID("77e507"),
 # Integral representations
 
 make_entry(ID("1699a9"),
-    Formula(Equal(HurwitzZeta(s, a), (ConstPi/(2*(s-1))) * Integral((a-Div(1,2)+ConstI*x)**(1-s) / Cosh(ConstPi*x)**2, For(x, -Infinity, Infinity)))),
+    Formula(Equal(HurwitzZeta(s, a), (Pi/(2*(s-1))) * Integral((a-Div(1,2)+ConstI*x)**(1-s) / Cosh(Pi*x)**2, For(x, -Infinity, Infinity)))),
     Variables(s, a),
     Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), Div(1,2)))),
     References("https://doi.org/10.1090/mcom/3401"))
 
 make_entry(ID("498036"),
-    Formula(Equal(HurwitzZeta(s, a), (1/GammaFunction(s)) * Integral((x**(s-1) * Exp(-(a*x))) / (1 - Exp(-x)), For(x, 0, Infinity)))),
+    Formula(Equal(HurwitzZeta(s, a), (1/Gamma(s)) * Integral((x**(s-1) * Exp(-(a*x))) / (1 - Exp(-x)), For(x, 0, Infinity)))),
     Variables(s, a),
     Assumptions(And(Element(s, CC), Greater(Re(s), 1), Element(a, CC), Greater(Re(a), 0))))
 
@@ -427,7 +427,7 @@ make_entry(ID("ba7f85"),
 
 # todo: relax assumptions on a
 make_entry(ID("69a1a9"),
-    Formula(Equal(HurwitzZeta(1-s, p/q), (2*GammaFunction(s))/(2*ConstPi*q)**s * Sum(Cos(ConstPi*s/2 - 2*ConstPi*k*p/q) * HurwitzZeta(s, k/q), For(k, 1, q)))),
+    Formula(Equal(HurwitzZeta(1-s, p/q), (2*Gamma(s))/(2*Pi*q)**s * Sum(Cos(Pi*s/2 - 2*Pi*k*p/q) * HurwitzZeta(s, k/q), For(k, 1, q)))),
     Variables(s, p, q),
     Assumptions(And(Element(s, CC), NotElement(s, ZZ), Element(q, ZZGreaterEqual(1)), Element(p, Range(1, q)))))
 
@@ -483,12 +483,12 @@ make_entry(ID("4228cd"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(z, CC))))
 
 make_entry(ID("f3b870"),
-    Formula(Equal(LogGamma(z), HurwitzZeta(0, z, 1) + Log(2*ConstPi)/2)),
+    Formula(Equal(LogGamma(z), HurwitzZeta(0, z, 1) + Log(2*Pi)/2)),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
 
 make_entry(ID("53026a"),
-    Formula(Equal(GammaFunction(z), Sqrt(2*ConstPi) * Exp(HurwitzZeta(0, z, 1)))),
+    Formula(Equal(Gamma(z), Sqrt(2*Pi) * Exp(HurwitzZeta(0, z, 1)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
 

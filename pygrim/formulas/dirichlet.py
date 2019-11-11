@@ -160,10 +160,10 @@ make_entry(ID("0ba38f"),
     References("http://oeis.org/A007431"))
 
 make_entry(ID("f88596"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)) / (Div(1,2) * N**2), For(N, Infinity)), 6/ConstPi**2)))
+    Formula(Equal(SequenceLimit(Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)) / (Div(1,2) * N**2), For(N, Infinity)), 6/Pi**2)))
 
 make_entry(ID("3b43b0"),
-    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), For(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)), For(N, Infinity)), 6/ConstPi**2)),
+    Formula(Equal(SequenceLimit(Sum(Cardinality(PrimitiveDirichletCharacters(q)), For(q, 1, N)) / Sum(Cardinality(DirichletGroup(q)), For(q, 1, N)), For(N, Infinity)), 6/Pi**2)),
     References("H. Jager, On the number of Dirichlet characters with modulus not exceeding x, Indagationes Mathematicae, Volume 76, Issue 5, 1973, Pages 452-455, https://doi.org/10.1016/1385-7258(73)90069-3"))
 
 make_entry(ID("d9a187"),
@@ -173,7 +173,7 @@ make_entry(ID("d9a187"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), ellrange, Equal(GCD(ell,q), 1), Element(n, ZZ))))
 
 make_entry(ID("57d31a"),
-    Formula(Where(Element(chi(n), Union(Set(Exp(2*ConstPi*ConstI*k/r), ForElement(k, ZZ)), Set(0))), Equal(r, Totient(q)))),
+    Formula(Where(Element(chi(n), Union(Set(Exp(2*Pi*ConstI*k/r), ForElement(k, ZZ)), Set(0))), Equal(r, Totient(q)))),
     Variables(q,chi,n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZ))))
 
@@ -266,7 +266,7 @@ make_entry(ID("2a48bd"),
         Element(ell, Range(1, Max(q1*q2, 2)-1)), Equal(GCD(ell,q1), GCD(ell,q2), GCD(q1,q2), 1))))
 
 make_entry(ID("4cf4e4"),
-    Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*a*b/Totient(q))),
+    Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*Pi*ConstI*a*b/Totient(q))),
         Equal(q, p**e), Equal(g, ConreyGenerator(p)), Equal(a, DiscreteLog(ell, g, q)), Equal(b, DiscreteLog(n, g, q)))),
     Variables(p, e, ell, n),
     Assumptions(And(Element(p, PP), GreaterEqual(p, 3), Element(e, ZZGreaterEqual(1)),
@@ -278,7 +278,7 @@ make_entry(ID("fc4f6a"),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("03fbe8"),
-    Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*ConstPi*ConstI*(((1-x)*(1-y)/8 + a*b/2**(e-2))))),
+    Formula(Where(Equal(DirichletCharacter(q, ell, n), Exp(2*Pi*ConstI*(((1-x)*(1-y)/8 + a*b/2**(e-2))))),
         Equal(q, 2**e), Equal(L(k),
             Cases(Tuple(
                 Tuple(1, DiscreteLog(k, 5, q)), Element(k, Set(Mod(5**i, q), For(i), Element(i, ZZGreaterEqual(1))))),
@@ -423,10 +423,10 @@ make_entry(ID("ec0054"),
         TableColumnHeadings(1, 2, 3, 4, 5, 6),
         List(
         Tuple(0, 1, 1, 1, 1, 1, 1),
-        Tuple(0, 1, -Exp(ConstPi*ConstI/3), Exp(2*ConstPi*ConstI/3), Exp(2*ConstPi*ConstI/3), -Exp(ConstPi*ConstI/3), 1),
-        Tuple(0, 1, Exp(2*ConstPi*ConstI/3), Exp(ConstPi*ConstI/3), -Exp(ConstPi*ConstI/3), -Exp(2*ConstPi*ConstI/3), -1),
-        Tuple(0, 1, Exp(2*ConstPi*ConstI/3), -Exp(ConstPi*ConstI/3), -Exp(ConstPi*ConstI/3), Exp(2*ConstPi*ConstI/3), 1),
-        Tuple(0, 1, -Exp(ConstPi*ConstI/3), -Exp(2*ConstPi*ConstI/3), Exp(2*ConstPi*ConstI/3), Exp(ConstPi*ConstI/3), -1),
+        Tuple(0, 1, -Exp(Pi*ConstI/3), Exp(2*Pi*ConstI/3), Exp(2*Pi*ConstI/3), -Exp(Pi*ConstI/3), 1),
+        Tuple(0, 1, Exp(2*Pi*ConstI/3), Exp(Pi*ConstI/3), -Exp(Pi*ConstI/3), -Exp(2*Pi*ConstI/3), -1),
+        Tuple(0, 1, Exp(2*Pi*ConstI/3), -Exp(Pi*ConstI/3), -Exp(Pi*ConstI/3), Exp(2*Pi*ConstI/3), 1),
+        Tuple(0, 1, -Exp(Pi*ConstI/3), -Exp(2*Pi*ConstI/3), Exp(2*Pi*ConstI/3), Exp(Pi*ConstI/3), -1),
         Tuple(0, 1, 1, -1, 1, -1, -1),
     )))
 
@@ -449,10 +449,10 @@ make_entry(ID("0c7de4"),
         TableColumnHeadings(1, 2, 4, 5, 7, 8),
         List(
         Tuple(0, 1, 1, 0, 1, 1, 0, 1, 1),
-        Tuple(0, 1, Exp(ConstPi*ConstI/3), 0, Exp(2*ConstPi*ConstI/3), -Exp(2*ConstPi*ConstI/3), 0, -Exp(ConstPi*ConstI/3), -1),
-        Tuple(0, 1, Exp(2*ConstPi*ConstI/3), 0, -Exp(ConstPi*ConstI/3), -Exp(ConstPi*ConstI/3), 0, Exp(2*ConstPi*ConstI/3), 1),
-        Tuple(0, 1, -Exp(2*ConstPi*ConstI/3), 0, -Exp(ConstPi*ConstI/3), Exp(ConstPi*ConstI/3), 0, Exp(2*ConstPi*ConstI/3), -1),
-        Tuple(0, 1, -Exp(ConstPi*ConstI/3), 0, Exp(2*ConstPi*ConstI/3), Exp(2*ConstPi*ConstI/3), 0, -Exp(ConstPi*ConstI/3), 1),
+        Tuple(0, 1, Exp(Pi*ConstI/3), 0, Exp(2*Pi*ConstI/3), -Exp(2*Pi*ConstI/3), 0, -Exp(Pi*ConstI/3), -1),
+        Tuple(0, 1, Exp(2*Pi*ConstI/3), 0, -Exp(Pi*ConstI/3), -Exp(Pi*ConstI/3), 0, Exp(2*Pi*ConstI/3), 1),
+        Tuple(0, 1, -Exp(2*Pi*ConstI/3), 0, -Exp(Pi*ConstI/3), Exp(Pi*ConstI/3), 0, Exp(2*Pi*ConstI/3), -1),
+        Tuple(0, 1, -Exp(Pi*ConstI/3), 0, Exp(2*Pi*ConstI/3), Exp(2*Pi*ConstI/3), 0, -Exp(Pi*ConstI/3), 1),
         Tuple(0, 1, -1, 0, 1, -1, 0, 1, -1),
     )))
 
@@ -475,14 +475,14 @@ make_entry(ID("7a56c2"),
         TableColumnHeadings(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
         List(
     Tuple(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-    Tuple(0, 1, Exp(ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(4*ConstPi*ConstI/5), -Exp(2*ConstPi*ConstI/5), Exp(3*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), -1),
-    Tuple(0, 1, -Exp(3*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), 1),
-    Tuple(0, 1, Exp(2*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), 1),
-    Tuple(0, 1, Exp(4*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), 1),
-    Tuple(0, 1, -Exp(4*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(ConstPi*ConstI/5), Exp(3*ConstPi*ConstI/5), -Exp(2*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -1),
-    Tuple(0, 1, -Exp(2*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), Exp(3*ConstPi*ConstI/5), -Exp(4*ConstPi*ConstI/5), Exp(ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -1),
-    Tuple(0, 1, Exp(3*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -Exp(2*ConstPi*ConstI/5), Exp(ConstPi*ConstI/5), -Exp(4*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), -1),
-    Tuple(0, 1, -Exp(ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), Exp(4*ConstPi*ConstI/5), Exp(2*ConstPi*ConstI/5), -Exp(3*ConstPi*ConstI/5), -Exp(ConstPi*ConstI/5), 1),
+    Tuple(0, 1, Exp(Pi*ConstI/5), -Exp(3*Pi*ConstI/5), Exp(2*Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(4*Pi*ConstI/5), -Exp(2*Pi*ConstI/5), Exp(3*Pi*ConstI/5), -Exp(Pi*ConstI/5), -1),
+    Tuple(0, 1, -Exp(3*Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(2*Pi*ConstI/5), Exp(2*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), 1),
+    Tuple(0, 1, Exp(2*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(2*Pi*ConstI/5), 1),
+    Tuple(0, 1, Exp(4*Pi*ConstI/5), Exp(2*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), -Exp(Pi*ConstI/5), -Exp(Pi*ConstI/5), -Exp(3*Pi*ConstI/5), Exp(2*Pi*ConstI/5), Exp(4*Pi*ConstI/5), 1),
+    Tuple(0, 1, -Exp(4*Pi*ConstI/5), Exp(2*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(Pi*ConstI/5), Exp(3*Pi*ConstI/5), -Exp(2*Pi*ConstI/5), Exp(4*Pi*ConstI/5), -1),
+    Tuple(0, 1, -Exp(2*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), Exp(3*Pi*ConstI/5), -Exp(4*Pi*ConstI/5), Exp(Pi*ConstI/5), Exp(2*Pi*ConstI/5), -1),
+    Tuple(0, 1, Exp(3*Pi*ConstI/5), Exp(4*Pi*ConstI/5), -Exp(Pi*ConstI/5), Exp(2*Pi*ConstI/5), -Exp(2*Pi*ConstI/5), Exp(Pi*ConstI/5), -Exp(4*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), -1),
+    Tuple(0, 1, -Exp(Pi*ConstI/5), -Exp(3*Pi*ConstI/5), Exp(2*Pi*ConstI/5), Exp(4*Pi*ConstI/5), Exp(4*Pi*ConstI/5), Exp(2*Pi*ConstI/5), -Exp(3*Pi*ConstI/5), -Exp(Pi*ConstI/5), 1),
     Tuple(0, 1, -1, 1, 1, 1, -1, -1, -1, 1, -1),
     )))
 
@@ -720,10 +720,10 @@ make_entry(ID("c2750a"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("d83109"),
-    Formula(Equal(DirichletL(1,DirichletCharacter(3,2)), ConstPi/Sqrt(27))))
+    Formula(Equal(DirichletL(1,DirichletCharacter(3,2)), Pi/Sqrt(27))))
 
 make_entry(ID("3b8c97"),
-    Formula(Equal(DirichletL(1,DirichletCharacter(4,3)), ConstPi/4)))
+    Formula(Equal(DirichletL(1,DirichletCharacter(4,3)), Pi/4)))
 
 make_entry(ID("c9d117"),
     Formula(Equal(DirichletL(1,DirichletCharacter(5,4)), 2*Log(GoldenRatio)/Sqrt(5))))
@@ -769,7 +769,7 @@ make_entry(ID("d69b41"),
     Formula(Equal(Sum(chi(a)* (z*Exp(a*z)/(Exp(q*z)-1)), For(a, 1, q)),
         Sum(GeneralizedBernoulliB(n, chi) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(q, chi, z),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), Unequal(z, 0), Less(Abs(z), 2*ConstPi / q))))
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), Unequal(z, 0), Less(Abs(z), 2*Pi / q))))
 
 make_entry(ID("f5c3c5"),
     Formula(Equal(DirichletL(-n, chi), -(GeneralizedBernoulliB(n+1,chi)/(n+1)))),
@@ -858,7 +858,7 @@ make_entry(ID("cc6a5a"),
     Description("In the literature, this function is sometimes multiplied by a different constant factor (depending on", chi, "but constant with respect to", s, ")."))
 
 make_entry(ID("b788a1"),
-    Formula(Equal(DirichletLambda(s, chi), Where(beta * (q / ConstPi)**((s+a)/2) * GammaFunction((s+a)/2) * DirichletL(s,chi),
+    Formula(Equal(DirichletLambda(s, chi), Where(beta * (q / Pi)**((s+a)/2) * Gamma((s+a)/2) * DirichletL(s,chi),
         Equal(a, (1 - chi(-1))/2), Equal(beta, Cases(Tuple(s*(s-1), Equal(q, 1)), Tuple(1, Otherwise)))))),
     Variables(q, chi, s),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)), Element(s, CC),
@@ -870,7 +870,7 @@ make_entry(ID("11a763"),
     SymbolDefinition(GaussSum, GaussSum(q, chi), "Gauss sum"))
 
 make_entry(ID("62f12c"),
-    Formula(Equal(GaussSum(q, chi), Sum(chi(n) * Exp(2*ConstPi*ConstI*n/q), For(n, 1, q)))),
+    Formula(Equal(GaussSum(q, chi), Sum(chi(n) * Exp(2*Pi*ConstI*n/q), For(n, 1, q)))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -928,7 +928,7 @@ make_entry(ID("8ff1ff"),
             Element(s, CC), Greater(Re(s), 1))))
 
 make_entry(ID("9b3fde"),
-    Formula(LessEqual(Abs(DirichletL(s,chi)), (q*Abs(1+s)/(2*ConstPi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
+    Formula(LessEqual(Abs(DirichletL(s,chi)), (q*Abs(1+s)/(2*Pi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
     Variables(q, chi, s, eta),
     Assumptions(
         And(Element(q, ZZGreaterEqual(2)), Element(chi, PrimitiveDirichletCharacters(q)),

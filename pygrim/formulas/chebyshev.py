@@ -277,27 +277,27 @@ make_entry(ID("7d111e"),
 # Zeros and extrema
 
 make_entry(ID("7a7d1d"),
-    Formula(Equal(Zeros(ChebyshevT(n,x), ForElement(x, CC)), Set(Cos(((2*k-1)/(2*n))*ConstPi), ForElement(k, Range(1, n))))),
+    Formula(Equal(Zeros(ChebyshevT(n,x), ForElement(x, CC)), Set(Cos(((2*k-1)/(2*n))*Pi), ForElement(k, Range(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("ce39ac"),
-    Formula(Equal(Zeros(ChebyshevU(n,x), ForElement(x, CC)), Set(Cos((k/(n+1))*ConstPi), ForElement(k, Range(1, n))))),
+    Formula(Equal(Zeros(ChebyshevU(n,x), ForElement(x, CC)), Set(Cos((k/(n+1))*Pi), ForElement(k, Range(1, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("3d25dd"),
-    Formula(Equal(Solutions(Brackets(Element(ChebyshevT(n,x), Set(-1,1))), ForElement(x, CC)), Set(Cos((k/n)*ConstPi), ForElement(k, Range(0, n))))),
+    Formula(Equal(Solutions(Brackets(Element(ChebyshevT(n,x), Set(-1,1))), ForElement(x, CC)), Set(Cos((k/n)*Pi), ForElement(k, Range(0, n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("b5a25e"),
-    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), 1)), ForElement(x, CC)), Set(Cos((2*k/n)*ConstPi), ForElement(k, Range(0, Floor(n/2)))))),
+    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), 1)), ForElement(x, CC)), Set(Cos((2*k/n)*Pi), ForElement(k, Range(0, Floor(n/2)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("db2b0a"),
-    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), -1)), ForElement(x, CC)), Set(Cos(((2*k-1)/n)*ConstPi), ForElement(k, Range(1, Floor((n+1)/2)))))),
+    Formula(Equal(Solutions(Brackets(Equal(ChebyshevT(n,x), -1)), ForElement(x, CC)), Set(Cos(((2*k-1)/n)*Pi), ForElement(k, Range(1, Floor((n+1)/2)))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -327,12 +327,12 @@ make_entry(ID("78f5bb"),
 
 make_entry(ID("2c26a1"),
     Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), For(x,-1,1)),
-        Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi, Equal(n, m, 0)), Tuple(ConstPi/2, And(Equal(n, m), Unequal(n, 0)))))),
+        Cases(Tuple(0, Unequal(n, m)), Tuple(Pi, Equal(n, m, 0)), Tuple(Pi/2, And(Equal(n, m), Unequal(n, 0)))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("473c36"),
-    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(ConstPi/2, Equal(n, m))))),
+    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(Pi/2, Equal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
@@ -493,12 +493,12 @@ make_entry(ID("5bd0ec"),
 # Product representations
 
 make_entry(ID("305a29"),
-    Formula(Equal(ChebyshevT(n,x), 2**(n-1) * Product(Parentheses(x-Cos((2*k-1)/(2*n) * ConstPi)), For(k,1,n)))),
+    Formula(Equal(ChebyshevT(n,x), 2**(n-1) * Product(Parentheses(x-Cos((2*k-1)/(2*n) * Pi)), For(k,1,n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, CC))))
 
 make_entry(ID("f5fa23"),
-    Formula(Equal(ChebyshevU(n,x), 2**n * Product(Parentheses(x-Cos(k/(n+1) * ConstPi)), For(k,1,n)))),
+    Formula(Equal(ChebyshevU(n,x), 2**n * Product(Parentheses(x-Cos(k/(n+1) * Pi)), For(k,1,n)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
@@ -622,14 +622,14 @@ make_entry(ID("b6b014"),
 
 make_entry(ID("6582c4"),
     Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x, r)),
-        (Sqrt(ConstPi) / (x-1)**r) * Hypergeometric3F2Regularized(1, -n, n, Div(1,2), 1-r, (1-x)/2))),
+        (Sqrt(Pi) / (x-1)**r) * Hypergeometric3F2Regularized(1, -n, n, Div(1,2), 1-r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
     References("http://functions.wolfram.com/Polynomials/ChebyshevT/20/02/01/0002/"))
 
 make_entry(ID("e1797b"),
     Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, x, r)),
-        ((Sqrt(ConstPi) * (n+1)) / (2 * (x-1)**r)) * Hypergeometric3F2Regularized(1, -n, n+2, Div(3,2), 1-r, (1-x)/2))),
+        ((Sqrt(Pi) * (n+1)) / (2 * (x-1)**r)) * Hypergeometric3F2Regularized(1, -n, n+2, Div(3,2), 1-r, (1-x)/2))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, SetMinus(CC, Set(-1, 1))))),
     References("http://functions.wolfram.com/Polynomials/ChebyshevU/20/02/01/0002/"))

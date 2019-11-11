@@ -77,7 +77,7 @@ make_entry(ID("ef8b17"),
     Assumptions(Element(s, ZZGreaterEqual(2))))
 
 make_entry(ID("4a23c7"),
-    Formula(Equal(MultiZetaValue(Repeat(2, n)), ConstPi**(2*n) / Factorial(2*n+1))),
+    Formula(Equal(MultiZetaValue(Repeat(2, n)), Pi**(2*n) / Factorial(2*n+1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

@@ -396,7 +396,7 @@ make_entry(ID("050fdb"),
 
 # todo: define Fibonacci(n) for non-integer n?
 make_entry(ID("ad0d7a"),
-    Formula(Equal(Fibonacci(n), (GoldenRatio**n - Cos(ConstPi*n) * GoldenRatio**(-n)) / Sqrt(5))),
+    Formula(Equal(Fibonacci(n), (GoldenRatio**n - Cos(Pi*n) * GoldenRatio**(-n)) / Sqrt(5))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -450,7 +450,7 @@ make_entry(ID("b8ed8f"),
 # Elementary functions
 
 make_entry(ID("12b336"),
-    Formula(Equal(Fibonacci(n), Where((Exp(n*u) - Cos(ConstPi*n)*Exp(-n*u))/Sqrt(5), Equal(u, Log(GoldenRatio))))),
+    Formula(Equal(Fibonacci(n), Where((Exp(n*u) - Cos(Pi*n)*Exp(-n*u))/Sqrt(5), Equal(u, Log(GoldenRatio))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -464,12 +464,12 @@ make_entry(ID("fd732d"),
 #    Formula(Equal(Fibonacci(2*n+1), (2/Sqrt(5)) * Cosh((n+Div(1,2))*Log(1+GoldenRatio)))),
 
 make_entry(ID("bceed4"),
-    Formula(Equal(Fibonacci(n), Where(((1+Cos(ConstPi*n))*Sinh(n*u) + (1-Cos(ConstPi*n))*Cosh(n*u)) / Sqrt(5), Equal(u, Log(GoldenRatio))))),
+    Formula(Equal(Fibonacci(n), Where(((1+Cos(Pi*n))*Sinh(n*u) + (1-Cos(Pi*n))*Cosh(n*u)) / Sqrt(5), Equal(u, Log(GoldenRatio))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("c4d78a"),
-    Formula(Equal(Fibonacci(n), (2/Sqrt(5)) * (-ConstI)**n * Sinh(n*(Log(GoldenRatio) + Div(1,2)*ConstPi*ConstI)))),
+    Formula(Equal(Fibonacci(n), (2/Sqrt(5)) * (-ConstI)**n * Sinh(n*(Log(GoldenRatio) + Div(1,2)*Pi*ConstI)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -631,12 +631,12 @@ make_entry(ID("344963"),
 
 make_entry(ID("da1873"),
     Formula(Equal(Sum(1/Fibonacci(2*n+1), For(n, 0, Infinity)),
-        Where((Sqrt(5)/4) * JacobiTheta(2,0, tau)**2, Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+        Where((Sqrt(5)/4) * JacobiTheta(2,0, tau)**2, Equal(tau, (1/(Pi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("22b67a"),
     Formula(Equal(Sum(1/Fibonacci(n)**2, For(n, 1, Infinity)),
-        Where(Div(5,24) * (JacobiTheta(2,0, tau)**4 - JacobiTheta(4,0, tau)**4 + 1), Equal(tau, (1/(ConstPi*ConstI)) * Log((3-Sqrt(5))/2))))),
+        Where(Div(5,24) * (JacobiTheta(2,0, tau)**4 - JacobiTheta(4,0, tau)**4 + 1), Equal(tau, (1/(Pi*ConstI)) * Log((3-Sqrt(5))/2))))),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987."))
 
 make_entry(ID("6d8bf0"),

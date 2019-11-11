@@ -105,12 +105,12 @@ make_entry(ID("8f10b0"),
     Assumptions(And(Element(q, CC), Less(Abs(q), 1))))
 
 make_entry(ID("ff587a"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * EulerQSeries(Exp(2*ConstPi*ConstI*tau)))),
+    Formula(Equal(DedekindEta(tau), Exp(Pi*ConstI*tau/12) * EulerQSeries(Exp(2*Pi*ConstI*tau)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1dc520"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * Product(Parentheses(1 - Exp(2*ConstPi*ConstI*k*tau)), For(k, 1, Infinity)))),
+    Formula(Equal(DedekindEta(tau), Exp(Pi*ConstI*tau/12) * Product(Parentheses(1 - Exp(2*Pi*ConstI*k*tau)), For(k, 1, Infinity)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -126,7 +126,7 @@ make_entry(ID("d8025b"),
 
 # Imaginary points
 
-rc = GammaFunction(Div(1,4)) / (2 * ConstPi ** Div(3,4))
+rc = Gamma(Div(1,4)) / (2 * Pi ** Div(3,4))
 
 make_entry(ID("9b8c9f"),
     Formula(Equal(DedekindEta(ConstI), rc)))
@@ -165,21 +165,21 @@ make_entry(ID("0701dc"),
     References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
 
 make_entry(ID("e3e4c5"),
-    Formula(Equal(DedekindEta(Sqrt(3) * ConstI), Pow(3,Div(1,8)) / Pow(2,Div(4,3)) * (GammaFunction(Div(1,3))**Div(3,2) / ConstPi))),
+    Formula(Equal(DedekindEta(Sqrt(3) * ConstI), Pow(3,Div(1,8)) / Pow(2,Div(4,3)) * (Gamma(Div(1,3))**Div(3,2) / Pi))),
     References("https://math.stackexchange.com/questions/1334684/what-is-the-exact-value-of-eta6i/1334940"))
 
 # Third roots of unity
 
 make_entry(ID("204acd"),
-    Formula(Equal(DedekindEta(Exp(2*ConstPi*ConstI/3)), Exp(-(ConstPi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(GammaFunction(Div(1,3)), Div(3,2)) / (2 * ConstPi)))))
+    Formula(Equal(DedekindEta(Exp(2*Pi*ConstI/3)), Exp(-(Pi*ConstI/24)) * (Pow(3,Div(1,8)) * Pow(Gamma(Div(1,3)), Div(3,2)) / (2 * Pi)))))
 
 make_entry(ID("4af6db"),
-    Formula(Equal(ComplexDerivative(DedekindEta(tau), For(tau, Exp(2*ConstPi*ConstI/3))),
-        ((ConstI*Sqrt(3))/6) * DedekindEta(Exp(2*ConstPi*ConstI/3)))))
+    Formula(Equal(ComplexDerivative(DedekindEta(tau), For(tau, Exp(2*Pi*ConstI/3))),
+        ((ConstI*Sqrt(3))/6) * DedekindEta(Exp(2*Pi*ConstI/3)))))
 # Connection formulas
 
 make_entry(ID("737805"),
-    Formula(Equal(DedekindEta(tau), Exp(ConstPi*ConstI*tau/12) * JacobiTheta(3,(tau+1)/2, 3*tau))),
+    Formula(Equal(DedekindEta(tau), Exp(Pi*ConstI*tau/12) * JacobiTheta(3,(tau+1)/2, 3*tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -189,7 +189,7 @@ make_entry(ID("f4dc79"),
     SymbolDefinition(DedekindEtaEpsilon, DedekindEtaEpsilon(a,b,c,d), "Root of unity in the functional equation of the Dedekind eta function"))
 
 make_entry(ID("1bae52"),
-    Formula(Equal(DedekindEta(tau+1), Exp(ConstPi*ConstI/12) * DedekindEta(tau))),
+    Formula(Equal(DedekindEta(tau+1), Exp(Pi*ConstI/12) * DedekindEta(tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -214,17 +214,17 @@ make_entry(ID("9f19c1"),
     Assumptions(And(Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))))
 
 make_entry(ID("f04e01"),
-    Formula(Equal(DedekindEtaEpsilon(1,b,0,1), Exp((ConstPi*ConstI*b)/12))),
+    Formula(Equal(DedekindEtaEpsilon(1,b,0,1), Exp((Pi*ConstI*b)/12))),
     Variables(b),
     Element(b, ZZ))
 
 make_entry(ID("921ef0"),
-    Formula(Equal(DedekindEtaEpsilon(a,b,c,d), Exp((ConstPi*ConstI*((a+d)/(12*c) - DedekindSum(d,c) - Div(1,4)))))),
+    Formula(Equal(DedekindEtaEpsilon(a,b,c,d), Exp((Pi*ConstI*((a+d)/(12*c) - DedekindSum(d,c) - Div(1,4)))))),
     Variables(a,b,c,d),
     Assumptions(And(Element(a, ZZ), Element(b, ZZ), Element(c, ZZ), Element(d, ZZ), Equal(a*d-b*c, 1), Greater(c, 0))))
 
 make_entry(ID("a1a3d4"),
-    Formula(Equal(DedekindEta(tau+Div(1,2)), Exp(ConstPi*ConstI/24) * (DedekindEta(2*tau)**3 / (DedekindEta(tau) * DedekindEta(4*tau))))),
+    Formula(Equal(DedekindEta(tau+Div(1,2)), Exp(Pi*ConstI/24) * (DedekindEta(2*tau)**3 / (DedekindEta(tau) * DedekindEta(4*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -232,13 +232,13 @@ make_entry(ID("a1a3d4"),
 
 make_entry(ID("871996"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), For(tau, tau)),
-        ((ConstI * ConstPi) / 12) * DedekindEta(tau) * EisensteinE(2, tau))),
+        ((ConstI * Pi) / 12) * DedekindEta(tau) * EisensteinE(2, tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1c25d3"),
     Formula(Equal(ComplexDerivative(DedekindEta(tau), For(tau, tau)),
-        (ConstI / (2 * ConstPi)) * DedekindEta(tau) * WeierstrassZeta(Div(1,2), tau))),
+        (ConstI / (2 * Pi)) * DedekindEta(tau) * WeierstrassZeta(Div(1,2), tau))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 

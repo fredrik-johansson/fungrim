@@ -163,10 +163,10 @@ make_entry(ID("d496b8"),
 
 
 make_entry(ID("c331da"),
-    Formula(Equal(Log(ConstI), ConstPi*ConstI/2)))
+    Formula(Equal(Log(ConstI), Pi*ConstI/2)))
 
 make_entry(ID("2f1f7b"),
-    Formula(Equal(Log(-1), ConstPi*ConstI)))
+    Formula(Equal(Log(-1), Pi*ConstI)))
 
 make_entry(ID("4538ba"),
     Formula(IsHolomorphic(Log(z), ForElement(z, Log_holomorphic_domain))))
@@ -184,12 +184,12 @@ make_entry(ID("b5ded1"),
     Formula(Equal(BranchCuts(Log(z), z, CC), Set(Log_branch_cut))))
 
 make_entry(ID("ed6590"),
-    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) + ConstPi*ConstI)),
+    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) + Pi*ConstI)),
     Variables(a,b),
     Assumptions(And(Element(a, CC), Element(b, CC), Greater(Im(a), 0), Less(Im(b), 0), Greater(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
 make_entry(ID("c1bee1"),
-    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) - ConstPi*ConstI)),
+    Formula(Equal(AnalyticContinuation(Log(z), For(z, a, b)), Log(-b) - Pi*ConstI)),
     Variables(a,b),
     Assumptions(And(Element(a, CC), Element(b, CC), Less(Im(a), 0), Greater(Im(b), 0), Less(Re(a)*Im(b)-Re(b)*Im(a), 0))))
 
@@ -232,7 +232,7 @@ make_entry(ID("4986ed"),
     Assumptions(Element(x, OpenInterval(0,Infinity))))
 
 make_entry(ID("792c76"),
-    Formula(LessEqual(Abs(Log(z)), Abs(Log(Abs(z))) + ConstPi)),
+    Formula(LessEqual(Abs(Log(z)), Abs(Log(Abs(z))) + Pi)),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
@@ -244,7 +244,7 @@ make_entry(ID("d87f6e"),
 make_entry(ID("4c1e1e"),
     Formula(Equal(Log(Exp(z)), z)),
     Variables(z),
-    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-ConstPi, ConstPi)))))
+    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
 
 make_entry(ID("c43533"),
     Formula(Equal(Log(z), Log(Abs(z)) + Arg(z)*ConstI)),

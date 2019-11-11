@@ -238,7 +238,7 @@ make_entry(ID("b786ad"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), LessEqual(-1, x, 1))))
 
 make_entry(ID("60ac50"),
-    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, 1))), (2**Div(3,2) / Sqrt(ConstPi)) * (n**Div(1,2) / (1 - x**2)**Div(3,4)))),
+    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, 1))), (2**Div(3,2) / Sqrt(Pi)) * (n**Div(1,2) / (1 - x**2)**Div(3,4)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Less(-1, x, 1))))
 
@@ -248,12 +248,12 @@ make_entry(ID("59e5df"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), LessEqual(-1, x, 1))))
 
 make_entry(ID("3b175b"),
-    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, 2))), (2**Div(5,2) / Sqrt(ConstPi)) * (n**Div(3,2) / (1 - x**2)**Div(5,4)))),
+    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, 2))), (2**Div(5,2) / Sqrt(Pi)) * (n**Div(3,2) / (1 - x**2)**Div(5,4)))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Less(-1, x, 1))))
 
 make_entry(ID("6476bd"),
-    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, r))), (2**(r+Div(1,2)) / Sqrt(ConstPi)) * (n**(r-Div(1,2)) / (1 - x**2)**((2*n+1)/4)))),
+    Formula(LessEqual(Abs(ComplexDerivative(LegendrePolynomial(n,x), For(x, x, r))), (2**(r+Div(1,2)) / Sqrt(Pi)) * (n**(r-Div(1,2)) / (1 - x**2)**((2*n+1)/4)))),
     Variables(n, r, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(r, ZZGreaterEqual(0)), Less(-1, x, 1))))
 

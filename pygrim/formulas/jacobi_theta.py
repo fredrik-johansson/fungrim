@@ -620,9 +620,9 @@ make_entry(ID("f96eac"),
         EntryReference("495a98"), ", ",
         EntryReference("2f97f5"), ", ",
         EntryReference("d923de"), "). ",
-        "It is important to note that Fungrim defines theta functions with a factor", ConstPi, "applied to the argument", z,
+        "It is important to note that Fungrim defines theta functions with a factor", Pi, "applied to the argument", z,
         "in the Fourier series, for uniformity with the lattice parameter", tau, ". Many authors omit this scaling factor or replace the input", tau,
-        "by", Equal(q, Exp(ConstPi*ConstI*tau)), ". Other conventions exist in the mathematical literature as well, "
+        "by", Equal(q, Exp(Pi*ConstI*tau)), ". Other conventions exist in the mathematical literature as well, "
         "so care is required when using different reference works."),
     Description("The following table lists conditions such that", SourceForm(JacobiTheta(j,z,tau)), "or", SourceForm(JacobiTheta(j,z,tau,r)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
@@ -637,122 +637,122 @@ make_entry(ID("f96eac"),
     )
 
 make_entry(ID("700d94"),
-    Formula(Equal(JacobiTheta(1,z,tau), Where(-ConstI * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(1,z,tau), Where(-ConstI * Exp(Pi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("495a98"),
-    Formula(Equal(JacobiTheta(2,z,tau), Where(Exp(ConstPi*ConstI*tau/4) * Sum(q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(2,z,tau), Where(Exp(Pi*ConstI*tau/4) * Sum(q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("2f97f5"),
     Formula(Equal(JacobiTheta(3,z,tau), Where(Sum(q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("d923de"),
     Formula(Equal(JacobiTheta(4,z,tau), Where(Sum((-1)**n * q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # Pure exponential series
 
 make_entry(ID("ed4ce5"),
-    Formula(Equal(JacobiTheta(1,z,tau), Sum(Exp(ConstPi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z + n - Div(1,2))), For(n, -Infinity, Infinity)))),
+    Formula(Equal(JacobiTheta(1,z,tau), Sum(Exp(Pi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z + n - Div(1,2))), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("7cb651"),
-    Formula(Equal(JacobiTheta(2,z,tau), Sum(Exp(ConstPi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z)), For(n, -Infinity, Infinity)))),
+    Formula(Equal(JacobiTheta(2,z,tau), Sum(Exp(Pi*ConstI*((n+Div(1,2))**2*tau + (2*n+1)*z)), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("580ba0"),
-    Formula(Equal(JacobiTheta(3,z,tau), Sum(Exp(ConstPi*ConstI*(n**2*tau + 2*n*z)), For(n, -Infinity, Infinity)))),
+    Formula(Equal(JacobiTheta(3,z,tau), Sum(Exp(Pi*ConstI*(n**2*tau + 2*n*z)), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("27c319"),
-    Formula(Equal(JacobiTheta(4,z,tau), Sum(Exp(ConstPi*ConstI*(n**2*tau + 2*n*z + n)), For(n, -Infinity, Infinity)))),
+    Formula(Equal(JacobiTheta(4,z,tau), Sum(Exp(Pi*ConstI*(n**2*tau + 2*n*z + n)), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # Trigonometric series
 
 make_entry(ID("2ba423"),
-    Formula(Equal(JacobiTheta(1,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * Sin((2*n+1)*ConstPi*z), For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(1,z,tau), Where(2 * Exp(Pi*ConstI*tau/4) * Sum((-1)**n * q**(n*(n+1)) * Sin((2*n+1)*Pi*z), For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("06633e"),
-    Formula(Equal(JacobiTheta(2,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Sum(q**(n*(n+1)) * Cos((2*n+1)*ConstPi*z), For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(2,z,tau), Where(2 * Exp(Pi*ConstI*tau/4) * Sum(q**(n*(n+1)) * Cos((2*n+1)*Pi*z), For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("f3e75c"),
-    Formula(Equal(JacobiTheta(3,z,tau), Where(1 + 2 * Sum(q**(n**2) * Cos(2*n*ConstPi*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(3,z,tau), Where(1 + 2 * Sum(q**(n**2) * Cos(2*n*Pi*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("8a34d1"),
-    Formula(Equal(JacobiTheta(4,z,tau), Where(1 + 2 * Sum((-1)**n * q**(n**2) * Cos(2*n*ConstPi*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(4,z,tau), Where(1 + 2 * Sum((-1)**n * q**(n**2) * Cos(2*n*Pi*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # Fourier series for derivatives
 
 make_entry(ID("2ae142"),
-    Formula(Equal(JacobiTheta(1,z,tau,r), Where(-ConstI * (ConstPi*ConstI)**r * Exp(ConstPi*ConstI*tau/4) * Sum((-1)**n * (2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(1,z,tau,r), Where(-ConstI * (Pi*ConstI)**r * Exp(Pi*ConstI*tau/4) * Sum((-1)**n * (2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau, r),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("42d832"),
-    Formula(Equal(JacobiTheta(2,z,tau,r), Where((ConstPi*ConstI)**r * Exp(ConstPi*ConstI*tau/4) * Sum((2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(2,z,tau,r), Where((Pi*ConstI)**r * Exp(Pi*ConstI*tau/4) * Sum((2*n+1)**r * q**(n*(n+1)) * w**(2*n+1), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau, r),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("f551ca"),
-    Formula(Equal(JacobiTheta(3,z,tau,r), Where((2*ConstPi*ConstI)**r * Sum(n**r * q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(3,z,tau,r), Where((2*Pi*ConstI)**r * Sum(n**r * q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau, r),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("1842d9"),
-    Formula(Equal(JacobiTheta(4,z,tau,r), Where((2*ConstPi*ConstI)**r * Sum((-1)**n * n**r * q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z))))),
+    Formula(Equal(JacobiTheta(4,z,tau,r), Where((2*Pi*ConstI)**r * Sum((-1)**n * n**r * q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z))))),
     Variables(z, tau, r),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 # Infinite products
 
 make_entry(ID("024a84"),
-    Formula(Equal(JacobiTheta(1,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Sin(ConstPi*z) *
-        Product((1-q**(2*n))*(1-2*q**(2*n)*Cos(2*ConstPi*z) + q**(4*n)), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(1,z,tau), Where(2 * Exp(Pi*ConstI*tau/4) * Sin(Pi*z) *
+        Product((1-q**(2*n))*(1-2*q**(2*n)*Cos(2*Pi*z) + q**(4*n)), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("d6a799"),
-    Formula(Equal(JacobiTheta(2,z,tau), Where(2 * Exp(ConstPi*ConstI*tau/4) * Cos(ConstPi*z) *
-        Product((1-q**(2*n))*(1+2*q**(2*n)*Cos(2*ConstPi*z) + q**(4*n)), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(2,z,tau), Where(2 * Exp(Pi*ConstI*tau/4) * Cos(Pi*z) *
+        Product((1-q**(2*n))*(1+2*q**(2*n)*Cos(2*Pi*z) + q**(4*n)), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("77aed2"),
     Formula(Equal(JacobiTheta(3,z,tau), Where(
-        Product((1-q**(2*n))*(1+2*q**(2*n-1)*Cos(2*ConstPi*z) + q**(4*n-2)), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        Product((1-q**(2*n))*(1+2*q**(2*n-1)*Cos(2*Pi*z) + q**(4*n-2)), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("2a2a38"),
     Formula(Equal(JacobiTheta(4,z,tau), Where(
-        Product((1-q**(2*n))*(1-2*q**(2*n-1)*Cos(2*ConstPi*z) + q**(4*n-2)), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        Product((1-q**(2*n))*(1-2*q**(2*n-1)*Cos(2*Pi*z) + q**(4*n-2)), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -760,90 +760,90 @@ make_entry(ID("13d2a1"),
     Formula(Where(Equal(JacobiTheta(3,z,tau),
         Sum(q**(n**2) * w**(2*n), For(n, -Infinity, Infinity)),
         Product((1-q**(2*n))*(1+q**(2*n-1)*w**2)*(1+q**(2*n-1)*w**(-2)), For(n, 1, Infinity))),
-            Equal(q, Exp(ConstPi*ConstI*tau)),
-            Equal(w, Exp(ConstPi*ConstI*z)))),
+            Equal(q, Exp(Pi*ConstI*tau)),
+            Equal(w, Exp(Pi*ConstI*z)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("39b699"),
     Formula(Where(Equal(JacobiTheta(2,z,tau),
-        -(ConstI*Exp(ConstPi*ConstI*tau/4) * (w - w**-1) * Product((1-q**(2*n)) * (1 - q**(2*n)*w**2) * (1 - q**(2*n)*w**-2), For(n, 1, Infinity)))),
-            Equal(q, Exp(ConstPi*ConstI*tau)),
-            Equal(w, Exp(ConstPi*ConstI*z)))),
+        -(ConstI*Exp(Pi*ConstI*tau/4) * (w - w**-1) * Product((1-q**(2*n)) * (1 - q**(2*n)*w**2) * (1 - q**(2*n)*w**-2), For(n, 1, Infinity)))),
+            Equal(q, Exp(Pi*ConstI*tau)),
+            Equal(w, Exp(Pi*ConstI*z)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("465810"),
     Formula(Where(Equal(JacobiTheta(2,z,tau),
-        Exp(ConstPi*ConstI*tau/4) * (w + w**-1) * Product((1-q**(2*n)) * (1 + q**(2*n)*w**2) * (1 + q**(2*n)*w**-2), For(n, 1, Infinity))),
-            Equal(q, Exp(ConstPi*ConstI*tau)),
-            Equal(w, Exp(ConstPi*ConstI*z)))),
+        Exp(Pi*ConstI*tau/4) * (w + w**-1) * Product((1-q**(2*n)) * (1 + q**(2*n)*w**2) * (1 + q**(2*n)*w**-2), For(n, 1, Infinity))),
+            Equal(q, Exp(Pi*ConstI*tau)),
+            Equal(w, Exp(Pi*ConstI*z)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("21851b"),
     Formula(Where(Equal(JacobiTheta(3,z,tau),
         Product((1-q**(2*n))*(1+q**(2*n-1)*w**2)*(1+q**(2*n-1)*w**(-2)), For(n, 1, Infinity))),
-            Equal(q, Exp(ConstPi*ConstI*tau)),
-            Equal(w, Exp(ConstPi*ConstI*z)))),
+            Equal(q, Exp(Pi*ConstI*tau)),
+            Equal(w, Exp(Pi*ConstI*z)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("d45548"),
     Formula(Where(Equal(JacobiTheta(4,z,tau),
         Product((1-q**(2*n))*(1-q**(2*n-1)*w**2)*(1-q**(2*n-1)*w**(-2)), For(n, 1, Infinity))),
-            Equal(q, Exp(ConstPi*ConstI*tau)),
-            Equal(w, Exp(ConstPi*ConstI*z)))),
+            Equal(q, Exp(Pi*ConstI*tau)),
+            Equal(w, Exp(Pi*ConstI*z)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 
 make_entry(ID("d2f183"),
     Formula(Equal(JacobiTheta(1,z,tau),
-        (JacobiTheta(1,0,tau,1)/ConstPi) * Sin(ConstPi*z) * Product(Sin(ConstPi*(n*tau+z))*Sin(ConstPi*(n*tau-z))/Sin(ConstPi*n*tau)**2, For(n, 1, Infinity)))),
+        (JacobiTheta(1,0,tau,1)/Pi) * Sin(Pi*z) * Product(Sin(Pi*(n*tau+z))*Sin(Pi*(n*tau-z))/Sin(Pi*n*tau)**2, For(n, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("64081c"),
     Formula(Equal(JacobiTheta(2,z,tau),
-        JacobiTheta(2,0,tau) * Cos(ConstPi*z) * Product(Cos(ConstPi*(n*tau+z))*Cos(ConstPi*(n*tau-z))/Cos(ConstPi*n*tau)**2, For(n, 1, Infinity)))),
+        JacobiTheta(2,0,tau) * Cos(Pi*z) * Product(Cos(Pi*(n*tau+z))*Cos(Pi*(n*tau-z))/Cos(Pi*n*tau)**2, For(n, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("816057"),
     Formula(Equal(JacobiTheta(3,z,tau),
-        JacobiTheta(3,0,tau) * Product(Cos(ConstPi*((n-Div(1,2))*tau+z))*Cos(ConstPi*((n-Div(1,2))*tau-z))/Cos(ConstPi*((n-Div(1,2))*tau))**2, For(n, 1, Infinity)))),
+        JacobiTheta(3,0,tau) * Product(Cos(Pi*((n-Div(1,2))*tau+z))*Cos(Pi*((n-Div(1,2))*tau-z))/Cos(Pi*((n-Div(1,2))*tau))**2, For(n, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("3c88a7"),
     Formula(Equal(JacobiTheta(4,z,tau),
-        JacobiTheta(4,0,tau) * Product(Sin(ConstPi*((n-Div(1,2))*tau+z))*Sin(ConstPi*((n-Div(1,2))*tau-z))/Sin(ConstPi*((n-Div(1,2))*tau))**2, For(n, 1, Infinity)))),
+        JacobiTheta(4,0,tau) * Product(Sin(Pi*((n-Div(1,2))*tau+z))*Sin(Pi*((n-Div(1,2))*tau-z))/Sin(Pi*((n-Div(1,2))*tau))**2, For(n, 1, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 
 make_entry(ID("dfbddd"),
     Formula(Equal(
-        (1/ConstPi) * (JacobiTheta(1,z,tau,1) / JacobiTheta(1,z,tau)), Where(Cot(ConstPi*z) + 4 * Sum(q**(2*n) / (1 - q**(2*n)) * Sin(2*ConstPi*n*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        (1/Pi) * (JacobiTheta(1,z,tau,1) / JacobiTheta(1,z,tau)), Where(Cot(Pi*z) + 4 * Sum(q**(2*n) / (1 - q**(2*n)) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Sin(ConstPi*z), 0))))
+    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Sin(Pi*z), 0))))
 
 make_entry(ID("c7f7a5"),
     Formula(Equal(
-        (1/ConstPi) * (JacobiTheta(2,z,tau,1) / JacobiTheta(2,z,tau)), Where(-Tan(ConstPi*z) + 4 * Sum((-1)**n * (q**(2*n) / (1 - q**(2*n))) * Sin(2*ConstPi*n*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        (1/Pi) * (JacobiTheta(2,z,tau,1) / JacobiTheta(2,z,tau)), Where(-Tan(Pi*z) + 4 * Sum((-1)**n * (q**(2*n) / (1 - q**(2*n))) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Cos(ConstPi*z), 0))))
+    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Cos(Pi*z), 0))))
 
 make_entry(ID("44e8fb"),
     Formula(Equal(
-        (1/ConstPi) * (JacobiTheta(3,z,tau,1) / JacobiTheta(3,z,tau)), Where(4 * Sum((-1)**n * (q**(n) / (1 - q**(2*n))) * Sin(2*ConstPi*n*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        (1/Pi) * (JacobiTheta(3,z,tau,1) / JacobiTheta(3,z,tau)), Where(4 * Sum((-1)**n * (q**(n) / (1 - q**(2*n))) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Div(1,2)*Abs(Im(tau))))))
 
 make_entry(ID("1848f1"),
     Formula(Equal(
-        (1/ConstPi) * (JacobiTheta(4,z,tau,1) / JacobiTheta(4,z,tau)), Where(4 * Sum(q**(n) / (1 - q**(2*n)) * Sin(2*ConstPi*n*z), For(n, 1, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+        (1/Pi) * (JacobiTheta(4,z,tau,1) / JacobiTheta(4,z,tau)), Where(4 * Sum(q**(n) / (1 - q**(2*n)) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Div(1,2)*Abs(Im(tau))))))
 
@@ -857,7 +857,7 @@ make_entry(ID("1cdd7b"),
 
 make_entry(ID("d637c5"),
     Formula(Equal(JacobiTheta(j,z,tau+x),
-        Sum((1/(4*ConstPi*ConstI)**n) * (JacobiTheta(j,z,tau,2*n) / Factorial(n)) * x**n, For(n, 0, Infinity)))),
+        Sum((1/(4*Pi*ConstI)**n) * (JacobiTheta(j,z,tau,2*n) / Factorial(n)) * x**n, For(n, 0, Infinity)))),
     Variables(j, z, tau, x),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(x, CC), Less(Abs(x), Im(tau)))))
 
@@ -868,14 +868,14 @@ todo: formally correct, but divergent -- what is an elegant regularization?
 
 make_entry(ID(""),
     Formula(Equal(JacobiTheta(1,z,tau,1)/JacobiTheta(1,z,tau),
-        -(ConstPi * Sum(1/Tan(ConstPi*(z+n*tau)), For(n, -Infinity, Infinity))))),
+        -(Pi * Sum(1/Tan(Pi*(z+n*tau)), For(n, -Infinity, Infinity))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(1, z, tau), 0))))
 
 make_entry(ID(""),
     Formula(Equal(JacobiTheta(2,z,tau,1)/JacobiTheta(2,z,tau),
-        ConstPi * Sum(Tan(ConstPi*(z+n*tau)), For(n, -Infinity, Infinity)))),
+        Pi * Sum(Tan(Pi*(z+n*tau)), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(2, z, tau), 0))))
@@ -884,7 +884,7 @@ make_entry(ID(""),
 # todo: introduce a log-derivative operator?
 make_entry(ID("d81f05"),
     Formula(Equal(ComplexBranchDerivative(Log(JacobiTheta(1,z,tau)), For(z, z, 2)),
-        ConstPi**2 * Sum(1/Sin(ConstPi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
+        Pi**2 * Sum(1/Sin(Pi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(1, z, tau), 0))))
@@ -892,43 +892,43 @@ make_entry(ID("d81f05"),
 make_entry(ID("561d75"),
     Formula(Equal(ComplexBranchDerivative(Log(JacobiTheta(2,z,tau)), For(z, z, 2)),
         #JacobiTheta(2,z,tau,2)/JacobiTheta(2,z,tau), - (JacobiTheta(2,z,tau,1)/JacobiTheta(2,z,tau))**2
-        ConstPi**2 * Sum(1/Cos(ConstPi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
+        Pi**2 * Sum(1/Cos(Pi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
         Unequal(JacobiTheta(2, z, tau), 0))))
 
 
 make_entry(ID("a5e568"),
-    Formula(Equal(JacobiTheta(3,0,tau)**k, Where(Sum(SquaresR(k, n) * q**n, For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(3,0,tau)**k, Where(Sum(SquaresR(k, n) * q**n, For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(tau, HH))))
 
 make_entry(ID("7c90eb"),
-    Formula(Equal(JacobiTheta(4,0,tau)**k, Where(Sum((-1)**n * SquaresR(k, n) * q**n, For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(4,0,tau)**k, Where(Sum((-1)**n * SquaresR(k, n) * q**n, For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(0)), Element(tau, HH))))
 
 make_entry(ID("df88a0"),
-    Formula(Equal(JacobiTheta(3,0,tau)**2 + JacobiTheta(4,0,tau)**2, 2 * Where(Sum(SquaresR(2, 2*n) * q**(2*n), For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 + JacobiTheta(4,0,tau)**2, 2 * Where(Sum(SquaresR(2, 2*n) * q**(2*n), For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("290f36"),
-    Formula(Equal(JacobiTheta(3,0,tau)**2 - JacobiTheta(3,0,2*tau)**2, Where(Sum(SquaresR(2, 2*n+1) * q**(2*n+1), For(n, 0, Infinity)), Equal(q, Exp(ConstPi*ConstI*tau))))),
+    Formula(Equal(JacobiTheta(3,0,tau)**2 - JacobiTheta(3,0,2*tau)**2, Where(Sum(SquaresR(2, 2*n+1) * q**(2*n+1), For(n, 0, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("a0ba58"),
     Formula(Equal(JacobiTheta(3,0,tau) / JacobiTheta(4,0,tau),
         Where(Product(((1+q**(2*n-1))/(1-q**(2*n-1)))**2, For(n, 1, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("f1f42f"),
     Formula(Equal(JacobiTheta(2,0,tau) / JacobiTheta(3,0,tau),
-        Where(2 * Exp(ConstPi*ConstI*tau/4) * Product(((1+q**(2*n))/(1+q**(2*n-1)))**2, For(n, 1, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+        Where(2 * Exp(Pi*ConstI*tau/4) * Product(((1+q**(2*n))/(1+q**(2*n-1)))**2, For(n, 1, Infinity)),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
@@ -936,73 +936,73 @@ make_entry(ID("f1f42f"),
 make_entry(ID("e4e707"),
     Formula(Equal(JacobiTheta(3,0,tau),
         Where(1 + 2*Sum(LiouvilleLambda(n) * q**n / (1-q**n), For(n, 1, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("0650f8"),
     Formula(Equal(JacobiTheta(3,0,tau)**2,
         Where(1 + 4*Sum(q**n / (1 + q**(2*n)), For(n, 1, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("c743eb"),
     Formula(Equal(JacobiTheta(2,0,tau)**4,
         Where(8 * Sum(((2*n+1)*q**(2*n+1))/(1+q**(2*n+1)), For(n, 0, Infinity)) + 8 * Sum(((2*n+1)*q**(2*n+1))/(1-q**(2*n+1)), For(n, 0, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("8a316c"),
     Formula(Equal(JacobiTheta(3,0,tau)**4,
         Where(1 + 8 * Sum(2*n*q**(2*n)/(1+q**(2*n)), For(n, 0, Infinity)) + 8 * Sum(((2*n+1)*q**(2*n+1))/(1-q**(2*n+1)), For(n, 0, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("dc7c83"),
     Formula(Equal(JacobiTheta(4,0,tau)**4,
         Where(1 + 8 * Sum(2*n*q**(2*n)/(1+q**(2*n)), For(n, 0, Infinity)) - 8 * Sum(((2*n+1)*q**(2*n+1))/(1+q**(2*n+1)), For(n, 0, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("1cec67"),
     Formula(Equal(JacobiTheta(4,0,tau)**4 - JacobiTheta(2,0,tau)**4,
         Where(1 - 24 * Sum((2*n+1) * q**(2*n+1) / (1 + q**(2*n+1)), For(n, 0, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("4d26ec"),
     Formula(Equal(JacobiTheta(4,0,tau)**8,
         Where(1 + 16 * Sum((-1)**n * n**3 * q**n / (1-q**n), For(n, 1, Infinity)),
-            Equal(q, Exp(ConstPi*ConstI*tau))))),
+            Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 
 make_entry(ID("9b7d8c"),
     Formula(Equal(JacobiTheta(2,0,tau)**2,
-        Sum(1/Cos(ConstPi*tau*(n+Div(1,2))), For(n, -Infinity, Infinity)))),
+        Sum(1/Cos(Pi*tau*(n+Div(1,2))), For(n, -Infinity, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("f8cd8f"),
-    Formula(Equal(JacobiTheta(3,0,tau)**2, 1 + 2 * Sum(1/Cos(ConstPi*tau*n), For(n, 1, Infinity)))),
+    Formula(Equal(JacobiTheta(3,0,tau)**2, 1 + 2 * Sum(1/Cos(Pi*tau*n), For(n, 1, Infinity)))),
     Variables(tau),
     Assumptions(Element(tau, HH)))
 
 make_entry(ID("7b3ac4"),
     Formula(Equal(JacobiTheta(3,0,tau)**2,
-        Sum(1/Cos(ConstPi*tau*n), For(n, -Infinity, Infinity)))),
+        Sum(1/Cos(Pi*tau*n), For(n, -Infinity, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("ab1c77"),
     Formula(Equal(JacobiTheta(4,0,tau)**2,
-        Sum(1/Cos(ConstPi*(tau+1)*n), For(n, -Infinity, Infinity)))),
+        Sum(1/Cos(Pi*(tau+1)*n), For(n, -Infinity, Infinity)))),
     Variables(tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1042,12 +1042,12 @@ make_entry(ID("fe1b96"),
 # Single shift
 
 make_entry(ID("6b2078"),
-    Formula(Equal(JacobiTheta(1,z,tau+1), Exp(ConstPi*ConstI/4) * JacobiTheta(1,z,tau))),
+    Formula(Equal(JacobiTheta(1,z,tau+1), Exp(Pi*ConstI/4) * JacobiTheta(1,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("cde93e"),
-    Formula(Equal(JacobiTheta(2,z,tau+1), Exp(ConstPi*ConstI/4) * JacobiTheta(2,z,tau))),
+    Formula(Equal(JacobiTheta(2,z,tau+1), Exp(Pi*ConstI/4) * JacobiTheta(2,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1064,34 +1064,34 @@ make_entry(ID("a5c258"),
 # Single inversion
 
 make_entry(ID("e8ce0b"),
-    Formula(Equal(JacobiTheta(1,z,-1/tau), -ConstI*Sqrt(tau/ConstI)*Exp(ConstPi*ConstI*tau*z**2)*JacobiTheta(1,tau*z,tau))),
+    Formula(Equal(JacobiTheta(1,z,-1/tau), -ConstI*Sqrt(tau/ConstI)*Exp(Pi*ConstI*tau*z**2)*JacobiTheta(1,tau*z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("06319a"),
-    Formula(Equal(JacobiTheta(2,z,-1/tau), Sqrt(tau/ConstI)*Exp(ConstPi*ConstI*tau*z**2)*JacobiTheta(4,tau*z,tau))),
+    Formula(Equal(JacobiTheta(2,z,-1/tau), Sqrt(tau/ConstI)*Exp(Pi*ConstI*tau*z**2)*JacobiTheta(4,tau*z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("c4b16c"),
-    Formula(Equal(JacobiTheta(3,z,-1/tau), Sqrt(tau/ConstI)*Exp(ConstPi*ConstI*tau*z**2)*JacobiTheta(3,tau*z,tau))),
+    Formula(Equal(JacobiTheta(3,z,-1/tau), Sqrt(tau/ConstI)*Exp(Pi*ConstI*tau*z**2)*JacobiTheta(3,tau*z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("ed8ba7"),
-    Formula(Equal(JacobiTheta(4,z,-1/tau), Sqrt(tau/ConstI)*Exp(ConstPi*ConstI*tau*z**2)*JacobiTheta(2,tau*z,tau))),
+    Formula(Equal(JacobiTheta(4,z,-1/tau), Sqrt(tau/ConstI)*Exp(Pi*ConstI*tau*z**2)*JacobiTheta(2,tau*z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # General shifts
 
 make_entry(ID("1fa8e7"),
-    Formula(Equal(JacobiTheta(1,z,tau+n), Exp(ConstPi*ConstI*n/4) * JacobiTheta(1, z, tau))),
+    Formula(Equal(JacobiTheta(1,z,tau+n), Exp(Pi*ConstI*n/4) * JacobiTheta(1, z, tau))),
     Variables(z, tau, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
 
 make_entry(ID("d0dfba"),
-    Formula(Equal(JacobiTheta(2,z,tau+n), Exp(ConstPi*ConstI*n/4) * JacobiTheta(2, z, tau))),
+    Formula(Equal(JacobiTheta(2,z,tau+n), Exp(Pi*ConstI*n/4) * JacobiTheta(2, z, tau))),
     Variables(z, tau, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(n, ZZ))))
 
@@ -1169,8 +1169,8 @@ make_entry(ID("c4714a"),
 
 make_entry(ID("03356b"),
     Formula(Equal(JacobiThetaEpsilon(1,a,b,c,d),
-        Cases(Tuple(KroneckerSymbol(c,d) * Call(Exp, ((ConstPi*ConstI/4) * Brackets(d*(b-c-1)+2))), Even(c)),
-              Tuple(KroneckerSymbol(d,c) * Call(Exp, ((ConstPi*ConstI/4) * Brackets(c*(a+d+1)-3))), Odd(c))))),
+        Cases(Tuple(KroneckerSymbol(c,d) * Call(Exp, ((Pi*ConstI/4) * Brackets(d*(b-c-1)+2))), Even(c)),
+              Tuple(KroneckerSymbol(d,c) * Call(Exp, ((Pi*ConstI/4) * Brackets(c*(a+d+1)-3))), Odd(c))))),
     Variables(a,b,c,d),
     Assumptions(Element(Matrix2x2(a,b,c,d), SL2Z)),
     References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Section 80."))
@@ -1179,9 +1179,9 @@ make_entry(ID("3c56c7"),
     Formula(Equal(JacobiThetaEpsilon(j,a,b,c,d),
         Where((1/JacobiThetaEpsilon(1,-d,b,c,-a)) *
         Cases(
-            Tuple(Call(Exp, ((ConstPi*ConstI/4) * Brackets((c-2)*d - 2 + 2*(1-c)*Subscript(delta, d+1)))), Equal(j, 2)),
-            Tuple(Call(Exp, ((ConstPi*ConstI/4) * Brackets((a+c-2)*(b+d) - 3 + 2*(1-a-c)*Subscript(delta, b+d+1)))), Equal(j, 3)),
-            Tuple(Call(Exp, ((ConstPi*ConstI/4) * Brackets((a-2)*b - 4 + 2*(1-a)*Subscript(delta, b+1)))), Equal(j, 4))),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((c-2)*d - 2 + 2*(1-c)*Subscript(delta, d+1)))), Equal(j, 2)),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a+c-2)*(b+d) - 3 + 2*(1-a-c)*Subscript(delta, b+d+1)))), Equal(j, 3)),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a-2)*b - 4 + 2*(1-a)*Subscript(delta, b+1)))), Equal(j, 4))),
             Equal(Subscript(delta, n), Mod(n, 2))))),
     Variables(j,a,b,c,d),
     Assumptions(And(Element(j, Set(2,3,4)), Element(Matrix2x2(a,b,c,d), SL2Z))),
@@ -1204,7 +1204,7 @@ make_entry(ID("89e79d"),
 
 make_entry(ID("4d8b0f"),
     Formula(Equal(JacobiTheta(j,z,(a*tau+b)/(c*tau+d)),
-        Where(JacobiThetaEpsilon(j,a,b,c,d) * Sqrt(v/ConstI) * Exp(ConstPi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,a,b,c,d), v*z,tau), Equal(v, (c*tau+d)),
+        Where(JacobiThetaEpsilon(j,a,b,c,d) * Sqrt(v/ConstI) * Exp(Pi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,a,b,c,d), v*z,tau), Equal(v, (c*tau+d)),
         ))),
     Variables(z, tau, a, b, c, d),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
@@ -1212,7 +1212,7 @@ make_entry(ID("4d8b0f"),
 
 make_entry(ID("100d3c"),
     Formula(Equal(JacobiTheta(j,z,tau),
-        Where(JacobiThetaEpsilon(j,-d,b,c,-a) * Sqrt(v/ConstI) * Exp(ConstPi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,-d,b,c,-a), v*z, (a*tau+b)/(c*tau+d)),
+        Where(JacobiThetaEpsilon(j,-d,b,c,-a) * Sqrt(v/ConstI) * Exp(Pi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,-d,b,c,-a), v*z, (a*tau+b)/(c*tau+d)),
             Equal(v, -(1/(c*tau+d))),
         ))),
     Variables(z, tau, a, b, c, d),
@@ -1392,14 +1392,14 @@ make_entry(ID("a222ed"),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("37e644"),
-    Formula(Equal(ComplexDerivative(JacobiTheta(j,z,tau,s), For(tau, tau, r)), (1/(4*ConstPi*ConstI)**r) * (JacobiTheta(j,z,tau,2*r+s)))),
+    Formula(Equal(ComplexDerivative(JacobiTheta(j,z,tau,s), For(tau, tau, r)), (1/(4*Pi*ConstI)**r) * (JacobiTheta(j,z,tau,2*r+s)))),
     Variables(j, z, tau, r, s),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0), Element(s, ZZGreaterEqual(0))))))
 
 # Heat equation
 
 make_entry(ID("ebc673"),
-    Formula(Equal(JacobiTheta(j,z,tau,2) - 4*ConstPi*ConstI*ComplexDerivative(JacobiTheta(j,z,tau), For(tau, tau)), 0)),
+    Formula(Equal(JacobiTheta(j,z,tau,2) - 4*Pi*ConstI*ComplexDerivative(JacobiTheta(j,z,tau), For(tau, tau)), 0)),
     Variables(j, z, tau),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH))))
 
@@ -1411,7 +1411,7 @@ D2 = Subscript(D, 2)
 D3 = Subscript(D, 3)
 
 make_entry(ID("936694"),
-    Formula(Where(Equal((30*D1**3-15*D0*D1*D2+D0**2*D3)**2 + 32*(D0*D2-3*D1**2)**3 + ConstPi**2*(D0*D2 - 3*D1**2)**2*D0**10, 0),
+    Formula(Where(Equal((30*D1**3-15*D0*D1*D2+D0**2*D3)**2 + 32*(D0*D2-3*D1**2)**3 + Pi**2*(D0*D2 - 3*D1**2)**2*D0**10, 0),
         Equal(Subscript(D, r), ComplexDerivative(JacobiTheta(j, 0, tau), For(tau, tau, r))))),
     Variables(j, tau),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(tau, HH))))
@@ -1439,7 +1439,7 @@ make_entry(ID("901934"),
     Assumptions(And(Element(tau, HH), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("f2e28a"),
-    Formula(Equal(JacobiTheta(1,0,tau,1), ConstPi*JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau))),
+    Formula(Equal(JacobiTheta(1,0,tau,1), Pi*JacobiTheta(2,0,tau)*JacobiTheta(3,0,tau)*JacobiTheta(4,0,tau))),
     Variables(tau),
     Assumptions(And(Element(tau, HH))))
 
@@ -1451,64 +1451,64 @@ make_entry(ID("278274"),
 # Derivatives of ratios
 
 make_entry(ID("cb493d"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(2,z,tau), For(z, z)), ConstPi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(2,z,tau), For(z, z)), Pi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("d41a95"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(3,z,tau), For(z, z)), ConstPi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(3,z,tau), For(z, z)), Pi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("a4eecf"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(4,z,tau), For(z, z)), ConstPi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(1,z,tau)/JacobiTheta(4,z,tau), For(z, z)), Pi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("713b6b"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(ConstPi*JacobiTheta(2,0,tau)**2 * (JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(Pi*JacobiTheta(2,0,tau)**2 * (JacobiTheta(3,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("64b65d"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(3,z,tau), For(z, z)), -(ConstPi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(3,z,tau), For(z, z)), -(Pi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(3,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("89985a"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(4,z,tau), For(z, z)), -(ConstPi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(2,z,tau)/JacobiTheta(4,z,tau), For(z, z)), -(Pi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(4,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 
 make_entry(ID("0373dc"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(ConstPi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(Pi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(1,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("2853d4"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(2,z,tau), For(z, z)), ConstPi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(2,z,tau), For(z, z)), Pi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(4,z,tau) / JacobiTheta(2,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("378949"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(4,z,tau), For(z, z)), -(ConstPi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(4,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(3,z,tau)/JacobiTheta(4,z,tau), For(z, z)), -(Pi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(4,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 
 make_entry(ID("a0552b"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(ConstPi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(1,z,tau)**2)))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(1,z,tau), For(z, z)), -(Pi * JacobiTheta(4,0,tau)**2 * (JacobiTheta(2,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(1,z,tau)**2)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("775637"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(2,z,tau), For(z, z)), ConstPi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(2,z,tau)**2))),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(2,z,tau), For(z, z)), Pi * JacobiTheta(3,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(3,z,tau) / JacobiTheta(2,z,tau)**2))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("23077c"),
-    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(3,z,tau), For(z, z)), ConstPi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(3,z,tau)**2))),    Variables(z, tau),
+    Formula(Equal(MeromorphicDerivative(JacobiTheta(4,z,tau)/JacobiTheta(3,z,tau), For(z, z)), Pi * JacobiTheta(2,0,tau)**2 * (JacobiTheta(1,z,tau) * JacobiTheta(2,z,tau) / JacobiTheta(3,z,tau)**2))),    Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 #-----------------------------------------------------------------------------#
@@ -1730,44 +1730,44 @@ make_entry(ID("4448f1"),
 # Single shifts
 
 make_entry(ID("d989cd"),
-    Formula(Equal(JacobiTheta(1,z+tau,tau), -Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(1,z,tau))),
+    Formula(Equal(JacobiTheta(1,z+tau,tau), -Exp(-(Pi*ConstI*(2*z+tau))) * JacobiTheta(1,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("cd5f45"),
-    Formula(Equal(JacobiTheta(2,z+tau,tau), Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(2,z,tau))),
+    Formula(Equal(JacobiTheta(2,z+tau,tau), Exp(-(Pi*ConstI*(2*z+tau))) * JacobiTheta(2,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("103bfb"),
-    Formula(Equal(JacobiTheta(3,z+tau,tau), Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(3,z,tau))),
+    Formula(Equal(JacobiTheta(3,z+tau,tau), Exp(-(Pi*ConstI*(2*z+tau))) * JacobiTheta(3,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("b83f63"),
-    Formula(Equal(JacobiTheta(4,z+tau,tau), -Exp(-(ConstPi*ConstI*(2*z+tau))) * JacobiTheta(4,z,tau))),
+    Formula(Equal(JacobiTheta(4,z+tau,tau), -Exp(-(Pi*ConstI*(2*z+tau))) * JacobiTheta(4,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 # General shifts
 
 make_entry(ID("43fa0e"),
-    Formula(Equal(JacobiTheta(1,z+(m+n*tau),tau), (-1)**(m+n) * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(1,z,tau))),
+    Formula(Equal(JacobiTheta(1,z+(m+n*tau),tau), (-1)**(m+n) * Exp(-(Pi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(1,z,tau))),
     Variables(z, tau, m, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
 
 make_entry(ID("d29148"),
-    Formula(Equal(JacobiTheta(2,z+(m+n*tau),tau), (-1)**m * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(2,z,tau))),
+    Formula(Equal(JacobiTheta(2,z+(m+n*tau),tau), (-1)**m * Exp(-(Pi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(2,z,tau))),
     Variables(z, tau, m, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
 
 make_entry(ID("2e4da0"),
-    Formula(Equal(JacobiTheta(3,z+(m+n*tau),tau), Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(3,z,tau))),
+    Formula(Equal(JacobiTheta(3,z+(m+n*tau),tau), Exp(-(Pi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(3,z,tau))),
     Variables(z, tau, m, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
 
 make_entry(ID("8d6a1d"),
-    Formula(Equal(JacobiTheta(4,z+(m+n*tau),tau), (-1)**n * Exp(-(ConstPi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(4,z,tau))),
+    Formula(Equal(JacobiTheta(4,z+(m+n*tau),tau), (-1)**n * Exp(-(Pi*ConstI*(tau*n**2 + 2*n*z))) * JacobiTheta(4,z,tau))),
     Variables(z, tau, m, n),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(m, ZZ), Element(n, ZZ))))
 
@@ -1794,22 +1794,22 @@ make_entry(ID("bb2d01"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("d5a29e"),
-    Formula(Equal(JacobiTheta(1,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(4,z,tau))),
+    Formula(Equal(JacobiTheta(1,z+Div(1,2)*tau,tau), Exp(-(Pi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(4,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("cc6d21"),
-    Formula(Equal(JacobiTheta(2,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * JacobiTheta(3,z,tau))),
+    Formula(Equal(JacobiTheta(2,z+Div(1,2)*tau,tau), Exp(-(Pi*ConstI*(z+tau/4))) * JacobiTheta(3,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("2d2dde"),
-    Formula(Equal(JacobiTheta(3,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * JacobiTheta(2,z,tau))),
+    Formula(Equal(JacobiTheta(3,z+Div(1,2)*tau,tau), Exp(-(Pi*ConstI*(z+tau/4))) * JacobiTheta(2,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("429093"),
-    Formula(Equal(JacobiTheta(4,z+Div(1,2)*tau,tau), Exp(-(ConstPi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(1,z,tau))),
+    Formula(Equal(JacobiTheta(4,z+Div(1,2)*tau,tau), Exp(-(Pi*ConstI*(z+tau/4))) * ConstI * JacobiTheta(1,z,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1821,12 +1821,12 @@ make_entry(ID("95988c"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("4c462b"),
-    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("ed0756"),
-    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(1,z,tau), -ConstI*Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1836,12 +1836,12 @@ make_entry(ID("785668"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("0878a4"),
-    Formula(Equal(JacobiTheta(2,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(2,z,tau), Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(3,z+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("6a7704"),
-    Formula(Equal(JacobiTheta(2,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(2,z,tau), Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(4,z+Div(1,2)+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1851,12 +1851,12 @@ make_entry(ID("b3fc6d"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("71d5ee"),
-    Formula(Equal(JacobiTheta(3,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(3,z,tau), Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("235d0d"),
-    Formula(Equal(JacobiTheta(3,z,tau), Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(3,z,tau), Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -1866,12 +1866,12 @@ make_entry(ID("5d41b1"),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("6d918c"),
-    Formula(Equal(JacobiTheta(4,z,tau), -ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(4,z,tau), -ConstI*Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(1,z+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
 make_entry(ID("10ca40"),
-    Formula(Equal(JacobiTheta(4,z,tau), ConstI*Exp(ConstPi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)+Div(1,2)*tau,tau))),
+    Formula(Equal(JacobiTheta(4,z,tau), ConstI*Exp(Pi*ConstI*(z+tau/4))*JacobiTheta(2,z+Div(1,2)+Div(1,2)*tau,tau))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH))))
 
@@ -2265,10 +2265,10 @@ make_entry(ID("055b0a"),
 # Constant for the square lattice
 
 make_entry(ID("d15f11"),
-    Formula(Equal(JacobiTheta(3,0,ConstI), ConstPi**Div(1,4) / GammaFunction(Div(3,4)))))
+    Formula(Equal(JacobiTheta(3,0,ConstI), Pi**Div(1,4) / Gamma(Div(3,4)))))
 
 make_entry(ID("1403b5"),
-    Formula(Equal(JacobiTheta(3,0,ConstI), GammaFunction(Div(1,4)) / (Sqrt(2) * ConstPi**Div(3,4)))))
+    Formula(Equal(JacobiTheta(3,0,ConstI), Gamma(Div(1,4)) / (Sqrt(2) * Pi**Div(3,4)))))
 
 make_entry(ID("0d4608"),
     Formula(NotElement(JacobiTheta(3,0,ConstI), AlgebraicNumbers)),
@@ -2426,12 +2426,12 @@ make_entry(ID("675f23"),
 
 make_entry(ID("c60033"),
     Formula(Equal(JacobiTheta(3, 0, Sqrt(6)*ConstI),
-        Pow((Sqrt(6)/(96*ConstPi**3)) * ((GammaFunction(Div(1,24))*GammaFunction(Div(5,24))*GammaFunction(Div(7,24))*GammaFunction(Div(11,24))) / (18 + 12*Sqrt(2) - 10*Sqrt(3) - 7*Sqrt(6))), Div(1,4)))),
+        Pow((Sqrt(6)/(96*Pi**3)) * ((Gamma(Div(1,24))*Gamma(Div(5,24))*Gamma(Div(7,24))*Gamma(Div(11,24))) / (18 + 12*Sqrt(2) - 10*Sqrt(3) - 7*Sqrt(6))), Div(1,4)))),
     References("http://mathworld.wolfram.com/PolyasRandomWalkConstants.html"))
 
 make_entry(ID("799b5e"),
     Formula(Equal(JacobiTheta(3, 0, Sqrt(6)*ConstI),
-        Sqrt((2/ConstPi) * EllipticK(((2-Sqrt(3))**2 * (Sqrt(2)-Sqrt(3))**2))))),
+        Sqrt((2/Pi) * EllipticK(((2-Sqrt(3))**2 * (Sqrt(2)-Sqrt(3))**2))))),
     References("http://mathworld.wolfram.com/PolyasRandomWalkConstants.html"))
 
 
@@ -2508,25 +2508,25 @@ def_Topic(
 # Laplace transforms
 
 make_entry(ID("f42652"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,0,ConstI*t,1), For(t, 0, Infinity)), 2 * ConstPi * (1/Cosh(Sqrt(ConstPi*a))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,0,ConstI*t,1), For(t, 0, Infinity)), 2 * Pi * (1/Cosh(Sqrt(Pi*a))))),
     Variables(a),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("b2f31a"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)), Sqrt(ConstPi/a) * Tanh(Sqrt(ConstPi*a)))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)), Sqrt(Pi/a) * Tanh(Sqrt(Pi*a)))),
     Variables(a),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("1ee920"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,0,ConstI*t), For(t, 0, Infinity)), Sqrt(ConstPi/a) * Coth(Sqrt(ConstPi*a)))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,0,ConstI*t), For(t, 0, Infinity)), Sqrt(Pi/a) * Coth(Sqrt(Pi*a)))),
     Variables(a),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("594cc3"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,0,ConstI*t), For(t, 0, Infinity)), Sqrt(ConstPi/a) * (1/Sinh(Sqrt(ConstPi*a))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,0,ConstI*t), For(t, 0, Infinity)), Sqrt(Pi/a) * (1/Sinh(Sqrt(Pi*a))))),
     Variables(a),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
@@ -2534,25 +2534,25 @@ make_entry(ID("594cc3"),
 # Laplace transforms
 
 make_entry(ID("8a857c"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Sinh((2*x)*Sqrt(ConstPi*a/b))/Cosh(Sqrt(ConstPi*a/b))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(Pi/(a*b))*(Sinh((2*x)*Sqrt(Pi*a/b))/Cosh(Sqrt(Pi*a/b))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(-Div(1,2), Div(1,2))))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("74be8f"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t), For(t, 0, Infinity)), -Sqrt(ConstPi/(a*b))*(Sinh((2*x-1)*Sqrt(ConstPi*a/b))/Cosh(Sqrt(ConstPi*a/b))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t), For(t, 0, Infinity)), -Sqrt(Pi/(a*b))*(Sinh((2*x-1)*Sqrt(Pi*a/b))/Cosh(Sqrt(Pi*a/b))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(0, 1)))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("026e44"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Cosh((2*x-1)*Sqrt(ConstPi*a/b))/Sinh(Sqrt(ConstPi*a/b))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(Pi/(a*b))*(Cosh((2*x-1)*Sqrt(Pi*a/b))/Sinh(Sqrt(Pi*a/b))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(0, 1)))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("a46f94"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(ConstPi/(a*b))*(Cosh((2*x)*Sqrt(ConstPi*a/b))/Sinh(Sqrt(ConstPi*a/b))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t), For(t, 0, Infinity)), Sqrt(Pi/(a*b))*(Cosh((2*x)*Sqrt(Pi*a/b))/Sinh(Sqrt(Pi*a/b))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, ClosedInterval(-Div(1,2), Div(1,2))))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
@@ -2560,25 +2560,25 @@ make_entry(ID("a46f94"),
 # Laplace transforms of derivatives
 
 make_entry(ID("321538"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*ConstPi/b)*(Cosh((2*x)*Sqrt(ConstPi*a/b))/(Cosh(Sqrt(ConstPi*a/b)))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(1,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*Pi/b)*(Cosh((2*x)*Sqrt(Pi*a/b))/(Cosh(Sqrt(Pi*a/b)))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(-Div(1,2), Div(1,2))))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("f5a15a"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t,1), For(t, 0, Infinity)), -(2*ConstPi/b)*(Cosh((2*x-1)*Sqrt(ConstPi*a/b))/(Cosh(Sqrt(ConstPi*a/b)))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(2,x,ConstI*b*t,1), For(t, 0, Infinity)), -(2*Pi/b)*(Cosh((2*x-1)*Sqrt(Pi*a/b))/(Cosh(Sqrt(Pi*a/b)))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(0, 1)))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("64c188"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*ConstPi/b)*(Sinh((2*x-1)*Sqrt(ConstPi*a/b))/(Sinh(Sqrt(ConstPi*a/b)))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(3,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*Pi/b)*(Sinh((2*x-1)*Sqrt(Pi*a/b))/(Sinh(Sqrt(Pi*a/b)))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(0, 1)))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
 
 make_entry(ID("5c054e"),
-    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*ConstPi/b)*(Sinh((2*x)*Sqrt(ConstPi*a/b))/(Sinh(Sqrt(ConstPi*a/b)))))),
+    Formula(Equal(Integral(Exp(-a*t) * JacobiTheta(4,x,ConstI*b*t,1), For(t, 0, Infinity)), (2*Pi/b)*(Sinh((2*x)*Sqrt(Pi*a/b))/(Sinh(Sqrt(Pi*a/b)))))),
     Variables(a, b, x),
     Assumptions(And(Element(a, CC), Greater(Re(a), 0), Element(b, CC), Greater(Re(b), 0), Element(x, OpenInterval(-Div(1,2), Div(1,2))))),
     References("https://doi.org/10.1016/0022-0728(88)87001-3"))
@@ -2586,42 +2586,42 @@ make_entry(ID("5c054e"),
 # Mellin transforms
 
 make_entry(ID("9376ec"),
-    Formula(Equal(Integral(t**(s-1) * JacobiTheta(2,0,ConstI*t**2), For(t, 0, Infinity)), (2**s - 1) * ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Formula(Equal(Integral(t**(s-1) * JacobiTheta(2,0,ConstI*t**2), For(t, 0, Infinity)), (2**s - 1) * Pi**(-(s/2)) * Gamma(s/2) * RiemannZeta(s))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
 
 make_entry(ID("41631f"),
-    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(3,0,ConstI*t**2) - 1), For(t, 0, Infinity)), ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(3,0,ConstI*t**2) - 1), For(t, 0, Infinity)), Pi**(-(s/2)) * Gamma(s/2) * RiemannZeta(s))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
 
 make_entry(ID("709905"),
-    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(4,0,ConstI*t**2) - 1), For(t, 0, Infinity)), (2**(1-s) - 1) * ConstPi**(-(s/2)) * GammaFunction(s/2) * RiemannZeta(s))),
+    Formula(Equal(Integral(t**(s-1) * (JacobiTheta(4,0,ConstI*t**2) - 1), For(t, 0, Infinity)), (2**(1-s) - 1) * Pi**(-(s/2)) * Gamma(s/2) * RiemannZeta(s))),
     Variables(s),
     Assumptions(And(Element(s, CC), Greater(Re(s), 2))))
 
 # Constant definite integrals
 
 make_entry(ID("f2a0c7"),
-    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1), For(t, 0, Infinity)), 2*ConstPi)))
+    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1), For(t, 0, Infinity)), 2*Pi)))
 
 make_entry(ID("ecb406"),
-    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)), ConstPi)))
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)), Pi)))
 
 make_entry(ID("799742"),
-    Formula(Equal(Integral(Parentheses(JacobiTheta(3,0,ConstI*t)-1), For(t, 0, Infinity)), ConstPi/3)))
+    Formula(Equal(Integral(Parentheses(JacobiTheta(3,0,ConstI*t)-1), For(t, 0, Infinity)), Pi/3)))
 
 make_entry(ID("f89d5a"),
-    Formula(Equal(Integral(Parentheses(JacobiTheta(4,0,ConstI*t)-1), For(t, 0, Infinity)), -(ConstPi/6))))
+    Formula(Equal(Integral(Parentheses(JacobiTheta(4,0,ConstI*t)-1), For(t, 0, Infinity)), -(Pi/6))))
 
 make_entry(ID("ae6718"),
-    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1)**2, For(t, 0, Infinity)), GammaFunction(Div(1,4))**4/(4*ConstPi))))
+    Formula(Equal(Integral(JacobiTheta(1,0,ConstI*t,1)**2, For(t, 0, Infinity)), Gamma(Div(1,4))**4/(4*Pi))))
 
 make_entry(ID("4f3d2b"),
     Formula(Equal(Integral(Parentheses(JacobiTheta(4,0,ConstI*t)**2-1), For(t, 0, Infinity)), -Log(2))))
 
 make_entry(ID("140815"),
-    Formula(Equal(Integral((JacobiTheta(4,0,ConstI*t)-1)**2, For(t, 0, Infinity)), ConstPi/3 - Log(2))))
+    Formula(Equal(Integral((JacobiTheta(4,0,ConstI*t)-1)**2, For(t, 0, Infinity)), Pi/3 - Log(2))))
 
 make_entry(ID("fe4967"),
     Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)*JacobiTheta(4,0,ConstI*t), For(t, 0, Infinity)), Log(3+2*Sqrt(2)))))
@@ -2642,19 +2642,19 @@ make_entry(ID("963daf"),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 
 make_entry(ID("e4cdf1"),
-    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), For(t, 0, Infinity)), 4*Log(2)/ConstPi)),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), For(t, 0, Infinity)), 4*Log(2)/Pi)),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 
 make_entry(ID("86d68c"),
-    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**6 / (1+t**2), For(t, 0, Infinity)), 16*ConstCatalan/ConstPi**2 - Div(2,3))),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**6 / (1+t**2), For(t, 0, Infinity)), 16*ConstCatalan/Pi**2 - Div(2,3))),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 
 make_entry(ID("45267a"),
-    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**8 / (1+t**2), For(t, 0, Infinity)), 20*RiemannZeta(3)/ConstPi**3)),
+    Formula(Equal(Integral(JacobiTheta(4,0,ConstI*t)**8 / (1+t**2), For(t, 0, Infinity)), 20*RiemannZeta(3)/Pi**3)),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 
 make_entry(ID("5b87f3"),
-    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), For(t, 0, Infinity)), 8*RiemannZeta(3)/ConstPi**3)),
+    Formula(Equal(Integral(JacobiTheta(2,0,ConstI*t)**4 * JacobiTheta(4,0,ConstI*t)**4 / (1+t**2), For(t, 0, Infinity)), 8*RiemannZeta(3)/Pi**3)),
     References("https://math.stackexchange.com/questions/1760270/closed-form-of-an-integral-involving-a-jacobi-theta-function-int-0-infty"))
 
 make_entry(ID("1a15f9"),
@@ -2695,11 +2695,11 @@ make_entry(ID("a0955b"),
 #-----------------------------------------------------------------------------#
 
 make_entry(ID("dac0aa"),
-    Formula(Where(LessEqual(Abs(Exp(-(ConstPi*ConstI*tau/4)) * JacobiTheta(2,z,tau,r) / (ConstPi*ConstI)**r -
+    Formula(Where(LessEqual(Abs(Exp(-(Pi*ConstI*tau/4)) * JacobiTheta(2,z,tau,r) / (Pi*ConstI)**r -
         Sum((2*n+1)**r * q**(n*(n+1)) * (w**(2*n+1) + (-1)**r / w**(2*n+1)), For(n, 0, N-1))),
         Cases(Tuple(2 * Q**(N*(N+1)) * W**(2*N+1) * (2*N+1)**r / (1 - alpha), Less(alpha, 1)),
               Tuple(Infinity, Otherwise))),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z)),
         Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
         Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/(N+1))),
     )),
@@ -2707,11 +2707,11 @@ make_entry(ID("dac0aa"),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("001234"),
-    Formula(Where(LessEqual(Abs(ConstI * Exp(-(ConstPi*ConstI*tau/4)) * JacobiTheta(1,z,tau,r) / (ConstPi*ConstI)**r -
+    Formula(Where(LessEqual(Abs(ConstI * Exp(-(Pi*ConstI*tau/4)) * JacobiTheta(1,z,tau,r) / (Pi*ConstI)**r -
         Sum((-1)**n * (2*n+1)**r * q**(n*(n+1)) * (w**(2*n+1) - (-1)**r / w**(2*n+1)), For(n, 0, N-1))),
         Cases(Tuple(2 * Q**(N*(N+1)) * W**(2*N+1) * (2*N+1)**r / (1 - alpha), Less(alpha, 1)),
               Tuple(Infinity, Otherwise))),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z)),
         Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
         Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/(N+1))),
     )),
@@ -2719,11 +2719,11 @@ make_entry(ID("001234"),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("24a793"),
-    Formula(Where(LessEqual(Abs(JacobiTheta(3,z,tau,r)/(2*ConstPi*ConstI)**r -
+    Formula(Where(LessEqual(Abs(JacobiTheta(3,z,tau,r)/(2*Pi*ConstI)**r -
         Parentheses(0**r + Sum(n**r * q**(n**2) * (w**(2*n) + (-1)**r / w**(2*n)), For(n, 1, N-1)))),
         Cases(Tuple(2 * Q**(N**2) * W**(2*N) * N**r / (1 - alpha), Less(alpha, 1)),
               Tuple(Infinity, Otherwise))),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z)),
         Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
         Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/N)),
     )),
@@ -2731,11 +2731,11 @@ make_entry(ID("24a793"),
     Assumptions(And(Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("c574fd"),
-    Formula(Where(LessEqual(Abs(JacobiTheta(4,z,tau,r)/(2*ConstPi*ConstI)**r -
+    Formula(Where(LessEqual(Abs(JacobiTheta(4,z,tau,r)/(2*Pi*ConstI)**r -
         Parentheses(0**r + Sum((-1)**n * n**r * q**(n**2) * (w**(2*n) + (-1)**r / w**(2*n)), For(n, 1, N-1)))),
         Cases(Tuple(2 * Q**(N**2) * W**(2*N) * N**r / (1 - alpha), Less(alpha, 1)),
               Tuple(Infinity, Otherwise))),
-        Equal(q, Exp(ConstPi*ConstI*tau)), Equal(w, Exp(ConstPi*ConstI*z)),
+        Equal(q, Exp(Pi*ConstI*tau)), Equal(w, Exp(Pi*ConstI*z)),
         Equal(Q, Abs(q)), Equal(W, Max(Abs(w), 1/Abs(w))),
         Equal(alpha, Q**(2*N+1) * W**2 * Exp(r/N)),
     )),

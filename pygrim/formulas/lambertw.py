@@ -220,7 +220,7 @@ make_entry(ID("f372e9"),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 
 make_entry(ID("e1dd64"),
-    Formula(Equal(LambertW(0,-(ConstPi/2)), ConstI*ConstPi/2)))
+    Formula(Equal(LambertW(0,-(Pi/2)), ConstI*Pi/2)))
 
 
 # Symmetry
@@ -367,7 +367,7 @@ make_entry(ID("99ff4c"),
 
 L1 = Subscript(L, 1)
 L2 = Subscript(L, 2)
-asympdefs = Equal(L1, Log(z) + 2*ConstPi*ConstI*k), Equal(L2, Log(L1)), Equal(sigma, 1/L1), Equal(tau, L2/L1)
+asympdefs = Equal(L1, Log(z) + 2*Pi*ConstI*k), Equal(L2, Log(L1)), Equal(sigma, 1/L1), Equal(tau, L2/L1)
 asympser = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, Infinity)), For(n, 0, Infinity))
 asympsertrunc = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, M-1)), For(n, 0, N-1))
 
@@ -413,11 +413,11 @@ make_entry(ID("55498b"),
 
 make_entry(ID("44ad09"),
     Formula(Equal(Set(LambertW(0,x), ForElement(x, OpenInterval(-Infinity, -Exp(-1)))),
-        Set(-y*Cot(y) + y*ConstI, ForElement(y, OpenInterval(0, ConstPi))))))
+        Set(-y*Cot(y) + y*ConstI, ForElement(y, OpenInterval(0, Pi))))))
 
 make_entry(ID("2d3356"),
     Formula(Equal(Set(LambertW(0,z), ForElement(z, SetMinus(CC, RR))),
-        Set(x+y*ConstI, For(Tuple(x, y)), And(Element(y, SetMinus(OpenInterval(-ConstPi, ConstPi), Set(0))), Element(x, OpenInterval(-y*Cot(y), Infinity)))))))
+        Set(x+y*ConstI, For(Tuple(x, y)), And(Element(y, SetMinus(OpenInterval(-Pi, Pi), Set(0))), Element(x, OpenInterval(-y*Cot(y), Infinity)))))))
 
 # Image of the non-principal branches
 
@@ -425,13 +425,13 @@ make_entry(ID("21d9a0"),
     Formula(Equal(Set(LambertW(-1,z), ForElement(z, SetMinus(CC, Set(0)))),
         Union(OpenClosedInterval(-Infinity, -1), Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(0, u, 2), LessEqual(t, v)), Parentheses(LessEqual(1, u, 2)), And(Less(1, u, 3), Greater(t, v)))),
-                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/ConstPi))))))))
+                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/Pi))))))))
 
 make_entry(ID("d5917b"),
     Formula(Equal(Set(LambertW(k,z), ForElement(z, SetMinus(CC, Set(0)))),
         Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), Less(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), GreaterEqual(t, v)))),
-                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, y/ConstPi))))),
+                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, y/Pi))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(1))))
 
@@ -439,29 +439,29 @@ make_entry(ID("bf3e29"),
     Formula(Equal(Set(LambertW(-k,z), ForElement(z, SetMinus(CC, Set(0)))),
         Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), LessEqual(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), Greater(t, v)))),
-                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/ConstPi)))))),
+                Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/Pi)))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))))
 
 # Bounds
 
 make_entry(ID("4257f4"),
-    Formula(Less(Abs(Im(LambertW(0,z))), ConstPi)),
+    Formula(Less(Abs(Im(LambertW(0,z))), Pi)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("82926c"),
-    Formula(Element(Im(LambertW(1,z)), OpenInterval(0, 3*ConstPi))),
+    Formula(Element(Im(LambertW(1,z)), OpenInterval(0, 3*Pi))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("e5bba3"),
-    Formula(Element(Im(LambertW(-1,z)), OpenClosedInterval(-(3*ConstPi), 0))),
+    Formula(Element(Im(LambertW(-1,z)), OpenClosedInterval(-(3*Pi), 0))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("a68e0e"),
-    Formula(Element(Im(LambertW(k,z)), OpenInterval(Sign(k)*(2*Abs(k)-2)*ConstPi, Sign(k)*(2*Abs(k)+1)*ConstPi))),
+    Formula(Element(Im(LambertW(k,z)), OpenInterval(Sign(k)*(2*Abs(k)-2)*Pi, Sign(k)*(2*Abs(k)+1)*Pi))),
     Variables(z, k),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(k, SetMinus(ZZ, Set(-1, 0, 1))))))
 

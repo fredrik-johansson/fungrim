@@ -55,7 +55,7 @@ make_entry(ID("ce2272"),
 
 make_entry(ID("af2d4b"),
     Formula(LessEqual(Abs(Sum(f(k), For(k, N, U)) - Parentheses(Integral(f(t), For(t, N, U)) + EM_rem)),
-            Div(4, (2*ConstPi)**(2*M)) * Integral(Abs(ComplexDerivative(f(t), For(t, t, 2 * M))), For(t, N, U)))),
+            Div(4, (2*Pi)**(2*M)) * Integral(Abs(ComplexDerivative(f(t), For(t, t, 2 * M))), For(t, N, U)))),
     Variables(f, N, U, M),
     Assumptions(EM_assumptions))
 

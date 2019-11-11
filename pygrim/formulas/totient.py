@@ -190,12 +190,12 @@ make_entry(ID("36fe36"),
 # Sum representations
 
 make_entry(ID("3f5711"),
-    Formula(Equal(Totient(n), Sum(GCD(n,k) * Exp(2*ConstPi*ConstI*k/n), For(k, 1, n)))),
+    Formula(Equal(Totient(n), Sum(GCD(n,k) * Exp(2*Pi*ConstI*k/n), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
 make_entry(ID("93a877"),
-    Formula(Equal(Totient(n), Sum(GCD(n,k) * Cos(2*ConstPi*k/n), For(k, 1, n)))),
+    Formula(Equal(Totient(n), Sum(GCD(n,k) * Cos(2*Pi*k/n), For(k, 1, n)))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -287,7 +287,7 @@ make_entry(ID("feb1a0"),
     Formula(Equal(SequenceLimitSuperior(Totient(n+1) / Totient(n), For(n, Infinity)), Infinity)))
 
 make_entry(ID("8d7b3d"),
-    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), For(n, 1, N)), For(N, Infinity)), 3/ConstPi**2)))
+    Formula(Equal(SequenceLimit(1/N**2 * Sum(Totient(n), For(n, 1, N)), For(N, Infinity)), 3/Pi**2)))
 
 make_entry(ID("9923b7"),
     Formula(Equal(SequenceLimit(1/Log(N) * Sum(1/Totient(n), For(n, 1, N)), For(N, Infinity)), (RiemannZeta(2)*RiemannZeta(3) / RiemannZeta(6)))))
@@ -340,7 +340,7 @@ make_entry(ID("acb28a"),
     References("G. H. Hardy and E. M. Wright (1979), An Introduction to the Theory of Numbers (Fifth ed.), Oxford University Press. Theorem 327."))
 
 make_entry(ID("0477b3"),
-    Formula(Greater(Totient(n) * DivisorSigma(1, n), (6/ConstPi**2) * n**2)),
+    Formula(Greater(Totient(n) * DivisorSigma(1, n), (6/Pi**2) * n**2)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))),
     References("G. H. Hardy and E. M. Wright (1979), An Introduction to the Theory of Numbers (Fifth ed.), Oxford University Press. Theorem 327."))

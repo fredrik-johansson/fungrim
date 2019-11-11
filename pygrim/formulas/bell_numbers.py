@@ -264,14 +264,14 @@ make_entry(ID("aab4e3"),
 # Integral representations
 
 make_entry(ID("f4e249"),
-    Formula(Equal(BellNumber(n), (2*Factorial(n))/(ConstPi*ConstE) * Im(Integral(ConstE**(ConstE**(ConstE**(ConstI*x))) * Sin(n*x), For(x, 0, ConstPi))))),
+    Formula(Equal(BellNumber(n), (2*Factorial(n))/(Pi*ConstE) * Im(Integral(ConstE**(ConstE**(ConstE**(ConstI*x))) * Sin(n*x), For(x, 0, Pi))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))),
     References("https://arxiv.org/abs/0708.3301"))
 
 make_entry(ID("a71381"),
-    Formula(Equal(BellNumber(n), (2*Factorial(n))/(ConstPi*ConstE) *
-        Integral(ConstE**(ConstE**(Cos(x))*Cos(Sin(x))) * Sin(ConstE**(Cos(x))*Sin(Sin(x))) * Sin(n*x), For(x, 0, ConstPi)))),
+    Formula(Equal(BellNumber(n), (2*Factorial(n))/(Pi*ConstE) *
+        Integral(ConstE**(ConstE**(Cos(x))*Cos(Sin(x))) * Sin(ConstE**(Cos(x))*Sin(Sin(x))) * Sin(n*x), For(x, 0, Pi)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))),
     References("https://arxiv.org/abs/0708.3301"))

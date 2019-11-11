@@ -39,7 +39,7 @@ make_entry(ID("fc0d55"),
     Formula(Equal(UnitCircle, Set(z, ForElement(z, CC), Equal(Abs(z), 1)))))
 
 make_entry(ID("912ff9"),
-    Formula(Equal(UnitCircle, Set(Exp(ConstI*theta), ForElement(theta, ClosedOpenInterval(0, 2*ConstPi))))))
+    Formula(Equal(UnitCircle, Set(Exp(ConstI*theta), ForElement(theta, ClosedOpenInterval(0, 2*Pi))))))
 
 make_entry(ID("c98bad"),
     Formula(Equal(OpenDisk(z, r), Set(t, ForElement(t, CC), Less(Abs(z-t), r)))),
@@ -53,7 +53,7 @@ make_entry(ID("d1cf0c"),
 
 
 make_entry(ID("40baa9"),
-    Formula(Equal(BernsteinEllipse(rho), Set(Div(rho*Exp(ConstI*theta) + rho**(-1)*Exp(-(ConstI*theta)), 2), ForElement(theta, ClosedOpenInterval(0, 2*ConstPi))))),
+    Formula(Equal(BernsteinEllipse(rho), Set(Div(rho*Exp(ConstI*theta) + rho**(-1)*Exp(-(ConstI*theta)), 2), ForElement(theta, ClosedOpenInterval(0, 2*Pi))))),
     Variables(rho),
     Assumptions(And(Element(rho, RR), Greater(rho, 1))))
 

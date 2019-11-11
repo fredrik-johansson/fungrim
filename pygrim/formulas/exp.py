@@ -113,10 +113,10 @@ make_entry(ID("9a944c"),
     Formula(Equal(Exp(1), ConstE)))
 
 make_entry(ID("54aaf1"),
-    Formula(Equal(Exp(ConstPi*ConstI), -1)))
+    Formula(Equal(Exp(Pi*ConstI), -1)))
 
 make_entry(ID("a90f35"),
-    Formula(Equal(Exp(ConstPi*ConstI/2), ConstI)))
+    Formula(Equal(Exp(Pi*ConstI/2), ConstI)))
 
 make_entry(ID("812707"),
     Formula(Equal(Exp(a+b), Exp(a) * Exp(b))),
@@ -139,12 +139,12 @@ make_entry(ID("77d6bf"),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("97ba8d"),
-    Formula(Equal(Exp(z+n*ConstPi*ConstI), (-1)**n * Exp(z))),
+    Formula(Equal(Exp(z+n*Pi*ConstI), (-1)**n * Exp(z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZ))))
 
 make_entry(ID("1fa6b7"),
-    Formula(Equal(Exp(z+2*n*ConstPi*ConstI), Exp(z))),
+    Formula(Equal(Exp(z+2*n*Pi*ConstI), Exp(z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZ))))
 
@@ -226,7 +226,7 @@ make_entry(ID("e2fac7"),
 make_entry(ID("a0d93c"),
     Formula(Equal(Arg(Exp(z)), Im(z))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-ConstPi, ConstPi)))))
+    Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
 
 make_entry(ID("52d827"),
     Formula(Equal(Exp(Conjugate(z)), Conjugate(Exp(z)))),

@@ -101,9 +101,9 @@ make_entry(ID("43cc72"),
     """understands two
     parameters as representing the endpoints (not necessarily integers)
     of a directed line segment to integrate over: """,
-        SourceForm(Integral(Cos(x), For(x, -ConstPi, ConstPi))),
+        SourceForm(Integral(Cos(x), For(x, -Pi, Pi))),
     "becomes",
-        Integral(Cos(x), For(x, -ConstPi, ConstPi)), ". ",
+        Integral(Cos(x), For(x, -Pi, Pi)), ". ",
     SourceForm(Derivative), "takes one or two parameters",
         "denoting the evaluation point and optionally the order of differentiation:",
             SourceForm(Derivative(Sin(x), For(x, y))),

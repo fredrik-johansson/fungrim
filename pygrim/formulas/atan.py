@@ -166,10 +166,10 @@ make_entry(ID("b120b9"),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(
         TableSection("Numbers"),
-        Tuple(Element(z, RR), Element(Atan(z), OpenInterval(-(ConstPi/2), ConstPi/2))),
+        Tuple(Element(z, RR), Element(Atan(z), OpenInterval(-(Pi/2), Pi/2))),
         Tuple(Element(z, SetMinus(CC, Set(-ConstI, +ConstI))), Element(Atan(z), CC)),
         TableSection("Infinities"),
-        Tuple(Element(z, Set(-Infinity, Infinity)), Element(Atan(z), Set(-(ConstPi/2), ConstPi/2))),
+        Tuple(Element(z, Set(-Infinity, Infinity)), Element(Atan(z), Set(-(Pi/2), Pi/2))),
         Tuple(Element(z, Set(-ConstI, +ConstI)), Element(Atan(z), Set(-ConstI*Infinity, +ConstI*Infinity))),
         TableSection("Formal power series"),
         Tuple(Element(z, FormalPowerSeries(RR, x)), Element(Atan(z), FormalPowerSeries(RR, x))),
@@ -186,7 +186,7 @@ make_entry(ID("ce3a8e"),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(
         TableSection("Numbers"),
-        Tuple(And(Element(y, RR), Element(x, RR)), Element(Atan2(y, x), OpenClosedInterval(-ConstPi, ConstPi))),
+        Tuple(And(Element(y, RR), Element(x, RR)), Element(Atan2(y, x), OpenClosedInterval(-Pi, Pi))),
       )))
 
 make_entry(ID("8bb3d8"),
@@ -215,17 +215,17 @@ make_entry(ID("0b829e"),
 make_entry(ID("f516e3"),
     Formula(Equal(Atan(Tan(theta)), theta)),
     Variables(theta),
-    Assumptions(And(Element(theta, CC), Less(-(ConstPi/2), Re(theta), ConstPi/2))))
+    Assumptions(And(Element(theta, CC), Less(-(Pi/2), Re(theta), Pi/2))))
 
 make_entry(ID("cbce7f"),
-    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), ForElement(w, CC)), Set(Atan(z) + ConstPi*n, ForElement(n, ZZ)))),
+    Formula(Equal(Solutions(Brackets(Equal(Tan(w), z)), ForElement(w, CC)), Set(Atan(z) + Pi*n, ForElement(n, ZZ)))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(-ConstI, ConstI)))))
 
 make_entry(ID("a2af66"),
     Formula(Equal(Atan2(y, x), UniqueSolution(Brackets(Where(
         Equal(Tuple(x,y), Tuple(r*Cos(theta), r*Sin(theta))),
-            Equal(r, Sqrt(x**2+y**2)))), ForElement(theta, OpenClosedInterval(-ConstPi, ConstPi))))),
+            Equal(r, Sqrt(x**2+y**2)))), ForElement(theta, OpenClosedInterval(-Pi, Pi))))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR), Or(Unequal(x, 0), Unequal(y, 0)))))
 
@@ -255,10 +255,10 @@ make_entry(ID("645e30"),
     Formula(Equal(Atan(0), 0)))
 
 make_entry(ID("d418d3"),
-    Formula(Equal(Atan(+Infinity), ConstPi/2)))
+    Formula(Equal(Atan(+Infinity), Pi/2)))
 
 make_entry(ID("7295b5"),
-    Formula(Equal(Atan(-Infinity), -(ConstPi/2))))
+    Formula(Equal(Atan(-Infinity), -(Pi/2))))
 
 make_entry(ID("a2d208"),
     Formula(Equal(Atan(+ConstI), +ConstI*Infinity)))
@@ -267,25 +267,25 @@ make_entry(ID("9b0994"),
     Formula(Equal(Atan(-ConstI), -ConstI*Infinity)))
 
 make_entry(ID("157c6c"),
-    Formula(Equal(Atan(1), ConstPi/4)))
+    Formula(Equal(Atan(1), Pi/4)))
 
 make_entry(ID("706783"),
-    Formula(Equal(Atan(Sqrt(3)), ConstPi/3)))
+    Formula(Equal(Atan(Sqrt(3)), Pi/3)))
 
 make_entry(ID("3c1021"),
-    Formula(Equal(Atan(1/Sqrt(3)), ConstPi/6)))
+    Formula(Equal(Atan(1/Sqrt(3)), Pi/6)))
 
 make_entry(ID("a9ecff"),
-    Formula(Equal(Atan(Sqrt(2)-1), ConstPi/8)))
+    Formula(Equal(Atan(Sqrt(2)-1), Pi/8)))
 
 make_entry(ID("c6c92a"),
-    Formula(Equal(Atan(Sqrt(2)+1), 3*ConstPi/8)))
+    Formula(Equal(Atan(Sqrt(2)+1), 3*Pi/8)))
 
 make_entry(ID("7dd050"),
-    Formula(Equal(Atan(2-Sqrt(3)), ConstPi/12)))
+    Formula(Equal(Atan(2-Sqrt(3)), Pi/12)))
 
 make_entry(ID("b0049f"),
-    Formula(Equal(Atan(2+Sqrt(3)), 5*ConstPi/12)))
+    Formula(Equal(Atan(2+Sqrt(3)), 5*Pi/12)))
 
 # Analytic properties
 
@@ -312,12 +312,12 @@ make_entry(ID("718a9b"),
 # Cases for atan2
 
 make_entry(ID("a6776b"),
-    Formula(Equal(Atan2(0,x), Cases(Tuple(0, GreaterEqual(x, 0)), Tuple(ConstPi, Less(x, 0))))),
+    Formula(Equal(Atan2(0,x), Cases(Tuple(0, GreaterEqual(x, 0)), Tuple(Pi, Less(x, 0))))),
     Variables(x),
     Assumptions(Element(x, RR)))
 
 make_entry(ID("77e519"),
-    Formula(Equal(Atan2(y,0), (ConstPi/2) * Sign(y))),
+    Formula(Equal(Atan2(y,0), (Pi/2) * Sign(y))),
     Variables(y),
     Assumptions(Element(y, RR)))
 
@@ -325,8 +325,8 @@ make_entry(ID("22fb4a"),
     Formula(Equal(Atan2(y,x), Cases(
         Tuple(0, Equal(x, y, 0)),
         Tuple(Atan(y/x), Greater(x, 0)),
-        Tuple(Parentheses(ConstPi/2) * Sign(y) - Atan(x/y), Unequal(y, 0)),
-        Tuple(ConstPi, And(Equal(y, 0), Less(x, 0))),
+        Tuple(Parentheses(Pi/2) * Sign(y) - Atan(x/y), Unequal(y, 0)),
+        Tuple(Pi, And(Equal(y, 0), Less(x, 0))),
         ))),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR))))
@@ -344,19 +344,19 @@ make_entry(ID("632063"),
     Assumptions(And(Element(z, CC), NotElement(ConstI*z, Union(OpenInterval(-Infinity,-1), OpenInterval(1,Infinity))))))
 
 make_entry(ID("e3d274"),
-    Formula(Equal(Atan(1/z), ConstPi/2 - Atan(z))),
+    Formula(Equal(Atan(1/z), Pi/2 - Atan(z))),
     Variables(z),
     Assumptions(And(Element(z, CC), Or(Greater(Re(z), 0),
         And(Equal(Re(z), 0), Element(Im(z), Union(OpenInterval(-1,0), OpenInterval(1, Infinity))))))))
 
 make_entry(ID("073e1a"),
-    Formula(Equal(Atan(1/z), -(ConstPi/2) - Atan(z))),
+    Formula(Equal(Atan(1/z), -(Pi/2) - Atan(z))),
     Variables(z),
     Assumptions(And(Element(z, CC), Or(Less(Re(z), 0),
         And(Equal(Re(z), 0), Element(Im(z), Union(OpenInterval(-Infinity,-1), OpenInterval(0, 1))))))))
 
 make_entry(ID("bfc13f"),
-    Formula(Equal(Atan(1/z), (ConstPi/2)*Csgn(1/z) - Atan(z))),
+    Formula(Equal(Atan(1/z), (Pi/2)*Csgn(1/z) - Atan(z))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(ConstI*z, Union(Set(0), OpenClosedInterval(-Infinity, -1), ClosedOpenInterval(1, Infinity))))))
 
@@ -419,14 +419,14 @@ make_entry(ID("a020e9"),
     Formula(Equal(Atan2(y1,x1)+Atan2(y2,x2), Atan2(y1*x2+y2*x1, x1*x2-y1*y2))),
     Variables(x, y),
     Assumptions(And(Element(x1, RR), Element(x2, RR), Element(y1, RR), Element(y2, RR),
-        Element(Atan2(y1,x1)+Atan2(y2,x2), OpenClosedInterval(-ConstPi, ConstPi)),
+        Element(Atan2(y1,x1)+Atan2(y2,x2), OpenClosedInterval(-Pi, Pi)),
         Not(Equal(x1,y1,0)), Not(Equal(x2,y2,0)))))
 
 make_entry(ID("1d730a"),
     Formula(Equal(Atan2(y1,x1)-Atan2(y2,x2), Atan2(y1*x2-y2*x1, x1*x2+y1*y2))),
     Variables(x, y),
     Assumptions(And(Element(x1, RR), Element(x2, RR), Element(y1, RR), Element(y2, RR),
-        Element(Atan2(y1,x1)-Atan2(y2,x2), OpenClosedInterval(-ConstPi, ConstPi)),
+        Element(Atan2(y1,x1)-Atan2(y2,x2), OpenClosedInterval(-Pi, Pi)),
         Not(Equal(x1,y1,0)), Not(Equal(x2,y2,0)))))
 
 # Representations through other functions
@@ -537,17 +537,17 @@ make_entry(ID("4e5947"),
 ## Real arguments
 
 make_entry(ID("b63481"),
-    Formula(LessEqual(Abs(Atan2(y,x)), ConstPi)),
+    Formula(LessEqual(Abs(Atan2(y,x)), Pi)),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR))))
 
 make_entry(ID("e7a9b1"),
-    Formula(Less(Abs(Atan(x)), ConstPi/2)),
+    Formula(Less(Abs(Atan(x)), Pi/2)),
     Variables(x),
     Assumptions(Element(x, RR)))
 
 make_entry(ID("5d6f74"),
-    Formula(LessEqual(Abs(Atan(x)), ConstPi/2)),
+    Formula(LessEqual(Abs(Atan(x)), Pi/2)),
     Variables(x),
     Assumptions(Element(x, Union(RR, Set(-Infinity, Infinity)))))
 
@@ -567,7 +567,7 @@ make_entry(ID("1eeccf"),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(N, ZZGreaterEqual(0)))))
 
 make_entry(ID("efebb8"),
-    Formula(LessEqual(Atan(x), (ConstPi/2)**2 * (x / (1 + (ConstPi/2) * x)))),
+    Formula(LessEqual(Atan(x), (Pi/2)**2 * (x / (1 + (Pi/2) * x)))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
@@ -577,12 +577,12 @@ make_entry(ID("a42212"),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
 make_entry(ID("3fe47b"),
-    Formula(GreaterEqual(Atan(x), (ConstPi * x) / (ConstPi + 2*x))),
+    Formula(GreaterEqual(Atan(x), (Pi * x) / (Pi + 2*x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
 make_entry(ID("f5d28c"),
-    Formula(LessEqual(Atan(x), (ConstPi/2) * (x / Sqrt(1 + x**2)))),
+    Formula(LessEqual(Atan(x), (Pi/2) * (x / Sqrt(1 + x**2)))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
@@ -592,7 +592,7 @@ make_entry(ID("b0a4e9"),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
 make_entry(ID("d04a5b"),
-    Formula(LessEqual(Atan(x), (ConstPi/2) * Tanh(x))),
+    Formula(LessEqual(Atan(x), (Pi/2) * Tanh(x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
@@ -631,7 +631,7 @@ make_entry(ID("fa30c7"),
     Assumptions(And(Element(x, RR), Element(y, RR))))
 
 make_entry(ID("4d2168"),
-    Formula(Less(Abs(Atan(x+y)-Atan(x)), ConstPi)),
+    Formula(Less(Abs(Atan(x+y)-Atan(x)), Pi)),
     Variables(x, y),
     Assumptions(And(Element(x, RR), Element(y, RR))))
 

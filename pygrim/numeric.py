@@ -45,7 +45,7 @@ function_arb_method_table = {
     Tanh : "tanh",
     Atan : "atan",
     LogGamma : "lgamma",
-    GammaFunction : "gamma",
+    Gamma : "gamma",
     RiemannZeta : "zeta",
     Erf : "erf",
     Erfc : "erfc",
@@ -125,7 +125,7 @@ class ArbNumericalEvaluation(object):
             if expr.is_integer():
                 return arb(expr._integer)
             if expr.is_symbol():
-                if expr == ConstPi:
+                if expr == Pi:
                     return arb.pi()
                 if expr == ConstE:
                     return arb.const_e()

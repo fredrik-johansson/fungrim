@@ -207,30 +207,30 @@ make_entry(ID("c52772"),
     Formula(Equal(Sin(0), 0)))
 
 make_entry(ID("e2161b"),
-    Formula(Equal(Sin(ConstPi), 0)))
+    Formula(Equal(Sin(Pi), 0)))
 
 make_entry(ID("69c5ef"),
-    Formula(Equal(Sin(ConstPi/2), 1)))
+    Formula(Equal(Sin(Pi/2), 1)))
 
 make_entry(ID("56667c"),
-    Formula(Equal(Sin(3*ConstPi/2), -1)))
+    Formula(Equal(Sin(3*Pi/2), -1)))
 
 make_entry(ID("3c833f"),
-    Formula(Equal(Sin(ConstPi/3), Sqrt(3)/2)))
+    Formula(Equal(Sin(Pi/3), Sqrt(3)/2)))
 
 make_entry(ID("5fc688"),
-    Formula(Equal(Sin(ConstPi/4), Sqrt(2)/2)))
+    Formula(Equal(Sin(Pi/4), Sqrt(2)/2)))
 
 make_entry(ID("ad6b74"),
-    Formula(Equal(Sin(ConstPi/6), Div(1,2))))
+    Formula(Equal(Sin(Pi/6), Div(1,2))))
 
 make_entry(ID("c62afa"),
-    Formula(Equal(Sin(ConstPi*k), 0)),
+    Formula(Equal(Sin(Pi*k), 0)),
     Variables(k),
     Element(k, ZZ))
 
 make_entry(ID("506d0c"),
-    Formula(Equal(Sin(ConstPi/2 + ConstPi*k), (-1)**k)),
+    Formula(Equal(Sin(Pi/2 + Pi*k), (-1)**k)),
     Variables(k),
     Element(k, ZZ))
 
@@ -242,22 +242,22 @@ make_entry(ID("09cd0b"),
     Assumptions(Element(alpha, SetMinus(AlgebraicNumbers, Set(0)))))
 
 make_entry(ID("713501"),
-    Formula(Element(Sin(ConstPi * x), AlgebraicNumbers)),
+    Formula(Element(Sin(Pi * x), AlgebraicNumbers)),
     Variables(x),
     Assumptions(Element(x, QQ)))
 
 make_entry(ID("056c0e"),
-    Formula(Implies(And(Element(x, QQ), Element(Sin(ConstPi*x), QQ)), Element(Sin(ConstPi*x), Set(0, Div(1,2), -Div(1,2), 1, -1)))),
+    Formula(Implies(And(Element(x, QQ), Element(Sin(Pi*x), QQ)), Element(Sin(Pi*x), Set(0, Div(1,2), -Div(1,2), 1, -1)))),
     References("Niven's theorem"))
 
 make_entry(ID("2f6818"),
-    Formula(Equal(Zeros(Brackets(Sin(z)), ForElement(z, CC)), Set(ConstPi * n, ForElement(n, ZZ)))))
+    Formula(Equal(Zeros(Brackets(Sin(z)), ForElement(z, CC)), Set(Pi * n, ForElement(n, ZZ)))))
 
 make_entry(ID("c5bdcc"),
-    Formula(Equal(ArgMax(Brackets(Sin(x)), ForElement(x, RR)), Set(ConstPi * (2 * n + Div(1,2)), ForElement(n, ZZ)))))
+    Formula(Equal(ArgMax(Brackets(Sin(x)), ForElement(x, RR)), Set(Pi * (2 * n + Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("ad04bd"),
-    Formula(Equal(ArgMin(Brackets(Sin(x)), ForElement(x, RR)), Set(ConstPi * (2 * n - Div(1,2)), ForElement(n, ZZ)))))
+    Formula(Equal(ArgMin(Brackets(Sin(x)), ForElement(x, RR)), Set(Pi * (2 * n - Div(1,2)), ForElement(n, ZZ)))))
 
 make_entry(ID("bfe28b"),
     Formula(Equal(Maximum(Brackets(Sin(x)), ForElement(x, RR)), 1)))
@@ -295,32 +295,32 @@ make_entry(ID("82c83f"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("6a8889"),
-    Formula(Equal(Sin(z + 2*ConstPi*k), Sin(z))),
+    Formula(Equal(Sin(z + 2*Pi*k), Sin(z))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZ))))
 
 make_entry(ID("393b62"),
-    Formula(Equal(Sin(z + ConstPi*k), (-1)**k * Sin(z))),
+    Formula(Equal(Sin(z + Pi*k), (-1)**k * Sin(z))),
     Variables(z, k),
     Assumptions(And(Element(z, CC), Element(k, ZZ))))
 
 make_entry(ID("1c22f1"),
-    Formula(Equal(Sin(ConstPi + z), -Sin(z))),
+    Formula(Equal(Sin(Pi + z), -Sin(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("9cc0f2"),
-    Formula(Equal(Sin(ConstPi - z), Sin(z))),
+    Formula(Equal(Sin(Pi - z), Sin(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("bae475"),
-    Formula(Equal(Sin(ConstPi/2 + z), Cos(z))),
+    Formula(Equal(Sin(Pi/2 + z), Cos(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("da58f7"),
-    Formula(Equal(Sin(ConstPi/2 - z), Cos(z))),
+    Formula(Equal(Sin(Pi/2 - z), Cos(z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -382,12 +382,12 @@ make_entry(ID("012eba"),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("f183d0"),
-    Formula(Equal(Sin(z) + Cos(z), Sqrt(2) * Sin(z + ConstPi / 4))),
+    Formula(Equal(Sin(z) + Cos(z), Sqrt(2) * Sin(z + Pi / 4))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("6c3ba9"),
-    Formula(Equal(Sin(z) - Cos(z), Sqrt(2) * Sin(z - ConstPi / 4))),
+    Formula(Equal(Sin(z) - Cos(z), Sqrt(2) * Sin(z - Pi / 4))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -422,7 +422,7 @@ make_entry(ID("acf63c"),
     Formula(Equal(Sin(z)**2, Tan(z)**2 / (1 + Tan(z)**2))),
     Variables(z),
     Assumptions(And(Element(z, CC),
-        NotElement(z, Set((2*n+1)*ConstPi/2, ForElement(n, ZZ))))))
+        NotElement(z, Set((2*n+1)*Pi/2, ForElement(n, ZZ))))))
 
 make_entry(ID("2a6702"),
     Formula(Equal(Sin(z)**3, (3*Sin(z) - Sin(3*z))/4)),
@@ -459,25 +459,25 @@ make_entry(ID("f6d0c6"),
 make_entry(ID("b8ab9c"),
     Formula(Equal(Sum(Sin(2*a*k+b), For(k, 0, n)), Sin(a*(n+1)) * Sin(a*n+b) / Sin(a))),
     Variables(a, n),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a / ConstPi, ZZ))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a / Pi, ZZ))))
 
 make_entry(ID("906569"),
-    Formula(Equal(Product(Sin(k*ConstPi/n), For(k, 1, n-1)), n/2**(n-1))),
+    Formula(Equal(Product(Sin(k*Pi/n), For(k, 1, n-1)), n/2**(n-1))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 # Representations through other functions
 
 make_entry(ID("925e5b"),
-    Formula(Equal(Sin(z), Cos(ConstPi/2-z), Cos(z-ConstPi/2), -Cos(z+ConstPi/2))),
+    Formula(Equal(Sin(z), Cos(Pi/2-z), Cos(z-Pi/2), -Cos(z+Pi/2))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("3fb3ca"),
     Formula(Equal(Sin(z), (2*Tan(z/2))/(Tan(z/2)**2 + 1))),
     Variables(z),
-    Assumptions(And(Element(z, CC), NotElement(z, Set((2*n+1)*ConstPi, ForElement(n, ZZ)))),
-        And(Element(z, FormalPowerSeries(CC, x)), NotElement(z, Set((2*n+1)*ConstPi, ForElement(n, ZZ))))))
+    Assumptions(And(Element(z, CC), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ)))),
+        And(Element(z, FormalPowerSeries(CC, x)), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ))))))
 
 make_entry(ID("18f40c"),
     Formula(Equal(Sin(z), (Exp(ConstI*z) - Exp(-ConstI*z)) / (2 * ConstI))),
@@ -500,13 +500,13 @@ make_entry(ID("54daa9"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("0fbd15"),
-    Formula(Equal(Sin(z), Sqrt(ConstPi * z / 2) * BesselJ(Div(1,2), z))),
+    Formula(Equal(Sin(z), Sqrt(Pi * z / 2) * BesselJ(Div(1,2), z))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 # todo: cos: 1/2+z, 1/2-z
 make_entry(ID("d38a03"),
-    Formula(Equal(Sin(ConstPi * z), ConstPi / (GammaFunction(z) * GammaFunction(1 - z)))),
+    Formula(Equal(Sin(Pi * z), Pi / (Gamma(z) * Gamma(1 - z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -541,7 +541,7 @@ make_entry(ID("297b3c"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("612b21"),
-    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, r)), Sin(z + ConstPi*r/2))),
+    Formula(Equal(ComplexDerivative(Sin(z), For(z, z, r)), Sin(z + Pi*r/2))),
     Variables(z, r),
     Assumptions(And(Element(z, CC), Element(r, ZZGreaterEqual(0)))))
 
@@ -574,12 +574,12 @@ make_entry(ID("f340cb"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("6b13be"),
-    Formula(Equal(Sin(z + x), Sum(Sin(z + ConstPi * k / 2) * (x**k / Factorial(k)), For(k, 0, Infinity)))),
+    Formula(Equal(Sin(z + x), Sum(Sin(z + Pi * k / 2) * (x**k / Factorial(k)), For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, CC), Element(x, CC))))
 
 make_entry(ID("11687b"),
-    Formula(Equal(Sin(z), z * Product(Parentheses(1 - z**2 / (ConstPi**2 * k**2)), For(k, 1, Infinity)))),
+    Formula(Equal(Sin(z), z * Product(Parentheses(1 - z**2 / (Pi**2 * k**2)), For(k, 1, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -596,14 +596,14 @@ make_entry(ID("c47a86"),
     Assumptions(Element(x, RR)))
 
 make_entry(ID("22c4f6"),
-    Formula(LessEqual(Sin(x), (4*x*(ConstPi-x))/(ConstPi**2))),
+    Formula(LessEqual(Sin(x), (4*x*(Pi-x))/(Pi**2))),
     Variables(x),
-    Assumptions(Element(x, ClosedInterval(0, ConstPi))))
+    Assumptions(Element(x, ClosedInterval(0, Pi))))
 
 make_entry(ID("d38739"),
-    Formula(GreaterEqual(Sin(x), (x*(ConstPi-x))/(ConstPi))),
+    Formula(GreaterEqual(Sin(x), (x*(Pi-x))/(Pi))),
     Variables(x),
-    Assumptions(Element(x, ClosedInterval(0, ConstPi))))
+    Assumptions(Element(x, ClosedInterval(0, Pi))))
 
 make_entry(ID("f77752"),
     Formula(LessEqual(Abs(Sin(x+y*ConstI)), Cosh(y))),

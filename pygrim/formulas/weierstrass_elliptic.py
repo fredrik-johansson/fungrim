@@ -109,7 +109,7 @@ make_entry(ID("ff0c9f"),
     )
 
 make_entry(ID("0c8084"),
-    Image(Description("X-ray of", WeierstrassP(z,Exp(ConstPi*ConstI/3)), "on", Element(z, intv + intv*ConstI), "with lattice cell highlighted"),
+    Image(Description("X-ray of", WeierstrassP(z,Exp(Pi*ConstI/3)), "on", Element(z, intv + intv*ConstI), "with lattice cell highlighted"),
         ImageSource("xray_elliptic_p_2")),
     description_xray,
     )
@@ -163,8 +163,8 @@ make_entry(ID("0e649f"),
 
 make_entry(ID("af0dfc"),
     Formula(Equal(WeierstrassP(z,tau),
-        (ConstPi * JacobiTheta(2,0,tau) * JacobiTheta(3,0,tau) * Div(JacobiTheta(4,z,tau), JacobiTheta(1,z,tau)))**2
-            - ConstPi**2/3 * (JacobiTheta(2,0,tau)**4 + JacobiTheta(3,0,tau)**4))),
+        (Pi * JacobiTheta(2,0,tau) * JacobiTheta(3,0,tau) * Div(JacobiTheta(4,z,tau), JacobiTheta(1,z,tau)))**2
+            - Pi**2/3 * (JacobiTheta(2,0,tau)**4 + JacobiTheta(3,0,tau)**4))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH), NotElement(z, Lattice(1, tau)))))
 

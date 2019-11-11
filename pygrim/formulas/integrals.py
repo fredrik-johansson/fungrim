@@ -45,7 +45,7 @@ make_entry(ID("9a06fb"),
 
 make_entry(ID("f8de2e"),
     Formula(Equal(Integral(Exp(-(a*x**2)+b), For(x, z, Infinity)),
-        Exp(b) / 2 * Sqrt(ConstPi/a) * Erfc(Sqrt(a) * z))),
+        Exp(b) / 2 * Sqrt(Pi/a) * Erfc(Sqrt(a) * z))),
     Variables(a, b, z),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC),
         Greater(Re(a), 0))))

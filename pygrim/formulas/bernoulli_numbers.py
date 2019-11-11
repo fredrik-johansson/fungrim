@@ -170,13 +170,13 @@ make_entry(ID("522b04"),
     Formula(Equal(z/(Exp(z)-1),
         Sum(BernoulliB(n) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Less(Abs(z), 2 * ConstPi), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), Less(Abs(z), 2 * Pi), Unequal(z, 0))))
 
 make_entry(ID("f79ff0"),
     Formula(Equal(z*Exp(x*z)/(Exp(z)-1),
         Sum(BernoulliPolynomial(n,x) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z, x),
-    Assumptions(And(Element(x, CC), Element(z, CC), Less(Abs(z), 2 * ConstPi), Unequal(z, 0))))
+    Assumptions(And(Element(x, CC), Element(z, CC), Less(Abs(z), 2 * Pi), Unequal(z, 0))))
 
 make_entry(ID("555e10"),
     Formula(Equal(BernoulliPolynomial(n,x), Sum(Binomial(n,k) * BernoulliB(n-k) * x**k, For(k, 0, n)))),
@@ -184,7 +184,7 @@ make_entry(ID("555e10"),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 
 make_entry(ID("14ecc4"),
-    Formula(Equal(BernoulliB(2*n), (-1)**(n+1) * (2 * Factorial(2*n) * RiemannZeta(2*n) / (2 * ConstPi)**(2*n)))),
+    Formula(Equal(BernoulliB(2*n), (-1)**(n+1) * (2 * Factorial(2*n) * RiemannZeta(2*n) / (2 * Pi)**(2*n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
@@ -253,22 +253,22 @@ make_entry(ID("4aab8a"),
 
 
 make_entry(ID("0f02a5"),
-    Formula(Less(Abs(BernoulliB(2*n)), (1 + 1/n) * (2 * Factorial(2*n) / ((2*ConstPi)**(2*n))))),
+    Formula(Less(Abs(BernoulliB(2*n)), (1 + 1/n) * (2 * Factorial(2*n) / ((2*Pi)**(2*n))))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("3a1316"),
-    Formula(Less(Abs(BernoulliB(2*n)), (1 + 1/n) * 4 * Sqrt(ConstPi * n) * (n / (ConstPi * ConstE))**(2*n))),
+    Formula(Less(Abs(BernoulliB(2*n)), (1 + 1/n) * 4 * Sqrt(Pi * n) * (n / (Pi * ConstE))**(2*n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("1d2f4a"),
-    Formula(Greater(Abs(BernoulliB(2*n)), 2 * Factorial(2*n) / (2*ConstPi)**(2*n))),
+    Formula(Greater(Abs(BernoulliB(2*n)), 2 * Factorial(2*n) / (2*Pi)**(2*n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("69ca86"),
-    Formula(Greater(Abs(BernoulliB(2*n)), 4 * Sqrt(ConstPi * n) * (n / (ConstPi * ConstE))**(2*n))),
+    Formula(Greater(Abs(BernoulliB(2*n)), 4 * Sqrt(Pi * n) * (n / (Pi * ConstE))**(2*n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

@@ -84,10 +84,10 @@ make_entry(ID("b7d740"),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(
-        Tuple(Element(z, RR), Element(Arg(z), Set(0, ConstPi))),
-        Tuple(Element(z, CC), Element(Arg(z), OpenClosedInterval(-ConstPi, ConstPi))),
+        Tuple(Element(z, RR), Element(Arg(z), Set(0, Pi))),
+        Tuple(Element(z, CC), Element(Arg(z), OpenClosedInterval(-Pi, Pi))),
         Tuple(Element(z, Set(Infinity)), Element(Arg(z), Set(0))),
-        Tuple(Element(z, Set(-Infinity)), Element(Arg(z), Set(ConstPi))),
+        Tuple(Element(z, Set(-Infinity)), Element(Arg(z), Set(Pi))),
       )))
 
 make_entry(ID("f5e62c"),
@@ -178,13 +178,13 @@ make_entry(ID("c423d2"),
     Formula(Equal(Arg(1), 0)))
 
 make_entry(ID("735409"),
-    Formula(Equal(Arg(ConstI), ConstPi/2)))
+    Formula(Equal(Arg(ConstI), Pi/2)))
 
 make_entry(ID("089f85"),
-    Formula(Equal(Arg(-ConstI), -(ConstPi/2))))
+    Formula(Equal(Arg(-ConstI), -(Pi/2))))
 
 make_entry(ID("a8b41c"),
-    Formula(Equal(Arg(-1), ConstPi)))
+    Formula(Equal(Arg(-1), Pi)))
 
 
 
@@ -253,7 +253,7 @@ make_entry(ID("432926"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("08268d"),
-    Formula(LessEqual(Abs(Arg(z)), ConstPi)),
+    Formula(LessEqual(Abs(Arg(z)), Pi)),
     Variables(z),
     Assumptions(Element(z, CC)))
 

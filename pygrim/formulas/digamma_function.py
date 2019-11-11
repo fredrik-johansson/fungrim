@@ -346,7 +346,7 @@ make_entry(ID("86333d"),
 # Derivatives and differential equations
 
 make_entry(ID("8415c7"),
-    Formula(Equal(DigammaFunction(z), ComplexDerivative(GammaFunction(z), For(z, z)) / GammaFunction(z))),
+    Formula(Equal(DigammaFunction(z), ComplexDerivative(Gamma(z), For(z, z)) / Gamma(z))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))))
 
@@ -423,7 +423,7 @@ make_entry(ID("24c9e9"),
 
 # todo: valid everywhere when removing the poles!
 make_entry(ID("bf533f"),
-    Formula(Equal(DigammaFunction(z)/GammaFunction(z),
+    Formula(Equal(DigammaFunction(z)/Gamma(z),
         -(Exp(2*ConstGamma*z)*Product((1-z/DigammaFunctionZero(n)) * Exp(z/DigammaFunctionZero(n)), For(n, 0, Infinity))))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZLessEqual(0)))),
@@ -490,7 +490,7 @@ make_entry(ID("950e5a"),
     )))
 
 make_entry(ID("fb9942"),
-    Formula(AsymptoticTo(DigammaFunctionZero(n), -n + (1/ConstPi)*Atan(ConstPi/Log(n)), n, Infinity)))
+    Formula(AsymptoticTo(DigammaFunctionZero(n), -n + (1/Pi)*Atan(Pi/Log(n)), n, Infinity)))
 
 # Specific values
 
@@ -544,41 +544,41 @@ make_entry(ID("89bed3"),
     Formula(Equal(DigammaFunction(Div(1,2)), -(2*Log(2))-ConstGamma)))
 
 make_entry(ID("98f642"),
-    Formula(Equal(DigammaFunction(Div(1,3)), -(Sqrt(3)*ConstPi/6) - ConstGamma - 3*Log(3)/2)))
+    Formula(Equal(DigammaFunction(Div(1,3)), -(Sqrt(3)*Pi/6) - ConstGamma - 3*Log(3)/2)))
 
 make_entry(ID("45a969"),
-    Formula(Equal(DigammaFunction(Div(2,3)), Sqrt(3)*ConstPi/6 - ConstGamma - 3*Log(3)/2)))
+    Formula(Equal(DigammaFunction(Div(2,3)), Sqrt(3)*Pi/6 - ConstGamma - 3*Log(3)/2)))
 
 make_entry(ID("7ec4f0"),
-    Formula(Equal(DigammaFunction(Div(1,4)), -(ConstPi/2) - ConstGamma - 3*Log(2))))
+    Formula(Equal(DigammaFunction(Div(1,4)), -(Pi/2) - ConstGamma - 3*Log(2))))
 
 make_entry(ID("f93bae"),
-    Formula(Equal(DigammaFunction(Div(3,4)), ConstPi/2 - ConstGamma - 3*Log(2))))
+    Formula(Equal(DigammaFunction(Div(3,4)), Pi/2 - ConstGamma - 3*Log(2))))
 
 make_entry(ID("177de7"),
-    Formula(Equal(DigammaFunction(Div(1,6)), -(Sqrt(3)*ConstPi/2) - ConstGamma - 2*Log(2) - 3*Log(3)/2)))
+    Formula(Equal(DigammaFunction(Div(1,6)), -(Sqrt(3)*Pi/2) - ConstGamma - 2*Log(2) - 3*Log(3)/2)))
 
 make_entry(ID("967bbb"),
-    Formula(Equal(DigammaFunction(Div(5,6)), Sqrt(3)*ConstPi/2 - ConstGamma - 2*Log(2) - 3*Log(3)/2)))
+    Formula(Equal(DigammaFunction(Div(5,6)), Sqrt(3)*Pi/2 - ConstGamma - 2*Log(2) - 3*Log(3)/2)))
 
 make_entry(ID("8c368f"),
-    Formula(Equal(DigammaFunction(Div(1,8)), -(ConstPi/2*(Sqrt(2)+1)) - ConstGamma - 4*Log(2) - (Log(2+Sqrt(2))-Log(2-Sqrt(2)))/Sqrt(2))))
+    Formula(Equal(DigammaFunction(Div(1,8)), -(Pi/2*(Sqrt(2)+1)) - ConstGamma - 4*Log(2) - (Log(2+Sqrt(2))-Log(2-Sqrt(2)))/Sqrt(2))))
 
 ## Values at general fractions
 
 make_entry(ID("3fe553"),
     Formula(Equal(DigammaFunction(Div(p,q)),
-        -ConstGamma - Log(2*q) - ConstPi/2 * Cot(ConstPi * p / q) + 2 * Sum(Cos((2*ConstPi*k*p)/q) * Log(Sin(ConstPi*k/q)), For(k, 1, Floor((q-1)/2))))),
+        -ConstGamma - Log(2*q) - Pi/2 * Cot(Pi * p / q) + 2 * Sum(Cos((2*Pi*k*p)/q) * Log(Sin(Pi*k/q)), For(k, 1, Floor((q-1)/2))))),
     Variables(p, q),
     Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(p, Range(1, q-1)))))
 
 ## Polygamma functions at integers and simple fractions
 
 make_entry(ID("babd3c"),
-    Formula(Equal(DigammaFunction(1, 1), ConstPi**2 / 6)))
+    Formula(Equal(DigammaFunction(1, 1), Pi**2 / 6)))
 
 make_entry(ID("fa0292"),
-    Formula(Equal(DigammaFunction(2, 1), ConstPi**2 / 6 - 1)))
+    Formula(Equal(DigammaFunction(2, 1), Pi**2 / 6 - 1)))
 
 make_entry(ID("4a30f1"),
     Formula(Equal(DigammaFunction(1, 2), -(2*RiemannZeta(3)))))
@@ -594,7 +594,7 @@ make_entry(ID("90b26f"),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(m, ZZGreaterEqual(1)))))
 
 make_entry(ID("595f46"),
-    Formula(Equal(DigammaFunction(Div(1,2), 1), ConstPi**2 / 2)))
+    Formula(Equal(DigammaFunction(Div(1,2), 1), Pi**2 / 2)))
 
 make_entry(ID("5ce30b"),
     Formula(Equal(DigammaFunction(Div(1,2), m), (-1)**(m+1) * (2**(m+1)-1) * Factorial(m) * RiemannZeta(m+1))),
@@ -602,43 +602,43 @@ make_entry(ID("5ce30b"),
     Assumptions(Element(m, ZZGreaterEqual(1))))
 
 make_entry(ID("807c7d"),
-    Formula(Equal(DigammaFunction(Div(1,4), 1), ConstPi**2 + 8*ConstCatalan)))
+    Formula(Equal(DigammaFunction(Div(1,4), 1), Pi**2 + 8*ConstCatalan)))
 
 make_entry(ID("d2f9fb"),
-    Formula(Equal(DigammaFunction(Div(3,4), 1), ConstPi**2 - 8*ConstCatalan)))
+    Formula(Equal(DigammaFunction(Div(3,4), 1), Pi**2 - 8*ConstCatalan)))
 
 make_entry(ID("03aca0"),
-    Formula(Equal(DigammaFunction(Div(1,4), 2), -(2*ConstPi**3) - 56*RiemannZeta(3))))
+    Formula(Equal(DigammaFunction(Div(1,4), 2), -(2*Pi**3) - 56*RiemannZeta(3))))
 
 make_entry(ID("e83059"),
-    Formula(Equal(DigammaFunction(Div(3,4), 2), 2*ConstPi**3 - 56*RiemannZeta(3))))
+    Formula(Equal(DigammaFunction(Div(3,4), 2), 2*Pi**3 - 56*RiemannZeta(3))))
 
 make_entry(ID("b31fd2"),
     Formula(Equal(DigammaFunction(Div(1,2), 2), -(14*RiemannZeta(3)))))
 
 make_entry(ID("2251c6"),
-    Formula(Equal(DigammaFunction(Div(1,2), 3), ConstPi**4)))
+    Formula(Equal(DigammaFunction(Div(1,2), 3), Pi**4)))
 
 make_entry(ID("bb88c8"),
-    Formula(Equal(DigammaFunction(Div(1,6), 2), -(182*RiemannZeta(3)) - 4*Sqrt(3)*ConstPi**3)))
+    Formula(Equal(DigammaFunction(Div(1,6), 2), -(182*RiemannZeta(3)) - 4*Sqrt(3)*Pi**3)))
 
 make_entry(ID("921d61"),
-    Formula(Equal(DigammaFunction(Div(5,6), 2), -(182*RiemannZeta(3)) + 4*Sqrt(3)*ConstPi**3)))
+    Formula(Equal(DigammaFunction(Div(5,6), 2), -(182*RiemannZeta(3)) + 4*Sqrt(3)*Pi**3)))
 
 ## Special complex parts
 
 make_entry(ID("03e2a6"),
-    Formula(Equal(Im(DigammaFunction(ConstI*y)), (ConstPi/2) * Coth(ConstPi*y) + 1/(2*y))),
+    Formula(Equal(Im(DigammaFunction(ConstI*y)), (Pi/2) * Coth(Pi*y) + 1/(2*y))),
     Variables(y),
     Assumptions(And(Element(y, RR), Unequal(y, 0))))
 
 make_entry(ID("22a9cd"),
-    Formula(Equal(Im(DigammaFunction(1+ConstI*y)), (ConstPi/2) * Coth(ConstPi*y) - 1/(2*y))),
+    Formula(Equal(Im(DigammaFunction(1+ConstI*y)), (Pi/2) * Coth(Pi*y) - 1/(2*y))),
     Variables(y),
     Assumptions(And(Element(y, RR), Unequal(y, 0))))
 
 make_entry(ID("6f3fec"),
-    Formula(Equal(Im(DigammaFunction(Div(1,2)+ConstI*y)), (ConstPi/2) * Tanh(ConstPi*y))),
+    Formula(Equal(Im(DigammaFunction(Div(1,2)+ConstI*y)), (Pi/2) * Tanh(Pi*y))),
     Variables(y),
     Assumptions(And(Element(y, RR), Unequal(y, 0))))
 
@@ -680,12 +680,12 @@ make_entry(ID("c687d6"),
 ## Reflection formula
 
 make_entry(ID("adf5e2"),
-    Formula(Equal(DigammaFunction(1-z), DigammaFunction(z) + ConstPi*Cot(ConstPi*z))),
+    Formula(Equal(DigammaFunction(1-z), DigammaFunction(z) + Pi*Cot(Pi*z))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, ZZ))))
 
 make_entry(ID("361f61"),
-    Formula(Equal(DigammaFunction(1-z, m), (-1)**m * (DigammaFunction(z, m) + ConstPi * ComplexDerivative(Cot(ConstPi*z), For(z, z, m))))),
+    Formula(Equal(DigammaFunction(1-z, m), (-1)**m * (DigammaFunction(z, m) + Pi * ComplexDerivative(Cot(Pi*z), For(z, z, m))))),
     Variables(m, z),
     Assumptions(And(Element(m, ZZGreaterEqual(0)), Element(z, CC), NotElement(z, ZZ))))
 
@@ -741,7 +741,7 @@ make_entry(ID("cfb999"),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
 make_entry(ID("d9c818"),
-    Formula(Equal(DigammaFunction(z), Log(z) - 1/(2*z) - 2*Integral(t/((t**2+z**2)*(Exp(2*ConstPi*t)-1)), For(t, 0, Infinity)))),
+    Formula(Equal(DigammaFunction(z), Log(z) - 1/(2*z) - 2*Integral(t/((t**2+z**2)*(Exp(2*Pi*t)-1)), For(t, 0, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
@@ -783,17 +783,17 @@ make_entry(ID("1e47db"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("458a97"),
-    Formula(Equal(Sum(DigammaFunction(k) * Exp(2*ConstPi*r*k*ConstI/n), For(k, 1, n)), n*Log(1-Exp(2*ConstPi*r*ConstI/n)))),
+    Formula(Equal(Sum(DigammaFunction(k) * Exp(2*Pi*r*k*ConstI/n), For(k, 1, n)), n*Log(1-Exp(2*Pi*r*ConstI/n)))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("739819"),
-    Formula(Equal(Sum(DigammaFunction(k) * Cos(2*ConstPi*r*k/n), For(k, 1, n)), n*Log(2*Sin(ConstPi*r/n)))),
+    Formula(Equal(Sum(DigammaFunction(k) * Cos(2*Pi*r*k/n), For(k, 1, n)), n*Log(2*Sin(Pi*r/n)))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("bb9eb6"),
-    Formula(Equal(Sum(DigammaFunction(k) * Sin(2*ConstPi*r*k/n), For(k, 1, n)), ConstPi*(r-n/2))),
+    Formula(Equal(Sum(DigammaFunction(k) * Sin(2*Pi*r*k/n), For(k, 1, n)), Pi*(r-n/2))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
@@ -801,15 +801,15 @@ make_entry(ID("bb9eb6"),
 
 make_entry(ID("1165fc"),
     Formula(Equal(Sum(1/DigammaFunctionZero(n)**2, For(n, 0, Infinity)), 
-        ConstGamma**2 + ConstPi**2/2)))
+        ConstGamma**2 + Pi**2/2)))
 
 make_entry(ID("39ce44"),
     Formula(Equal(Sum(1/DigammaFunctionZero(n)**3, For(n, 0, Infinity)), 
-        -ConstGamma**3 - ConstGamma*ConstPi**2/2 - 4*RiemannZeta(3))))
+        -ConstGamma**3 - ConstGamma*Pi**2/2 - 4*RiemannZeta(3))))
 
 make_entry(ID("a4f9c9"),
     Formula(Equal(Sum(1/DigammaFunctionZero(n)**4, For(n, 0, Infinity)), 
-        ConstGamma**4 + ConstPi**4/9 + 2*ConstGamma**2*ConstPi**2/3 + 4*(ConstGamma*RiemannZeta(3)))))
+        ConstGamma**4 + Pi**4/9 + 2*ConstGamma**2*Pi**2/3 + 4*(ConstGamma*RiemannZeta(3)))))
 
 make_entry(ID("6547da"),
     Formula(Equal(Sum(1/DigammaFunctionZero(n)**(r+1), For(n, 0, Infinity)), 

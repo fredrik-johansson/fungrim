@@ -84,7 +84,7 @@ examples will employ infix arithmetic.
 Subexpressions of a Grim expression may represent the following:
 
 * Constant values: objects in an imagined mathematical universe,
-  such as 5, ConstPi, False, ZZ, or the set {Exp(ConstPi), Infinity}.
+  such as 5, Pi, False, ZZ, or the set {Exp(Pi), Infinity}.
 
 * Variables: placeholders for constants. Variables should always be bound by
   operators (more on this below).
@@ -121,7 +121,7 @@ meaning on a level of rigor that at least in principle should allow mechanical
 translation into a formal theorem proving environment.
 
 Conceptually, Fungrim works over a single universe of objects (5, False,
-Infinity, Set(ConstPi, Tuple(2, Set(3, 4))), etc.). The complex number 1 is
+Infinity, Set(Pi, Tuple(2, Set(3, 4))), etc.). The complex number 1 is
 the same object as the integer 1. More generally, the usual field isomorphisms
 are actually subset relations: for example, ZZ is a subset of QQ ... is a
 subset of CC .. is a subset of CC((x)), etc. "Types" are just restrictions
@@ -152,7 +152,7 @@ Local variables and generators
 -------------------------------------------------------------------------------
 
 Symbols occurring in a formula either denote constants in the surrounding
-universe (like ConstPi, Sin, ZZ), or expression-level variables (like x).
+universe (like Pi, Sin, ZZ), or expression-level variables (like x).
 Variables are always locally bound and must be declared explicitly
 using one of the special generator expressions described in this section.
 
@@ -209,7 +209,7 @@ For()
     parameters as representing the endpoints (not necessarily integers)
     of a directed line segment to integrate over:
 
-        Integral(Cos(x), For(x, -ConstPi, ConstPi))
+        Integral(Cos(x), For(x, -Pi, Pi))
 
     Derivative() takes one or two parameters, denoting the evaluation
     point and optionally the order of differentiation:

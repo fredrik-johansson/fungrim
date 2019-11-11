@@ -62,17 +62,17 @@ make_entry(ID("3be335"),
     )
 
 make_entry(ID("2aaba8"),
-    Formula(Equal(Erf(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), For(t, 0, z)))),
+    Formula(Equal(Erf(z), 2/Sqrt(Pi) * Integral(Exp(-(t**2)), For(t, 0, z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("36ef64"),
-    Formula(Equal(Erfc(z), 2/Sqrt(ConstPi) * Integral(Exp(-(t**2)), For(t, z, Infinity)))),
+    Formula(Equal(Erfc(z), 2/Sqrt(Pi) * Integral(Exp(-(t**2)), For(t, z, Infinity)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("622772"),
-    Formula(Equal(Erfi(z), 2/Sqrt(ConstPi) * Integral(Exp(t**2), For(t, 0, z)))),
+    Formula(Equal(Erfi(z), 2/Sqrt(Pi) * Integral(Exp(t**2), For(t, 0, z)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -94,22 +94,22 @@ make_entry(ID("603a49"),
 
 
 make_entry(ID("abadc7"),
-    Formula(Equal(Erf(z), (2*z)/Sqrt(ConstPi) * Hypergeometric1F1(Div(1,2), Div(3,2), -(z**2)))),
+    Formula(Equal(Erf(z), (2*z)/Sqrt(Pi) * Hypergeometric1F1(Div(1,2), Div(3,2), -(z**2)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("98688d"),
-    Formula(Equal(Erf(z), (2*z*Exp(-(z**2)))/Sqrt(ConstPi) * Hypergeometric1F1(1, Div(3,2), z**2))),
+    Formula(Equal(Erf(z), (2*z*Exp(-(z**2)))/Sqrt(Pi) * Hypergeometric1F1(1, Div(3,2), z**2))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("cb93ea"),
-    Formula(Equal(Erf(z), z/Sqrt(z**2) - Exp(-(z**2))/(z*Sqrt(ConstPi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),
+    Formula(Equal(Erf(z), z/Sqrt(z**2) - Exp(-(z**2))/(z*Sqrt(Pi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),
     Variables(z),
     Assumptions(And(Element(z, CC), Unequal(z, 0))))
 
 make_entry(ID("ae3110"),
-    Formula(Equal(Erfc(z), Exp(-(z**2))/(z*Sqrt(ConstPi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),
+    Formula(Equal(Erfc(z), Exp(-(z**2))/(z*Sqrt(Pi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),
     Variables(z),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0))))
 
@@ -131,12 +131,12 @@ make_entry(ID("01440f"),
 
 
 make_entry(ID("b5bd5d"),
-    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, 1)), 2/Sqrt(ConstPi) * Exp(-(z**2)))),
+    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, 1)), 2/Sqrt(Pi) * Exp(-(z**2)))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("fae9d3"),
-    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, n)), 2/Sqrt(ConstPi) * (-1)**(n+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
+    Formula(Equal(ComplexDerivative(Erf(z), For(z, z, n)), 2/Sqrt(Pi) * (-1)**(n+1) * HermitePolynomial(n-1, z) * Exp(-(z**2)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(1)))))
 

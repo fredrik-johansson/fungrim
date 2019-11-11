@@ -75,7 +75,7 @@ make_entry(ID("69fd4b"),
     Assumptions(And(Element(x, RR), GreaterEqual(x, 1))))
 
 make_entry(ID("375afe"),
-    Formula(Less(Abs(PrimePi(x)-LogIntegral(x)), Sqrt(x)*Log(x)/(8*ConstPi))),
+    Formula(Less(Abs(PrimePi(x)-LogIntegral(x)), Sqrt(x)*Log(x)/(8*Pi))),
     Variables(x),
     Assumptions(And(Element(x, RR), GreaterEqual(x, 2657), RiemannHypothesis)),
     References("L. Schoenfeld (1976). Sharper bounds for the Chebyshev functions θ(x) and ψ(x). II. Mathematics of Computation. 30 (134): 337-360. DOI: 10.2307/2005976"))
