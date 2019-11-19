@@ -156,9 +156,9 @@ make_entry(ID("d1ea57"),
     Assumptions(And(Element(m, ZZGreaterEqual(0)), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("11a56b"),
-    Formula(Equal(Totient(-n), 0)),
+    Formula(Equal(Totient(-n), Totient(n))),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterEqual(0))))
+    Assumptions(Element(n, ZZ)))
 
 # Divisibility
 
