@@ -100,7 +100,7 @@ make_entry(ID("2c46dc"),
 make_entry(ID("c19cd6"),
     Formula(Equal(Totient(n), Cardinality(Set(k, For(k), And(Element(k, Range(1, n)), Equal(GCD(n,k), 1)))))),
     Variables(n),
-    Assumptions(Element(n, ZZ)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 # Factorization
 
@@ -165,7 +165,7 @@ make_entry(ID("11a56b"),
 make_entry(ID("f0639c"),
     Formula(Cases(Tuple(Odd(Totient(n)), Element(n, Set(1, 2))), Tuple(Even(Totient(n)), Otherwise))),
     Variables(n),
-    Assumptions(Element(n, ZZ)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("eae0de"),
     Formula(Implies(Divides(m, n), Divides(Totient(m), Totient(n)))),
@@ -192,17 +192,17 @@ make_entry(ID("36fe36"),
 make_entry(ID("3f5711"),
     Formula(Equal(Totient(n), Sum(GCD(n,k) * Exp(2*Pi*ConstI*k/n), For(k, 1, n)))),
     Variables(n),
-    Assumptions(Element(n, ZZ)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("93a877"),
     Formula(Equal(Totient(n), Sum(GCD(n,k) * Cos(2*Pi*k/n), For(k, 1, n)))),
     Variables(n),
-    Assumptions(Element(n, ZZ)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("efd378"),
     Formula(Equal(Totient(n), DivisorSum(MoebiusMu(d) * (n/d), For(d, n)))),
     Variables(n),
-    Assumptions(Element(n, ZZ)))
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 # todo: better markup for this kind of sum
 make_entry(ID("bb4ce0"),
