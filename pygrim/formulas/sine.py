@@ -170,8 +170,8 @@ make_entry(ID("b63dce"),
         Tuple(Element(z, RR), Element(Sin(z), ClosedInterval(-1, 1))),
         Tuple(Element(z, CC), Element(Sin(z), CC)),
         TableSection("Formal power series"),
-        Tuple(Element(z, FormalPowerSeries(RR, x)), Element(Sin(z), FormalPowerSeries(RR, x))),
-        Tuple(Element(z, FormalPowerSeries(CC, x)), Element(Sin(z), FormalPowerSeries(CC, x))),
+        Tuple(Element(z, PowerSeries(RR, x)), Element(Sin(z), PowerSeries(RR, x))),
+        Tuple(Element(z, PowerSeries(CC, x)), Element(Sin(z), PowerSeries(CC, x))),
       )))
 
 make_entry(ID("31fef8"),
@@ -477,7 +477,7 @@ make_entry(ID("3fb3ca"),
     Formula(Equal(Sin(z), (2*Tan(z/2))/(Tan(z/2)**2 + 1))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ)))),
-        And(Element(z, FormalPowerSeries(CC, x)), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ))))))
+        And(Element(z, PowerSeries(CC, x)), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ))))))
 
 make_entry(ID("18f40c"),
     Formula(Equal(Sin(z), (Exp(ConstI*z) - Exp(-ConstI*z)) / (2 * ConstI))),

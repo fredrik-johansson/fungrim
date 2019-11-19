@@ -131,6 +131,50 @@ import datetime
 datestamp = str(datetime.date.today())
 timestamp = str(datetime.datetime.utcnow())
 
+if len(sys.argv) > 1 and sys.argv[1] == "grimdoc":
+    import os
+    from pygrim import *
+    from pygrim.formulas import *
+    if not os.path.exists("build/html/grim"):
+        os.makedirs("build/html/grim")
+    inf = open("grim.html", "r")
+    out = open("build/html/grim/index.html", "w")
+    inf = inf.read()
+
+    inf = inf.split("@example@")
+    for i in range(1, len(inf), 2):
+        code = inf[i]
+        if "|" in code:
+            code, text = code.split("|")
+            code = code.strip()
+        else:
+            text = None
+        #inf[i] = "<pre>" + inf[i] + "</pre>" + katex(eval(inf[i]).latex(), display=True)
+        inf[i] = "<pre>" + code + "</pre>" + "$$" + eval(code).latex() + "$$"
+        if text:
+            inf[i] = inf[i] + """<p style="margin-bottom:0.5em">""" + text + "</p>"
+        inf[i] = """<div style="border: 1px solid #ccc; padding-left:0.5em; padding-right:0.5em; margin-bottom:0.5em;">""" + inf[i] + """</div>"""
+    inf = "".join(inf)
+
+    inf = inf.split("@@@")
+    for i in range(1, len(inf), 2):
+        print(inf[i])
+        #inf[i] = katex(eval(inf[i]).latex(), display=True)
+        inf[i] = "$$" + eval(inf[i]).latex() + "$$"
+    inf = "".join(inf)
+
+    inf = inf.split("@@")
+    for i in range(1, len(inf), 2):
+        print(inf[i])
+        #inf[i] = katex(eval(inf[i]).latex(), display=False)
+        inf[i] = "$" + eval(inf[i]).latex() + "$"
+    inf = "".join(inf)
+
+    out.write(inf)
+    print("Success!")
+    sys.exit(0)
+
+
 html_start = """
 <!DOCTYPE html>
 <html>

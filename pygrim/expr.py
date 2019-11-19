@@ -691,6 +691,13 @@ def inject_vars(string):
         variable_names.add(sym)
 
 inject_builtin("""
+Universe Sets Tuples
+Function MultivariateFunction
+Functions MultivariateFunctions
+One Zero
+Matrices
+Def Gen
+All Any
 True_ False_
 Parentheses Brackets Braces
 Ellipsis Call Subscript
@@ -704,6 +711,10 @@ Cardinality
 Element NotElement Subset SubsetEqual
 ForAll Exists
 EqualAndElement
+Concatenation
+CartesianProduct CartesianPower
+Restriction
+Length Item
 Rings CommutativeRings Fields
 PP ZZ QQ RR CC HH AlgebraicNumbers
 ZZGreaterEqual ZZLessEqual Range
@@ -732,9 +743,7 @@ PrimeSum DivisorSum PrimeProduct DivisorProduct
 Integral
 IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqual
 AsymptoticTo
-FormalGenerator
-FormalPolynomialRing
-FormalPowerSeries FormalLaurentSeries SeriesCoefficient
+FormalGenerator Polynomials RationalFunctions PowerSeries LaurentSeries SeriesCoefficient
 Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
 Residue
@@ -800,7 +809,7 @@ QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
 BarnesG LogBarnesG LogBarnesGRemainder
 SloaneA
-HalphenConstant RationalFunctions RationalFunctionDegree
+HalphenConstant RationalFunctionDegree
 """)
 
 

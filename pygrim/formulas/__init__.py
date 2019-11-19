@@ -81,12 +81,12 @@ describe(Matrix2x2, Matrix2x2(a,b,c,d), [], None, "Two by two matrix")
 describe(LogIntegral, LogIntegral(z), [Element(z, SetMinus(CC, Set(1)))], CC, "Logarithmic integral")
 describe(RiemannXi, RiemannXi(s), [Element(s, CC)], CC, "Riemann xi-function")
 
-describe2(FormalPowerSeries, FormalPowerSeries(K,x), "Formal power series", None,
+describe2(PowerSeries, PowerSeries(K,x), "Formal power series", None,
     Description("Represents the set of formal power series in the (formal) symbol", x,
     "and with coefficients in the set", K, ", equivalently infinite series",
     Sum(c(k) * x**k, Tuple(k, 0, Infinity)), "where", Element(c(k), K), "."))
 
-describe2(FormalLaurentSeries, FormalLaurentSeries(K,x), "Formal Laurent series", None,
+describe2(LaurentSeries, LaurentSeries(K,x), "Formal Laurent series", None,
     Description("Represents the set of formal Laurent series in the (formal) symbol", x,
     "and with coefficients in the set", K, ", equivalently infinite series",
     Sum(c(k) * x**k, Tuple(k, n, Infinity)), "where", Element(c(k), K), "and", Element(n, ZZ), " may be negative."))

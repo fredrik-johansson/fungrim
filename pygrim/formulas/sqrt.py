@@ -109,10 +109,10 @@ make_entry(ID("21d9b8"),
         Tuple(Element(z, Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-Pi,Pi)))),
                 Element(Sqrt(z), Set(Exp(ConstI*theta)*Infinity, ForElement(theta, OpenClosedInterval(-Pi/2,Pi/2))))),
         TableSection("Formal power series"),
-        Tuple(And(Element(z, FormalPowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
-            And(Element(Sqrt(z), FormalPowerSeries(RR, x)))),
-        Tuple(And(Element(z, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
-            And(Element(Sqrt(z), FormalPowerSeries(CC, x)))),
+        Tuple(And(Element(z, PowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
+            And(Element(Sqrt(z), PowerSeries(RR, x)))),
+        Tuple(And(Element(z, PowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
+            And(Element(Sqrt(z), PowerSeries(CC, x)))),
       )))
 
 make_entry(ID("af984e"),
@@ -388,19 +388,19 @@ make_entry(ID("b14da0"),
     Formula(Equal(Sqrt(z+x), Sqrt(z) * Sum(((-1)**k * RisingFactorial(-Div(1,2),k)) / (z**k * Factorial(k)) * x**k, For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(x, CC), And(Less(Abs(x), Abs(z)), Or(Greater(Re(z), 0), Equal(Sign(Im(x)), Sign(Im(z)))))),
-        And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, FormalPowerSeries(CC, x)))))
+        And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, PowerSeries(CC, x)))))
 
 make_entry(ID("3c2557"),
     Formula(Equal(1/Sqrt(z+x), (1/Sqrt(z)) * Sum(((-1)**k * RisingFactorial(Div(1,2),k)) / (z**k * Factorial(k)) * x**k, For(k, 0, Infinity)))),
     Variables(z, x),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(x, CC), And(Less(Abs(x), Abs(z)), Or(Greater(Re(z), 0), Equal(Sign(Im(x)), Sign(Im(z)))))),
-        And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, FormalPowerSeries(CC, x)))))
+        And(Element(z, SetMinus(CC, Set(0))), FormalGenerator(x, PowerSeries(CC, x)))))
 
 make_entry(ID("6202cb"),
     Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
-    Assumptions(And(Element(A, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(A, PowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
     #Formula(Where(Equal(Sqrt(Sum(Subscript(a, n) * x**n, For(n, 0, Infinity))), Sum(Subscript(c, n) * x**n, For(n, 0, Infinity))),
     #    Equal(Subscript(c, 0), Sqrt(Subscript(a, 0))),
     #        Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))))))
@@ -409,5 +409,5 @@ make_entry(ID("5ff181"),
     Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(1/Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
-    Assumptions(And(Element(A, FormalPowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(A, PowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
 

@@ -133,6 +133,8 @@ subscript_latex_table = {
     ConreyGenerator: "g",
     KeiperLiLambda: "\\lambda",
     DigammaFunctionZero: "x",
+    Zero: "0",
+    One: "1",
 }
 
 subscript_pair_latex_table = {
@@ -353,6 +355,39 @@ def tex_Add(head, args, **kwargs):
     return " + ".join(argstr)
 
 @deftex
+def tex_CartesianProduct(head, args, **kwargs):
+    # hack
+    # todo: general printing system for infix operators, aware of generators
+    if len(args) == 1 and args[0].head() == Repeat:
+        pattern, num = args[0].args()
+        patternstr = pattern.latex()
+        num = num.latex()
+        return "\\underbrace{%s \\times \\ldots \\times %s}_{%s \\text{ times}}" % (patternstr, patternstr, num)
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return " \\times ".join(argstr)
+
+@deftex
+def tex_CartesianPower(head, args, **kwargs):
+    assert len(args) == 2
+    base = args[0].latex(**kwargs)
+    expo = args[1].latex(**kwargs)
+    return "{%s}^{%s}" % (base, expo)
+
+@deftex
+def tex_Concatenation(head, args, **kwargs):
+    argstr = [arg.latex(**kwargs) for arg in args]
+    for i in range(1,len(argstr)):
+        if argstr[i].startswith("(") or argstr[i].startswith("\\left("):
+            argstr[i] = "\\!" + argstr[i]
+    return " ^\\frown ".join(argstr)
+
+@deftex
+def tex_Restriction(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "{%s|}_{%s}" % (argstr[0], argstr[1])
+
+@deftex
 def tex_Sub(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(1, len(args)):
@@ -523,9 +558,43 @@ def tex_TupleSetList(head, args, **kwargs):
                 if len(args) == 2 and len(forargs) == 3:
                     var, a, b = forargs
                     func = args[0]
+                    if a.is_integer() and b.is_integer():
+                        aa = a._integer
+                        bb = b._integer
+                        if bb < aa:
+                            return "%s %s" % (L, R)
+                        if bb == aa:
+                            a = func.replace({var: aa}).latex(**kwargs)
+                            return "%s %s %s" % (L, a, R)
+                        if bb == aa + 1:
+                            a = func.replace({var: aa}).latex(**kwargs)
+                            b = func.replace({var: bb}).latex(**kwargs)
+                            return "%s %s, %s %s" % (L, a, b, R)
+                        if bb == aa + 2:
+                            a = func.replace({var: aa}).latex(**kwargs)
+                            m = func.replace({var: aa + 1}).latex(**kwargs)
+                            b = func.replace({var: bb}).latex(**kwargs)
+                            return "%s %s, %s, %s %s" % (L, a, m, b, R)
+                    if a.is_integer():
+                        second = func.replace({var: Expr(a._integer + 1)}).latex(**kwargs)
+                    else:
+                        second = func.replace({var: Add(a, 1)}).latex(**kwargs)
                     first = func.replace({var: a}).latex(**kwargs)
                     last = func.replace({var: b}).latex(**kwargs)
-                    return "%s%s, \\ldots, %s%s" % (L, first, last, R)
+                    if a == -Infinity:
+                        if b == Infinity:
+                            a = func.replace({var: -1}).latex(**kwargs)
+                            m = func.replace({var: 0}).latex(**kwargs)
+                            b = func.replace({var: 1}).latex(**kwargs)
+                            return "%s \\ldots, %s, %s, %s, \\ldots %s" % (L, a, m, b, R)
+                        if b.is_integer():
+                            penultimate = func.replace({var: Expr(b._integer - 1)}).latex(**kwargs)
+                        else:
+                            penultimate = func.replace({var: Sub(b, 1)}).latex(**kwargs)
+                        return "%s \\ldots, %s, %s %s" % (L, penultimate, last, R)
+                    if b == Infinity:
+                        return "%s%s, %s, \\ldots %s" % (L, first, second, R)
+                    return "%s%s, %s, \\ldots, %s%s" % (L, first, second, last, R)
                 if len(args) == 3 and len(forargs) == 1:
                     func = args[0].latex(**kwargs)
                     cond = args[2].latex(**kwargs)
@@ -1266,23 +1335,19 @@ def tex_StieltjesGamma(head, args, **kwargs):
     if len(args) == 2:
         return "\\gamma_{%s}\\!\\left(%s\\right)" % (arg0, argstr[1])
 
-@deftex
-def tex_FormalPowerSeries(head, args, **kwargs):
-    assert len(args) == 2
+@deftex_heads([Polynomials,RationalFunctions,PowerSeries,LaurentSeries])
+def tex_PolynomialStructures(head, args, **kwargs):
+    assert len(args) >= 1
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "%s[[%s]]" % tuple(argstr)
-
-@deftex
-def tex_FormalPolynomialRing(head, args, **kwargs):
-    assert len(args) == 2
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "%s[%s]" % tuple(argstr)
-
-@deftex
-def tex_FormalLaurentSeries(head, args, **kwargs):
-    assert len(args) == 2
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "%s(\!(%s)\!)" % tuple(argstr)
+    if head == Polynomials:
+        L, R = "[", "]"
+    elif head == RationalFunctions:
+        L, R = "(", ")"
+    elif head == PowerSeries:
+        L, R = "[[", "]]"
+    elif head == LaurentSeries:
+        L, R = "(\\!(", ")\\!)"
+    return argstr[0] + L + ", ".join(argstr[1:]) + R
 
 @deftex
 def tex_SeriesCoefficient(head, args, **kwargs):
@@ -1311,6 +1376,9 @@ def tex_Det(head, args, **kwargs):
     if args[0].head() == Matrix2x2:
         argstr = [arg.latex(**kwargs) for arg in args]
         return "\\operatorname{det}" + argstr[0]
+    elif args[0].head() == Matrix:
+        argstr = [arg.latex(**kwargs) for arg in args]
+        return "\\operatorname{det}" + argstr[0]
     else:
         return Call(head, *args).latex(**kwargs)
 
@@ -1327,6 +1395,16 @@ def tex_Exists(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     return "\\text{there exists } %s \\text{ with } %s" % (argstr[0], argstr[1])
+
+# todo
+@deftex
+def tex_All(head, args, **kwargs):
+    assert len(args) == 2
+    argstr0 = args[0].latex(**kwargs)
+    assert args[1].head() == ForElement
+    argstr1 = Element(*args[1].args()).latex(**kwargs)
+    return "\\forall %s : \\, %s" % (argstr1, argstr0)
+
 
 @deftex
 def tex_DiscreteLog(head, args, **kwargs):
@@ -1447,13 +1525,6 @@ def tex_is_morphic(head, args, **kwargs):
     raise ValueError
 
 @deftex
-def tex_RationalFunctions(head, args, **kwargs):
-    R, var = args
-    R = R.latex(**kwargs)
-    var = var.latex(**kwargs)
-    return "%s\\!\\left(%s\\right)" % (R, var)
-
-@deftex
 def tex_HurwitzZeta(head, args, **kwargs):
     assert len(args) in (2, 3)
     fsym = symbol_latex_table[head]
@@ -1475,6 +1546,16 @@ def tex_HurwitzZeta(head, args, **kwargs):
             return fsym + "^{(" + rstr + ")}" + "\!\\left(" + sstr + ", " + astr + "\\right)"
 
 @deftex
+def tex_Functions(head, args, **kwargs):
+    if len(args) == 0:
+        args = [Universe, Universe]
+    if len(args) == 1:
+        args = [args[0], Universe]
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s \\rightarrow %s" % tuple(argstr)
+
+@deftex
 def tex_Description(head, args, **kwargs):
     s = ""
     for arg in args:
@@ -1483,4 +1564,27 @@ def tex_Description(head, args, **kwargs):
         else:
             s += arg.latex()
     return s
+
+@deftex
+def tex_Def(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s := %s" % (argstr[0], argstr[1])
+
+@deftex
+def tex_Function(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s \\mapsto %s" % (argstr[0], argstr[1])
+
+@deftex
+def tex_Matrices(head, args, **kwargs):
+    assert len(args) == 3
+    R, m, n = [arg.latex(**kwargs) for arg in args]
+    if kwargs.get("in_small"):
+        return "\\mathcal{M}_{%s, %s} \\left(%s\\right)" % (m, n, R)
+    else:
+        return "\\mathcal{M}_{%s, %s}\\!\\left(%s\\right)" % (m, n, R)
+
+
 

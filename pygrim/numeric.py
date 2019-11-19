@@ -16,7 +16,7 @@ dangerous_operators = set([
     IndefiniteIntegralEqual, RealIndefiniteIntegralEqual, ComplexIndefiniteIntegralEqual,
     AsymptoticTo,
     FormalGenerator,
-    FormalPowerSeries, FormalLaurentSeries, SeriesCoefficient,
+    PowerSeries, LaurentSeries, SeriesCoefficient,
     Poles, BranchPoints, BranchCuts, EssentialSingularities, Zeros, UniqueZero, AnalyticContinuation,
     ComplexZeroMultiplicity,
     Residue,

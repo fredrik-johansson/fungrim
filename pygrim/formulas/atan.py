@@ -172,8 +172,8 @@ make_entry(ID("b120b9"),
         Tuple(Element(z, Set(-Infinity, Infinity)), Element(Atan(z), Set(-(Pi/2), Pi/2))),
         Tuple(Element(z, Set(-ConstI, +ConstI)), Element(Atan(z), Set(-ConstI*Infinity, +ConstI*Infinity))),
         TableSection("Formal power series"),
-        Tuple(Element(z, FormalPowerSeries(RR, x)), Element(Atan(z), FormalPowerSeries(RR, x))),
-        Tuple(And(Element(z, FormalPowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), Set(-ConstI, +ConstI))), Element(Atan(z), FormalPowerSeries(CC, x))),
+        Tuple(Element(z, PowerSeries(RR, x)), Element(Atan(z), PowerSeries(RR, x))),
+        Tuple(And(Element(z, PowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), Set(-ConstI, +ConstI))), Element(Atan(z), PowerSeries(CC, x))),
       )))
 
 make_entry(ID("ce3a8e"),

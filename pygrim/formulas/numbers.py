@@ -89,7 +89,7 @@ make_entry(ID("e5a04c"),
 
 # todo: non-semantic formula
 make_entry(ID("aa6b07"),
-    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Exists(f, And(Element(f, SetMinus(FormalPolynomialRing(ZZ, x), Set(0))),
+    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Exists(f, And(Element(f, SetMinus(Polynomials(ZZ, x), Set(0))),
         Equal(f(z), 0)))))))
 
 make_entry(ID("24c179"),
