@@ -148,6 +148,7 @@ def_Topic(
     Section("Matrix formulas"),
     Entries(
         "dc6806",
+        "f4750b",
     ),
 )
 
@@ -574,4 +575,11 @@ make_entry(ID("306699"),
     Variables(x, n),
     Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(n, Set(0, 1, 2, 3)))))
 
+# Matrix formulas
+
+make_entry(ID("f4750b"),
+    Formula(Equal(Det(HilbertMatrix(n)),
+        BarnesG(n+1)**4 / BarnesG(2*n+1))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 

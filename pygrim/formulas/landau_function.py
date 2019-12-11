@@ -195,7 +195,8 @@ make_entry(ID("87d19b"),
 
 make_entry(ID("65fa9f"),
     Formula(Equivalent(RiemannHypothesis,
-        ForAll(n, Element(n, ZZGreaterEqual(1)),
-            Less(Log(LandauG(n)), Where(Sqrt(f(n)), Equal(f(y), UniqueSolution(Brackets(Equal(LogIntegral(x), y)), ForElement(x, OpenInterval(1, Infinity))))))))),
+        Where(
+            All(Less(Log(LandauG(n)), Sqrt(f(n))), ForElement(n, ZZGreaterEqual(1))),
+            Equal(f(y), UniqueSolution(Brackets(Equal(LogIntegral(x), y)), ForElement(x, OpenInterval(1, Infinity))))))),
     References("Marc Deleglise, Jean-Louis Nicolas, The Landau function and the Riemann Hypothesis, https://arxiv.org/abs/1907.07664"))
 

@@ -141,33 +141,51 @@ if len(sys.argv) > 1 and sys.argv[1] == "grimdoc":
     out = open("build/html/grim/index.html", "w")
     inf = inf.read()
 
+    toc = []
+    inf = inf.splitlines()
+    for _i, line in enumerate(inf):
+        if "<h2>" in line:
+            tstart = line.index("<h2>")
+            tend = line.index("</h2>")
+            htitle = line[tstart+4:tend]
+            label = escape_title(htitle)
+            inf[_i] = line.replace("<h2>", """<h2><a name="%s">""" % label).replace("</h2>", "</a></h2>")
+            toc.append((htitle, label))
+    inf = "\n".join(inf)
+
+    toctext = "<ul>"
+    for (htitle, label) in toc:
+        toctext += """<li><a href="#%s">%s</a></li>""" % (label, htitle)
+    toctext += "</ul>"
+    inf = inf.replace("@toc@", toctext)
+
     inf = inf.split("@example@")
-    for i in range(1, len(inf), 2):
-        code = inf[i]
+    for _i in range(1, len(inf), 2):
+        code = inf[_i]
         if "|" in code:
             code, text = code.split("|")
-            code = code.strip()
         else:
             text = None
-        #inf[i] = "<pre>" + inf[i] + "</pre>" + katex(eval(inf[i]).latex(), display=True)
-        inf[i] = "<pre>" + code + "</pre>" + "$$" + eval(code).latex() + "$$"
+        code = code.strip()
+        inf[_i] = "<pre>" + code + "</pre>" + "$$" + eval(code).latex() + "$$"
+        #inf[_i] = "<pre>" + code + "</pre>" + katex(eval(code).latex(), display=True)
         if text:
-            inf[i] = inf[i] + """<p style="margin-bottom:0.5em">""" + text + "</p>"
-        inf[i] = """<div style="border: 1px solid #ccc; padding-left:0.5em; padding-right:0.5em; margin-bottom:0.5em;">""" + inf[i] + """</div>"""
+            inf[_i] = inf[_i] + """<p style="margin-bottom:0.5em">""" + text + "</p>"
+        inf[_i] = """<div style="border: 1px solid #ccc; padding-left:0.5em; padding-right:0.5em; margin-bottom:0.5em;">""" + inf[_i] + """</div>"""
     inf = "".join(inf)
 
     inf = inf.split("@@@")
-    for i in range(1, len(inf), 2):
-        print(inf[i])
-        #inf[i] = katex(eval(inf[i]).latex(), display=True)
-        inf[i] = "$$" + eval(inf[i]).latex() + "$$"
+    for _i in range(1, len(inf), 2):
+        print(inf[_i])
+        #inf[_i] = katex(eval(inf[_i]).latex(), display=True)
+        inf[_i] = "$$" + eval(inf[_i]).latex() + "$$"
     inf = "".join(inf)
 
     inf = inf.split("@@")
-    for i in range(1, len(inf), 2):
-        print(inf[i])
-        #inf[i] = katex(eval(inf[i]).latex(), display=False)
-        inf[i] = "$" + eval(inf[i]).latex() + "$"
+    for _i in range(1, len(inf), 2):
+        print(inf[_i])
+        #inf[_i] = katex(eval(inf[_i]).latex(), display=False)
+        inf[_i] = "$" + eval(inf[_i]).latex() + "$"
     inf = "".join(inf)
 
     out.write(inf)

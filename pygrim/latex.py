@@ -19,18 +19,26 @@ def _latex(expr, in_small=False):
 
     if expr.is_atom():
         if expr._symbol is not None:
-            if expr._symbol in variable_names:
-                if len(expr._symbol) == 1:
-                    return expr._symbol
+            sym = expr._symbol
+            if sym in variable_names:
+                if len(sym) == 1:
+                    return sym
                 else:
-                    if expr._symbol == "epsilon":
+                    sym = sym.rstrip("_")
+                    if len(sym) == 1:
+                        return sym
+                    if sym == "epsilon":
                         return "\\varepsilon"
-                    if expr._symbol == "lamda":
+                    if sym == "lamda":
                         return "\\lambda"
-                    if expr._symbol == "Lamda":
+                    if sym == "Lamda":
                         return "\\Lambda"
-                    return "\\" + expr._symbol
-            return "\\operatorname{" + expr._symbol + "}"
+                    if sym == "GreekPi":
+                        return "\\Pi"
+                    if sym == "GreekGamma":
+                        return "\\Gamma"
+                    return "\\" + sym
+            return "\\operatorname{" + sym + "}"
         if expr._integer is not None:
             return str(expr._integer)
         if expr._text is not None:
@@ -41,29 +49,7 @@ def _latex(expr, in_small=False):
     args = expr._args[1:]
 
     if head in infix_latex_table:
-        argstr = []
-        for arg in args:
-            # todo: combine code
-            if arg.head() == Step:
-                expr, forexpr = arg.args()
-                n, a, b = forexpr.args()
-                # todo: semantic substitution?
-                na = expr.replace({n:a})
-                if a.is_integer():
-                    na1 = expr.replace({n:Expr(int(a)+1)})
-                else:
-                    na1 = expr.replace({n:a+1})
-                nb = expr.replace({n:b})
-                na = na.latex(in_small=in_small)
-                na1 = na1.latex(in_small=in_small)
-                nb = nb.latex(in_small=in_small)
-                argstr.append(na)
-                argstr.append(na1)
-                argstr.append("\\ldots")
-                argstr.append(nb)
-            else:
-                argstr.append(latex(arg, in_small=in_small))
-        return (" " + infix_latex_table[head] + " ").join(argstr)
+        return latex_infix(head, args, in_small=in_small)
 
     # F(n,x,...) -> F_n(x,...)
     if head in subscript_call_latex_table:
@@ -84,8 +70,25 @@ def _latex(expr, in_small=False):
         arg1 = latex(args[1], in_small=True)
         return subscript_pair_latex_table[head] + "_{" + arg0 + "," + arg1 + "}"
 
+    if head.is_symbol() and head._symbol.endswith("_") and len(args) >= 1:
+        argstr = [arg.latex(in_small=True) for arg in args]
+        return head.latex() + "_{" + ", ".join(argstr) + "}"
+
+    for arg in args:
+        if arg.head() in (For, ForElement):
+            argstr = latex(Tuple(*args), in_small=in_small)
+            if argstr.startswith("\\left(") and not in_small:
+                return latex(expr._args[0]) + "\\!" + argstr
+            else:
+                return latex(expr._args[0]) + argstr
+
     argstr = [latex(arg, in_small=in_small) for arg in args]
-    fstr = latex(expr._args[0])
+    argstr = ", ".join(argstr)
+
+    if expr._args[0].head() == Fun:
+        fstr = latex(Parentheses(expr._args[0]))
+    else:
+        fstr = latex(expr._args[0])
     if len(args) == 1 and args[0].is_atom():
         lpar, rpar = "(", ")"
         spacer = ""
@@ -95,8 +98,36 @@ def _latex(expr, in_small=False):
             spacer = ""
         else:
             spacer = "\\!"
-    s = fstr + spacer + lpar + ", ".join(argstr) + rpar
+    s = fstr + spacer + lpar + argstr + rpar
     return s
+
+def latex_infix(head, args, opsymbol=None, **kwargs):
+    argstr = []
+    in_small = kwargs.get("in_small")
+    for arg in args:
+        # todo: combine code
+        if arg.head() == Step:
+            expr, forexpr = arg.args()
+            n, a, b = forexpr.args()
+            # todo: semantic substitution?
+            na = expr.replace({n:a})
+            if a.is_integer():
+                na1 = expr.replace({n:Expr(int(a)+1)})
+            else:
+                na1 = expr.replace({n:a+1})
+            nb = expr.replace({n:b})
+            na = na.latex(in_small=in_small)
+            na1 = na1.latex(in_small=in_small)
+            nb = nb.latex(in_small=in_small)
+            argstr.append(na)
+            argstr.append(na1)
+            argstr.append("\\ldots")
+            argstr.append(nb)
+        else:
+            argstr.append(latex(arg, in_small=in_small))
+    if opsymbol is None:
+        opsymbol = infix_latex_table[head]
+    return (" " + opsymbol + " ").join(argstr)
 
 
 # heads with their own conversion functions
@@ -135,6 +166,12 @@ subscript_latex_table = {
     DigammaFunctionZero: "x",
     Zero: "0",
     One: "1",
+    HilbertMatrix: "H",
+    XX: "\\text{x}",
+    XXSeries: "\\varepsilon",
+    XXNonCommutative: "\\text{X}",
+    ZZp: "\\mathbb{Z}",
+    QQp: "\\mathbb{Q}",
 }
 
 subscript_pair_latex_table = {
@@ -289,6 +326,12 @@ symbol_latex_table = {
     LogBarnesG: "\\log G",
     HalphenConstant: "\\Lambda",
     RationalFunctionDegree: "\\deg",
+    Characteristic: "\\operatorname{char}",
+    StandardIndeterminates: "\\mathbb{X}",
+    StandardNoncommutativeIndeterminates: "\\mathbb{X}^{\\text{NC}}",
+    XX: "\\mathbb{X}",
+    XXSeries: "\\mathbb{X}_{\\displaystyle{\\varepsilon}}",
+    XXNonCommutative: "\\mathbb{X}_{\\text{NC}}",
 }
 
 def deftex(f):
@@ -302,6 +345,18 @@ def deftex_heads(heads):
             latex_conversion_functions[head] = f
         return f
     return decorator
+
+@deftex
+def tex_Elements(head, args, **kwargs):
+    assert len(args) >= 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return ", ".join(argstr[:-1]) + " \\in " + argstr[-1]
+
+@deftex
+def tex_DistinctElements(head, args, **kwargs):
+    assert len(args) >= 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return ", ".join(argstr[:-1]) + " \\text{ distinct} \\in " + argstr[-1]
 
 @deftex
 def tex_Exp(head, args, **kwargs):
@@ -334,8 +389,19 @@ def tex_Div(head, args, **kwargs):
 
 @deftex
 def tex_Where(head, args, **kwargs):
+    args = list(args)
+    for i in range(1, len(args)):
+        if args[i].head() == Def:
+            var, val = args[i].args()
+            if val.head() == Fun:
+                fargs, fval = val.args()
+                if fargs.head() == Tuple:
+                    args[i] = Equal(var(*fargs.args()), fval)
+                else:
+                    args[i] = Equal(var(fargs), fval)
     argstr = [arg.latex(**kwargs) for arg in args]
-    return argstr[0] + "\; \\text{ where } " + ",\,".join(argstr[1:])
+    return argstr[0] + "\; \\text{ where } " + ",\;".join(argstr[1:])
+    #return argstr[0] + "; \\;\\;" + ",\;".join(argstr[1:])
 
 @deftex
 def tex_Pos(head, args, **kwargs):
@@ -347,7 +413,10 @@ def tex_Pos(head, args, **kwargs):
 def tex_Neg(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "-" + argstr[0]
+    if args[0].head() == Neg:
+        return "-\\left(" + argstr[0] + "\\right)"
+    else:
+        return "-" + argstr[0]
 
 @deftex
 def tex_Add(head, args, **kwargs):
@@ -381,11 +450,11 @@ def tex_Concatenation(head, args, **kwargs):
             argstr[i] = "\\!" + argstr[i]
     return " ^\\frown ".join(argstr)
 
-@deftex
+@deftex_heads([Restriction, MultivariateRestriction])
 def tex_Restriction(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "{%s|}_{%s}" % (argstr[0], argstr[1])
+    return "{%s \\,\\rvert}_{%s}" % (argstr[0], argstr[1])
 
 @deftex
 def tex_Sub(head, args, **kwargs):
@@ -434,7 +503,10 @@ def tex_Pow(head, args, **kwargs):
     basestr = base.latex(in_small=in_small)
     expostr = expo.latex(in_small=True)
     if base.is_symbol() or (base.is_integer() and base._integer >= 0) or (not base.is_atom() and base._args[0] in (Abs, Binomial, PrimeNumber, Matrix2x2, Parentheses, Braces, Brackets)):
-        return "{" + basestr + "}^{" + expostr + "}"
+        if base.is_symbol() and "_" in basestr:
+            return basestr + "^{" + expostr + "}"
+        else:
+            return "{" + basestr + "}^{" + expostr + "}"
     else:
         return "{\\left(" + basestr + "\\right)}^{" + expostr + "}"
 
@@ -497,6 +569,10 @@ def tex_Cases(head, args, **kwargs):
 
 @deftex
 def tex_And(head, args, **kwargs):
+    # fixme: cleanup
+    for arg in args:
+        if arg.head() == Step:
+            return latex_infix(head, args, opsymbol=" \\land ")
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
         if (not args[i].is_atom()) and args[i].head() in (And, Or):
@@ -512,6 +588,10 @@ def tex_And(head, args, **kwargs):
 
 @deftex
 def tex_Or(head, args, **kwargs):
+    # fixme: cleanup
+    for arg in args:
+        if arg.head() == Step:
+            return latex_infix(head, args, opsymbol=" \\lor ")
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
         if (not args[i].is_atom()) and args[i].head() in (And, Or, Not):
@@ -637,12 +717,26 @@ def tex_Braces(head, args, **kwargs):
     return "\\left\\{" + argstr[0] + "\\right\\}"
 
 @deftex
+def tex_AngleBrackets(head, args, **kwargs):
+    assert len(args) == 1
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "\\left\\langle" + argstr[0] + "\\right\\rangle"
+
+@deftex
 def tex_Call(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     return argstr[0] + "\!\\left(" + ", ".join(argstr[1:]) + "\\right)"
 
 @deftex
 def tex_Subscript(head, args, **kwargs):
+    assert len(args) == 2
+    argstr0 = args[0].latex(**kwargs)
+    kwargs["in_small"] = True
+    argstr1 = args[1].latex(**kwargs)
+    return "{" + argstr0 + "}_{" + argstr1 + "}"
+
+@deftex
+def tex_Item(head, args, **kwargs):
     assert len(args) == 2
     argstr0 = args[0].latex(**kwargs)
     kwargs["in_small"] = True
@@ -1335,12 +1429,14 @@ def tex_StieltjesGamma(head, args, **kwargs):
     if len(args) == 2:
         return "\\gamma_{%s}\\!\\left(%s\\right)" % (arg0, argstr[1])
 
-@deftex_heads([Polynomials,RationalFunctions,PowerSeries,LaurentSeries])
+@deftex_heads([Polynomials,RationalFunctions,PolynomialFractions,PowerSeries,LaurentSeries])
 def tex_PolynomialStructures(head, args, **kwargs):
     assert len(args) >= 1
     argstr = [arg.latex(**kwargs) for arg in args]
     if head == Polynomials:
         L, R = "[", "]"
+    elif head == PolynomialFractions:
+        L, R = "(", ")"
     elif head == RationalFunctions:
         L, R = "(", ")"
     elif head == PowerSeries:
@@ -1390,21 +1486,42 @@ def tex_ForAll(head, args, **kwargs):
         return "\\text{for all } %s, \\,\\, %s" % (argstr[1], argstr[2])
     return "\\text{for all } %s \\text{ with } %s, \\,\\, %s" % (argstr[0], argstr[1], argstr[2])
 
-@deftex
-def tex_Exists(head, args, **kwargs):
-    assert len(args) == 2
-    argstr = [arg.latex(**kwargs) for arg in args]
-    return "\\text{there exists } %s \\text{ with } %s" % (argstr[0], argstr[1])
-
-# todo
-@deftex
+@deftex_heads([All, Exists])
 def tex_All(head, args, **kwargs):
-    assert len(args) == 2
+    assert len(args) in (2, 3)
+    if head == All:
+        opname = "\\forall "
+    else:
+        opname = "\\exists "
     argstr0 = args[0].latex(**kwargs)
-    assert args[1].head() == ForElement
-    argstr1 = Element(*args[1].args()).latex(**kwargs)
-    return "\\forall %s : \\, %s" % (argstr1, argstr0)
-
+    if args[1].head() == ForElement:
+        argstr1 = Element(*args[1].args()).latex(**kwargs)
+    elif args[1].head() == For:
+        assert len(args[1].args()) == 1
+        argstr1 = args[1].args()[0].latex(**kwargs)
+    else:
+        raise ValueError
+    if 1 and head == All:
+        if head == All:
+            opname = "\\;\\text{ for all }"
+            if len(args) == 2:
+                return "%s %s %s" % (argstr0, opname, argstr1)
+            else:
+                argstr2 = args[2].latex(**kwargs)
+                return "%s %s %s \\text{ with } %s" % (argstr0, opname, argstr1, argstr2)
+        else:
+            opname = "\\text{there exists }"
+            if len(args) == 2:
+                return "%s %s \\text{ such that } %s" % (opname, argstr1, argstr0)
+            else:
+                argstr2 = args[2].latex(**kwargs)
+                return "%s %s \\text{ with } %s \\text{ such that } %s" % (opname, argstr1, argstr2, argstr0)
+    else:
+        if len(args) == 2:
+            return opname + "%s : \\, %s" % (argstr1, argstr0)
+        else:
+            argstr2 = args[2].latex(**kwargs)
+            return opname + "%s, \\, %s : \\, %s" % (argstr1, argstr2, argstr0)
 
 @deftex
 def tex_DiscreteLog(head, args, **kwargs):
@@ -1545,7 +1662,7 @@ def tex_HurwitzZeta(head, args, **kwargs):
         else:
             return fsym + "^{(" + rstr + ")}" + "\!\\left(" + sstr + ", " + astr + "\\right)"
 
-@deftex
+@deftex_heads([Functions, MultivariateFunctions])
 def tex_Functions(head, args, **kwargs):
     if len(args) == 0:
         args = [Universe, Universe]
@@ -1569,13 +1686,32 @@ def tex_Description(head, args, **kwargs):
 def tex_Def(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "%s := %s" % (argstr[0], argstr[1])
+    #return "%s := %s" % (argstr[0], argstr[1])
+    return "%s = %s" % (argstr[0], argstr[1])
 
 @deftex
 def tex_Function(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     return "%s \\mapsto %s" % (argstr[0], argstr[1])
+
+@deftex
+def tex_Fun(head, args, **kwargs):
+    assert len(args) >= 1
+    argstr1 = [arg.latex(**kwargs) for arg in args[:-1]]
+    argstr2 = args[-1].latex(**kwargs)
+    #return "\\left(%s\\right) \\mapsto %s" % (", ".join(argstr1), argstr2)
+    #return "\\left[%s \\mapsto %s\\right]" % (", ".join(argstr1), argstr2)
+    return "%s \\mapsto %s" % (", ".join(argstr1), argstr2)
+
+@deftex
+def tex_EvaluateIndeterminate(head, args, **kwargs):
+    assert len(args) == 3
+    func, indet, val = [arg.latex(**kwargs) for arg in args]
+    #return "\\left[%s \\text{ at } %s \\to %s\\right]" % (func, indet, val)
+    #return "\\left(%s\\right) \\!\\mid_{%s = %s} \\;" % (func, indet, val)
+    return "\\left(%s\\right)_{%s = %s} \\," % (func, indet, val)
+
 
 @deftex
 def tex_Matrices(head, args, **kwargs):
@@ -1585,6 +1721,49 @@ def tex_Matrices(head, args, **kwargs):
         return "\\mathcal{M}_{%s, %s} \\left(%s\\right)" % (m, n, R)
     else:
         return "\\mathcal{M}_{%s, %s}\\!\\left(%s\\right)" % (m, n, R)
+
+@deftex
+def tex_Evaluated(head, args, **kwargs):
+    assert len(args) == 1
+    from fractions import Fraction
+    def try_eval(expr):
+        if expr.is_integer():
+            return int(expr)
+        elif expr.head() == Add:
+            return sum(try_eval(arg) for arg in expr.args())
+        elif expr.head() == Neg:
+            return -try_eval(expr.args()[0])
+        elif expr.head() == Sub:
+            return try_eval(expr.args()[0]) - try_eval(expr.args()[1])
+        elif expr.head() == Mul:
+            v = 1
+            args = [try_eval(arg) for arg in expr.args()]
+            for arg in args:
+                v *= arg
+            return v
+        elif expr.head() == Div:
+            p, q = expr.args()
+            p = try_eval(p)
+            q = try_eval(q)
+            return Fraction(p) / Fraction(q)
+        elif expr.head() == Pow:
+            p, q = expr.args()
+            p = try_eval(p)
+            q = try_eval(q)
+            return Fraction(p) ** Fraction(q)
+        raise NotImplementedError
+    try:
+        v = Fraction(try_eval(args[0]))
+        p = v.numerator
+        q = v.denominator
+        if q == 1:
+            v = Expr(p)
+        else:
+            v = Div(p, q)
+    except NotImplementedError:
+        v = args[0]
+    return v.latex(**kwargs)
+
 
 
 

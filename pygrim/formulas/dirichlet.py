@@ -142,8 +142,8 @@ make_entry(ID("47d430"),
 make_entry(ID("ed65c8"),
     Formula(Equal(PrimitiveDirichletCharacters(q),
         Set(chi, For(chi), And(Element(chi, DirichletGroup(q)),
-            Brackets(ForAll(d, And(Element(d, Range(1, q-1)), Divides(d, q)),
-                Exists(a, And(Element(a, Range(0, q-1)), CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1))))))))),
+            Brackets(All(Exists(And(CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1)), ForElement(a, Range(0, q-1))),
+                ForElement(d, Range(1, q-1)), Divides(d, q))))))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))),
     References("T. Apostol (1976), Introduction to Analytic Number Theory, Springer. Chapter 8.7."))
@@ -217,8 +217,9 @@ make_entry(ID("d8c6d1"),
 # Primitive decomposition
 
 make_entry(ID("a7d592"),
-    Formula(Where(Exists(Tuple(d, Subscript(chi, 0)), And(Element(d, Range(1, q)), Divides(d, q),
-        Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)))),
+    Formula(Where(Exists(And(Element(d, Range(1, q)), Divides(d, q),
+        Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1))),
+            For(Tuple(d, Subscript(chi, 0)))),
             Equal(Subscript(chi, 1), DirichletCharacter(q, 1)))),
     Variables(q, Subscript(chi, 0)),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
@@ -792,8 +793,9 @@ make_entry(ID("dc593e"),
     Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the generalized Riemann hypothesis."))
 
 make_entry(ID("e2a734"),
-    Formula(Equivalent(GeneralizedRiemannHypothesis, ForAll(Tuple(q, chi, n), And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)),
-        Element(n, SetMinus(ZZ, Set(0)))), Equal(Re(DirichletLZero(n,chi)), Div(1,2))))))
+    Formula(Equivalent(GeneralizedRiemannHypothesis, All(Equal(Re(DirichletLZero(n,chi)), Div(1,2)),
+        For(Tuple(q, chi, n)),
+            And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, SetMinus(ZZ, Set(0))))))))
 
 make_entry(ID("982e3b"),
     Formula(Less(0, Re(DirichletLZero(n,chi)), 1)),

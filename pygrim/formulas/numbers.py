@@ -87,10 +87,10 @@ make_entry(ID("be9c83"),
 make_entry(ID("e5a04c"),
     Formula(Subset(ZZ, QQ, AlgebraicNumbers, CC)))
 
-# todo: non-semantic formula
 make_entry(ID("aa6b07"),
-    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Exists(f, And(Element(f, SetMinus(Polynomials(ZZ, x), Set(0))),
-        Equal(f(z), 0)))))))
+    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Parentheses(Exists(Equal(EvaluateIndeterminate(P, x, z), 0), ForElement(P, SetMinus(Polynomials(ZZ, x), Set(0)))))))),
+    Variables(x),
+    Assumptions(Equal(x, XX(1))))
 
 make_entry(ID("24c179"),
     Formula(Element(Sqrt(2), AlgebraicNumbers)))

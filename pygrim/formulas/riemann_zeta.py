@@ -1081,20 +1081,20 @@ make_entry(ID("c03de4"),
     Description("This symbol can be used in an assumption to express that a formula is valid conditionally on the truth of the Riemann hypothesis."))
 
 make_entry(ID("9fa2a1"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(s, And(Element(s, CC), LessEqual(0, Re(s), 1), Equal(RiemannZeta(s), 0)), Equal(Re(s), Div(1,2))))))
+    Formula(Equivalent(RiemannHypothesis, All(Equal(Re(s), Div(1,2)), ForElement(s, CC), And(LessEqual(0, Re(s), 1), Equal(RiemannZeta(s), 0))))))
 
 make_entry(ID("49704a"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Equal(Re(RiemannZetaZero(n)), Div(1,2))))))
+    Formula(Equivalent(RiemannHypothesis, All(Equal(Re(RiemannZetaZero(n)), Div(1,2)), ForElement(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("bfaeb5"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(x, Element(x, ClosedOpenInterval(2, Infinity)), Less(Abs(PrimePi(x) - LogIntegral(x)), Sqrt(x) * Log(x))))),
+    Formula(Equivalent(RiemannHypothesis, All(Less(Abs(PrimePi(x) - LogIntegral(x)), Sqrt(x) * Log(x)), ForElement(x, ClosedOpenInterval(2, Infinity))))),
     References("https://mathoverflow.net/q/338066"))
 
 make_entry(ID("3142ec"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(5041)), Less(DivisorSigma(1,n), Exp(ConstGamma) * n*Log(Log(n)))))))
+    Formula(Equivalent(RiemannHypothesis, All(Less(DivisorSigma(1,n), Exp(ConstGamma) * n*Log(Log(n))), ForElement(n, ZZGreaterEqual(5041))))))
 
 make_entry(ID("e4287f"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(2)), Less(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n)))))),
+    Formula(Equivalent(RiemannHypothesis, All(Less(DivisorSigma(1,n), HarmonicNumber(n) + Exp(HarmonicNumber(n)) * Log(HarmonicNumber(n))), ForElement(n, ZZGreaterEqual(2))))),
     References("https://doi.org/10.2307/2695443"))
 
 make_entry(ID("22ab47"),
@@ -1232,7 +1232,7 @@ make_entry(ID("64bd32"),
     References("https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("e68f82"),
-    Formula(Equivalent(RiemannHypothesis, ForAll(n, Element(n, ZZGreaterEqual(1)), Greater(KeiperLiLambda(n), 0)))),
+    Formula(Equivalent(RiemannHypothesis, All(Greater(KeiperLiLambda(n), 0), ForElement(n, ZZGreaterEqual(1))))),
     References("https://doi.org/10.1006/jnth.1997.2137"))
 
 make_entry(ID("a5d65f"),
@@ -1241,8 +1241,9 @@ make_entry(ID("a5d65f"),
     References("https://doi.org/10.7169/facm/1317045228"))
 
 make_entry(ID("8f8fb7"),
-    Formula(Implies(ForAll(n, And(Element(n, ZZGreaterEqual(1)), Less(Im(RiemannZetaZero(n)), T)), Equal(Re(RiemannZetaZero(n)), Div(1,2))),
-        ForAll(n, And(Element(n, ZZGreaterEqual(0)), LessEqual(n, T**2)), GreaterEqual(KeiperLiLambda(n), 0)))),
+    Formula(Implies(
+            All(Equal(Re(RiemannZetaZero(n)), Div(1,2)), ForElement(n, ZZGreaterEqual(1)), Less(Im(RiemannZetaZero(n)), T))),
+            All(GreaterEqual(KeiperLiLambda(n), 0), ForElement(n, ZZGreaterEqual(0)), LessEqual(n, T**2))),
     Variables(T),
     Assumptions(Element(T, ClosedOpenInterval(0, Infinity))),
     References("https://arxiv.org/abs/1703.02844"))

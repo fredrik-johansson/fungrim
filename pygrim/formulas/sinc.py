@@ -317,10 +317,9 @@ make_entry(ID("1c3766"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
-_a = lambda n: Subscript(a, n)
 make_entry(ID("ff5e82"),
-    Formula(Where(Equal((z*(n**2 + 5*n + 6))*_a(n+3) + (n**2 + 5*n + 6)*_a(n+2) + z*_a(n+1) + _a(n), 0),
-        Equal(_a(n), ComplexDerivative(Sinc(z), For(z, z, n)) / Factorial(n)))),
+    Formula(Where(Equal((z*(n**2 + 5*n + 6))*a_(n+3) + (n**2 + 5*n + 6)*a_(n+2) + z*a_(n+1) + a_(n), 0),
+        Equal(a_(n), ComplexDerivative(Sinc(z), For(z, z, n)) / Factorial(n)))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0)))))
 

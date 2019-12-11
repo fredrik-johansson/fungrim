@@ -58,6 +58,8 @@ class Expr(object):
         elif isinstance(arg, str):
             self._text = arg
         elif isinstance(arg, int_types):
+            if isinstance(arg, bool):
+                return [False_, True_][arg]
             self._integer = int(arg)
         elif call is not None:
             self._args = tuple(Expr(obj) for obj in call)
@@ -292,7 +294,7 @@ class Expr(object):
             if not self._args[-1].is_atom():
                 return False
             allow_div = False
-        if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt):
+        if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt, XX, XXSeries):
             return False
         for arg in self._args[1:]:
             if not arg.show_exponential_as_power(allow_div=allow_div):
@@ -685,21 +687,24 @@ def inject_builtin(string):
 variable_names = set()
 
 def inject_vars(string):
-    for sym in string.split():
-        e = Expr(symbol_name=sym)
-        globals()[sym] = e
-        variable_names.add(sym)
+    for s in string.split():
+        for sym in [s, s + "_"]:
+            e = Expr(symbol_name=sym)
+            globals()[sym] = e
+            variable_names.add(sym)
 
 inject_builtin("""
 Universe Sets Tuples
-Function MultivariateFunction
-Functions MultivariateFunctions
-One Zero
+Fun Function MultivariateFunction
+Funs Functions MultivariateFunctions
+CartesianProduct CartesianPower
+Restriction MultivariateRestriction
+One Zero Characteristic
 Matrices
 Def Gen
-All Any
+All Exists
 True_ False_
-Parentheses Brackets Braces
+Parentheses Brackets Braces AngleBrackets
 Ellipsis Call Subscript
 Repeat Step
 Unknown Undefined
@@ -708,15 +713,12 @@ Set List Tuple
 PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
-Element NotElement Subset SubsetEqual
-ForAll Exists
+Element Elements DistinctElements NotElement Subset SubsetEqual
 EqualAndElement
 Concatenation
-CartesianProduct CartesianPower
-Restriction
 Length Item
 Rings CommutativeRings Fields
-PP ZZ QQ RR CC HH AlgebraicNumbers
+PP ZZ QQ RR CC HH AlgebraicNumbers ZZp QQp
 ZZGreaterEqual ZZLessEqual Range
 ClosedInterval OpenInterval ClosedOpenInterval OpenClosedInterval
 Path CurvePath
@@ -743,7 +745,7 @@ PrimeSum DivisorSum PrimeProduct DivisorProduct
 Integral
 IndefiniteIntegralEqual RealIndefiniteIntegralEqual ComplexIndefiniteIntegralEqual
 AsymptoticTo
-FormalGenerator Polynomials RationalFunctions PowerSeries LaurentSeries SeriesCoefficient
+FormalGenerator Polynomials PolynomialFractions RationalFunctions PowerSeries LaurentSeries SeriesCoefficient
 Poles BranchPoints BranchCuts EssentialSingularities Zeros UniqueZero AnalyticContinuation
 ComplexZeroMultiplicity
 Residue
@@ -810,8 +812,12 @@ BetaFunction IncompleteBeta IncompleteBetaRegularized
 BarnesG LogBarnesG LogBarnesGRemainder
 SloaneA
 HalphenConstant RationalFunctionDegree
+HilbertMatrix
+StandardIndeterminates StandardNoncommutativeIndeterminates
+EvaluateIndeterminate
+XX XXSeries XXNonCommutative
+Evaluated
 """)
-
 
 inject_builtin("""
 For ForElement Var
@@ -826,8 +832,8 @@ Image ImageSource
 # symbols we don't want to show in entry definition listings, because they are too common/generic
 # todo: a better solution may be to hide long tables
 exclude_symbols = set([Set, List, Tuple, And, Or, Implies, Equivalent, Not,
-    Element, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual, For, ForElement,
-    Repeat, Step, Parentheses, Brackets, Braces, Entry, ID, Formula, Variables,
+    Element, Elements, NotElement, Union, Intersection, SetMinus, Subset, SubsetEqual, For, ForElement,
+    Repeat, Step, Parentheses, Brackets, Braces, AngleBrackets, Entry, ID, Formula, Variables,
     Assumptions, References, Description])
 
 

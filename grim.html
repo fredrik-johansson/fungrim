@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Grim formula language</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+body { font-family: roboto, arial, sans-serif; line-height: 1.5em; margin: 2em; background-color:#fcfcfc; }
+#main { max-width:900px; margin-left: auto; margin-right: auto; }
+/* p { text-align:justify; text-justify:inter-word; } */
+h2 { margin-top: 2em; border-bottom:0.1em solid black; }
+h3 { margin-top: 1.5em; }
+table { border-collapse:collapse; background-color:#fff; }
+table, th, td { border: 1px solid #aaa; }
+th, td { padding:0.3em; }
+tt { border:1px solid #ccc; background-color:#fff; padding:0.2em; }
+pre {
+ background-color: #f4f4f4;
+ line-height: 1.3em;
+ margin-left: 2em;
+ margin-right: 2em;
+ white-space: pre-wrap;
+ white-space: -moz-pre-wrap;
+ white-space: -pre-wrap;
+ white-space: -o-pre-wrap;
+ word-wrap: break-word;
+}
+</style>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {delimiters: [
+              {left: "$$", right: "$$", display: true},
+              {left: "$", right: "$", display: false},
+            ]
+        });
+    });
+</script>
+
+
+</head>
+<body>
+
+<div id="main">
+
+<h1 style="margin-top:0.3em; margin-bottom:0.35em">The Grim formula language (draft)</h1>
+
+<p><i>Updated 2019-12-10</i> -- <a href="https://github.com/fredrik-johansson/fungrim">Source code on GitHub</a></p>
+
+@toc@
+
+<h2>Introduction</h2>
+
+<p>
+<b>Grim</b> is a symbolic language for representing mathematical formulas.
+Grim is human-readable, computer-readable (enabling algorithmic
+manipulation of symbolic expressions), and can be converted to LaTeX for rendering.
+Grim is being developed as a means to represent mathematics in semantic form
+in <a href="http://fungrim.org">FunGrim: the Mathematical Functions Grimoire</a>.
+A secondary goal is to have a reliable symbolic interface for
+<a href="http://arblib.org">Arb</a> numerical evaluation.
+</p>
+
+<p>
+Grim has two components:
+<ul>
+<li>A simple core language for symbolic expressions (similar to Lisp S-expressions
+and Wolfram language M-expressions).</li>
+<li>A vocabulary of hundreds of builtin symbols for mathematical
+objects and operations (most of which are documented in FunGrim).
+</li>
+</ul>
+</p>
+
+<p>
+At this time, no attempt is made to provide a complete specification.
+Grim is defined by the reference implementation in Python (<tt>pygrim</tt>,
+which currently handles LaTeX conversion and some numerical
+evaluation via Arb), together with
+the 2500+ formulas added to FunGrim so far which both serve as documentation and as an informal
+test suite.
+</p>
+
+<ul>
+<li><span style="color:red"><b>Warning: Grim is currently alpha-level, and anything in this document may change. There
+are many known inconsistencies. Feedback is welcome on anything from mathematical foundations
+to syntax and naming.</b></span></li>
+</ul>
+
+<h3>Quick examples</h3>
+
+<table>
+<tr><th>Grim</th><th>Generated LaTeX</th><th>Rendered formula</th></tr>
+<tr>
+<td>
+<tt style="border:0">
+Implies(Element(n, ZZ), Equal(Sin(Mul(Pi, n)), 0))
+</tt>
+</td>
+<td>
+<tt style="border:0">
+\left(n \in \mathbb{Z}\right) \implies \left(\sin\!\left(\pi n\right) = 0\right)</tt>
+</td>
+<td>
+@@@Implies(Element(n, ZZ), Equal(Sin(Mul(Pi, n)), 0))@@@
+</td>
+</tr>
+<tr>
+<td>
+<tt style="border:0">
+Equal(Exp(z), Sum(Div(Pow(z, n), Factorial(n)), For(n, 0, Infinity)))
+</tt>
+</td>
+<td>
+<tt style="border:0">
+{e}^{z} = \sum_{n=0}^{\infty} \frac{{z}^{n}}{n !}</tt>
+</td>
+<td>
+@@@Equal(Exp(z), Sum(Div(Pow(z, n), Factorial(n)), For(n, 0, Infinity)))@@@
+</td>
+</tr>
+<tr>
+<td>
+<tt style="border:0">
+Equal(Det(Matrix(BellNumber(Add(i, j)), For(i, 0, n), For(j, 0, n))), Product(Factorial(k), For(k, 1, n)), BarnesG(Add(n, 2)))</tt></td>
+<td>
+<tt style="border:0">
+\operatorname{det}\displaystyle{\begin{pmatrix} B_{0 + 0} & B_{0 + 1} & \cdots & B_{0 + n} \\ B_{1 + 0} & B_{1 + 1} & \cdots & B_{1 + n} \\ \vdots & \vdots & \ddots & \vdots \\ B_{n + 0} & B_{n + 1} & \ldots & B_{n + n} \end{pmatrix}} = \prod_{k=1}^{n} k ! = G\!\left(n + 2\right)</tt></td>
+<td>@@@Equal(Det(Matrix(BellNumber(Add(i, j)), For(i, 0, n), For(j, 0, n))), Product(Factorial(k), For(k, 1, n)), BarnesG(Add(n, 2)))@@@</td>
+</tr>
+</table>
+
+
+
+
+<h3>Goals</h3>
+
+<ul>
+<li><b>Open source</b>. Mathematics should be free!</li>
+<li><b>Easy to write</b>. Grim is uniform, and
+when combined with infix arithmetic (as discussed further below),
+nearly as compact as LaTeX.</li>
+<li><b>Easy to parse</b>. 
+In fact, Grim formulas can be written within many existing
+programming languages (such as Python, JavaScript, Julia),
+relying only on the language's native syntax.</li>
+<li><b>Symbolic</b>. Grim represents mathematics
+semantically.
+Grim expressions are meant to be easy to manipulate by symbolic
+computation software and precise enough
+to be used by theorem-proving software.
+</li>
+</ul>
+
+<h3>Non-goals</h3>
+
+<p>Grim is <b>not designed to be a typesetting language</b>.
+The details of how to display a formula are meant to be handled
+by the Grim-to-LaTeX converter.
+Nevertheless, Grim is designed to map naturally to
+conventional mathematical notation, and it does
+allow including typesetting hints in formulas where the
+default rendering is inadequate.
+</p>
+
+<p>Grim is also <b>not strict about semantic correctness</b>!
+It is possible to write purely
+"syntactical" formulas in Grim just for the purpose of rendering via LaTeX.
+This is often necessary when the goal is just to display a formula
+(not to do symbolic computation with the expression)
+and a semantically correct version would be
+too cumbersome to express;
+hopefully, future improvements to the language
+will make such situations less common.
+</li>
+
+<ul>
+<li><span style="color:red">TODO: semantic and non-semantic formulas
+could be distinguished explicitly.</span></li>
+</ul>
+
+<p>
+Grim is <b>not designed to be a general-purpose programming language</b>
+although
+it can be used to encode simple functional programs
+performing mathematical calculations.
+In contrast to full-blown Lisp-like programming languages,
+Grim is not meant to be used to
+manipulate symbolic expressions "from within";
+it is meant to be embedded in a host programming language where
+the host language can be used to traverse expression trees.
+Another limitation is that Grim lacks concrete data structures for programming,
+being mainly concerned with representing idealized and immutable mathematical objects.
+In general, the abstractions in Grim are designed
+more for expressing pure mathematics than for expressing programs.
+</p>
+
+<p>Grim is <b>not an automatic rewrite system</b>. Most computer algebra systems
+implement rules for automatically rewriting symbolic expressions in "canonical form"
+(for example, converting @@x + x@@ to @@2*x@@)
+and must be told explicitly not to do so when rewriting
+is unwanted.
+The default assumption in Grim is that expressions are preserved verbatim.
+Grim expressions can be used as a basis for a rewrite system
+and the semantic specification is intended to serve as a guide
+for mathematically correct rewriting,
+but the specification of the Grim formula language itself does
+not mandate any form of automatic rewriting.
+Some rewriting in the <i>presentation</i> of a formula may take place
+during conversion to LaTeX, but this does not represent a change
+to the underlying Grim source expression.
+</p>
+
+<p>Grim is <b>not a good fit for all branches of mathematics</b>.
+The primary goal is to express concrete results involving (complex)
+numbers and functions on numbers, and the
+builtin symbols and their semantics reflect this design.
+A future module/namespace system could potentially
+make the language more versatile.</p>
+
+<h2>Syntax and representation of expressions</h2>
+
+<h3>Grim expressions</h3>
+
+<p>Grim has a single data structure: symbolic expression trees.
+A <i>Grim expression</i> is either of the following:</p>
+
+<ul>
+<li>An atom (atomic expression), being either:</li>
+<ul>
+<li>An integer literal, like <tt>0</tt>, <tt>1</tt> or <tt>-42</tt>.</li>
+<li>A symbol, like <tt>x</tt>, <tt>Pi</tt>, <tt>Sin</tt> or <tt>Integral</tt>.</li>
+<li>A Unicode string, like <tt>"A grim expression: 😀"</tt>.</li>
+</ul>
+<li>
+A non-atom (non-atomic expression), having the form <tt>f(x1, x2, ..., xn)</tt> where
+<tt>f</tt>, <tt>x1</tt>, <tt>x2</tt>, ..., <tt>xn</tt> are expressions. The expression
+<tt>f</tt> is called the <i>head</i> and
+<tt>x1</tt>, <tt>x2</tt>, ..., <tt>xn</tt> are called the <i>arguments</i> of the expression.
+</li>
+</ul>
+
+<h3>Example</h3>
+
+<p>
+An entry in FunGrim is represented by a single Grim expression
+that contains various metadata as well as the main formula
+as subexpressions. For example:</p>
+
+<pre>
+Entry(ID("22dc6e"),
+    Formula(Equal(Fibonacci(n), Add(Fibonacci(Sub(n, 1)), Fibonacci(Sub(n, 2))))),
+    Variables(n),
+    Assumptions(Element(n, ZZ)))
+</pre>
+
+<p>The formula is the recurrence relation for Fibonacci numbers: @@Equal(Fibonacci(n), Add(Fibonacci(n-1), Fibonacci(n-2)))@@.
+The metadata in this case specifies the FunGrim entry ID (<tt>22dc6e</tt>, as a string),
+lists the free variables in the formula (here the single variable <tt>n</tt>),
+and provides conditions on the variables ("assumptions"),
+in this case @@Element(n, ZZ)@@, such that the formula represents a theorem.
+</p>
+
+<h3>Some points of caution</h3>
+
+<ul>
+<li>Grim distinguishes between
+the atomic expression <tt>f</tt> and the non-atomic
+expression <tt>f()</tt> where <tt>f</tt> is called with an empty argument list.
+
+<ul>
+<li><span style="color:red">TODO: should atoms also have a head (e.g. <tt>Integer</tt>, <tt>Symbol</tt>, <tt>Text</tt>)?</span></li>
+</ul>
+</li>
+
+<li>The head of an expression need not be an atom; <tt>f(g(a))(x, y)</tt> is valid.</li>
+
+<li>
+Symbol names at this time are limited to ASCII Latin letters, digits and underscores,
+where a digit may not appear as the first character. Since symbol names
+cannot start with digits or the minus symbol, integer literals can also just
+be thought of as a distinguished class of symbols.
+<ul>
+<li><span style="color:red">TODO: should probably allow Unicode</span></li>
+</ul>
+
+</li>
+
+</ul>
+
+<h3>String representation and infix operators</h3>
+
+<p>
+Every Grim expression has a canonical string representation, for example
+<tt>Add(3, Mul(-5, x))</tt>. The simple syntax ensures that Grim expressions
+are syntactically valid in common programming languages.
+The current backend code for FunGrim (<tt>pygrim</tt>)
+simply embeds Grim as a domain-specific
+language within Python, using Python's native integer literals and
+function call syntax (the necessary symbols have to be created
+as Python variables).</p>
+
+<p>The same Grim expression could be represented with different syntax
+where this is convenient, for example in Lisp syntax as <tt>(Add 3 (Mul -5 x))</tt> or
+with infix arithmetic operators as <tt>3 + (-5 * x)</tt>.
+Indeed, because function-call syntax is clumsy for complex arithmetic expressions,
+we will frequently write Grim expressions in an <b>extended syntactical form</b>
+using <b>infix arithmetic operators (+, -, *, /, **) as well as parentheses
+for grouping</b>.
+In the Python implementation, operators are simply handled by overloading
+the Python-level arithmetic operators (with the operator precedence rules of Python).
+We need to be careful: for example, we can do <tt>x / 3</tt> to construct
+the Grim expression <tt>Div(x, 3)</tt> in Python when <tt>x</tt> is a Grim
+symbol, but <tt>1 / 3</tt> in Python
+does not give <tt>Div(1, 3)</tt>.
+</p>
+
+<h3>Symbols available for variables</h3>
+
+<p>
+Symbols reserved for builtin objects (such as <tt>Add</tt> and <tt>ZZ</tt>)
+start with an uppercase letter and are at least two
+characters long, so all single-letter symbols and all symbols beginning
+with a lowercase character can be used for variables.
+The Python implementation defines at least the following Python variables
+as Grim symbols:
+</p>
+
+@example@ Set(a, b, c, d, e, f, g, h, i, j, k, l, ell, m, n, o, p, q, r, s, t, u, v, w, x, y, z) @example@
+
+@example@ Set(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z) @example@
+
+@example@ Set(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lamda, mu, nu, xi, pi, rho, sigma, tau, phi, chi, psi, omega) @example@
+
+@example@ Set(Alpha, Beta, GreekGamma, Delta, Epsilon, Zeta, Eta, Theta, Iota, Kappa, Lamda, Mu, Nu, Xi, GreekPi, Rho, Sigma, Tau, Phi, Chi, Psi, Omega) @example@
+
+<p>
+Most Greek letter names are available as symbols and are recognized
+by the LaTeX converter.
+There are some exceptions: <tt>Gamma</tt> is reserved
+for the gamma function,
+and <tt>Pi</tt> is reserved for the constant @@Pi@@; one should use <tt>GreekGamma</tt>
+and <tt>GreekPi</tt> for the Greek capital letters as variables.
+The alternative spelling <tt>lamda</tt> / <tt>Lamda</tt> is used for "lambda" since
+<tt>lambda</tt> is a reserved keyword in Python.
+</p>
+
+<p>A convenience hack: a symbol name ending with an underscore results
+in function calls being rendered as subscripts (but watch out as <tt>a_</tt>
+is not the same symbol as <tt>a</tt>, and the symbols
+are not implicitly connected):</p>
+
+@example@ Tuple(a_(n), gamma_(m,n), f_(n)(x)) @example@
+
+<ul>
+<li><span style="color:red">
+TODO: provide a way to declare custom rendering rules for variables.
+</li>
+</ul>
+
+<h2>Mathematical universe</h2>
+
+<p>In symbolic computation, it is important to distinguish between
+<b>expressions</b> and the <b>values</b> they represent.
+The symbolic expressions
+@@Expr(4)@@, @@Add(2,2)@@ and
+@@Pow(2, 2)@@
+are different as expressions,
+but represent the same value, the integer 4, in an imagined mathematical universe.
+We will often refer to values in the mathematical universe as <b>objects</b>.
+The universe of objects that can be described using
+Grim expressions includes the following:</p>
+
+<ul>
+<li><b>Booleans</b>. True and False.</li>
+<li><b>Tuples</b>. Finite ordered collections of objects.</li>
+<li><b>Sets</b>. Possibly infinite unordered collections of objects.</li>
+<li><b>Functions</b>. Functions, describing maps between sets.</li>
+<li><b>Numbers (and number-like objects)</b>. This comprises the integers and certain standard extensions and completions with respect to algebraic operations and limits; including rational and algebraic numbers, real and complex numbers, as well as formal polynomials and power series over numbers, and infinities.</li>
+<li><b>Matrices</b>. Matrices are considered arithmetical objects, but distinct from scalar numbers.</li>
+<li><span style="color:red">
+TODO: Equivalence classes / extensional sets of objects: to allow representing various arithmetic objects: residues of integers modulo @@N@@, finite field elements, algebraic number field elements, and truncated power series; in all cases viewed as equivalence classes and not as representatives in an explicit embedding.</li>
+</ul>
+
+<p>
+Each item on this list denotes a family of objects belonging to a <b>type</b>
+disjoint from the other types.
+The notion of type is used informally here, and this
+list is not systematic or exhaustive.
+</p>
+
+<h3>Equality</h3>
+
+<p>
+The ordinary equality predicate <tt>Equal</tt> (@@Equal(a, b)@@) and
+its logical negation <tt>Unequal</tt> (@@Unequal(a, b)@@) are defined
+to compare values (objects), not to compare the expressions as syntactical trees of symbols.
+The same goes for the predicates for set membership, etc.
+</p>
+
+<p>
+The <tt>Equal</tt> function is defined to compare objects pedantically
+within the mathematical universe:
+@@Equal(a, b)@@ if and only if @@a@@ and @@b@@ are exactly
+the same object. If @@Equal(a, b)@@,
+we will accordingly have @@Equal(f(a), f(b))@@ for any function @@f@@.
+Objects of different types are considered unequal
+even if they are in some sense isomorphic. This contract is intended
+to provide a solid foundation for symbolic rewriting.
+In contexts where this notion of equality is too strong, one should
+work with alternative comparison functions representing different
+notions of equivalence,
+isomorphism, etc.
+</p>
+
+<ul>
+<li><span style="color:red">
+TODO: consider setoids / extensional sets.
+</li>
+</ul>
+
+<p>
+To keep predicates and definitions involving numbers and arithmetic
+functions simple,
+all ordinary numbers belong to the same type:
+there is no distinction between 3 viewed
+as a natural number, integer, rational number,
+real number, or complex number.
+On the other hand, collection-like objects belong to different types:
+the 1-tuple @@Tuple(3)@@, the set @@Set(3)@@, the one-by-one
+matrix @@Tuple(3)@@ and the constant function @@Function(x, 3)@@ <!-- todo: should be Matrix(...) -->
+are all considered distinct objects, and distinct from the integer 3.
+</p>
+
+<p>A subtle point is that if @@a@@ and @@b@@ both represent mathematical objects, then the
+value of the equality test
+@@Equal(a, b)@@ is considered an element of @@Set(False, True)@@
+even if this equality is undecidable (or simply algorithmically hard to decide); inability to compute
+a value (reduce an expression to a simpler expression in the same
+equivalence class) is an out-of-universe concept and not
+an in-universe concept.</p>
+
+<h3>Foundations and implementations</h3>
+
+<p>
+Symbolic expressions are finite and computable as syntactical structures.
+One way to think of values is as
+equivalence classes of symbolic expressions,
+where @@Expr(4)@@ and @@Add(2,2)@@ belong
+to the same equivalence class. However,
+mathematical objects need not be explicitly computable.
+The set @@RR@@ is considered a subset (as well as an element) of the mathematical universe,
+but being uncountable, most of its elements cannot be represented individually
+by symbolic expressions. Whether the elements of @@RR@@ actually "exist" is a philosophical question, but we can
+manipulate the symbol @@RR@@ and expressions such as @@Set(x**2, ForElement(x, RR))@@
+as if the elements exist.</p>
+
+<p>
+The mathematical universe is not based on a particular
+formalized foundation of mathematics,
+and the Grim language does not specify how to perform concrete computations
+with objects (indeed, it allows expressing objects that are provably not computable!).
+The idea is that for actual computations, the user will implement
+a translation between Grim expressions and data structures and algorithms for
+the relevant kinds of objects.
+An example of this is the Arb backend for numerical evaluation,
+which understands a subset of Grim symbols related to
+real and complex numbers.
+The purpose of the documented Grim semantics, apart from describing the
+correct call syntax,
+is to disambiguate cases where different interpretations could be made,
+so that translations can be done consistently.
+</p>
+
+<p>The universe can be extended ad-hoc by defining
+the meaning of previously undefined symbols and expressions.
+For example, a user might define the meaning of the symbol
+<tt>Fruits</tt> as representing a set of objects denoted
+by the symbols <tt>Apple</tt> and <tt>Orange</tt>
+and then define the meaning of operations such as @@Less(Expr(symbol_name="Apple"), Expr(symbol_name="Orange"))@@.
+"Define the meaning" here means providing the intended
+translations in an external environment using the Grim language.</p>
+
+<h2>Symbols, variables and expression operators</h2>
+
+<p>
+Symbols within formulas can denote specific objects
+(such as the constant <tt>Pi</tt> or the function <tt>Add</tt>)
+or variables.
+A symbol such as <tt>x</tt> without a builtin meaning
+can be used as a <b>variable</b>, whose meaning depends
+on the context.
+In a context where <tt>x</tt> has not been defined, any expression containing <tt>x</tt> is viewed
+purely as an expression which does not represent a mathematical object.
+We will distinguish between two kinds of variables:
+<b>free variables</b> and <b>bound variables</b>.
+(A third type of variable, an <i>indeterminate</i> is discussed
+further in the section on <i>formal polynomials and power series</i>. An
+indeterminate is not actually a variable but a distinct kind of
+mathematical object.)
+</p>
+
+<p>In formulas such as
+@@Brackets(Where(Sin(x), Def(x, Pi/6)))@@, the function definition @@Function(x, x**2)@@,
+the set comprehension @@Set(x, ForElement(x, RR), Greater(x, 0))@@,
+the integral @@Integral(x**2, For(x, a, b))@@
+or the quantified statement @@All(GreaterEqual(x**2, 0), ForElement(x, RR))@@,
+the symbol <tt>x</tt> is a bound variable.
+Binding a variable is a local operation: it
+overrides any meaning previously assigned to the same symbol
+outside the surrounding evaluation context, and the binding
+has no effect outside of the expression where it is used.
+</p>
+
+<p>Some builtin symbols represent neither objects nor variables; they act
+as special <b>expression operators</b>.
+In an ordinary function call <tt>f(x1, x2, ..., xn)</tt>, the
+arguments represent values (possibly unknown
+values represented by variables), and
+any argument can be replaced by
+any other expression representing the same value without changing
+the meaning. In an expression operation
+<tt>f(x1, x2, ..., xn)</tt>, some of the arguments may need to be
+processed as symbolic expressions.
+Operators that deal with binding variables belong to this category.
+There is no syntactical difference between ordinary function calls
+and expression operations;
+which interpretation applies depends on the head <tt>f</tt>
+and whether the arguments contain special expression operators
+such as <tt>For</tt>, documented below.
+Code for manipulating expressions semantically must detect
+expression operators on a case by case basis.
+</p>
+
+
+<h3>Free variables</h3>
+
+<p>In a formula such as @@LessEqual(Abs(Sin(x)), 1)@@,
+the symbol <tt>x</tt> represents a free variable unless other
+context is provided.
+A formula containing free variables does not represent a single mathematical
+object but a range of possible mathematical objects;
+the interpretation is usually is that the formula holds when @@x@@ is
+replaced by any concrete value satisfying certain assumptions.
+In FunGrim entries, all free variables and accompanying assumptions
+must be declared explicitly as part of the entry metadata; in the example, <tt>Variables(x)</tt>
+and <tt>Assumptions(Element(x, RR))</tt>.
+This information can be used to interpret the formula as a quantified logical
+formula which no longer contains a free variable:
+@@All(LessEqual(Abs(Sin(x)), 1), ForElement(x, RR))@@.</p>
+
+
+<p>Assumptions can be more complicated; for example, the content
+of the <tt>Assumptions()</tt> accompanying
+a formula with the free variables <tt>Variables(x, y)</tt> might read:</p>
+
+@example@ Or(And(Element(x, ZZ), Element(y, RR)), And(Element(x, RR), Element(y, CC), Or(Greater(x, 0), Unequal(Add(x, y), 0)))) @example@
+
+<p>Assumptions should always specify the base set of each variable unambiguously,
+typically by specifying @@Element(x, S)@@ where @@S@@ is a known set.
+It is not sufficient to state @@Greater(x, 0)@@ implying that @@x@@ should be
+a positive real number, because there may be other objects in the universe that
+satisfy this relation (for example, @@+Infinity@@).</p>
+</p>
+
+<h3>Where/Def-expressions: local definitions</h3>
+
+<p>The simplest example of a locally bound variable is a symbol used
+as an alias for a specific value. Such aliases can be created
+using the <tt>Def</tt> expression operator.</p>
+
+@example@ Def(x, a) | Defines the meaning of the symbol <tt>x</tt> to represent the value of @@a@@ in the scope of the parent operator. @example@
+
+<p>The <tt>Def</tt> expression has to appear as an
+argument to an expression operator that applies the variable binding.
+Currently the only such operator is <tt>Where</tt>:</p>
+
+@example@ Where(f(x,y), Def(x, 1/Pi), Def(y, x+1)) | The <tt>Where</tt> operator
+returns the value of its first argument after executing the definition
+statements in the subsequent arguments. The definition statements
+are interpreted left to right and the right-hand side values in definitions can depend
+on the symbols defined in the preceding definitions. @example@
+
+@example@ Where(Equal(GCD(a, b), d, Add(Mul(a, u), Mul(b, v))), Def(Tuple(d, u, v), XGCD(a, b))) | The <tt>Where</tt> operator allows destructuring assignment (binding a tuple of variables to a tuple of values). The extended GCD function (XGCD) returns a triplet of integers. @example@
+
+<h3>Fun-expressions: constructing functions</h3>
+
+<p>The <tt>Fun</tt> expression operator allows constructing anonymous functions:</p>
+
+@example@ Fun(x, Sin(x) * Cos(x)) @example@
+
+@example@ Fun(Tuple(x, y), Sin(x+y)*Cos(x-y)) @example@
+
+<p>Locally named functions can be constructed by combining <tt>Where</tt>/<tt>Def</tt> with <tt>Fun</tt>:</p>
+
+@example@ Where(f(Pi/3), Def(f, Fun(x, Sin(x)+Cos(x)))) @example@
+
+<p>More information is provided in the section on functions
+and function spaces.</p>
+
+<h3>For-expressions: iterations and comprehensions</h3>
+
+<p>
+The expression <tt>For(x, ...)</tt> binds the symbol <tt>x</tt> as
+an iteration or set comprehension
+variable in the parent expression, where any additional arguments <tt>...</tt>
+are parameters defining the iteration.
+The interpretation of the parameters is up to the parent operator.
+Most operators recognize <tt>For()</tt> with two parameters as
+specifying a range of integers to iterate over:</p>
+
+@example@ Sum(Factorial(n), For(n, 2, 10)) | The <tt>For</tt> operator binds the variable <tt>n</tt> locally and specifies an iteration range
+in the scope of the parent <tt>Sum</tt> operator. @example@
+
+<p>
+When <tt>For(n, a, b)</tt> is used in this sense, the endpoints @@a@@ and @@b@@
+should represent
+integers or possibly @@Equal(a, -Infinity)@@ and/or @@Equal(b, Infinity)@@ where an infinite
+sequence makes sense. The iteration sequence is empty if @@Less(b, a)@@.
+Of course, the endpoints can be variables.
+</p>
+
+@example@ Sum(Div(1, Factorial(n)), For(n, N, Infinity)) | An infinite series. @example@
+
+<p>
+Some operators may interpret the <tt>For</tt> expression
+differently. For example, <tt>Integral()</tt> understands two
+parameters as representing the endpoints (not necessarily integers)
+of a directed line segment to integrate over:
+</p>
+
+@example@ Equal(Integral(Cos(x), For(x, a, b)), -Integral(Cos(x), For(x, b, a))) @example@
+
+<p>
+<tt>ForElement(x, S)</tt> binds the variable <tt>x</tt> just like <tt>For(x)</tt>, but
+additionally tells the parent operator that <tt>x</tt> is to range over the
+elements of the set <tt>S</tt>.
+</p>
+
+@example@ Equal(Sum(1/n**2, ForElement(n, SetMinus(ZZ, Set(0)))), Pi**2/3) @example@
+
+<p>
+Iteration with <tt>For</tt> and <tt>ForElement</tt> is often used in
+set comprehensions and as part of quantified formulas,
+and often together with filter predicates:</p>
+
+@example@ Tuple(n**2, For(n, 1, 10)) @example@
+
+@example@ Set(f(z), ForElement(z, CC), Greater(Re(z), 0)) @example@
+
+<p>
+This is discussed further below in the section on logic, sets and tuples.
+</p>
+
+<h3>Repeat-expressions and Step-expressions: variable-length argument lists</h3>
+
+<p><tt>Repeat()</tt> and <tt>Step()</tt> expressions allow creating
+variable-length argument lists..</p>
+
+<p><tt>Repeat()</tt> generates a repeating sequence:</p>
+
+@example@ Repeat(1, n) @example@
+
+@example@ Repeat(1, 2, 3, n) @example@
+
+<p><tt>Step()</tt> generates a sequence between two integer endpoints:</p>
+
+@example@ Step(Pow(k, 2), For(k, a, b)) @example@
+
+<p>The sequence is empty if @@Less(b, a)@@, and undefined if @@a@@ and @@b@@
+are not integers.</p>
+
+<p>
+The <tt>Repeat()</tt> and <tt>Step()</tt>
+expressions do not represent mathematical objects; they only exist
+at the expression level. To construct a mathematical object,
+they must be used in the argument list of a function:</p>
+
+@example@ Tuple(Step(1/k, For(k, a, b))) @example@
+
+<p>
+The <tt>Repeat()</tt> and <tt>Step()</tt> expressions generate runs of arguments that can be
+placed in arbitrary locations among other arguments:</p>
+
+@example@ f(Repeat(-1, n), 0, Step(1/k, For(k, 1, 10)), 2) @example@
+
+<p>These expressions can be composed:</p>
+
+@example@ Tuple(Step(Repeat(n, n), For(n, 0, N))) @example@
+
+<p>In this example, explicitly listing the first few items makes the pattern
+clearer:</p>
+
+@example@ Tuple(1, 2, 2, Step(Repeat(n, n), For(n, 3, N))) @example@
+
+<p>Watch out, however: the second version is not equivalent to the first version when
+@@Equal(N, 0)@@ or @@Equal(N, 1)@@ since the second version always includes the leading 1, 2, 2.
+Visual pattern matching can be dangerous!
+</p>
+
+<ul>
+<li><span style="color:red">
+TODO: Repeat() and Step() are potentially redundant; consider allowing
+For() directly anywhere and/or using a common Block() construct.
+</li>
+</ul>
+
+<h2>Logic, sets and tuples</h2>
+
+<p>
+The core mathematical abstractions in Grim deal with
+elementary logic and set theory.
+</p>
+
+<h3>Boolean logic</h3>
+
+@example@ Equal(True, Not(False)) @example@
+
+@example@ Equivalent(Not(Or(P, Q)), And(Not(P), Not(Q))) | One of De Morgan's laws.
+Usage note: the @@Equivalent(a, b)@@ operator does not differ semantically
+from the usual @@Equal(a, b)@@ operator for boolean values; it simply highlights that the equality
+is between booleans as opposed to an equality between some other objects.
+@example@
+
+<ul>
+<li><span style="color:red">
+TODO: boolean operators are rendered as text since this tends
+to make logical formulas easier to read outside
+of contexts where one is working with logical formulas
+for their own sake. There should be an option for using operator symbols.
+</li>
+</ul>
+
+<!--
+@example@ Tuple(And(Step(a_(i), For(i, 1, n))), Or(Step(b_(i), For(i, 1, n)))) @example@
+-->
+
+@example@ Element(RiemannHypothesis, Set(True, False)) | Boolean constants
+may be used to denote the truth value of unresolved mathematical conjectures, such
+as the Riemann hypothesis. This symbol can be used in the left-hand side
+of an implication or in the assumptions of a formula to denote
+a result conditional on the hypothesis. @example@
+
+<h3>Conditional values</h3>
+
+<p>The <tt>Cases</tt> operator allows choosing a value depending
+on the value of a logical predicate or a combination of predicates.</p>
+
+@example@ Equal(Sign(x), Cases(Tuple(-1, Less(x, 0)), Tuple(0, Equal(x, 0)), Tuple(1, Greater(x, 0)))) | Conditional formulas
+can be written using the <tt>Cases</tt> operator. @example@
+
+@example@ Equal(Abs(x), Cases(Tuple(x, GreaterEqual(x, 0)), Tuple(0, Equal(x, 0)), Tuple(1, Or(Equal(x, 1), Equal(x, -1))), Tuple(-x, Otherwise))) |
+The conditions in the <tt>Cases</tt> operator can overlap, but the values for the
+overlapping cases should be compatible with each other so that
+the order of evaluation does not matter.
+The special <tt>Otherwise</tt> case is used when no other conditions match. If no <tt>Otherwise</tt>
+case is provided, the conditions should cover all possible inputs. (In this example as well
+as the example above, the variable @@x@@ presumably represents a real number.) @example@
+
+<h3>Logical formulas with quantifiers</h3>
+
+<p>Quantified logical statements can be written using the <tt>All</tt> and <tt>Any</tt>
+operators, which work much like set comprehensions
+@@Set(P(x), ForElement(x, S), Q(x))@@
+(in which @@S@@ is an arbitrary set, @@P@@ is a predicate,
+and @@Q@@ is an optional predicate to restrict to a subset of @@S@@).
+The <tt>All</tt> operator expresses
+the universal quantifier, while the <tt>Any</tt> operator expresses
+the existence quantifier.</p>
+
+@example@ Equivalent(All(P(x), ForElement(x, S)), NotElement(False, Set(P(x), ForElement(x, S)))) @example@
+
+@example@ Equivalent(All(P(x), ForElement(x, S), Q(x)), NotElement(False, Set(P(x), ForElement(x, S), Q(x)))) @example@
+
+@example@ Equivalent(Exists(P(x), ForElement(x, S)), Element(True, Set(P(x), ForElement(x, S)))) @example@
+
+@example@ Equivalent(Exists(P(x), ForElement(x, S), Q(x)), Element(True, Set(P(x), ForElement(x, S), Q(x)))) @example@
+
+<p>Two concrete examples:</p>
+
+@example@ All(GreaterEqual(Exp(x), 1), ForElement(x, RR), GreaterEqual(x, 0)) @example@
+
+@example@ Exists(Equal(Exp(x), 2), ForElement(x, RR), GreaterEqual(x, 0)) @example@
+
+<p>
+It is important to distinguish between logical formulas containing
+free variables and "self-contained" logical formulas such as
+the two examples above in which the variables are bound.
+</p>
+
+@example@ Implies(And(Element(x, RR), GreaterEqual(x, 0)), GreaterEqual(Exp(x), 1)) | This expression
+is incomplete as a fully quantified representation of a theorem, because <tt>x</tt>
+is not being declared as a bound variable; to make sense, <tt>x</tt> should be defined in the surrounding
+scope either as a free or bound variable. @example@
+
+@example@ All(GreaterEqual(Exp(x), 1), ForElement(x, RR), GreaterEqual(x, 0)) |
+A complete quantified formula: <tt>x</tt> is a locally bound variable. @example@
+
+@example@ All(Implies(GreaterEqual(x, 0), GreaterEqual(Exp(x), 1)), ForElement(x, RR)) |
+Logically equivalent to the previous example. @example@
+
+@example@ All(Implies(And(Element(x, RR), GreaterEqual(x, 0)), GreaterEqual(Exp(x), 1)), For(x)) |
+Normally, the domain of the bound variable should be specified as part of the <tt>All</tt>
+operator, but this form is acceptable when the <tt>Implies</tt> expression
+contains a domain statement. @example@
+
+<h3>Constructing sets and tuples</h3>
+
+<p>
+Here are some examples of iteration with <tt>For()</tt> and <tt>ForElement()</tt>:</p>
+
+@example@ Tuple(n, For(n, 2, 5)) @example@
+
+@example@ Tuple(n, For(n, 1, 0)) @example@
+
+@example@ Set(n, For(n, 0, Infinity)) @example@
+
+@example@ Set(n**2, For(n, -Infinity, Infinity)) @example@
+
+@example@ Set(PrimeNumber(n), For(n, 1, Infinity)) @example@
+
+@example@ Set(Pow(-1, n), ForElement(n, ZZ)) @example@
+
+@example@ Set(f(n), For(n, -Infinity, -2)) @example@
+
+@example@ Equal(Set(f(n), For(n, a, b)), Set(f(n), ForElement(n, ZZ), LessEqual(a, n, b))) @example@
+
+@example@ Set(1, 2, Pi) @example@
+
+@example@ Set() | The empty set. @example@
+
+@example@ Set(n**2, ForElement(n, ZZ), Unequal(n, 0)) | Set comprehension. @example@
+
+@example@ Set(Tuple(), Tuple(1), Tuple(1,2), Tuple(1,2,Infinity)) @example@
+
+<p>Usage note: the singleton tuple <tt>Tuple(x)</tt> (rendered as @@Tuple(x)@@) is NOT the same object as the element @@x@@.</p>
+
+<h3>Operations on sets and tuples</h3>
+
+@example@ Equivalent(Element(x, S), Not(NotElement(x, S))) | Set membership. @example@
+
+@example@ Or(Subset(S, T), SubsetEqual(S, U)) @example@
+
+<ul>
+<li><span style="color:red">
+TODO: should these be called <tt>ProperSubset</tt>, <tt>Subset</tt> instead?
+</li>
+</ul>
+
+@example@ Tuple(Union(S, T), Intersection(S, T), SetMinus(S, T)) | Set arithmetic. @example@
+
+@example@ Equal(Cardinality(Set(0, 1, 2)), 3) | The cardinality of a set. @example@
+
+@example@ Equal(Cardinality(RR), Cardinality(CC), Pow(2, Cardinality(ZZ)), Pow(2, Cardinality(QQ))) | Cardinalities of infinite sets.
+Usage note: the symbol @@Infinity@@ (<tt>Infinity</tt>) is used in arithmetic and limits
+with numbers
+and does not represent the cardinality of a set.
+One should use @@Cardinality(ZZ)@@ to represent the cardinality of a countably infinite set. @example@
+
+@example@ Length(A) | The length of the tuple @@A@@. @example@
+
+@example@ Item(A, n) | The item at position @@n@@ in the tuple @@A@@ (index from 1). @example@
+
+@example@ Concatenation(A, B) | Concatenation of tuples. This function can be called with an arbitrary number of arguments. @example@
+
+@example@ Equal(Concatenation(Tuple(a, b), Tuple(c, d, e), Tuple()), Tuple(a, b, c, d, e)) @example@
+
+@example@ CartesianProduct(X, Y) | The set of all tuples @@Tuple(x, y)@@ with @@And(Element(x, X), Element(y, Y))@@. More generally, this function can be called with @@n@@ arguments to construct @@n@@-tuples. This function should not be confused with the ordinary product function <tt>Mul</tt> which computes arithmetic products pointwise when applied to sets. @example@
+
+@example@ Equal(CartesianPower(X, n), CartesianProduct(Repeat(X, n))) | This function should not be confused with the ordinary power function <tt>Pow</tt> which computes arithmetic powers pointwise when applied to sets. Note the special case @@CartesianPower(X, 1)@@ representing 1-tuples, giving a different set than @@X@@. @example@
+
+<p>The following sets are useful:</p>
+
+@example@ Sets(S) | The set of all sets with elements in @@S@@. @example@
+
+@example@ Sets(S, n) | The set of all sets with elements in @@S@@ and having cardinality @@n@@. @example@
+
+@example@ Tuples(S) | The set of all tuples with elements in @@S@@. @example@
+
+@example@ Tuples(S, n) | The set of all tuples with elements in @@S@@ and having length @@n@@. @example@
+
+<h3>Abstract sets</h3>
+
+<p>
+The set @@ZZ@@ is an example of a "concrete" mathematical set; though infinite, it
+is meaningful to iterate over its elements. There are also "abstract" builtin
+sets which describe properties of objects; the actual scope of such sets is undefined.
+An example of an abstract set is @@Universe@@, which is simply defined to contain any object:
+</p>
+
+@example@ Universe | The universe of all objects. @example@
+
+<p>Another example is @@Rings@@ which is the abstract set of concrete sets that are rings,
+such as @@ZZ@@ (discussed further in the section on algebraic structures).</p>
+
+
+<h2>Numbers and arithmetic</h2>
+
+<p>Grim provides various builtin functions
+for working with integers, rational, algebraic, real and complex numbers.
+Most such functions are documented in FunGrim. Here we describe
+some of the basic concepts.</p>
+
+<h3>Numbers and arithmetic</h3>
+
+@example@ And(Equal(Add(Div(1, 3), Div(2, 3)), 1), Equal(Pow(Sqrt(2), 2), 2), Unequal(Pow(2, 64), 0), Equal(Sin(Pi), 0)) | Grim numbers are mathematical numbers, not approximations. @example@
+
+@example@ Equal(ConstI, Sqrt(-1), Pow(-1, Div(1, 2)), Exp(Div(1,2) * Log(-1))) | Numerical functions extend to complex numbers.
+Multivalued functions such as @@Sqrt(z)@@ and @@Log(z)@@ give the principal branches. (Information about branch cuts can be found in FunGrim.)
+Other interpretations of standard mathematical functions may be introduced as separate symbols. @example@
+
+@example@ Add(Mul(3, a), Sub(2, 5), Div(1, 3), Pow(b, 4)) | Arithmetic operations (without using infix syntax). @example@
+
+@example@ a*b + c/3 + x**2 + Div(1,2) - Pow(2,3) | Arithmetic operations using infix syntax in Python. (Function calls need to be used when both operands are integers, to bypass Python's arithmetic.) @example@
+
+@example@ Equal(Neg(Neg(x)), x, Pos(x)) | Usage note: @@Pos(x)@@ represents the identity function. @example@
+
+@example@ Tuple(Less(a, b), LessEqual(a, b), Greater(a, b), GreaterEqual(a, b), Equal(a, b), Unequal(a, b)) | Comparisons. @example@
+
+@example@ Equal(Decimal("-3.25"), -Div(325,100)) | Grim does not have floating-point literals or floating-point numbers as a distinct type. The <tt>Decimal</tt> function takes a decimal floating-point string as input, describing a rational number. @example@
+
+@example@ And(Equal(Decimal("2.0e-123456789"), Div(2, Pow(10, 123456789))), Less(3, Pow(10,Pow(10,Pow(10,Pow(10,10)))))) | Reminder that we are working with symbolic expressions: numbers are not "evaluated" when constructing expressions, so we do not need to worry about large numbers causing overflow or being inefficient. @example@
+
+<h3>Infinities and undefined values</h3>
+
+@example@ Infinity | This symbol represents a quantity larger than any real number. By definition, @@Equal(Pos(Infinity), Infinity)@@.
+Multiplication of @@Infinity@@ by a nonzero complex number represents an infinite limit
+with the given direction in the complex plane. In particular, @@Set(-Infinity, ConstI*Infinity, -(ConstI*Infinity))@@ are frequently used. @example@
+
+@example@ UnsignedInfinity | This symbol represents a quantity with infinite magnitude and undefined sign.
+It is typically used to represent the value of meromorphic functions at poles,
+including the special case of dividing a nonzero number by zero: @@Equal(Div(1, 0), UnsignedInfinity)@@.
+The set @@Union(CC, Set(UnsignedInfinity))@@ represents the complex Riemann sphere. @example@
+
+@example@ Equal(Tuple(1 / Infinity, 1 / UnsignedInfinity, Infinity + Infinity, UnsignedInfinity + UnsignedInfinity, Infinity - Infinity, Infinity / Infinity), Tuple(0, 0, Infinity, Undefined, Undefined, Undefined)) | Arithmetic involving infinities
+gives a number or infinity when the limiting value is unambiguous, otherwise is usually undefined. @example@
+
+@example@ Equal(Pow(0, 0), 1) | This special case is well-defined, as a matter of convention. @example@
+
+@example@ Equal(Infinity + 1, Infinity + ConstI, Infinity) | Any infinity completely absorbs any (finite) number added to it.
+This includes the case of complex numbers added to the infinities @@Set(Infinity, -Infinity)@@ with real direction.
+This convention will make some people unhappy some of the time, but so would the opposite convention. @example@
+
+<h3>Sets of numbers</h3>
+
+@example@ Tuple(ZZ, QQ, RR, CC, AlgebraicNumbers) | Standard sets of numbers. @example@
+
+@example@ And(NotElement(Sqrt(2), QQ), Element(Sqrt(2), AlgebraicNumbers), NotElement(Pi, AlgebraicNumbers), Element(Pi, RR)) @example@
+
+@example@ Equal(QQ, Set(Div(p, q), For(Tuple(p, q)), And(Element(p, ZZ), Element(q, SetMinus(ZZ, Set(0)))))) @example@
+
+@example@ Equal(CC, Set(Add(x, Mul(y, ConstI)), For(Tuple(x, y)), And(Element(x, RR), Element(y, RR)))) @example@
+
+@example@ Tuple(ClosedInterval(a,b), OpenInterval(a,b), ClosedOpenInterval(a, b), OpenClosedInterval(a, b)) |
+Intervals represent contiguous subsets of the extended real line @@Equal(S, Union(RR, Set(-Infinity, Infinity)))@@,
+with or without endpoints included.
+The endpoints must be elements of @@S@@. @example@
+
+@example@ Tuple(ZZGreaterEqual(1), ZZGreaterEqual(0), ZZLessEqual(0), Range(1, 10)) | Useful ranges of integers. @example@
+
+@example@ Equal(Div(ClosedOpenInterval(4, 6), -2), OpenClosedInterval(-3, -2)) | Arithmetic operations between numbers and sets of numbers apply pointwise. @example@
+
+@example@ Equal(Add(ClosedInterval(a, b), ClosedInterval(c, d)*ConstI), Set(x+y*ConstI, ForElement(Tuple(x, y), CartesianProduct(ClosedInterval(a, b), ClosedInterval(c, d))))) | Applying an arithmetic operation to two sets of numbers evaluates the operation over the Cartesian product of arguments. @example@
+
+@example@ And(Subset(AlgebraicNumbers, CC), Element(Sqrt(-1), AlgebraicNumbers), Element(Sqrt(-1), CC)) | The algebraic numbers are considered canonically embedded in the complex numbers. @example@
+
+<h3>p-adic numbers</h3>
+
+<p>The <i>p</i>-adic numbers (for a given prime @@p@@) are an extension of the rational numbers.</p>
+
+@example@ And(Subset(ZZ, ZZp(p)), Subset(QQ, QQp(p)), Subset(ZZp(p), QQp(p))) @example@
+
+<p>The <i>p</i>-adic number 1 is considered the same object as the integer 1 and the complex number 1,
+and rational arithmetic involving <i>p</i>-adic numbers requires no special notation.
+However, mixing <i>p</i>-adic numbers with irrational real and complex numbers is meaningless.
+Any operation that implicitly or explicitly involves norms or limits (such as summation of infinite series
+and evaluation of transcendental functions) must be expressed using dedicated
+functions for the <i>p</i>-adic norm.
+</p>
+
+<ul>
+<li><span style="color:red">
+TODO: This is tentative...
+</li>
+<li><span style="color:red">
+TODO: Algebraic numbers with <i>p</i>-adic numbers.
+</li>
+</ul>
+
+<h2>Functions</h2>
+
+<p>
+The term <i>function</i>, just like <i>variable</i>, is ambiguous.
+We will distinguish between (proper) univariate functions, (proper) multivariate functions,
+and improper functions.
+</p>
+
+<p>A <b>univariate function</b> or simply <b>function</b> is an object @@f@@ with an associated set @@S@@ called the <b>domain</b> of @@f@@
+such that @@f(x)@@ represents a unique value for any @@Element(x, S)@@.</p>
+
+<p>A <b>multivariate function</b> is an object @@f@@ with an associated set @@S@@ of tuples called the <b>(multivariate) domain</b> of @@f@@
+such that @@f(Subscript(x,k), For(k,1,n))@@ represents represents a unique value for any @@Element(Tuple(Subscript(x,k), For(k,1,n)), S)@@.</p>
+
+<p>A univariate function is the same thing as a multivariate function on a set of 1-tuples.
+Note that a multivariate function defined on 2-tuples is not the same thing as
+a univariate function defined on 2-tuples:
+we distinguish between @@f(x,y)@@ and @@f(Tuple(x,y))@@. The latter
+is the same thing as a multivariate function defined on 1-tuples of 2-tuples.</p>
+
+<p>
+An <b>improper function</b> is an object that can be called as a (multivariate) function but
+does not have a delimited domain.
+Most builtin symbols in Grim actually denote improper functions.
+For example, the symbols <tt>Add</tt> and <tt>Exp</tt> represent improper functions which are
+defined not only on the real and complex numbers @@RR@@ and @@CC@@ but
+also for infinities, formal power series and many other kinds of objects.
+</p>
+
+<p>
+We will generally use <i>function</i> to mean <i>improper function</i>
+except in contexts where we discuss function spaces as sets.
+When disambiguation is necessary, univariate or multivariate functions in the ordinary
+mathematical sense (with delimited domains) will be called <b>proper functions</b>.
+An improper function can be converted to a proper
+function (such as the real exponential function
+@@Equal(f(x), Exp(x))@@ with domain @@Element(x, RR)@@) by restricting it to a concrete domain.
+</p>
+
+<h3>Defining improper functions</h3>
+
+<p>Improper functions can be defined using the <tt>Fun</tt>
+expression operator.</p>
+
+@example@ Fun(x, x**2) | Defines a univariate improper function mapping the symbol given as the first argument to the expression
+in the second argument. The symbol <tt>x</tt> representing
+the dummy variable becomes locally bound within the context of the arguments of the <tt>Fun</tt> operator. @example@
+
+@example@ Fun(Tuple(x, y), 2*x+3*y) | Defines a bivariate function. The symbols <tt>x</tt> and <tt>y</tt> become locally bound. @example@
+
+@example@ Fun(Tuple(x), x**2) | Equivalent to defining a univariate function. @example@
+
+@example@ Fun(Tuple(x_(i), For(i, 1, n)), Sum(i * x_(i), For(i, 1, n))) | Defines a multivariate function with arity @@n@@. In
+this special case, the variable binding <tt>x_</tt> in the scope of the <tt>Tuple</tt> call propagates through
+to the <tt>Fun</tt> operator. @example@
+
+@example@ Equal(Fun(x, x**2)(3), 9) | Calling a function. @example@
+
+@example@ Equal(Fun(x, Sin(x)/x)(0), Undefined) | Function evaluation is equivalent to naively applying the operations
+in the defining expression tree to the value. It is not implied to compute limits where the result would be undefined. @example@
+
+@example@ Equal(Fun(x, Cases(Tuple(Sin(x)/x, Unequal(x, 0)), Tuple(1, Equal(x, 0))))(0), 1) | Here we define the sinc function with the correct limiting value at the origin. @example@
+
+<h3>Defining named improper functions</h3>
+
+@example@ Where(g(c_(2), c_(3)), Def(c_, Fun(n, n**2+n+1)), Def(g, Fun(Tuple(x, y), (x+y)*(x-y)))) | Defining and calling named improper functions in the context of a <tt>Where</tt> expression. @example@
+
+<h3>Proper functions and domains</h3>
+
+@example@ Restriction(f, S) | The function @@f@@ restricted to the domain @@S@@, creating a proper univariate function. @example@
+
+@example@ MultivariateRestriction(g, T) | The function @@g@@ restricted to the multivariate domain (set of tuples) @@T@@, creating a proper multivariate function. @example@
+
+@example@ Restriction(Fun(n, Factorial(n)), ZZGreaterEqual(0)) | Defining a proper function, in this case with the nonnegative integers as the domain. @example@
+
+@example@ MultivariateRestriction(Fun(Tuple(x, y), x / y), CartesianProduct(RR, SetMinus(RR, Set(0)))) | Defining a proper bivariate function: the division operator
+on the real numbers, excluding zero in the denominator. @example@
+
+<h3>Function spaces</h3>
+
+<!-- @example@ Functions(S) | The set of all (proper) functions from @@S@@ to @@Universe@@. @example@ -->
+
+@example@ Functions(S, T) | The set of all (proper) functions from @@S@@ to the set @@T@@. @example@
+
+<!-- @example@ MultivariateFunctions(S) | The set of all (proper) multivariate functions from the set of tuples @@S@@ to @@Universe@@. @example@ -->
+
+@example@ MultivariateFunctions(S, T) | The set of all (proper) multivariate functions from the set of tuples @@S@@ to the set @@T@@. @example@
+
+@example@ Where(Element(MultivariateRestriction(Fun(Tuple(x, y), x / y), S), Parentheses(MultivariateFunctions(S, QQ))), Def(S, CartesianProduct(ZZ, SetMinus(ZZ, Set(0))))) |
+Division maps integers, restricted to exclude zero denominators, to rational numbers. @example@
+
+@example@ Element(MultivariateRestriction(Brackets(Fun(Tuple(x, y), x / y)), CartesianPower(ZZ, 2)), Parentheses(MultivariateFunctions(CartesianPower(ZZ, 2), Union(QQ, Set(UnsignedInfinity, Undefined))))) |
+Division as a total function for pairs of integers (@@Equal(Div(1, 0), UnsignedInfinity)@@ and @@Equal(Div(0, 0), Undefined)@@). @example@
+
+@example@ Element(Restriction(Sin, RR), Parentheses(Functions(RR, ClosedInterval(-1, 1)))) | The symbol @@Sin@@ represents a function defined for many different types of objects. The restriction belongs to the space of functions defined on @@RR@@, and even more narrowly to the space of functions from @@RR@@ to @@ClosedInterval(-1,1)@@. @example@
+
+@example@ Set(f, ForElement(f, Functions(CC, CC)), IsHolomorphic(f(z), ForElement(z, CC))) | This constructs the space of holomorphic functions on the complex plane. @example@
+
+<h3>Undefined values</h3>
+
+@example@ Undefined | A distinguished object used to represent the result of evaluating functions outside of their domain of definition. (This includes both proper functions and improper functions outside the domain where they are implicitly meaningful.) @example@
+
+@example@ Equal(Add(True, Pi), Undefined) | Example: addition is not defined for booleans. @example@
+
+<h3>Sequences and multidimensional arrays</h3>
+
+<p>
+Sequences and multidimensional arrays do not have a designated "type" in Grim,
+but can defined naturally as functions.</p>
+
+<p>Sequences can be defined as functions with a subset of
+@@ZZ@@ as the domain, typically @@ZZGreaterEqual(a)@@ for an infinite sequence
+with the initial term at offset @@a@@. A doubly infinite sequence can be
+thought of as a function on @@ZZ@@.
+</p>
+
+<p>
+Similarly, <i>n</i>-dimensional arrays are conveniently described as functions from a subset of @@CartesianPower(ZZ, n)@@
+to the value set.
+For example, a function @@a(i,j,k)@@ (alternatively, using subscript notation @@a_(i,j,k)@@) in
+@@Functions(CartesianProduct(Range(0,M), Range(1,N), Range(1,P)), CC)@@
+denotes a three-dimensional complex array of size @@(M+1) * N * P@@ where the first dimension is indexed from zero
+and the remaining indices are indexed from one.
+</p>
+
+<ul>
+<li><span style="color:red">
+TODO: syntax for defining array-like functions from the list of values.
+</li>
+</ul>
+
+<p>
+Tuples constructed using <tt>Tuple()</tt>
+are however considered a distinct type of object from functions defined on @@Range(1,n)@@, and similarly for matrices
+constructed using <tt>Matrix()</tt>.
+</p>
+
+<h2>Calculus: summation, solving, and other operations</h2>
+
+<p>
+Operators 
+</p>
+
+<p><tt>Derivative()</tt> takes one or two parameters, denoting the evaluation
+point and optionally the order of differentiation:</p>
+
+@example@ Tuple(Derivative(Sin(x), For(x, y)), Derivative(Sin(x), For(x, y, 2))) @example@
+
+<p>A subtle point is that the symbol declared in <tt>For()</tt> overrides any
+meaning of the same symbol from the surrounding context, but not in the
+evaluation of the parameters: for example:</p>
+
+@example@ Where(Equal(Derivative(Sin(x), For(x, x)), Derivative(Sin(y), For(y, x))), Def(x, Pi)) @example@
+
+<h2>Matrices and linear algebra</h2>
+
+<p>The interface for matrices is being developed.</p>
+
+@example@ Equal(Det(Matrix2x2(a, b, c, d)), a*d-b*c) @example@
+
+@example@ Matrix(a_(i,j), For(i, 1, M), For(j, 1, N)) @example@
+
+@example@ Matrices(R, m, n) | The set of @@m@@ by @@n@@ matrices with elements in @@R@@. @example@
+
+<ul>
+<li><span style="color:red">
+TODO: block matrices/flattening.
+Element access.
+Relation between matrices, vectors, lists/tuples.
+Additional matrix operations; vector spaces.
+</li>
+</ul>
+
+
+<h2>Algebraic structures</h2>
+
+<p>
+An algebraic structure is
+a set of objects together with a collection of operations on that set
+required to satisfy certain properties.
+Groups, rings, and fields are common examples.
+The most important algebraic structures are rings of numbers, matrices,
+polynomials, power series, and residue classes.
+</p>
+
+<p>
+There are potentially two ways to formalize the definition
+of an algebraic structure:
+the first approach is to identify the algebraic structure with the
+set of objects, understanding that the
+arithmetic functions <tt>Add</tt>, <tt>Mul</tt>, etc. implement the
+operations.
+The second approach is to identify the algebraic structure
+with a tuple @@Tuple(S, f, g, Ellipsis)@@ where
+@@S@@ is the set of objects and @@f@@ and @@g@@ (etc.)
+are functions for the relevant operations.
+Grim favors the first approach, as it makes it easier
+to write formulas that are valid for generic objects.
+</p>
+
+@example@ Implies(And(Element(R, CommutativeRings), Elements(x, y, R)), Equal((x+y)**2, x**2+2*x*y+y**2)) @example@
+
+<h3>Rings and fields</h3>
+
+<p>
+Any set of objects whose elements satisfy the usual ring axioms
+(with respect to the normal arithmetic operators <tt>Add</tt>, <tt>Mul</tt>, etc.)
+is considered an element of @@Rings@@,
+and similarly for other kinds of algebraic structures:
+</p>
+
+@example@ Element(Matrices(ZZ, 2, 2), Rings) | An example of a ring. @example@
+
+@example@ Element(ZZ, CommutativeRings) | An example of a commutative ring. @example@
+
+@example@ Element(QQ, Fields) | An example of a field. @example@
+
+<p>
+Rings may consist of other types of objects than numbers.
+In particular, the identity elements of a ring need not be the same objects as the
+numbers (integers) 0 and 1.
+</p>
+
+@example@ Zero(R) | The zero element (additive identity) of the ring @@R@@. @example@
+
+@example@ One(R) | The unit element (multiplicative identity) of the ring @@R@@. @example@
+
+@example@ Equal(One(Matrices(CC, 2, 2)), Matrix2x2(1, 0, 0, 1)) | A ring where the unit element is not the same object as the number 1. @example@
+
+@example@ Characteristic(R) | The characteristic of the ring @@R@@. @example@
+
+<p>In rings that do not contain the integers as a subset, ring elements can still
+mix with ordinary integers in arithmetic operations, and then "absorb" the integers (that is, the unique ring
+homomorphism @@Functions(ZZ, R)@@ applies automatically).
+If @@And(Element(R, Rings), Element(r, R))@@, we have for example:</p>
+
+@example@ Equal(0 * r, r - r, Zero(R)) | However, @@Equal(0 * r, r - r, 0)@@ does not hold if the zero
+element is not the number 0: equality
+in the sense of the <tt>Equal</tt> operator is a more fundamental operation than arithmetic, and
+is not interpreted in the sense of a homomorphism.@example@
+
+@example@ And(Equal(r + 0, r), Equal(1 * r, r), Equal(Zero(R) + 1, One(R)), Equal(2 * r, r + r), Equal(r**0, One(R))) @example@
+
+<p>Caution: operators such as <tt>Sum</tt> and <tt>Product</tt> work over generic rings,
+but they are understood to return the integers 0 and 1
+when applied to the empty set of terms.
+To write semantically correct formulas that work over generic rings,
+one should handle the empty case separately or add the identity explicitly as a "coercion":</p>
+
+@example@ Zero(R) + Sum(A(n), For(n, 1, N)) | Works when @@Equal(N, 0)@@.  @example@
+
+<h3>Extension rings and fields</h3>
+
+<p>
+A ring or field can be extended by adjoining generating elements:
+</p>
+
+@example@ Element(Sqrt(2)+5*Sqrt(3), Polynomials(ZZ, Sqrt(2), Sqrt(3))) | An element in a ring of algebraic numbers. @example@
+
+@example@ Element(1/(Sqrt(2)+Sqrt(3)), PolynomialFractions(QQ, Sqrt(2), Sqrt(3))) | The corresponding fraction field. @example@
+
+@example@ Element((Pi+1)/(Pi-1), PolynomialFractions(QQ, Pi)) | An element in a transcendental number field. @example@
+
+@example@ Element(Sum(Sqrt(n), For(n, -10, 10)), PolynomialFractions(QQ, Set(Sqrt(n), ForElement(n, ZZ)))) | The smallest field containing all square roots of integers. @example@
+
+<p>
+In general, @@Polynomials(R, S)@@ denotes the ring generated by polynomials
+in elements of @@R@@ and @@Set(S)@@ (or @@S@@ if this is already a set).
+The elements of this ring should be understood as converted to a common type (in principle, by adding the zero element of all constituent rings to each element):
+for example, @@Polynomials(Matrices(QQ, 2, 2), Sqrt(2))@@,
+does not contain the numbers 0, 1 or @@Sqrt(2)@@ as objects; the corresponding scalar elements of this ring are the scalar matrices @@Matrix2x2(c,0,0,c)@@.
+</p>
+
+<h3>Residue rings</h3>
+
+<p>
+Unlike extension rings which can be formed by adding new elements to
+an existing set, residue rings require forming new types of objects.
+For example, the ring of integers mod 2
+has to be represented by a new set of objects
+@@Set(Subscript(0, 2), Subscript(1, 2))@@
+if we want to use the usual arithmetic operations <tt>Add</tt> etc.,
+since the usual integers @@Subset(Set(0, 1), ZZ)@@ have a different
+arithmetic.
+This means that elements of a residue ring cannot compare as equal
+to the elements in the larger ring; one has to apply
+a homomorphism explicitly to compare elements between the rings.
+</p>
+
+<ul>
+<li><span style="color:red">TODO: residue rings, finite fields</span></li>
+</ul>
+
+
+<h2>Formal polynomials and power series</h2>
+
+<p>
+To represent polynomials and polynomial-like objects in the algebraic sense
+(rather than as functions or expressions), one can
+adjoin <i>indeterminates</i> to numbers.
+The following sets of indeterminates are built-in:
+</p>
+
+<ul>
+<li>Standard polynomial indeterminates (<tt>XX</tt>): @@Equal(XX, Set(XX(1), XX(2), Ellipsis))@@</li>
+<li>Standard series indeterminates (<tt>XXSeries</tt>): @@Equal(XXSeries, Set(XXSeries(1), XXSeries(2), Ellipsis))@@</li>
+<li>Standard noncommutative polynomial indeterminates (<tt>XXNonCommutative</tt>): @@Equal(XXNonCommutative, Set(XXNonCommutative(1), XXNonCommutative(2), Ellipsis))@@</li>
+</ul>
+
+<p>
+Each set contains infinitely many indeterminates.
+Calling the set with an index @@n@@ as the argument returns the @@n@@-th indeterminate:</p>
+
+@example@ And(Equal(XX(1) + 1, 1 + XX(1)), Element(XX(1), XX), Subset(Set(XX(1), XX(42)), XX)) @example@
+
+<p>
+(The index does not necessarily need to be an integer: an object such as a tuple could also be used to label a unique indeterminate, e.g.: @@XX(Tuple(3,4))@@.)
+Indeterminates are not the same thing as free variables;
+they are particular objects in the mathematical universe.</p>
+
+<p>Indeterminates are not actually variables, but certain
+objects <i>within the mathematical universe</i>
+that generate algebraic structures.
+The <b>standard polynomial indeterminates</b>
+allow expressing structures such as
+the polynomial ring
+@@Polynomials(CC, XX(1), XX(2))@@. The set
+of indeterminates is denoted by <tt>XX</tt>, rendered @@XX@@, and
+specific indeterminates are denoted by <tt>XX(n)</tt>, rendered @@XX(n)@@.
+</p>
+
+@example@ Subset(Set(XX(1), XX(2), XX(4)), XX) | Standard indeterminates for constructing polynomials. @example@
+
+<p>Indeterminates can be assigned to ordinary variables, just like any other objects:</p>
+
+@example@ Where(Equal((x+Sqrt(2))*(x-Sqrt(2)), x**2-2), Def(x, XX(1))) @example@
+
+<p>
+There are different kinds of indeterminates with different
+properties (noncommutative, etc.).
+Indeterminates and the related algebraic structures
+are discussed further in the section on "Formal polynomials and power series".</p>
+
+<p>
+Indeterminates should not be confused with symbols or variables.
+For example, the expression <tt>Fun(XX(1), XX(1)**2+1)</tt>
+is meaningless because <tt>XX(1)</tt> has
+a reserved meaning and cannot be used as
+the name of an expression-level variable. (Evaluating a polynomial constructed
+from an indeterminate uses a different syntax.)
+Further, two variables can refer to the same object,
+including the same indeterminate, say @@Equal(x, y, XX(1))@@,
+but one always has @@Unequal(XX(1), XX(2))@@.
+More generally, an indeterminate is distinct from any number and
+from any other indeterminate: for example,
+we have @@Unequal(x, 0)@@ by definition when @@x@@ is any indeterminate,
+while the truth of 
+@@Equal(x, 0)@@ is unknown if @@x@@ is a free variable
+(unless that variable is constrained to exclude zero through assumptions).
+</p>
+
+
+
+<h3>Indeterminates and variables</h3>
+
+<p>Typically, one wants
+to assign an indeterminate to an ordinary variable when writing down a formula:</p>
+
+@example@ Where(Equal((x+y)**2, x**2+2*x*y+y**2), Def(x, XX(1)), Def(y, XX(2))) | In
+this <tt>Where</tt> expression, the expression-level variables @@x@@ and @@y@@
+are defined as aliases for the standard polynomial indeterminates @@XX(1)@@ and @@XX(2)@@. @example@
+
+<p>The index of the indeterminate is often unimportant. An alternative
+way to write a formula involving an indeterminate is to leave the expression-level
+variables (such as <tt>x</tt>) as free variables
+and state that the formula holds for any choice of indeterminate:</p>
+
+@example@ Implies(Elements(x, y, XX), Equal((x+y)**2, x**2+2*x*y+y**2)) @example@
+
+<p>Note that in the above example, <tt>x</tt> and <tt>y</tt> could actually refer to the same indeterminate. This can be avoided as follows:</p>
+
+@example@ Implies(DistinctElements(x, y, XX), Equal((x+y)**2, x**2+2*x*y+y**2)) @example@
+
+<p>Referencing the same indeterminate with different variables can also be deliberate:</p>
+
+@example@ Where(Equal(x**2*y, x*y*z), Def(x, XX(1)), Def(y, XX(2)), Def(z, x)) |  Here both @@x@@ and @@z@@ are set to @@XX(1)@@. @example@
+
+<p>A much more elaborate example of a formula, involving a variable number of indeterminates:</p>
+
+@example@ Where(
+    Equal(
+        Sum(x_(i), For(i, 1, m))**n,
+        Sum((Factorial(n) / Product(Factorial(Item(k, i)), For(i, 1, m)) * Product(x_(i)**Item(k, i), For(i, 1, m))),
+            ForElement(k, S))),
+    Def(x_, Fun(k, XX(k))),
+    Def(S, Set(k, ForElement(k, CartesianPower(Range(0,n), m)),
+        Equal(Sum(Item(k, i), For(i, 1, m)), n)))) | The multinomial theorem for the standard polynomial indeterminates. @example@
+
+
+<h3>Rings and fields of polynomials</h3>
+
+<p>
+Standard indeterminates are named as such because they have familiar algebraic properties: for example, any standard indeterminate @@x@@ satisfies
+@@Equal(Sub(x, x), 0)@@,
+@@Unequal(x**n, 0)@@ for all @@Element(n, ZZ)@@, and @@Equal(x**0, x * x**-1, 1)@@.
+(In <i>nonstandard</i> circumstances, one might want different properties: for example,
+@@Equal(x**2, 0)@@ would allow representing dual numbers.)
+More precisely, the standard polynomial indeterminates generate a
+universal ring @@Equal(Polynomials(CC, XX), Polynomials(CC, XX(1), XX(2), Ellipsis))@@ of formal multivariate polynomials
+with the usual properties of commutative algebra.
+If @@R@@ is a subring of @@CC@@
+(for example, @@ZZ@@, @@QQ@@ or @@CC@@), we have:</p>
+
+@example@ Subset(Polynomials(R, XX(1)), Polynomials(R, XX(1), XX(2), XX(3)), Polynomials(R, XX)) | Formal polynomials in one variable, a few variables, and in any finite combination of variables. @example@
+
+<p>By extension, quotients involving such polynomials (for example: @@Element(1/(XX(1)-1), PolynomialFractions(QQ, XX(1)))@@) generate a universal field of formal polynomial fractions:</p>
+
+@example@ Subset(PolynomialFractions(R, XX(1)), PolynomialFractions(R, XX(1), XX(2), XX(3)), PolynomialFractions(R, XX)) | Formal polynomial fractions in one variable, a few variables, and in any finite combination of variables.@example@
+
+<p>
+By <i>formal polynomial</i>, we mean a particular kind of algebraic object.
+Formal polynomials are different from expressions:
+@@(XX(1)+1)*(XX(1)-1)@@ and @@XX(1)**2-1@@
+describe the same quadratic polynomial just like @@(Pi+1)*(Pi-1)@@ and @@Pi**2-1@@ describe
+the same real number; viewed from within the mathematical universe, this object
+has no "memory" of which expression was used to construct it.
+The formal polynomial @@XX(1)**2-1@@ is also not the same thing as the
+polynomial function @@Fun(x, x**2-1)@@: it is an entirely different type of object.
+A more common name for <i>polynomial fraction</i> is <i>rational function</i>,
+but we avoid this term in the algebraic context to avoid confusion with
+rational functions as functions.
+</p>
+
+<p>
+The objects generated by compatible standard indeterminates are considered
+to belong to a large shared set in which subrings are simply
+subsets: just as @@Subset(ZZ, QQ, RR, CC)@@, we have
+@@Subset(ZZ, CC, Polynomials(CC, XX(1)), PolynomialFractions(CC, XX(1), XX(2)))@@,
+and @@Subset(Polynomials(Polynomials(QQ, XX(2)), XX(1)), Polynomials(CC, XX(1), XX(2), XX(3)))@@.
+This construction is not flexible enough for all applications:
+just to mention two limitations,
+@@Polynomials(CC, XX(1), XX(2))@@ and @@Polynomials(Polynomials(CC, XX(1)), XX(2))@@
+are exactly the same ring (some applications require making a distinction), and
+the identity elements @@Equal(XX(1)**0, 1)@@ and @@Equal(0*XX(1), 0)@@ are the
+usual integers (potentially inconvenient for working with polynomials over non-number base rings).
+</p>
+
+<h3>Noncommutative polynomials</h3>
+
+<p>
+Noncommutative indeterminates are compatible with the commutative indeterminates:</p>
+
+@example@ Implies(And(Elements(a, b, XX), DistinctElements(A, B, XXNonCommutative)), And(Unequal(A*B, B*A), Equal(b*A*a*B**2*2*B**(-1), 2*a*b*A*B))) | Noncommutative indeterminates do not commute with each other, but commute
+with commutative indeterminates and with complex numbers. @example@
+
+@example@ Element((XX(1)+Sqrt(2))/((2+3*ConstI)*XX(2)+1) * XXNonCommutative(1)**2 * XXNonCommutative(2), Polynomials(PolynomialFractions(CC, XX), XXNonCommutative)) | A universal ring of noncommutative polynomials with complex polynomial fractions as coefficients. @example@
+
+<p>Noncommutative indeterminates may be used, for example, to model @@n@@ by @@n@@ matrices
+for an unspecified @@n@@, under the assumption that matrices satisfy no commutation relations. However,
+one should be careful since @@0*XXNonCommutative(1)@@ and @@XXNonCommutative(1)**0@@ are defined to represent the integers 0 and 1
+rather than the zero and identity matrices for some @@n@@.</p>
+
+@example@ Element((1+2*ConstI)*XXNonCommutative(1) * Matrix2x2(1, XX(1)+1, -XX(3)**-2, 1) * XXNonCommutative(1)**2 * XXNonCommutative(2), Polynomials(Matrices(PolynomialFractions(CC, XX), 2, 2), XXNonCommutative)) | Mixing noncommutative indeterminates with two by two matrices with polynomial fraction elements. Note: in order for the set on the right to be interpreted as a ring, it must be understood to exclude scalar numbers so that there is a unique identity element; the 2-by-2 identity matrix. @example@
+
+<h3>Evaluation and composition</h3>
+
+<p>A special function is used to replace indeterminates (or combinations of indeterminates)
+by given values which can be numbers, indeterminates, or other objects:</p>
+
+@example@ Equal(EvaluateIndeterminate(XX(1)**2 + XX(2), XX(1), 2), 4 + XX(2)) @example@
+
+@example@ Equal(EvaluateIndeterminate(XX(1)**2 + XX(2), Tuple(XX(1), XX(2)), Tuple(2, 1)), 5) @example@
+
+@example@ Equal(EvaluateIndeterminate(XX(1)**2 + XX(2), Tuple(XX(1), XX(2)), Tuple(XX(2)+1, XX(1))), (XX(2)+1)**2 + XX(1)) @example@
+
+<p>Since the representation (monomial basis, factored, etc.) of a polynomial is undefined, it is assumed that the evaluation point
+is an object such that the evaluation map is unambiguous.</p>
+
+<p>To define polynomial functions, one can evaluate an indeterminate at the value given by the bound variable in a <tt>Fun</tt>-expression:</p>
+
+@example@ Fun(x, EvaluateIndeterminate(XX(1)**2 + 1, XX(1), x)) @example@
+
+<p>As a special case, polynomial fractions expressed in terms of
+standard polynomial indeterminates can be assumed to correspond
+to reduced forms without removable singularities: 
+the function @@Fun(x, (x-2) / (x-2))@@
+is undefined (@@Div(0, 0)@@) when evaluated at 2, but the
+formal polynomial fraction @@(XX(1)-2) / (XX(1)-2)@@
+represents the constant integer 1, and equals 1
+when evaluated at @@Equal(XX(1), 2)@@.</p>
+
+<h3>Power series</h3>
+
+<p>The standard series indeterminates @@Equal(XXSeries, Set(XXSeries(n), For(n, 1, Infinity)))@@
+have the property that powers of the indeterminates converge in the topology of formal power series: @@Equal(Limit(c_(n) * XXSeries(1)**n, For(n, Infinity)), 0)@@
+for any sequence of complex numbers @@c_(n)@@.
+The <tt>Sum</tt> and <tt>Product</tt> operators recognize this notion of convergence, so that formal power series
+can be expressed in a natural way as infinite series and products involving series indeterminates.
+</p>
+
+@example@ Where(Sum(Factorial(n) * x**n, For(n, 0, Infinity)), Def(x, XXSeries(1))) | This is a valid formal power series (with radius of convergence 0). @example@
+
+<p>
+Series indeterminates behave like polynomial indeterminates with respect to addition and multiplication,
+but differ in other respects: 
+polynomial indeterminates are essentially inert outside of ring and field
+operations, while series indeterminates generate
+formal series expansions.
+</p>
+
+<p>An important difference is that quotients of polynomial indeterminates create
+formal polynomial fractions
+while quotients of series indeterminates create
+the formal power series (or more generally Laurent series) expansions
+of rational functions at 0.
+The distinction matters for evaluation: the formal polynomial fraction @@1/(1-XX(1))@@ can be evaluated anywhere on the complex plane
+(representing a meromorphic function), but the corresponding
+formal power series @@1+XXSeries(1)+XXSeries(1)**2+Ellipsis@@ needs to be analytically continued
+outside of the unit disk.
+The distinction also matters for arithmetic in several variables since
+multivariate polynomial fractions are well-defined arithmetically but have non-unique
+multivariate Laurent expansions.</p>
+
+<p>Likewise,
+@@Exp(XX(1))@@ represents a term that is algebraically independent of @@XX(1)@@
+(allowing one to express formal exponential polynomials
+such as @@XX(1)*Exp(XX(1)) + 5*XX(1)*Exp(2*XX(1))@@),
+while @@Exp(XXSeries(1))@@ gives the formal power series @@1 + XXSeries(1) + XXSeries(1)**2/2 + Ellipsis@@.</p>
+
+@example@ Implies(Elements(x, y, XXSeries), Equal(Exp(x+y), Exp(x)*Exp(y), Sum((x+y)**n/Factorial(n), For(n, 0, Infinity)), Parentheses(Sum(x**n/Factorial(n), For(n, 0, Infinity))) * Parentheses(Sum(y**n/Factorial(n), For(n, 0, Infinity))))) @example@
+
+<p>We can construct rings of formal power series and Laurent series:</p>
+
+@example@ Subset(PowerSeries(R, XXSeries(1)), PowerSeries(R, XXSeries(1), XXSeries(2), XXSeries(3)), PowerSeries(R, XXSeries)) | Formal power series in one variable, a few variables, and in any finite combination of variables. @example@
+
+@example@ Subset(LaurentSeries(R, XXSeries(1)), LaurentSeries(R, XXSeries(1), XXSeries(2), XXSeries(3)), LaurentSeries(R, XXSeries)) | Formal Laurent series in one variable, a few variables, and in any finite combination of variables. @example@
+
+<p>More generally, the standard series indeterminates are compatible with the standard polynomial indeterminates,
+and when combined allow expressing formal power series with polynomials (or polynomial fractions) as coefficients:</p>
+
+@example@ Where(Element(Sum((Parentheses(Product(Parentheses(a+k), For(k, 1, n))) / Parentheses(Product(Parentheses(b+k), For(k, 1, n)))) * (x**n / Factorial(n)), For(n, 0, Infinity)), PowerSeries(PolynomialFractions(CC, a, b), x)), Def(a, XX(1)), Def(b, XX(2)), Def(x, XXSeries(1))) @example@
+
+<p>Note that the example above represents a definite object in the mathematical universe, not containing any free variables.
+If we use evaluated complex-valued functions instead of formal polynomial fractions, we express a formal power series with ordinary (but possibly unknown) complex coefficients. In the following example, the coefficients are unknown complex numbers if @@f@@ and @@g@@ are interpreted as free variables:</p>
+
+@example@ Where(Implies(And(Element(f, Functions(ZZ, CC)), Element(g, Functions(ZZ, SetMinus(CC, Set(0))))), Element(Sum((f(n) / g(n)) * (x**n / Factorial(n)), For(n, 0, Infinity)), PowerSeries(CC, x))), Def(x, XXSeries(1))) @example@
+
+<ul>
+<li><span style="color:red">TODO: There are subtle problems with defining power series and Laurent series in several variables; this needs elaboration.</span></li>
+<li><span style="color:red">TODO: Puiseux series. Generalized series expansions?</span></li>
+</ul>
+
+<h2>Non-semantic markup</h2>
+
+<p>The Grim to LaTeX converter is intended to produce beautifully rendered,
+natural-looking formulas from expressions written
+in a semantically natural way.
+Nevertheless, the results are not always perfect, and sometimes manual
+rendering hints are needed.</p>
+
+<h3>Decorations and display style</h3>
+
+<p>The following functions semantically
+represent the identity function, but provide hints
+to the LaTeX converter:</p>
+
+@example@ AngleBrackets(Parentheses(x + Brackets(a - b)) * Braces(s - t)) | <tt>Parentheses</tt>, <tt>Brackets</tt>, <tt>Braces</tt> and <tt>AngleBrackets</tt>
+hint that the enclosed expression should be surrounded by ( ), [ ], { } and &LeftAngleBracket; &RightAngleBracket; respectively. @example@
+
+<!--
+@example@ Equal(Add(1/(i+1)**2, For(i, 0, 9)), Add(Evaluated(1/(i+1)**2), For(i, 0, 9)), Evaluated(Add(1/(i+1)**2, For(i, 0, 9)))) | The <tt>Evaluated</tt> function
+hints that the render should apply simple symbolic simplifications (such as constant folding) to the enclosed expression. @example@
+-->
+
+@example@ Equal(Tuple(1/(i+1)**2, For(i, 0, 9)), Tuple(Evaluated(1/(i+1)**2), For(i, 0, 9))) | The <tt>Evaluated</tt> function
+hints that the converter should apply symbolic simplifications (such as constant folding of rational numbers) to the enclosed expression before display. The precise
+simplification rules to be used are at the discretion of the converter (this should perhaps be configurable by the user). @example@
+
+
+<ul>
+<li><span style="color:red">
+TODO: other hints: small/large display style?
+Text vs operators? Patterns vs comprehension?
+Some of these should be options to the renderer rather than part of the formula language.
+</li>
+</ul>
+
+<h3>Gibberish</h3>
+
+<p>It is sometimes useful to write Grim expressions which are syntactically valid but semantically incorrect (or at least semantically under-specified),
+just for rendering formulas for a human reader. Here are some typical examples:</p>
+
+@example@ Equal(f(n), n**2) | This reads like a function definition, but it does not bind the symbols <tt>f</tt> and <tt>n</tt> and hence only makes sense as an equation involving free variables. @example@
+
+@example@ Equal(Set(n**2, For(n, 1, Infinity)), Set(1, 4, 9, 16, Ellipsis)) | The <tt>Ellipsis</tt> symbol does not have a formal interpretation; the right-hand side (and hence the equation as a whole) is semantically meaningless. @example@
+
+<h2>pygrim: Grim in Python</h2>
+
+<pre>
+>>> import pygrim
+>>> pygrim.Equal
+Equal
+>>> pygrim.Pi
+Pi
+>>> pygrim.Equal(pygrim.Pi - pygrim.Pi, 0)
+Equal(Sub(Pi, Pi), 0)
+>>> import pygrim.formulas
+>>> e = pygrim.formulas.entries_dict["590136"]
+>>> e
+Entry(ID("590136"),
+    Formula(Equal(Pi, Neg(Mul(ConstI, Log(-1))))))
+>>> e.args()[1].args()[0].head()
+Equal
+>>> e.args()[1].args()[0].args()
+(Pi, Neg(Mul(ConstI, Log(-1))))
+</pre>
+
+<p>The <tt>Expr</tt> class overloads arithmetic operators in Python.
+However, the <tt>==</tt> and <tt>!=</tt> operators in Python
+compare expressions, rather than creating Grim <tt>Equal</tt> and
+<tt>Unequal</tt> expressions.
+</p>
+
+<h3>Constructing and manipulating expressions</h3>
+
+<pre>
+>>> x.is_atom()
+True
+>>> x.args()
+>>> x.head()
+>>> (x+y+z).is_atom()
+False
+>>> x+y+z
+Add(Add(x, y), z)
+>>> (x+y+z).head()
+Add
+>>> (x+y+z).args()
+(Add(x, y), z)
+>>> x.is_symbol()
+True
+>>> Expr(3).is_integer()
+True
+>>> int(Expr(3))
+3
+>>> Expr("foo").is_text()
+True
+</pre>
+
+<h3>LaTeX output</h3>
+
+<p>The <tt>.latex()</tt> method converts an <tt>Expr</tt>
+expression to a LaTeX string.</p>
+
+<pre>
+>>> (Cos(Pi)+x/y).latex()
+'\\cos(\\pi) + \\frac{x}{y}'
+</pre>
+
+<h3>Numerical evaluation</h3>
+
+<p>The <tt>.n()</tt> method provides numerical evaluation using Arb.
+It only works if <a href="https://github.com/fredrik-johansson/python-flint">Python-FLINT</a>
+is installed.</p>
+
+<pre>
+>>> (Pi - 1).n(50)
+RealBall(Decimal("2.1415926535897932384626433832795028841971693993751"), Decimal("5.83e-51"))
+</pre>
+
+<p>By default, <tt>.n()</tt> returns a Grim expression representing a set
+that encloses the value of the input expression. The enclosure can also
+be returned as a Python-FLINT type:</p>
+
+<pre>
+>>> type((Pi - 1).n(30, as_arb=True))
+&lt;class 'flint.arb'>
+</pre>
+
+
+</div>
+</body>
+</html>
+
