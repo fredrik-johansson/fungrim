@@ -1478,14 +1478,6 @@ def tex_Det(head, args, **kwargs):
     else:
         return Call(head, *args).latex(**kwargs)
 
-@deftex
-def tex_ForAll(head, args, **kwargs):
-    assert len(args) == 3
-    argstr = [arg.latex(**kwargs) for arg in args]
-    if args[1].head() == Element:
-        return "\\text{for all } %s, \\,\\, %s" % (argstr[1], argstr[2])
-    return "\\text{for all } %s \\text{ with } %s, \\,\\, %s" % (argstr[0], argstr[1], argstr[2])
-
 @deftex_heads([All, Exists])
 def tex_All(head, args, **kwargs):
     assert len(args) in (2, 3)

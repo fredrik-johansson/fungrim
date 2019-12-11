@@ -3,7 +3,7 @@ from .expr import *
 # operators that may introduce bound variables, complicating symbol substitution
 dangerous_operators = set([
     Where,
-    ForAll, Exists,
+    All, Exists,
     Minimum, Maximum, ArgMin, ArgMax, ArgMinUnique, ArgMaxUnique,
     Solutions, UniqueSolution,
     Supremum, Infimum,
