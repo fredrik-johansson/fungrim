@@ -497,7 +497,9 @@ class Expr(object):
         return s
 
     def html_CodeExample(self):
-        expr, *args = self.args()
+        #expr, *args = self.args()
+        expr = self.args()[0]
+        args = self.args()[1:]
         s = ""
         s += """<div style="text-align:left; margin:1em"><span style="margin-right:0.5em">&#9658;</span>"""
         s += Description(SourceForm(expr))._html_Description()
