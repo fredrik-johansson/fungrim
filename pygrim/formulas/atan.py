@@ -227,7 +227,7 @@ make_entry(ID("a2af66"),
         Equal(Tuple(x,y), Tuple(r*Cos(theta), r*Sin(theta))),
             Equal(r, Sqrt(x**2+y**2)))), ForElement(theta, OpenClosedInterval(-Pi, Pi))))),
     Variables(x, y),
-    Assumptions(And(Element(x, RR), Element(y, RR), Or(Unequal(x, 0), Unequal(y, 0)))))
+    Assumptions(And(Element(x, RR), Element(y, RR), Or(NotEqual(x, 0), NotEqual(y, 0)))))
 
 
 # Differential equations
@@ -325,7 +325,7 @@ make_entry(ID("22fb4a"),
     Formula(Equal(Atan2(y,x), Cases(
         Tuple(0, Equal(x, y, 0)),
         Tuple(Atan(y/x), Greater(x, 0)),
-        Tuple(Parentheses(Pi/2) * Sign(y) - Atan(x/y), Unequal(y, 0)),
+        Tuple(Parentheses(Pi/2) * Sign(y) - Atan(x/y), NotEqual(y, 0)),
         Tuple(Pi, And(Equal(y, 0), Less(x, 0))),
         ))),
     Variables(x, y),
@@ -449,12 +449,12 @@ make_entry(ID("12765e"),
 make_entry(ID("9dec3e"),
     Formula(Equal(Atan2(y,x), -ConstI*Log(Sign(x+y*ConstI)))),
     Variables(x, y),
-    Assumptions(And(Element(x, RR), Element(y, RR), Unequal(x+y*ConstI, 0))))
+    Assumptions(And(Element(x, RR), Element(y, RR), NotEqual(x+y*ConstI, 0))))
 
 make_entry(ID("eca4ce"),
     Formula(Equal(Atan2(y,x), Im(Log(x+y*ConstI)))),
     Variables(x, y),
-    Assumptions(And(Element(x, RR), Element(y, RR), Unequal(x+y*ConstI, 0))))
+    Assumptions(And(Element(x, RR), Element(y, RR), NotEqual(x+y*ConstI, 0))))
 
 make_entry(ID("c580f4"),
     Formula(Equal(Atan(z), Acot(1/z))),
@@ -518,12 +518,12 @@ make_entry(ID("36171f"),
 make_entry(ID("6b8963"),
     Formula(Equal(RealDerivative(Atan2(y, x), For(x, x, 1)), -(y/(x**2+y**2)))),
     Variables(x, y),
-    Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), Unequal(y, 0)))))
+    Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), NotEqual(y, 0)))))
 
 make_entry(ID("1d3fd7"),
     Formula(Equal(RealDerivative(Atan2(y, x), For(y, y, 1)), x/(x**2+y**2))),
     Variables(x, y),
-    Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), Unequal(y, 0)))))
+    Assumptions(And(Element(x, RR), Element(y, RR), Or(Greater(x, 0), NotEqual(y, 0)))))
 
 # Series expansions
 

@@ -293,12 +293,12 @@ make_entry(ID("6c3523"),
 make_entry(ID("8bbb6f"),
     Formula(Equal(HurwitzZeta(s, Div(1,4)) + HurwitzZeta(s, Div(3,4)), 2**s * (2**s-1) * RiemannZeta(s))),
     Variables(s),
-    Assumptions(And(Element(s, CC), Unequal(s, 1))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1))))
 
 make_entry(ID("4d1f6b"),
     Formula(Equal(HurwitzZeta(s, Div(1,6)) + HurwitzZeta(s, Div(5,6)), (2**s-1) * (3**s-1) * RiemannZeta(s))),
     Variables(s),
-    Assumptions(And(Element(s, CC), Unequal(s, 1))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1))))
 
 make_entry(ID("575b8f"),
     Formula(Equal(HurwitzZeta(2, 1), Pi**2 / 6)))
@@ -403,7 +403,7 @@ make_entry(ID("0bd6aa"),
 make_entry(ID("1699a9"),
     Formula(Equal(HurwitzZeta(s, a), (Pi/(2*(s-1))) * Integral((a-Div(1,2)+ConstI*x)**(1-s) / Cosh(Pi*x)**2, For(x, -Infinity, Infinity)))),
     Variables(s, a),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), Div(1,2)))),
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(a, CC), Greater(Re(a), Div(1,2)))),
     References("https://doi.org/10.1090/mcom/3401"))
 
 make_entry(ID("498036"),
@@ -419,17 +419,17 @@ make_entry(ID("498036"),
 make_entry(ID("ed4f6f"),
     Formula(Equal(HurwitzZeta(s, a+1), HurwitzZeta(s, a) - 1/a**s)),
     Variables(s, a),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)))))
 
 make_entry(ID("bed7ee"),
     Formula(Equal(HurwitzZeta(s, a+N), HurwitzZeta(s, a) - Sum(1/(n+a)**s, For(n, 0, N-1)))),
     Variables(s, a, N),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)), Element(N, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("95e270"),
     Formula(Equal(HurwitzZeta(s, a+N, r), HurwitzZeta(s, a, r) + (-1)**(r+1) * Sum(Log(a+k)**r / (a+k)**s, For(k, 0, N-1)))),
     Variables(s, a, N, r),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0)), Element(N, ZZGreaterEqual(1)), Element(r, ZZGreaterEqual(0)))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0)), Element(N, ZZGreaterEqual(1)), Element(r, ZZGreaterEqual(0)))))
 
 ## Multiplication formula
 
@@ -437,17 +437,17 @@ make_entry(ID("95e270"),
 make_entry(ID("ebc49c"),
     Formula(Equal(HurwitzZeta(s, a), (1/2**s) * (HurwitzZeta(s, a/2) + HurwitzZeta(s, (a+1)/2)))),
     Variables(s, a),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Greater(Re(a), 0))))
 
 make_entry(ID("7d9feb"),
     Formula(Equal(HurwitzZeta(s, a), (1/N**s) * Sum(HurwitzZeta(s, (a + k)/N), For(k, 0, N-1)))),
     Variables(s, a, N),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
 
 make_entry(ID("ba7f85"),
     Formula(Equal(HurwitzZeta(s, N*a), (1/N**s) * Sum(HurwitzZeta(s, a + k/N), For(k, 0, N-1)))),
     Variables(s, a, N),
-    Assumptions(And(Element(s, CC), Element(a, CC), Unequal(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(s, CC), Element(a, CC), NotEqual(s, 1), Greater(Re(a), 0), Element(N, ZZGreaterEqual(1)))))
 
 ## Reflection formula
 
@@ -463,13 +463,13 @@ make_entry(ID("69a1a9"),
 make_entry(ID("3ba544"),
     Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s)), HurwitzZeta(s, a, 1))),
     Variables(s, a),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), 0))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(a, CC), Greater(Re(a), 0))))
 
 # todo: relax assumptions on a
 make_entry(ID("d0d03b"),
     Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s, r)), HurwitzZeta(s, a, r))),
     Variables(s, a, r),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
 
 # todo: relax assumptions on a
 make_entry(ID("83065e"),
@@ -481,7 +481,7 @@ make_entry(ID("83065e"),
 make_entry(ID("40c3e2"),
     Formula(Equal(ComplexDerivative(HurwitzZeta(s, a), For(a, a, r)), RisingFactorial(1-s-r, r) * HurwitzZeta(s+r, a))),
     Variables(s, a, r),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Unequal(s+r, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), NotEqual(s+r, 1), Element(a, CC), Greater(Re(a), 0), Element(r, ZZGreaterEqual(0)))))
 
 # Euler-Maclaurin formula
 
@@ -492,7 +492,7 @@ make_entry(ID("d25d10"),
         1/(a+N)**s * (Div(1,2) + Sum((BernoulliB(2*k)/Factorial(2*k)) * (RisingFactorial(s,2*k-1)/(a+N)**(2*k-1)), For(k, 1, M))) -
         Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2*M)) * (RisingFactorial(s, 2*M) / (a+t)**(s+2*M)), For(t, N, Infinity)))),
     Variables(s, a, N, M),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(a, CC), Element(N, ZZGreaterEqual(1)), Element(M, ZZGreaterEqual(1)),
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(a, CC), Element(N, ZZGreaterEqual(1)), Element(M, ZZGreaterEqual(1)),
         Greater(Re(a+N), 0), Greater(Re(s+2*M-1), 0), Or(NotElement(a, ZZLessEqual(0)), Less(Re(s), 0), Equal(s, 0)))),
     References("http://dx.doi.org/10.1007/s11075-014-9893-1"))
 

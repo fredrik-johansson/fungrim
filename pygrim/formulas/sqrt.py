@@ -111,7 +111,7 @@ make_entry(ID("21d9b8"),
         TableSection("Formal power series"),
         Tuple(And(Element(z, PowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
             And(Element(Sqrt(z), PowerSeries(RR, x)))),
-        Tuple(And(Element(z, PowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
+        Tuple(And(Element(z, PowerSeries(CC, x)), NotEqual(SeriesCoefficient(z, x, 0), 0)),
             And(Element(Sqrt(z), PowerSeries(CC, x)))),
       )))
 
@@ -232,7 +232,7 @@ make_entry(ID("e0ac95"),
 make_entry(ID("fc2582"),
     Formula(Equal(Zeros(a*z**2+b*z+c, ForElement(z, CC)), Set((-b+Sqrt(b**2-4*a*c))/(2*a), (-b-Sqrt(b**2-4*a*c))/(2*a)))),
     Variables(a, b, c),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(c, CC), Unequal(a, 0))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(c, CC), NotEqual(a, 0))))
 
 
 make_entry(ID("0984ef"),
@@ -297,17 +297,17 @@ make_entry(ID("99c0b3"),
 make_entry(ID("d40229"),
     Formula(Equal(Sqrt(z/(z+c)), Sqrt(z)/Sqrt(z+c))),
     Variables(z, c),
-    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), Unequal(z+c, 0))))
+    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(z+c, 0))))
 
 make_entry(ID("6f63dd"),
     Formula(Equal(Sqrt(z/(z-c)), Sqrt(-z)/Sqrt(c-z))),
     Variables(z, c),
-    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), Unequal(z-c, 0))))
+    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(z-c, 0))))
 
 make_entry(ID("185efc"),
     Formula(Equal(Sqrt(z/(c-z)), Sqrt(z)*Sqrt(1/(c-z)))),
     Variables(z, c),
-    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), Unequal(c-z, 0))))
+    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(c-z, 0))))
 
 make_entry(ID("ac54c7"),
     Formula(Equal(Abs(Sqrt(z)), Sqrt(Abs(z)))),
@@ -400,7 +400,7 @@ make_entry(ID("6202cb"),
     Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
-    Assumptions(And(Element(A, PowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(A, PowerSeries(CC, x)), NotEqual(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
     #Formula(Where(Equal(Sqrt(Sum(Subscript(a, n) * x**n, For(n, 0, Infinity))), Sum(Subscript(c, n) * x**n, For(n, 0, Infinity))),
     #    Equal(Subscript(c, 0), Sqrt(Subscript(a, 0))),
     #        Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((3*k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))))))
@@ -409,5 +409,5 @@ make_entry(ID("5ff181"),
     Formula(Where(Equal(Subscript(c, n), 1/(n * Subscript(a, 0)) * Sum((k/2-n) * Subscript(a, k) * Subscript(c, n-k), For(k, 1, n))),
         Equal(Subscript(c, n), SeriesCoefficient(1/Sqrt(A), x, n)), Equal(Subscript(a, n), SeriesCoefficient(A, x, n)))),
     Variables(A, n),
-    Assumptions(And(Element(A, PowerSeries(CC, x)), Unequal(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
+    Assumptions(And(Element(A, PowerSeries(CC, x)), NotEqual(SeriesCoefficient(A, x, 0), 0), Element(n, ZZGreaterEqual(1)))))
 

@@ -630,17 +630,17 @@ make_entry(ID("921d61"),
 make_entry(ID("03e2a6"),
     Formula(Equal(Im(DigammaFunction(ConstI*y)), (Pi/2) * Coth(Pi*y) + 1/(2*y))),
     Variables(y),
-    Assumptions(And(Element(y, RR), Unequal(y, 0))))
+    Assumptions(And(Element(y, RR), NotEqual(y, 0))))
 
 make_entry(ID("22a9cd"),
     Formula(Equal(Im(DigammaFunction(1+ConstI*y)), (Pi/2) * Coth(Pi*y) - 1/(2*y))),
     Variables(y),
-    Assumptions(And(Element(y, RR), Unequal(y, 0))))
+    Assumptions(And(Element(y, RR), NotEqual(y, 0))))
 
 make_entry(ID("6f3fec"),
     Formula(Equal(Im(DigammaFunction(Div(1,2)+ConstI*y)), (Pi/2) * Tanh(Pi*y))),
     Variables(y),
-    Assumptions(And(Element(y, RR), Unequal(y, 0))))
+    Assumptions(And(Element(y, RR), NotEqual(y, 0))))
 
 # Functional equations
 
@@ -916,14 +916,14 @@ make_entry(ID("d02cf9"),
 
 make_entry(ID("21e21a"),
     Formula(Equal(Sum(1 / ((n+a)*(n+b)), For(n, 0, Infinity)),
-        Cases(Tuple(1/(a-b) * (DigammaFunction(a) - DigammaFunction(b)), Unequal(a, b)),
+        Cases(Tuple(1/(a-b) * (DigammaFunction(a) - DigammaFunction(b)), NotEqual(a, b)),
               Tuple(DigammaFunction(a, 1), Equal(a, b))))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), NotElement(a, ZZLessEqual(0)), NotElement(b, ZZLessEqual(0)))))
 
 make_entry(ID("b7f13b"),
     Formula(Equal(Sum((-1)**n / ((n+a)*(n+b)), For(n, 0, Infinity)),
-        Cases(Tuple(1/(2*(a-b)) * (DigammaFunction(a/2) + DigammaFunction((b+1)/2) - DigammaFunction(b/2) - DigammaFunction((a+1)/2)), Unequal(a, b)),
+        Cases(Tuple(1/(2*(a-b)) * (DigammaFunction(a/2) + DigammaFunction((b+1)/2) - DigammaFunction(b/2) - DigammaFunction((a+1)/2)), NotEqual(a, b)),
               Tuple(Div(1,4) * (DigammaFunction(a/2, 1) - DigammaFunction((a+1)/2, 1)), Equal(a, b))))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), NotElement(a, ZZLessEqual(0)), NotElement(b, ZZLessEqual(0)))))

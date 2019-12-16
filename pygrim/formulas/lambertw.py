@@ -153,7 +153,7 @@ make_entry(ID("88168b"),
 
 make_entry(ID("d7136f"),
     Formula(Equal(Solutions(Brackets(Equal(w * Exp(w), z)), ForElement(w, CC)),
-        Set(LambertW(k,z), For(k), And(Element(k, ZZ), Or(Unequal(z, 0), Equal(k, 0)))))),
+        Set(LambertW(k,z), For(k), And(Element(k, ZZ), Or(NotEqual(z, 0), Equal(k, 0)))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -230,7 +230,7 @@ make_entry(ID("6d936e"),
     Variables(k, z),
     Assumptions(And(Element(k, ZZ), Element(z, CC),
         Or(And(Equal(k, 0), NotElement(z, OpenInterval(-Infinity, -Exp(-1)))),
-           And(Unequal(k, 0), NotElement(z, OpenClosedInterval(-Infinity, 0)))))))
+           And(NotEqual(k, 0), NotElement(z, OpenClosedInterval(-Infinity, 0)))))))
 
 # Analytic properties
 
@@ -376,7 +376,7 @@ make_entry(ID("1fc63b"),
         Where(asympser, *asympdefs))),
     Variables(k, z),
     Assumptions(Where(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0))),
-        Less(Abs(sigma), Div(1,4)), Less(Abs(tau), Div(1,4)), Or(Unequal(k, 0), Greater(Abs(z), 1))),
+        Less(Abs(sigma), Div(1,4)), Less(Abs(tau), Div(1,4)), Or(NotEqual(k, 0), Greater(Abs(z), 1))),
             *asympdefs)))
 
 make_entry(ID("da0f15"),
@@ -384,13 +384,13 @@ make_entry(ID("da0f15"),
         *asympdefs)),
     Variables(k, z, N, M),
     Assumptions(Where(And(Element(N, ZZGreaterEqual(0)), Element(M, ZZGreaterEqual(0)), Element(k, ZZ), Element(z, SetMinus(CC, Set(0))),
-        Less(Abs(sigma), Div(1,4)), Less(Abs(tau), Div(1,4)), Or(Unequal(k, 0), Greater(Abs(z), 1))),
+        Less(Abs(sigma), Div(1,4)), Less(Abs(tau), Div(1,4)), Or(NotEqual(k, 0), Greater(Abs(z), 1))),
             *asympdefs)))
 
 # Range
 
 make_entry(ID("c0ae5b"),
-    Formula(Equal(Set(LambertW(k,z), For(Tuple(k,z)), And(Element(k, ZZ), Element(z, CC), Or(Unequal(z, 0), Equal(k, 0)))), CC)))
+    Formula(Equal(Set(LambertW(k,z), For(Tuple(k,z)), And(Element(k, ZZ), Element(z, CC), Or(NotEqual(z, 0), Equal(k, 0)))), CC)))
 
 k1 = Subscript(k,1)
 k2 = Subscript(k,2)
@@ -398,9 +398,9 @@ z1 = Subscript(z,1)
 z2 = Subscript(z,2)
 
 make_entry(ID("6e05c9"),
-    Formula(Unequal(LambertW(k1,z1), LambertW(k2,z2))),
+    Formula(NotEqual(LambertW(k1,z1), LambertW(k2,z2))),
     Variables(k1,z1,k2,z2),
-    Assumptions(And(Element(k1,ZZ),Element(k2,ZZ),Element(z1,CC),Element(z2,CC),Or(Unequal(k1,k2),Unequal(z1,z2)),
+    Assumptions(And(Element(k1,ZZ),Element(k2,ZZ),Element(z1,CC),Element(z2,CC),Or(NotEqual(k1,k2),NotEqual(z1,z2)),
         NotElement(LambertW(k1,z1), Set(-1,-Infinity)))))
 
 # Image of the principal branch

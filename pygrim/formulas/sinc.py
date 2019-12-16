@@ -224,28 +224,28 @@ make_entry(ID("41998e"),
 make_entry(ID("fa9283"),
     Formula(Equal(Sinc(z), Sin(z) / z)),
     Variables(z),
-    Assumptions(And(Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("b18020"),
     Formula(Equal(Sinc(0), 1)))
 
 make_entry(ID("01422b"),
-    Formula(Equal(Sinc(z), Cases(Tuple(Sin(z)/z, Unequal(z, 0)), Tuple(1, Equal(z, 0))))),
+    Formula(Equal(Sinc(z), Cases(Tuple(Sin(z)/z, NotEqual(z, 0)), Tuple(1, Equal(z, 0))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 # Zeros
 
 make_entry(ID("af4516"),
-    Formula(Equal(Zeros(Sinc(z), ForElement(z, CC)), Set(Pi*n, ForElement(n, ZZ), Unequal(n, 0)))))
+    Formula(Equal(Zeros(Sinc(z), ForElement(z, CC)), Set(Pi*n, ForElement(n, ZZ), NotEqual(n, 0)))))
 
 make_entry(ID("1349b5"),
-    Formula(Equal(Zeros(Sinc(Pi*z), ForElement(z, CC)), Set(n, ForElement(n, ZZ), Unequal(n, 0)))))
+    Formula(Equal(Zeros(Sinc(Pi*z), ForElement(z, CC)), Set(n, ForElement(n, ZZ), NotEqual(n, 0)))))
 
 # Specific values
 
 make_entry(ID("593e63"),
-    Formula(Equal(Sinc(Pi*n), Cases(Tuple(1, Equal(n, 0)), Tuple(0, Unequal(n, 0))))),
+    Formula(Equal(Sinc(Pi*n), Cases(Tuple(1, Equal(n, 0)), Tuple(0, NotEqual(n, 0))))),
     Variables(n),
     Assumptions(Element(n, ZZ)))
 
@@ -282,7 +282,7 @@ make_entry(ID("3a428f"),
 make_entry(ID("b41d08"),
     Formula(Equal(Sinc(ConstI*z), Sinh(z)/z)),
     Variables(z),
-    Assumptions(And(Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("d5000a"),
     Formula(Equal(Sinc(2*z), Sinc(z)*Cos(z))),
@@ -292,12 +292,12 @@ make_entry(ID("d5000a"),
 # Derivatives and differential equations
 
 make_entry(ID("768c77"),
-    Formula(Equal(ComplexDerivative(Sinc(z), For(z, z)), Cases(Tuple(Cos(z)/z - Sin(z)/z**2, Unequal(z, 0)), Tuple(0, Equal(z, 0))))),
+    Formula(Equal(ComplexDerivative(Sinc(z), For(z, z)), Cases(Tuple(Cos(z)/z - Sin(z)/z**2, NotEqual(z, 0)), Tuple(0, Equal(z, 0))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("90c66a"),
-    Formula(Equal(ComplexDerivative(Sinc(z), For(z, z, 2)), Cases(Tuple((2/z**3-1/z)*Sin(z) - 2*Cos(z)/z**2, Unequal(z, 0)), Tuple(-Div(1,3), Equal(z, 0))))),
+    Formula(Equal(ComplexDerivative(Sinc(z), For(z, z, 2)), Cases(Tuple((2/z**3-1/z)*Sin(z) - 2*Cos(z)/z**2, NotEqual(z, 0)), Tuple(-Div(1,3), Equal(z, 0))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
@@ -310,7 +310,7 @@ make_entry(ID("aa15f0"),
     Formula(Where(Equal(z * ComplexDerivative(f(z), For(z, z, 2)) + 2 * ComplexDerivative(f(z), For(z, z)) + A**2 * z * f(z), 0),
         Equal(f(z), Subscript(C, 1) * Sinc(A*z) + Subscript(C, 2) * (Cos(A*z) / z)))),
     Variables(C, A, z),
-    Assumptions(And(Element(z, CC), Unequal(z, 0), Element(A, CC), Element(Subscript(C, 1), CC), Element(Subscript(C, 2), CC))))
+    Assumptions(And(Element(z, CC), NotEqual(z, 0), Element(A, CC), Element(Subscript(C, 1), CC), Element(Subscript(C, 2), CC))))
 
 make_entry(ID("1c3766"),
     Formula(Equal(ComplexDerivative(Sinc(z), For(z, 0, n)), Cases(Tuple((-1)**Floor(n/2) * (1/(n+1)), Even(n)), Tuple(0, Odd(n))))),
@@ -357,7 +357,7 @@ make_entry(ID("50f72f"),
 make_entry(ID("19d7d9"),
     Formula(Equal(Sinc(z), ((2*z)/Pi)**(-(Div(1,2))) * (BesselJ(Div(1,2), z)))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), NotEqual(z, 0))))
 
 # Integral representations
 
@@ -369,7 +369,7 @@ make_entry(ID("6e4f58"),
 make_entry(ID("e2c10d"),
     Formula(Equal(Sinc(a*z), (1/a) * Integral(Cos(z*x), For(x, 0, a)))),
     Variables(a, z),
-    Assumptions(And(Element(z, CC), Element(a, CC), Unequal(a, 0))))
+    Assumptions(And(Element(z, CC), Element(a, CC), NotEqual(a, 0))))
 
 make_entry(ID("729c78"),
     Formula(Equal(Sinc(Pi*z), Integral(Cos(Pi*z*x), For(x, 0, 1)))),
@@ -385,7 +385,7 @@ make_entry(ID("08583a"),
 make_entry(ID("b1d132"),
     Formula(Equal(Sinc(a*z), Div(1,(2*a)) * Integral(Exp(ConstI*z*x), For(x, -a, a)))),
     Variables(a, z),
-    Assumptions(And(Element(z, CC), Element(a, CC), Unequal(a, 0))))
+    Assumptions(And(Element(z, CC), Element(a, CC), NotEqual(a, 0))))
 
 make_entry(ID("99ad29"),
     Formula(Equal(Sinc(Pi*z), Integral(Exp(2*Pi*ConstI*z*x), For(x, -Div(1,2), Div(1,2))))),
@@ -430,14 +430,14 @@ make_entry(ID("81f531"),
         Decimal("1.85193705198246617036105337016"), 30)))
 
 make_entry(ID("f5887b"),
-    Formula(Equal(Integral(Sinc(x + Pi*n) * Sinc(x + Pi*m), For(x, -Infinity, Infinity)), Cases(Tuple(Pi, Equal(n, m)), Tuple(0, Unequal(n, m))))),
+    Formula(Equal(Integral(Sinc(x + Pi*n) * Sinc(x + Pi*m), For(x, -Infinity, Infinity)), Cases(Tuple(Pi, Equal(n, m)), Tuple(0, NotEqual(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZ), Element(m, ZZ))))
 
 make_entry(ID("108daa"),
     Formula(Equal(Integral(Sinc(a*x) * Sinc(b*x), For(x, -Infinity, Infinity)), (Pi/2) * ((Abs(a+b)-Abs(a-b))/(a*b)))),
     Variables(a, b),
-    Assumptions(And(Element(a, RR), Element(b, RR), Unequal(a, 0), Unequal(b, 0))))
+    Assumptions(And(Element(a, RR), Element(b, RR), NotEqual(a, 0), NotEqual(b, 0))))
 
 make_entry(ID("3fe2b0"),
     Formula(Equal(Integral(Sinc(x+a) * Sinc(x+b), For(x, -Infinity, Infinity)), Pi * Sinc(a-b))),
@@ -572,7 +572,7 @@ make_entry(ID("4d3f04"),
 make_entry(ID("f0325d"),
     Formula(LessEqual(Abs(Sinc(x)), 1/Abs(x))),
     Variables(x),
-    Assumptions(And(Element(x, RR), Unequal(x, 0))))
+    Assumptions(And(Element(x, RR), NotEqual(x, 0))))
 
 make_entry(ID("d8d286"),
     Formula(LessEqual(Abs(Sinc(x)), (1+Abs(x))/(1+x**2))),
@@ -582,12 +582,12 @@ make_entry(ID("d8d286"),
 make_entry(ID("a934d1"),
     Formula(Less(Abs(Sinc(x)), Asinh(x)/x)),
     Variables(x),
-    Assumptions(And(Element(x, RR), Unequal(x, 0))))
+    Assumptions(And(Element(x, RR), NotEqual(x, 0))))
 
 make_entry(ID("351d87"),
     Formula(Less(Abs(Sinc(x)), (Sqrt(2)/x) * Tanh(x/Sqrt(2)))),
     Variables(x),
-    Assumptions(And(Element(x, RR), Unequal(x, 0))))
+    Assumptions(And(Element(x, RR), NotEqual(x, 0))))
 
 make_entry(ID("5d16e5"),
     Formula(LessEqual(Abs(Derivative(Sinc(x), For(x, x, n))), 1)),

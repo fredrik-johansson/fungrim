@@ -91,9 +91,9 @@ make_entry(ID("dfbcd9"),
         Tuple(And(Element(z, PowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 0)),
             And(Element(Exp(z), PowerSeries(QQ, x)), Equal(SeriesCoefficient(Exp(z), x, 0), 1))),
         Tuple(Element(z, PowerSeries(RR, x)),
-            And(Element(Exp(z), PowerSeries(RR, x)), Unequal(SeriesCoefficient(Exp(z), x, 0), 0))),
+            And(Element(Exp(z), PowerSeries(RR, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0))),
         Tuple(Element(z, PowerSeries(CC, x)),
-            And(Element(Exp(z), PowerSeries(CC, x)), Unequal(SeriesCoefficient(Exp(z), x, 0), 0))),
+            And(Element(Exp(z), PowerSeries(CC, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0))),
       )))
 
 make_entry(ID("f758c6"),

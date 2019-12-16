@@ -301,9 +301,9 @@ class Expr(object):
                 return False
         return True
 
-    def latex(self, in_small=False):
+    def latex(self, in_small=False, **kwargs):
         from .latex import latex
-        return latex(self, in_small=in_small)
+        return latex(self, in_small=in_small, **kwargs)
 
     def _can_render_html(self):
         if self.is_integer():
@@ -727,7 +727,7 @@ UnitCircle
 OpenDisk ClosedDisk BernsteinEllipse
 InteriorClosure Interior
 Decimal
-Equal Unequal Greater GreaterEqual Less LessEqual
+Equal NotEqual Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 CongruentMod Odd Even
 Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
@@ -814,9 +814,9 @@ SloaneA
 HalphenConstant RationalFunctionDegree
 HilbertMatrix
 StandardIndeterminates StandardNoncommutativeIndeterminates
-EvaluateIndeterminate
+EvaluateIndeterminate CallIndeterminate
 XX XXSeries XXNonCommutative
-Evaluated
+Evaluated Logic
 """)
 
 inject_builtin("""

@@ -327,12 +327,12 @@ make_entry(ID("78f5bb"),
 
 make_entry(ID("2c26a1"),
     Formula(Equal(Integral((ChebyshevT(n,x)*ChebyshevT(m,x)) * (1/Sqrt(1-x**2)), For(x,-1,1)),
-        Cases(Tuple(0, Unequal(n, m)), Tuple(Pi, Equal(n, m, 0)), Tuple(Pi/2, And(Equal(n, m), Unequal(n, 0)))))),
+        Cases(Tuple(0, NotEqual(n, m)), Tuple(Pi, Equal(n, m, 0)), Tuple(Pi/2, And(Equal(n, m), NotEqual(n, 0)))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
 make_entry(ID("473c36"),
-    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, Unequal(n, m)), Tuple(Pi/2, Equal(n, m))))),
+    Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, NotEqual(n, m)), Tuple(Pi/2, Equal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
 
@@ -600,13 +600,13 @@ make_entry(ID("12ce84"),
     Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, x, r)),
         (RisingFactorial(n,r) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r-1)) * Hypergeometric2F1(r+n, r-n, Div(1,2)+r, (1-x)/2))),
     Variables(n, r, x),
-    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), NotEqual(x, -1)))))
 
 make_entry(ID("9d66de"),
     Formula(Equal(ComplexDerivative(ChebyshevU(n, x), For(x, x, r)),
         (RisingFactorial(n+1,r+1) * RisingFactorial(n-r+1,r) / DoubleFactorial(2*r+1)) * Hypergeometric2F1(r+n+2, r-n, Div(3,2)+r, (1-x)/2))),
     Variables(n, r, x),
-    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), Unequal(x, -1)))))
+    Assumptions(And(Element(n, ZZ), Element(r, ZZGreaterEqual(0)), Element(x, CC), Or(LessEqual(r, n), NotEqual(x, -1)))))
 
 make_entry(ID("a68f0e"),
     Formula(Equal(ComplexDerivative(ChebyshevT(n, x), For(x, 1, r)),

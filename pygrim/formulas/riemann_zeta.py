@@ -131,13 +131,13 @@ make_entry(ID("e0a6a2"),
         Tuple(Element(s, Set(1)), Element(RiemannZeta(s), Set(UnsignedInfinity))),
         Tuple(Element(s, Set(Infinity)), Element(RiemannZeta(s), Set(1))),
         TableSection("Formal power series"),
-        Tuple(And(Element(s, PowerSeries(RR, x)), Unequal(SeriesCoefficient(s, x, 0), 1)),
+        Tuple(And(Element(s, PowerSeries(RR, x)), NotEqual(SeriesCoefficient(s, x, 0), 1)),
             Element(RiemannZeta(s), PowerSeries(RR, x))),
-        Tuple(And(Element(s, PowerSeries(CC, x)), Unequal(SeriesCoefficient(s, x, 0), 1)),
+        Tuple(And(Element(s, PowerSeries(CC, x)), NotEqual(SeriesCoefficient(s, x, 0), 1)),
             Element(RiemannZeta(s), PowerSeries(CC, x))),
-        Tuple(And(Element(s, PowerSeries(RR, x)), Unequal(s, 1)),
+        Tuple(And(Element(s, PowerSeries(RR, x)), NotEqual(s, 1)),
             Element(RiemannZeta(s), LaurentSeries(RR, x))),
-        Tuple(And(Element(s, PowerSeries(CC, x)), Unequal(s, 1)),
+        Tuple(And(Element(s, PowerSeries(CC, x)), NotEqual(s, 1)),
             Element(RiemannZeta(s), LaurentSeries(CC, x))),
       )),
     )
@@ -333,7 +333,7 @@ make_entry(ID("3a5eb6"),
     Formula(Less(Abs(RiemannZeta(s)), 3 * Abs((1+s)/(1-s)) * Abs((1+s)/(2*Pi))**((1+eta-Re(s))/2) * RiemannZeta(1+eta))),
     Variables(s, eta),
     Assumptions(
-        And(Element(s, CC), Element(eta, RR), Unequal(s, 1), Element(eta, OpenClosedInterval(0, Div(1,2))), LessEqual(-eta, Re(s), 1 + eta))),
+        And(Element(s, CC), Element(eta, RR), NotEqual(s, 1), Element(eta, OpenClosedInterval(0, Div(1,2))), LessEqual(-eta, Re(s), 1 + eta))),
     References("H. Rademacher, Topics in analytic number theory, Springer, 1973. Equation 43.3."))
 
 make_entry(ID("792f7b"),
@@ -341,7 +341,7 @@ make_entry(ID("792f7b"),
         Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))) -
                 Integral((BernoulliPolynomial(2*M, t - Floor(t)) / Factorial(2 * M)) * (RisingFactorial(s, 2*M) / t**(s+2*M)), For(t, N, Infinity)))),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
@@ -351,7 +351,7 @@ make_entry(ID("d31b04"),
         Parentheses(Sum(1/k**s, For(k, 1, N-1)) + N**(1-s)/(s-1) + 1/N**s * (Div(1,2) +
             Sum((BernoulliB(2*k) / Factorial(2*k)) * (RisingFactorial(s, 2*k-1) / N**(2*k-1)), For(k, 1, M))))),
         (4 * Abs(RisingFactorial(s, 2*M)) / (2*Pi)**(2*M)) * (N**(-Parentheses(Re(s)+2*M-1)) / (Re(s)+2*M-1)))),
-    Assumptions(And(Element(s, CC), Unequal(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
+    Assumptions(And(Element(s, CC), NotEqual(s, 1), Element(N, ZZ), Element(M, ZZ), Greater(Re(s+2*M-1), 0), GreaterEqual(N, 1), GreaterEqual(M, 1))),
     Variables(s, N, M),
     References("""F. Johansson (2015), Rigorous high-precision computation of the Hurwitz zeta function and its derivatives, Numerical Algorithms 69:253, DOI: 10.1007/s11075-014-9893-1""",
         """F. W. J. Olver, Asymptotics and Special Functions, AK Peters, 1997. Chapter 8."""))
@@ -362,14 +362,14 @@ make_entry(ID("e37535"),
             (3*(1 + 2*Abs(Im(s)))/(3+Sqrt(8))**n) * Exp(Abs(Im(s))*Pi/2)),
             Equal(d(k), n*Sum(Factorial(n+i-1)*4**i/(Factorial(n-i)*Factorial(2*i)), For(i, 0, k))))),
     Variables(s, n),
-    Assumptions(And(Element(s, CC), GreaterEqual(Re(s), Div(1,2)), Unequal(s, 1), Element(n, ZZGreaterEqual(1)))),
+    Assumptions(And(Element(s, CC), GreaterEqual(Re(s), Div(1,2)), NotEqual(s, 1), Element(n, ZZGreaterEqual(1)))),
     References("P. Borwein. An efficient algorithm for the Riemann zeta function. Canadian Mathematical Society Conference Proceedings, vol. 27, pp. 29-34. 2000.")
     )
 
 make_entry(ID("69348a"),
     Formula(Equal(RiemannZeta(Conjugate(s)), Conjugate(RiemannZeta(s)))),
     Variables(s),
-    Assumptions(And(Element(s, CC), Unequal(s, 1))))
+    Assumptions(And(Element(s, CC), NotEqual(s, 1))))
 
 make_entry(ID("8b5ddb"),
     Formula(IsHolomorphic(RiemannZeta(s), ForElement(s, SetMinus(CC, Set(1))))))
@@ -390,26 +390,26 @@ make_entry(ID("2e1ff3"),
     Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, RR)), Set(-(2*n), ForElement(n, ZZGreaterEqual(1))))))
 
 make_entry(ID("a78abc"),
-    Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, CC), LessEqual(0, Re(s), 1)), Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0))))))
+    Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, CC), LessEqual(0, Re(s), 1)), Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), NotEqual(n, 0))))))
 
 make_entry(ID("692e42"),
     Formula(Equal(Zeros(RiemannZeta(s), ForElement(s, CC)), Union(Set(-(2*n), ForElement(n, ZZGreaterEqual(1))),
-        Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), Unequal(n, 0)))))))
+        Set(RiemannZetaZero(n), For(n), And(Element(n, ZZ), NotEqual(n, 0)))))))
 
 make_entry(ID("cbbf16"),
     Formula(Less(0, Re(RiemannZetaZero(n)), 1)),
     Variables(n),
-    Assumptions(And(Element(n, ZZ), Unequal(n, 0))))
+    Assumptions(And(Element(n, ZZ), NotEqual(n, 0))))
 
 make_entry(ID("60c2ec"),
     Formula(Equal(RiemannZetaZero(-n), Conjugate(RiemannZetaZero(n)))),
     Variables(n),
-    Assumptions(And(Element(n, ZZ), Unequal(n, 0))))
+    Assumptions(And(Element(n, ZZ), NotEqual(n, 0))))
 
 make_entry(ID("e6ff64"),
     Formula(Equal(Re(RiemannZetaZero(n)), Div(1,2))),
     Variables(n),
-    Assumptions(And(Element(n, ZZ), Unequal(n, 0), Or(Less(Abs(n), 103800788359), RiemannHypothesis))),
+    Assumptions(And(Element(n, ZZ), NotEqual(n, 0), Or(Less(Abs(n), 103800788359), RiemannHypothesis))),
     References("""D. J. Platt (2016), Isolating some non-trivial zeros of zeta, Mathematics of Computation 86(307):1, DOI: 10.1090/mcom/3198"""))
 
 make_entry(ID("945fa5"),
@@ -1162,7 +1162,7 @@ make_entry(ID("fcab61"),
 
 # todo: absolute convergence? need to encode order of summation?
 make_entry(ID("cce75b"),
-    Formula(Equal(KeiperLiLambda(n), (1/n) * Sum(Parentheses(1 - (RiemannZetaZero(k) / (RiemannZetaZero(k) - 1))**n), ForElement(k, ZZ), Unequal(k, 0)))),
+    Formula(Equal(KeiperLiLambda(n), (1/n) * Sum(Parentheses(1 - (RiemannZetaZero(k) / (RiemannZetaZero(k) - 1))**n), ForElement(k, ZZ), NotEqual(k, 0)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

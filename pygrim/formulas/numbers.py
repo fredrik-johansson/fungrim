@@ -88,9 +88,7 @@ make_entry(ID("e5a04c"),
     Formula(Subset(ZZ, QQ, AlgebraicNumbers, CC)))
 
 make_entry(ID("aa6b07"),
-    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Parentheses(Exists(Equal(EvaluateIndeterminate(P, x, z), 0), ForElement(P, SetMinus(Polynomials(ZZ, x), Set(0)))))))),
-    Variables(x),
-    Assumptions(Equal(x, XX(1))))
+    Formula(Equal(AlgebraicNumbers, Set(z, ForElement(z, CC), Parentheses(Exists(Equal(CallIndeterminate(f, XX(1), z), 0), ForElement(f, SetMinus(Polynomials(ZZ, XX(1)), Set(0)))))))))
 
 make_entry(ID("24c179"),
     Formula(Element(Sqrt(2), AlgebraicNumbers)))

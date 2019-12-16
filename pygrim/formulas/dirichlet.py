@@ -142,7 +142,7 @@ make_entry(ID("47d430"),
 make_entry(ID("ed65c8"),
     Formula(Equal(PrimitiveDirichletCharacters(q),
         Set(chi, For(chi), And(Element(chi, DirichletGroup(q)),
-            Brackets(All(Exists(And(CongruentMod(a, 1, d), Equal(GCD(a,q), 1), Unequal(chi(a), 1)), ForElement(a, Range(0, q-1))),
+            Brackets(All(Exists(And(CongruentMod(a, 1, d), Equal(GCD(a,q), 1), NotEqual(chi(a), 1)), ForElement(a, Range(0, q-1))),
                 ForElement(d, Range(1, q-1)), Divides(d, q))))))),
     Variables(q),
     Assumptions(Element(q, ZZGreaterEqual(1))),
@@ -188,7 +188,7 @@ make_entry(ID("0851cf"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(m, ZZ), Element(n, ZZ))))
 
 make_entry(ID("afd0c5"),
-    Formula(Equivalent(Equal(chi(n), 0), Unequal(GCD(n,q), 1))),
+    Formula(Equivalent(Equal(chi(n), 0), NotEqual(GCD(n,q), 1))),
     Variables(q,chi,n),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(n, ZZ))))
 
@@ -203,7 +203,7 @@ make_entry(ID("d29554"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("458198"),
-    Formula(Equal(chi(0), Cases(Tuple(1, Equal(q, 1)), Tuple(0, Unequal(q, 1))))),
+    Formula(Equal(chi(0), Cases(Tuple(1, Equal(q, 1)), Tuple(0, NotEqual(q, 1))))),
     Variables(q,chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -217,9 +217,9 @@ make_entry(ID("d8c6d1"),
 # Primitive decomposition
 
 make_entry(ID("a7d592"),
-    Formula(Where(Exists(And(Element(d, Range(1, q)), Divides(d, q),
-        Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)), Equal(chi, Subscript(chi, 0) * Subscript(chi, 1))),
-            For(Tuple(d, Subscript(chi, 0)))),
+    Formula(Where(Exists(Equal(chi, Subscript(chi, 0) * Subscript(chi, 1)),
+            For(Tuple(d, Subscript(chi, 0))),
+                And(Element(d, Range(1, q)), Divides(d, q), Element(Subscript(chi, 0), PrimitiveDirichletCharacters(d)))),
             Equal(Subscript(chi, 1), DirichletCharacter(q, 1)))),
     Variables(q, Subscript(chi, 0)),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
@@ -504,12 +504,12 @@ make_entry(ID("5e1d3b"),
 make_entry(ID("e6deb7"),
     Formula(LessEqual(Abs(Sum(chi(n), For(n, 0, N))), Totient(q))),
     Variables(N),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("5df909"),
     Formula(LessEqual(Abs(Sum(chi(n), For(n, M, N))), Sqrt(q)*Log(q)/(2*Log(2)) + 3*Sqrt(q))),
     Variables(q, chi, M, N),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(M, ZZ), Element(N, ZZ), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))),
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(M, ZZ), Element(N, ZZ), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))),
     Description("Pólya-Vinogradov inequality, explicit form"),
     References("E. Dobrowolski and K. S. Williams, An upper bound for the sum ... for a certain class of functions f, Proceedings of the American Mathematical Society, Vol. 114, No. 1 (Jan., 1992), pp. 29-35, http://doi.org/10.2307/2159779"))
 
@@ -700,7 +700,7 @@ make_entry(ID("6c3fff"),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
 make_entry(ID("3d5327"),
-    Formula(Unequal(DirichletL(1, chi), 0)),
+    Formula(NotEqual(DirichletL(1, chi), 0)),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)))))
 
@@ -718,7 +718,7 @@ make_entry(ID("23256b"),
 make_entry(ID("c2750a"),
     Formula(Equal(DirichletL(1,chi), -((1/q) * Sum(chi(k) * DigammaFunction(k/q), For(k, 1, q-1))))),
     Variables(q),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("d83109"),
     Formula(Equal(DirichletL(1,DirichletCharacter(3,2)), Pi/Sqrt(27))))
@@ -739,7 +739,7 @@ make_entry(ID("a07d28"),
 make_entry(ID("789ca4"),
     Formula(Equal(DirichletL(0,chi), -Div(1,q) * Sum(k * chi(k), For(k, 1, q)))),
     Variables(q),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Unequal(chi, DirichletCharacter(q, 1)))))
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("fad52f"),
     Formula(Implies(Equal(chi(-1), 1), Equal(DirichletL(0,chi), 0))),
@@ -770,7 +770,7 @@ make_entry(ID("d69b41"),
     Formula(Equal(Sum(chi(a)* (z*Exp(a*z)/(Exp(q*z)-1)), For(a, 1, q)),
         Sum(GeneralizedBernoulliB(n, chi) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(q, chi, z),
-    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), Unequal(z, 0), Less(Abs(z), 2*Pi / q))))
+    Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(z, CC), NotEqual(z, 0), Less(Abs(z), 2*Pi / q))))
 
 make_entry(ID("f5c3c5"),
     Formula(Equal(DirichletL(-n, chi), -(GeneralizedBernoulliB(n+1,chi)/(n+1)))),
@@ -801,19 +801,19 @@ make_entry(ID("982e3b"),
     Formula(Less(0, Re(DirichletLZero(n,chi)), 1)),
     Variables(q,n,chi),
     Assumptions(And(Element(q,ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)),
-        Element(n, ZZ), Unequal(n, 0))))
+        Element(n, ZZ), NotEqual(n, 0))))
 
 make_entry(ID("214a91"),
     Formula(Equal(Re(DirichletLZero(n,chi)), Div(1,2))),
     Variables(q,n,chi),
     Assumptions(And(Element(q,ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)),
-        Element(n, ZZ), Unequal(n, 0), Or(And(Less(q, 400000), Less(Abs(Im(DirichletLZero(n,chi))), Pow(10,8)/q)), GeneralizedRiemannHypothesis))),
+        Element(n, ZZ), NotEqual(n, 0), Or(And(Less(q, 400000), Less(Abs(Im(DirichletLZero(n,chi))), Pow(10,8)/q)), GeneralizedRiemannHypothesis))),
     References("""D. J. Platt (2013), Numerical computations concerning the GRH. https://arxiv.org/pdf/1305.3087.pdf"""))
 
 make_entry(ID("9ba78a"),
     Formula(Equal(Zeros(DirichletL(s, chi), For(s), And(Element(s, CC), LessEqual(Re(s), 0))),
         Cases(Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
-              Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), Unequal(q, 1))),
+              Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), NotEqual(q, 1))),
               Tuple(Set(-(2*n)-1, For(n), Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))

@@ -260,7 +260,7 @@ make_entry(ID("99dc4a"),
 make_entry(ID("6880d0"),
     Formula(Equal(GCD(a,b), Maximum(Set(d, For(d), And(Element(d, ZZGreaterEqual(1)), Divides(d, a), Divides(d, b)))))),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("805c7a"),
     Formula(Equal(LCM(a,b), Minimum(Set(m, For(m), And(Element(m, ZZGreaterEqual(1)), Divides(a, m), Divides(b, m)))))),
@@ -285,12 +285,12 @@ make_entry(ID("5d03d2"),
 make_entry(ID("a9c81e"),
     Formula(Divides(GCD(a, b), a)),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("272bc8"),
     Formula(Divides(GCD(a, b), b)),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("67978f"),
     Formula(Divides(a, LCM(a, b))),
@@ -305,27 +305,27 @@ make_entry(ID("4f1441"),
 make_entry(ID("65cfe5"),
     Formula(Divides(LCM(a, b), a*b)),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), And(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), And(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("b60924"),
     Formula(Divides(GCD(a, b), a*b)),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("1277f6"),
     Formula(Divides(GCD(a, b), LCM(a, b))),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), And(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), And(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("e3392b"),
     Formula(Divides(GCD(a, b), a+b)),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("663d9c"),
     Formula(Divides(GCD(a, b), a*x+b*y)),
     Variables(a,b,x,y),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(x, ZZ), Element(y, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(x, ZZ), Element(y, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 # Bézout identity
 
@@ -343,12 +343,12 @@ make_entry(ID("965ac0"),
 make_entry(ID("e922c4"),
     Formula(Equal(GCD(a,b), Minimum(Set(a*x + b*y, For(Tuple(x, y)), And(Element(x, ZZ), Element(y, ZZ), GreaterEqual(a*x + b*y, 1)))))),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("f20503"),
     Formula(Where(Equal(d, a*x + b*y), Equal(Tuple(d, u, v), XGCD(a, b)), Equal(Tuple(x, y), Tuple(u+k*b/d, v-k*a/d)))),
     Variables(a,b,k),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(k, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(k, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 # Connection formulas
 
@@ -360,12 +360,12 @@ make_entry(ID("4d3127"),
 make_entry(ID("6572c5"),
     Formula(Equal(GCD(a,b), Abs(a*b) / LCM(a,b))),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Unequal(a, 0), Unequal(b, 0))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), NotEqual(a, 0), NotEqual(b, 0))))
 
 make_entry(ID("927e6e"),
     Formula(Equal(LCM(a,b), Abs(a*b) / GCD(a,b))),
     Variables(a,b),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(Unequal(a, 0), Unequal(b, 0)))))
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Or(NotEqual(a, 0), NotEqual(b, 0)))))
 
 make_entry(ID("126f3e"),
     Formula(Equal(GCD(a,b), Where(d, Equal(Tuple(d, u, v), XGCD(a, b))))),
@@ -494,22 +494,22 @@ make_entry(ID("a5ef5f"),
     Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
 make_entry(ID("633265"),
-    Formula(Where(Implies(And(Unequal(Abs(a), Abs(b)), Unequal(Abs(a), Abs(2*d))), Less(2*d*Abs(v), Abs(a))), Equal(Tuple(d, u, v), XGCD(a, b)))),
+    Formula(Where(Implies(And(NotEqual(Abs(a), Abs(b)), NotEqual(Abs(a), Abs(2*d))), Less(2*d*Abs(v), Abs(a))), Equal(Tuple(d, u, v), XGCD(a, b)))),
     Variables(a, b),
     Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
 make_entry(ID("4e5aad"),
-    Formula(Where(Implies(And(Unequal(Abs(a), Abs(b)), Equal(Abs(a), Abs(2*d))), Equal(v, Sign(b))), Equal(Tuple(d, u, v), XGCD(a, b)))),
+    Formula(Where(Implies(And(NotEqual(Abs(a), Abs(b)), Equal(Abs(a), Abs(2*d))), Equal(v, Sign(b))), Equal(Tuple(d, u, v), XGCD(a, b)))),
     Variables(a, b),
     Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
 make_entry(ID("da7d00"),
-    Formula(Where(Implies(And(Unequal(Abs(a), Abs(b)), Unequal(Abs(b), Abs(2*d))), Less(2*d*Abs(u), Abs(b))), Equal(Tuple(d, u, v), XGCD(a, b)))),
+    Formula(Where(Implies(And(NotEqual(Abs(a), Abs(b)), NotEqual(Abs(b), Abs(2*d))), Less(2*d*Abs(u), Abs(b))), Equal(Tuple(d, u, v), XGCD(a, b)))),
     Variables(a, b),
     Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
 make_entry(ID("569278"),
-    Formula(Where(Implies(And(Unequal(Abs(a), Abs(b)), Equal(Abs(b), Abs(2*d))), Equal(u, Sign(a))), Equal(Tuple(d, u, v), XGCD(a, b)))),
+    Formula(Where(Implies(And(NotEqual(Abs(a), Abs(b)), Equal(Abs(b), Abs(2*d))), Equal(u, Sign(a))), Equal(Tuple(d, u, v), XGCD(a, b)))),
     Variables(a, b),
     Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, SetMinus(ZZ, Set(0))))))
 
@@ -557,7 +557,7 @@ make_entry(ID("07ac4a"),
 make_entry(ID("959a25"),
     Formula(Equal(GCD(Mod(a,b), b), GCD(a, b))),
     Variables(a, b),
-    Assumptions(And(Element(a, ZZ), Element(b, ZZ), Unequal(b, 0))))
+    Assumptions(And(Element(a, ZZ), Element(b, ZZ), NotEqual(b, 0))))
 
 make_entry(ID("d4852c"),
     Formula(Equal(GCD(n*a, n*b), Abs(n)*GCD(a, b))),
@@ -638,7 +638,7 @@ make_entry(ID("8621f6"),
 make_entry(ID("fbe121"),
     Formula(Equal(LCM(r*s, c), LCM(r,c)*LCM(s,c)/Abs(c))),
     Variables(r, s, c),
-    Assumptions(And(Element(r, ZZ), Element(s, ZZ), Element(c, ZZ), Equal(GCD(r,s), 1), Unequal(c, 0))))
+    Assumptions(And(Element(r, ZZ), Element(s, ZZ), Element(c, ZZ), Equal(GCD(r,s), 1), NotEqual(c, 0))))
 
 make_entry(ID("5aad5c"),
     Formula(Equal(GCD(r**m, s**n), 1)),
@@ -655,12 +655,12 @@ make_entry(ID("250a45"),
 make_entry(ID("062423"),
     Formula(Equal(GCD(p, q), 1)),
     Variables(p, q),
-    Assumptions(And(Element(p, PP), Element(q, PP), Unequal(p, q))))
+    Assumptions(And(Element(p, PP), Element(q, PP), NotEqual(p, q))))
 
 make_entry(ID("499cfc"),
     Formula(Equal(GCD(p**m, q**n), 1)),
     Variables(p, q, m, n),
-    Assumptions(And(Element(p, PP), Element(q, PP), Unequal(p, q), Element(m, ZZGreaterEqual(0)), Element(n, ZZGreaterEqual(0)))))
+    Assumptions(And(Element(p, PP), Element(q, PP), NotEqual(p, q), Element(m, ZZGreaterEqual(0)), Element(n, ZZGreaterEqual(0)))))
 
 make_entry(ID("25986e"),
     Formula(Equal(GCD(Product(PrimeNumber(k)**Subscript(e,k), For(k, 1, m)),

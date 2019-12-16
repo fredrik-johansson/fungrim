@@ -86,7 +86,7 @@ make_entry(ID("ed210c"),
             And(Element(Log(z), PowerSeries(QQ, x)), Equal(SeriesCoefficient(Log(z), x, 0), 0))),
         Tuple(And(Element(z, PowerSeries(RR, x)), Element(SeriesCoefficient(z, x, 0), OpenInterval(0,Infinity))),
             And(Element(Log(z), PowerSeries(RR, x)))),
-        Tuple(And(Element(z, PowerSeries(CC, x)), Unequal(SeriesCoefficient(z, x, 0), 0)),
+        Tuple(And(Element(z, PowerSeries(CC, x)), NotEqual(SeriesCoefficient(z, x, 0), 0)),
             And(Element(Log(z), PowerSeries(CC, x)))),
       )))
 

@@ -51,7 +51,7 @@ make_entry(ID("f5e0b0"),
     References(SloaneA("A073007")))
 
 make_entry(ID("d0993b"),
-    Formula(Unequal(HalphenConstant, Div(1,9))))
+    Formula(NotEqual(HalphenConstant, Div(1,9))))
 
 # Approximation theory
 

@@ -110,9 +110,9 @@ make_entry(ID("09e2ed"),
         Tuple(Element(z, Set(ConstI*Infinity, -(ConstI*Infinity))), Element(Gamma(z), Set(0))),
         TableSection("Formal power series"),
         Tuple(And(Element(z, PowerSeries(RR, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
-            And(Element(Gamma(z), PowerSeries(RR, x)), Unequal(SeriesCoefficient(Gamma(z), x, 0), 0))),
+            And(Element(Gamma(z), PowerSeries(RR, x)), NotEqual(SeriesCoefficient(Gamma(z), x, 0), 0))),
         Tuple(And(Element(z, PowerSeries(CC, x)), NotElement(SeriesCoefficient(z, x, 0), ZZLessEqual(0))),
-            And(Element(Gamma(z), PowerSeries(CC, x)), Unequal(SeriesCoefficient(Gamma(z), x, 0), 0))),
+            And(Element(Gamma(z), PowerSeries(CC, x)), NotEqual(SeriesCoefficient(Gamma(z), x, 0), 0))),
         Tuple(And(Element(z, PowerSeries(RR, x)), NotElement(z, ZZLessEqual(0))),
             Element(Gamma(z), LaurentSeries(RR, x))),
         Tuple(And(Element(z, PowerSeries(CC, x)), NotElement(z, ZZLessEqual(0))),
@@ -126,7 +126,7 @@ make_entry(ID("c6038c"),
         "It satisfies", Equal(LogGamma(x), Log(Gamma(x))), "for real", Greater(x, 0), "and is defined on the complex plane",
         "through analytic continuation, with branch cuts on", OpenClosedInterval(-Infinity, 0), ".",
         "An explicit construction uses", EntryReference("37a95a"), "combined with", EntryReference("774d37"), "for analytic continuation.",
-        "In general,", Unequal(LogGamma(z), Log(Gamma(z))), " as the latter has an infinite set of branch cuts off the real line.",
+        "In general,", NotEqual(LogGamma(z), Log(Gamma(z))), " as the latter has an infinite set of branch cuts off the real line.",
         "The following table lists all conditions such that", SourceForm(LogGamma(z)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
       TableHeadings(Description("Domain"), Description("Codomain")),
@@ -399,19 +399,19 @@ make_entry(ID("143002"),
 make_entry(ID("b7fec0"),
     Formula(Where(LessEqual(Abs(Gamma(z)), (2*Pi)**Div(1,2) * Abs(z)**(x-Div(1,2)) * Exp(-(Pi*Abs(y)/2)) * Exp(Div(1,6*Abs(z)))), Equal(z, x+y*ConstI))),
     Variables(x, y),
-    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, RR), Unequal(x+y*ConstI, 0))),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, RR), NotEqual(x+y*ConstI, 0))),
     References("R. B. Paris and D. Kaminski (2001), Asymptotics of Mellin-Barnes integrals, Cambridge University Press. (2.1.19), p. 34."))
 
 make_entry(ID("80f7dc"),
     Formula(LessEqual(Abs(Gamma(z)), (2*Pi)**Div(1,2) * Abs(z**(z-Div(1,2)) * Exp(-z)) * Exp(Div(1,6*Abs(z))))),
     Variables(z),
-    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), Unequal(z, 0))),
+    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), NotEqual(z, 0))),
     References("R. B. Paris and D. Kaminski (2001), Asymptotics of Mellin-Barnes integrals, Cambridge University Press. (2.1.18), p. 34."))
 
 make_entry(ID("931d89"),
     Formula(GreaterEqual(Abs(Gamma(z)), (2*Pi)**Div(1,2) * Abs(z**(z-Div(1,2)) * Exp(-z)) * Exp(-Div(1,6*Abs(z))))),
     Variables(z),
-    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0), NotEqual(z, 0))))
 
 
 make_entry(ID("1976db"),

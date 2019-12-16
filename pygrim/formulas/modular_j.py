@@ -158,7 +158,7 @@ make_entry(ID("f0f53b"),
 make_entry(ID("348b26"),
     Formula(Equal(ComplexDerivative(ModularJ(tau), For(tau, tau)), -(2*Pi*ConstI) * (EisensteinE(6,tau) / EisensteinE(4,tau)) * ModularJ(tau))),
     Variables(tau),
-    Assumptions(And(Element(tau, HH), Unequal(EisensteinE(4,tau), 0))))
+    Assumptions(And(Element(tau, HH), NotEqual(EisensteinE(4,tau), 0))))
 
 
 

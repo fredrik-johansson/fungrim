@@ -116,44 +116,44 @@ make_entry(ID("a047eb"),
 make_entry(ID("9d3147"),
     Formula(Equal(HypergeometricU(a,b,z), z**(1-b) * HypergeometricU(1+a-b, 2-b, z))),
     Variables(a, b, z),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("06f229"),
     Formula(Where(Equal(z * ComplexDerivative(y(z), For(z, z, 2)) + (b-z) * ComplexDerivative(y(z), For(z, z, 1)) - a*y(z), 0), Equal(y(z),
         C*Hypergeometric1F1Regularized(a,b,z) + D*HypergeometricU(a,b,z)))),
     Variables(z, a, b, C, D),
     Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Element(C, CC), Element(D, CC),
-        Or(Equal(D, 0), Unequal(z, 0), Element(-a, ZZGreaterEqual(0))))))
+        Or(Equal(D, 0), NotEqual(z, 0), Element(-a, ZZGreaterEqual(0))))))
 
 make_entry(ID("bb5d67"),
     Formula(Where(Equal(z * ComplexDerivative(y(z), For(z, z, 2)) + a * ComplexDerivative(y(z), For(z, z, 1)) - y(z), 0), Equal(y(z),
         C*Hypergeometric0F1Regularized(a,z) + D*z**(1-a)*Hypergeometric0F1Regularized(2-a,z)))),
     Variables(z, a, C, D),
     Assumptions(And(Element(a, CC), Element(z, CC), Element(C, CC), Element(D, CC),
-        Or(Equal(D, 0), Unequal(z, 0), Element(1-a, ZZGreaterEqual(0))))))
+        Or(Equal(D, 0), NotEqual(z, 0), Element(1-a, ZZGreaterEqual(0))))))
 
 make_entry(ID("c8fcc7"),
     Formula(Equal(HypergeometricUStar(a,b,z), z**a * HypergeometricU(a,b,z))),
     Variables(a, b, z),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("4cf1e9"),
     Formula(Equal(HypergeometricUStar(a,b,z), Hypergeometric2F0(a, a-b+1, -(1/z)))),
     Variables(a, b, z),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), NotEqual(z, 0))))
 
 # todo: requires reciprocal gamma function
 make_entry(ID("f7f84e"),
     Formula(Equal(Hypergeometric1F1Regularized(a,b,z),
         Div((-z)**(-a), Gamma(b-a)) * HypergeometricUStar(a,b,z) + Div(z**(a-b) * Exp(z), Gamma(a)) * HypergeometricUStar(b-a, b, -z))),
     Variables(a, b, z),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("6cf802"),
     Formula(Equal(HypergeometricU(a,b,z),
         Gamma(1-b) / Gamma(a-b+1) * Hypergeometric1F1(a,b,z) + Gamma(b-1)/Gamma(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z))),
     Variables(a, b, z),
-    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), Unequal(z, 0), NotElement(b, ZZ))))
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(z, CC), NotEqual(z, 0), NotElement(b, ZZ))))
 
 make_entry(ID("18ef23"),
     Formula(Equal(HypergeometricU(a,n,z),
@@ -161,7 +161,7 @@ make_entry(ID("18ef23"),
         Gamma(1-b) / Gamma(a-b+1) * Hypergeometric1F1(a,b,z) + Gamma(b-1)/Gamma(a) * z**(1-b) * Hypergeometric1F1(a-b+1, 2-b, z),
             For(b, n)))),
     Variables(a, n, z),
-    Assumptions(And(Element(a, CC), Element(n, ZZ), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(n, ZZ), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("2df3e3"),
     Formula(Equal(Hypergeometric0F1(a,z), Exp(-(2*Sqrt(z))) * Hypergeometric1F1(a-Div(1,2), 2*a-1, 4*Sqrt(z)))),
@@ -171,19 +171,19 @@ make_entry(ID("2df3e3"),
 make_entry(ID("325a0e"),
     Formula(Equal(Hypergeometric0F1Regularized(a,z), (-z)**((1-a)/2) * BesselJ(a-1, 2*Sqrt(-z)))),
     Variables(a, z),
-    Assumptions(And(Element(a, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("00dfd1"),
     Formula(Equal(Hypergeometric0F1Regularized(a,z), z**((1-a)/2) * BesselI(a-1, 2*Sqrt(z)))),
     Variables(a, z),
-    Assumptions(And(Element(a, CC), Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(a, CC), Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("d1b3b5"),
     Formula(Equal(HypergeometricUStar(a,b,z),
         Sum(RisingFactorial(a,k) * RisingFactorial(a-b+1,k) / (Factorial(k) * (-z)**k), For(k, 0, n-1))
         + HypergeometricUStarRemainder(n,a,b,z))),
     Variables(a,b,z,n),
-    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)))))
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), NotEqual(z,0), Element(n,ZZGreaterEqual(0)))))
 
 make_entry(ID("99f69c"),
     SymbolDefinition(HypergeometricUStarRemainder, HypergeometricUStarRemainder(n,a,b,z), "Error term in asymptotic expansion of Tricomi confluent hypergeometric function"))
@@ -200,7 +200,7 @@ make_entry(ID("279e4f"),
         Equal(sigma, Abs(b-2*a)/Abs(z)),
         Equal(rho, Abs(a**2-a*b+b/2) + sigma*(1+sigma/4)/(1-sigma)**(2)))),
     Variables(a,b,z,n),
-    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Greater(Re(z), Abs(b-2*a)))),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), NotEqual(z,0), Element(n,ZZGreaterEqual(0)), Greater(Re(z), Abs(b-2*a)))),
     References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
 
 make_entry(ID("461a54"),
@@ -210,7 +210,7 @@ make_entry(ID("461a54"),
         Equal(sigma, Abs(b-2*a)/Abs(z)),
         Equal(rho, Abs(a**2-a*b+b/2) + sigma*(1+sigma/4)/(1-sigma)**(2)))),
     Variables(a,b,z,n),
-    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Or(Greater(Abs(Im(z)), Abs(b-2*a)), Greater(Re(z), Abs(b-2*a))))),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), NotEqual(z,0), Element(n,ZZGreaterEqual(0)), Or(Greater(Abs(Im(z)), Abs(b-2*a)), Greater(Re(z), Abs(b-2*a))))),
     References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
 
 make_entry(ID("7b91b4"),
@@ -223,6 +223,6 @@ make_entry(ID("7b91b4"),
         Equal(rho, Abs(a**2-a*b+b/2) + tau*(1+tau/4)/(1-tau)**(2)),
         Equal(C(m), (Sqrt(1+Pi*m/2) + sigma*nu**2*m) * nu**m))),
     Variables(a,b,z,n),
-    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), Unequal(z,0), Element(n,ZZGreaterEqual(0)), Greater(Abs(z), 2*Abs(b-2*a)))),
+    Assumptions(And(Element(a,CC), Element(b,CC), Element(z,CC), NotEqual(z,0), Element(n,ZZGreaterEqual(0)), Greater(Abs(z), 2*Abs(b-2*a)))),
     References("DLMF section 13.7, https://dlmf.nist.gov/13.7"))
 

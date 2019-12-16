@@ -98,25 +98,25 @@ make_entry(ID("0aac97"),
     Formula(Equal(Pow(a+b*ConstI, c+d*ConstI),
         Where(M**c * Exp(-(d*theta)) * (Cos(c*theta + d*Log(M)) + ConstI * Sin(c*theta + d*Log(M))), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
-    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), NotEqual(a+b*ConstI, 0))))
 
 make_entry(ID("bc4d0a"),
     Formula(Equal(Abs(Pow(a+b*ConstI, c+d*ConstI)),
         Where(M**c * Exp(-(d*theta)), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
-    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), NotEqual(a+b*ConstI, 0))))
 
 make_entry(ID("caf8cf"),
     Formula(Equal(Re(Pow(a+b*ConstI, c+d*ConstI)),
         Where(M**c * Exp(-(d*theta)) * Cos(c*theta + d*Log(M)), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
-    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), NotEqual(a+b*ConstI, 0))))
 
 make_entry(ID("18873d"),
     Formula(Equal(Im(Pow(a+b*ConstI, c+d*ConstI)),
         Where(M**c * Exp(-(d*theta)) * Sin(c*theta + d*Log(M)), Equal(M, Abs(a+b*ConstI)), Equal(theta, Arg(a+b*ConstI))))),
     Variables(a, b, c, d),
-    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), Unequal(a+b*ConstI, 0))))
+    Assumptions(And(Element(a, RR), Element(b, RR), Element(c, RR), Element(d, RR), NotEqual(a+b*ConstI, 0))))
 
 
 make_entry(ID("2090c3"),

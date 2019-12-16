@@ -106,7 +106,7 @@ make_entry(ID("98688d"),
 make_entry(ID("cb93ea"),
     Formula(Equal(Erf(z), z/Sqrt(z**2) - Exp(-(z**2))/(z*Sqrt(Pi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), NotEqual(z, 0))))
 
 make_entry(ID("ae3110"),
     Formula(Equal(Erfc(z), Exp(-(z**2))/(z*Sqrt(Pi)) * HypergeometricUStar(Div(1,2), Div(1,2), z**2))),

@@ -152,13 +152,13 @@ make_entry(ID("a51a4b"),
     Formula(Equal(ComplexDerivative(CoulombF(ell, eta, z), For(z, z, 1)),
         ((ell+1)/z + eta/(ell+1)) * CoulombF(ell,eta,z) - ((Sqrt(1+ell+ConstI*eta)*Sqrt(1+ell-ConstI*eta))/(ell+1)) * CoulombF(ell+1,eta,z))),
     Variables(ell, eta),
-    Assumptions(And(Element(ell, CC), Unequal(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+    Assumptions(And(Element(ell, CC), NotEqual(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("2fec14"),
     Formula(Equal(ComplexDerivative(CoulombG(ell, eta, z), For(z, z, 1)),
         ((ell+1)/z + eta/(ell+1)) * CoulombG(ell,eta,z) - ((Sqrt(1+ell+ConstI*eta)*Sqrt(1+ell-ConstI*eta))/(ell+1)) * CoulombG(ell+1,eta,z))),
     Variables(ell, eta),
-    Assumptions(And(Element(ell, CC), Unequal(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+    Assumptions(And(Element(ell, CC), NotEqual(ell, -1), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 make_entry(ID("07a654"),
     Formula(Where(Equal(ComplexDerivative(f(z), For(z, z, 2)),

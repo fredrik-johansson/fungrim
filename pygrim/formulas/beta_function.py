@@ -122,7 +122,7 @@ make_entry(ID("a1941b"),
 make_entry(ID("5ec9c0"),
     Formula(Equal(IncompleteBeta(x, a, b), (x**a / a) * Hypergeometric2F1(a, 1-b, a+1, x))),
     Variables(x, a, b),
-    Assumptions(And(Element(a, SetMinus(CC, ZZLessEqual(0))), Element(b, CC), Element(x, SetMinus(CC, Set(1))), Or(Unequal(x, 0), Greater(Re(a), 0)))))
+    Assumptions(And(Element(a, SetMinus(CC, ZZLessEqual(0))), Element(b, CC), Element(x, SetMinus(CC, Set(1))), Or(NotEqual(x, 0), Greater(Re(a), 0)))))
 
 # Symmetry 
 

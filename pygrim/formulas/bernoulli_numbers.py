@@ -170,13 +170,13 @@ make_entry(ID("522b04"),
     Formula(Equal(z/(Exp(z)-1),
         Sum(BernoulliB(n) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z),
-    Assumptions(And(Element(z, CC), Less(Abs(z), 2 * Pi), Unequal(z, 0))))
+    Assumptions(And(Element(z, CC), Less(Abs(z), 2 * Pi), NotEqual(z, 0))))
 
 make_entry(ID("f79ff0"),
     Formula(Equal(z*Exp(x*z)/(Exp(z)-1),
         Sum(BernoulliPolynomial(n,x) * (z**n / Factorial(n)), For(n, 0, Infinity)))),
     Variables(z, x),
-    Assumptions(And(Element(x, CC), Element(z, CC), Less(Abs(z), 2 * Pi), Unequal(z, 0))))
+    Assumptions(And(Element(x, CC), Element(z, CC), Less(Abs(z), 2 * Pi), NotEqual(z, 0))))
 
 make_entry(ID("555e10"),
     Formula(Equal(BernoulliPolynomial(n,x), Sum(Binomial(n,k) * BernoulliB(n-k) * x**k, For(k, 0, n)))),

@@ -131,19 +131,19 @@ make_entry(ID("651a4a"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
         (1-z)**(c-a-b) * Hypergeometric2F1Regularized(c-a, c-b, c, z))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
 
 make_entry(ID("b25089"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
         (1-z)**(-a) * Hypergeometric2F1Regularized(a, c-b, c, z/(z-1)))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
 
 make_entry(ID("504717"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
         (1-z)**(-b) * Hypergeometric2F1Regularized(c-a, b, c, z/(z-1)))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), Unequal(z, 1))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
 
 make_entry(ID("90ac58"),
     Formula(Equal((Sin(Pi * (b-a)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),

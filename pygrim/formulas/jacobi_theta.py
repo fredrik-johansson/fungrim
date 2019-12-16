@@ -827,13 +827,13 @@ make_entry(ID("dfbddd"),
     Formula(Equal(
         (1/Pi) * (JacobiTheta(1,z,tau,1) / JacobiTheta(1,z,tau)), Where(Cot(Pi*z) + 4 * Sum(q**(2*n) / (1 - q**(2*n)) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Sin(Pi*z), 0))))
+    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), NotEqual(Sin(Pi*z), 0))))
 
 make_entry(ID("c7f7a5"),
     Formula(Equal(
         (1/Pi) * (JacobiTheta(2,z,tau,1) / JacobiTheta(2,z,tau)), Where(-Tan(Pi*z) + 4 * Sum((-1)**n * (q**(2*n) / (1 - q**(2*n))) * Sin(2*Pi*n*z), For(n, 1, Infinity)), Equal(q, Exp(Pi*ConstI*tau))))),
     Variables(z, tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), Unequal(Cos(Pi*z), 0))))
+    Assumptions(And(Element(z, CC), Element(tau, HH), Less(Abs(Im(z)), Abs(Im(tau))), NotEqual(Cos(Pi*z), 0))))
 
 make_entry(ID("44e8fb"),
     Formula(Equal(
@@ -871,14 +871,14 @@ make_entry(ID(""),
         -(Pi * Sum(1/Tan(Pi*(z+n*tau)), For(n, -Infinity, Infinity))))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
-        Unequal(JacobiTheta(1, z, tau), 0))))
+        NotEqual(JacobiTheta(1, z, tau), 0))))
 
 make_entry(ID(""),
     Formula(Equal(JacobiTheta(2,z,tau,1)/JacobiTheta(2,z,tau),
         Pi * Sum(Tan(Pi*(z+n*tau)), For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
-        Unequal(JacobiTheta(2, z, tau), 0))))
+        NotEqual(JacobiTheta(2, z, tau), 0))))
 """
 
 # todo: introduce a log-derivative operator?
@@ -887,7 +887,7 @@ make_entry(ID("d81f05"),
         Pi**2 * Sum(1/Sin(Pi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
-        Unequal(JacobiTheta(1, z, tau), 0))))
+        NotEqual(JacobiTheta(1, z, tau), 0))))
 
 make_entry(ID("561d75"),
     Formula(Equal(ComplexBranchDerivative(Log(JacobiTheta(2,z,tau)), For(z, z, 2)),
@@ -895,7 +895,7 @@ make_entry(ID("561d75"),
         Pi**2 * Sum(1/Cos(Pi*(z+n*tau))**2, For(n, -Infinity, Infinity)))),
     Variables(z, tau),
     Assumptions(And(Element(z, CC), Element(tau, HH),
-        Unequal(JacobiTheta(2, z, tau), 0))))
+        NotEqual(JacobiTheta(2, z, tau), 0))))
 
 
 make_entry(ID("a5e568"),

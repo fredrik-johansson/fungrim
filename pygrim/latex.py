@@ -4,15 +4,15 @@ from .expr import *
 
 latex_cache = {}
 
-def latex(expr, in_small=False):
-    if (expr, in_small) in latex_cache:
-        return latex_cache[(expr, in_small)]
+def latex(expr, in_small=False, in_logic=False, **kwargs):
+    if (expr, in_small, in_logic) in latex_cache:
+        return latex_cache[(expr, in_small, in_logic)]
     else:
-        tex = _latex(expr, in_small=in_small)
-        latex_cache[(expr, in_small)] = tex
+        tex = _latex(expr, in_small=in_small, in_logic=in_logic)
+        latex_cache[(expr, in_small, in_logic)] = tex
         return tex
 
-def _latex(expr, in_small=False):
+def _latex(expr, **kwargs):
 
     if expr in symbol_latex_table:
         return symbol_latex_table[expr]
@@ -45,6 +45,8 @@ def _latex(expr, in_small=False):
             return "\\text{``" + str(expr._text).replace("_","\\_") + "''}"
         raise NotImplementedError
 
+    in_small = kwargs.get("in_small")
+
     head = expr._args[0]
     args = expr._args[1:]
 
@@ -58,11 +60,14 @@ def _latex(expr, in_small=False):
         return subscript_call_latex_table[head] + "_{" + arg0 + "}" + "\!\\left(" + args1 + "\\right)"
 
     if head in latex_conversion_functions:
-        return latex_conversion_functions[head](head, args, in_small=in_small)
+        return latex_conversion_functions[head](head, args, **kwargs)
 
     if head in subscript_latex_table:
-        assert len(args) == 1
-        return subscript_latex_table[head] + "_{" + latex(args[0], in_small=True) + "}"
+        assert len(args) in (0, 1)
+        if len(args) == 0:
+            return subscript_latex_table[head]
+        else:
+            return subscript_latex_table[head] + "_{" + latex(args[0], in_small=True) + "}"
 
     if head in subscript_pair_latex_table:
         assert len(args) == 2
@@ -82,7 +87,7 @@ def _latex(expr, in_small=False):
             else:
                 return latex(expr._args[0]) + argstr
 
-    argstr = [latex(arg, in_small=in_small) for arg in args]
+    argstr = [latex(arg, **kwargs) for arg in args]
     argstr = ", ".join(argstr)
 
     if expr._args[0].head() == Fun:
@@ -145,7 +150,7 @@ infix_latex_table = {
     Greater: ">",
     GreaterEqual: "\\ge",
     Equal: "=",
-    Unequal: "\\ne",
+    NotEqual: "\\ne",
     Subset: "\\subset",
     SubsetEqual: "\\subseteq",
     Divides: "\\mid",
@@ -583,8 +588,10 @@ def tex_And(head, args, **kwargs):
         #return "\\text{ and }".join(argstr)
         return ",\\,".join(argstr)
     else:
-        return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
-        #return " \\,\\land\\, ".join(argstr)
+        if kwargs.get("in_logic"):
+            return " \\,\\land\\, ".join(argstr)
+        else:
+            return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
 
 @deftex
 def tex_Or(head, args, **kwargs):
@@ -596,8 +603,10 @@ def tex_Or(head, args, **kwargs):
     for i in range(len(args)):
         if (not args[i].is_atom()) and args[i].head() in (And, Or, Not):
             argstr[i] = "\\left(%s\\right)" % argstr[i]
-    return " \\,\\mathbin{\\operatorname{or}}\\, ".join(argstr)
-    #return " \\,\\lor\\, ".join(argstr)
+    if kwargs.get("in_logic"):
+        return " \\,\\lor\\, ".join(argstr)
+    else:
+        return " \\,\\mathbin{\\operatorname{or}}\\, ".join(argstr)
 
 @deftex
 def tex_Sqrt(head, args, **kwargs):
@@ -758,13 +767,14 @@ def tex_Limit(head, args, **kwargs):
         if args[1].head() == For:
             formula, var, cond = args
             var, point = var.args()
+            cond = ",\\," + cond.latex(in_small=True)
         else:
             formula, var, point = args
             cond = ""
     elif len(args) == 4:
         formula, var, point, cond = args
         assert var.head() == Var
-        cond = ", " + cond.latex(in_small=True)
+        cond = ",\\," + cond.latex(in_small=True)
     else:
         raise ValueError
     var = var.latex()
@@ -1335,7 +1345,13 @@ def tex_AsymptoticTo(head, args, **kwargs):
 def tex_Not(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
-    return " \\operatorname{not} \\left(%s\\right)" % argstr[0]
+    argstr = argstr[0]
+    if not args[0].is_atom():
+        argstr = "\\left(%s\\right)" % argstr
+    if kwargs.get("in_logic"):
+        return " \\neg %s" % argstr
+    else:
+        return " \\operatorname{not} %s" % argstr
 
 @deftex
 def tex_Implies(head, args, **kwargs):
@@ -1478,13 +1494,15 @@ def tex_Det(head, args, **kwargs):
     else:
         return Call(head, *args).latex(**kwargs)
 
+@deftex
+def tex_Logic(head, args, **kwargs):
+    assert len(args) == 1
+    kwargs["in_logic"] = True
+    return args[0].latex(**kwargs)
+
 @deftex_heads([All, Exists])
 def tex_All(head, args, **kwargs):
     assert len(args) in (2, 3)
-    if head == All:
-        opname = "\\forall "
-    else:
-        opname = "\\exists "
     argstr0 = args[0].latex(**kwargs)
     if args[1].head() == ForElement:
         argstr1 = Element(*args[1].args()).latex(**kwargs)
@@ -1493,27 +1511,27 @@ def tex_All(head, args, **kwargs):
         argstr1 = args[1].args()[0].latex(**kwargs)
     else:
         raise ValueError
-    if 1 and head == All:
+    if kwargs.get("in_logic"):
         if head == All:
-            opname = "\\;\\text{ for all }"
-            if len(args) == 2:
-                return "%s %s %s" % (argstr0, opname, argstr1)
-            else:
-                argstr2 = args[2].latex(**kwargs)
-                return "%s %s %s \\text{ with } %s" % (argstr0, opname, argstr1, argstr2)
+            opname = "\\forall "
         else:
-            opname = "\\text{there exists }"
-            if len(args) == 2:
-                return "%s %s \\text{ such that } %s" % (opname, argstr1, argstr0)
-            else:
-                argstr2 = args[2].latex(**kwargs)
-                return "%s %s \\text{ with } %s \\text{ such that } %s" % (opname, argstr1, argstr2, argstr0)
-    else:
+            opname = "\\exists "
         if len(args) == 2:
             return opname + "%s : \\, %s" % (argstr1, argstr0)
         else:
             argstr2 = args[2].latex(**kwargs)
             return opname + "%s, \\, %s : \\, %s" % (argstr1, argstr2, argstr0)
+    else:
+        if head == All:
+            opname = "\\;\\text{ for all }"
+        else:
+            opname = "\\;\\text{ for some }"
+        if len(args) == 2:
+            return "%s %s %s" % (argstr0, opname, argstr1)
+        else:
+            argstr2 = args[2].latex(**kwargs)
+            return "%s %s %s \\text{ with } %s" % (argstr0, opname, argstr1, argstr2)
+
 
 @deftex
 def tex_DiscreteLog(head, args, **kwargs):
@@ -1704,6 +1722,14 @@ def tex_EvaluateIndeterminate(head, args, **kwargs):
     #return "\\left(%s\\right) \\!\\mid_{%s = %s} \\;" % (func, indet, val)
     return "\\left(%s\\right)_{%s = %s} \\," % (func, indet, val)
 
+@deftex
+def tex_CallIndeterminate(head, args, **kwargs):
+    assert len(args) == 3
+    func, indet, val = args
+    if val.head() == Tuple:
+        return func(*val.args()).latex(**kwargs)
+    else:
+        return func(val).latex(**kwargs)
 
 @deftex
 def tex_Matrices(head, args, **kwargs):
