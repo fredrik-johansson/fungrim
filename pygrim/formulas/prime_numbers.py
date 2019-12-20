@@ -4,34 +4,44 @@ from ..expr import *
 
 def_Topic(
     Title("Prime numbers"),
+    Section("Definitions"),
     Entries(
         "38f111",
         "0b643d",
         "6c22c8",
         "c03de4",  # included from zeta
-        "9d0839",  # OEIS
-        "4fa169",  # OEIS
     ),
-    Section("Basic formulas"),
+    Section("Connection formulas"),
     Entries(
         "3fc797",
         "04427b",
+        "9d0839",  # OEIS
+        "4fa169",  # OEIS
     ),
-    Section("Numerical values"),
+    Section("Tables"),
     Entries(
         "a3035f",
         "1e142c",
         "5404ce",
     ),
     Section("Bounds and inequalities"),
+    Subsection("Bertrand's postulate"),
     Entries(
         "d1ec2d",
         "69fd4b",
-        "8c52de",
+    ),
+    Subsection("Bounds for prime numbers"),
+    Entries(
         "6f3cf7",
-        "d898b9",
+        "8c52de",
+        "bfa464",
+        "1e3388",
+    ),
+    Subsection("Bounds for the prime counting function"),
+    Entries(
         "5258c0",
         "375afe",
+        "d898b9",
     ),
 )
 
@@ -99,6 +109,18 @@ make_entry(ID("6f3cf7"),
     Formula(Less(PrimeNumber(n), n*Log(n*Log(n)))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(6))))
+
+make_entry(ID("bfa464"),
+    Formula(Less(PrimeNumber(n), n*(Log(n) + Log(Log(n)) - 1 + (Log(Log(n))-2)/Log(n) - (Log(Log(n))**2 - 6*Log(Log(n)) + Decimal("10.667"))/(2*Log(n)**2)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(46254381))),
+    References("https://arxiv.org/abs/1706.03651"))
+
+make_entry(ID("1e3388"),
+    Formula(Greater(PrimeNumber(n), n*(Log(n) + Log(Log(n)) - 1 + (Log(Log(n))-2)/Log(n) - (Log(Log(n))**2 - 6*Log(Log(n)) + Decimal("11.508"))/(2*Log(n)**2)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(2))),
+    References("https://arxiv.org/abs/1706.03651"))
 
 make_entry(ID("a3035f"),
     Description("Table of", PrimeNumber(n), "for", LessEqual(1, n, 200)),
