@@ -679,6 +679,27 @@ class Expr(object):
         from .numeric import neval
         return neval(self, digits, **kwargs)
 
+    def simple(self, **kwargs):
+        """
+        Simple expression simplification: returns an expression that is
+        mathematically equivalent to the original expression.
+
+            >>> (-(-Expr(3))).simple()
+            3
+            >>> And(Element(3, ZZ), Element(Pi, SetMinus(RR, QQ))).simple()
+            True_
+
+        The following expression does not change; without assumptions,
+        it is unknown whether arithmetic with x is associative!
+
+            >>> Expr(1 + x + 1).simple()
+            Add(Add(1, x), 1)
+
+        This method is a simple wrapper around the Simplification class.
+        """
+        from .simplification import simple
+        return simple(self)
+
 all_builtins = []
 
 def inject_builtin(string):
