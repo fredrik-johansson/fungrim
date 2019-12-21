@@ -11,7 +11,31 @@ def_Topic(
     ),
     Section("Illustrations"),
     Entries(
+        "e74de0",
         "6ef3d1",
+    ),
+    Section("Domain and range"),
+    Subsection("Numbers"),
+    Entries(
+        "be1092",
+        "819b5f",
+        "ca8b0a",
+    ),
+    Subsection("Infinities"),
+    Entries(
+        "66f4c8",
+        "424db5",
+    ),
+    Subsection("Formal power series"),
+    Entries(
+        "a807a7",
+        "0d82d4",
+        "148f96",
+    ),
+    Subsection("Matrices"),
+    Entries(
+        "9e388b",
+        "2ea614",
     ),
     Section("Particular values"),
     Entries(
@@ -19,6 +43,10 @@ def_Topic(
         "9a944c",
         "54aaf1",
         "a90f35",
+        "bb7d22",
+        "8f9143",
+        "71a0b8",
+        "e2b379",
     ),
     Section("Functional equations and connection formulas"),
     Entries(
@@ -30,6 +58,8 @@ def_Topic(
         "1fa6b7",
         "1568e1",
         "e103e7",
+        "296627",
+        "987e3c",
     ),
     Section("Analytic properties"),
     Entries(
@@ -75,36 +105,73 @@ make_entry(ID("dfbcd9"),
     SymbolDefinition(Exp, Exp(z), "Exponential function"),
     Description("The exponential function", Exp(z), "is a function of one complex variable", z, ".",
         "It can be defined by the Taylor series", EntryReference("1635f5"), "."),
-    Description("In rendered formulas,", SourceForm(Exp(z)), "is shown as", Exp(z), "or as", Call(Exp, z), "depending on the typographical requirements; no semantic difference is implied."),
-    Description("The following table lists all conditions such that", SourceForm(Exp(z)), "is defined in Fungrim."),
-    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
-      TableHeadings(Description("Domain"), Description("Codomain")),
-      List(
-        TableSection("Numbers"),
-        Tuple(Element(z, Set(0)), Element(Exp(z), Set(1))),
-        Tuple(Element(z, RR), Element(Exp(z), OpenInterval(0,Infinity))),
-        Tuple(Element(z, CC), Element(Exp(z), SetMinus(CC, Set(0)))),
-        TableSection("Infinities"),
-        Tuple(Element(z, Set(Infinity)), Element(Exp(z), Set(Infinity))),
-        Tuple(Element(z, Set(-Infinity)), Element(Exp(z), Set(0))),
-        TableSection("Formal power series"),
-        Tuple(And(Element(z, PowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 0)),
-            And(Element(Exp(z), PowerSeries(QQ, x)), Equal(SeriesCoefficient(Exp(z), x, 0), 1))),
-        Tuple(Element(z, PowerSeries(RR, x)),
-            And(Element(Exp(z), PowerSeries(RR, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0))),
-        Tuple(Element(z, PowerSeries(CC, x)),
-            And(Element(Exp(z), PowerSeries(CC, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0))),
-      )))
+    Description("In rendered formulas,", SourceForm(Exp(z)), "is shown as", Exp(z), "or as", Call(Exp, z), "depending on the typographical requirements; no semantic difference is implied."))
 
 make_entry(ID("f758c6"),
     SymbolDefinition(ConstE, ConstE, "The constant e (2.718...)"),
     Description("The real number giving the base of the natural logarithm, also known as Euler's number."))
+
+make_entry(ID("e74de0"),
+    Image(Description("Plot of", Exp(x), "on", Element(x, ClosedInterval(-4,4))),
+        ImageSource("plot_exp")),
+    description_xray,
+    )
 
 make_entry(ID("6ef3d1"),
     Image(Description("X-ray of", Exp(z), "on", Element(z, ClosedInterval(-5,5) + ClosedInterval(-5,5)*ConstI)),
         ImageSource("xray_exp")),
     description_xray,
     )
+
+# Domain and range
+
+make_entry(ID("be1092"),
+    Formula(Implies(Element(z, Set(0)), Element(Exp(z), Set(1)))),
+    Variables(z))
+
+make_entry(ID("819b5f"),
+    Formula(Implies(Element(z, RR), Element(Exp(z), OpenInterval(0,Infinity)))),
+    Variables(z))
+
+make_entry(ID("ca8b0a"),
+    Formula(Implies(Element(z, CC), Element(Exp(z), SetMinus(CC, Set(0))))),
+    Variables(z))
+
+make_entry(ID("66f4c8"),
+    Formula(Implies(Element(z, Set(Infinity)), Element(Exp(z), Set(Infinity)))),
+    Variables(z))
+
+make_entry(ID("424db5"),
+    Formula(Implies(Element(z, Set(-Infinity)), Element(Exp(z), Set(0)))),
+    Variables(z))
+
+make_entry(ID("a807a7"),
+    Formula(Implies(And(Element(z, PowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 0)),
+        And(Element(Exp(z), PowerSeries(QQ, x)), Equal(SeriesCoefficient(Exp(z), x, 0), 1)))),
+    Variables(x, z),
+    Assumptions(Equal(x, XXSeries())))
+
+make_entry(ID("0d82d4"),
+    Formula(Implies(Element(z, PowerSeries(RR, x)),
+        And(Element(Exp(z), PowerSeries(RR, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0)))),
+    Variables(x, z),
+    Assumptions(Equal(x, XXSeries())))
+
+make_entry(ID("148f96"),
+    Formula(Implies(Element(z, PowerSeries(CC, x)),
+            And(Element(Exp(z), PowerSeries(CC, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0)))),
+    Variables(x, z),
+    Assumptions(Equal(x, XXSeries())))
+
+make_entry(ID("9e388b"),
+    Formula(Where(Implies(And(Element(n, ZZGreaterEqual(1)), Element(A, R)), Element(Exp(A), SetMinus(R, Set(Zero(R))))), Def(R, Matrices(RR, n, n)))),
+    Variables(A, n))
+
+make_entry(ID("2ea614"),
+    Formula(Where(Implies(And(Element(n, ZZGreaterEqual(1)), Element(A, R)), Element(Exp(A), SetMinus(R, Set(Zero(R))))), Def(R, Matrices(CC, n, n)))),
+    Variables(A, n))
+
+# Particular values
 
 make_entry(ID("27ca8d"),
     Formula(Equal(Exp(0), 1)))
@@ -117,6 +184,20 @@ make_entry(ID("54aaf1"),
 
 make_entry(ID("a90f35"),
     Formula(Equal(Exp(Pi*ConstI/2), ConstI)))
+
+make_entry(ID("bb7d22"),
+    Formula(NotElement(ConstE, QQ)))
+
+make_entry(ID("8f9143"),
+    Formula(NotElement(ConstE, AlgebraicNumbers)))
+
+make_entry(ID("71a0b8"),
+    Formula(All(NotElement(Exp(alpha), QQ), ForElement(alpha, SetMinus(QQ, Set(0))))))
+
+make_entry(ID("e2b379"),
+    Formula(All(NotElement(Exp(alpha), AlgebraicNumbers), ForElement(alpha, SetMinus(AlgebraicNumbers, Set(0))))))
+
+# Functional equations
 
 make_entry(ID("812707"),
     Formula(Equal(Exp(a+b), Exp(a) * Exp(b))),
@@ -147,6 +228,17 @@ make_entry(ID("1fa6b7"),
     Formula(Equal(Exp(z+2*n*Pi*ConstI), Exp(z))),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZ))))
+
+make_entry(ID("296627"),
+    Formula(Equal(Exp(Log(z)), z)),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("987e3c"),
+    Formula(Implies(Element(Im(z), OpenClosedInterval(-Pi, Pi)), Equal(Log(Exp(z)), z))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
 
 make_entry(ID("28d158"),
     Formula(IsHolomorphic(Exp(z), ForElement(z, CC))))

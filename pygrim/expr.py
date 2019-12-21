@@ -273,34 +273,6 @@ class Expr(object):
             return self
         return Expr(call=(arg.replace(rules) for arg in self._args))
 
-    # needs work
-    def need_parens_in_mul(self):
-        if self.is_atom():
-            if self.is_integer() and self._integer < 0:
-                return True
-            return False
-        # if self._args[0] in (Pos, Neg):
-        #     return True
-        if self._args[0] in (Add, Sub):
-            return True
-        return False
-
-    # needs work
-    def show_exponential_as_power(self, allow_div=True):
-        if self.is_atom():
-            return True
-        head = self._args[0]
-        if head == Div:
-            if not self._args[-1].is_atom():
-                return False
-            allow_div = False
-        if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt, XX, XXSeries):
-            return False
-        for arg in self._args[1:]:
-            if not arg.show_exponential_as_power(allow_div=allow_div):
-                return False
-        return True
-
     def latex(self, in_small=False, **kwargs):
         from .latex import latex
         return latex(self, in_small=in_small, **kwargs)

@@ -732,4 +732,3 @@ class TestSimplification(object):
         assert simp.simple(Add(-1, Pi, 1)) == Pi
         assert simp.simple(Add(3*Pi, 5*Pi/7, Pi/2, Pi/3, 2*Pi, -Div(191,42)*Pi)) == Mul(2, Pi)
 
-

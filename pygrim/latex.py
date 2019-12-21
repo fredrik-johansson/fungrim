@@ -351,6 +351,34 @@ def deftex_heads(heads):
         return f
     return decorator
 
+# needs work
+def need_parens_in_mul(expr):
+    if expr.is_atom():
+        if expr.is_integer() and expr._integer < 0:
+            return True
+        return False
+    # if self._args[0] in (Pos, Neg):
+    #     return True
+    if expr._args[0] in (Add, Sub):
+        return True
+    return False
+
+# needs work
+def show_exponential_as_power(expr, allow_div=True):
+    if expr.is_atom():
+        return True
+    head = expr._args[0]
+    if head == Div:
+        if not expr._args[-1].is_atom():
+            return False
+        allow_div = False
+    if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt, XX, XXSeries, Re, Im, Log):
+        return False
+    for arg in expr._args[1:]:
+        if not show_exponential_as_power(arg, allow_div=allow_div):
+            return False
+    return True
+
 @deftex
 def tex_Elements(head, args, **kwargs):
     assert len(args) >= 2
@@ -366,7 +394,7 @@ def tex_DistinctElements(head, args, **kwargs):
 @deftex
 def tex_Exp(head, args, **kwargs):
     assert len(args) == 1
-    if args[0].show_exponential_as_power():
+    if show_exponential_as_power(args[0]):
         return Pow(ConstE, args[0]).latex(**kwargs)
     else:
         return Call(Exp, args[0]).latex(**kwargs)
@@ -379,9 +407,9 @@ def tex_Div(head, args, **kwargs):
     if in_small:
         numstr = num.latex(in_small=True)
         denstr = den.latex(in_small=True)
-        if num.need_parens_in_mul():  # fixme!
+        if need_parens_in_mul(num):  # fixme!
             numstr = "\\left( %s \\right)" % numstr
-        if den.need_parens_in_mul():  # fixme!
+        if need_parens_in_mul(den):  # fixme!
             denstr = "\\left( %s \\right)" % denstr
         return numstr + " / " + denstr
     else:
@@ -446,7 +474,7 @@ def tex_Sub(head, args, **kwargs):
 def tex_Mul(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
-        if args[i].need_parens_in_mul():
+        if need_parens_in_mul(args[i]):
             argstr[i] = "\\left(" + argstr[i] + "\\right)"
     return " ".join(argstr)
 
