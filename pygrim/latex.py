@@ -412,13 +412,16 @@ def tex_Where(head, args, **kwargs):
 def tex_Pos(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "+" + argstr[0]
+    if args[0].head() in (Neg, Add, Sub):
+        return "+\\left(" + argstr[0] + "\\right)"
+    else:
+        return "+" + argstr[0]
 
 @deftex
 def tex_Neg(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
-    if args[0].head() == Neg:
+    if args[0].head() in (Neg, Pos, Add, Sub):
         return "-\\left(" + argstr[0] + "\\right)"
     else:
         return "-" + argstr[0]
@@ -426,7 +429,26 @@ def tex_Neg(head, args, **kwargs):
 @deftex
 def tex_Add(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
+    for i in range(1, len(args)):
+        if args[i].head() in (Neg, Pos, Sub):
+            argstr[i] = "\\left(" + argstr[i] + "\\right)"
     return " + ".join(argstr)
+
+@deftex
+def tex_Sub(head, args, **kwargs):
+    argstr = [arg.latex(**kwargs) for arg in args]
+    for i in range(1, len(args)):
+        if args[i].head() in (Neg, Pos, Add, Sub):
+            argstr[i] = "\\left(" + argstr[i] + "\\right)"
+    return " - ".join(argstr)
+
+@deftex
+def tex_Mul(head, args, **kwargs):
+    argstr = [arg.latex(**kwargs) for arg in args]
+    for i in range(len(args)):
+        if args[i].need_parens_in_mul():
+            argstr[i] = "\\left(" + argstr[i] + "\\right)"
+    return " ".join(argstr)
 
 @deftex
 def tex_CartesianProduct(head, args, **kwargs):
@@ -460,22 +482,6 @@ def tex_Restriction(head, args, **kwargs):
     assert len(args) == 2
     argstr = [arg.latex(**kwargs) for arg in args]
     return "{%s \\,\\rvert}_{%s}" % (argstr[0], argstr[1])
-
-@deftex
-def tex_Sub(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    for i in range(1, len(args)):
-        if not args[i].is_atom() and args[i]._args[0] in (Neg, Sub):
-            argstr[i] = "\\left(" + argstr[i] + "\\right)"
-    return " - ".join(argstr)
-
-@deftex
-def tex_Mul(head, args, **kwargs):
-    argstr = [arg.latex(**kwargs) for arg in args]
-    for i in range(len(args)):
-        if args[i].need_parens_in_mul():
-            argstr[i] = "\\left(" + argstr[i] + "\\right)"
-    return " ".join(argstr)
 
 @deftex
 def tex_Pow(head, args, **kwargs):
