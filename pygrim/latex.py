@@ -207,6 +207,8 @@ subscript_call_latex_table = {
     SquaresR: "r",
     StirlingSeriesRemainder: "R",
     LogBarnesGRemainder: "R",
+    GeneralLinearGroup: "\\operatorname{GL}",
+    SpecialLinearGroup: "\\operatorname{GL}",
 }
 
 symbol_latex_table = {
@@ -1770,9 +1772,9 @@ def tex_Matrices(head, args, **kwargs):
     assert len(args) == 3
     R, m, n = [arg.latex(**kwargs) for arg in args]
     if kwargs.get("in_small"):
-        return "\\mathcal{M}_{%s, %s} \\left(%s\\right)" % (m, n, R)
+        return "\\operatorname{M}_{%s \\times %s} \\left(%s\\right)" % (m, n, R)
     else:
-        return "\\mathcal{M}_{%s, %s}\\!\\left(%s\\right)" % (m, n, R)
+        return "\\operatorname{M}_{%s \\times %s}\\!\\left(%s\\right)" % (m, n, R)
 
 @deftex
 def tex_Evaluated(head, args, **kwargs):

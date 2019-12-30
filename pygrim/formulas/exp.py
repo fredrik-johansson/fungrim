@@ -164,12 +164,20 @@ make_entry(ID("148f96"),
     Assumptions(Equal(x, XXSeries())))
 
 make_entry(ID("9e388b"),
-    Formula(Where(Implies(And(Element(n, ZZGreaterEqual(1)), Element(A, R)), Element(Exp(A), SetMinus(R, Set(Zero(R))))), Def(R, Matrices(RR, n, n)))),
-    Variables(A, n))
+#    Formula(All(Element(Exp(A), GeneralLinearGroup(n, RR)), ForElement(A, Matrices(RR, n, n)))),
+#    Variables(n),
+#    Assumptions(Element(n, ZZGreaterEqual(0))))
+    Formula(Implies(Element(A, Matrices(RR, n, n)), Element(Exp(A), GeneralLinearGroup(n, RR)))),
+    Variables(A, n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("2ea614"),
-    Formula(Where(Implies(And(Element(n, ZZGreaterEqual(1)), Element(A, R)), Element(Exp(A), SetMinus(R, Set(Zero(R))))), Def(R, Matrices(CC, n, n)))),
-    Variables(A, n))
+#    Formula(All(Element(Exp(A), GeneralLinearGroup(n, CC)), ForElement(A, Matrices(CC, n, n)))),
+#    Variables(n),
+#    Assumptions(Element(n, ZZGreaterEqual(0))))
+    Formula(Implies(Element(A, Matrices(CC, n, n)), Element(Exp(A), GeneralLinearGroup(n, CC)))),
+    Variables(A, n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
 
 # Particular values
 

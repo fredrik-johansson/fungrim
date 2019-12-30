@@ -8,13 +8,11 @@ def_Topic(
     Description("""
 Formulas in Fungrim are represented using symbolic expressions
 that encode mathematical objects and operations in a semantic way.
-The symbolic expression language is called Grim ("GRIM Represents Intelligible Mathematics").
+The symbolic expression language is called Grim.
 The LaTeX output rendered on the Fungrim website is
 produced automatically from the symbolic Grim expressions."""),
-    Description("""This topic page documents fundamental constructions
-used in Grim expressions. The language is still a work in progress and the
-details are subject to change.
-"""),
+    Section("Language documentation"),
+    Description("""See: <a href="http://fungrim.org/grim/">The Grim formula language</a>"""),
     Section("Markup for Fungrim entries"),
     Entries(
         "6db9b2",

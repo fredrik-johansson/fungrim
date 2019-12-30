@@ -4,6 +4,37 @@ class EvaluationContext(object):
     def __init__(self, symbol_values=None, assumptions=None):
         pass
 
+class ExprPolynomial(object):
+    pass
+
+class ExprFactors(ExprPolynomial):
+    pass
+
+class ExprTerms(ExprPolynomial):
+    def __init__(self):
+        self.terms_coeffs = {}
+        self.hash = None
+
+    def __hash__(self):
+        if self.hash is None:
+            self.hash = hash(frozenset(self.terms_coeffs.items()))
+        return self.hash
+
+    def __iadd__(self, other):
+        if isinstance(other, ExprTerms):
+            for term, coeff in other.terms_coeffs:
+                if term in self.terms_coeffs:
+                    self.terms_coeffs[term] += coeff
+                else:
+                    self.terms_coeffs[term] = coeff
+        elif isinstance(other, ExprFactors):
+
+            raise NotImplementedError
+        elif isinstance(other, Expr):
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
+
 additive_ops = set([Pos, Neg, Add, Sub])
 ring_arithmetic_ops = set([Pos, Neg, Add, Sub, Mul])
 field_arithmetic_ops = set([Pos, Neg, Add, Sub, Mul, Div])
@@ -146,7 +177,9 @@ class Simplification(object):
             return True
         if self.is_real(x, context):
             if x.head() in (Exp, Cosh):
-                return True
+                t, = x.args()
+                if self.is_real(t, context):
+                    return True
             if x.head() in (Pos, Add, Mul, Sqrt):
                 if all(self.is_positive(arg, context) for arg in x.args()):
                     return True
@@ -385,142 +418,13 @@ class Simplification(object):
                 return False
         return None
 
-    def _simple_Add(self, expr, head, args, context=None):
-        if len(args) == 0:
-            return Expr(0)
-        if len(args) == 1:
-            return args[0]
-        if all(self.is_complex(arg, context) for arg in args):
-            def iter_terms_coeffs(args, context=None):
-                for arg in args:
-                    if arg.is_integer():
-                        yield Expr(1), int(arg)
-                    elif arg.head() == Add:
-                        for term, coeff in iter_terms_coeffs(arg.args(), context):
-                            yield term, coeff
-                    elif arg.head() == Sub:
-                        args2 = arg.args()
-                        assert len(args2) == 2
-                        (term1, coeff1), (term2, coeff2) = iter_terms_coeffs(args2, context)
-                        yield term1, coeff1
-                        yield term2, -coeff2
-                    elif arg.head() == Neg:
-                        args2 = arg.args()
-                        assert len(args2) == 1
-                        (term, coeff), = iter_terms_coeffs(args2, context)
-                        yield term, -coeff
-                    elif arg.head() == Mul:
-                        inert = []
-                        coeff = 1
-                        for (term2, coeff2) in iter_terms_coeffs(arg.args(), context):
-                            if term2 != Expr(1):
-                                inert.append(term2)
-                            coeff *= coeff2
-                        if len(inert) == 0:
-                            inert = Expr(1)
-                        elif len(inert) == 1:
-                            inert = inert[0]
-                        else:
-                            inert = Mul(*inert)
-                        yield inert, coeff
-                    elif arg.head() == Div:
-                        args2 = arg.args()
-                        assert len(args2) == 2
-                        (term1, coeff1), (term2, coeff2) = iter_terms_coeffs(args2, context)
-                        if term1 == term2:
-                            yield Expr(1), self._mpq(coeff1) / self._mpq(coeff2)
-                        elif term2 == Expr(1):
-                            yield term1, self._mpq(coeff1) / self._mpq(coeff2)
-                        else:
-                            yield Div(term1, term2), self._mpq(coeff1) / self._mpq(coeff2)
-                    else:
-                        yield arg, 1
-
-            term_coeff = {}
-            for term, coeff in iter_terms_coeffs(args, context):
-                if term in term_coeff:
-                    term_coeff[term] += coeff
-                else:
-                    term_coeff[term] = coeff
-
-            term_coeff = term_coeff.items()
-            term_coeff = [(term, coeff) for (term, coeff) in term_coeff if coeff != 0]
-
-            if len(term_coeff) == 0:
-                return Expr(0)
-
-            #if 0:
-            #    term_coeff = [(term, *self._mpq_numer_denom(coeff)) for (term, coeff) in term_coeff]
-
-            def merge_term_coeff(term, coeff):
-                if coeff == 1:
-                    return term, 1
-                if coeff == -1:
-                    if term.head() == Neg:
-                        assert len(term.args()) == 1
-                        return term.args()[0], 1
-                    return term, -1
-                p, q = self._mpq_numer_denom(coeff)
-                if term == Expr(1):
-                    if p > 0:
-                        coeff_expr = self._rational(p, q)
-                        return coeff_expr, 1
-                    else:
-                        coeff_expr = self._rational(-p, q)
-                        return coeff_expr, -1
-                else:
-                    if p > 0:
-                        coeff_expr = self._rational(p, q)
-                        return coeff_expr * term, 1
-                    else:
-                        coeff_expr = self._rational(-p, q)
-                        return coeff_expr * term, -1
-
-            if len(term_coeff) == 1:
-                term, coeff = term_coeff[0]
-                expr, sign = merge_term_coeff(term, coeff)
-                if sign == 1:
-                    return expr
-                else:
-                    return Neg(expr)
-
-            term_sign = [merge_term_coeff(term, coeff) for (term, coeff) in term_coeff]
-
-            positive = [term for (term, sign) in term_sign if sign == 1]
-            negative = [term for (term, sign) in term_sign if sign == -1]
-
-            # todo: logical sort order?
-            positive = sorted(positive, key=str)
-            negative = sorted(negative, key=str)
-
-            if positive and not negative:
-                return Add(*positive)
-
-            if negative and not positive:
-                return Neg(Add(*negative))
-
-            if len(positive) == 1:
-                positive = positive[0]
-            else:
-                positive = Add(*positive)
-
-            if len(negative) == 1:
-                negative = negative[0]
-            else:
-                negative = Add(*negative)
-
-            return Sub(positive, negative)
-
-            # from pygrim import *
-            # Add(3*Pi, -4*Pi, 3*ConstE).simple()
-
-
-        return expr
-
-    def simple_arithmetic(self, expr, context=None):
-
+    def trivial_arithmetic(self, expr, context=None):
+        """
+        Non-interventionist simplification of arithmetic expressions.
+        """
         head = expr.head()
         args = expr.args()
+        args = [self.simple(arg, context) for arg in args]
 
         if head == Neg:
             assert len(args) == 1
@@ -538,17 +442,210 @@ class Simplification(object):
             return args[0]
 
         if head == Add:
-            return self._simple_Add(expr, head, args, context)
+            if len(args) == 0:
+                return Expr(0)
+            if len(args) == 1:
+                return args[0]
 
         if head == Mul:
             if len(args) == 0:
                 return Expr(1)
             if len(args) == 1:
                 return args[0]
-            if all(self.is_complex(arg, context) for arg in args):
-                pass
 
         return expr
+
+    def iter_terms_coeffs(self, expr, context=None):
+
+        if expr.is_integer():
+            yield Expr(1), int(expr)
+            return
+
+        if expr.is_atom():
+            yield expr, 1
+            return
+
+        head = expr.head()
+        args = expr.args()
+
+        if head not in arithmetic_ops:
+            val = self.simple(expr, context)
+            if val.head() in arithmetic_ops:
+                for term, coeff in self.iter_terms_coeffs(val, context):
+                    yield term, coeff
+            else:
+                yield val, 1
+            return
+
+        if head == Add:
+            for arg in args:
+                for term, coeff in self.iter_terms_coeffs(arg, context):
+                    yield term, coeff
+            return
+
+        if head == Sub:
+            for i, arg in enumerate(args):
+                for term, coeff in self.iter_terms_coeffs(arg, context):
+                    if i == 0:
+                        yield term, coeff
+                    else:
+                        yield term, -coeff
+            return
+
+        if head == Neg:
+            assert len(args) == 1
+            for term, coeff in self.iter_terms_coeffs(args[0], context):
+                yield term, -coeff
+            return
+
+        if head == Mul:
+            inert = []
+            coeff = 1
+            for arg in args:
+                arg = self.simple(arg, context)
+                for term, coeff2 in self.iter_terms_coeffs(arg, context):
+                    if term != Expr(1):
+                        inert.append(term)
+                    coeff *= coeff2
+            if len(inert) == 0:
+                inert = Expr(1)
+            elif len(inert) == 1:
+                inert = inert[0]
+            else:
+                inert = Mul(*inert)
+            yield inert, coeff
+            return
+
+        if head == Div:
+            assert len(args) == 2
+            num_inert = []
+            num_coeff = 1
+            num, den = args
+            for term, coeff in self.iter_terms_coeffs(num, context):
+                if term != Expr(1):
+                    num_inert.append(term)
+                num_coeff *= coeff
+            den_inert = []
+            den_coeff = 1
+            for term, coeff in self.iter_terms_coeffs(den, context):
+                if term != Expr(1):
+                    den_inert.append(term)
+                den_coeff *= coeff
+            coeff = self._mpq(num_coeff) / self._mpq(den_coeff)
+
+            if len(num_inert) == 0:
+                num = Expr(1)
+            elif len(num_inert) == 1:
+                num = num_inert[0]
+            else:
+                num = Mul(*num_inert)
+
+            if len(den_inert) == 0:
+                den = Expr(1)
+            elif len(den_inert) == 1:
+                den = den_inert[0]
+            else:
+                den = Mul(*den_inert)
+
+            if num == den or coeff == 0:
+                yield Expr(1), coeff
+            elif den == Expr(1):
+                yield num, coeff
+            else:
+                yield num / den, coeff
+
+            return
+
+        if head == Pow:
+            pass
+
+        if head == Sqrt:
+            pass
+
+        if head == Exp:
+            pass
+
+        yield expr, 1
+
+    def simple_arithmetic(self, expr, context=None):
+        head = expr.head()
+        args = expr.args()
+
+        # todo: apply selectively?
+        if not all(self.is_complex(arg, context) for arg in args):
+            return trivial_arithmetic(self)
+
+        term_coeff = {}
+        for term, coeff in self.iter_terms_coeffs(expr, context):
+            if term in term_coeff:
+                term_coeff[term] += coeff
+            else:
+                term_coeff[term] = coeff
+
+        term_coeff = term_coeff.items()
+        term_coeff = [(term, coeff) for (term, coeff) in term_coeff if coeff != 0]
+
+        if len(term_coeff) == 0:
+            return Expr(0)
+
+        def merge_term_coeff(term, coeff):
+            if coeff == 1:
+                return term, 1
+            if coeff == -1:
+                if term.head() == Neg:
+                    assert len(term.args()) == 1
+                    return term.args()[0], 1
+                return term, -1
+            p, q = self._mpq_numer_denom(coeff)
+            if term == Expr(1):
+                if p > 0:
+                    coeff_expr = self._rational(p, q)
+                    return coeff_expr, 1
+                else:
+                    coeff_expr = self._rational(-p, q)
+                    return coeff_expr, -1
+            else:
+                if p > 0:
+                    coeff_expr = self._rational(p, q)
+                    return coeff_expr * term, 1
+                else:
+                    coeff_expr = self._rational(-p, q)
+                    return coeff_expr * term, -1
+
+        if len(term_coeff) == 1:
+            term, coeff = term_coeff[0]
+            expr, sign = merge_term_coeff(term, coeff)
+            if sign == 1:
+                return expr
+            else:
+                return Neg(expr)
+
+        term_sign = [merge_term_coeff(term, coeff) for (term, coeff) in term_coeff]
+
+        positive = [term for (term, sign) in term_sign if sign == 1]
+        negative = [term for (term, sign) in term_sign if sign == -1]
+
+        # todo: logical sort order?
+        positive = sorted(positive, key=str)
+        negative = sorted(negative, key=str)
+
+        if positive and not negative:
+            return Add(*positive)
+
+        if negative and not positive:
+            return Neg(Add(*negative))
+
+        if len(positive) == 1:
+            positive = positive[0]
+        else:
+            positive = Add(*positive)
+
+        if len(negative) == 1:
+            negative = negative[0]
+        else:
+            negative = Add(*negative)
+
+        return Sub(positive, negative)
 
     def simple_set_logic(self, expr, context=None):
         # head = self.simple(expr.head(), context)
@@ -667,6 +764,7 @@ class Simplification(object):
         if head in arithmetic_ops:
             return self.simple_arithmetic(expr, context)
 
+        # todo: simplify arguments?
         return expr
 
 
@@ -731,4 +829,5 @@ class TestSimplification(object):
         assert simp.simple(Add(0, 0, 1)) == Expr(1)
         assert simp.simple(Add(-1, Pi, 1)) == Pi
         assert simp.simple(Add(3*Pi, 5*Pi/7, Pi/2, Pi/3, 2*Pi, -Div(191,42)*Pi)) == Mul(2, Pi)
+
 
