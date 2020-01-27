@@ -695,6 +695,96 @@ class Expr(object):
         b = Brain(assumptions=assumptions)
         return b.simple(self)
 
+    def test(self, variables, assumptions=None, num=100, verbose=True):
+        """
+        Test that this formula holds for variables satisfying the given
+        assumptions, by assigning random values to the listed
+        free variables and attempting to simplify.
+
+        These assumptions are not correct:
+
+            >>> Equal(Sqrt(x**2), x).test([x], Element(x, RR))
+            {x: 0}    ...  True
+            {x: Div(1, 2)}    ...  True
+            {x: Sqrt(2)}    ...  True
+            {x: Pi}    ...  True
+            {x: 1}    ...  True
+            {x: Neg(Div(1, 2))}    ...  False
+            Traceback (most recent call last):
+              ...
+            ValueError
+
+        Valid assumptions:
+        
+            >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, RR), GreaterEqual(x, 0)))
+                ...
+            Passed 69 instances (68 True, 1 Unknown, 0 False)
+
+            >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, CC), Or(Greater(Re(x), 0), And(Equal(Re(x), 0), Greater(Im(x), 0)))))
+                ...
+            Passed 86 instances (67 True, 19 Unknown, 0 False)
+
+        """
+        if len(variables) == 0:
+            v = self.simple()
+            if v == False_:
+                if verbose:
+                    print("False")
+                raise ValueError
+            elif v == True_:
+                if verbose:
+                    print("True")
+            else:
+                if verbose:
+                    print("Unknown")
+            return
+        from .brain import Brain
+        b = Brain()
+        count = 0
+        count_true = 0
+        count_false = 0
+        count_unknown = 0
+        for assignment in b.some_values(variables, assumptions, num=num, as_dict=True):
+            v = self.replace(assignment)
+            if verbose:
+                print(assignment, "   ...  ", end="")
+            v = v.simple()
+            count += 1
+            if v == False_:
+                if verbose:
+                    print("False")
+                count_false += 1
+                raise ValueError
+            elif v == True_:
+                if verbose:
+                    print("True")
+                count_true += 1
+            else:
+                if verbose:
+                    print("Unknown")
+                count_unknown += 1
+        if verbose:
+            print("Passed", count, "instances (%i True, %i Unknown, %i False)" % (count_true, count_unknown, count_false))
+
+def test_fungrim_entry(id, num=100):
+    from .formulas import entries_dict
+    entry = entries_dict[id]
+    formula = entry.get_arg_with_head(Formula)
+    if formula is None:
+        print("no Formula() in entry")
+        return
+    print("Formula: ", formula)
+    variables = entry.get_arg_with_head(Variables)
+    if variables is None:
+        variables = []
+    else:
+        variables = variables.args()
+    assumptions = entry.get_arg_with_head(Assumptions)
+    if assumptions is None:
+        assumptions = True_
+    print("Variables: ", variables)
+    print("Assumptions: ", assumptions)
+    test_formula(formula, variables, assumptions, num=num)
 
 all_builtins = []
 

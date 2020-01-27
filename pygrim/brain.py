@@ -500,7 +500,13 @@ class Brain(object):
             return False
         if Greater(x, 0) in self.inferences:
             return False
-        # todo: ...
+        val = self.complex_enclosure(x)
+        if val is not None:
+            real, imag = val.real, val.imag
+            if imag == 0 and real < 0:
+                return True
+            if imag != 0 or real >= 0:
+                return False
         return None
 
     def is_nonpositive(self, x):
@@ -518,7 +524,13 @@ class Brain(object):
             return True
         if Greater(x, 0) in self.inferences:
             return False
-        # todo: ...
+        val = self.complex_enclosure(x)
+        if val is not None:
+            real, imag = val.real, val.imag
+            if imag == 0 and real <= 0:
+                return True
+            if imag != 0 or real > 0:
+                return False
         return None
 
     def is_integer(self, x):
@@ -999,41 +1011,6 @@ class Brain(object):
         args = expr.args()
         return expr
 
-    def simple_Sqrt(self, x):
-        """
-        Return an expression equivalent to Sqrt(x), simplified if possible.
-        """
-        x = self.simple(x)
-        if x in (Expr(0), Expr(1), Infinity, UnsignedInfinity, Undefined):
-            return x
-        if x == Expr(-1):
-            return ConstI
-        if x == -Infinity:
-            return ConstI * Infinity
-        if x.is_integer():
-            # todo: call an actual square root function
-            v = int(x)
-            real = v >= 0
-            v = abs(v)
-            if v < 1e100:
-                r = int(round(v ** 0.5))
-                if r * r == v:
-                    return Expr(r) if real else Expr(r)*ConstI
-        # todo: wanted?
-        if self.is_negative(x):
-            return self.simple_Sqrt(-x) * ConstI
-        # todo: generalize
-        if x.head() == Pow:
-            base, exp = x.args()
-            if exp.is_integer():
-                exp = int(exp)
-                if exp % 2 == 0 and exp > 0 and self.is_real(base) and self.is_nonnegative(base):
-                    if exp == 2:
-                        return base
-                    else:
-                        return Pow(base, exp // 2)
-        return Sqrt(x)
-
     def simple_Pos(self, x):
         return self.simple(x)
 
@@ -1114,7 +1091,7 @@ class Brain(object):
         if len(terms) == 1:
             return self.simple(terms[0])
         # todo: we want to avoid recursive Add simplifies if possible...
-        factors = [self.simple(x) for x in terms]
+        terms = [self.simple(x) for x in terms]
         if not all(self.is_complex(x) for x in terms):
             # todo: simplifications for this case
             return Add(*terms)
@@ -1266,8 +1243,6 @@ class Brain(object):
                 else:
                     yield x, Expr(1)
         for b, e in iter_base_exp(factors):
-            #e = self.simple(e)
-            #print("WOOLY", b, e)
             if b.is_integer() and e.is_integer():
                 bb = int(b)
                 ee = int(e)
@@ -1284,6 +1259,7 @@ class Brain(object):
         factors = []
         den_factors = []
         for b, e in base_exp.items():
+            # todo: simple_Pow here?
             e = self.simple(e)
             if b == ConstE:
                 if e == Expr(0):
@@ -1349,7 +1325,66 @@ class Brain(object):
     def simple_Pow(self, x, y):
         x = self.simple(x)
         y = self.simple(y)
+        # todo: want to combine this with power simplification in Mul...
+        if self.is_complex(x) and self.is_complex(y):
+            if x.is_integer() and y.is_integer():
+                a = int(x)
+                b = int(y)
+                if 0 <= b <= 2:
+                    return Expr(a**b)
+            if y == Expr(0):
+                return Expr(1)
+            if y == Expr(1):
+                return x
+            if x == Expr(1):
+                return Expr(1)
+            if x == Expr(0):
+                if self.is_positive(y):
+                    return Expr(0)
+                if self.is_negative(y):
+                    return UnsignedInfinity
+        if x == ConstE:
+            return Exp(y)
         return Pow(x, y)
+
+    def simple_Exp(self, x):
+        return self.simple_Pow(ConstE, x)
+
+    # todo: have this call simple_Pow, implementing all simplifications there?
+    def simple_Sqrt(self, x):
+        """
+        Return an expression equivalent to Sqrt(x), simplified if possible.
+        """
+        x = self.simple(x)
+        if x in (Expr(0), Expr(1), Infinity, UnsignedInfinity, Undefined):
+            return x
+        if x == Expr(-1):
+            return ConstI
+        if x == -Infinity:
+            return ConstI * Infinity
+        if x.is_integer():
+            # todo: call an actual square root function
+            v = int(x)
+            real = v >= 0
+            v = abs(v)
+            if v < 1e100:
+                r = int(round(v ** 0.5))
+                if r * r == v:
+                    return Expr(r) if real else Expr(r)*ConstI
+        # todo: wanted?
+        if self.is_negative(x):
+            return self.simple_Sqrt(-x) * ConstI
+        # todo: generalize
+        if x.head() == Pow:
+            base, exp = x.args()
+            if exp.is_integer():
+                exp = int(exp)
+                if exp % 2 == 0 and exp > 0 and self.is_real(base) and self.is_nonnegative(base):
+                    if exp == 2:
+                        return base
+                    else:
+                        return Pow(base, exp // 2)
+        return Sqrt(x)
 
     def simple_Abs(self, x):
         """
