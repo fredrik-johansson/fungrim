@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from .expr import *
+from .brain import *
 
 def test():
-    from .simplification import TestSimplification
-    TestSimplification().run()
+    TestBrain().run()
 

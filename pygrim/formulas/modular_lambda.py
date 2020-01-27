@@ -13,6 +13,13 @@ def_Topic(
     Entries(
         "f0981b",
     ),
+    Section("Domain"),
+    Entries(
+        "813d25",
+        "c7f85b",
+        "ad5aff",
+        "55ee4a",
+    ),
     Section("Modular transformations"),
     Subsection("Level 2 principal subgroup"),
     Entries(
@@ -98,11 +105,7 @@ def_Topic(
 make_entry(ID("f53771"),
     SymbolDefinition(ModularLambda, ModularLambda(tau), "Modular lambda function"),
     Description("The modular lambda function", ModularLambda(tau), "is a function of one variable", tau, "in the upper half-plane."),
-    Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
-      TableHeadings(Description("Domain"), Description("Codomain")),
-      List(
-        Tuple(Element(tau, HH), Element(ModularLambda(tau), CC)),
-      )))
+    CodeExample(ModularLambda(tau), "represents the modular lambda function evaluated at", tau, "."))
 
 make_entry(ID("6c6204"),
     SymbolDefinition(ModularLambdaFundamentalDomain, ModularLambdaFundamentalDomain, "Fundamental domain of the modular lambda function"),
@@ -114,6 +117,23 @@ make_entry(ID("f0981b"),
     Image(Description("X-ray of", ModularLambda(tau), "on", Element(tau, ClosedInterval(-Div(3,2),Div(3,2)) + ClosedInterval(0,2)*ConstI), "with", ModularLambdaFundamentalDomain, "highlighted"),
         ImageSource("xray_modular_lambda")),
     description_xray)
+
+# Domain
+
+make_entry(ID("813d25"),
+    Formula(Implies(Element(tau, HH), Element(ModularLambda(tau), SetMinus(CC, Set(0, 1))))),
+    Variables(tau))
+
+make_entry(ID("c7f85b"),
+    Formula(Implies(Element(tau, Set(ConstI*Infinity)), Element(ModularLambda(tau), Set(0)))),
+    Variables(tau))
+
+make_entry(ID("ad5aff"),
+    Formula(Implies(Element(tau, Set(2*n, ForElement(n, ZZ))), Element(ModularLambda(tau), Set(1)))),
+    Variables(tau))
+
+make_entry(ID("55ee4a"),
+    Formula(IsHolomorphic(ModularLambda(tau), ForElement(tau, Union(HH, Set(ConstI*Infinity))))))
 
 # Modular transformations
 

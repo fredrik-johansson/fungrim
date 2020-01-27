@@ -225,6 +225,30 @@ class ArbNumericalEvaluation(object):
                     return v.imag
             raise ArbFiniteError
 
+        if head == Floor:
+            assert len(args) == 1
+            v = self.eval(args[0], **kwargs)
+            if v.is_finite():
+                if isinstance(v, arb):
+                    v = v.floor()
+                else:
+                    v = v.real.floor()
+                if v.is_finite():
+                    return v
+            raise ArbFiniteError
+
+        if head == Ceil:
+            assert len(args) == 1
+            v = self.eval(args[0], **kwargs)
+            if v.is_finite():
+                if isinstance(v, arb):
+                    v = v.ceil()
+                else:
+                    v = v.real.ceil()
+                if v.is_finite():
+                    return v
+            raise ArbFiniteError
+
         if head in (Parentheses, Brackets, Braces):
             assert len(args) == 1
             return self.eval(args[0], **kwargs)

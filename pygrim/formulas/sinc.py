@@ -421,9 +421,7 @@ make_entry(ID("2b7b1d"),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("f0f0a6"),
-    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, Infinity)), Pi)),
-    Variables(z),
-    Assumptions(Element(z, CC)))
+    Formula(Equal(Integral(Sinc(x), For(x, -Infinity, Infinity)), Pi)))
 
 make_entry(ID("81f531"),
     Formula(EqualNearestDecimal(Integral(Sinc(x), For(x, 0, Pi)), 

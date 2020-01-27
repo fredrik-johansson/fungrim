@@ -262,6 +262,23 @@ class Expr(object):
                 for expr in arg.subexpressions_with_head(head):
                     yield expr
 
+    def head_args_flattened(self, head):
+        """
+        Iterates over args with the given head, flattening nested applications.
+
+            >>> from pygrim import *
+            >>> list(And(And(a, b), c).head_args_flattened(And))
+            [a, b, c]
+            >>> list(And(And(a, b), c).head_args_flattened(Or))
+            [And(And(a, b), c)]
+        """
+        if self.head() == head:
+            for x in self.args():
+                for t in x.head_args_flattened(head):
+                    yield t
+        else:
+            yield self
+
     def replace(self, rules):
         """
         Replace subexpressions of self with exact matches in the given
@@ -651,7 +668,7 @@ class Expr(object):
         from .numeric import neval
         return neval(self, digits, **kwargs)
 
-    def simple(self, **kwargs):
+    def simple(self, assumptions=None, **kwargs):
         """
         Simple expression simplification: returns an expression that is
         mathematically equivalent to the original expression.
@@ -667,10 +684,17 @@ class Expr(object):
             >>> Expr(1 + x + 1).simple()
             Add(Add(1, x), 1)
 
-        This method is a simple wrapper around the Simplification class.
+        Providing assmptions permits simplification:
+
+            >>> Expr(1 + x + 1).simple(Element(x, CC))
+            Add(2, x)
+
+        This method is a simple wrapper around Brain.simple.
         """
-        from .simplification import simple
-        return simple(self)
+        from .brain import Brain
+        b = Brain(assumptions=assumptions)
+        return b.simple(self)
+
 
 all_builtins = []
 
