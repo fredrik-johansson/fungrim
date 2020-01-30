@@ -133,24 +133,26 @@ make_entry(ID("651a4a"),
     Variables(a,b,c,z),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
 
+# todo: valid for all z given right conditions
 make_entry(ID("b25089"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
         (1-z)**(-a) * Hypergeometric2F1Regularized(a, c-b, c, z/(z-1)))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, ClosedOpenInterval(1, Infinity)))))
 
+# todo: valid for all z given right conditions
 make_entry(ID("504717"),
     Formula(Equal(Hypergeometric2F1Regularized(a,b,c,z),
         (1-z)**(-b) * Hypergeometric2F1Regularized(c-a, b, c, z/(z-1)))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotEqual(z, 1))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, ClosedOpenInterval(1, Infinity)))))
 
 make_entry(ID("90ac58"),
     Formula(Equal((Sin(Pi * (b-a)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),
         ((-z)**(-a) / (Gamma(b) * Gamma(c-a))) * Hypergeometric2F1Regularized(a, a-c+1, a-b+1, 1/z) - 
         ((-z)**(-b) / (Gamma(a) * Gamma(c-b))) * Hypergeometric2F1Regularized(b, b-c+1, b-a+1, 1/z))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, ClosedInterval(0, 1)))))
 
 make_entry(ID("27bc34"),
     Formula(Equal((Sin(Pi * (b-a)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),

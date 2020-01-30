@@ -82,6 +82,22 @@ def custom_cartesian(*lists):
                     c = N - i - j
                     if 0 <= a < A and 0 <= b < B and 0 <= c < C:
                         yield lists[0][a], lists[1][b], lists[2][c]
+    elif len(lists) == 4:
+        N = 0
+        A = len(lists[0])
+        B = len(lists[1])
+        C = len(lists[2])
+        D = len(lists[3])
+        for N in range(max(A,B,C,D)):
+            for i in range(N+1):
+                for j in range(N+1):
+                    for k in range(N+1):
+                        a = i
+                        b = N - i
+                        c = N - i - j
+                        d = N - i - j - k
+                        if 0 <= a < A and 0 <= b < B and 0 <= c < C and 0 <= d < D:
+                            yield lists[0][a], lists[1][b], lists[2][c], lists[3][d]
     else:
         for v in itertools.product(*lists):
             yield v
@@ -240,7 +256,17 @@ class Brain(object):
     A "brain" for performing symbolic computation.
     """
 
-    def __init__(self, variables=(), assumptions=None):
+    def infer(self, thm):
+        self.inferences.add(thm)
+        if thm.head() == Element:
+            x, dom = thm.args()
+            infer_domain(self.inferences, x, dom)
+            if dom.head() == SetMinus:
+                inset, outset = dom.args()
+                infer_domain(self.inferences, x, inset)
+                infer_not_domain(self.inferences, x, outset)
+
+    def __init__(self, variables=(), assumptions=None, fungrim=False, penalty={}):
         """
         Input: a list of symbols representing free variables and
         assumptions involving the free variables, which may be used
@@ -251,6 +277,9 @@ class Brain(object):
                     Element(c, QQ), NotEqual(a, 1)))
 
         """
+        self.simple_cache = {}
+        self.penalty = penalty
+
         # Init computational types
         from flint import arb, acb, fmpz, fmpq, ctx
         self._arb = arb
@@ -269,14 +298,49 @@ class Brain(object):
         # Simple inferences (mostly based on the domain)
         for asm in self.assumptions:
             # asm = asm.simple()
-            self.inferences.add(asm)
-            if asm.head() == Element:
-                x, dom = asm.args()
-                infer_domain(self.inferences, x, dom)
-                if dom.head() == SetMinus:
-                    inset, outset = dom.args()
-                    infer_domain(self.inferences, x, inset)
-                    infer_not_domain(self.inferences, x, outset)
+            self.infer(asm)
+
+        # Init Fungrim patterns
+        self.expr_db = {}
+        self.match_db = {}
+        if fungrim:
+            from . import formulas
+            from .expr import all_entries
+            for entry in all_entries:
+                formula = entry.get_arg_with_head(Formula)
+                if formula is None:
+                    continue
+
+                variables = entry.get_arg_with_head(Variables)
+
+                # Constant expression
+                if variables is None:
+                    content = formula.args()[0]
+                    self.infer(content)
+                    # self.expr_db[content] = True_
+                    if content.head() == Equal:
+                        args = content.args()
+                        best = args[0]
+                        cost = self.complexity(best)
+                        for arg in args[1:]:
+                            cost2 = self.complexity(arg)
+                            if cost2 < cost:
+                                best = arg
+                                cost = cost2
+                        for arg in args:
+                            if arg != best:
+                                self.expr_db[arg] = best
+                # Nonconstant expression for matching
+                else:
+                    content = formula.args()[0]
+                    if content.head() == Equal and len(content.args()) == 2:
+                        eid = entry.id()
+                        lhs_head = content.args()[0].head()
+                        if lhs_head in self.match_db:
+                            self.match_db[lhs_head].add(eid)
+                        else:
+                            self.match_db[lhs_head] = set([eid])
+
 
     def __repr__(self):
         s = ""
@@ -328,20 +392,48 @@ class Brain(object):
         if expr.is_atom():
             return expr
 
-        head = expr.head()
+        if expr in self.simple_cache:
+            v = self.simple_cache[expr]
+            if v is None:
+                return expr
+            return v
 
-        if head.is_symbol():
+        input_expr = expr
+        self.simple_cache[input_expr] = None
+
+
+        def fungrim_simplify(expr):
+            if expr in self.expr_db:
+                return self.expr_db[expr]
+            if expr.is_atom():
+                return expr
+
+            head = expr.head()
+            expr = head(*(self.simple(arg) for arg in expr.args()))
+            if head in self.match_db:
+                exprs = set((self.rewrite_fungrim(expr, id, recursive=False), id) for id in self.match_db[head])
+                #for e in exprs:
+                #    print(e, self.complexity(e[0]))
+                expr2, id = min(exprs, key=lambda v: self.complexity(v[0]))
+                if expr2 != expr and self.complexity(expr2) < self.complexity(expr):
+                    expr = self.simple(expr2)
+            return expr
+
+        if self.expr_db:
+            expr = fungrim_simplify(expr)
+
+        head = expr.head()
+        if head is not None and head.is_symbol():
             s = head._symbol
             f = "simple_" + s
             if hasattr(self, f):
                 args = expr.args()
-                return getattr(self, f)(*args)
+                expr2 = getattr(self, f)(*args)
+                if self.expr_db and expr2 != expr:
+                    expr2 = fungrim_simplify(expr2)
+                expr = expr2
 
-        if head in set_logic_ops:
-            return self.simple_set_logic(expr)
-
-        if head in arithmetic_ops:
-            return self.simple_arithmetic(expr)
+        self.simple_cache[input_expr] = expr
 
         return expr
 
@@ -556,6 +648,11 @@ class Brain(object):
                 return True
         if x in complex_constants:
             return False
+        val = self.complex_enclosure(x)
+        if val is not None:
+            # todo: with increased precision when needed
+            if not val.contains_integer():
+                return False
         if self.is_infinity(x) or x == Undefined:
             return False
         return None
@@ -687,9 +784,13 @@ class Brain(object):
                 return True
         if x.head() == Pow:
             base, exp = x.args()
-            if self.is_real(base) and self.is_real(exp) and \
-                (self.is_not_zero(base) or self.is_positive(exp)):
-                return True
+            if self.is_real(base) and self.is_real(exp):
+                if self.is_positive(base) and self.is_positive(exp):
+                    return True
+                if self.is_not_zero(base) and self.is_integer(exp):
+                    return True
+                if self.is_integer(exp) and self.is_nonnegative(exp):
+                    return True
         v = self.complex_enclosure(x)
         if v is not None:
             if v.imag == 0:
@@ -761,7 +862,6 @@ class Brain(object):
         if val1 is not None:
             val2 = self.complex_enclosure(b)
             if val2 is not None:
-                val1 = type(val1+val2)(val1)
                 if not val1.overlaps(val2):
                     return False
 
@@ -792,61 +892,170 @@ class Brain(object):
             return False
         return None
 
-    def element(self, a, S):
+    def greater(self, a, b):
+        v = self.simple(Greater(a, b))
+        if v == True_:
+            return True
+        if v == False_:
+            return False
+        return None
+
+    def less(self, a, b):
+        v = self.simple(Less(a, b))
+        if v == True_:
+            return True
+        if v == False_:
+            return False
+        return None
+
+    def greater_equal(self, a, b):
+        v = self.simple(GreaterEqual(a, b))
+        if v == True_:
+            return True
+        if v == False_:
+            return False
+        return None
+
+    def less_equal(self, a, b):
+        v = self.simple(LessEqual(a, b))
+        if v == True_:
+            return True
+        if v == False_:
+            return False
+        return None
+
+    def is_extended_real(self, x):
+        if x == Infinity:
+            return True
+        if x == -Infinity:
+            return True
+        v = self.is_real(x)
+        if v:
+            return True
+        if v is False and self.is_complex(x):
+            return False
+        return None
+
+    def element(self, x, S):
         """
-        Check if a is an element of S.
+        Check if x is an element of S.
         Returns True, False, or None for unknown.
         """
-        assert isinstance(a, Expr)
-        if Element(a, S) in self.inferences:
+        assert isinstance(x, Expr)
+        if Element(x, S) in self.inferences:
             return True
-        if NotElement(a, S) in self.inferences:
+        if NotElement(x, S) in self.inferences:
             return False
         if S == CC:
-            return self.is_complex(a)
+            return self.is_complex(x)
         if S == RR:
-            return self.is_real(a)
+            return self.is_real(x)
         if S == QQ:
-            return self.is_rational(a)
+            return self.is_rational(x)
         if S == ZZ:
-            return self.is_integer(a)
+            return self.is_integer(x)
+        if S == HH:
+            c1 = self.is_complex(x)
+            if not c1:
+                return c1
+            return self.is_positive(Im(x))
+        if S == PP:
+            z = self.is_integer(x)
+            if not z:
+                return z
+            if x.is_integer() and int(x) <= 20:
+                return int(x) in [2,3,5,7,11,13,17,19]
+            return None
         if S == AlgebraicNumbers:
-            return self.is_algebraic(a)
+            return self.is_algebraic(x)
+        head = S.head()
+        if head == ZZGreaterEqual:
+            a, = S.args()
+            v = self.is_integer(x)
+            if not v:
+                return v
+            return self.less_equal(a, x)
+        if head == ZZLessEqual:
+            b, = S.args()
+            v = self.is_integer(x)
+            if not v:
+                return v
+            return self.less_equal(x, b)
+        if head == Range:
+            a, b = S.args()
+            v = self.is_integer(x)
+            if not v:
+                return v
+            v = self.less_equal(a, x)
+            if not v:
+                return v
+            return self.less_equal(x, b)
+        if head in (ClosedInterval, OpenInterval, ClosedOpenInterval, OpenClosedInterval):
+            a, b = S.args()
+            v = self.is_extended_real(a)
+            if not v:
+                return None
+            v = self.is_extended_real(b)
+            if not v:
+                return None
+            v = self.is_extended_real(x)
+            if not v:
+                return v
+            if head != ClosedInterval and a == b:
+                return False
+            if head == ClosedInterval or head == ClosedOpenInterval:
+                v = self.less_equal(a, x)
+                if not v:
+                    return v
+            else:
+                v = self.less(a, x)
+                if not v:
+                    return v
+            if head == ClosedInterval or head == OpenClosedInterval:
+                v = self.less_equal(x, b)
+                return v
+            else:
+                v = self.less(x, b)
+                return v
         # todo: check for comprehensions
-        if S.head() == Set:
-            check = [self.equal(a, b) for b in S.args()]
+        if head == Set:
+            check = [self.equal(x, y) for y in S.args()]
             if True in check:
                 return True
             if all(c == False for c in check):
                 return False
+            return None
         # todo: check for comprehensions
-        if S.head() == Union:
+        if head == Union:
             if len(S.args()) == 0:
                 return False
-            check = [self.element(a, T) for T in S.args()]
+            check = [self.element(x, T) for T in S.args()]
             if True in check:
                 return True
             if all(c == False for c in check):
                 return False
+            return None
         # todo: check for comprehensions
-        if S.head() == Intersection:
+        if head == Intersection:
             assert len(S.args()) >= 1
-            check = [self.element(a, T) for T in S.args()]
+            check = [self.element(x, T) for T in S.args()]
             if all(c == True for c in check):
                 return True
             if False in check:
                 return False
-        if S.head() == SetMinus:
+            return None
+        if head == SetMinus:
             assert len(S.args()) == 2
             T, U = S.args()
-            v1 = self.element(a, T)
+            v1 = self.element(x, T)
             if v1 == False:
                 return False
-            v2 = self.element(a, U)
+            v2 = self.element(x, U)
             if v1 == True and v2 == False:
                 return True
             if v1 == True and v2 == True:
                 return False
+            return None
         return None
 
     def simple_Not(self, x):
@@ -868,83 +1077,114 @@ class Brain(object):
             return NotElement(*x.args())
         return Not(x)
 
-    def simple_set_logic(self, expr):
-        """
-        Attempts to simplify logical expressions, set operations and predicates.
-        """
-        head = expr.head()
-
+    def simple_And(self, *args):
         # todo: identify For-expression iteration, etc.
-        # todo: for some operations (like And/Or, could terminate early)
-        # todo: postpone in some cases, e.g. after numerical evaluation
-        args = [self.simple(arg) for arg in expr.args()]
+        # todo: early termination
+        # todo: postponed simplifications
+        args = [self.simple(arg) for arg in args]
+        if False_ in args:
+            return False_
+        args = [arg for arg in args if arg != True_]
+        if len(args) == 0:
+            return True_
+        if len(args) == 1:
+            return args[0]
+        return And(*args)
 
-        if head == And:
-            if False_ in args:
+    def simple_Or(self, *args):
+        # todo: identify For-expression iteration, etc.
+        # todo: early termination
+        # todo: postponed simplifications
+        args = [self.simple(arg) for arg in args]
+        if True_ in args:
+            return True_
+        args = [arg for arg in args if arg != False_]
+        if len(args) == 0:
+            return False_
+        if len(args) == 1:
+            return args[0]
+        return Or(*args)
+
+    def simple_Implies(self, *args):
+        args = [self.simple(arg) for arg in args]
+        assert len(args) == 2
+        P, Q = args
+        if P == False_:
+            return True_
+        if P == True_:
+            return Q
+        return Implies(*args)
+
+    def simple_Equal(self, *args):
+        args = [self.simple(arg) for arg in args]
+        assert len(args) >= 2   # define Equal for len = 0, 1 ?
+        # all equal
+        if all(self.equal(args[0], arg) for arg in args[1:]):
+            return True_
+        # any not equal
+        for i in range(len(args)):
+            for j in range(i + 1, len(args)):
+                a = args[i]
+                b = args[j]
+                if self.equal(a, b) == False:
+                    return False_
+        # todo: remove duplicates?
+        return Equal(*args)
+
+    def simple_NotEqual(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) != 2:
+            return NotEqual(*args) # XXX
+        # all equal
+        if all(self.equal(args[0], arg) for arg in args[1:]):
+            return False_
+        # any not equal
+        for i in range(len(args)):
+            for j in range(i + 1, len(args)):
+                a = args[i]
+                b = args[j]
+                if self.equal(a, b) == False:
+                    return True_
+        # todo: remove duplicates?
+        return NotEqual(*args)
+
+    def simple_Element(self, *args):
+        args = [self.simple(arg) for arg in args]
+        head = Element
+        assert len(args) == 2
+        v = self.element(args[0], args[1])
+        if v == True:
+            if head == Element:
+                return True_
+            else:
                 return False_
-            args = [arg for arg in args if arg != True_]
-            if len(args) == 0:
-                return True_
-            if len(args) == 1:
-                return args[0]
-            return And(*args)
-
-        if head == Or:
-            if True_ in args:
-                return True_
-            args = [arg for arg in args if arg != False_]
-            if len(args) == 0:
+        if v == False:
+            if head == Element:
                 return False_
-            if len(args) == 1:
-                return args[0]
-            return Or(*args)
-
-        if head == Implies:
-            assert len(args) == 2
-            P, Q = args
-            if P == False_:
+            else:
                 return True_
-            if P == True_:
-                return Q
-            return expr
+        return Element(*args)
 
-        if head == Equal or (head == NotEqual and len(args) == 2):
-            assert len(args) >= 2   # define Equal for len = 0, 1 ?
-            # all equal
-            if all(self.equal(args[0], arg) for arg in args[1:]):
-                if head == Equal:
-                    return True_
-                else:
-                    return False_
-            # any not equal
-            for i in range(len(args)):
-                for j in range(i + 1, len(args)):
-                    a = args[i]
-                    b = args[j]
-                    if self.equal(a, b) == False:
-                        if head == Equal:
-                            return False_
-                        else:
-                            return True_
-            # todo: remove duplicates?
-            return expr
+    def simple_NotElement(self, *args):
+        args = [self.simple(arg) for arg in args]
+        head = NotElement
+        assert len(args) == 2
+        v = self.element(args[0], args[1])
+        if v == True:
+            if head == Element:
+                return True_
+            else:
+                return False_
+        if v == False:
+            if head == Element:
+                return False_
+            else:
+                return True_
+        return NotElement(*args)
 
-        if head == Element or head == NotElement:
-            assert len(args) == 2
-            v = self.element(args[0], args[1])
-            if v == True:
-                if head == Element:
-                    return True_
-                else:
-                    return False_
-            if v == False:
-                if head == Element:
-                    return False_
-                else:
-                    return True_
-            return expr
-
-        if head == LessEqual:
+    def simple_LessEqual(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
             a, b = args
             if a.is_integer() and b.is_integer():
                 if int(a) <= int(b):
@@ -958,8 +1198,24 @@ class Brain(object):
                         return True_
                     if v > 0:
                         return False_
+            if self.is_extended_real(a) and self.is_extended_real(b):
+                if self.equal(a, b):
+                    return True_
+                if a == -Infinity:
+                    return True_
+                if b == Infinity:
+                    return True_
+                if self.is_real(a) and b == -Infinity:
+                    return False_
+                if self.is_real(b) and a == Infinity:
+                    return False_
+                if a == Infinity and b == -Infinity:
+                    return False_
+        return LessEqual(*args)
 
-        if head == Less:
+    def simple_Less(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
             a, b = args
             if a.is_integer() and b.is_integer():
                 if int(a) < int(b):
@@ -973,8 +1229,24 @@ class Brain(object):
                         return True_
                     if v >= 0:
                         return False_
+            if self.is_extended_real(a) and self.is_extended_real(b):
+                if self.equal(a, b):
+                    return False_
+                if a == -Infinity and self.is_real(b):
+                    return True_
+                if a == -Infinity and b == Infinity:
+                    return True_
+                if self.is_real(a) and b == Infinity:
+                    return True_
+                if a == Infinity:
+                    return False_
+                if b == -Infinity:
+                    return False_
+        return Less(*args)
 
-        if head == GreaterEqual:
+    def simple_GreaterEqual(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
             a, b = args
             if a.is_integer() and b.is_integer():
                 if int(a) >= int(b):
@@ -988,8 +1260,24 @@ class Brain(object):
                         return True_
                     if v < 0:
                         return False_
+            if self.is_extended_real(a) and self.is_extended_real(b):
+                if self.equal(a, b):
+                    return True_
+                if b == -Infinity:
+                    return True_
+                if a == Infinity:
+                    return True_
+                if self.is_real(b) and a == -Infinity:
+                    return False_
+                if self.is_real(a) and b == Infinity:
+                    return False_
+                if b == Infinity and a == -Infinity:
+                    return False_
+        return GreaterEqual(*args)
 
-        if head == Greater:
+    def simple_Greater(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
             a, b = args
             if a.is_integer() and b.is_integer():
                 if int(a) > int(b):
@@ -1003,13 +1291,20 @@ class Brain(object):
                         return True_
                     if v <= 0:
                         return False_
-
-        return expr
-
-    def simple_arithmetic(self, expr):
-        head = expr.head()
-        args = expr.args()
-        return expr
+            if self.is_extended_real(a) and self.is_extended_real(b):
+                if self.equal(a, b):
+                    return False_
+                if b == -Infinity and self.is_real(a):
+                    return True_
+                if b == -Infinity and a == Infinity:
+                    return True_
+                if self.is_real(b) and a == Infinity:
+                    return True_
+                if b == Infinity:
+                    return False_
+                if a == -Infinity:
+                    return False_
+        return Greater(*args)
 
     def simple_Pos(self, x):
         return self.simple(x)
@@ -1037,6 +1332,8 @@ class Brain(object):
         return Neg(x)
 
     def complexity(self, expr):
+        if expr in self.penalty:
+            return self.penalty[expr]
         if expr.is_integer():
             v = int(expr)
             return 1 + v.bit_length() + (v<0)
@@ -1049,9 +1346,9 @@ class Brain(object):
                 return 20
             if expr in [Pi, ConstE, Pow, Exp, Log, Sin, Cos, Tan, Sinh, Cosh, Tanh]:
                 return 100
-            if expr in [Gamma, Erf, RiemannZeta, ConstGamma, ConstCatalan]:
+            if expr in [Gamma, Erf, Erfc, Erfi, RiemannZeta, ConstGamma, ConstCatalan]:
                 return 1000
-            return 10000
+            return 1000000
         head = expr.head()
         args = expr.args()
         a = self.complexity(head)
@@ -1247,7 +1544,10 @@ class Brain(object):
                 bb = int(b)
                 ee = int(e)
                 if -2 <= ee <= 2 or bb == -1:
-                    if ee >= 0:
+                    if bb == -1:
+                        if ee % 2:
+                            prefactor = -prefactor
+                    elif ee >= 0:
                         prefactor *= self._fmpz(bb)**ee
                     else:
                         prefactor *= self._fmpq(1,bb**(-ee))
@@ -1350,6 +1650,18 @@ class Brain(object):
     def simple_Exp(self, x):
         return self.simple_Pow(ConstE, x)
 
+    def simple_Sin(self, x):
+        x = self.simple(x)
+        if x == Expr(0):
+            return x
+        return Sin(x)
+
+    def simple_Cos(self, x):
+        x = self.simple(x)
+        if x == Expr(0):
+            return Expr(1)
+        return Cos(x)
+
     # todo: have this call simple_Pow, implementing all simplifications there?
     def simple_Sqrt(self, x):
         """
@@ -1426,7 +1738,76 @@ class Brain(object):
                     return Expr(1)
         return Abs(x)
 
-    def some_values(self, variables, assumptions, num=10, as_dict=False):
+    def simple_Re(self, x):
+        x = self.simple(x)
+        if self.is_integer(x):
+            return x
+        if not self.is_complex(x):
+            return Re(x)
+        if self.is_real(x):
+            return x
+        if x.head() == Add:
+            return self.simple_Add(*[self.simple_Re(t) for t in x.args()])
+        if x.head() == Sub:
+            a, b = x.args()
+            return self.simple_Sub(self.simple_Re(a), self.simple_Re(b))
+        if x.head() == Neg:
+            a, = x.args()
+            return self.simple_Neg(self.simple_Re(a))
+        if x.head() == Mul:
+            real = []
+            nonreal = []
+            for t in x.args():
+                if self.is_real(t):
+                    real.append(t)
+                else:
+                    nonreal.append(t)
+            if real:
+                return self.simple(Mul(*real) * Re(Mul(*nonreal)))
+        if x.head() == Exp:
+            a, = x.args()
+            return self.simple(Exp(Re(a)) * Cos(Im(a)))
+        v = self.complex_enclosure(x)
+        if v is not None:
+            if v.real == 0:
+                return Expr(0)
+        return Re(x)
+
+    def simple_Im(self, x):
+        x = self.simple(x)
+        if not self.is_complex(x):
+            return Im(x)
+        if self.is_real(x):
+            return Expr(0)
+        if x == ConstI:
+            return Expr(1)
+        if x.head() == Add:
+            return self.simple_Add(*[self.simple_Im(t) for t in x.args()])
+        if x.head() == Sub:
+            a, b = x.args()
+            return self.simple_Sub(self.simple_Im(a), self.simple_Im(b))
+        if x.head() == Neg:
+            a, = x.args()
+            return self.simple_Neg(self.simple_Im(a))
+        if x.head() == Mul:
+            real = []
+            nonreal = []
+            for t in x.args():
+                if self.is_real(t):
+                    real.append(t)
+                else:
+                    nonreal.append(t)
+            if real:
+                return self.simple(Mul(*real) * Im(Mul(*nonreal)))
+        if x.head() == Exp:
+            a, = x.args()
+            return self.simple(Exp(Re(a)) * Sin(Im(a)))
+        xdivi = self.simple(x / ConstI)
+        if self.is_real(xdivi):
+            return xdivi
+        return Im(x)
+
+    def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """
         Attempt to generate values satisfying given assumptions (constraints).
 
@@ -1495,10 +1876,14 @@ class Brain(object):
                             base_sets[var] = some_extended_reals
         base_sets = [base_sets[var] for var in variables]
         found = 0
+        count = 0
         for values in custom_cartesian(*base_sets):
             assignment = {var:val for (var,val) in zip(variables, values)}
             # todo: when the assumptions for the variables are pure domain statements with simple domains, we could skip the checks
             ok = all(self.simple(a.replace(assignment)) == True_ for a in assumptions)
+            if count > max_candidates:
+                break
+            count += 1
             if ok:
                 if found == num:
                     break
@@ -1508,6 +1893,94 @@ class Brain(object):
                 else:
                     yield values
 
+    def match(self, expr, rule, free_variables=[], assumptions=None):
+        if assumptions is None:
+            assumptions = True_
+
+        match_values = {}
+
+        def match_recursive(expr, rule):
+            if rule in free_variables:
+                if rule in match_values:
+                    if expr != match_values[rule]:
+                        raise ValueError
+                else:
+                    match_values[rule] = expr
+                return
+            if expr == rule:
+                return
+            expr_head = expr.head()
+            rule_head = rule.head()
+            expr_args = expr.args()
+            rule_args = rule.args()
+            if expr_head != rule_head or expr_head is None or len(expr_args) != len(rule_args):
+                raise ValueError
+            for a, b in zip(expr_args, rule_args):
+                match_recursive(a, b)
+
+        try:
+            match_recursive(expr, rule)
+        except ValueError:
+            return None
+
+        #print("MATCH", rule, match_values)
+
+        # todo: some_values search for matching assumptions if missing variables?
+
+        assumptions = assumptions.replace(match_values)
+        assumptions = self.simple(assumptions)
+
+        #print("ASSUMPTIONS", assumptions)
+
+        if assumptions == True_:
+            return match_values
+        else:
+            return None
+
+    def rewrite_fungrim(self, expr, id, recursive=True):
+        from .formulas import entries_dict
+        entry = entries_dict[id]
+        variables = entry.get_arg_with_head(Variables)
+        if variables is None:
+            variables = []
+        else:
+            variables = variables.args()
+        formula = entry.get_arg_with_head(Formula)
+        if formula is None:
+            raise ValueError("unsupported kind of entry for rewriting")
+        formula = formula.args()[0]
+        assumptions = entry.get_arg_with_head(Assumptions)
+        if assumptions is None:
+            assumptions = True_
+        else:
+            assumptions = assumptions.args()[0]
+        if formula is None or formula.head() != Equal or len(formula.args()) != 2:
+            raise ValueError("unsupported kind of entry for rewriting")
+        lhs, rhs = formula.args()
+
+        def match_local(expr):
+            match = self.match(expr, lhs, variables, assumptions)
+            if match is not None:
+                return rhs.replace(match)
+            if expr.is_atom():
+                return expr
+            head = expr.head()
+            args = expr.args()
+            return head(*(match_local(arg) for arg in args))
+
+        if recursive:
+            return match_local(expr)
+        else:    
+            match = self.match(expr, lhs, variables, assumptions)
+            if match is not None:
+                return rhs.replace(match)
+            return expr
+
+
+
+class FungrimBrain(Brain):
+    def __init__(self):
+        pass
 
 
 
@@ -1615,6 +2088,88 @@ class TestBrain(object):
         assert b.element(Pi, Union(ZZ, Set(Pi))) is True
         assert b.element(Pi, SetMinus(RR, QQ)) is True
         assert b.element(Div(3, 2), ZZ) in (False, None)  # todo: implement calculation
+
+        points = [-Infinity, Expr(-3), Expr(0), Expr(3), Infinity, ConstI]
+        np = range(len(points))
+        bad = points.index(ConstI)
+        for ia in np:
+            for ib in np:
+                # todo: order comparisons with complex numbers -> False consistently?
+                v = b.less(points[ia], points[ib])
+                if bad in (ia, ib):
+                    assert v in (False, None)
+                else:
+                    assert v == (ia < ib)
+
+                v = b.less_equal(points[ia], points[ib])
+                if bad in (ia, ib):
+                    assert v in (False, None)
+                else:
+                    assert v == (ia <= ib)
+
+                v = b.greater(points[ia], points[ib])
+                if bad in (ia, ib):
+                    assert v in (False, None)
+                else:
+                    assert v == (ia > ib)
+
+                v = b.greater_equal(points[ia], points[ib])
+                if bad in (ia, ib):
+                    assert v in (False, None)
+                else:
+                    assert v == (ia >= ib)
+
+                for ix in np:
+                    v = b.element(points[ix], ClosedInterval(points[ia], points[ib]))
+                    if bad in (ia, ib):
+                        assert v is None
+                    elif ix == bad:
+                        assert v is False
+                    else:
+                        assert v == (ia <= ix and ix <= ib)
+
+                    v = b.element(points[ix], OpenInterval(points[ia], points[ib]))
+                    if bad in (ia, ib):
+                        assert v is None
+                    elif ix == bad:
+                        assert v is False
+                    else:
+                        assert v == (ia < ix and ix < ib)
+
+                    v = b.element(points[ix], OpenClosedInterval(points[ia], points[ib]))
+                    if bad in (ia, ib):
+                        assert v is None
+                    elif ix == bad:
+                        assert v is False
+                    else:
+                        assert v == (ia < ix and ix <= ib)
+
+                    v = b.element(points[ix], ClosedOpenInterval(points[ia], points[ib]))
+                    if bad in (ia, ib):
+                        assert v is None
+                    elif ix == bad:
+                        assert v is False
+                    else:
+                        assert v == (ia <= ix and ix < ib)
+
+        assert b.element(Expr(3), ZZGreaterEqual(2)) is True
+        assert b.element(Expr(3), ZZGreaterEqual(3)) is True
+        assert b.element(Expr(3), ZZGreaterEqual(4)) is False
+        assert b.element(Pi, ZZGreaterEqual(4)) is False
+
+        assert b.element(Expr(3), ZZLessEqual(2)) is False
+        assert b.element(Expr(3), ZZLessEqual(3)) is True
+        assert b.element(Expr(3), ZZLessEqual(4)) is True
+        assert b.element(Pi, ZZLessEqual(4)) is False
+
+        assert b.element(Expr(2), Range(2, 5)) is True
+        assert b.element(Expr(3), Range(2, 5)) is True
+        assert b.element(Expr(5), Range(2, 5)) is True
+        assert b.element(Expr(1), Range(2, 5)) is False
+        assert b.element(Expr(6), Range(2, 5)) is False
+        assert b.element(Pi, Range(2, 5)) is False
+        assert b.element(Expr(2), Range(2, 1)) is False
+
         b = Brain([z], Element(z, CC))
         assert b.element(Log(z), CC) is None
         b = Brain([z], And(Element(z, CC), NotEqual(z, 0)))
@@ -1691,4 +2246,12 @@ class TestBrain(object):
         assert b.simple(Pi / Pi**2) == 1/Pi
         assert b.simple(Pi**2 / (Pi - 2*Pi)**2) == Expr(1)
         assert b.simple(Pi**2 / (Pi - 2*Pi)**3) == b.simple(-1/Pi)
+
+    def test_fungrim(self):
+        b = Brain(fungrim=True)
+        assert b.simple(RiemannZeta(2) / Pi**2) == Div(1,6)
+        assert b.simple((1+Sqrt(5))/2) == GoldenRatio
+        assert b.simple(Sin(1)**2 + Cos(1)**2) == Expr(1)
+        assert b.simple(Erf(Sin(1)**2 + Cos(1)**2) + Erfc(1)) == Expr(1)
+        assert b.simple(2 * Integral(1/(2*x+3)**Div(3,2), For(x, 1, Infinity))) == b.simple(2 * Pow(5, Div(-1, 2)))
 

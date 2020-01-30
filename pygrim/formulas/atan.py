@@ -290,8 +290,8 @@ make_entry(ID("b0049f"),
 # Analytic properties
 
 make_entry(ID("a6cd13"),
-    Formula(Equal(IsHolomorphic(Atan(z), ForElement(z, 
-        SetMinus(CC, Parentheses(Union(OpenClosedInterval(-Infinity,-1)*ConstI, ClosedOpenInterval(1,Infinity)*ConstI))))))))
+    Formula(IsHolomorphic(Atan(z), ForElement(z, 
+        SetMinus(CC, Parentheses(Union(OpenClosedInterval(-Infinity,-1)*ConstI, ClosedOpenInterval(1,Infinity)*ConstI)))))))
 
 make_entry(ID("30ba67"),
     Formula(Equal(EssentialSingularities(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set())))

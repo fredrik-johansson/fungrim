@@ -304,10 +304,11 @@ make_entry(ID("6f63dd"),
     Variables(z, c),
     Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(z-c, 0))))
 
+# todo: correct complex domain
 make_entry(ID("185efc"),
     Formula(Equal(Sqrt(z/(c-z)), Sqrt(z)*Sqrt(1/(c-z)))),
     Variables(z, c),
-    Assumptions(And(Element(z, CC), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(c-z, 0))))
+    Assumptions(And(Element(z, RR), Element(c, ClosedOpenInterval(0, Infinity)), NotEqual(c-z, 0))))
 
 make_entry(ID("ac54c7"),
     Formula(Equal(Abs(Sqrt(z)), Sqrt(Abs(z)))),

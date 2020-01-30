@@ -524,7 +524,7 @@ make_entry(ID("693e0e"),
     Assumptions(Element(z, SetMinus(CC, ZZLessEqual(0)))))
 
 make_entry(ID("52ea5f"),
-    Formula(Equal(PolyLog(s, z), (Gamma(1-s) / (2*Pi)**(1-s)) * (ConstI**(1-s) * HurwitzZeta(s, Div(1,2) + Log(-z) / (2*Pi*ConstI))
+    Formula(Equal(PolyLog(s, z), (Gamma(1-s) / (2*Pi)**(1-s)) * (ConstI**(1-s) * HurwitzZeta(1-s, Div(1,2) + Log(-z) / (2*Pi*ConstI))
         + ConstI**(s-1) * HurwitzZeta(1-s, Div(1,2) - Log(-z) / (2*Pi*ConstI))))),
     Variables(s, z),
     Assumptions(And(Element(s, CC), Element(z, CC), NotElement(z, Set(0, 1)), NotElement(s, ZZGreaterEqual(0)))))

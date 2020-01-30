@@ -711,7 +711,7 @@ make_entry(ID("aa47cd"),
 make_entry(ID("5db5f2"),
     Formula(Equal(DigammaFunction(Conjugate(z), m), Conjugate(DigammaFunction(z, m)))),
     Variables(m, z),
-    Assumptions(And(Element(ZZGreaterEqual(0)), Element(z, CC))))
+    Assumptions(And(Element(m, ZZGreaterEqual(0)), Element(z, CC))))
 
 # Integral representations
 

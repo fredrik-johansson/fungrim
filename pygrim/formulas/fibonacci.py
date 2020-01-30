@@ -590,7 +590,7 @@ make_entry(ID("d454a3"),
 # Asymptotics
 
 make_entry(ID("0574c1"),
-    Formula(Equal(AsymptoticTo(Fibonacci(n), GoldenRatio**n / Sqrt(5), n, Infinity))))
+    Formula(AsymptoticTo(Fibonacci(n), GoldenRatio**n / Sqrt(5), n, Infinity)))
 
 make_entry(ID("fdfdcc"),
     Formula(Equal(SequenceLimit(Fibonacci(n+1)/Fibonacci(n), For(n, Infinity)), GoldenRatio)))

@@ -1242,8 +1242,8 @@ make_entry(ID("a5d65f"),
 
 make_entry(ID("8f8fb7"),
     Formula(Implies(
-            All(Equal(Re(RiemannZetaZero(n)), Div(1,2)), ForElement(n, ZZGreaterEqual(1)), Less(Im(RiemannZetaZero(n)), T))),
-            All(GreaterEqual(KeiperLiLambda(n), 0), ForElement(n, ZZGreaterEqual(0)), LessEqual(n, T**2))),
+            All(Equal(Re(RiemannZetaZero(n)), Div(1,2)), ForElement(n, ZZGreaterEqual(1)), Less(Im(RiemannZetaZero(n)), T)),
+            All(GreaterEqual(KeiperLiLambda(n), 0), ForElement(n, ZZGreaterEqual(0)), LessEqual(n, T**2)))),
     Variables(T),
     Assumptions(Element(T, ClosedOpenInterval(0, Infinity))),
     References("https://arxiv.org/abs/1703.02844"))

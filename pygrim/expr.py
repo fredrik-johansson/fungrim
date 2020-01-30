@@ -668,7 +668,7 @@ class Expr(object):
         from .numeric import neval
         return neval(self, digits, **kwargs)
 
-    def simple(self, assumptions=None, **kwargs):
+    def simple(self, variables=(), assumptions=None, **kwargs):
         """
         Simple expression simplification: returns an expression that is
         mathematically equivalent to the original expression.
@@ -686,13 +686,13 @@ class Expr(object):
 
         Providing assmptions permits simplification:
 
-            >>> Expr(1 + x + 1).simple(Element(x, CC))
+            >>> Expr(1 + x + 1).simple([x], Element(x, CC))
             Add(2, x)
 
         This method is a simple wrapper around Brain.simple.
         """
         from .brain import Brain
-        b = Brain(assumptions=assumptions)
+        b = Brain(variables=variables, assumptions=assumptions, **kwargs)
         return b.simple(self)
 
     def test(self, variables, assumptions=None, num=100, verbose=True):
@@ -718,7 +718,7 @@ class Expr(object):
         
             >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, RR), GreaterEqual(x, 0)))
                 ...
-            Passed 69 instances (68 True, 1 Unknown, 0 False)
+            Passed 69 instances (67 True, 2 Unknown, 0 False)
 
             >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, CC), Or(Greater(Re(x), 0), And(Equal(Re(x), 0), Greater(Im(x), 0)))))
                 ...
@@ -765,26 +765,6 @@ class Expr(object):
                 count_unknown += 1
         if verbose:
             print("Passed", count, "instances (%i True, %i Unknown, %i False)" % (count_true, count_unknown, count_false))
-
-def test_fungrim_entry(id, num=100):
-    from .formulas import entries_dict
-    entry = entries_dict[id]
-    formula = entry.get_arg_with_head(Formula)
-    if formula is None:
-        print("no Formula() in entry")
-        return
-    print("Formula: ", formula)
-    variables = entry.get_arg_with_head(Variables)
-    if variables is None:
-        variables = []
-    else:
-        variables = variables.args()
-    assumptions = entry.get_arg_with_head(Assumptions)
-    if assumptions is None:
-        assumptions = True_
-    print("Variables: ", variables)
-    print("Assumptions: ", assumptions)
-    test_formula(formula, variables, assumptions, num=num)
 
 all_builtins = []
 

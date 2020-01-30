@@ -209,12 +209,12 @@ make_entry(ID("3c87b9"),
 make_entry(ID("6cd4a1"),
     Formula(Equal(LegendrePolynomial(2*n, z), Div((-1)**n, 4**n) * Binomial(2*n,n) * Hypergeometric2F1(-n, n+Div(1,2), Div(1,2), z**2))),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, SetMinus(CC)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("859445"),
     Formula(Equal(LegendrePolynomial(2*n+1, z), Div((-1)**n, 4**n) * (2*n+1) * Binomial(2*n,n) * z * Hypergeometric2F1(-n, n+Div(3,2), Div(3,2), z**2))),
     Variables(n, z),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, SetMinus(CC)))))
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(z, CC))))
 
 make_entry(ID("1ba9a5"),
     Formula(LessEqual(Abs(LegendrePolynomial(n,x)), 1)),

@@ -27,6 +27,14 @@ def test_fungrim_entry(id, num=100):
     print("Assumptions: ", assumptions)
     formula.test(variables, assumptions, num=num)
 
+def test_fungrim(nstart=0):
+    from .formulas import entries_dict
+    for n, eid in enumerate(sorted(entries_dict)):
+        if n >= nstart:
+            print("-------------------------------------------------------------------")
+            print(eid, n, len(entries_dict))
+            test_fungrim_entry(eid)
+
 def test():
     TestBrain().run()
 

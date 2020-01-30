@@ -50,6 +50,7 @@ function_arb_method_table = {
     Erf : "erf",
     Erfc : "erfc",
     Erfi : "erfi",
+    Sinc: "sinc",
 }
 
 function_acb_method_table = {
@@ -272,9 +273,6 @@ class ArbNumericalEvaluation(object):
             method = function_acb_method_table[head]
             assert len(args) == 1
             x = self.eval(args[0], **kwargs)
-            v = getattr(x, method)()
-            if v.is_finite():
-                return v
             x = acb(x)
             v = getattr(x, method)()
             if v.is_finite():
@@ -343,12 +341,14 @@ class ArbNumericalEvaluation(object):
                 if chi.head() == DirichletCharacter and len(chi.args()) == 2:
                     q, l = chi.args()
                     if q.is_integer() and l.is_integer():
-                        chi = self.flint.dirichlet_char(q._integer, l._integer)
-                        s = self.eval(s, **kwargs)
-                        v = chi.l(s)
-                        if v.is_finite():
-                            return v
-                        raise ArbFiniteError
+                        # todo: adjustable limit for this kind of thing?
+                        if int(q) <= 1000000:
+                            chi = self.flint.dirichlet_char(q._integer, l._integer)
+                            s = self.eval(s, **kwargs)
+                            v = chi.l(s)
+                            if v.is_finite():
+                                return v
+                            raise ArbFiniteError
 
         if head == LambertW:
             if len(args) == 2:

@@ -182,7 +182,7 @@ make_entry(ID("ed7dac"),
 make_entry(ID("30bd5b"),
     Formula(Equal(LambertW(0,x*Log(x)), Log(x))),
     Variables(x),
-    Assumptions(Element(x, ClosedOpenInterval(-(1/ConstE), Infinity))))
+    Assumptions(Element(x, ClosedOpenInterval(1/ConstE, Infinity))))
 
 make_entry(ID("a172c7"),
     Formula(Equal(LambertW(-1,x*Log(x)), Log(x))),

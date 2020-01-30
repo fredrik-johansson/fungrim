@@ -307,7 +307,7 @@ make_entry(ID("485ab6"),
 make_entry(ID("d0b5a7"),
     Formula(GreaterEqual(Totient(n), Sqrt(n))),
     Variables(n),
-    Assumptions(Element(n, SetMinus(ZZGreaterEqual(7)))))
+    Assumptions(Element(n, ZZGreaterEqual(7))))
 
 make_entry(ID("b81b45"),
     Formula(Implies(NotElement(n, PP), LessEqual(Totient(n), n - Sqrt(n)))),

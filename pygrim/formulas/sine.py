@@ -227,13 +227,12 @@ make_entry(ID("ad6b74"),
 make_entry(ID("c62afa"),
     Formula(Equal(Sin(Pi*k), 0)),
     Variables(k),
-    Element(k, ZZ))
+    Assumptions(Element(k, ZZ)))
 
 make_entry(ID("506d0c"),
     Formula(Equal(Sin(Pi/2 + Pi*k), (-1)**k)),
     Variables(k),
-    Element(k, ZZ))
-
+    Assumptions(Element(k, ZZ)))
 
 make_entry(ID("09cd0b"),
     Formula(NotElement(Sin(alpha), AlgebraicNumbers)),
