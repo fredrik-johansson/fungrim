@@ -57,6 +57,8 @@ function_acb_method_table = {
     DedekindEta : "modular_eta",
     ModularJ : "modular_j",
     ModularLambda : "modular_lambda",
+    BarnesG: "barnes_g",
+    LogBarnesG: "log_barnes_g",
 }
 
 class ArbFiniteError(ValueError):
@@ -226,6 +228,30 @@ class ArbNumericalEvaluation(object):
                     return v.imag
             raise ArbFiniteError
 
+        if head == Conjugate:
+            assert len(args) == 1
+            v = self.eval(args[0], **kwargs)
+            if v.is_finite():
+                if isinstance(v, arb):
+                    return v
+                else:
+                    return acb(v.real, -v.imag)
+            raise ArbFiniteError
+
+        if head == Arg:
+            assert len(args) == 1
+            v = self.eval(args[0], **kwargs)
+            if v.is_finite():
+                return acb(v).arg()
+            raise ArbFiniteError
+
+        if head == Sign:
+            assert len(args) == 1
+            v = self.eval(args[0], **kwargs)
+            if v.is_finite():
+                return acb(v).sgn()
+            raise ArbFiniteError
+
         if head == Floor:
             assert len(args) == 1
             v = self.eval(args[0], **kwargs)
@@ -293,6 +319,52 @@ class ArbNumericalEvaluation(object):
             a, b, c, z = [self.eval(arg, **kwargs) for arg in args]
             z = acb(z)
             v = z.hypgeom_2f1(a, b, c, regularized=(head == Hypergeometric2F1Regularized))
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == HypergeometricU:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.hypgeom_u(a, b)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == HypergeometricUStar:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            # todo: implement in arb
+            z = acb(z)
+            v = z**a * z.hypgeom_u(a, b)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CoulombF:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.coulomb_f(a, b)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CoulombG:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.coulomb_g(a, b)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CoulombG:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.coulomb_g(a, b)
             if v.is_finite():
                 return v
             raise ArbFiniteError
@@ -488,6 +560,62 @@ class ArbNumericalEvaluation(object):
             v = self.eval(args[0], **kwargs)
             # note: **kwargs is a new copy, so we don't have to restore the stack
             return v
+
+        if head == Factorial:
+            if len(args) == 1:
+                z, = args
+                z = self.eval(z, **kwargs)
+                z = acb(z)
+                v = (z+1).gamma()
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
+
+        if head == Fibonacci:
+            if len(args) == 1:
+                z, = args
+                z = z.simple()  # XXX
+                if z.is_integer():
+                    n = int(z)
+                    v = arb.fib(n)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
+
+        if head == BernoulliB:
+            if len(args) == 1:
+                n, = args
+                n = n.simple()  # XXX
+                if n.is_integer() and int(n) >= 0:
+                    n = int(n)
+                    v = arb.bernoulli(n)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
+
+        if head == Binomial:
+            if len(args) == 2:
+                z, n = args
+                z = self.eval(z, **kwargs)
+                n = n.simple()  # XXX
+                if n.is_integer() and int(n) >= 0 and int(n) <= 10**9 and isinstance(z, arb):   # XXX
+                    n = int(n)
+                    v = z.bin(n)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
+
+        if head == RisingFactorial:
+            if len(args) == 2:
+                z, n = args
+                z = self.eval(z, **kwargs)
+                n = n.simple()  # XXX
+                if n.is_integer() and int(n) >= 0 :
+                    n = int(n)
+                    v = z.rising(n)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
 
         # todo: delete
         if kwargs.get("full_traversal"):

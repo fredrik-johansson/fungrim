@@ -300,48 +300,6 @@ class Brain(object):
             # asm = asm.simple()
             self.infer(asm)
 
-        # Init Fungrim patterns
-        self.expr_db = {}
-        self.match_db = {}
-        if fungrim:
-            from . import formulas
-            from .expr import all_entries
-            for entry in all_entries:
-                formula = entry.get_arg_with_head(Formula)
-                if formula is None:
-                    continue
-
-                variables = entry.get_arg_with_head(Variables)
-
-                # Constant expression
-                if variables is None:
-                    content = formula.args()[0]
-                    self.infer(content)
-                    # self.expr_db[content] = True_
-                    if content.head() == Equal:
-                        args = content.args()
-                        best = args[0]
-                        cost = self.complexity(best)
-                        for arg in args[1:]:
-                            cost2 = self.complexity(arg)
-                            if cost2 < cost:
-                                best = arg
-                                cost = cost2
-                        for arg in args:
-                            if arg != best:
-                                self.expr_db[arg] = best
-                # Nonconstant expression for matching
-                else:
-                    content = formula.args()[0]
-                    if content.head() == Equal and len(content.args()) == 2:
-                        eid = entry.id()
-                        lhs_head = content.args()[0].head()
-                        if lhs_head in self.match_db:
-                            self.match_db[lhs_head].add(eid)
-                        else:
-                            self.match_db[lhs_head] = set([eid])
-
-
     def __repr__(self):
         s = ""
         s += "Variables: " + str(self.variables) + "\n"
@@ -401,27 +359,6 @@ class Brain(object):
         input_expr = expr
         self.simple_cache[input_expr] = None
 
-
-        def fungrim_simplify(expr):
-            if expr in self.expr_db:
-                return self.expr_db[expr]
-            if expr.is_atom():
-                return expr
-
-            head = expr.head()
-            expr = head(*(self.simple(arg) for arg in expr.args()))
-            if head in self.match_db:
-                exprs = set((self.rewrite_fungrim(expr, id, recursive=False), id) for id in self.match_db[head])
-                #for e in exprs:
-                #    print(e, self.complexity(e[0]))
-                expr2, id = min(exprs, key=lambda v: self.complexity(v[0]))
-                if expr2 != expr and self.complexity(expr2) < self.complexity(expr):
-                    expr = self.simple(expr2)
-            return expr
-
-        if self.expr_db:
-            expr = fungrim_simplify(expr)
-
         head = expr.head()
         if head is not None and head.is_symbol():
             s = head._symbol
@@ -429,8 +366,6 @@ class Brain(object):
             if hasattr(self, f):
                 args = expr.args()
                 expr2 = getattr(self, f)(*args)
-                if self.expr_db and expr2 != expr:
-                    expr2 = fungrim_simplify(expr2)
                 expr = expr2
 
         self.simple_cache[input_expr] = expr
@@ -863,6 +798,9 @@ class Brain(object):
             val2 = self.complex_enclosure(b)
             if val2 is not None:
                 if not val1.overlaps(val2):
+                    return False
+                val3 = self.complex_enclosure(a - b)
+                if not val3.contains(0):
                     return False
 
         # try domain exclusions
@@ -1979,9 +1917,106 @@ class Brain(object):
 
 
 class FungrimBrain(Brain):
-    def __init__(self):
-        pass
 
+    def __init__(self, *args, **kwargs):
+        Brain.__init__(self, *args, **kwargs)
+
+        # Init Fungrim patterns
+        self.expr_db = {}
+        self.match_db = {}
+
+        from . import formulas
+        from .expr import all_entries
+        for entry in all_entries:
+            formula = entry.get_arg_with_head(Formula)
+            if formula is None:
+                continue
+
+            variables = entry.get_arg_with_head(Variables)
+
+            # Constant expression
+            if variables is None:
+                content = formula.args()[0]
+                self.infer(content)
+                # self.expr_db[content] = True_
+                if content.head() == Equal:
+                    args = content.args()
+                    best = args[0]
+                    cost = self.complexity(best)
+                    for arg in args[1:]:
+                        cost2 = self.complexity(arg)
+                        if cost2 < cost:
+                            best = arg
+                            cost = cost2
+                    for arg in args:
+                        if arg != best:
+                            self.expr_db[arg] = best
+            # Nonconstant expression for matching
+            else:
+                content = formula.args()[0]
+                if content.head() == Equal and len(content.args()) == 2:
+                    eid = entry.id()
+                    lhs_head = content.args()[0].head()
+                    if lhs_head in self.match_db:
+                        self.match_db[lhs_head].add(eid)
+                    else:
+                        self.match_db[lhs_head] = set([eid])
+
+    def simple(self, expr):
+        """
+        Given a symbolic expression expr, return an equivalent expression,
+        hopefully simplified.
+        """
+        if expr in self.inferences:
+            return True_
+
+        if expr.is_atom():
+            return expr
+
+        if expr in self.simple_cache:
+            v = self.simple_cache[expr]
+            if v is None:
+                return expr
+            return v
+
+        input_expr = expr
+        self.simple_cache[input_expr] = None
+
+
+        def fungrim_simplify(expr):
+            if expr in self.expr_db:
+                return self.expr_db[expr]
+            if expr.is_atom():
+                return expr
+
+            head = expr.head()
+            expr = head(*(self.simple(arg) for arg in expr.args()))
+            if head in self.match_db:
+                exprs = set((self.rewrite_fungrim(expr, id, recursive=False), id) for id in self.match_db[head])
+                #for e in exprs:
+                #    print(e, self.complexity(e[0]))
+                expr2, id = min(exprs, key=lambda v: self.complexity(v[0]))
+                if expr2 != expr and self.complexity(expr2) < self.complexity(expr):
+                    expr = self.simple(expr2)
+            return expr
+
+        if self.expr_db:
+            expr = fungrim_simplify(expr)
+
+        head = expr.head()
+        if head is not None and head.is_symbol():
+            s = head._symbol
+            f = "simple_" + s
+            if hasattr(self, f):
+                args = expr.args()
+                expr2 = getattr(self, f)(*args)
+                if self.expr_db and expr2 != expr:
+                    expr2 = fungrim_simplify(expr2)
+                expr = expr2
+
+        self.simple_cache[input_expr] = expr
+
+        return expr
 
 
 class TestBrain(object):
@@ -2248,7 +2283,7 @@ class TestBrain(object):
         assert b.simple(Pi**2 / (Pi - 2*Pi)**3) == b.simple(-1/Pi)
 
     def test_fungrim(self):
-        b = Brain(fungrim=True)
+        b = FungrimBrain()
         assert b.simple(RiemannZeta(2) / Pi**2) == Div(1,6)
         assert b.simple((1+Sqrt(5))/2) == GoldenRatio
         assert b.simple(Sin(1)**2 + Cos(1)**2) == Expr(1)

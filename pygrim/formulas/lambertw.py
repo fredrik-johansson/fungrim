@@ -460,8 +460,9 @@ make_entry(ID("e5bba3"),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
+# todo: move sign to RHS; make sure test code works with set * constant
 make_entry(ID("a68e0e"),
-    Formula(Element(Im(LambertW(k,z)), OpenInterval(Sign(k)*(2*Abs(k)-2)*Pi, Sign(k)*(2*Abs(k)+1)*Pi))),
+    Formula(Element(Sign(k) * Im(LambertW(k,z)), OpenInterval((2*Abs(k)-2)*Pi, (2*Abs(k)+1)*Pi))),
     Variables(z, k),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(k, SetMinus(ZZ, Set(-1, 0, 1))))))
 

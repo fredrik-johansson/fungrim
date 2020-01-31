@@ -333,7 +333,7 @@ make_entry(ID("4ed6a8"),
 make_entry(ID("e722ca"),
     Formula(Equal(Im(Sqrt(z)), Sign(Im(z)) * Sqrt((Abs(z)-Re(z))/2))),
     Variables(z),
-    Assumptions(Element(z, CC)))
+    Assumptions(Element(z, SetMinus(CC, OpenInterval(-Infinity, 0)))))
 
 make_entry(ID("c58f46"),
     Formula(Equal(Sqrt(Conjugate(z)), Conjugate(Sqrt(z)))),

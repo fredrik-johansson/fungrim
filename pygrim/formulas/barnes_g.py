@@ -387,7 +387,7 @@ make_entry(ID("541e2e"),
     References("https://doi.org/10.1145/384101.384104"))
 
 make_entry(ID("d1a0ec"),
-    Formula(Equal(LogBarnesG(1-x), LogBarnesG(1+x) + Log(Abs(Sin(Pi*x))/Pi) * (1/(2*Pi)) * Im(PolyLog(2, Exp(2*Pi*ConstI*x)))
+    Formula(Equal(LogBarnesG(1-x), LogBarnesG(1+x) + x * Log(Abs(Sin(Pi*x))/Pi) + (1/(2*Pi)) * Im(PolyLog(2, Exp(2*Pi*ConstI*x)))
         + Where(Sign(x) * (n*(n+1)) * (Pi * ConstI / 2), Equal(n, Floor(x))))),
     Variables(x),
     Assumptions(And(Element(x, RR), NotElement(x, ZZ))))

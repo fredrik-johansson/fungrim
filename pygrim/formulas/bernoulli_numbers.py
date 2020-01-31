@@ -194,7 +194,7 @@ make_entry(ID("a98234"),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
 make_entry(ID("d10873"),
-    Formula(Greater((-1)**(n+1) * BernoulliB(2*n+2), 0)),
+    Formula(Greater((-1)**n * BernoulliB(2*n+2), 0)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
