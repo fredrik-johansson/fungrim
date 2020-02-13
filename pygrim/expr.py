@@ -64,6 +64,27 @@ class Expr(object):
         elif call is not None:
             self._args = tuple(Expr(obj) for obj in call)
             assert len(self._args) >= 1
+        elif isinstance(arg, list):
+            return List(*(Expr(x) for x in arg))
+        elif isinstance(arg, tuple):
+            return Tuple(*(Expr(x) for x in arg))
+        else:
+            try:
+                import flint
+                if type(arg) is flint.fmpz:
+                    return Expr(int(arg))
+                elif type(arg) is flint.fmpq:
+                    p = arg.p
+                    q = arg.q
+                    if q == 1:
+                        return Expr(int(p))
+                    elif p > 0:
+                        return Div(Expr(int(p)), Expr(int(q)))
+                    else:
+                        return -Div(Expr(int(-p)), Expr(int(q)))
+            except ImportError:
+                pass
+            raise ValueError("cannot create Expr from type %s", type(arg))
         return self
 
     def __eq__(self, other):
@@ -194,6 +215,9 @@ class Expr(object):
 
     def __repr__(self):
         return self.str()
+
+    def _repr_latex_(self):
+        return "$$" + self.latex() + "$$"
 
     def atoms(self, unique=False):
         """
@@ -878,7 +902,7 @@ PrimeNumber PrimePi
 RiemannHypothesis
 SinIntegral LogIntegral LandauG
 Matrix2x2 Matrix2x1 Matrix
-Spectrum Det
+Spectrum Det SingularValues
 SL2Z PSL2Z ModularGroupAction ModularGroupFundamentalDomain
 ModularLambdaFundamentalDomain
 ModularJ ModularLambda

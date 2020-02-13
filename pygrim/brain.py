@@ -272,9 +272,10 @@ class Brain(object):
         assumptions involving the free variables, which may be used
         in symbolic simplification.
 
-        >>> Brain(variables=[a,b,c],
-                assumptions=And(Element(a, CC), Element(b, ZZ),
-                    Element(c, QQ), NotEqual(a, 1)))
+        >>> brain = Brain(variables=[a,b,c],
+        ...     assumptions=And(Element(a, CC), Element(b, ZZ),
+        ...         Element(c, QQ), NotEqual(a, 1)))
+        >>>
 
         """
         self.simple_cache = {}
@@ -678,7 +679,6 @@ class Brain(object):
             v, = x.args()
             if self.is_algebraic(v) and self.is_not_zero(v):
                 return False
-            # todo: exp(pi i * p/q) is algebraic
         if x.head() == Log:
             v, = x.args()
             if self.is_algebraic(v) and (self.equal(v, Expr(1)) == False):
@@ -802,6 +802,26 @@ class Brain(object):
                 val3 = self.complex_enclosure(a - b)
                 if not val3.contains(0):
                     return False
+
+        # try exact computation
+        from .algebraic import alg_get_degree_limit, alg_set_degree_limit
+        from .algebraic import alg_get_bits_limit, alg_set_bits_limit
+        
+        orig_degree = alg_get_degree_limit()
+        orig_bits = alg_get_bits_limit()
+        try:
+            alg_set_degree_limit(200)
+            alg_set_bits_limit(100000)
+
+            val1 = self.evaluate_alg_or_None(a)
+            if val1 is not None:
+                val2 = self.evaluate_alg_or_None(b)
+                if val2 is not None:
+                    return val1 == val2
+
+        finally:
+            alg_set_degree_limit(orig_degree)
+            alg_set_bits_limit(orig_bits)
 
         # try domain exclusions
         aq = self.is_rational(a)
@@ -1306,16 +1326,464 @@ class Brain(object):
             s = self._fmpq(0)
             for x in expr.args():
                 s += self.evaluate_fmpq(x)
+            return s
         elif expr.head() == Mul:
             s = self._fmpq(1)
             for x in expr.args():
                 s *= self.evaluate_fmpq(x)
+            return s
         elif expr.head() == Div:
             x, y = expr.args()
             return self.evaluate_fmpq(x) / self.evaluate_fmpq(y)
+        elif expr.head() == Pow:
+            x, y = expr.args()
+            y = self.simple(y)
+            if y.is_integer():
+                return self.evaluate_fmpq(x) ** int(y)
         else:
             raise NotImplementedError
 
+    def evaluate_fmpq_poly(self, expr, var):
+        from flint import fmpq_poly, fmpq
+        if expr == var:
+            return fmpq_poly([0,1])
+        elif expr.is_integer():
+            return fmpq_poly([fmpq(int(expr))])
+        elif expr.head() == Neg:
+            x, = expr.args()
+            return -self.evaluate_fmpq_poly(x, var)
+        elif expr.head() == Sub:
+            x, y = expr.args()
+            return self.evaluate_fmpq_poly(x, var) - self.evaluate_fmpq_poly(y, var)
+        elif expr.head() == Add:
+            s = fmpq_poly()
+            for x in expr.args():
+                s += self.evaluate_fmpq_poly(x, var)
+            return s
+        elif expr.head() == Mul:
+            s = fmpq_poly([1])
+            for x in expr.args():
+                s *= self.evaluate_fmpq_poly(x, var)
+            return s
+        elif expr.head() == Div:
+            x, y = expr.args()
+            return self.evaluate_fmpq_poly(x, var) / self.evaluate_fmpq(y)
+        elif expr.head() == Pow:
+            x, y = expr.args()
+            x = self.evaluate_fmpq_poly(x, var)
+            y = self.evaluate_fmpq(y)
+            if y.q == 1 and y.p >= 0:
+                return x ** int(y.p)
+            else:
+                raise NotImplementedError
+        else:
+            v = self.evaluate_fmpq(expr)
+            return fmpq_poly([v])
+
+    def evaluate_fmpq_mat(self, expr):
+        from flint import fmpq_mat, fmpq
+        if expr.head() == Matrix2x1:
+            a, b = expr.args()
+            a = self.evaluate_fmpq(a)
+            b = self.evaluate_fmpq(b)
+            return fmpq_mat([[a],[b]])
+        if expr.head() == Matrix2x2:
+            a, b, c, d = expr.args()
+            a = self.evaluate_fmpq(a)
+            b = self.evaluate_fmpq(b)
+            c = self.evaluate_fmpq(c)
+            d = self.evaluate_fmpq(d)
+            return fmpq_mat([[a,b],[c,d]])
+        if expr.head() == Matrix:
+            args = expr.args()
+            if len(args) == 1 and args[0].head() in (List, Tuple):
+                rows = args[0].args()
+                eval_rows = []
+                for row in rows:
+                    if row.head() not in (List, Tuple):
+                        raise NotImplementedError
+                    row = [self.evaluate_fmpq(x) for x in row.args()]
+                    eval_rows.append(row)
+                return fmpq_mat(eval_rows)
+            if len(args) == 3 and args[1].head() == For and args[2].head() == For:
+                i, a, b = args[1].args()
+                j, c, d = args[2].args()
+                elem = args[0]
+                a = self.simple(a)
+                b = self.simple(b)
+                c = self.simple(c)
+                d = self.simple(d)
+                if a.is_integer() and b.is_integer() and c.is_integer() and d.is_integer():
+                    a = int(a)
+                    b = int(b)
+                    c = int(c)
+                    d = int(d)
+                    rows = []
+                    for ii in range(a, b+1):
+                        rows.append([])
+                        for jj in range(c, d+1):
+                            # xxx
+                            val = elem.replace({i:Expr(ii), j:Expr(jj)})
+                            val = self.evaluate_fmpq(val)
+                            rows[-1].append(val)
+                    return fmpq_mat(rows)
+        if expr.head() == Neg:
+            A, = args()
+            return -self.evaluate_fmpq_mat(A)
+        if expr.head() == Sub:
+            A, B = args()
+            return self.evaluate_fmpq_mat(A) - self.evaluate_fmpq_mat(B)
+        if expr.head() == Add and len(expr.args()) >= 1:
+            args = expr.args()
+            A = self.evaluate_fmpq_mat(args[0])
+            for B in args[1:]:
+                A += self.evaluate_fmpq_mat(B)
+            return A
+        if expr.head() == Mul and len(expr.args()) >= 1:
+            args = expr.args()
+            A = self.evaluate_fmpq_mat(args[0])
+            for B in args[1:]:
+                A *= self.evaluate_fmpq_mat(B)
+            return A
+        if expr.head() == Pow:
+            mat, exp = expr.args()
+            exp = self.simple(exp)
+            if exp.is_integer():
+                mat = self.evaluate_fmpq_mat(mat)
+                return mat ** int(exp)
+        if expr.head() == HilbertMatrix:
+            n, = expr.args()
+            n = self.simple(n)
+            if n.is_integer() and int(n) >= 0:
+                n = int(n)
+                return fmpq_mat.hilbert(n, n)
+        raise NotImplementedError
+
+    def evaluate_alg(self, expr):
+        from .algebraic import alg
+        if expr.is_atom():
+            if expr.is_integer():
+                return alg(int(expr))
+            if expr == ConstI:
+                return alg.i()
+            if expr == GoldenRatio:
+                return alg.phi()
+            raise ValueError
+        head = expr.head()
+        if head == Pos:
+            x, = expr.args()
+            return self.evaluate_alg(x)
+        elif head == Neg:
+            x, = expr.args()
+            return -self.evaluate_alg(x)
+        elif head == Sub:
+            x, y = expr.args()
+            return self.evaluate_alg(x) - self.evaluate_alg(y)
+        elif head == Add:
+            s = alg(0)
+            for x in expr.args():
+                s += self.evaluate_alg(x)
+            return s
+        elif head == Mul:
+            s = alg(1)
+            for x in expr.args():
+                s *= self.evaluate_alg(x)
+            return s
+        elif head == Div:
+            x, y = expr.args()
+            return self.evaluate_alg(x) / self.evaluate_alg(y)
+        elif head == Sqrt:
+            x, = expr.args()
+            return self.evaluate_alg(x).sqrt()
+        elif head == Pow:
+            x, y = expr.args()
+            x = self.evaluate_alg(x)
+            y = self.evaluate_alg(y)
+            return x ** y
+        elif head == Sign:
+            x, = expr.args()
+            return self.evaluate_alg(x).sgn()
+        elif head == Re:
+            x, = expr.args()
+            return self.evaluate_alg(x).real
+        elif head == Im:
+            x, = expr.args()
+            return self.evaluate_alg(x).imag
+        elif head == Abs:
+            x, = expr.args()
+            return abs(self.evaluate_alg(x))
+        elif head in (Exp, Cos, Sin, Tan, Cot, Sec, Csc):
+            x, = expr.args()
+            v = self.simple(x / Pi)
+            v = self.evaluate_alg(v)
+            if head == Exp:
+                v = v.imag
+            if v.is_rational():
+                v = v.fmpq()
+                if head == Exp:
+                    return alg.exp_pi_i(v)
+                elif head == Cos:
+                    return alg.cos_pi(v)
+                elif head == Sin:
+                    return alg.sin_pi(v)
+                elif head == Tan:
+                    return alg.tan_pi(v)
+                elif head == Cot:
+                    return alg.cot_pi(v)
+                elif head == Sec:
+                    return alg.sec_pi(v)
+                elif head == Csc:
+                    return alg.csc_pi(v)
+        else:
+            raise NotImplementedError
+
+    def evaluate_alg_or_None(self, expr):
+        try:
+            return self.evaluate_alg(expr)
+        except (ValueError, NotImplementedError):
+            return None
+
+    def alg_to_expression(self, x):
+        from .algebraic import alg
+
+        x = alg(x)
+
+        if x.is_rational():
+            x = x.fmpq()
+            p = x.p
+            q = x.q
+            if q == 1:
+                return Expr(int(p))
+            elif p < 0:
+                return Neg(Div(int(-p), int(q)))
+            else:
+                return Div(int(p), int(q))
+
+        if x.degree() == 2:
+            fmpz = self._fmpz
+            a, b, c = x.as_quadratic()
+            if b == 0:
+                return Expr(a)
+            A = Expr(a)
+            if c > 0:
+                B = Sqrt(c)
+            elif c == -1:
+                B = ConstI
+            else:
+                B = Mul(Sqrt(-c), ConstI)
+            if b == 1:
+                if a == 0:
+                    return B
+                else:
+                    return Add(A, B)
+            elif b == -1:
+                if a == 0:
+                    return Neg(B)
+                else:
+                    return Sub(A, B)
+            elif b > 0:
+                if a == 0:
+                    return Mul(b, B)
+                else:
+                    return Add(A, Mul(b, B))
+            else:
+                if a == 0:
+                    return Neg(Mul(-b, B))
+                else:
+                    return Sub(A, Mul(-b, B))
+
+        from flint import fmpz_poly, fmpq
+
+        pol = x.minpoly()
+        d = pol.degree()
+        # identify roots of unity
+        n = pol.is_cyclotomic()
+        if n > 0:
+            pol2 = fmpz_poly.cyclotomic(n)
+            if pol == pol2:
+                # todo: this can be faster
+                for k in range(1, n+1):
+                    v = alg.exp_two_pi_i(fmpq(k, n))
+                    if v == x:
+                        return self.simple_Exp_two_pi_i_k_n(k, n)
+        # identify rational multiples of roots of unity
+        if pol[d-1] != 0:
+            q = pol[d].root(d)
+            if q**d == pol[d]:
+                if pol[d-1] % q**(d-1) == 0:
+                    p = pol[d-1] // q**(d-1)
+                    v = fmpq(p,q)
+                    u = x / v
+                    if u.minpoly().is_cyclotomic():
+                        return v * self.alg_to_expression(u)
+
+        fmpq = self._fmpq
+        # try depression
+        deg = x.degree()
+        pol = x.minpoly()
+        a = pol[deg]
+        b = pol[deg-1]
+        if b != 0:
+            shift = fmpq(-b, deg * a)
+            res = self.alg_to_expression(x - shift)
+            if res is not None:
+                return res + shift
+
+        # try deflation
+        pol, n = pol.deflation()
+        if n > 1:
+            neg = False
+            if x.is_real() and x < 0:
+                x = -x
+                neg = True
+            v = x ** n
+            vroot = v.root(n)
+            A = self.alg_to_expression(v)
+            if A is not None:
+                if n == 2:
+                    A = Sqrt(A)
+                else:
+                    A = Pow(A, Div(1, n))
+                for k in range(n):
+                    s = alg.exp_two_pi_i(self._fmpq(k,n))
+                    if s * vroot == x:
+                        if neg:
+                            t = self._fmpq(k,n) + self._fmpq(1,2)
+                            k, n = t.p, t.q
+                        B = self.simple_Exp_two_pi_i_k_n(k, n)
+                        if B == Expr(1):
+                            return A
+                        if B == Expr(-1):
+                            return Neg(A)
+                        if B == ConstI:
+                            return A * B
+                        if B == -ConstI:
+                            return -(A * B)
+                        return B * A
+
+        if x.degree() == 3:
+            fmpz = self._fmpz
+            d, c, b, a = map(int, list(x.minpoly()))
+            D0 = b**2 - 3*a*c
+            D1 = 2*b**3 - 9*a*b*c + 27*a**2*d
+            C3 = (D1 + alg(D1**2 - 4*D0**3).sqrt()) / 2
+            if C3 == 0:
+                C3 = (D1 - alg(D1**2 - 4*D0**3).sqrt()) / 2
+            C = self.alg_to_expression(C3)
+            assert C is not None
+            C = Pow(C, Div(1, 3))
+            w1 = self.simple_Exp_two_pi_i_k_n(1, 3)
+            w2 = self.simple_Exp_two_pi_i_k_n(2, 3)
+            x0 = (int(b) + C + int(D0) / C) / (-3*a)
+            x1 = (int(b) + w1*C + w2 * int(D0) / C) / int(-3*a)
+            x2 = (int(b) + w2*C + w1 * int(D0) / C) / int(-3*a)
+            if self.evaluate_alg(x0) == x:
+                return x0
+            if self.evaluate_alg(x1) == x:
+                return x1
+            if self.evaluate_alg(x2) == x:
+                return x2
+        if x.degree() == 4:
+            # see: http://eqworld.ipmnet.ru/en/solutions/ae/ae0108.pdf
+
+            fmpz = self._fmpz
+            fmpq = self._fmpq
+            from flint import fmpz_poly, fmpq_poly
+            pol = x.minpoly()
+
+            e,d,c,b,a = map(fmpq, list(pol))
+
+            shift = -b/(4*a)
+            reduced = fmpq_poly(pol)(fmpq_poly([shift,1]))
+            reduced /= reduced[4]
+            p = reduced[2]
+            q = reduced[1]
+            r = reduced[0]
+
+            # biquadratic!
+            if q == 0:
+                raise ValueError("should not be biquadratic!")
+                roots = alg.polynomial_roots([r,p,1])
+                for cand, _ in roots:
+                    cand = Sqrt(self.alg_to_expression(cand))
+                    for sign in [1,-1]:
+                        if sign == 1:
+                            cand2 = shift + cand
+                        else:
+                            cand2 = shift - cand
+                        if self.evaluate_alg(cand2) == x:
+                            return cand2
+
+
+            resroots = alg.polynomial_roots([-q*q, p*p-4*r, 2*p, 1])
+
+            resroots2 = []
+            for r, m in resroots:
+                for i in range(m):
+                    resroots2.append(r)
+
+            resroots3 = []
+            for r in resroots2:
+                v = r.sqrt()
+                if v.degree() <= 2:
+                    resroots3.append(self.alg_to_expression(v))
+                else:
+                    resroots3.append(Sqrt(self.alg_to_expression(r)))
+
+            a, b, c = resroots3
+            xs = [a+b+c, a+b-c, a-b+c, a-b-c, -a+b+c, -a+b-c, -a-b+c, -a-b-c]
+            for xn in xs:
+                xn = xn / 2
+                xn += shift
+                if self.evaluate_alg(xn) == x:
+                    return xn
+
+        if not x.is_real():
+            re = self.alg_to_expression(x.real)
+            if re is not None:
+                im = self.alg_to_expression(x.imag)
+                if im is not None:
+                    if im == Expr(0):
+                        return re
+                    elif re == Expr(0):
+                        return im*ConstI
+                    else:
+                        return re + im*ConstI
+        return None
+
+    def simple_Exp_two_pi_i_k_n(self, k, n):
+        k = k % (2 * n)
+        if k == 0:
+            return Expr(1)
+        if n == 2 * k:
+            return Expr(-1)
+        if n == 4 * k:
+            return ConstI
+        if 3 * n == 4 * k:
+            return -ConstI
+        if n == 8 * k:
+            return Sqrt(2)/2 * (1 + ConstI)
+        if 3 * n == 8 * k:
+            return Sqrt(2)/2 * (-1 + ConstI)
+        if 5 * n == 8 * k:
+            return Sqrt(2)/2 * (-1 - ConstI)
+        if 7 * n == 8 * k:
+            return Sqrt(2)/2 * (1 - ConstI)
+        if n == 3 * k:
+            return (-1 + Sqrt(3)*ConstI)/2
+        if 2 * n == 3 * k:
+            return (-1 - Sqrt(3)*ConstI)/2
+        if n == 6 * k:
+            return (1 + Sqrt(3)*ConstI)/2
+        if 5 * n == 6 * k:
+            return (1 - Sqrt(3)*ConstI)/2
+        u = 2 * self._fmpq(k, n)
+        p = int(u.p)
+        q = int(u.q)
+        if p == 1:
+            return Exp(Pi*ConstI/q)
+        else:
+            return Exp(p*Pi*ConstI/q)
 
     def simple_Add(self, *terms):
         """
@@ -1582,6 +2050,12 @@ class Brain(object):
                 if self.is_negative(y):
                     return UnsignedInfinity
         if x == ConstE:
+            # todo: maybe don't want this much ... ?
+            #v = self.simple(y / (Pi * ConstI / 120))
+            #if v.is_integer():
+            #    a = self.simple(Cos(v * Pi / 120))
+            #    b = self.simple(Sin(v * Pi / 120))
+            #    return self.simple(a + b * ConstI)
             return Exp(y)
         return Pow(x, y)
 
@@ -1592,12 +2066,56 @@ class Brain(object):
         x = self.simple(x)
         if x == Expr(0):
             return x
+        if self.is_complex(x):
+            v = self.simple(x / Pi)
+            if self.is_integer(v):
+                return Expr(0)
+            v = self.simple(x * (120 / Pi))
+            if v.is_integer():
+                v = int(v)
+                v = v % 240
+                def _sin(v):
+                    if v > 60:
+                        v = 120 - v
+                    if v == 0: return Expr(0)
+                    if v == 10: return (Sqrt(2)*(Sqrt(3)-1))/4   # todo: sqrt(6)?
+                    if v == 12: return (Sqrt(5)-1)/4
+                    if v == 15: return Sqrt(2-Sqrt(2))/2
+                    if v == 20: return Div(1,2)
+                    if v == 30: return Sqrt(2)/2
+                    if v == 36: return (Sqrt(5)+1)/4
+                    if v == 40: return Sqrt(3)/2
+                    if v == 45: return Sqrt(Sqrt(2)+2)/2
+                    if v == 50: return (Sqrt(2)*(Sqrt(3)+1))/4
+                    if v == 60: return Expr(1)
+                    if v > 30:
+                        return Cos(self.simple(Pi*(60-v)/120))
+                    else:
+                        return Sin(self.simple(Pi*v/120))
+                if v >= 120:
+                    return self.simple(-_sin(v-120))
+                else:
+                    return _sin(v)
+            if self.is_negative(x):
+                return -Sin(self.simple(-x))
+            v = self.simple(x / ConstI)
+            if self.is_real(v):
+                return self.simple(Sinh(v) * ConstI)
         return Sin(x)
 
     def simple_Cos(self, x):
         x = self.simple(x)
         if x == Expr(0):
             return Expr(1)
+        if self.is_complex(x):
+            v = self.simple(x * (120 / Pi))
+            if v.is_integer():
+                return self.simple(Sin((int(v)+60)*Pi/120))
+            if self.is_negative(x):
+                return Cos(self.simple(-x))
+            v = self.simple(x / ConstI)
+            if self.is_real(v):
+                return self.simple(Cosh(v))
         return Cos(x)
 
     # todo: have this call simple_Pow, implementing all simplifications there?
@@ -1744,6 +2262,155 @@ class Brain(object):
         if self.is_real(xdivi):
             return xdivi
         return Im(x)
+
+    def simple_Arg(self, x):
+        x = self.simple(x)
+        if not self.is_complex(x):
+            return Arg(x)
+        if x == Expr(0):
+            return x
+        if self.is_nonnegative(x):
+            return Expr(0)
+        if self.is_negative(x):
+            return Pi
+        if self.is_positive(x / ConstI):
+            return Pi / 2
+        if self.is_negative(x / ConstI):
+            return self.simple(-Pi / 2)
+        return Arg(x)
+
+    def simple_Floor(self, x):
+        x = self.simple(x)
+        if self.is_integer(x):
+            return x
+        # xxx: dynamic precision / bounds
+        v = self.real_enclosure(Floor(x))
+        if v.is_exact() and abs(v) < self._arb("1e1000"):
+            v = v.unique_fmpz()
+            return Expr(v)
+        return Floor(x)
+
+    def simple_Ceil(self, x):
+        x = self.simple(x)
+        if self.is_integer(x):
+            return x
+        # xxx: dynamic precision / bounds
+        v = self.real_enclosure(Ceil(x))
+        if v.is_exact() and abs(v) < self._arb("1e1000"):
+            v = v.unique_fmpz()
+            return Expr(v)
+        return Ceil(x)
+
+    def simple_DirichletCharacter(self, *args):
+        args = [self.simple(x) for x in args]
+        if len(args) == 3:
+            q, p, n = args
+            if q.is_integer() and p.is_integer() and n.is_integer():
+                q = int(q)
+                p = int(p)
+                n = int(n)
+                from flint import dirichlet_char
+                try:
+                    char = dirichlet_char(q, p)
+                except (AssertionError, ValueError, OverflowError):
+                    return DirichletCharacter(*args)
+                a = char.chi_exponent(n)
+                if a is None:
+                    return Expr(0)
+                b = char.group().exponent()
+                return self.simple_Exp_two_pi_i_k_n(a, b)
+        return DirichletCharacter(*args)
+
+    def simple_Zeros(self, *args):
+        if len(args) == 3:
+            expr, foriter, cond = args
+        elif len(args) == 2:
+            expr, foriter = args
+            cond = True_
+        else:
+            return Zeros(*args)
+
+        if foriter.head() == ForElement:
+            var, domain = foriter.args()
+            # xxx: better function for this
+            inferences = set()
+            infer_domain(inferences, var, domain)
+            if Element(var, CC) in inferences:
+                orig_cond = cond
+                cond = And(Element(var, domain), cond)
+                try:
+                    poly = self.evaluate_fmpq_poly(expr, var)
+                except NotImplementedError:
+                    poly = None
+                if poly is not None:
+                    if poly == 0:
+                        if len(args) == 2:
+                            return Set(var, ForElement(var, domain))
+                        else:
+                            return Set(var, ForElement(var, domain), orig_cond)
+                    from .algebraic import alg
+                    roots = alg.polynomial_roots(poly)
+                    roots = [r for (r, multiplicity) in roots]
+                    roots_expr = []
+                    for r in roots:
+                        r = self.alg_to_expression(r)
+                        if r is None:
+                            return Zeros(*args)   # unable to express
+                        r_cond = cond.replace({var:r})
+                        r_cond = self.simple(r_cond)
+                        if r_cond == True_:
+                            roots_expr.append(r)
+                        elif r_cond == False_:
+                            pass
+                        else:
+                            return Zeros(*args)   # unable to decide?
+                    return Set(*roots_expr)
+
+        return Zeros(*args)
+
+    def simple_Det(self, A):
+        try:
+            mat = self.evaluate_fmpq_mat(A)
+            return Expr(mat.det())
+        except (NotImplementedError, ZeroDivisionError):
+            pass
+        return Det(A)
+
+    def simple_Spectrum(self, A):
+        try:
+            mat = self.evaluate_fmpq_mat(A)
+            from .algebraic import alg
+            eig = alg.matrix_eigenvalues(mat)
+            eig = [r for (r, multiplicity) in eig]
+            eig_expr = []
+            for r in eig:
+                r = self.alg_to_expression(r)
+                if r is None:
+                    return Spectrum(A)
+                eig_expr.append(r)
+            return Set(*eig_expr)
+        except (NotImplementedError, ZeroDivisionError):
+            pass
+        return Spectrum(A)
+
+    def simple_SingularValues(self, A):
+        try:
+            mat = self.evaluate_fmpq_mat(A)
+            # todo: recognize symmetric matrices
+            mat = mat * mat.transpose()
+            from .algebraic import alg
+            eig = alg.matrix_eigenvalues(mat)
+            eig = [r.sqrt() for (r, multiplicity) in eig]
+            eig_expr = []
+            for r in eig:
+                r = self.alg_to_expression(r)
+                if r is None:
+                    return SingularValues(A)
+                eig_expr.append(r)
+            return Set(*eig_expr)
+        except (NotImplementedError, ZeroDivisionError):
+            pass
+        return SingularValues(A)
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """
@@ -2281,6 +2948,16 @@ class TestBrain(object):
         assert b.simple(Pi / Pi**2) == 1/Pi
         assert b.simple(Pi**2 / (Pi - 2*Pi)**2) == Expr(1)
         assert b.simple(Pi**2 / (Pi - 2*Pi)**3) == b.simple(-1/Pi)
+
+    def test_Zeros(self):
+        b = Brain()
+        assert b.simple(Zeros(x**2+1, ForElement(x, CC))) == Set(ConstI, Neg(ConstI))
+        assert b.simple(Zeros(x**2+1, ForElement(x, RR))) == Set()
+        assert b.simple(Zeros(x**2+1, ForElement(x, CC), Greater(Im(x), 0))) == Set(ConstI)
+        # xxx
+        assert b.simple(Zeros(0, ForElement(x, CC))) != Set()
+        assert b.simple(Zeros(0, ForElement(x, CC), NotEqual(x, 0))) != Set()
+
 
     def test_fungrim(self):
         b = FungrimBrain()

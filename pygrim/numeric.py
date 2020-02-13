@@ -305,6 +305,31 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
+        if head in (BesselJ, BesselI, BesselY, BesselK):
+            assert len(args) == 2
+            a, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            if head == BesselJ:
+                v = z.bessel_j(a)
+            elif head == BesselI:
+                v = z.bessel_i(a)
+            elif head == BesselY:
+                v = z.bessel_y(a)
+            else:
+                v = z.bessel_k(a)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head in (Hypergeometric0F1, Hypergeometric0F1Regularized):
+            assert len(args) == 2
+            a, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.hypgeom_0f1(a, regularized=(head == Hypergeometric0F1Regularized))
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
         if head in (Hypergeometric1F1, Hypergeometric1F1Regularized):
             assert len(args) == 3
             a, b, z = [self.eval(arg, **kwargs) for arg in args]
@@ -616,6 +641,20 @@ class ArbNumericalEvaluation(object):
                     if v.is_finite():
                         return v
                     raise ArbFiniteError
+
+        if head == RiemannZetaZero:
+            if len(args) == 1:
+                n, = args
+                n = n.simple()  # XXX
+                if n.is_integer():
+                    n = int(n)
+                    if 0 < abs(n) <= 10**15:    # XXX
+                        v = acb.zeta_zero(abs(n))
+                        if n < 0:
+                            v = v.conjugate()
+                        if v.is_finite():
+                            return v
+                        raise ArbFiniteError
 
         # todo: delete
         if kwargs.get("full_traversal"):

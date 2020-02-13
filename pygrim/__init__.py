@@ -3,6 +3,14 @@
 from .expr import *
 from .brain import *
 
+# this should maybe not be exported, but it's currently
+# useful for development
+try:
+    from flint import *
+    from .algebraic import alg
+except ImportError:
+    pass
+
 def test_fungrim_entry(id, num=100):
     from .formulas import entries_dict
     entry = entries_dict[id]
@@ -36,5 +44,17 @@ def test_fungrim(nstart=0):
             test_fungrim_entry(eid)
 
 def test():
+    print("----------------------------------------------------------")
+    print("algebraic")
+    print("----------------------------------------------------------")
+    import doctest
+    doctest.testmod(algebraic, verbose=True, raise_on_error=True)
+    algebraic.TestAlgebraic().run()
+
+    print("----------------------------------------------------------")
+    print("brain")
+    print("----------------------------------------------------------")
+    import doctest
+    doctest.testmod(brain, verbose=True, raise_on_error=True)
     TestBrain().run()
 

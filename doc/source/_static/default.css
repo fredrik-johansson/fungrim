@@ -1,0 +1,7 @@
+@import url("classic.css");
+
+div.body {
+    min-width: 450px;
+    max-width: 100%;
+}
+

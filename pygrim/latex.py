@@ -1510,23 +1510,29 @@ def tex_FormalGenerator(head, args, **kwargs):
     return "%s \\text{ is the generator of } %s" % (argstr[0], argstr[1])
 
 @deftex
+def tex_Det(head, args, **kwargs):
+    assert len(args) == 1
+    if args[0].head() in (Matrix2x2, Matrix):
+        argstr = [arg.latex(**kwargs) for arg in args]
+        return "\\operatorname{det}" + argstr[0]
+    else:
+        return Call(head, *args).latex(**kwargs)
+
+@deftex
 def tex_Spectrum(head, args, **kwargs):
     assert len(args) == 1
-    if args[0].head() == Matrix2x2:
+    if args[0].head() in (Matrix2x2, Matrix):
         argstr = [arg.latex(**kwargs) for arg in args]
         return "\\operatorname{spec}" + argstr[0]
     else:
         return Call(head, *args).latex(**kwargs)
 
 @deftex
-def tex_Det(head, args, **kwargs):
+def tex_SingularValues(head, args, **kwargs):
     assert len(args) == 1
-    if args[0].head() == Matrix2x2:
+    if args[0].head() in (Matrix2x2, Matrix):
         argstr = [arg.latex(**kwargs) for arg in args]
-        return "\\operatorname{det}" + argstr[0]
-    elif args[0].head() == Matrix:
-        argstr = [arg.latex(**kwargs) for arg in args]
-        return "\\operatorname{det}" + argstr[0]
+        return "\\sigma \\," + argstr[0]
     else:
         return Call(head, *args).latex(**kwargs)
 
@@ -1643,6 +1649,20 @@ def tex_Step(head, args, **kwargs):
 
 @deftex
 def tex_Matrix(head, args, **kwargs):
+    if len(args) == 1 and args[0].head() in (Tuple, List):
+        s = r"\displaystyle{\begin{pmatrix}"
+        rows = args[0].args()
+        for i, r in enumerate(rows):
+            if r.head() not in (Tuple, List):
+                # ???
+                return Call(Matrix, args).latex(**kwargs)
+            args = r.args()
+            line = " & ".join(x.latex(**kwargs) for x in args)
+            if i != len(rows) - 1:
+                line += r" \\"
+            s += line
+        s += r"\end{pmatrix}}"
+        return s
     if len(args) == 3 and args[1].head() == For and args[2].head() == For:
         i, a, b = args[1].args()
         j, c, d = args[2].args()
@@ -1779,6 +1799,8 @@ def tex_Matrices(head, args, **kwargs):
 @deftex
 def tex_Evaluated(head, args, **kwargs):
     assert len(args) == 1
+    return args[0].simple().latex(**kwargs)
+
     from fractions import Fraction
     def try_eval(expr):
         if expr.is_integer():
