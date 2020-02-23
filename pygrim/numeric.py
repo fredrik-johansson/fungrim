@@ -367,6 +367,17 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
+        if head == Hypergeometric2F0:
+            assert len(args) == 3
+            a, b, z = [self.eval(arg, **kwargs) for arg in args]
+            # todo: implement in arb
+            z = acb(z)
+            z = -1/z
+            v = z**a * z.hypgeom_u(a, a-b+1)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
         if head == CoulombF:
             assert len(args) == 3
             a, b, z = [self.eval(arg, **kwargs) for arg in args]
@@ -655,6 +666,26 @@ class ArbNumericalEvaluation(object):
                         if v.is_finite():
                             return v
                         raise ArbFiniteError
+
+        if head in (AiryAiZero, AiryBiZero):
+            if len(args) == 1:
+                n, = args
+                d = Expr(0)
+            elif len(args) == 2:
+                n, d = args
+            n = n.simple()  # XXX
+            d = d.simple()
+            if n.is_integer() and d.is_integer():
+                n = int(n)
+                d = int(d)
+                if n >= 1 and d in (0,1):
+                    if head == AiryAiZero:
+                        v = arb.airy_ai_zero(n, d)
+                    else:
+                        v = arb.airy_bi_zero(n, d)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
 
         # todo: delete
         if kwargs.get("full_traversal"):

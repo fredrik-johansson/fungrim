@@ -645,17 +645,21 @@ class alg(object):
         try:
             acc = x.rel_accuracy_bits()
             ctx.prec = max(acc, 32) * 2 + 10
+            pure_real = x.imag == 0
             # slightly inflate enclosure - needed e.g. in case of
             # complex interval with one very narrow real/imaginary part
             eps = x.rad() * (1/16.)
-            if x.imag == 0:
+            if pure_real:
                 x += arb(0,eps)
             else:
                 x += acb(arb(0,eps), arb(0,eps))
             # interval Newton steps
             xmid = x.mid()
             y = xmid - poly(xmid) / poly.derivative()(x)
-            if x.contains(y):
+            if pure_real:
+                x = x.real
+                y = y.real
+            if x.contains_interior(y):
                 return y
             return None
         finally:

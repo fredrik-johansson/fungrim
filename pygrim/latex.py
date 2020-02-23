@@ -159,6 +159,7 @@ infix_latex_table = {
 
 subscript_latex_table = {
     BernoulliB: "B",
+    EulerE: "E",
     Fibonacci: "F",
     BellNumber: "B",
     HarmonicNumber: "H",
@@ -190,6 +191,7 @@ subscript_pair_latex_table = {
 
 subscript_call_latex_table = {
     BernoulliPolynomial: "B",
+    EulerPolynomial: "E",
     LegendrePolynomial: "P",
     ChebyshevT: "T",
     ChebyshevU: "U",
@@ -208,7 +210,9 @@ subscript_call_latex_table = {
     StirlingSeriesRemainder: "R",
     LogBarnesGRemainder: "R",
     GeneralLinearGroup: "\\operatorname{GL}",
-    SpecialLinearGroup: "\\operatorname{GL}",
+    SpecialLinearGroup: "\\operatorname{SL}",
+    Cyclotomic: "\\Phi",
+    SymmetricPolynomial: "e",
 }
 
 symbol_latex_table = {
@@ -226,6 +230,7 @@ symbol_latex_table = {
     Gamma: "\\Gamma",
     LogGamma: "\\log \\Gamma",
     UpperGamma: "\\Gamma",
+    LowerGamma: "\\gamma",
     Erf: "\\operatorname{erf}",
     Erfc: "\\operatorname{erfc}",
     Erfi: "\\operatorname{erfi}",
@@ -278,7 +283,6 @@ symbol_latex_table = {
     Hypergeometric0F1Regularized: "\\,{}_0{\\textbf F}_1",
     Hypergeometric1F1Regularized: "\\,{}_1{\\textbf F}_1",
     Hypergeometric2F1Regularized: "\\,{}_2{\\textbf F}_1",
-    Hypergeometric2F0Regularized: "\\,{}_2{\\textbf F}_0",
     Hypergeometric3F2Regularized: "\\,{}_3{\\textbf F}_2",
     BesselJ: "J",
     BesselI: "I",
@@ -288,6 +292,10 @@ symbol_latex_table = {
     HankelH2: "H^{(2)}",
     AiryAi: "\\operatorname{Ai}",
     AiryBi: "\\operatorname{Bi}",
+    AiryAiZero: "a",
+    AiryBiZero: "b",
+    BesselJZero: "j",
+    BesselYZero: "y",
     LogIntegral: "\\operatorname{li}",
     SinIntegral: "\\operatorname{Si}",
     GCD: "\\gcd",
@@ -316,6 +324,7 @@ symbol_latex_table = {
     Ellipsis: "\\ldots",
     Spectrum: "\\operatorname{spec}",
     Det: "\\operatorname{det}",
+    SingularValues: "\\sigma",
     RiemannHypothesis: "\\operatorname{RH}",
     GeneralizedRiemannHypothesis: "\\operatorname{GRH}",
     RiemannZeta: "\\zeta",
@@ -332,6 +341,7 @@ symbol_latex_table = {
     BarnesG: "G",
     LogBarnesG: "\\log G",
     HalphenConstant: "\\Lambda",
+    PolynomialDegree: "\\deg",
     RationalFunctionDegree: "\\deg",
     Characteristic: "\\operatorname{char}",
     StandardIndeterminates: "\\mathbb{X}",
@@ -339,6 +349,22 @@ symbol_latex_table = {
     XX: "\\mathbb{X}",
     XXSeries: "\\mathbb{X}_{\\displaystyle{\\varepsilon}}",
     XXNonCommutative: "\\mathbb{X}_{\\text{NC}}",
+    PolX: "x",
+    PolY: "y",
+    PolZ: "z",
+    SerX: "x",
+    SerY: "y",
+    SerQ: "q",
+    AGM: "\\operatorname{agm}",
+    EllipticPi: "\\Pi",
+    IncompleteEllipticF: "F",
+    IncompleteEllipticE: "E",
+    IncompleteEllipticPi: "\\Pi",
+    CarlsonRF: "R_F",
+    CarlsonRG: "R_G",
+    CarlsonRJ: "R_J",
+    CarlsonRD: "R_D",
+    CarlsonRC: "R_C",
 }
 
 def deftex(f):
@@ -381,6 +407,16 @@ def show_exponential_as_power(expr, allow_div=True):
             return False
     return True
 
+@deftex_heads([Ser,Pol])
+def tex_SerPol(head, args, **kwargs):
+    assert len(args) <= 1
+    if not args:
+        return "x"
+    elif args[0].is_text():
+        return args[0]   # todo: escape...?
+    else:
+        return "x_{%s}" % args[0].latex(**kwargs)
+
 @deftex
 def tex_Elements(head, args, **kwargs):
     assert len(args) >= 2
@@ -417,6 +453,11 @@ def tex_Div(head, args, **kwargs):
     else:
         numstr = num.latex()
         denstr = den.latex()
+        if numstr.startswith("-"):  # hack
+            return "-\\frac{" + numstr[1:] + "}{" + denstr + "}"
+        else:
+            return "\\frac{" + numstr + "}{" + denstr + "}"
+
         #if num.is_integer() and den.is_integer():
         #    return "\\frac{" + numstr + "}{" + denstr + "}"
         #else:
@@ -520,14 +561,22 @@ def tex_Pow(head, args, **kwargs):
     base = args[0]
     expo = args[1]
     in_small = kwargs.get("in_small", False)
+    # hack
+    if base.head() in (Ser, Pol):
+        if len(base.args()) == 0:
+            base = x
+        elif len(base.args()) == 1:
+            base = Subscript(x, base.args()[0])
     # todo: more systematic solutions
     if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, Log, DedekindEta, Sec, Sech, Sinc):
         return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
     if not base.is_atom() and base.head() == Fibonacci:
         return "F_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
     if base.head() in subscript_latex_table:
-        assert len(base.args()) == 1
-        return "%s_{%s}^{%s}" % (subscript_latex_table[base.head()], base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
+        if len(base.args()) == 1:
+            return "%s_{%s}^{%s}" % (subscript_latex_table[base.head()], base.args()[0].latex(in_small=in_small), expo.latex(in_small=True))
+        elif len(base.args()) == 0:
+            return "{%s}^{%s}" % (subscript_latex_table[base.head()], expo.latex(in_small=True))
     if not base.is_atom() and base.head() == Subscript:
         assert len(base.args()) == 2
         return "{%s}_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), base.args()[1].latex(in_small=True), expo.latex(in_small=True))
@@ -627,7 +676,7 @@ def tex_And(head, args, **kwargs):
         if kwargs.get("in_logic"):
             return " \\,\\land\\, ".join(argstr)
         else:
-            return " \\,\\mathbin{\\operatorname{and}}\\, ".join(argstr)
+            return " \\;\\mathbin{\\operatorname{and}}\\; ".join(argstr)
 
 @deftex
 def tex_Or(head, args, **kwargs):
@@ -642,7 +691,7 @@ def tex_Or(head, args, **kwargs):
     if kwargs.get("in_logic"):
         return " \\,\\lor\\, ".join(argstr)
     else:
-        return " \\,\\mathbin{\\operatorname{or}}\\, ".join(argstr)
+        return " \\;\\mathbin{\\operatorname{or}}\\; ".join(argstr)
 
 @deftex
 def tex_Sqrt(head, args, **kwargs):
@@ -860,6 +909,9 @@ def tex_std_operator(head, args, **kwargs):
             var, = args[1].args()
     else:
         raise ValueError
+    # todo: more systematic solution
+    if formula.head() in (Add, Sub, Neg, Sum, Product, Integral):
+        formula = Brackets(formula)
     #var = var.latex()
     if 0 and predicate.head() == And and len(predicate.args()) > 1:
         # katex does not support substack
@@ -1204,12 +1256,14 @@ def tex_Cardinality(head, args, **kwargs):
 @deftex
 def tex_Decimal(head, args, **kwargs):
     assert len(args) == 1
-    text = args[0]._text
-    if "e" in text:
-        mant, expo = text.split("e")
-        expo = expo.lstrip("+")
-        text = mant + " \\cdot 10^{" + expo + "}"
-    return text
+    if args[0].is_text():
+        text = args[0]._text
+        if "e" in text:
+            mant, expo = text.split("e")
+            expo = expo.lstrip("+")
+            text = mant + " \\cdot 10^{" + expo + "}"
+        return text
+    return Call(head, *args).latex(**kwargs)
 
 @deftex_heads([BesselJ, BesselY, BesselI, BesselK, HankelH1, HankelH2])
 def tex_Bessel(head, args, **kwargs):
@@ -1247,6 +1301,46 @@ def tex_Airy(head, args, **kwargs):
             return fsym + ("'" * r._integer) + "\!\\left(" + zstr + "\\right)"
         else:
             return fsym + "^{(" + rstr + ")}" + "\!\\left(" + zstr + "\\right)"
+
+@deftex_heads([AiryAiZero, AiryBiZero])
+def tex_AiryZero(head, args, **kwargs):
+    assert len(args) in (1, 2)
+    in_small = kwargs.get("in_small", False)
+    if len(args) == 1:
+        fsym = symbol_latex_table[head]
+        n, = args
+        nstr = n.latex(in_small=in_small)
+        return fsym + "_{" + nstr + "}"
+    else:
+        fsym = symbol_latex_table[head]
+        n, r = args
+        nstr = n.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+            return fsym + ("'" * r._integer) + "_{" + nstr + "}"
+        else:
+            return fsym + "^{(" + rstr + ")}" + "_{" + nstr + "}"
+
+@deftex_heads([BesselJZero, BesselYZero])
+def BesselZero(head, args, **kwargs):
+    assert len(args) in (2, 3)
+    in_small = kwargs.get("in_small", False)
+    if len(args) == 2:
+        fsym = symbol_latex_table[head]
+        v, n = args
+        vstr = v.latex(in_small=in_small)
+        nstr = n.latex(in_small=in_small)
+        return fsym + "_{" + vstr + ", " + nstr + "}"
+    else:
+        fsym = symbol_latex_table[head]
+        v, n, r = args
+        vstr = v.latex(in_small=in_small)
+        nstr = n.latex(in_small=in_small)
+        rstr = r.latex(in_small=in_small)
+        if r.is_integer() and r._integer >= 0 and r._integer <= 3:
+            return fsym + ("'" * r._integer) + "_{" + vstr + ", " + nstr + "}"
+        else:
+            return fsym + "^{(" + rstr + ")}" + "_{" + vstr + ", " + nstr + "}"
 
 @deftex_heads([CoulombF, CoulombG])
 def tex_Coulomb(head, args, **kwargs):
@@ -1481,26 +1575,42 @@ def tex_StieltjesGamma(head, args, **kwargs):
     if len(args) == 2:
         return "\\gamma_{%s}\\!\\left(%s\\right)" % (arg0, argstr[1])
 
-@deftex_heads([Polynomials,RationalFunctions,PolynomialFractions,PowerSeries,LaurentSeries])
+@deftex_heads([Polynomials,RationalFunctions,PolynomialFractions,PowerSeries,LaurentSeries,FormalPowerSeries,FormalLaurentSeries,FormalPuiseuxSeries])
 def tex_PolynomialStructures(head, args, **kwargs):
     assert len(args) >= 1
+    if len(args) == 2 and args[1].head() == Tuple:
+        args = (args[0],) + args[1].args()
     argstr = [arg.latex(**kwargs) for arg in args]
-    if head == Polynomials:
+    if head in (Polynomials,):
         L, R = "[", "]"
-    elif head == PolynomialFractions:
+    elif head in (RationalFunctions,PolynomialFractions):
         L, R = "(", ")"
-    elif head == RationalFunctions:
-        L, R = "(", ")"
-    elif head == PowerSeries:
+    elif head in (PowerSeries,FormalPowerSeries):
         L, R = "[[", "]]"
-    elif head == LaurentSeries:
+    elif head in (LaurentSeries,FormalLaurentSeries):
         L, R = "(\\!(", ")\\!)"
+    elif head in (FormalPuiseuxSeries,):
+        L, R = "\\!\\left\\langle\\!\\left\\langle ", " \\right\\rangle\\!\\right\\rangle"
     return argstr[0] + L + ", ".join(argstr[1:]) + R
+
+@deftex
+def tex_QuotientRing(head, args, **kwargs):
+    assert len(args) == 2
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "%s / %s" % (argstr[0], argstr[1])
 
 @deftex
 def tex_SeriesCoefficient(head, args, **kwargs):
     assert len(args) == 3
     argstr = [arg.latex(**kwargs) for arg in args]
+    return "[{%s}^{%s}] %s" % (argstr[1], argstr[2], argstr[0])
+
+@deftex
+def tex_Coefficient(head, args, **kwargs):
+    assert len(args) == 3
+    argstr = [arg.latex(**kwargs) for arg in args]
+    if args[0].head() in (Add, Sub):   # xxx ...
+        argstr[0] = "\\left( %s \\right)" % argstr[0]
     return "[{%s}^{%s}] %s" % (argstr[1], argstr[2], argstr[0])
 
 @deftex

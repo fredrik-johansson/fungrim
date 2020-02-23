@@ -23,12 +23,19 @@ Features
 * Symbolic computation (evaluation/simplification of expressions)
 * Numerical evaluation of expressions
 
+Grim formula language
+---------------------
+
+.. toctree::
+    :maxdepth: 3
+
+    numbers.rst
+
 Module documentation
 --------------------
 
 .. toctree::
     :maxdepth: 3
-    :caption: Contents:
 
     expr.rst
     brain.rst

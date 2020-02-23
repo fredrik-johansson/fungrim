@@ -368,6 +368,10 @@ class Brain(object):
                 args = expr.args()
                 expr2 = getattr(self, f)(*args)
                 expr = expr2
+            else:
+                args = expr.args()
+                args = [self.simple(x) for x in args]
+                expr = head(*args)
 
         self.simple_cache[input_expr] = expr
 
@@ -2342,6 +2346,12 @@ class Brain(object):
                     poly = self.evaluate_fmpq_poly(expr, var)
                 except NotImplementedError:
                     poly = None
+                if poly is None:
+                    expr = self.simple(expr)
+                    try:
+                        poly = self.evaluate_fmpq_poly(expr, var)
+                    except NotImplementedError:
+                        poly = None
                 if poly is not None:
                     if poly == 0:
                         if len(args) == 2:
@@ -2411,6 +2421,98 @@ class Brain(object):
         except (NotImplementedError, ZeroDivisionError):
             pass
         return SingularValues(A)
+
+    def simple_Sum(self, *args):
+        if len(args) == 2 or len(args) == 3:
+            if len(args) == 2:
+                expr, forargs = args
+                cond = True_
+            else:
+                expr, forargs, cond = args
+            if forargs.head() == For and len(forargs.args()) == 3:
+                var, a, b = forargs.args()
+                a = self.simple(a)
+                b = self.simple(b)
+                if a.is_integer() and b.is_integer():
+                    a = int(a)
+                    b = int(b)
+                    if b - a < 100:
+                        if cond == True_:
+                            terms = [expr.replace({var:i}) for i in range(a,b+1)]
+                        else:
+                            terms = []
+                            for i in range(a,b+1):
+                                include = self.simple(cond.replace({var:i}))
+                                if include == True_:
+                                    terms.append(expr.replace({var:i}))
+                                elif include == False_:
+                                    continue
+                                else:
+                                    return Sum(*args)
+                        return self.simple(Add(*terms))
+        return Sum(*args)
+
+    def simple_Where(self, *args):
+        expr = args[0]
+        defs = list(args[1:])
+
+        # todo: semantic substitutions (stopping at new bound variables)
+        def replace_func(expr, func, func_args, func_value):
+            if expr.head() == func:
+                args = expr.args()
+                if len(args) != len(func_args):
+                    raise ValueError("function called with wrong number of arguments")
+                return func_value.replace(dict(zip(func_args, args)))
+            if expr.is_atom():
+                return expr
+            head = replace_func(expr.head(), func, func_args, func_value)
+            args = [replace_func(arg, func, func_args, func_value) for arg in expr.args()]
+            return head(*args)
+
+        try:
+
+            for i in range(len(defs)):
+                definition = defs[i]
+                assert definition.head() in (Def, Equal)
+                var, value = definition.args()
+                value = self.simple(value)
+                # normal assignment
+                if var.is_symbol():
+                    for j in range(i+1, len(defs)):
+                        defs[j] = defs[j].replace({var:value})
+                    expr = expr.replace({var:value})
+                # destructuring assignment (todo: more cases)
+                elif var.head() in (Tuple, List, Matrix2x2):
+                    if value.head() in (Tuple, List, Matrix2x2):
+                        xs = var.args()
+                        xvals = value.args()
+                        if len(xs) == len(xvals) and all(x.is_symbol() for x in xs):
+                            replace_map = dict(zip(xs, xvals))
+                            for j in range(i+1, len(defs)):
+                                defs[j] = defs[j].replace(replace_map)
+                            expr = expr.replace(replace_map)
+                        else:
+                            raise NotImplementedError
+                # function assignment
+                elif var.head() not in all_builtins:
+                    func = var.head()
+                    func_args = var.args()
+                    func_value = value
+                    for j in range(i+1, len(defs)):
+                        defs[j] = replace_func(defs[j], func, func_args, func_value)
+                    expr = replace_func(expr, func, func_args, func_value)
+
+                else:
+                    raise NotImplementedError
+
+            expr = self.simple(expr)
+            return expr
+
+        except NotImplementedError:
+            pass
+
+        return Where(*args)
+
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """
@@ -2940,7 +3042,6 @@ class TestBrain(object):
         assert b.simple(Add(0, 0, 0)) == Expr(0)
         assert b.simple(Add(0, 0, 1)) == Expr(1)
         assert b.simple(Add(-1, Pi, 1)) == Pi
-        assert b.simple(Add(3*Pi, 5*Pi/7, Pi/2, Pi/3, 2*Pi, -Div(191,42)*Pi)) == Mul(2, Pi)
 
     def test_Mul(self):
         b = Brain()
@@ -2958,6 +3059,12 @@ class TestBrain(object):
         assert b.simple(Zeros(0, ForElement(x, CC))) != Set()
         assert b.simple(Zeros(0, ForElement(x, CC), NotEqual(x, 0))) != Set()
 
+    def test_Where(self):
+        b = Brain()
+        assert b.simple(Where(x**2, Def(x, Pi))) == Pi**2
+        assert b.simple(Where(x*y, Def(x, 5), Def(y, x+1))) == Expr(30)
+        assert b.simple(Where(f(3)*f(4), Def(f(x), x**2))) == Expr(144)
+        assert b.simple(Where(x+y, Def([x,y], List(3,5)))) == Expr(8)
 
     def test_fungrim(self):
         b = FungrimBrain()

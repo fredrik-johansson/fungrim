@@ -719,6 +719,9 @@ class Expr(object):
         b = Brain(variables=variables, assumptions=assumptions, **kwargs)
         return b.simple(self)
 
+    def eval(self, *args, **kwargs):
+        return self.simple(*args, **kwargs)
+
     def test(self, variables, assumptions=None, num=100, verbose=True):
         """
         Test that this formula holds for variables satisfying the given
@@ -882,9 +885,9 @@ BesselJZero BesselYZero
 CoulombF CoulombG CoulombH CoulombC CoulombSigma
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0 Hypergeometric3F2
 HypergeometricU HypergeometricUStar
-Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric2F0Regularized Hypergeometric3F2Regularized
+Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric3F2Regularized
 HypergeometricUStarRemainder
-AiryAi AiryBi
+AiryAi AiryBi AiryAiZero AiryBiZero
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
 ChebyshevT ChebyshevU
@@ -919,17 +922,45 @@ GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
 MultiZetaValue
 EisensteinG EisensteinE
-EllipticK EllipticE
+AGM EllipticK EllipticE EllipticPi IncompleteEllipticF IncompleteEllipticE IncompleteEllipticPi
+CarlsonRF CarlsonRG CarlsonRJ CarlsonRD CarlsonRC
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
 BarnesG LogBarnesG LogBarnesGRemainder
 SloaneA
-HalphenConstant RationalFunctionDegree
+HalphenConstant PolynomialDegree RationalFunctionDegree
 HilbertMatrix
 StandardIndeterminates StandardNoncommutativeIndeterminates
 EvaluateIndeterminate CallIndeterminate
 XX XXSeries XXNonCommutative
 Evaluated Logic
+Cyclotomic
+SymmetricPolynomial
+PolX
+PolY
+PolZ
+Pol
+SerX
+SerY
+SerQ
+Ser
+NonComX
+NonComY
+NonCom
+Coefficient
+Polynomial
+One
+Zero
+Characteristic
+Rings
+CommutativeRings
+Fields
+QuotientRing
+
+FormalPowerSeries
+FormalLaurentSeries
+FormalPuiseuxSeries
+
 """)
 
 inject_builtin("""
