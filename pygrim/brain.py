@@ -1344,8 +1344,7 @@ class Brain(object):
             y = self.simple(y)
             if y.is_integer():
                 return self.evaluate_fmpq(x) ** int(y)
-        else:
-            raise NotImplementedError
+        raise NotImplementedError
 
     def evaluate_fmpq_poly(self, expr, var):
         from flint import fmpq_poly, fmpq
@@ -1898,6 +1897,24 @@ class Brain(object):
             return self.simple_Add(x, Neg(y))
         return Sub(self.simple(x), self.simple(y))
 
+    '''
+    def simple_Mul(self, *factors):
+        u = Mul(*factors)
+        v = self.simple_Mul2(*factors)
+        try:
+            a = u.n(as_arb=True)
+            b = v.n(as_arb=True)
+            if not a.overlaps(b):
+                print(u)
+                print(a)
+                print(v)
+                print(b)
+                assert 0
+        except (NotImplementedError, ValueError):
+            pass
+        return v
+    '''
+
     def simple_Mul(self, *factors):
         """
         Simple product.
@@ -2030,7 +2047,11 @@ class Brain(object):
     def simple_Div(self, x, y):
         if self.is_complex(x) and self.is_complex(y) and self.is_not_zero(y):
             return self.simple_Mul(x, Pow(y, -1))
-        return Div(self.simple(x), self.simple(y))
+        x = self.simple(x)
+        y = self.simple(y)
+        if self.is_complex(x) and self.is_complex(y) and self.is_not_zero(y):
+            return self.simple_Mul(x, Pow(y, -1))
+        return Div(x, y)
 
     def simple_Pow(self, x, y):
         x = self.simple(x)
@@ -2224,6 +2245,13 @@ class Brain(object):
                     nonreal.append(t)
             if real:
                 return self.simple(Mul(*real) * Re(Mul(*nonreal)))
+        if x.head() == Div:
+            a, b = x.args()
+            if self.is_not_zero(b):
+                if self.is_real(b):
+                    if self.is_real(a):
+                        return a / b
+                    return self.simple(Re(a) / b)
         if x.head() == Exp:
             a, = x.args()
             return self.simple(Exp(Re(a)) * Cos(Im(a)))
@@ -2513,6 +2541,833 @@ class Brain(object):
 
         return Where(*args)
 
+    def simple_RiemannZeta(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            s, = args
+            if s.is_integer():
+                fmpq = self._fmpq
+                fmpz = self._fmpz
+                n = int(s)
+                if n == 1:
+                    return UnsignedInfinity
+                if n <= 0 and n >= -20:
+                    return Expr((-1)**(-n) * fmpq.bernoulli(-n+1) / (-n+1))
+                if n == 2:
+                    return Pi**2 / 6
+                if n >= 4 and n % 2 == 0 and n <= 20:
+                    c = (-1)**(n//2+1) * fmpq.bernoulli(n) / (2 * fmpz.fac_ui(n)) * 2**n
+                    return self.simple(Expr(c) * Pi**n)
+            if s == Infinity:
+                return Expr(1)
+            if s.head() == RiemannZetaZero:
+                n, = s.args()
+                if self.is_integer(n) and self.is_not_zero(n):
+                    return Expr(0)
+        if len(args) == 2:
+            s, r = args
+            if r.is_integer() and int(r) >= 0:
+                r = int(r)
+                if r == 0:
+                    return self.simple(RiemannZeta(s))
+                if r == 1 and s == Expr(0):
+                    return -(Log(2*Pi)/2)
+                if s == Expr(1):
+                    return UnsignedInfinity
+                if s == Infinity:
+                    return Expr(0)
+        return RiemannZeta(*args)
+
+    def simple_Cases(self, *args):
+        unknown = []
+        for arg in args:
+            val, cond = arg.args()
+            cond = self.simple(cond)
+            if cond == True_:
+                return self.simple(val)
+            if cond == False_:
+                continue
+            unknown.append((val, cond))
+        if len(unknown) == 1:
+            if unknown[0][1] == Otherwise:
+                return self.simple(unknown[0][0])
+        return Cases(*unknown)
+
+    def simple_Erf(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            if x == Expr(0):
+                return Expr(0)
+            if x == Infinity:
+                return Expr(1)
+            if x == -Infinity:
+                return Expr(-1)
+            if self.is_negative(x):
+                return -Erf(self.simple(-x))
+            return Erf(x)
+        return Erf(*args)
+
+    def simple_Erfc(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            if x == Expr(0):
+                return Expr(1)
+            if x == Infinity:
+                return Expr(0)
+            if x == -Infinity:
+                return Expr(2)
+            return Erfc(x)
+        return Erfc(*args)
+
+    def simple_HurwitzZeta(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            s, a = args
+            if self.is_complex(s) and self.is_complex(a):
+                if s == Expr(1):
+                    return UnsignedInfinity
+                if s == Expr(0):
+                    return self.simple(Div(1,2) - a)
+                if self.simple(Element(s, ZZLessEqual(0))) == True_:
+                    n = Neg(s)
+                    return self.simple(-BernoulliPolynomial(n+1, a) / (n+1))
+                if self.simple(Element(s, ZZGreaterEqual(2))) == True_ and self.simple(Element(a, ZZLessEqual(0))) == True_:
+                    return UnsignedInfinity
+                if a.is_integer():
+                    n = int(a)
+                    if n == 1:
+                        return self.simple(RiemannZeta(s))
+                    if n >= 2 and n <= 50:
+                        return self.simple(RiemannZeta(s) - Add(*(1/k**s for k in range(1, n))))
+                if self.is_rational(a):
+                    bval = {(s,       Div(1,2)) : (2**s-1)*RiemannZeta(s),
+                            (Expr(2), Div(1,4)) : Pi**2 + 8*ConstCatalan,
+                            (Expr(2), Div(3,4)) : Pi**2 - 8*ConstCatalan,
+                            (Expr(3), Div(1,4)) : 28*RiemannZeta(3) + Pi**3,
+                            (Expr(3), Div(3,4)) : 28*RiemannZeta(3) - Pi**3,
+                            (Expr(3), Div(1,6)) : 91*RiemannZeta(3) + 2*Sqrt(3)*Pi**3,
+                            (Expr(3), Div(5,6)) : 28*RiemannZeta(3) - 2*Sqrt(3)*Pi**3}
+                    for sval, aval in bval:
+                        if s == sval:
+                            v = self.simple(a - aval)
+                            if v.is_integer():
+                                n = int(v)
+                                if n >= 0 and n <= 20:
+                                    return self.simple(bval[(s, aval)] - Add(*(1/(k+aval)**s for k in range(n))))
+                                if n >= -20 and n < 0:
+                                    return self.simple(bval[(s, aval)] + Add(*(1/(k-(-n)+aval)**s for k in range(-n))))
+        return HurwitzZeta(*args)
+
+    def simple_DigammaFunction(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            if args[1] == Expr(0):
+                args = [args[0]]
+        if len(args) == 1:
+            z, = args
+            if z == Infinity:
+                return Infinity
+            if z.is_integer():
+                n = int(z)
+                if n <= 0:
+                    return UnsignedInfinity
+                if n == 1:
+                    return -ConstGamma
+                if n <= 100:
+                    return self._fmpq.harmonic(n-1) - ConstGamma
+            try:
+                x = self.evaluate_fmpq(z)
+                p = x.p
+                q = x.q
+                if q != 1 and q <= 12 and abs(x) <= 100:
+                    n = p // q
+                    p = p % q
+                    assert 1 <= p < q
+                    s = -ConstGamma - Log(2*q) - (Pi/2)*Cot(Pi*p/q)
+                    s += 2 * sum(Cos(2*Pi*k*p/q)*Log(Sin(Pi*k/q)) for k in range(1, (q-1)//2+1))
+                    if n > 0:
+                        x = self._fmpq(p, q)
+                        s += sum(1/(x+k) for k in range(n))
+                    elif n < 0:
+                        x = self._fmpq(p, q)
+                        s -= sum(1/(x-k) for k in range(1, -n+1))
+                    return self.simple(s)
+            except NotImplementedError:
+                pass
+        if len(args) == 2:
+            z, r = args
+            if r.is_integer():
+                if int(r) >= 1:
+                    if z == Infinity:
+                        return Expr(0)
+                    if self.is_complex(z):
+                        pole = self.simple(Element(z, ZZLessEqual(0)))
+                        if pole == True_:
+                            return UnsignedInfinity
+                        if pole == False_:
+                            return self.simple((-1)**(r+1) * Factorial(r) * HurwitzZeta(r + 1, z))
+        return DigammaFunction(*args)
+
+    def _gamma_fmpq(self, x):
+        # https://arxiv.org/abs/math/0403510
+        p = x.p
+        q = x.q
+        G = lambda a, b: Gamma(Div(a, b))
+        n = p // q
+        if abs(n) > 100:
+            return G(p, q)
+        p = p % q
+        if n != 0:
+            c = x - n
+            r = 1
+            if n > 0:
+                for k in range(n):
+                    r *= (c + k)
+            else:
+                for k in range(-n):
+                    r /= (c + n + k)
+            return self.simple(r * self._gamma_fmpq(c))
+        if q not in [2,3,4,5,6,8,10,12,15,20,24,30,60]:
+            return G(p, q)
+        S = Sqrt
+        A = 5 + S(5)
+        B = 5 - S(5)
+        C = S(5 + 2*S(5))
+        D = S(5 - 2*S(5))
+        def gamma(ppi, qpi, p2, q2, p3, q3, p5, q5, r, s):
+            f = Pow(Pi, Div(ppi, qpi)) * Pow(2, Div(p2, q2)) * Pow(3, Div(p3, q3)) * Pow(5, Div(p5, q5))
+            f = self.simple(f)
+            return Mul(f, r, s)
+        if q == 2:
+            if p == 1:
+                return Sqrt(Pi)
+        if q == 3:
+            if p == 2:
+                return 2*Pi/(Sqrt(3) * G(1,3))
+        if q == 4:
+            if p == 3:
+                return Sqrt(2) * Pi / G(1,4)
+        if q == 5:
+            if p == 3:
+                return Pi * S(2) / S(5) * S(B) * G(2, 5)**-1
+            if p == 4:
+                return Pi * S(2) / S(5) * S(A) * G(1, 5)**-1
+        if q == 6:
+            if p == 1:
+                return Gamma(Div(1,3))**2 * Sqrt(3) / (Sqrt(Pi) * Pow(2,Div(1,3)))
+            if p == 5:
+                return 2*Pow(Pi,Div(3,2)) * Pow(2,Div(1,3)) / (Sqrt(3) * Gamma(Div(1,3))**2)
+        if q == 8:
+            if p == 3:
+                return Sqrt(Pi) * S(S(2)-1) * G(1,4)**-1 * G(1,8)
+            if p == 5:
+                return Sqrt(Pi) * 2**Div(3,4) * G(1,4) * G(1,8)**-1
+            if p == 7:
+                return Pi * 2**Div(3,4) * S(S(2)+1) * G(1,8)**-1
+        if q == 10:
+            if p == 1:
+                return gamma(-1, 2, -7, 10, 0, 1, 0, 1, S(A), G(1,5) * G(2,5))
+            if p == 3:
+                return gamma(1, 2, -3, 5, 0, 1, -1, 2, B, G(1,5) * G(2,5)**-1)
+            if p == 7:
+                return Sqrt(Pi) * 2**Div(3,5) * G(1,5)**-1 * G(2,5)
+            if p == 9:
+                return gamma(3, 2, 7, 10, 0, 1, -1, 2, S(A), G(1,5)**-1 * G(2,5)**-1)
+        if q == 12:
+            if p == 1:
+                return gamma(-1, 2, -1, 4, 3, 8, 0, 1, S(S(3)+1), G(1,3) * G(1,4))
+            if p == 5:
+                return gamma(1, 2, 1, 4, -1, 8, 0, 1, S(S(3)-1), G(1,4) * G(1,3)**-1)
+            if p == 7:
+                return gamma(1, 2, 1, 4, 1, 8, 0, 1, S(S(3)-1), G(1,3) * G(1,4)**-1)
+            if p == 11:
+                return gamma(3, 2, 3, 4, -3, 8, 0, 1, S(S(3)+1), G(1,3)**-1 * G(1,4)**-1)
+        if q == 15:
+            if p == 2:
+                return gamma(0, 1, -1, 1, -7, 20, -1, 3, S(B) * S(S(15)-D), G(1,3)**-1 * G(2,5) * G(1,15))
+            if p == 4:
+                return gamma(0, 1, -3, 2, -3, 10, -1, 2, S(A) * S(S(15)-C) * S(S(15)-D), G(1,5)**-1 * G(2,5) * G(1,15))
+            if p == 7:
+                return gamma(0, 1, -1, 1, 9, 20, -1, 6, S(B) * S(S(15)+D), G(1,3) * G(1,5) * G(1,15)**-1)
+            if p == 8:
+                return gamma(1, 1, 1, 2, -9, 20, -1, 3, S(S(15)-C), G(1,3)**-1 * G(1,5)**-1 * G(1,15))
+            if p == 11:
+                return 2 * Pi * 3**Div(3,10) * G(1,5) * G(2,5)**-1 * G(1,15)**-1
+            if p == 13:
+                return gamma(1, 1, 1, 2, 7, 20, -1, 6, S(S(15)+C), G(1,3) * G(2,5)**-1 * G(1,15)**-1)
+            if p == 14:
+                return gamma(1, 1, -1, 2, 0, 1, -1, 2, S(A) * S(S(15)+C) * S(S(15)+D), G(1,15)**-1)
+        if q == 20:
+            if p == 3:
+                return gamma(1, 2, -21, 20, 0, 1, -7, 8, B * S(S(10)-S(B)), G(2,5)**-1 * G(1,20))
+            if p == 7:
+                return gamma(1, 2, -3, 20, 0, 1, -3, 8, S(S(10)-S(A)), G(1,5)**-1 * G(1,20))
+            if p == 9:
+                return gamma(1, 1, -1, 5, 0, 1, -1, 2, S(S(10)-S(A)) * S(S(10)-S(B)), G(1,5)**-1 * G(2,5)**-1 * G(1,20))
+            if p == 11:
+                return 2**Div(1,5) * Sqrt(A) * G(1,5) * G(2,5) * G(1,20)**-1
+            if p == 13:
+                return gamma(1, 2, 3, 20, 0, 1, -1, 8, S(B) * S(S(10)+S(B)), G(1,5) * G(1,20)**-1)
+            if p == 17:
+                return gamma(1, 2, 1, 20, 0, 1, -1, 8, S(A) * S(S(10)+S(A)), G(2,5) * G(1,20)**-1)
+            if p == 19:
+                return gamma(1, 1, 0, 1, 0, 1, -1, 2, S(A) * S(S(10)+S(A)) * S(S(10)+S(B)), G(1,20)**-1)
+        if q == 24:
+            if p == 5:
+                return gamma(1, 2, -1, 6, -1, 2, 0, 1, S(S(2)-1) * S(S(3)-1), G(1,3)**-1 * G(1,24))
+            if p == 7:
+                return gamma(1, 2, -1, 4, -3, 8, 0, 1, S(S(3)-1) * S(S(3)-S(2)), G(1,4)**-1 * G(1,24))
+            if p == 11:
+                return gamma(1, 1, 1, 12, -3, 8, 0, 1, S(S(2)-1) * S(S(3)-S(2)), G(1,3)**-1 * G(1,4)**-1 * G(1,24))
+            if p == 13:
+                return gamma(0, 1, 2, 3, 3, 8, 0, 1, S(S(3)+1), G(1,3) * G(1,4) * G(1,24)**-1)
+            if p == 17:
+                return gamma(1, 2, 1, 1, 3, 8, 0, 1, S(S(2)+1), G(1,4) * G(1,24)**-1)
+            if p == 19:
+                return gamma(1, 2, 11, 12, 1, 2, 0, 1, S(S(3)+S(2)), G(1,3) * G(1,24)**-1)
+            if p == 23:
+                return gamma(1, 1, 3, 4, 0, 1, 0, 1, S(S(2)+1) * S(S(3)+1) * S(S(3)+S(2)), G(1,24)**-1)
+        if q == 30:
+            if p == 1:
+                return gamma(-1, 2, -16, 15, 9, 20, -1, 6, S(A) * S(S(15)+C), G(1,3) * G(1,5))
+            if p == 7:
+                return gamma(-1, 2, -22, 15, 3, 20, -1, 6, S(B) * S(S(15)+D), G(1,3) * G(2,5))
+            if p == 11:
+                return gamma(1, 2, -11, 15, -1, 20, -1, 3, S(A) * S(S(15)-C), G(1,3)**-1 * G(1,5))
+            if p == 13:
+                return gamma(1, 2, -41, 30, 7, 20, -2, 3, B * S(S(15)-D), G(1,3) * G(2,5)**-1)
+            if p == 17:
+                return gamma(1, 2, -2, 15, -7, 20, -1, 3, S(B) * S(S(15)-D), G(1,3)**-1 * G(2,5))
+            if p == 19:
+                return gamma(1, 2, -23, 30, 1, 20, -2, 3, A * S(S(15)-C), G(1,3) * G(1,5)**-1)
+            if p == 23:
+                return gamma(3, 2, -1, 30, -3, 20, -5, 6, B * S(S(15)+D), G(1,3)**-1 * G(2,5)**-1)
+            if p == 29:
+                return gamma(3, 2, -13, 30, -9, 20, -5, 6, A * S(S(15)+C), G(1,3)**-1 * G(1,5)**-1)
+        if q == 60:
+            if p == 11:
+                return gamma(1, 2, -5,4, -1,2, -17,24,  S(A) * S(S(15) - C) * S(S(10) - S(A)), G(1,3)**-1 * G(1,60))
+            if p == 13:
+                return gamma(1, 2, -13, 10, -3, 20, -3, 8,  S(B) * S(S(3) + 1) * S(S(5) - S(3)) * S(S(15) - D), G(2,5)**-1 * G(7,60))
+            if p == 17:
+                return gamma(1, 2, -3, 4, -1, 2, -11, 24, S(B) * S(S(15) - D) * S(S(10) - S(B)), G(1,3)**-1 * G(7,60))
+            if p == 19:
+                return gamma(1, 2, -7, 5, -9, 20, -5, 8, S(A) * S(S(3) - 1) * S(S(5) - S(3)) * S(S(15) - C), G(1,5)**-1 * G(1,60))
+            if p == 23:
+                return gamma(1, 1, -11, 20, -3, 20, -7, 12, S(B) * S(S(3) + 1) * S(S(5) - S(3)) * S(S(10) - S(B)), G(1,3)**-1 * G(2,5)**-1 * G(7,60))
+            if p == 29:
+                return gamma(1, 1, -23, 20, -9, 20, -7, 12, S(A) * S(S(3) - 1) * S(S(5) - S(3)) * S(S(10) - S(A)), G(1,3)**-1 * G(1,5)**-1 * G(1,60))
+            if p == 31:
+                return gamma(0, 1, -1, 10, 9, 20, -1, 6, S(A) * S(S(15) + C), G(1,3) * G(1,5) * G(1,60)**-1)
+            if p == 37:
+                return gamma(0, 1, -7, 10, 3, 20, -1, 6, S(B) * S(S(15) + D), G(1,3) * G(2,5) * G(7,60)**-1)
+            if p == 41:  # typo corrected
+                return gamma(1, 2, 3, 20, 9, 20, -1, 8, S(A) * S(S(10) + S(A)), G(1,5) * G(1,60)**-1)
+            if p == 43:
+                return gamma(1, 2, -1, 2, 1, 2, -7, 24, S(B) * S(S(3)-1) * S(S(5) + S(3)), G(1,3) * G(7,60)**-1)
+            if p == 47: # typo corrected
+                return gamma(1, 2, 1, 20, 3, 20, -3, 8, S(B) * S(S(10) + S(B)), G(2,5) * G(7,60)**-1)
+            if p == 49:
+                return gamma(1, 2, 0, 1, 1, 2, -1, 24, S(A) * S(S(3) + 1) * S(S(5) + S(3)), G(1,3) * G(1,60)**-1)
+            if p == 53:
+                return gamma(1, 1, -5, 4, 0, 1, -3, 4, B * S(S(3) - 1) * S(S(5) + S(3)) * S(S(15) + D) * S(S(10) + S(B)), G(7,60)**-1)
+            if p == 59:
+                return gamma(1, 1, -5, 4, 0, 1, -3, 4, A * S(S(3) + 1) * S(S(5) + S(3)) * S(S(15) + C) * S(S(10) + S(A)), G(1,60)**-1)
+        return G(p, q)
+
+    def simple_Gamma(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            fmpz = self._fmpz
+            z, = args
+            if z.is_integer():
+                n = int(z)
+                if n <= 0:
+                    return UnsignedInfinity
+                if n <= 100:
+                    return Expr(fmpz.fac_ui(n - 1))
+            if z == Infinity:
+                return Infinity
+            if self.is_rational(z):
+                m = self.simple(z * 60)
+                if m.is_integer():
+                    return self._gamma_fmpq(self.evaluate_fmpq(z))
+                m = self.simple(z * 24)
+                if m.is_integer():
+                    return self._gamma_fmpq(self.evaluate_fmpq(z))
+
+        return Gamma(*args)
+
+    def simple_Factorial(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            fmpz = self._fmpz
+            z, = args
+            if z.is_integer():
+                n = int(z)
+                if n < 0:
+                    return UnsignedInfinity
+                if n <= 100:
+                    return Expr(fmpz.fac_ui(n))
+        return Factorial(*args)
+
+    def simple_RisingFactorial(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            a, n = args
+            if n.is_integer():
+                n = int(n)
+                if n <= 100 and a.is_integer():
+                    v = self._fmpz(int(a)).rising(n)
+                    return Expr(v)
+                if n <= 30 and self.is_complex(a):
+                    return self.simple(Mul(*(a+k for k in range(n))))
+
+        return RisingFactorial(*args)
+
+
+    def simple_hypergeometric(self, As, Bs, z, regularized=False):
+        """
+        Step 1 of hypergeometric evaluation; applies generic transformations
+        and dispatches to step 2 if possible.
+        """
+        As = [self.simple(a) for a in As]
+        Bs = [self.simple(b) for b in Bs]
+        z = self.simple(z)
+        all_complex = all(self.is_complex(a) for a in (As + Bs + [z]))
+        prefactor = Expr(1)
+        try:
+            if all_complex:
+
+                # We define F(..., 0) = 1 regardless of any parameter poles
+                # Todo: is this a wise definition?
+                at_zero = self.is_zero(z)
+                if at_zero:
+                    val = Expr(1)
+                    if regularized:
+                        for b in Bs:
+                            # todo: unnecessary; div by UnsignedInfinity ought to be simplified
+                            if b.is_integer() and int(b) <= 0:
+                                return Expr(0)
+                            val *= (1 / Gamma(b))
+                    return self.simple(val)
+
+                # Look for certain termination
+                # Possible outcomes: None, parameter a_i = n
+                terminating = None
+                for a in As:
+                    if a.is_integer():
+                        an = int(a)
+                        if an <= 0:
+                            if terminating is None:
+                                terminating = an
+                            else:
+                                terminating = max(terminating, an)
+
+                # Possible issue: if there is some termination point a_j > a_i
+                # with a corresponding pole b_k > a_i which could not be detected
+                # with certainty, we are potentially adding too many
+                # terms, incorrectly adding a pole. This must be avoided.
+                if terminating is not None and not regularized:
+                    if any(self.simple(Element(b, Range(terminating + 1, 0))) != False_ for b in Bs):
+                        if any(self.simple(Element(a, Range(terminating + 1, 0))) != False_ for a in As):
+                            terminating = None
+
+                # Todo: fast code here (use recurrences when possible)
+                if terminating is not None:
+                    if terminating >= -30:
+                        terms = []
+                        for k in range(-terminating + 1):
+                            P = [RisingFactorial(a, k) for a in As]
+                            P += [z**k]
+                            P += [1/Factorial(k)]
+                            if regularized:
+                                for b in Bs:
+                                    # todo: unnecessary; div by UnsignedInfinity ought to be simplified
+                                    if b.is_integer() and int(b) + k <= 0:
+                                        P += [Expr(0)]
+                                    else:
+                                        P += [1/Gamma(b + k)]
+                            else:
+                                for b in Bs:
+                                    P += [1/RisingFactorial(b, k)]
+                            term = self.simple(Mul(*P))
+                            terms.append(term)
+                        return self.simple(Add(*terms))
+
+                # Eliminate redundant parameters
+                remove_Bi = set()
+                for i in range(len(Bs)):
+                    b = Bs[i]
+                    if self.simple(Element(b, ZZLessEqual(0))) == False_:
+                        for j in range(len(As)):
+                            if self.equal(As[j], b):
+                                del As[j]
+                                remove_Bi.add(i)
+                                break
+
+                Bs_removed = [b for (i, b) in enumerate(Bs) if i in remove_Bi]
+                Bs = [b for (i, b) in enumerate(Bs) if i not in remove_Bi]
+                if Bs_removed and regularized:
+                    prefactor = Mul(*(1/Gamma(b) for b in Bs_removed))
+
+                # Now try step 2
+                res = self.simple_hypergeometric_2(As, Bs, z, regularized)
+                if res is not None:
+                    if prefactor != Expr(1):
+                        res = self.simple(prefactor * res)
+                    return res
+
+        except NotImplementedError:
+            pass
+
+        p = len(As)
+        q = len(Bs)
+        if q == 0:
+            regularized = False
+
+        # we define this regardless of whether z is complex
+        if p == 0 and q == 0:
+            res = self.simple(prefactor * Exp(z))
+
+        if regularized:
+            if p == 0 and q == 1:
+                res = Hypergeometric0F1Regularized(Bs[0], z)
+            elif p == 1 and q == 1:
+                res = Hypergeometric1F1Regularized(As[0], Bs[0], z)
+            elif p == 1 and q == 2:
+                res = Hypergeometric1F2Regularized(As[0], Bs[0], Bs[1], z)
+            elif p == 2 and q == 1:
+                res = Hypergeometric2F1Regularized(As[0], As[1], Bs[0], z)
+            elif p == 2 and q == 2:
+                res = Hypergeometric2F2Regularized(As[0], As[1], Bs[0], Bs[1], z)
+            elif p == 3 and q == 2:
+                res = Hypergeometric3F2Regularized(As[0], As[1], As[2], Bs[0], Bs[1], z)
+            else:
+                res = HypergeometricPFQRegularized(As, Bs, z)
+        else:
+            if p == 0 and q == 1:
+                res = Hypergeometric0F1(Bs[0], z)
+            elif p == 1 and q == 1:
+                res = Hypergeometric1F1(As[0], Bs[0], z)
+            elif p == 1 and q == 2:
+                res = Hypergeometric1F2(As[0], Bs[0], Bs[1], z)
+            elif p == 2 and q == 0:
+                res = Hypergeometric2F0(As[0], As[1], Bs[0], z)
+            elif p == 2 and q == 1:
+                res = Hypergeometric2F1(As[0], As[1], Bs[0], z)
+            elif p == 2 and q == 2:
+                res = Hypergeometric2F2(As[0], As[1], Bs[0], Bs[1], z)
+            elif p == 3 and q == 2:
+                res = Hypergeometric3F2(As[0], As[1], As[2], Bs[0], Bs[1], z)
+            else:
+                res = HypergeometricPFQ(As, Bs, z)
+        if prefactor == Expr(1):
+            return res
+        else:
+            return prefactor * res
+
+    def simple_hypergeometric_2(self, As, Bs, z, regularized=False):
+        """
+        Step 2 of hypergeometric evaluation: attempt to find closed forms
+        for special cases. Assumes step 1 has done preprocessing (verify
+        that all parameters are complex; remove redundant parameters;
+        handle finite cases). Returns None if no good closed form is found.
+        """
+        p = len(As)
+        q = len(Bs)
+
+        if p == 0 and q == 0:
+            return self.simple(Exp(z))
+
+        if p == 1 and q == 0:
+            return self.simple((1-z)**(-As[0]))
+
+        # print("CASE", As, Bs, regularized)
+
+        # explicit evaluation of 0F1
+        # todo: regularization
+        # todo: do we want bessel functions?
+        if p == 0 and q == 1:
+            b = Bs[0]
+            if b.is_integer():
+                n = int(b)
+                if n <= 0:
+                    if not regularized and self.is_not_zero(z):
+                        return UnsignedInfinity
+                    if regularized:
+                        return self.simple(z**(1-n) * Hypergeometric0F1Regularized(2-n, z))
+
+            n = self.simple(2 * b)
+            if n.is_integer():
+                n = int(n)
+                if n % 2 == 1 and abs(n) <= 7:
+                    # todo: implement this in a much better way
+                    fmpq = self._fmpq
+                    def _0f1(b, z):
+                        if b == fmpq(1,2):
+                            return self.simple(Cosh(2 * Sqrt(z)))
+                        if b == fmpq(-1,2):
+                            return self.simple(Cosh(2 * Sqrt(z)) - 2 * Sqrt(z) * Sinh(2 * Sqrt(z)))
+                        if b == fmpq(3,2):
+                            return self.simple(Sinh(2 * Sqrt(z)) / (2 * Sqrt(z)))
+                        if b > fmpq(3,2):
+                            return (b-2)*(b-1)/z * (_0f1(b-2,z) - _0f1(b-1,z))
+                        if b < fmpq(-1,2):
+                            return _0f1(b+1,z) + z/(b*(b+1)) * _0f1(b+2,z)
+                    val = _0f1(fmpq(n, 2), z)
+                    if n >= 3:
+                        # division by zero in the formulas
+                        val = Cases((val, NotEqual(z, 0)), Tuple(1, Equal(z, 0)))
+                        val = self.simple(val)  # todo. div not simplifying enough
+                    if regularized:
+                        return self.simple(val / Gamma(b))
+                    else:
+                        return self.simple(val)
+
+        # Gauss 2F1
+        if p == 2 and q == 1:
+            if z == Expr(1):
+                a, b, c = As[0], As[1], Bs[0]
+                if self.is_complex(a) and self.is_complex(b) and self.is_complex(c) and self.simple(NotElement(c, ZZLessEqual(0))) == True_:
+                    v = Greater(Re(c-a-b), 0)
+                    v = self.simple(v)
+                    if v == True_:
+                        if regularized:
+                            return self.simple(Gamma(c-a-b) / (Gamma(c-a) * Gamma(c - b)))
+                        else:
+                            return self.simple(Gamma(c) * Gamma(c-a-b) / (Gamma(c-a) * Gamma(c-b)))
+
+        return None
+
+    def simple_Hypergeometric0F1(self, *args):
+        try:
+            b, z = args
+        except ValueError:
+            return Hypergeometric0F1(*args)
+        return self.simple_hypergeometric([], [b], z)
+
+    def simple_Hypergeometric0F1Regularized(self, *args):
+        try:
+            b, z = args
+        except ValueError:
+            return Hypergeometric0F1Regularized(*args)
+        return self.simple_hypergeometric([], [b], z, regularized=True)
+
+    def simple_Hypergeometric1F1(self, *args):
+        try:
+            a, b, z = args
+        except ValueError:
+            return Hypergeometric1F1(*args)
+        return self.simple_hypergeometric([a], [b], z)
+
+    def simple_Hypergeometric1F1Regularized(self, *args):
+        try:
+            a, b, z = args
+        except ValueError:
+            return Hypergeometric1F1Regularized(*args)
+        return self.simple_hypergeometric([a], [b], z, regularized=True)
+
+    def simple_Hypergeometric2F1(self, *args):
+        try:
+            a, b, c, z = args
+        except ValueError:
+            return Hypergeometric2F1(*args)
+        return self.simple_hypergeometric([a, b], [c], z)
+
+    def simple_Hypergeometric2F1Regularized(self, *args):
+        try:
+            a, b, c, z = args
+        except ValueError:
+            return Hypergeometric2F1Regularized(*args)
+        return self.simple_hypergeometric([a, b], [c], z, regularized=True)
+
+    def simple_HypergeometricPFQ(self, *args):
+        try:
+            a, b, z = args
+            # todo: check iterators
+            if a.head() in (List, Tuple) and b.head() in (List, Tuple):
+                return self.simple_hypergeometric(a.args(), b.args(), z)
+        except ValueError:
+            pass
+        return HypergeometricPFQ(*args)
+
+    def simple_HypergeometricPFQRegularized(self, *args):
+        try:
+            a, b, z = args
+            # todo: check iterators
+            if a.head() in (List, Tuple) and b.head() in (List, Tuple):
+                return self.simple_hypergeometric(a.args(), b.args(), z, regularized=True)
+        except ValueError:
+            pass
+        return HypergeometricPFQRegularized(*args)
+
+
+    def simple_ModularJ(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            tau, = args
+            try:
+                v = self.evaluate_alg(tau)
+                v, transform = v.reduce_sl2z(v)
+            except ValueError:
+                v = None
+            if v is not None and v.degree() == 2:
+                a, b, c = v.as_quadratic()
+                h = self._fmpq(1,2)
+                # Produce exact values.
+                # https://en.wikipedia.org/wiki/J-invariant#Special_values
+                # Todo: implement an algorithm!
+                modjtab = {
+                    (-h, h, -3) : Expr(0),
+                    (0, 1, -1) : Expr(1728),
+                    (0, 2, -1) : Expr(66**3),
+                    (0, 3, -1) : 64*(2+Sqrt(3))**2*(21+20*Sqrt(3))**3,
+                    (0, 4, -1) : 27*(724+513*Sqrt(2))**3,
+                    (0, 1, -2) : Expr(20**3),
+                    (0, 2, -2) : 1000*(19+13*Sqrt(2))**3,
+                    (0, 2, -3) : 13500*(30+17*Sqrt(3))**3,
+                    (-h, 1, -1) : 27*(724-513*Sqrt(2))**3,
+                    (0, 1, -6) : 432 * (14 + 9*Sqrt(2))**3 * (2 - Sqrt(2)),
+                    (-h, h, -7) : Expr(-15**3),
+                    (-h, h, -11) : Expr(-32**3),
+                    (-h, h, -19) : Expr(-96**3),
+                    (-h, h, -43) : Expr(-960**3),
+                    (-h, h, -67) : Expr(-5280**3),
+                    (-h, h, -163) : Expr(-640320**3),
+                }
+                val = modjtab.get((a, b, c))
+                if val is not None:
+                    return val
+        return ModularJ(*args)
+
+    def simple_DedekindEtaEpsilon(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 4:
+            a, b, c, d = args
+            if a.is_integer() and b.is_integer() and c.is_integer() and d.is_integer():
+                fmpz = self._fmpz
+                def epsilon_arg(a, b, c, d):
+                    if a*d - b*c != 1:
+                        raise ValueError
+                    if c < 0 or (c == 0 and d < 0):
+                        a, b, c, d = -a, -b, -c, -d
+                    if c == 0:
+                        return b % 24
+                    aa = a % 24
+                    bb = b % 24
+                    cc = c % 24
+                    dd = d % 24
+                    def kronecker(a, b):
+                        if b < 0:
+                            return kronecker(a, -b)
+                        if b == 1:
+                            return fmpz(1)
+                        return fmpz(a).jacobi(b)
+                    if cc % 2 == 1:
+                        u = kronecker(a, c)
+                        aa = aa*bb + 2*aa*cc - 3*cc + cc*dd*(1-aa*aa)
+                    else:
+                        u = kronecker(c, a)
+                        aa = aa*bb - aa*cc + 3*aa - 3 + cc*dd*(1-aa*aa)
+                    assert u in (-1, 1)
+                    if u == -1:
+                        aa += 12
+                    aa = aa % 24
+                    return aa
+                try:
+                    r = epsilon_arg(int(a), int(b), int(c), int(d))
+                except ValueError:
+                    return Undefined
+                r = self.simple_Exp_two_pi_i_k_n(r, 24)
+                return r
+
+        return DedekindEtaEpsilon(*args)
+
+    def simple_ModularLambda(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            tau, = args
+            try:
+                v = self.evaluate_alg(tau)
+                v, transform = v.reduce_sl2z(v)
+            except ValueError:
+                v = None
+            if v is not None and v.degree() == 2:
+                a, b, c = v.as_quadratic()
+                h = self._fmpq(1,2)
+                # http://mathworld.wolfram.com/EllipticLambdaFunction.html
+                # Todo: fill in more values
+                modlamtab = {
+                    (0, 1, -1) : Expr(1)/2,
+                    (-h, h, -3) : -self.simple_Exp_two_pi_i_k_n(1, 3),
+                    (0, 2, -1) : 17 - 12*Sqrt(2),
+                    (0, 1, -2) : (Sqrt(2) - 1)**2,
+                    (0, 1, -3) : ((Sqrt(3)-1)**2/8),
+                    (0, 1, -5) : (Div(1,2)-Sqrt(Sqrt(5)-2)),
+                    (0, 1, -6) : (2-Sqrt(3))**2*(Sqrt(3)-Sqrt(2))**2,
+                    (0, 1, -7) : ((3-Sqrt(7))**2/32),
+                    (0, 2, -2) : ((1+Sqrt(2)-Sqrt(2*Sqrt(2)+2))**4),
+                    (0, 3, -1) : ((Sqrt(2)-3**Div(1,4))**2*(Sqrt(3)-1)**2/4),
+                    (0, 1, -10) : ((Sqrt(10)-3)**2*(Sqrt(2)-1)**4),
+                    (0, 2, -3) : (Sqrt(3)-Sqrt(2))**4 * (Sqrt(2)-1)**4,
+                    (0, h, -6) : 1 - (2-Sqrt(3))**2*(Sqrt(2)+Sqrt(3))**2,
+                    (0, h, -10) : 1 - (1+Sqrt(2))**4*(Sqrt(10)-3)**2,
+                }
+                val = modlamtab.get((a, b, c))
+                if val is not None:
+                    transform = [n%2 for n in transform]
+                    if transform == [1, 0, 0, 1]: val = val
+                    if transform == [0, 1, 1, 0]: val = 1-val
+                    if transform == [1, 0, 1, 1]: val = 1/val
+                    if transform == [0, 1, 1, 1]: val = 1/(1-val)
+                    if transform == [1, 1, 1, 0]: val = 1-1/val
+                    if transform == [1, 1, 0, 1]: val = val/(val-1)
+                    return self.simple(val)
+
+        return ModularLambda(*args)
+
+    def simple_DedekindEta(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            tau, = args
+            try:
+                v = self.evaluate_alg(tau)
+                v, transform = v.reduce_sl2z(v)
+            except ValueError:
+                v = None
+            if v is not None and v.degree() == 2:
+                a, b, c = v.as_quadratic()
+                h = self._fmpq(1,2)
+                if a == -h:
+                    t = b * Sqrt(c)
+                    val = Exp(-Pi*ConstI/24) * DedekindEta(2*t)**3 / (DedekindEta(t) * DedekindEta(4*t))
+                    val = self.simple(val)
+                else:
+                    etai = Gamma(Div(1,4)) / (2 * Pi**Div(3,4))
+                    modetatab = {
+                        (0, 1, -1) : etai,
+                        (0, 2, -1) : etai / 2**Div(3,8),
+                        (0, 3, -1) : etai / (3**Div(3,8) * (2+Sqrt(3))**Div(1,12)),
+                        (0, 4, -1) : etai / (2**Div(13,16) * (1+Sqrt(2))**Div(1,4)),
+                        (0, 5, -1) : etai / Sqrt(5*GoldenRatio),
+                        (0, 6, -1) : (1/6**Div(3,8)) * ((5-Sqrt(3))/2 - 3**Div(3,4)/Sqrt(2))**Div(1,6) * etai,
+                        (0, 7, -1) : (1/Sqrt(7)) * (-Div(7,2) + Sqrt(7) + Div(1,2)*Sqrt(-7+4*Sqrt(7)))**Div(1,4) * etai,
+                        (0, 8, -1) : (1/2**Div(41,32)) * Sqrt(2**Div(1,4) - 1) / (1+Sqrt(2))**Div(1,8) * etai,
+                        (0, 16, -1) : (1/2**Div(113,64)) * (2**Div(1,4)-1)**Div(1,4) / (1+Sqrt(2))**Div(1,16) * Sqrt(-2**Div(5,8) + Sqrt(1+Sqrt(2))) * etai,
+                        (0, 1, -3) : 3**Div(1,8) / 2**Div(4,3) * Gamma(Div(1,3))**Div(3,2) / Pi,
+                        (-h, h, -3) : Exp(-Pi*ConstI/24) * 3**Div(1,8) * Gamma(Div(1,3))**Div(3,2) / (2*Pi),
+                    }
+                    val = modetatab.get((a, b, c))
+                if val is not None:
+                    a, b, c, d = transform
+                    tau = v.expr()
+                    val = DedekindEtaEpsilon(a, b, c, d) * Sqrt(c*tau + d) * val
+                    return self.simple(val)
+
+        return DedekindEta(*args)
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """
@@ -3073,4 +3928,60 @@ class TestBrain(object):
         assert b.simple(Sin(1)**2 + Cos(1)**2) == Expr(1)
         assert b.simple(Erf(Sin(1)**2 + Cos(1)**2) + Erfc(1)) == Expr(1)
         assert b.simple(2 * Integral(1/(2*x+3)**Div(3,2), For(x, 1, Infinity))) == b.simple(2 * Pow(5, Div(-1, 2)))
+
+    def test_hypergeometric(self):
+        N = 8
+        for b in range(-N,N+1):
+            for z in [0, -2, 2]:
+                for r in [True, False]:
+                    if r:
+                        f = Hypergeometric0F1Regularized(Div(b, 2), z)
+                    else:
+                        f = Hypergeometric0F1(Div(b, 2), z)
+                    g = f.eval()
+                    try:
+                        x1 = f.n(as_arb=True)
+                        x2 = g.n(as_arb=True)
+                    except ValueError:
+                        x1 = x2 = Expr(0).n(as_arb=True)
+                    if not x1.overlaps(x2):
+                        raise ValueError
+        N = 6
+        for a in range(-N,N+1):
+            for b in range(-N,N+1):
+                for z in [0, -2, 2]:
+                    for r in [True, False]:
+                        if r:
+                            f = Hypergeometric1F1Regularized(Div(a, 2), Div(b, 2), z)
+                        else:
+                            f = Hypergeometric1F1(Div(a, 2), Div(b, 2), z)
+                        g = f.eval()
+                        try:
+                            x1 = f.n(as_arb=True)
+                            x2 = g.n(as_arb=True)
+                        except ValueError:
+                            x1 = x2 = Expr(0).n(as_arb=True)
+                        if not x1.overlaps(x2):
+                            raise ValueError
+        if 0:
+            N = 6   # slow
+        else:
+            N = 3
+        for a in range(-N,N+1):
+            for b in range(-N,N+1):
+                for c in range(-N,N+1):
+                    for z in [0, 1, Div(1,4), 4]:
+                        for r in [True, False]:
+                            if r:
+                                f = Hypergeometric2F1Regularized(Div(a, 2), Div(b, 2), Div(c, 2), z)
+                            else:
+                                f = Hypergeometric2F1(Div(a, 2), Div(b, 2), Div(c, 2), z)
+                            g = f.eval()
+                            try:
+                                x1 = f.n(as_arb=True)
+                                x2 = g.n(as_arb=True)
+                            except ValueError:
+                                x1 = x2 = Expr(0).n(as_arb=True)
+                            if not x1.overlaps(x2):
+                                raise ValueError
 

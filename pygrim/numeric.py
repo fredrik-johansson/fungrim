@@ -40,6 +40,7 @@ function_arb_method_table = {
     Sin : "sin",
     Cos : "cos",
     Tan : "tan",
+    Cot : "cot",
     Sinh : "sinh",
     Cosh : "cosh",
     Tanh : "tanh",
@@ -348,6 +349,33 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
+        if head in (Hypergeometric1F2, Hypergeometric1F2Regularized):
+            assert len(args) == 4
+            a, b, c, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.hypgeom([a], [b, c], regularized=(head == Hypergeometric1F2Regularized))
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head in (Hypergeometric2F2, Hypergeometric2F2Regularized):
+            assert len(args) == 5
+            a, b, c, d, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.hypgeom([a, b], [c, d], regularized=(head == Hypergeometric2F2Regularized))
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head in (Hypergeometric3F2, Hypergeometric3F2Regularized):
+            assert len(args) == 6
+            a, b, c, d, e, z = [self.eval(arg, **kwargs) for arg in args]
+            z = acb(z)
+            v = z.hypgeom([a, b, c], [d, e], regularized=(head == Hypergeometric3F2Regularized))
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
         if head == HypergeometricU:
             assert len(args) == 3
             a, b, z = [self.eval(arg, **kwargs) for arg in args]
@@ -377,6 +405,23 @@ class ArbNumericalEvaluation(object):
             if v.is_finite():
                 return v
             raise ArbFiniteError
+
+        if head in (HypergeometricPFQ, HypergeometricPFQRegularized):
+            assert len(args) == 3
+            a, b, z = args
+            if a.head() in (List, Tuple):
+                if b.head() in (List, Tuple):
+                    a = [self.eval(arg, **kwargs) for arg in a.args()]
+                    b = [self.eval(arg, **kwargs) for arg in b.args()]
+                    z = self.eval(z, **kwargs)
+                    z = acb(z)
+                    if head == HypergeometricPFQRegularized:
+                        v = z.hypgeom(a, b, regularized=True)
+                    else:
+                        v = z.hypgeom(a, b)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
 
         if head == CoulombF:
             assert len(args) == 3

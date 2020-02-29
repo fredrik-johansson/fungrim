@@ -211,9 +211,13 @@ class Expr(object):
         return s
 
     def __str__(self):
+        #if self.is_integer():
+        #    return "Expr(%s)" % int(self)
         return self.str()
 
     def __repr__(self):
+        #if self.is_integer():
+        #    return "Expr(%s)" % int(self)
         return self.str()
 
     def _repr_latex_(self):
@@ -886,6 +890,10 @@ CoulombF CoulombG CoulombH CoulombC CoulombSigma
 Hypergeometric0F1 Hypergeometric1F1 Hypergeometric2F1 Hypergeometric2F0 Hypergeometric3F2
 HypergeometricU HypergeometricUStar
 Hypergeometric0F1Regularized Hypergeometric1F1Regularized Hypergeometric2F1Regularized Hypergeometric3F2Regularized
+Hypergeometric1F2 Hypergeometric1F2Regularized
+Hypergeometric2F2 Hypergeometric2F2Regularized
+HypergeometricPFQ
+HypergeometricPFQRegularized
 HypergeometricUStarRemainder
 AiryAi AiryBi AiryAiZero AiryBiZero
 LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight

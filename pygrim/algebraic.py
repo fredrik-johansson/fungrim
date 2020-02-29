@@ -172,6 +172,18 @@ class alg(object):
         elif isinstance(v, alg):
             self._minpoly = v._minpoly
             self._enclosure = v._enclosure
+        elif isinstance(v, float):
+            import math
+            m, e = math.frexp(v)
+            m = int(m * 2.0**53)
+            e -= 53
+            v = alg(m) * alg(2)**e
+            self._minpoly = v._minpoly
+            self._enclosure = v._enclosure
+        elif isinstance(v, complex):
+            v = alg(v.real) + alg(v.imag)*alg.i()
+            self._minpoly = v._minpoly
+            self._enclosure = v._enclosure
         else:
             raise NotImplementedError
         self._hash = None
@@ -346,21 +358,26 @@ class alg(object):
                 # todo: the partial factoring in flint is wonky;
                 # it should at least do a perfect power test or single-word
                 # factorisation of the last factor
-                rem = fac[-1][0]
-                if rem < factor_limit:
-                    fac = fac[:-1] + rem.factor()
-                elif rem.is_perfect_power():
-                    for e in range(64,1,-1):
-                        p = rem.root(e)
-                        if p**e == rem:
-                            if p < factor_limit:
-                                fac2 = rem.factor()
-                                fac = fac[:-1]
-                                for (p, f) in fac2:
-                                    fac.append((p, e*f))
-                            else:
-                                fac = fac[:-1] + [(p, e)]
-                            break
+                if 1:
+                    rem, reme = fac[-1]
+                    if rem < factor_limit:
+                        fac = fac[:-1] + [(pp, ee*reme) for (pp, ee) in rem.factor()]
+                    elif rem.is_perfect_power():
+                        for e in range(64,1,-1):
+                            p = rem.root(e)
+                            if p**e == rem:
+                                if p < factor_limit:
+                                    fac2 = rem.factor()
+                                    fac = fac[:-1]
+                                    for (p, f) in fac2:
+                                        fac.append((p, e*f*reme))
+                                else:
+                                    fac = fac[:-1] + [(p, e*reme)]
+                                break
+                check = 1
+                for p, e in fac:
+                    check *= p**e
+                # assert check == abs(c)
             square = fmpz(1)
             squarefree = fmpz(1)
             for p, e in fac:
@@ -373,6 +390,7 @@ class alg(object):
                 squarefree = -squarefree
             b *= square
             c = squarefree
+        # assert self == alg(a) + alg(b) * alg(c).sqrt()
         return a, b, c
 
     def expr(self):
@@ -383,6 +401,10 @@ class alg(object):
     @staticmethod
     def i():
         return alg(_minpoly=fmpz_poly([1,0,1]), _enclosure=acb(0,1))
+
+    @staticmethod
+    def w():
+        return alg(-1) ** fmpq(2,3)
 
     @staticmethod
     def phi():
@@ -862,15 +884,41 @@ class alg(object):
             if n >= 0:
                 return alg(fmpq(c0**n) / (-c1)**n)
             else:
-                return alg((-c1)**n / fmpq(c0**n))
+                return alg((-c1)**(-n) / fmpq(c0**(-n)))
         if n == 0:
             return alg(1)
         if n == 1:
             return self
-        if n == 2:
-            return self * self
         if n < 0:
             return (1 / self).pow(-n)
+
+        # fast detection of perfect powers
+        pol, d = self.minpoly().deflation()
+        if d % n == 0:
+            # todo: is factoring needed here?
+            H = list(self.minpoly())
+            H = H[::n]
+            H = fmpz_poly(H)
+            c, factors = H.factor()
+            prec = 64
+            orig_prec = ctx.prec
+            try:
+                while 1:
+                    ctx.prec = prec
+                    x = self.enclosure(pretty=True)
+                    z = acb(x) ** n
+                    maybe_root = [fac for fac, mult in factors if fac(z).contains(0)]
+                    if len(maybe_root) == 1:
+                        fac = maybe_root[0]
+                        z2 = alg._validate_root_enclosure(fac, z)
+                        if z2 is not None:
+                            return alg(_minpoly=fac, _enclosure=z2)
+                    prec *= 2
+            finally:
+                ctx.prec = orig_prec
+
+        if n == 2:
+            return self * self
         v = self.pow(n // 2)
         v = v * v
         if n % 2:
@@ -1196,6 +1244,37 @@ class alg(object):
             b = b - a
             num += 1
 
+    def reduce_sl2z(self, inverse=False):
+        if self.imag_sgn() <= 0:
+            raise ValueError("not in the upper half-plane")
+        # todo: use numerical code in arb to improve performance
+        tau = self
+        a, b, c, d = fmpz(1), fmpz(0), fmpz(0), fmpz(1)
+        half = alg(1)/2
+        minus_half = -half
+        while 1:
+            x = tau.real
+            if x < minus_half or x >= half:
+                n = (x + half).floor().fmpz()
+                tau -= n
+                a -= n * c
+                b -= n * d
+            else:
+                v = abs(tau)
+                if v < 1 or (v == 1 and x > 0):
+                    tau = -1 / tau
+                    a, b, c, d = -c, -d, a, b
+                else:
+                    break
+        if inverse:
+            a, b, c, d = d, -b, -c, a
+        if c < 0 or (c == 0 and d < 0):
+            a = -a
+            b = -b
+            c = -c
+            d = -d
+        return tau, (a, b, c, d)
+
 class TestAlgebraic:
 
     def run(self):
@@ -1295,4 +1374,6 @@ class TestAlgebraic:
         x = ((1/(alg(3).sqrt() + alg(5).sqrt()) + 1).root(3) + 1)**2 + fmpq(1,3)
         x + alg.i()
         u = (x+alg.i()).root(3)
+        P = alg.polynomial_roots([340282366920938463463374607431768211456, 4454982093016792820459821542203090534400000000, 179577734764660553639051786303255347200000000000000,-669109415404441101038544285174988800000000000000000000, 17329972089242952969786575138568878173828125])[0][0].expr()
+        assert P is not None
 

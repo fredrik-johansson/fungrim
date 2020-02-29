@@ -275,14 +275,18 @@ symbol_latex_table = {
     Sinc: "\\operatorname{sinc}",
     Hypergeometric0F1: "\\,{}_0F_1",
     Hypergeometric1F1: "\\,{}_1F_1",
+    Hypergeometric1F2: "\\,{}_1F_2",
     Hypergeometric2F1: "\\,{}_2F_1",
+    Hypergeometric2F2: "\\,{}_2F_2",
     Hypergeometric2F0: "\\,{}_2F_0",
     Hypergeometric3F2: "\\,{}_3F_2",
     HypergeometricU: "U",
     HypergeometricUStar: "U^{*}",
     Hypergeometric0F1Regularized: "\\,{}_0{\\textbf F}_1",
     Hypergeometric1F1Regularized: "\\,{}_1{\\textbf F}_1",
+    Hypergeometric1F2Regularized: "\\,{}_1{\\textbf F}_2",
     Hypergeometric2F1Regularized: "\\,{}_2{\\textbf F}_1",
+    Hypergeometric2F2Regularized: "\\,{}_2{\\textbf F}_2",
     Hypergeometric3F2Regularized: "\\,{}_3{\\textbf F}_2",
     BesselJ: "J",
     BesselI: "I",
@@ -378,18 +382,6 @@ def deftex_heads(heads):
             latex_conversion_functions[head] = f
         return f
     return decorator
-
-# needs work
-def need_parens_in_mul(expr):
-    if expr.is_atom():
-        if expr.is_integer() and expr._integer < 0:
-            return True
-        return False
-    # if self._args[0] in (Pos, Neg):
-    #     return True
-    if expr._args[0] in (Add, Sub):
-        return True
-    return False
 
 # needs work
 def show_exponential_as_power(expr, allow_div=True):
@@ -513,12 +505,30 @@ def tex_Sub(head, args, **kwargs):
             argstr[i] = "\\left(" + argstr[i] + "\\right)"
     return " - ".join(argstr)
 
+# needs work
+def need_parens_in_mul(expr):
+    if expr.is_atom():
+        if expr.is_integer() and expr._integer < 0:
+            return True
+        return False
+    # if self._args[0] in (Pos, Neg):
+    #     return True
+    if expr._args[0] in (Add, Sub):
+        return True
+    return False
+
 @deftex
 def tex_Mul(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
         if need_parens_in_mul(args[i]):
             argstr[i] = "\\left(" + argstr[i] + "\\right)"
+    for i in range(len(args)-1):
+        a = argstr[i]
+        b = argstr[i+1]
+        # insert dots between digits (hacky way...)
+        if a.replace("}","").rstrip()[-1].isdigit() and b.replace("{","").lstrip()[0].isdigit():
+            argstr[i] = a + " \\cdot "
     return " ".join(argstr)
 
 @deftex
@@ -560,6 +570,11 @@ def tex_Pow(head, args, **kwargs):
     # remove frac to try to keep it on one line
     base = args[0]
     expo = args[1]
+    # hack
+    if expo.head() == Div:
+        p, q = expo.args()
+        if p.is_integer() and int(p) < 0:
+            expo = Neg(Div(-int(p), q))
     in_small = kwargs.get("in_small", False)
     # hack
     if base.head() in (Ser, Pol):
@@ -1905,6 +1920,13 @@ def tex_Matrices(head, args, **kwargs):
         return "\\operatorname{M}_{%s \\times %s} \\left(%s\\right)" % (m, n, R)
     else:
         return "\\operatorname{M}_{%s \\times %s}\\!\\left(%s\\right)" % (m, n, R)
+
+@deftex
+def tex_RiemannZeta(head, args, **kwargs):
+    if len(args) == 2:
+        s, r = args
+        return Derivative(head(s), For(s, s, r)).latex(**kwargs)
+    return Call(head, *args).latex()
 
 @deftex
 def tex_Evaluated(head, args, **kwargs):
