@@ -2579,6 +2579,7 @@ class Brain(object):
         return RiemannZeta(*args)
 
     def simple_Cases(self, *args):
+        # todo: push new assumptions when simplifying cases!
         unknown = []
         for arg in args:
             val, cond = arg.args()
@@ -2592,6 +2593,84 @@ class Brain(object):
             if unknown[0][1] == Otherwise:
                 return self.simple(unknown[0][0])
         return Cases(*unknown)
+
+    def simple_AiryAi(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            if args[1] == Expr(0):
+                args = [args[0]]
+        if len(args) == 1:
+            x, = args
+            if x == Expr(0):
+                return (Gamma(Div(1,3)) / (2*3**Div(1,6)*Pi))
+            if x == Infinity:
+                return Expr(0)
+            if x == -Infinity:
+                return Expr(0)
+            if x.head() == AiryAiZero:
+                if len(x.args()) == 1 and self.simple(Element(x.args()[0], ZZGreaterEqual(1))) == True_:
+                    return Expr(0)
+        if len(args) == 2:
+            x, r = args
+            if r.is_integer():
+                n = int(r)
+                if x == Expr(0):
+                    if n % 3 == 2:
+                        return Expr(0)
+                    if n == 1:
+                        return -(1/(3**Div(1,3) * Gamma(Div(1,3))))
+                if self.is_complex(x):
+                    if n == 2:
+                        return (x * AiryAi(x)).simple()
+                    if n == 3:
+                        return (AiryAi(x) + x * AiryAi(x, 1)).simple()
+                    if n == 4:
+                        return (x**2 * AiryAi(x) + 2 * AiryAi(x, 1)).simple()
+                    # todo: could implement higher derivatives
+            if x.head() == AiryAiZero:
+                if len(x.args()) == 2 and self.simple(Element(x.args()[0], ZZGreaterEqual(1))) == True_:
+                    if self.equal(r, x.args()[1]) and self.simple(Element(r, ZZGreaterEqual(0))) == True_:
+                        return Expr(0)
+        return AiryAi(*args)
+
+    def simple_AiryBi(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            if args[1] == Expr(0):
+                args = [args[0]]
+        if len(args) == 1:
+            x, = args
+            if x == Expr(0):
+                return (3**Div(1,3) * Gamma(Div(1,3))) / (2*Pi)
+            if x == Infinity:
+                return Infinity
+            if x == -Infinity:
+                return Expr(0)
+            if x.head() == AiryBiZero:
+                if len(x.args()) == 1 and self.simple(Element(x.args()[0], ZZGreaterEqual(1))) == True_:
+                    return Expr(0)
+        if len(args) == 2:
+            x, r = args
+            if r.is_integer():
+                n = int(r)
+                if x == Expr(0):
+                    if n % 3 == 2:
+                        return Expr(0)
+                    if n == 1:
+                        return 3**Div(1,6) / Gamma(Div(1,3))
+                if self.is_complex(x):
+                    if n == 2:
+                        return (x * AiryBi(x)).simple()
+                    if n == 3:
+                        return (AiryBi(x) + x * AiryBi(x, 1)).simple()
+                    if n == 4:
+                        return (x**2 * AiryBi(x) + 2 * AiryBi(x, 1)).simple()
+                    # todo: could implement higher derivatives
+            if x.head() == AiryBiZero:
+                if len(x.args()) == 2 and self.simple(Element(x.args()[0], ZZGreaterEqual(1))) == True_:
+                    if self.equal(r, x.args()[1]) and self.simple(Element(r, ZZGreaterEqual(0))) == True_:
+                        return Expr(0)
+        return AiryBi(*args)
 
     def simple_Erf(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -3368,6 +3447,48 @@ class Brain(object):
                     return self.simple(val)
 
         return DedekindEta(*args)
+
+    def simple_EllipticK(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            z, = args
+            if z == Expr(0):
+                return Pi / 2
+            if z == Expr(1):
+                return Infinity
+            if z == Expr(-1):
+                return Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi))
+            if z == Expr(2):
+                return Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)) * (1-ConstI)
+            if self.equal(z, Div(1, 2)):
+                return Gamma(Div(1,4))**2 / (4*Sqrt(Pi))
+            # todo: implement evaluation at more singular values
+            if self.equal(z, 17-12*Sqrt(2)):
+                return (2+Sqrt(2))*Gamma(Div(1,4))**2 / (16*Sqrt(Pi))
+            if self.equal(z, (4-3*Sqrt(2))/8):
+                return Gamma(Div(1,4))**2 / (4*2**Div(1,4) * Sqrt(Pi))
+        return EllipticK(*args)
+
+    def simple_EllipticE(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            z, = args
+            if z == Expr(0):
+                return Pi / 2
+            if z == Expr(1):
+                return Expr(1)
+            if z == Expr(-1):
+                return Sqrt(2) * (Gamma(Div(1,4))**2 / (8*Sqrt(Pi)) + Pi**Div(3,2) / Gamma(Div(1,4))**2)
+            if z == Expr(2):
+                return (Sqrt(2)*Pi**Div(3,2)/Gamma(Div(1,4))**2 * (1+ConstI))
+            if self.equal(z, Div(1, 2)):
+                return (Gamma(Div(1,4))**2 / (8*Sqrt(Pi)) + Pi**Div(3,2) / Gamma(Div(1,4))**2)
+            # todo: implement evaluation at singular values
+        return EllipticE(*args)
+
+
+
+
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """

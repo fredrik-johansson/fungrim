@@ -60,7 +60,18 @@ function_acb_method_table = {
     ModularLambda : "modular_lambda",
     BarnesG: "barnes_g",
     LogBarnesG: "log_barnes_g",
+    EllipticK: "elliptic_k",
+    EllipticE: "elliptic_e",
+    EllipticPi: "elliptic_pi",
 }
+
+"""
+with the right call order...
+
+    IncompleteEllipticF: "elliptic_f",
+    IncompleteEllipticE: "elliptic_e_inc",
+    IncompleteEllipticPi: "elliptic_pi_inc",
+"""
 
 class ArbFiniteError(ValueError):
     pass
