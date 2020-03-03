@@ -44,7 +44,12 @@ function_arb_method_table = {
     Sinh : "sinh",
     Cosh : "cosh",
     Tanh : "tanh",
+    Asin : "asin",
+    Asinh : "asinh",
+    Acos : "acos",
+    Acosh : "acosh",
     Atan : "atan",
+    Atanh : "atanh",
     LogGamma : "lgamma",
     Gamma : "gamma",
     RiemannZeta : "zeta",
@@ -742,6 +747,28 @@ class ArbNumericalEvaluation(object):
                     if v.is_finite():
                         return v
                     raise ArbFiniteError
+
+        if head == AGM:
+            if len(args) == 1:
+                a, = args
+                a = self.eval(a, **kwargs)
+                v = acb(a).agm()
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
+            if len(args) == 2:
+                a, b = args
+                a = self.eval(a, **kwargs)
+                b = self.eval(b, **kwargs)
+                # hack workaround!
+                if b == 0:
+                    if a == 0:
+                        return acb(0)
+                    a, b = b, a
+                v = acb(a).agm(b)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
 
         # todo: delete
         if kwargs.get("full_traversal"):

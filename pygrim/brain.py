@@ -1291,6 +1291,8 @@ class Brain(object):
         if x.is_integer():
             v = int(x)
             return Expr(-v)
+        if x == UnsignedInfinity or x == Undefined:
+            return x
         return Neg(x)
 
     def complexity(self, expr):
@@ -1343,7 +1345,13 @@ class Brain(object):
             x, y = expr.args()
             y = self.simple(y)
             if y.is_integer():
-                return self.evaluate_fmpq(x) ** int(y)
+                a = self.evaluate_fmpq(x)
+                b = int(y)
+                if abs(a) == 1:
+                    b = b % 2
+                # todo: more systematic solution
+                if a.height_bits() * abs(b) < 10000:
+                    return a ** b
         raise NotImplementedError
 
     def evaluate_fmpq_poly(self, expr, var):
@@ -1755,7 +1763,7 @@ class Brain(object):
         return None
 
     def simple_Exp_two_pi_i_k_n(self, k, n):
-        k = k % (2 * n)
+        k = k % n
         if k == 0:
             return Expr(1)
         if n == 2 * k:
@@ -1799,7 +1807,21 @@ class Brain(object):
         # todo: we want to avoid recursive Add simplifies if possible...
         terms = [self.simple(x) for x in terms]
         if not all(self.is_complex(x) for x in terms):
-            # todo: simplifications for this case
+            infinities = []
+            for term in terms:
+                if self.is_infinity(term):
+                    infinities.append(term)
+                elif term == Undefined:
+                    return Undefined
+                elif not self.is_complex(term):
+                    return Add(*terms)
+            if infinities:
+                signs = [Sign(x) for x in infinities]
+                same = [self.simple(Equal(s, signs[0])) for s in signs[1:]]
+                if all(s == True_ for s in same):
+                    return self.simple(Mul(signs[0], Infinity))
+                if False_ in same:
+                    return Undefined
             return Add(*terms)
         constant_term = self._fmpz(0)
         term_coeff = {}
@@ -1822,29 +1844,50 @@ class Brain(object):
                     x, = x.args()
                     for t, c in iter_term_coeff([x]):
                         yield t, -c
-                elif head == Mul:
-                    factors = x.args()
-                    # todo: make this more robust
-                    if len(factors) >= 2:
+                elif head in (Mul, Div, Pow):
+                    def extract_rational_content(x):
+                        coeff = self._fmpz(1)
+                        if x.head() == Mul:
+                            old_factors = list(x.args())
+                            factors = []
+                            for fac in old_factors:
+                                fac, c = extract_rational_content(fac)
+                                coeff *= c
+                                factors.append(fac)
+                            if factors == old_factors:
+                                return x, self._fmpz(1)
+                            else:
+                                return self.simple(Mul(*factors)), coeff
+                        if x.head() == Div:
+                            old_p, old_q = x.args()
+                            p, pc = extract_rational_content(old_p)
+                            q, qc = extract_rational_content(old_q)
+                            if old_p == p and old_q == q:
+                                return x, self._fmpz(1)
+                            else:
+                                return self.simple(Div(p, q)), pc / self._fmpq(qc)
+                        if x.head() == Pow:
+                            a, b = x.args()
+                            if b.is_integer():
+                                fac, c = extract_rational_content(a)
+                                if fac != a:
+                                    e = int(b)
+                                    if abs(c) == 1:
+                                        e %= 2
+                                    if c.height_bits() * e < 10000:
+                                        return fac, c ** e
+                            return x, self._fmpz(1)
+                        # todo: robustly standardize sign content of Add, Sub, Neg, ... ?
+                        if x.head() == Neg:
+                            a, = x.args()
+                            return a, self._fmpz(-1)
                         try:
-                            v = self.evaluate_fmpq(factors[0])
+                            v = self.evaluate_fmpq(x)
+                            return Expr(1), v
                         except NotImplementedError:
-                            v = None
-                        if v is None:
-                            yield x, self._fmpz(1)
-                        else:
-                            red = self.simple_Mul(*factors[1:])
-                            for t, c in iter_term_coeff([red]):
-                                yield t, c * v
-                    else:
-                        yield x, self._fmpz(1)
-                elif head == Div:
-                    p, q = x.args()
-                    if q.is_integer():
-                        for t, c in iter_term_coeff([p]):
-                            yield t, c / self._fmpq(int(q))
-                    else:
-                        yield x, self._fmpz(1)
+                            pass
+                        return x, self._fmpz(1)
+                    yield extract_rational_content(x)
                 else:
                     yield x, self._fmpz(1)
         for t, c in iter_term_coeff(terms):
@@ -1893,9 +1936,13 @@ class Brain(object):
         return Add(*terms)
 
     def simple_Sub(self, x, y):
-        if self.is_complex(x) and self.is_complex(y):
+        if (self.is_complex(x) or self.is_infinity(x)) and (self.is_complex(y) or self.is_infinity(y)):
             return self.simple_Add(x, Neg(y))
-        return Sub(self.simple(x), self.simple(y))
+        x = self.simple(x)
+        y = self.simple(y)
+        if x == Undefined or y == Undefined:
+            return Undefined
+        return Sub(x, y)
 
     '''
     def simple_Mul(self, *factors):
@@ -1927,6 +1974,29 @@ class Brain(object):
         factors = [self.simple(x) for x in factors]
         if not all(self.is_complex(x) for x in factors):
             # todo: simplifications for this case
+            infinities = []
+            nonzero = []
+            others = []
+            for fac in factors:
+                if fac == Undefined:
+                    return Undefined
+                if self.is_infinity(fac):
+                    infinities.append(fac)
+                elif self.is_complex(fac) and self.is_not_zero(fac):
+                    nonzero.append(fac)
+                else:
+                    others.append(fac)
+            if infinities and not others:
+                s = self.simple(Mul(*(Sign(x) for x in infinities + nonzero)))
+                if self.equal(s, Expr(1)):
+                    return Infinity
+                if self.equal(s, Expr(-1)):
+                    return -Infinity
+                if s == Undefined:
+                    return UnsignedInfinity
+                return Mul(s, Infinity)
+            if infinities and all(self.is_zero(x) for x in others):
+                return Undefined
             return Mul(*factors)
         for x in factors:
             if x == Expr(0):
@@ -2051,6 +2121,25 @@ class Brain(object):
         y = self.simple(y)
         if self.is_complex(x) and self.is_complex(y) and self.is_not_zero(y):
             return self.simple_Mul(x, Pow(y, -1))
+        # infinity / c
+        if self.is_infinity(x):
+            if self.is_complex(y) and self.is_not_zero(y):
+                return self.simple_Mul(x, Pow(y, -1))
+            if self.is_complex(y) and self.is_zero(y):
+                return UnsignedInfinity
+            if self.is_infinity(y):
+                return Undefined
+        if self.is_infinity(y) and self.is_complex(x):
+            return Expr(0)
+        # c / 0
+        if self.is_zero(y):
+            if self.is_complex(x):
+                if self.is_zero(x):
+                    return Undefined
+                if self.is_not_zero(x):
+                    return UnsignedInfinity
+        if x == Undefined or y == Undefined:
+            return Undefined
         return Div(x, y)
 
     def simple_Pow(self, x, y):
@@ -2075,6 +2164,16 @@ class Brain(object):
                 if self.is_negative(y):
                     return UnsignedInfinity
         if x == ConstE:
+            v = self.simple(y / (Pi * ConstI))
+            try:
+                v = self.evaluate_fmpq(v)
+            except NotImplementedError:
+                return Exp(y)
+            v /= 2
+            p = v.p
+            q = v.q
+            return self.simple_Exp_two_pi_i_k_n(p, q)
+
             # todo: maybe don't want this much ... ?
             #v = self.simple(y / (Pi * ConstI / 120))
             #if v.is_integer():
@@ -2179,6 +2278,45 @@ class Brain(object):
                         return Pow(base, exp // 2)
         return Sqrt(x)
 
+    def simple_Sign(self, x):
+        x = self.simple(x)
+        if x.is_integer():
+            v = int(x)
+            if v > 0:
+                return Expr(1)
+            if v < 0:
+                return Expr(-1)
+            return Expr(0)
+        if x == Undefined or x == UnsignedInfinity:
+            return Undefined
+        if x == Infinity:
+            return Expr(1)
+        if x == Neg(Infinity):
+            return Expr(-1)
+        val = self.complex_enclosure(x)
+        if val is not None:
+            real, imag = val.real, val.imag
+            if imag == 0:
+                if real > 0:
+                    return Expr(1)
+                if real < 0:
+                    return Expr(-1)
+            if real == 0:
+                if imag >= 0:
+                    return ConstI
+                if imag < 0:
+                    return -ConstI
+        if self.is_positive(x):
+            return Expr(1)
+        if self.is_negative(x):
+            return Expr(-1)
+        if x.head() == Exp and self.is_complex(x):
+            return self.simple(Exp(ConstI * Im(x.args()[0])))
+        if x.head() == Mul and self.is_infinity(x):
+            return self.simple(Mul(*(Sign(fac) for fac in x.args())))
+        # todo: more simplifications; reduce to Abs...?
+        return Sign(x)
+
     def simple_Abs(self, x):
         """
         Return an expression equivalent to Abs(x), simplified if possible.
@@ -2213,10 +2351,8 @@ class Brain(object):
             return self.simple(-x)
         if x.head() == Exp:
             v, = x.args()
-            # todo: is_imaginary
             if self.is_complex(v):
-                if self.is_real(self.simple(v / ConstI)):
-                    return Expr(1)
+                return self.simple(Exp(Re(v)))
         return Abs(x)
 
     def simple_Re(self, x):
@@ -2592,6 +2728,7 @@ class Brain(object):
         if len(unknown) == 1:
             if unknown[0][1] == Otherwise:
                 return self.simple(unknown[0][0])
+        unknown = [(self.simple(val), cond) for (val, cond) in unknown]
         return Cases(*unknown)
 
     def simple_AiryAi(self, *args):
@@ -3208,8 +3345,8 @@ class Brain(object):
 
         # Gauss 2F1
         if p == 2 and q == 1:
-            if z == Expr(1):
-                a, b, c = As[0], As[1], Bs[0]
+            a, b, c = As[0], As[1], Bs[0]
+            if self.equal(z, Expr(1)):
                 if self.is_complex(a) and self.is_complex(b) and self.is_complex(c) and self.simple(NotElement(c, ZZLessEqual(0))) == True_:
                     v = Greater(Re(c-a-b), 0)
                     v = self.simple(v)
@@ -3218,8 +3355,174 @@ class Brain(object):
                             return self.simple(Gamma(c-a-b) / (Gamma(c-a) * Gamma(c - b)))
                         else:
                             return self.simple(Gamma(c) * Gamma(c-a-b) / (Gamma(c-a) * Gamma(c-b)))
+                    if v == False_:
+                        if self.simple(And(NotElement(a, ZZLessEqual(0)), NotElement(b, ZZLessEqual(0)))) == True_:
+                            if self.simple(Equal(c - a - b, 0)) == True_:
+                                if regularized:
+                                    return self.simple(1 / (Sign(Gamma(a)) * Sign(Gamma(b))) * Infinity)
+                                else:
+                                    return self.simple(Sign(Gamma(c)) / (Sign(Gamma(a)) * Sign(Gamma(b))) * Infinity)
+                            if self.simple(Less(Re(c-a-b), 0)) == True_:
+                                return UnsignedInfinity
+                            if self.simple(Equal(Re(c-a-b), 0)) == True_:
+                                return Undefined
+            if self.is_complex(a) and self.is_complex(b) and self.is_complex(c) and self.simple(NotElement(c, ZZLessEqual(0))) == True_:
+                try:
+                    v = self.simple_hypgeom_2f1_half(a, b, c, z, regularized)
+                    return v
+                except NotImplementedError:
+                    pass
 
         return None
+
+    def simple_hypgeom_2f1_half(self, a, b, c, z, regularized=False):
+        """
+        Evaluation of Gauss 2F1 at integer or half-integer parameters.
+        Assumes z is complex. Raises NotImplementedError if unhandled.
+        """
+        fmpq = self._fmpq
+
+        def _2f1(a,b,c,z):
+            """
+            Closed-form evaluation of 2F1(a,b,c,z), assuming a, b, c are integers or
+            half-integers (must be passed as fmpqs, while z must be an Expr).
+
+            Assumes c is not a nonnegative integer (must be handled elsewhere).
+
+            Does not check whether the formula is valid at z = 0 or z = 1; this must
+            be done as a postprocessing step.
+            """
+            if c <= 0 and c.q == 1:
+                raise ValueError
+            if a == 0 or b == 0:
+                return Expr(1)
+            if a > b:
+                a, b = b, a
+            if b == c:
+                return (1-z)**(-a)
+            if a == c:
+                return (1-z)**(-b)
+            if a == c + 1:
+                return (1-a + z*(a-b-1)) / (1-a) * (1-z)**(-b-1)
+            if b == c + 1:
+                return (1-b + z*(b-a-1)) / (1-b) * (1-z)**(-a-1)
+            R12 = fmpq(1,2)
+            R32 = fmpq(3,2)
+            R52 = fmpq(5,2)
+            if (a,b,c) == (-R12,-R12,R12): return Sqrt(1-z) + Sqrt(z)*Asin(Sqrt(z))
+            if (a,b,c) == (-R12,R12,1): return 2*EllipticE(z)/Pi
+            if (a,b,c) == (-R12,1,R12): return 1-Sqrt(z)*Atanh(Sqrt(z))
+            if (a,b,c) == (-R12,R32,1): return (4*EllipticE(z)-2*EllipticK(z))/Pi
+            if (a,b,c) == (-R12,2,R12): return (3*z-2)/(2*(z-1)) - 3*Sqrt(z)*Atanh(Sqrt(z))/2
+            if (a,b,c) == (R12,R12,1): return 2*EllipticK(z)/Pi
+            if (a,b,c) == (R12,R12,R32): return Asin(Sqrt(z))/Sqrt(z)
+            if (a,b,c) == (R12,R12,2): return 4*(EllipticE(z)+(z-1)*EllipticK(z))/(Pi*z)
+            if (a,b,c) == (R12,1,R32): return Atanh(Sqrt(z))/Sqrt(z)
+            if (a,b,c) == (R12,1,2): return (2-2*Sqrt(1-z))/z
+            if (a,b,c) == (R12,R32,1): return -2*EllipticE(z)/(Pi*(z-1))
+            if (a,b,c) == (R12,R32,2): return 4*(EllipticK(z)-EllipticE(z))/(Pi*z)
+            if (a,b,c) == (R12,R32,R52): return -3*(Sqrt(1-z)*Sqrt(z) - Asin(Sqrt(z)))/(2*z**Div(3,2))
+            if (a,b,c) == (R12,2,R32): return 1/(2*(1-z)) + Atanh(Sqrt(z))/(2*Sqrt(z))
+            if (a,b,c) == (R12,2,3): return -4*((z+2)*Sqrt(1-z)-2)/(3*z**2)
+            if (a,b,c) == (1,1,R12): return (-Sqrt(1-z)-Sqrt(z)*Asin(Sqrt(z)))/(Sqrt(1-z)*(z-1))
+            if (a,b,c) == (1,1,R32): return Asin(Sqrt(z))/(Sqrt(1-z)*Sqrt(z))
+            if (a,b,c) == (1,1,2): return -Log(1-z)/z
+            if (a,b,c) == (1,R32,R12): return (1+z)/(1-z)**2
+            if (a,b,c) == (1,R32,2): return 2*(1/Sqrt(1-z)-1)/z
+            if (a,b,c) == (1,R32,R52): return 3*(Sqrt(z)*Atanh(Sqrt(z))-z)/z**2
+            if (a,b,c) == (1,2,R12): return (2+z+3*Sqrt(z)*Asin(Sqrt(z))/Sqrt(1-z))/(2*(z-1)**2)
+            if (a,b,c) == (1,2,R32): return 1/(2*(1-z)) + Asin(Sqrt(z))/(2*(1-z)**Div(3,2)*Sqrt(z))
+            if (a,b,c) == (1,2,3): return -2*(z+Log(1-z))/z**2
+            if (a,b,c) == (R32,R32,1): return 2/(Pi*(z-1)) * (EllipticK(z) + 2*EllipticE(z)/(z-1))
+            if (a,b,c) == (R32,R32,2): return -4/(Pi*z) * (EllipticK(z) + EllipticE(z)/(z-1))
+            if (a,b,c) == (R32,R32,R52): return 3/(z*Sqrt(1-z)) - 3*Asin(Sqrt(z))/z**Div(3,2)
+            if (a,b,c) == (R32,2,R12): return (1+3*z)/(1-z)**3
+            if (a,b,c) == (R32,2,1): return (2+z)/(2*(Sqrt(1-z)*(1-z)**2))
+            if (a,b,c) == (R32,2,R52): return -3*(Sqrt(z)+(z-1)*Atanh(Sqrt(z)))/(2*(z-1)*z**Div(3,2))
+            if (a,b,c) == (R32,2,3): return -4*(2*Sqrt(1-z)+z-2)/(z**2*Sqrt(1-z))
+            if (a,b,c) == (2,2,R12): return (Sqrt(1-z)*(4+11*z)+3*Sqrt(z)*(3+2*z)*Asin(Sqrt(z))) / (4*(Sqrt(1-z)*(1-z)**3))
+            if (a,b,c) == (2,2,1): return (1+z)/(1-z)**3
+            if (a,b,c) == (2,2,R32): return (3+(1+2*z)*Asin(Sqrt(z))/Sqrt(-z*(z-1)))/(4*(z-1)**2)
+            if (a,b,c) == (2,2,3): return 2*((z-1)*Log(1-z)-z)/((z-1)*z**2)
+            if a < 0:
+                q = a+1-c
+                if q != 0:
+                    F1 = _2f1(a+1,b,c,z)
+                    F2 = _2f1(a+2,b,c,z)
+                    r1 = -(c-2*(a+1)+(a+1-b)*z)
+                    r2 = (a+1)*(z-1)
+                    return (r1*F1 + r2*F2) / q
+            if b > 2:
+                q = (b-1)
+                if q != 0:
+                    q *= (z-1)
+                    F1 = _2f1(a,b-1,c,z)
+                    F2 = _2f1(a,b-2,c,z)
+                    r1 = (c-2*b+2+(b-a-1)*z)
+                    r2 = (b-c-1)
+                    return (r1*F1 + r2*F2) / q
+            if c < 0:
+                F1 = _2f1(a,b,c+1,z)
+                F2 = _2f1(a,b,c+2,z)
+                q = c*(c+1)*(1-z)
+                r1 = (c+1)*(c+(a+b-2*(c+1)+1)*z)
+                r2 = (a-c-1)*(b-c-1)*z
+                return (r1*F1 + r2*F2) / q
+            if c > 2:
+                q = -(a-c+1)*(b-c+1)
+                if q != 0:
+                    q *= z
+                    F1 = _2f1(a,b,c-1,z)
+                    F2 = _2f1(a,b,c-2,z)
+                    r1 = (c-1)*(c-2+(a+b-2*(c-1)+1)*z)
+                    r2 = (c-1)*(c-2)*(z-1)
+                    return (r1*F1 + r2*F2) / q
+            raise NotImplementedError
+            #return Hypergeometric2F1(a, b, c, z)
+
+        ra = self.evaluate_fmpq(a)
+        rb = self.evaluate_fmpq(b)
+        rc = self.evaluate_fmpq(c)
+
+        if ra.q > 2 or rb.q > 2 or rc.q > 2 or abs(ra) > 6 or abs(rb) > 6 or abs(rc) > 6 or abs(ra) + abs(rb) + abs(rc) > 8:
+            raise NotImplementedError
+
+        v = _2f1(ra, rb, rc, x)
+
+        not_zero = self.simple(NotEqual(z, 0))
+        not_one = self.simple(NotEqual(z, 1))
+
+        zero_cond = False
+        one_cond = False
+
+        if not_zero != True_:
+            val_zero = v.replace({x:Expr(0)}).simple()
+            if val_zero != Expr(1):
+                zero_cond = True
+
+        if not_one != True_:
+            val_one = v.replace({x:Expr(1)}).simple()
+            if not self.is_complex(val_one):
+                one_cond = True
+
+        v = v.replace({x:z})
+
+        if zero_cond and one_cond:
+            v = Cases(Tuple(v, NotElement(z, Set(0, 1))),
+                      Tuple(1, Equal(z, 0)),
+                      Tuple(Hypergeometric2F1(a, b, c, 1), Equal(z, 1)))
+        elif zero_cond:
+            v = Cases(Tuple(v, NotEqual(z, 0)),
+                      Tuple(1, Equal(z, 0)))
+        elif one_cond:
+            v = Cases(Tuple(v, NotEqual(z, 1)),
+                      Tuple(Hypergeometric2F1(a, b, c, 1), Equal(z, 1)))
+
+        if regularized:
+            v /= Gamma(c)
+
+        return self.simple(v)
+
 
     def simple_Hypergeometric0F1(self, *args):
         try:
@@ -3452,13 +3755,13 @@ class Brain(object):
         args = [self.simple(arg) for arg in args]
         if len(args) == 1:
             z, = args
-            if z == Expr(0):
+            if self.is_zero(z):
                 return Pi / 2
-            if z == Expr(1):
+            if self.equal(z, Expr(1)):
                 return Infinity
-            if z == Expr(-1):
+            if self.equal(z, Expr(-1)):
                 return Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi))
-            if z == Expr(2):
+            if self.equal(z, Expr(2)):
                 return Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)) * (1-ConstI)
             if self.equal(z, Div(1, 2)):
                 return Gamma(Div(1,4))**2 / (4*Sqrt(Pi))
@@ -3486,6 +3789,38 @@ class Brain(object):
             # todo: implement evaluation at singular values
         return EllipticE(*args)
 
+    def simple_AGM(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            args = [Expr(1), args[0]]
+        if len(args) == 2:
+            a, b = args
+            if self.is_complex(a) and self.is_complex(b):
+                if self.equal(a, b):
+                    return a
+                if self.is_zero(a) or self.is_zero(b):
+                    return Expr(0)
+                c = self.simple(a + b)
+                if self.is_zero(c):
+                    return Expr(0)
+                if self.is_not_zero(c) and self.is_not_zero(a) and self.is_not_zero(b):
+                    if self.is_negative(a / b) == False:
+                        v = ((a-b)/c)**2
+                        v = self.simple(EllipticK(v))    #  todo: more robust detection of singular values here
+                        if v.head() != EllipticK:
+                            return self.simple(Pi * (a + b) / (4 * v))
+
+                if self.is_positive(a) and self.is_positive(b):
+                    if a == Expr(1):
+                        return AGM(a, b)
+                    if b == Expr(1):
+                        return AGM(b, a)
+                    if self.greater(b, a):
+                        return a * AGM(Expr(1), self.simple(b / a))
+                    else:
+                        return b * AGM(Expr(1), self.simple(a / b))
+
+        return AGM(*args)
 
 
 

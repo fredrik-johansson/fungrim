@@ -947,6 +947,9 @@ for arithmetic operators. Pygrim also supports infix Python syntax: <tt>x**2 + 3
             of more explicit (and hopefully simpler) objects.
             For example, an implicit description of a finite set might be replaced by an explicit listing of the elements.
             This example demonstrates computing the set of roots of a polynomial which satisfy a given condition."""),
+        ("Re(Gamma(Div(7,4)) * DedekindEta(5+4*ConstI))",
+            """Pygrim can find symbolic closed form evaluations of various transcendental functions."""
+        ),
     ],
     numerical_examples=[
         ("RiemannZetaZero(10**6)",
@@ -2650,6 +2653,12 @@ documentify(Gamma,
     examples=[
     ("Gamma(z)",
         "Gamma function."),
+    ],
+    evaluation_examples=[
+        ("Gamma(Div(17,2))",),
+    ],
+    numerical_examples=[
+        ("Gamma(1+ConstI)",),
     ])
 
 documentify(LogGamma,
@@ -2710,11 +2719,14 @@ documentify(RiemannZeta,
     examples=[
     ("RiemannZeta(s)",
         "Riemann zeta function."),
-# TODO: differentiated
-#    ("RiemannZeta(s, 1)",
-#        "Differentiated Riemann zeta function."),
-#    ("RiemannZeta(s, r)",
-#        "Riemann zeta function differentiated to order @@r@@."),
+    ("RiemannZeta(s, 1)",
+        "Differentiated Riemann zeta function."),
+    ("RiemannZeta(s, r)",
+        "Riemann zeta function differentiated to order @@r@@."),
+    ],
+    evaluation_examples=[
+        ("RiemannZeta(4)",),
+        ("RiemannZeta(0, 1)",),
     ],
     numerical_examples=[
         ("RiemannZeta(3)",),
@@ -3480,6 +3492,9 @@ documentify(AGM,
     examples=[
     ("AGM(x, y)",
         "Arithmetic-geometric mean."),
+    ],
+    evaluation_examples=[
+        ("AGM(1, 3 + 2*Sqrt(2))",),
     ])
 
 
