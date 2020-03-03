@@ -508,6 +508,9 @@ class Brain(object):
                 base, exp = x.args()
                 if self.is_positive(base):
                     return True
+            if x.head() == Re:
+                t, = x.args()
+                return self.is_positive(t)
         val = self.complex_enclosure(x)
         if val is not None:
             real, imag = val.real, val.imag
@@ -753,7 +756,7 @@ class Brain(object):
             return True
         if NotElement(x, CC) in self.inferences:
             return False
-        if x.head() in (Pos, Neg, Add, Sub, Mul, Sqrt, Exp, Sin, Cos):
+        if x.head() in (Pos, Neg, Add, Sub, Mul, Sqrt, Exp, Sin, Cos, Abs, RealAbs, Asin, Acos, Floor, Ceil):
             if all(self.is_complex(arg) for arg in x.args()):
                 return True
         if x.head() == Div:
@@ -2447,26 +2450,30 @@ class Brain(object):
             return self.simple(-Pi / 2)
         return Arg(x)
 
+    # todo: real part?
     def simple_Floor(self, x):
         x = self.simple(x)
         if self.is_integer(x):
             return x
         # xxx: dynamic precision / bounds
         v = self.real_enclosure(Floor(x))
-        if v.is_exact() and abs(v) < self._arb("1e1000"):
-            v = v.unique_fmpz()
-            return Expr(v)
+        if v is not None:
+            if v.is_exact() and abs(v) < self._arb("1e1000"):
+                v = v.unique_fmpz()
+                return Expr(v)
         return Floor(x)
 
+    # todo: real part?
     def simple_Ceil(self, x):
         x = self.simple(x)
         if self.is_integer(x):
             return x
         # xxx: dynamic precision / bounds
         v = self.real_enclosure(Ceil(x))
-        if v.is_exact() and abs(v) < self._arb("1e1000"):
-            v = v.unique_fmpz()
-            return Expr(v)
+        if v is not None:
+            if v.is_exact() and abs(v) < self._arb("1e1000"):
+                v = v.unique_fmpz()
+                return Expr(v)
         return Ceil(x)
 
     def simple_DirichletCharacter(self, *args):
@@ -3382,6 +3389,7 @@ class Brain(object):
         """
         fmpq = self._fmpq
 
+        # todo: take a flag for squared argument?
         def _2f1(a,b,c,z):
             """
             Closed-form evaluation of 2F1(a,b,c,z), assuming a, b, c are integers or
@@ -3821,6 +3829,83 @@ class Brain(object):
                         return b * AGM(Expr(1), self.simple(a / b))
 
         return AGM(*args)
+
+    def simple_RealAbs(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            rex = self.simple(Re(x))  # todo: is_positive should be enough...
+            if self.is_positive(rex):
+                return x
+            if self.is_negative(rex):
+                return self.simple(Neg(x))
+            if self.is_zero(rex):
+                imx = self.simple(Im(x))
+                if self.is_nonnegative(imx):
+                    return x
+                if self.is_nonpositive(imx):
+                    return self.simple(Neg(x))
+        return RealAbs(*args)
+
+    def complex_as_sine(self, x):
+        """
+        Assuming that x is a complex number (not checked),
+        return v such that x = Sin(v).
+        """
+        if x.head() == Sin:
+            v, = x.args()
+            return v
+        if x.head() == Cos:
+            v, = x.args()
+            return Pi/2 - v
+        if x.head() == Neg:
+            v, = x.args()
+            return Neg(self.complex_as_sine(v))
+        if self.is_algebraic(x) and self.element(x, OpenInterval(-1, 1)):
+            v = self.real_enclosure(Asin(x) / Pi)
+            if v is not None:
+                from .algebraic import alg
+                # todo: should set the arb precision here
+                v = alg.guess(v, deg=1)
+                if v is not None and v.degree() == 1:
+                    v = v.fmpq()
+                    if v.q <= 120:
+                        x_alg = self.evaluate_alg(x)
+                        v_alg = alg.sin_pi(v)
+                        if x_alg == v_alg:
+                            return v * Pi
+        raise NotImplementedError
+
+    def simple_Asin(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            if self.is_complex(x):
+                if self.is_zero(x):
+                    return Expr(0)
+                if self.equal(x, Expr(1)):
+                    return Pi/2
+                if self.equal(x, Expr(-1)):
+                    return -(Pi/2)
+                if self.equal(x, Sqrt(2) / 2):
+                    return Pi/4
+                if self.equal(x, -Sqrt(2) / 2):
+                    return -(Pi/4)
+                try:
+                    v = self.complex_as_sine(x)
+                    correction = Cases(Tuple(2*Im(v)*ConstI, And(Less(Im(v), 0), Element(Re(v)/(2*Pi)-Div(1,4), ZZ))), Tuple(0, Otherwise))
+                    v = Pi*RealAbs(v/Pi + Div(1,2)  - 2*Floor(Re(v)/(2*Pi)+Div(3,4))) - Pi/2 + correction
+                    return self.simple(v)
+                except NotImplementedError:
+                    pass
+                if self.is_real(x):
+                    if self.greater(x, Expr(1)):
+                        return Pi/2 - Acosh(x) * ConstI
+                    if self.less(x, Expr(-1)):
+                        return Acosh(x) * ConstI - Pi/2
+                if self.is_real(x / ConstI):
+                    return self.simple(Asinh(x / ConstI) * ConstI)
+        return Asin(*args)
 
 
 

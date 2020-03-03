@@ -408,6 +408,7 @@ toc = [
             "Arg",
             "Conjugate",
             "Csgn",
+            "RealAbs",
             "Max",
             "Min",
             "Floor",
@@ -2310,6 +2311,12 @@ documentify(Csgn,
     examples=[
     ("Csgn(z)",
         "Real-valued sign function for complex numbers."),
+    ])
+
+documentify(RealAbs,
+    examples=[
+    ("RealAbs(z)",
+        "Real-valued extension of absolute value."),
     ])
 
 documentify(Max,

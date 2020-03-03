@@ -60,6 +60,7 @@ function_arb_method_table = {
 }
 
 function_acb_method_table = {
+    RealAbs: "real_abs",
     DedekindEta : "modular_eta",
     ModularJ : "modular_j",
     ModularLambda : "modular_lambda",

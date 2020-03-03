@@ -850,7 +850,7 @@ Decimal
 Equal NotEqual Greater GreaterEqual Less LessEqual
 Pos Neg Add Sub Mul Div Mod Inv Pow
 CongruentMod Odd Even
-Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate
+Max Min Sign Csgn Abs Floor Ceil Arg Re Im Conjugate RealAbs
 NearestDecimal
 EqualNearestDecimal
 Minimum Maximum ArgMin ArgMax ArgMinUnique ArgMaxUnique

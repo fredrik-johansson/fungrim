@@ -392,7 +392,7 @@ def show_exponential_as_power(expr, allow_div=True):
         if not expr._args[-1].is_atom():
             return False
         allow_div = False
-    if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, Sqrt, XX, XXSeries, Re, Im, Log):
+    if head not in (Pos, Neg, Add, Sub, Mul, Div, Pow, Abs, RealAbs, Sqrt, XX, XXSeries, Re, Im, Log):
         return False
     for arg in expr._args[1:]:
         if not show_exponential_as_power(arg, allow_div=allow_div):
@@ -716,6 +716,12 @@ def tex_Sqrt(head, args, **kwargs):
 
 @deftex
 def tex_Abs(head, args, **kwargs):
+    assert len(args) == 1
+    argstr = [arg.latex(**kwargs) for arg in args]
+    return "\\left|" + argstr[0] + "\\right|"
+
+@deftex
+def tex_RealAbs(head, args, **kwargs):
     assert len(args) == 1
     argstr = [arg.latex(**kwargs) for arg in args]
     return "\\left|" + argstr[0] + "\\right|"
