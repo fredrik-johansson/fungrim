@@ -407,7 +407,7 @@ make_entry(ID("122e3d"),
 
 make_entry(ID("d6c29e"),
     Formula(Equal(Integral(Sinc(x), For(x, a, b)), SinIntegral(b) - SinIntegral(a))),
-    Variables(a),
+    Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
 make_entry(ID("8ef3d7"),

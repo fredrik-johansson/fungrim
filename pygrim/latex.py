@@ -178,6 +178,7 @@ subscript_latex_table = {
     XXNonCommutative: "\\text{X}",
     ZZp: "\\mathbb{Z}",
     QQp: "\\mathbb{Q}",
+    IdentityMatrix: "I",
 }
 
 subscript_pair_latex_table = {
@@ -583,6 +584,9 @@ def tex_Pow(head, args, **kwargs):
         elif len(base.args()) == 1:
             base = Subscript(x, base.args()[0])
     # todo: more systematic solutions
+    if not base.is_atom() and base.head().is_symbol() and base.head()._symbol.endswith("_"):
+        # see entry 936694
+        return base.latex() + "^{" + expo.latex(in_small=True) + "}"
     if not base.is_atom() and base.head() in (Sin, Cos, Csc, Tan, Sinh, Cosh, Tanh, Log, DedekindEta, Sec, Sech, Sinc):
         return base.head().latex() + "^{" + expo.latex(in_small=True) + "}" + "\\!\\left(" + base.args()[0].latex(in_small=in_small) + "\\right)"
     if not base.is_atom() and base.head() == Fibonacci:

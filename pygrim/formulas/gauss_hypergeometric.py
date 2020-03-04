@@ -180,12 +180,12 @@ make_entry(ID("ca9123"),
 # todo: the assumption refers to D which is defined inside the formula; can the markup be improved?
 make_entry(ID("c60679"),
     Formula(Where(LessEqual(Abs(Hypergeometric2F1(a,b,c,z) - Sum((RisingFactorial(a,k) * RisingFactorial(b,k) / RisingFactorial(c,k)) * (z**k / Factorial(k)), For(k, 0, N-1))),
-        Abs((RisingFactorial(a,N) * RisingFactorial(b,N) / RisingFactorial(c,N)) * (z**N / Factorial(N))) * (1/(1-D))),
+        Abs((RisingFactorial(a,N) * RisingFactorial(b,N) / RisingFactorial(c,N)) * (z**N / Factorial(N))) * Cases(Tuple(1/(1-D), Less(D, 1)), Tuple(Infinity, Otherwise))),
             Equal(D, Abs(z) * (1 + Abs(a-c)/Abs(c+N)) * (1 + Abs(b-1)/Abs(1+N)))
             )),
     Variables(a,b,c,z,N),
     Assumptions(And(Element(a,CC), Element(b, CC), Element(c, SetMinus(CC, ZZLessEqual(0))), Element(z,CC), Less(Abs(z), 1), Element(N, ZZGreaterEqual(0)),
-        Greater(Re(c)+N, 0), Less(D, 1))))
+        Greater(Re(c)+N, 0))))
 
 
 make_entry(ID("853a62"),

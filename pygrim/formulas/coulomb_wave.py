@@ -217,43 +217,43 @@ _H1 = (2*z)**(-(ConstI*eta)) * Exp(ConstI*(z-ell*Pi/2 + CoulombSigma(ell,eta))) 
 _H2 = (2*z)**((ConstI*eta)) * Exp(-(ConstI*(z-ell*Pi/2 + CoulombSigma(ell,eta)))) * HypergeometricUStar(1+ell-ConstI*eta, 2*ell+2, (2*ConstI*z))
 
 make_entry(ID("e2efbf"),
-    Formula(Equal(CoulombG(l,eta,z), Div(1,2) * (_H1 + _H2))),
+    Formula(Equal(CoulombG(ell,eta,z), Div(1,2) * (_H1 + _H2))),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Greater(Re(z), 0))))
 
 make_entry(ID("8027e8"),
-    Formula(Equal(CoulombG(l,eta,z), _H1 - ConstI*CoulombF(ell,eta,z))),
+    Formula(Equal(CoulombG(ell,eta,z), _H1 - ConstI*CoulombF(ell,eta,z))),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(GreaterEqual(Im(z), 0), Greater(Re(z), 0)))))
 
 make_entry(ID("69e5fb"),
-    Formula(Equal(CoulombG(l,eta,z), _H2 + ConstI*CoulombF(ell,eta,z))),
+    Formula(Equal(CoulombG(ell,eta,z), _H2 + ConstI*CoulombF(ell,eta,z))),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(Less(Im(z), 0), GreaterEqual(Re(z), 0)))))
 
 make_entry(ID("bcdfc6"),
-    Formula(Equal(CoulombH(1,l,eta,z), _H1)),
+    Formula(Equal(CoulombH(1,ell,eta,z), _H1)),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(GreaterEqual(Im(z), 0), Greater(Re(z), 0)))))
 
 make_entry(ID("f0414a"),
-    Formula(Equal(CoulombH(1,l,eta,z), _H2 + 2*ConstI*CoulombF(ell,eta,z))),
+    Formula(Equal(CoulombH(1,ell,eta,z), _H2 + 2*ConstI*CoulombF(ell,eta,z))),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(Less(Im(z), 0), GreaterEqual(Re(z), 0)))))
 
 make_entry(ID("781eae"),
-    Formula(Equal(CoulombH(-1,l,eta,z), _H2)),
+    Formula(Equal(CoulombH(-1,ell,eta,z), _H2)),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(Less(Im(z), 0), GreaterEqual(Re(z), 0)))))
 
 make_entry(ID("0cc301"),
-    Formula(Equal(CoulombH(-1,l,eta,z), _H1 - 2*ConstI*CoulombF(ell,eta,z))),
+    Formula(Equal(CoulombH(-1,ell,eta,z), _H1 - 2*ConstI*CoulombF(ell,eta,z))),
     Variables(ell, eta, z),
     Assumptions(And(Element(ell, CC), Element(eta, CC), coulomb_param_condition, Element(z, SetMinus(CC, Set(0))),
         Or(GreaterEqual(Im(z), 0), Greater(Re(z), 0)))))

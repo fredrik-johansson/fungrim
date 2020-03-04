@@ -483,7 +483,7 @@ make_entry(ID("6f8e14"),
 
 make_entry(ID("b16d00"),
     Formula(Equal(LogBarnesGRemainder(N, z),
-        Integral(((t/2)*Coth(t/2) - Sum(BernoulliB(2*k) / Factorial(2*k) * t**(2*k))) * (Exp(-(z*t))/t**3), For(t, 0, Infinity)))),
+        Integral(((t/2)*Coth(t/2) - Sum(BernoulliB(2*k) / Factorial(2*k) * t**(2*k), For(k, 0, N))) * (Exp(-(z*t))/t**3), For(t, 0, Infinity)))),
     Variables(z, N),
     Assumptions(And(Element(z, CC), Greater(Re(z), 0), Element(N, ZZGreaterEqual(1)))),
     References("https://dx.doi.org/10.1098/rspa.2014.0534"))

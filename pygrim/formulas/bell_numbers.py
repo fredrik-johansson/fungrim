@@ -360,13 +360,13 @@ make_entry(ID("60740b"),
 
 make_entry(ID("dd9d26"),
     Formula(CongruentMod(BellNumber(n+p), BellNumber(n) + BellNumber(n+1), p)),
-    Variables(p),
-    Assumptions(Element(p, PP)))
+    Variables(n, p),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(p, PP))))
 
 make_entry(ID("b41c49"),
     Formula(CongruentMod(BellNumber(n+p**m), m*BellNumber(n) + BellNumber(n+1), p)),
-    Variables(p, m),
-    Assumptions(And(Element(p, PP), Element(m, ZZGreaterEqual(1)))))
+    Variables(n, p, m),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(p, PP), Element(m, ZZGreaterEqual(1)))))
 
 make_entry(ID("050ee1"),
     Formula(CongruentMod(BellNumber(n), Cases(Tuple(0, CongruentMod(n, 2, 3)), Tuple(1, Otherwise)), 2)),
@@ -391,10 +391,9 @@ make_entry(ID("a1108d"),
 
 # Determinants
 
-# todo: semantic identity matrix
-# todo: semantic subscripts, zero-indexed
+# todo: define IdentityMatrix
 make_entry(ID("b5a382"),
-    Formula(Equal(BellNumber(n), Subscript(Exp(Matrix(Binomial(i,j), For(i, 0, N), For(j, 0, N)) - Subscript(I, N+1)), Tuple(n, 0)))),
+    Formula(Equal(BellNumber(n), Item(Exp(Matrix(Binomial(i,j), For(i, 0, N), For(j, 0, N)) - IdentityMatrix(N+1)), Tuple(n+1, 1)))),
     Variables(N, n),
     Assumptions(And(Element(N, ZZGreaterEqual(0)), Element(n, Range(0, N)))))
 

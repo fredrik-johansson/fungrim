@@ -4506,11 +4506,16 @@ class TestBrain(object):
                             raise ValueError
         if 0:
             N = 6   # slow
+            MAX = 15
         else:
             N = 3
+            MAX = 7
         for a in range(-N,N+1):
             for b in range(-N,N+1):
                 for c in range(-N,N+1):
+                    if abs(a) + abs(b) + abs(c) > MAX:
+                        continue
+                    print("2F1 test", a, b, c)
                     for z in [0, 1, Div(1,4), 4]:
                         for r in [True, False]:
                             if r:

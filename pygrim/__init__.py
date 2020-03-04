@@ -44,17 +44,23 @@ def test_fungrim(nstart=0):
             test_fungrim_entry(eid)
 
 def test():
+    import doctest
+
+    print("----------------------------------------------------------")
+    print("expr")
+    print("----------------------------------------------------------")
+    doctest.testmod(expr, verbose=True, raise_on_error=False, optionflags=doctest.ELLIPSIS)
+    expr.TestExpr().run()
+
     print("----------------------------------------------------------")
     print("algebraic")
     print("----------------------------------------------------------")
-    import doctest
-    doctest.testmod(algebraic, verbose=True, raise_on_error=True)
+    doctest.testmod(algebraic, verbose=True, raise_on_error=True, optionflags=doctest.ELLIPSIS)
     algebraic.TestAlgebraic().run()
 
     print("----------------------------------------------------------")
     print("brain")
     print("----------------------------------------------------------")
-    import doctest
-    doctest.testmod(brain, verbose=True, raise_on_error=True)
+    doctest.testmod(brain, verbose=True, raise_on_error=True, optionflags=doctest.ELLIPSIS)
     TestBrain().run()
 

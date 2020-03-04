@@ -388,6 +388,7 @@ toc = [
         "Matrix",
         "Matrix2x2",
         "Matrix2x1",
+        "IdentityMatrix",
         "Det",
         "Spectrum",
         "SingularValues",
@@ -1310,6 +1311,12 @@ documentify(Matrix2x1,
     examples=[
     ("Matrix2x1(a, b)",
         "Equivalent to @Matrix([[a], [b]])@."),
+    ])
+
+documentify(IdentityMatrix,
+    examples=[
+    ("IdentityMatrix(n)",
+        "The identity matrix of size @@n@@."),
     ])
 
 documentify(Det,

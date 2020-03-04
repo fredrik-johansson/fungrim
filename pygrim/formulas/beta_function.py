@@ -133,12 +133,12 @@ make_entry(ID("cc2ebb"),
 
 make_entry(ID("315b3d"),
     Formula(Equal(IncompleteBetaRegularized(x, a, b), 1 - IncompleteBetaRegularized(1 - x, b, a))),
-    Variables(a, b),
+    Variables(a, b, x),
     Assumptions(And(Element(x, CC), Element(a, SetMinus(CC, ZZLessEqual(0))), Element(b, SetMinus(CC, ZZLessEqual(0))), NotElement(a+b, ZZLessEqual(0)))))
 
 make_entry(ID("fd0e48"),
     Formula(Equal(BetaFunction(a,b) * BetaFunction(a+b,c), BetaFunction(b,c)*BetaFunction(a,b+c))),
-    Variables(a, b),
+    Variables(a, b, c),
     Assumptions(And(Element(a, SetMinus(CC, ZZLessEqual(0))), Element(b, SetMinus(CC, ZZLessEqual(0))), Element(c, SetMinus(CC, ZZLessEqual(0))),
         NotElement(a+b, ZZLessEqual(0)), NotElement(b+c, ZZLessEqual(0)))))
 

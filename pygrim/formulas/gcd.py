@@ -274,8 +274,8 @@ make_entry(ID("7638c5"),
 
 make_entry(ID("3605cc"),
     Formula(Implies(And(Divides(a,m), Divides(b,m)), Divides(LCM(a,b), m))),
-    Variables(a,b,d),
-    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(d, ZZ))))
+    Variables(a,b,m),
+    Assumptions(And(Element(a,ZZ), Element(b, ZZ), Element(m, ZZ))))
 
 make_entry(ID("5d03d2"),
     Formula(Implies(Or(Divides(d,a), Divides(d,b)), Divides(d, LCM(a,b)))),
@@ -572,12 +572,12 @@ make_entry(ID("9500d3"),
 make_entry(ID("5781de"),
     Formula(Equal(LCM(a+b, b), Abs(a+b) * LCM(a,b) / Abs(a))),
     Variables(a, b),
-    Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, ZZ), Element(n, ZZ))))
+    Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, ZZ))))
 
 make_entry(ID("e74d86"),
     Formula(Equal(LCM(a-b, b), Abs(a-b) * LCM(a,b) / Abs(a))),
     Variables(a, b),
-    Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, ZZ), Element(n, ZZ))))
+    Assumptions(And(Element(a, SetMinus(ZZ, Set(0))), Element(b, ZZ))))
 
 make_entry(ID("1bbdaf"),
     Formula(Equal(LCM(a+n*b, b), Abs(a+n*b) * LCM(a,b) / Abs(a))),

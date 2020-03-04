@@ -193,7 +193,7 @@ make_entry(ID("9ee8bc"),
     Variables(s),
     Assumptions(
         And(Element(s, CC), NotElement(s, ZZGreaterEqual(1))),
-        And(Element(s, PowerSeries(CC, x)), NotElement(s, ZZGreaterEqual(1))),
+        And(Element(s, PowerSeries(CC, SerX)), NotElement(s, ZZGreaterEqual(1))),
     ))
 
 make_entry(ID("7cb17f"),

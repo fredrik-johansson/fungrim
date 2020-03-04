@@ -68,6 +68,43 @@ class Expr(object):
             return List(*(Expr(x) for x in arg))
         elif isinstance(arg, tuple):
             return Tuple(*(Expr(x) for x in arg))
+        elif isinstance(arg, float):
+            import math
+            if math.isinf(arg):
+                if arg > 0.0:
+                    return Infinity
+                else:
+                    return -Infinity
+            if math.isnan(arg):
+                return Undefined
+            if arg == 0.0:
+                return Expr(0)
+            m, e = math.frexp(arg)
+            m = int(m * 2.0**53)
+            e -= 53
+            s = str(m)
+            trailing = (m^(m-1)).bit_length()-1
+            m >>= trailing
+            e += trailing
+            if 0 <= e <= 20:
+                return Expr(m * 2**e)
+            if -8 <= e < 0:
+                return Expr(m) / Expr(2**-e)
+            if m == 1:
+                return Expr(2)**e
+            if m == -1:
+                return -Expr(2)**e
+            return Expr(m) * Expr(2)**e
+        elif isinstance(arg, complex):
+            if arg.real == 0.0:
+                if arg.imag == 1.0:
+                    return ConstI
+                if arg.imag == -1.0:
+                    return -ConstI
+                return Expr(arg.imag) * ConstI
+            if arg.imag == 0.0:
+                return Expr(arg.real)
+            return Expr(arg.real) + Expr(arg.imag) * ConstI
         else:
             try:
                 import flint
@@ -262,6 +299,86 @@ class Expr(object):
                 for arg in self._args:
                     for symbol in arg.symbols():
                         yield symbol
+
+    def free_variables(self, bound=None):
+        """
+        Return a list of the free variables in self, assuming that self
+        is a mathematical formula.
+        """
+        variables = set()
+        if bound is None:
+            bound = set()
+        else:
+            bound = set(bound)
+
+        def search(expr, bound):
+            if expr.is_atom():
+                if expr.is_symbol():
+                    if expr._symbol not in all_builtins_set and expr not in bound:
+                        variables.add(expr)
+            else:
+                head = expr.head()
+                args = expr.args()
+                # todo: deprecate subscript
+                if head == Subscript:
+                    a, b = args
+                    if a.is_symbol() and b.is_integer():
+                        search(a, bound)
+                        return
+                # todo: handle Fun - expressions
+                # todo: variable-length tuple unpacking
+                # todo: handle function defs in Where
+                if head == Where or any(arg.head() in (For, ForElement) for arg in args):
+                    """
+                    print(head)
+                    for arg in args:
+                        print(arg)
+                    print()
+                    """
+                    # we have to deal with variable bindings
+                    bound_local = bound.copy()
+                    remaining_args = []
+                    for i, arg in enumerate(args):
+                        # hack; needed because of Equal being used in old Where statements
+                        if head == Where and i == 0:
+                            remaining_args.append(arg)
+                            continue
+                        if arg.head() == For or arg.head() == ForElement or (head == Where and arg.head() in (Equal, Def)):
+                            new_var = arg.args()[0]
+                            if head == Where and arg.head() in (Equal, Def):
+                                if not new_var.is_atom() and new_var.head().is_symbol():
+                                    func_symb = new_var.head()
+                                    if func_symb._symbol not in all_builtins_set:
+                                        # Def(f(x, y), expr(x, y)) -- bind f and search locally in expr
+                                        func_args = new_var.args()
+                                        bound_local2 = bound_local.copy()
+                                        for s in func_args:
+                                            bound_local2.add(s)
+                                        for data in arg.args()[1:]:
+                                            search(data, bound_local2)
+                                        bound_local.add(func_symb)
+                                        continue
+                            for data in arg.args()[1:]:
+                                search(data, bound_local)
+                            # Possible multiple vars (make more robust?)
+                            if new_var.head() == Tuple:
+                                for subvar in new_var.args():
+                                    bound_local.add(subvar)
+                            else:
+                                bound_local.add(new_var)
+                        else:
+                            remaining_args.append(arg)
+                    for arg in remaining_args:
+                        search(arg, bound_local)
+                else:
+                    search(head, bound)
+                    for arg in args:
+                        search(arg, bound)
+        search(self, bound)
+        return frozenset(variables)
+
+
+
 
     def subexpressions(self, unique=False):
         """
@@ -734,26 +851,30 @@ class Expr(object):
 
         These assumptions are not correct:
 
-            >>> Equal(Sqrt(x**2), x).test([x], Element(x, RR))
+            >>> try:
+            ...     Equal(Sqrt(x**2), x).test([x], Element(x, RR))
+            ... except ValueError:
+            ...     print("FAIL!")
+            ...
             {x: 0}    ...  True
             {x: Div(1, 2)}    ...  True
             {x: Sqrt(2)}    ...  True
             {x: Pi}    ...  True
             {x: 1}    ...  True
             {x: Neg(Div(1, 2))}    ...  False
-            Traceback (most recent call last):
-              ...
-            ValueError
+            FAIL!
 
         Valid assumptions:
         
             >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, RR), GreaterEqual(x, 0)))
-                ...
-            Passed 69 instances (67 True, 2 Unknown, 0 False)
+            {x: Div(1, 2)}    ...  True
+            ...
+            Passed 69 instances (68 True, 1 Unknown, 0 False)
 
             >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, CC), Or(Greater(Re(x), 0), And(Equal(Re(x), 0), Greater(Im(x), 0)))))
-                ...
-            Passed 86 instances (67 True, 19 Unknown, 0 False)
+            {x: Div(1, 2)}    ...  True
+            ...
+            Passed 91 instances (85 True, 6 Unknown, 0 False)
 
         """
         if len(variables) == 0:
@@ -798,11 +919,13 @@ class Expr(object):
             print("Passed", count, "instances (%i True, %i Unknown, %i False)" % (count_true, count_unknown, count_false))
 
 all_builtins = []
+all_builtins_set = set()
 
 def inject_builtin(string):
     for sym in string.split():
         globals()[sym] = Expr(symbol_name=sym)
         all_builtins.append(sym)
+        all_builtins_set.add(sym)
 
 variable_names = set()
 
@@ -820,7 +943,7 @@ Funs Functions MultivariateFunctions
 CartesianProduct CartesianPower
 Restriction MultivariateRestriction
 One Zero Characteristic
-Matrices GeneralLinearGroup SpecialLinearGroup
+Matrices GeneralLinearGroup SpecialLinearGroup IdentityMatrix
 Def Gen
 All Exists
 True_ False_
@@ -1047,4 +1170,30 @@ def make_entry(*args):
         descriptions[symbol] = (example, None, None, description._text)
         domain_tables[symbol] = id.args()[0]._text
     all_entries.append(entry)
+
+
+class TestExpr:
+
+    def __init__(self):
+        pass
+
+    def run(self):
+        for method in dir(self):
+            if method.startswith("test_"):
+                print(method, "...", end=" ")
+                getattr(self, method)()
+                print("OK!")
+
+    def test_free_variables(self):
+        assert (x+y+1).free_variables() == set([x, y])
+        assert (Pi+1).free_variables() == set()
+        assert (x+Where(y, Def(y, 3))).free_variables() == set([x])
+        assert (x+Where(y, Def(y, y))).free_variables() == set([x, y])
+        assert (x+Where(y, Def(y, 3), Def(z, y))).free_variables() == set([x])
+        assert Sum(f(n), For(n, a, b)).free_variables() == set([f, a, b])
+        assert Sum(f(n), ForElement(n, S)).free_variables() == set([f, S])
+        assert Where(t+y*u, Def(Tuple(t, u), v)).free_variables() == set([y, v])
+        assert Where(f(b), Def(f(z), z+a)).free_variables() == set([a, b])
+        assert Where(f(b), Def(f(z, x), z+x-a)).free_variables() == set([a, b])
+        assert Where(f(b), Def(f(z, x), z+x-a+f)).free_variables() == set([a, b, f])
 

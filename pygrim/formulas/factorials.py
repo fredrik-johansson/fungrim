@@ -350,7 +350,7 @@ make_entry(ID("2362af"),
 make_entry(ID("081188"),
     Formula(Equal(Binomial(z + 1, k + 1), Binomial(z, k) + Binomial(z, k + 1))),
     Variables(z, k),
-    Assumptions(And(Element(z, CC), Element(k, Range(0, n)))))
+    Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)))))
 
 make_entry(ID("209fc8"),
     Formula(Equal(Binomial(z, k + 1), ((z - k) / (k + 1)) * Binomial(z, k))),
@@ -546,7 +546,7 @@ make_entry(ID("433d8b"),
 
 make_entry(ID("fa3b53"),
     Formula(LessEqual(Binomial(n, k), 2**n)),
-    Variables(n),
+    Variables(n, k),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(k, ZZGreaterEqual(0)))))
 
 

@@ -987,7 +987,7 @@ make_entry(ID("9b7d8c"),
     Formula(Equal(JacobiTheta(2,0,tau)**2,
         Sum(1/Cos(Pi*tau*(n+Div(1,2))), For(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("f8cd8f"),
     Formula(Equal(JacobiTheta(3,0,tau)**2, 1 + 2 * Sum(1/Cos(Pi*tau*n), For(n, 1, Infinity)))),
@@ -998,13 +998,13 @@ make_entry(ID("7b3ac4"),
     Formula(Equal(JacobiTheta(3,0,tau)**2,
         Sum(1/Cos(Pi*tau*n), For(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Assumptions(Element(tau, HH)))
 
 make_entry(ID("ab1c77"),
     Formula(Equal(JacobiTheta(4,0,tau)**2,
         Sum(1/Cos(Pi*(tau+1)*n), For(n, -Infinity, Infinity)))),
     Variables(tau),
-    Assumptions(And(Element(z, CC), Element(tau, HH))))
+    Assumptions(Element(tau, HH)))
 
 # Zeros
 
@@ -1179,10 +1179,10 @@ make_entry(ID("3c56c7"),
     Formula(Equal(JacobiThetaEpsilon(j,a,b,c,d),
         Where((1/JacobiThetaEpsilon(1,-d,b,c,-a)) *
         Cases(
-            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((c-2)*d - 2 + 2*(1-c)*Subscript(delta, d+1)))), Equal(j, 2)),
-            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a+c-2)*(b+d) - 3 + 2*(1-a-c)*Subscript(delta, b+d+1)))), Equal(j, 3)),
-            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a-2)*b - 4 + 2*(1-a)*Subscript(delta, b+1)))), Equal(j, 4))),
-            Equal(Subscript(delta, n), Mod(n, 2))))),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((c-2)*d - 2 + 2*(1-c) * delta_(d+1)))), Equal(j, 2)),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a+c-2)*(b+d) - 3 + 2*(1-a-c) * delta_(b+d+1)))), Equal(j, 3)),
+            Tuple(Call(Exp, ((Pi*ConstI/4) * Brackets((a-2)*b - 4 + 2*(1-a) * delta_(b+1)))), Equal(j, 4))),
+            Def(delta_(n), Mod(n, 2))))),
     Variables(j,a,b,c,d),
     Assumptions(And(Element(j, Set(2,3,4)), Element(Matrix2x2(a,b,c,d), SL2Z))),
     References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Section 81."))
@@ -1206,8 +1206,8 @@ make_entry(ID("4d8b0f"),
     Formula(Equal(JacobiTheta(j,z,(a*tau+b)/(c*tau+d)),
         Where(JacobiThetaEpsilon(j,a,b,c,d) * Sqrt(v/ConstI) * Exp(Pi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,a,b,c,d), v*z,tau), Equal(v, (c*tau+d)),
         ))),
-    Variables(z, tau, a, b, c, d),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
+    Variables(j, z, tau, a, b, c, d),
+    Assumptions(And(Element(j, Set(1,2,3,4)), Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
     References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Sections 80, 81."))
 
 make_entry(ID("100d3c"),
@@ -1215,8 +1215,8 @@ make_entry(ID("100d3c"),
         Where(JacobiThetaEpsilon(j,-d,b,c,-a) * Sqrt(v/ConstI) * Exp(Pi*ConstI*c*v*z**2) * JacobiTheta(JacobiThetaPermutation(j,-d,b,c,-a), v*z, (a*tau+b)/(c*tau+d)),
             Equal(v, -(1/(c*tau+d))),
         ))),
-    Variables(z, tau, a, b, c, d),
-    Assumptions(And(Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
+    Variables(j, z, tau, a, b, c, d),
+    Assumptions(And(Element(j, Set(1,2,3,4)), Element(z, CC), Element(tau, HH), Element(Matrix2x2(a, b, c, d), PSL2Z))),
     References("Hans Rademacher (1973), Topics in Analytic Number Theory, Springer. Sections 80, 81."))
 
 
@@ -1405,14 +1405,9 @@ make_entry(ID("ebc673"),
 
 # Jacobi differential equation
 
-D0 = Subscript(D, 0)
-D1 = Subscript(D, 1)
-D2 = Subscript(D, 2)
-D3 = Subscript(D, 3)
-
 make_entry(ID("936694"),
-    Formula(Where(Equal((30*D1**3-15*D0*D1*D2+D0**2*D3)**2 + 32*(D0*D2-3*D1**2)**3 + Pi**2*(D0*D2 - 3*D1**2)**2*D0**10, 0),
-        Equal(Subscript(D, r), ComplexDerivative(JacobiTheta(j, 0, tau), For(tau, tau, r))))),
+    Formula(Where(Equal((30*D_(1)**3-15*D_(0)*D_(1)*D_(2)+D_(0)**2*D_(3))**2 + 32*(D_(0)*D_(2)-3*D_(1)**2)**3 + Pi**2*(D_(0)*D_(2) - 3*D_(1)**2)**2*D_(0)**10, 0),
+        Def(D_(r), ComplexDerivative(JacobiTheta(j, 0, tau), For(tau, tau, r))))),
     Variables(j, tau),
     Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(tau, HH))))
 

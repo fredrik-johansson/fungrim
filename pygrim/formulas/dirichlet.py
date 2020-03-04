@@ -503,7 +503,7 @@ make_entry(ID("5e1d3b"),
 
 make_entry(ID("e6deb7"),
     Formula(LessEqual(Abs(Sum(chi(n), For(n, 0, N))), Totient(q))),
-    Variables(N),
+    Variables(N, chi, q),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(N, ZZ), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("5df909"),
@@ -717,7 +717,7 @@ make_entry(ID("23256b"),
 
 make_entry(ID("c2750a"),
     Formula(Equal(DirichletL(1,chi), -((1/q) * Sum(chi(k) * DigammaFunction(k/q), For(k, 1, q-1))))),
-    Variables(q),
+    Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("d83109"),
@@ -738,12 +738,12 @@ make_entry(ID("a07d28"),
 
 make_entry(ID("789ca4"),
     Formula(Equal(DirichletL(0,chi), -Div(1,q) * Sum(k * chi(k), For(k, 1, q)))),
-    Variables(q),
+    Variables(chi, q),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), NotEqual(chi, DirichletCharacter(q, 1)))))
 
 make_entry(ID("fad52f"),
     Formula(Implies(Equal(chi(-1), 1), Equal(DirichletL(0,chi), 0))),
-    Variables(q),
+    Variables(chi, q),
     Assumptions(And(Element(q, ZZGreaterEqual(2)), Element(chi, DirichletGroup(q)))))
 
 # Values at negative integers
@@ -837,7 +837,7 @@ make_entry(ID("2a34c3"),
 
 make_entry(ID("7c86d5"),
     Formula(Equal(DirichletL(s, Conjugate(chi)), Conjugate(DirichletL(Conjugate(s), chi)))),
-    Variables(s, CC),
+    Variables(s, q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, DirichletGroup(q)), Element(s, CC))))
 
 make_entry(ID("50adea"),

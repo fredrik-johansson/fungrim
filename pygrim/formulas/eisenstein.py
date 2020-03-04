@@ -291,17 +291,17 @@ make_entry(ID("e20db0"),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("7c00e6"),
-    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(DivisorSigma(2*k-1, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*Pi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*k)/BernoulliB(2*k) * Sum(DivisorSigma(2*k-1, n) * q**n, For(n, 1, Infinity)), Equal(q, Exp(2*Pi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("848d97"),
-    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) * Sum(n**(2*k-1) * q**n / (1 - q**n), For(n, 1, Infinity)), Equal(q, Exp(2*Pi*ConstI*tau))))),
+    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*k)/BernoulliB(2*k) * Sum(n**(2*k-1) * q**n / (1 - q**n), For(n, 1, Infinity)), Equal(q, Exp(2*Pi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))
 
 make_entry(ID("15b347"),
-    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*n)/BernoulliB(2*n) *
+    Formula(Equal(EisensteinE(2*k, tau), Where(1 - (4*k)/BernoulliB(2*k) *
         Sum(Sum(n**(2*k-1) * q**(m*n), For(m, 1, Infinity)), For(n, 1, Infinity)), Equal(q, Exp(2*Pi*ConstI*tau))))),
     Variables(k, tau),
     Assumptions(And(Element(k, ZZGreaterEqual(1)), Element(tau, HH))))

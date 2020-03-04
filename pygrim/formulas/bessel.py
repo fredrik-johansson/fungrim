@@ -312,7 +312,7 @@ make_entry(ID("b6d600"),
 
 make_entry(ID("15ac84"),
     Formula(Equal((r**2+4*r-n**2+4)*BesselJ(n,0,r+2) + (r+1)*(r+2)*BesselJ(n,0,r), 0)),
-    Variables(nu,r),
+    Variables(n,r),
     Assumptions(And(Element(n,ZZ), Element(r, ZZGreaterEqual(0))))) 
 
 make_entry(ID("9b2f38"),
@@ -399,7 +399,7 @@ make_entry(ID("9d98f8"),
 
 make_entry(ID("f303c9"),
     Formula(Equal((r**2+4*r-n**2+4)*BesselI(n,0,r+2) - (r+1)*(r+2)*BesselI(n,0,r), 0)),
-    Variables(nu,r),
+    Variables(n,r),
     Assumptions(And(Element(n,ZZ), Element(r, ZZGreaterEqual(0)))))
 
 make_entry(ID("e233b0"),

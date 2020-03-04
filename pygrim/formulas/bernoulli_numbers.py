@@ -215,7 +215,7 @@ make_entry(ID("03ee0b"),
 
 
 make_entry(ID("8b4f7f"),
-    Formula(Equal(BernoulliPolynomial(n, x+1), BernoulliPolynomial(n, z) + n * x**(n-1))),
+    Formula(Equal(BernoulliPolynomial(n, x+1), BernoulliPolynomial(n, x) + n * x**(n-1))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(x, CC))))
 

@@ -457,8 +457,8 @@ make_entry(ID("f6d0c6"),
 
 make_entry(ID("b8ab9c"),
     Formula(Equal(Sum(Sin(2*a*k+b), For(k, 0, n)), Sin(a*(n+1)) * Sin(a*n+b) / Sin(a))),
-    Variables(a, n),
-    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), NotElement(a / Pi, ZZ))))
+    Variables(a, b, n),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Element(b, CC), NotElement(a / Pi, ZZ))))
 
 make_entry(ID("906569"),
     Formula(Equal(Product(Sin(k*Pi/n), For(k, 1, n-1)), n/2**(n-1))),
@@ -476,7 +476,7 @@ make_entry(ID("3fb3ca"),
     Formula(Equal(Sin(z), (2*Tan(z/2))/(Tan(z/2)**2 + 1))),
     Variables(z),
     Assumptions(And(Element(z, CC), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ)))),
-        And(Element(z, PowerSeries(CC, x)), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ))))))
+        And(Element(z, PowerSeries(CC, SerX)), NotElement(z, Set((2*n+1)*Pi, ForElement(n, ZZ))))))
 
 make_entry(ID("18f40c"),
     Formula(Equal(Sin(z), (Exp(ConstI*z) - Exp(-ConstI*z)) / (2 * ConstI))),
