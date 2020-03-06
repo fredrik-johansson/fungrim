@@ -352,16 +352,32 @@ class Expr(object):
                                         # Def(f(x, y), expr(x, y)) -- bind f and search locally in expr
                                         func_args = new_var.args()
                                         bound_local2 = bound_local.copy()
-                                        for s in func_args:
-                                            bound_local2.add(s)
+                                        for x in func_args:
+                                            bound_local2.add(x)
                                         for data in arg.args()[1:]:
                                             search(data, bound_local2)
                                         bound_local.add(func_symb)
                                         continue
+
                             for data in arg.args()[1:]:
                                 search(data, bound_local)
-                            # Possible multiple vars (make more robust?)
+
+                            # Destructuring assignment (should be improved...)
                             if new_var.head() == Tuple:
+                                # allow assigning to Def(Tuple(f(i), For(i, 1, n)), T)
+                                if len(new_var.args()) == 2 and new_var.args()[1].head() == For:
+                                    fi = new_var.args()[0]
+                                    func_symb = fi.head()
+                                    i, a, b = new_var.args()[1].args()
+                                    if a.is_integer() and b.is_symbol():
+                                        bound_local.add(b)
+                                        bound_local.add(func_symb)
+                                else:
+                                    # Regular destructuring assignment
+                                    for subvar in new_var.args():
+                                        bound_local.add(subvar)
+                            elif new_var.head() == Matrix2x2:
+                                # Regular destructuring assignment
                                 for subvar in new_var.args():
                                     bound_local.add(subvar)
                             else:
@@ -377,7 +393,101 @@ class Expr(object):
         search(self, bound)
         return frozenset(variables)
 
+    def replace(self, rules, semantic=False):
+        """
+        Replace subexpressions of self with exact matches in the given
+        dictionary. If semantic=True, free variables will be replaced
+        but bound variables will not.
+        """
+        if self in rules:
+            return rules[self]
+        if self.is_atom() or not rules:
+            return self
+        if not semantic:
+            return Expr(call=(arg.replace(rules, semantic=False) for arg in self._args))
+        expr = self
+        head = expr.head()
+        args = expr.args()
+        # todo: handle Fun-expressions
+        if head == Where or any(arg.head() in (For, ForElement) for arg in args):
+            args = list(args)
+            remaining_arg_indices = []
+            for arg_index, arg in enumerate(args):
+                # hack; needed because of Equal being used in old Where statements
+                if head == Where and arg_index == 0:
+                    remaining_arg_indices.append(arg_index)
+                    continue
+                if arg.head() == For or arg.head() == ForElement or (head == Where and arg.head() in (Equal, Def)):
+                    for_args = list(arg.args())
+                    new_var = for_args[0]
+                    if head == Where and arg.head() in (Equal, Def):
+                        if not new_var.is_atom() and new_var.head().is_symbol():
+                            # Def(f(x, y), expr(x, y)) -- replace locally in expr (ignoring x, y), then bind f
+                            func_symb = new_var.head()
+                            func_args = new_var.args()
+                            if func_symb._symbol not in all_builtins_set:
+                                rules2 = rules.copy()
+                                for x in func_args:
+                                    if x in rules2:
+                                        del rules2[x]
+                                # replace in expr(x, y)
+                                for_args = [new_var] + [a.replace(rules2, semantic) for a in for_args[1:]]
+                                # bind f
+                                if func_symb in rules:
+                                    rules = rules.copy()
+                                    del rules[func_symb]
 
+                                args[arg_index] = arg.head()(*for_args)
+                                continue
+
+                    # Def(x, y) or For(x, a, b) -- 
+                    for_args = [new_var] + [a.replace(rules, semantic) for a in for_args[1:]]
+
+                    # Destructuring assignment
+                    if new_var.head() == Tuple:
+                        # Special destructuring assignment Def(Tuple(f(i), For(i, 1, n)), T)
+                        if len(new_var.args()) == 2 and new_var.args()[1].head() == For:
+                            fi = new_var.args()[0]
+                            func_symb = fi.head()
+                            i, a, b = new_var.args()[1].args()
+                            # todo: possible variable in a / b ?
+                            if b in rules:
+                                rules = rules.copy()
+                                del rules[b]
+                            if func_symb in rules:
+                                rules = rules.copy()
+                                del rules[func_symb]
+                        else:
+                            # Regular destructuring assignment
+                            for subvar in new_var.args():
+                                if subvar in rules:
+                                    rules = rules.copy()
+                                    del rules[subvar]
+                    elif new_var.head() == Matrix2x2:
+                        # Regular destructuring assignment
+                        for subvar in new_var.args():
+                            if subvar in rules:
+                                rules = rules.copy()
+                                del rules[subvar]
+                    else:
+                        # Simple variable
+                        if new_var in rules:
+                            rules = rules.copy()
+                            del rules[new_var]
+
+                    args[arg_index] = arg.head()(*for_args)
+                else:
+                    remaining_arg_indices.append(arg_index)
+
+            # Go back and complete the replace op after binding variables
+            for arg_index in remaining_arg_indices:
+                args[arg_index] = args[arg_index].replace(rules, semantic)
+
+            return head(*args)
+        else:
+            head = head.replace(rules, semantic)
+            args = [arg.replace(rules, semantic) for arg in args]
+            return head(*args)
 
 
     def subexpressions(self, unique=False):
@@ -423,17 +533,6 @@ class Expr(object):
                     yield t
         else:
             yield self
-
-    def replace(self, rules):
-        """
-        Replace subexpressions of self with exact matches in the given
-        dictionary. Warning: does not treat locally bound variables specially.
-        """
-        if self in rules:
-            return rules[self]
-        if self.is_atom():
-            return self
-        return Expr(call=(arg.replace(rules) for arg in self._args))
 
     def latex(self, in_small=False, **kwargs):
         from .latex import latex
@@ -813,7 +912,7 @@ class Expr(object):
         from .numeric import neval
         return neval(self, digits, **kwargs)
 
-    def simple(self, variables=(), assumptions=None, **kwargs):
+    def simple(self, assumptions=None, variables=None, **kwargs):
         """
         Simple expression simplification: returns an expression that is
         mathematically equivalent to the original expression.
@@ -831,12 +930,17 @@ class Expr(object):
 
         Providing assmptions permits simplification:
 
-            >>> Expr(1 + x + 1).simple([x], Element(x, CC))
+            >>> Expr(1 + x + 1).simple(Element(x, CC))
             Add(2, x)
 
         This method is a simple wrapper around Brain.simple.
         """
         from .brain import Brain
+        assert (assumptions is None or isinstance(assumptions, Expr))
+        if variables is None:
+            variables = self.free_variables()
+            if assumptions is not None:
+                variables = variables.union(assumptions.free_variables())
         b = Brain(variables=variables, assumptions=assumptions, **kwargs)
         return b.simple(self)
 
@@ -1196,4 +1300,30 @@ class TestExpr:
         assert Where(f(b), Def(f(z), z+a)).free_variables() == set([a, b])
         assert Where(f(b), Def(f(z, x), z+x-a)).free_variables() == set([a, b])
         assert Where(f(b), Def(f(z, x), z+x-a+f)).free_variables() == set([a, b, f])
+        assert Where(Sum(a_(i) * b, For(i, 1, n)), Def(Tuple(a_(i), For(i, 1, n)), T)).free_variables() == set([T, b])
+        assert Where(a*d-b*c, Def(Matrix2x2(a, b, c, d), M)).free_variables() == set([M])
+
+    def test_replace(self):
+        assert (x+y+1).replace({x:z}) == (z+y+1)
+        assert (x+y).replace({x:y, y:x}) == y+x
+        assert Where(y, Def(y, 3)).replace({y:5}) == Where(5, Def(5, 3))
+        assert Where(y, Def(y, 3)).replace({y:5}, semantic=True) == Where(y, Def(y, 3))
+        assert Where(y, Def(y, y)).replace({y:5}, semantic=True) == Where(y, Def(y, 5))
+        assert Where(x, Def(x, y), Def(y, x)).replace({x:5, y:3}, semantic=True) == Where(x, Def(x, 3), Def(y, x))
+        assert Where(x+z, Def(x, y), Def(y, x)).replace({x:5, y:3, z:2}, semantic=True) == Where(x+2, Def(x, 3), Def(y, x))
+        assert Where(a+b, Def(Tuple(a, b, c), T(a))).replace({a:2, T:S, b:8}, semantic=True) == Where(a+b, Def(Tuple(a, b, c), S(2)))
+        assert Where(Sum(a_(i) * b, For(i, 1, n)), Def(Tuple(a_(i), For(i, 1, n)), T)).replace({a_:f, i:7, b:5, n:8, T:S}, semantic=True) == \
+                Where(Sum(a_(i) * 5, For(i, 1, n)), Def(Tuple(a_(i), For(i, 1, n)), S))
+        assert Where(f(b), Def(f(z), z+a)).replace({f:g}, semantic=True) == Where(f(b), Def(f(z), z+a))
+        assert Where(f(b), Def(f(z), z+a)).replace({f:g, z:w}, semantic=True) == Where(f(b), Def(f(z), z+a))
+        assert Where(f(b), Def(f(z), z+a), Def(b, f(a))).replace({f:g, z:w}, semantic=True) == Where(f(b), Def(f(z), z+a), Def(b, f(a)))
+        assert Where(f(b), Def(f(z), z+a)).replace({f:g, z:w, a:b, b:a}, semantic=True) == Where(f(a), Def(f(z), z+b))
+        assert Where(a*d-b*c+e, Def(Matrix2x2(a, b, c, d), M)).replace({a:2, M:S, e:7}, semantic=True) == Where(a*d-b*c+7, Def(Matrix2x2(a, b, c, d), S))
+        assert Sum(f(n), For(n, a, b)).replace({a:1,b:10}, semantic=True) == Sum(f(n), For(n, 1, 10))
+        assert Sum(f(n), For(n, a, b)).replace({a:1,b:10,f:g}, semantic=True) == Sum(g(n), For(n, 1, 10))
+        assert Sum(f(n), For(n, a, b)).replace({a:1,b:10,f:g,n:m}, semantic=True) == Sum(g(n), For(n, 1, 10))
+        assert Sum(f(n), For(n, a, b), Q(n,a)).replace({a:1,b:10,f:g,n:m,Q:R}, semantic=True) == Sum(g(n), For(n, 1, 10), R(n,1))
+        assert Set(x+y, ForElement(x, S)).replace({x:y}, semantic=True) == Set(x+y, ForElement(x, S))
+        assert Set(x+y, ForElement(x, S), P(x)).replace({x:y}, semantic=True) == Set(x+y, ForElement(x, S), P(x))
+        assert Set(x+y, ForElement(x, S), P(x)).replace({x:y, S:x, P:Q, y:5}, semantic=True) == Set(x+5, ForElement(x, x), Q(x))
 

@@ -1,5 +1,6 @@
 from .expr import *
 
+import contextlib
 from itertools import chain, zip_longest
 import itertools
 
@@ -265,6 +266,9 @@ class Brain(object):
                 inset, outset = dom.args()
                 infer_domain(self.inferences, x, inset)
                 infer_not_domain(self.inferences, x, outset)
+        if thm.head() == NotElement:
+            x, dom = thm.args()
+            infer_not_domain(self.inferences, x, dom)
 
     def __init__(self, variables=(), assumptions=None, fungrim=False, penalty={}):
         """
@@ -292,14 +296,51 @@ class Brain(object):
         # Init assumptions
         self.variables = frozenset(variables)
         self.inferences = set()
+
         if assumptions is None:
             self.assumptions = frozenset()
         else:
             self.assumptions = frozenset(assumptions.head_args_flattened(And))
+
         # Simple inferences (mostly based on the domain)
         for asm in self.assumptions:
             # asm = asm.simple()
             self.infer(asm)
+
+    @contextlib.contextmanager
+    def assuming(self, assumptions):
+        """
+        Context manager that extends the current assumptions, then restores
+        the state when done.
+
+            >>> brain = Brain(variables=[z], assumptions=Element(z, CC))
+            >>> brain.simple(Element(z, QQ))
+            Element(z, QQ)
+            >>> with brain.assuming(NotElement(z, RR)):
+            ...     print(brain.simple(Element(z, QQ)))
+            ...
+            False_
+            >>> brain.simple(Element(z, QQ))
+            Element(z, QQ)
+
+        """
+        assert isinstance(assumptions, Expr)
+        variables = assumptions.free_variables()
+        old_inferences = self.inferences
+        old_variables = self.variables
+        old_cache = self.simple_cache
+        try:
+            self.inferences = old_inferences.copy()
+            self.variables = old_variables.union(variables)
+            self.simple_cache = {}
+            assumptions = frozenset(assumptions.head_args_flattened(And))
+            for asm in assumptions:
+                self.infer(asm)
+            yield
+        finally:
+            self.inferences = old_inferences
+            self.variables = old_variables
+            self.simple_cache = old_cache
 
     def __repr__(self):
         s = ""
@@ -775,6 +816,9 @@ class Brain(object):
                 return True
         if self.is_infinity(x) or x == Undefined:
             return False
+        v = self.complex_enclosure(x)
+        if v is not None:
+            return True
         return None
 
     # todo: identify different types; bools, tuples, sets, matrices, ...
@@ -2320,6 +2364,39 @@ class Brain(object):
         # todo: more simplifications; reduce to Abs...?
         return Sign(x)
 
+    def simple_Csgn(self, x):
+        x = self.simple(x)
+        if self.is_infinity(x):
+            x = self.simple(Sign(x))
+        if x == Undefined:
+            return x
+        if x.is_integer():
+            v = int(x)
+            if v > 0:
+                return Expr(1)
+            if v < 0:
+                return Expr(-1)
+            return Expr(0)
+        val = self.complex_enclosure(x)
+        if val is not None:
+            real, imag = val.real, val.imag
+            if imag == 0:
+                if real > 0:
+                    return Expr(1)
+                if real < 0:
+                    return Expr(-1)
+            if real == 0:
+                if imag > 0:
+                    return Expr(1)
+                if imag < 0:
+                    return Expr(-1)
+        # todo: exact tests for the real and imaginary part ...
+        if self.is_positive(x):
+            return Expr(1)
+        if self.is_negative(x):
+            return Expr(-1)
+        return Csgn(x)
+
     def simple_Abs(self, x):
         """
         Return an expression equivalent to Abs(x), simplified if possible.
@@ -2650,8 +2727,8 @@ class Brain(object):
                 # normal assignment
                 if var.is_symbol():
                     for j in range(i+1, len(defs)):
-                        defs[j] = defs[j].replace({var:value})
-                    expr = expr.replace({var:value})
+                        defs[j] = defs[j].replace({var:value}, semantic=True)
+                    expr = expr.replace({var:value}, semantic=True)
                 # destructuring assignment (todo: more cases)
                 elif var.head() in (Tuple, List, Matrix2x2):
                     if value.head() in (Tuple, List, Matrix2x2):
@@ -2660,8 +2737,8 @@ class Brain(object):
                         if len(xs) == len(xvals) and all(x.is_symbol() for x in xs):
                             replace_map = dict(zip(xs, xvals))
                             for j in range(i+1, len(defs)):
-                                defs[j] = defs[j].replace(replace_map)
-                            expr = expr.replace(replace_map)
+                                defs[j] = defs[j].replace(replace_map, semantic=True)
+                            expr = expr.replace(replace_map, semantic=True)
                         else:
                             raise NotImplementedError
                 # function assignment
@@ -3876,6 +3953,35 @@ class Brain(object):
                             return v * Pi
         raise NotImplementedError
 
+    def complex_as_tangent(self, x):
+        """
+        Assuming that x is a complex number (not checked),
+        return v such that x = Tan(v).
+        """
+        if x.head() == Tan:
+            v, = x.args()
+            return v
+        if x.head() == Cot:
+            v, = x.args()
+            return Pi/2 - v
+        if x.head() == Neg:
+            v, = x.args()
+            return Neg(self.complex_as_tangent(v))
+        if self.is_algebraic(x) and self.is_real(x):
+            v = self.real_enclosure(Atan(x) / Pi)
+            if v is not None:
+                from .algebraic import alg
+                # todo: should set the arb precision here
+                v = alg.guess(v, deg=1)
+                if v is not None and v.degree() == 1:
+                    v = v.fmpq()
+                    if v.q <= 120:
+                        x_alg = self.evaluate_alg(x)
+                        v_alg = alg.tan_pi(v)
+                        if x_alg == v_alg:
+                            return v * Pi
+        raise NotImplementedError
+
     def simple_Asin(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 1:
@@ -3907,7 +4013,67 @@ class Brain(object):
                     return self.simple(Asinh(x / ConstI) * ConstI)
         return Asin(*args)
 
+    def simple_Atan(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            # todo: is_extended_complex; allow meromorphic argument (in particular, tan)
+            if self.is_complex(x):
+                if self.is_zero(x):
+                    return Expr(0)
+                if self.equal(x, Expr(1)):
+                    return Pi/4
+                if self.equal(x, Expr(-1)):
+                    return -(Pi/4)
+                if self.equal(x, ConstI):
+                    return ConstI * Infinity
+                if self.equal(x, -ConstI):
+                    return -(ConstI * Infinity)
+                try:
+                    v = self.complex_as_tangent(x)
+                    res = Pi * (v/Pi - Floor(Re(v)/Pi + Div(1,2)))
+                    correction = Cases(Tuple(Undefined, Element(v / Pi + Div(1, 2), ZZ)),
+                                       Tuple(Pi, And(Greater(Im(v), 0), Element(Re(v) / Pi + Div(1, 2), ZZ))),
+                                       Tuple(0, Otherwise))
+                    return self.simple(res + correction)
+                except NotImplementedError:
+                    pass
+                v = self.simple(x / ConstI)
+                if self.is_real(v):
+                    return Atanh(v) * ConstI
+            if x == Undefined:
+                return x
+            if self.is_infinity(x):
+                s = self.simple(Csgn(x))
+                if s == Undefined:
+                    return Undefined
+                return self.simple(Csgn(s) * (Pi / 2))
+        return Atan(*args)
 
+    def simple_Atanh(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, = args
+            if self.is_complex(x):
+                if self.is_zero(x):
+                    return Expr(0)
+                if self.equal(x, Expr(1)):
+                    return Infinity
+                if self.equal(x, Expr(-1)):
+                    return -Infinity
+                if self.equal(x, ConstI):
+                    return Pi/4 * ConstI
+                if self.equal(x, ConstI):
+                    return -(Pi/4) * ConstI
+                return self.simple(Atan(x / ConstI) * ConstI)
+            if x == Undefined:
+                return x
+            if self.is_infinity(x):
+                s = self.simple(Csgn(x / ConstI))
+                if s == Undefined:
+                    return Undefined
+                return self.simple(Csgn(s) * (Pi / 2) * ConstI)
+        return Atanh(*args)
 
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
@@ -4461,6 +4627,7 @@ class TestBrain(object):
         assert b.simple(Where(x*y, Def(x, 5), Def(y, x+1))) == Expr(30)
         assert b.simple(Where(f(3)*f(4), Def(f(x), x**2))) == Expr(144)
         assert b.simple(Where(x+y, Def([x,y], List(3,5)))) == Expr(8)
+        assert b.simple(Where(Where(x+y, Def(x, 3)), Def(x, 2))) == 3+y
 
     def test_fungrim(self):
         b = FungrimBrain()
@@ -4504,16 +4671,22 @@ class TestBrain(object):
                             x1 = x2 = Expr(0).n(as_arb=True)
                         if not x1.overlaps(x2):
                             raise ValueError
+        import random
         if 0:
-            N = 6   # slow
+            # slow
+            NA = -6
+            NB = 6
             MAX = 15
+            probab = 1.0
         else:
-            N = 3
+            NA = -3
+            NB = 4
             MAX = 7
-        for a in range(-N,N+1):
-            for b in range(-N,N+1):
-                for c in range(-N,N+1):
-                    if abs(a) + abs(b) + abs(c) > MAX:
+            probab = 0.2
+        for a in range(NA, NB):
+            for b in range(NA, NB):
+                for c in range(NA, NB):
+                    if abs(a) + abs(b) + abs(c) > MAX or random.random() > probab:
                         continue
                     print("2F1 test", a, b, c)
                     for z in [0, 1, Div(1,4), 4]:

@@ -1797,12 +1797,27 @@ documentify(Infinity,
     examples=[
     ("Infinity",
         "Positive infinity."),
+    ("-Infinity",
+        "Negative infinity."),
+    ("Exp(ConstI / 3) * Infinity",
+        "Infinity with a complex direction."),
+    ],
+    evaluation_examples=[
+        ("Tuple(Infinity + (3 + 4*ConstI), ConstI * Infinity - 5, 2 * ConstI * Infinity)", "Infinities absorb complex numbers"),
+        ("Tuple(Infinity + Infinity, Infinity * Infinity, (-Infinity) + (-Infinity))", "Arithmetic involving infinities is well-defined when the limits are unambiguous"),
+        ("Tuple(Infinity - Infinity, Infinity / Infinity, 0 * Infinity)", "Arithmetic involving infinities is undefined when the limits are ambiguous.")
     ])
 
 documentify(UnsignedInfinity,
     examples=[
     ("UnsignedInfinity",
-        "Unsigned infinity."),
+        "Unsigned infinity. Generally used to represent @@Limit(f(z), For(z, c))@@ for functions where @@Equal(Limit(Abs(f(z)), For(z, c)), Infinity)@@ but @@Limit(Sign(f(z)), For(z, c))@@ is undefined."),
+    ],
+    evaluation_examples=[
+        ("Div(1, 0)", "@UnsignedInfinity@ is the result of division by zero."),
+        ("Tuple(Abs(UnsignedInfinity), Sign(UnsignedInfinity))", "@UnsignedInfinity@ has infinite magnitude, but undefined sign."),
+        ("Tuple(Infinity * UnsignedInfinity, UnsignedInfinity * UnsignedInfinity)", "Arithmetic involving infinities is well-defined when the limits are unambiguous"),
+        ("Tuple(UnsignedInfinity + UnsignedInfinity, 0 * UnsignedInfinity)", "Arithmetic involving infinities is undefined when the limits are ambiguous.")
     ])
 
 documentify(ZZGreaterEqual,
@@ -2155,7 +2170,7 @@ documentify(MeromorphicDerivative,
     ("MeromorphicDerivative(f(z), For(z, z))",
         """Complex derivative, allowing poles. This operator is equivalent to @ComplexDerivative@,
          except that whereas @ComplexDerivative@ is undefined at a pole (where the function is not complex differentiable),
-         @ComplexBranchDerivative@ gives @UnsignedInfinity@ at a pole."""),
+         @MeromorphicDerivative@ gives @UnsignedInfinity@ at a pole."""),
     ])
 
 documentify(Integral,
