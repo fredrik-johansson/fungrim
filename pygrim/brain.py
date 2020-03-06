@@ -325,22 +325,25 @@ class Brain(object):
 
         """
         assert isinstance(assumptions, Expr)
-        variables = assumptions.free_variables()
-        old_inferences = self.inferences
-        old_variables = self.variables
-        old_cache = self.simple_cache
-        try:
-            self.inferences = old_inferences.copy()
-            self.variables = old_variables.union(variables)
-            self.simple_cache = {}
-            assumptions = frozenset(assumptions.head_args_flattened(And))
-            for asm in assumptions:
-                self.infer(asm)
+        if assumptions == True_:
             yield
-        finally:
-            self.inferences = old_inferences
-            self.variables = old_variables
-            self.simple_cache = old_cache
+        else:
+            variables = assumptions.free_variables()
+            old_inferences = self.inferences
+            old_variables = self.variables
+            old_cache = self.simple_cache
+            try:
+                self.inferences = old_inferences.copy()
+                self.variables = old_variables.union(variables)
+                self.simple_cache = {}
+                assumptions = frozenset(assumptions.head_args_flattened(And))
+                for asm in assumptions:
+                    self.infer(asm)
+                yield
+            finally:
+                self.inferences = old_inferences
+                self.variables = old_variables
+                self.simple_cache = old_cache
 
     def __repr__(self):
         s = ""
@@ -735,7 +738,7 @@ class Brain(object):
             return False
         return None
 
-    def is_real(self, x):
+    def _is_real(self, x):
         """
         Check if x is a real number.
         Return True, False, or None for unknown.
@@ -784,14 +787,35 @@ class Brain(object):
             return False
         return None
 
-    def is_complex(self, x):
+    def is_real(self, x):
+        # xxx
+        t = Element(x, RR, RR)
+        if t in self.simple_cache:
+            v = self.simple_cache[t]
+            if v == True_:
+                return True
+            if v == False_:
+                return False
+            return None
+        v = self._is_real(x)
+        if v == True:
+            self.simple_cache[t] = True_
+        elif v == False:
+            self.simple_cache[t] = False_
+        else:
+            self.simple_cache[t] = t
+        return v
+
+    def _is_complex(self, x):
         """
         Check if x is a complex number.
         Return True, False, or None for unknown.
         """
-        if self.is_real(x):  # todo: remove this?
+        if self.is_integer(x):
             return True
         if x == ConstI:
+            return True
+        if x in (Pi, ConstGamma, ConstE, ConstCatalan):
             return True
         if Element(x, CC) in self.inferences:
             return True
@@ -820,6 +844,25 @@ class Brain(object):
         if v is not None:
             return True
         return None
+
+    def is_complex(self, x):
+        # xxx
+        t = Element(x, CC, CC)
+        if t in self.simple_cache:
+            v = self.simple_cache[t]
+            if v == True_:
+                return True
+            if v == False_:
+                return False
+            return None
+        v = self._is_complex(x)
+        if v == True:
+            self.simple_cache[t] = True_
+        elif v == False:
+            self.simple_cache[t] = False_
+        else:
+            self.simple_cache[t] = t
+        return v
 
     # todo: identify different types; bools, tuples, sets, matrices, ...
     def equal(self, a, b):
@@ -1481,7 +1524,7 @@ class Brain(object):
                         rows.append([])
                         for jj in range(c, d+1):
                             # xxx
-                            val = elem.replace({i:Expr(ii), j:Expr(jj)})
+                            val = elem.replace({i:Expr(ii), j:Expr(jj)}, semantic=True)
                             val = self.evaluate_fmpq(val)
                             rows[-1].append(val)
                     return fmpq_mat(rows)
@@ -2614,7 +2657,7 @@ class Brain(object):
                         r = self.alg_to_expression(r)
                         if r is None:
                             return Zeros(*args)   # unable to express
-                        r_cond = cond.replace({var:r})
+                        r_cond = cond.replace({var:r}, semantic=True)
                         r_cond = self.simple(r_cond)
                         if r_cond == True_:
                             roots_expr.append(r)
@@ -2670,34 +2713,72 @@ class Brain(object):
             pass
         return SingularValues(A)
 
+    def simple_CongruentMod(self, *args):
+        n, r, m = args
+        # todo: evaluate mod !
+        n = self.simple(n)
+        r = self.simple(r)
+        m = self.simple(m)
+        if n.is_integer() and r.is_integer() and m.is_integer():
+            nv = int(n)
+            rv = int(r)
+            mv = int(m)
+            if mv == 0:
+                return False_
+            if (nv - rv) % mv == 0:
+                return True_
+            return False_
+
+        return CongruentMod(n, r, m)
+
     def simple_Sum(self, *args):
+        args = list(args)
         if len(args) == 2 or len(args) == 3:
             if len(args) == 2:
                 expr, forargs = args
                 cond = True_
             else:
                 expr, forargs, cond = args
+            # Sum(f(n), For(n, a, b)) or Sum(f(n), For(n, a, b), P(n))
             if forargs.head() == For and len(forargs.args()) == 3:
                 var, a, b = forargs.args()
                 a = self.simple(a)
                 b = self.simple(b)
+                cond = self.simple(cond)
+                # Sum must be empty if the condition is always false
+                if cond == False_:
+                    return Expr(0)
+                # Todo: when do we want to pre-simplify?
+                # with self.assuming(cond):
+                #     expr = self.simple(expr)
                 if a.is_integer() and b.is_integer():
                     a = int(a)
                     b = int(b)
-                    if b - a < 100:
+                    if b - a <= 100:
                         if cond == True_:
-                            terms = [expr.replace({var:i}) for i in range(a,b+1)]
+                            terms = [expr.replace({var:i}, semantic=True) for i in range(a,b+1)]
                         else:
                             terms = []
                             for i in range(a,b+1):
-                                include = self.simple(cond.replace({var:i}))
+                                include = self.simple(cond.replace({var:i}, semantic=True))
                                 if include == True_:
-                                    terms.append(expr.replace({var:i}))
+                                    term = expr.replace({var:i}, semantic=True)
+                                    terms.append(expr.replace({var:i}, semantic=True))
                                 elif include == False_:
                                     continue
                                 else:
-                                    return Sum(*args)
+                                    # todo: break if a large number of unknowns? (ugly)
+                                    term = expr.replace({var:i}, semantic=True)
+                                    notinclude = self.simple(Not(include))
+                                    terms.append(Cases(Tuple(term, include), Tuple(0, notinclude)))
                         return self.simple(Add(*terms))
+                # Possibly simplified if symbolic output
+                with self.assuming(cond):
+                    expr = self.simple(expr)
+                if cond == True_:
+                    args = [expr, For(var, a, b)]
+                else:
+                    args = [expr, For(var, a, b), cond]
         return Sum(*args)
 
     def simple_Where(self, *args):
@@ -2799,7 +2880,6 @@ class Brain(object):
         return RiemannZeta(*args)
 
     def simple_Cases(self, *args):
-        # todo: push new assumptions when simplifying cases!
         unknown = []
         for arg in args:
             val, cond = arg.args()
@@ -2809,11 +2889,22 @@ class Brain(object):
             if cond == False_:
                 continue
             unknown.append((val, cond))
-        if len(unknown) == 1:
-            if unknown[0][1] == Otherwise:
-                return self.simple(unknown[0][0])
-        unknown = [(self.simple(val), cond) for (val, cond) in unknown]
-        return Cases(*unknown)
+        otherwise_cond = None
+        unknown2 = []
+        for val, cond in unknown:
+            if cond == Otherwise:
+                if otherwise_cond is None:
+                    otherwise_cond = And(*(Not(cond) for (val, cond) in unknown if cond != Otherwise))
+                    otherwise_cond = self.simple(otherwise_cond)
+                with self.assuming(otherwise_cond):
+                    val = self.simple(val)
+            else:
+                with self.assuming(cond):
+                    val = self.simple(val)
+            unknown2.append((val, cond))
+        if len(unknown2) == 1 and unknown2[0][1] == Otherwise:
+            return unknown2[0][0]
+        return Cases(*unknown2)
 
     def simple_AiryAi(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -4149,7 +4240,7 @@ class Brain(object):
         for values in custom_cartesian(*base_sets):
             assignment = {var:val for (var,val) in zip(variables, values)}
             # todo: when the assumptions for the variables are pure domain statements with simple domains, we could skip the checks
-            ok = all(self.simple(a.replace(assignment)) == True_ for a in assumptions)
+            ok = all(self.simple(a.replace(assignment, semantic=True)) == True_ for a in assumptions)
             if count > max_candidates:
                 break
             count += 1
@@ -4628,6 +4719,13 @@ class TestBrain(object):
         assert b.simple(Where(f(3)*f(4), Def(f(x), x**2))) == Expr(144)
         assert b.simple(Where(x+y, Def([x,y], List(3,5)))) == Expr(8)
         assert b.simple(Where(Where(x+y, Def(x, 3)), Def(x, 2))) == 3+y
+
+    def test_Cases(self):
+        assert Cases(Tuple(x, Equal(2, 3)), Tuple(y, Equal(2, 2))).eval() == y
+        assert Cases(Tuple(x, Equal(2, 3)), Tuple(y, Equal(2, 4)), Tuple(z, Otherwise)).eval() == z
+        assert Cases(Tuple(x / x, NotEqual(x, 0)), Tuple(2, Equal(x, 0))).eval(Element(x, CC)) == Cases(Tuple(1, NotEqual(x, 0)), Tuple(2, Equal(x, 0)))
+        assert Cases(Tuple(x / x, NotEqual(x, 0)), Tuple(2, Equal(x, 0))).eval(Element(x, CC)) == Cases(Tuple(1, NotEqual(x, 0)), Tuple(2, Equal(x, 0)))
+        assert Cases(Tuple(3, Equal(x, 0)), Tuple(x / x, Otherwise)).eval(Element(x, CC)) == Cases(Tuple(3, Equal(x, 0)), Tuple(1, Otherwise))
 
     def test_fungrim(self):
         b = FungrimBrain()
