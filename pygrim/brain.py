@@ -4166,6 +4166,44 @@ class Brain(object):
                 return self.simple(Csgn(s) * (Pi / 2) * ConstI)
         return Atanh(*args)
 
+    def simple_IdentityMatrix(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            n,  = args
+            if self.is_integer(n):
+                n = int(n)
+                if n < 0:
+                    return Undefined
+                if n == 0:
+                    return Matrix([[]])
+                if n == 1:
+                    return Matrix([[1]])
+                if n == 2:
+                    return Matrix2x2(1, 0, 0, 1)
+                if 3 <= n <= 10:
+                    zero = Expr(0)
+                    one = Expr(1)
+                    return Matrix([[one if i == j else zero for j in range(n)] for i in range(n)])
+        return IdentityMatrix(*args)
+
+    def simple_ZeroMatrix(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            args = [args[0], args[0]]
+        if len(args) == 2:
+            m, n = args
+            if self.is_integer(n) and self.is_integer(m):
+                m = int(m)
+                n = int(n)
+                if m < 0 or n < 0:
+                    return Undefined
+                if n == 2 and m == 2:
+                    return Matrix2x2(0, 0, 0, 0)
+                elif m <= 10 and n <= 10:
+                    zero = Expr(0)
+                    row = List(*(zero for i in range(m)))
+                    return Matrix(List(*(row for j in range(n))))
+        return ZeroMatrix(*args)
 
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """

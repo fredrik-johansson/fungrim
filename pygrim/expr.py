@@ -1047,7 +1047,7 @@ Funs Functions MultivariateFunctions
 CartesianProduct CartesianPower
 Restriction MultivariateRestriction
 One Zero Characteristic
-Matrices GeneralLinearGroup SpecialLinearGroup IdentityMatrix
+Matrices GeneralLinearGroup SpecialLinearGroup IdentityMatrix ZeroMatrix
 Def Gen
 All Exists
 True_ False_

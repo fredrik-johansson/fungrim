@@ -155,6 +155,10 @@ def_Topic(
         "6ae250",
         "ad91ae",
     ),
+    Subsection("Transcendence"),
+    Entries(
+        "298bb1",
+    ),
     Subsection("Weight 2 series"),
     Entries(
         "cae067",
@@ -556,6 +560,12 @@ make_entry(ID("097efc"),
     Assumptions(Element(k, ZZGreaterEqual(2))),
     References("K. Ono and M. A. Papanikolas (2004). p-Adic Properties of Values of the Modular j-Function. In: Hashimoto K., Miyake K., Nakamura H. (eds) Galois Theory and Modular Forms. Developments in Mathematics, vol 11. Springer, Boston, MA, https://doi.org/10.1007/978-1-4613-0249-0_19",
     "S. Garthwaite, L. Long, H. Swisher, S. Treneer. Zeros of classical Eisenstein series and recent developments, Fields Communications Volume 60, WIN - Women In Numbers, Proceedings of the WIN Workshop, (2011), 251-263. http://math.oregonstate.edu/~swisherh/C1P.pdf"))
+
+make_entry(ID("298bb1"),
+    Formula(Implies(And(Equal(EisensteinE(2*k, tau), 0), NotElement(tau, Set(ConstI, Exp(2*Pi*ConstI/3)))), NotElement(tau, AlgebraicNumbers))),
+    Variables(tau, k),
+    Assumptions(And(Element(k, ZZGreaterEqual(2)), Element(tau, ModularGroupFundamentalDomain))),
+    References("https://doi.org/10.14992/00008713"))
 
 # todo: more distribution theorems?
 

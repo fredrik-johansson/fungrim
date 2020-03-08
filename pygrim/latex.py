@@ -63,11 +63,14 @@ def _latex(expr, **kwargs):
         return latex_conversion_functions[head](head, args, **kwargs)
 
     if head in subscript_latex_table:
-        assert len(args) in (0, 1)
-        if len(args) == 0:
+        num = len(args)
+        if num == 0:
             return subscript_latex_table[head]
-        else:
+        elif num == 1:
             return subscript_latex_table[head] + "_{" + latex(args[0], in_small=True) + "}"
+        else:
+            argstr = [arg.latex(in_small=True) for arg in args]
+            return subscript_latex_table[head] + "_{" + ", ".join(argstr) + "}"
 
     if head in subscript_pair_latex_table:
         assert len(args) == 2
@@ -179,6 +182,7 @@ subscript_latex_table = {
     ZZp: "\\mathbb{Z}",
     QQp: "\\mathbb{Q}",
     IdentityMatrix: "I",
+    ZeroMatrix: "0",
 }
 
 subscript_pair_latex_table = {
