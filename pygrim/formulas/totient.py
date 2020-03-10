@@ -46,6 +46,7 @@ def_Topic(
         "3f5711",
         "93a877",
         "efd378",
+        "91f156",
         "bb4ce0",
         "a08583",
         "08ff0b",
@@ -204,11 +205,16 @@ make_entry(ID("efd378"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
+make_entry(ID("91f156"),
+    Formula(Equal(Totient(n), Sum(Cases(Tuple(1, Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), For(k, 1, n)))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
 # todo: better markup for this kind of sum
 make_entry(ID("bb4ce0"),
     Formula(Equal(Totient(n), (2/n) * Sum(Cases(Tuple(k, Equal(GCD(n,k), 1)), Tuple(0, Otherwise)), For(k, 1, n)))),
     Variables(n),
-    Assumptions(Element(n, ZZGreaterEqual(1))))
+    Assumptions(Element(n, ZZGreaterEqual(2))))
 
 # todo: better markup for this kind of sum
 make_entry(ID("a08583"),

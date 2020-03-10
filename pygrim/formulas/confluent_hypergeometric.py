@@ -130,7 +130,7 @@ make_entry(ID("bb5d67"),
         C*Hypergeometric0F1Regularized(a,z) + D*z**(1-a)*Hypergeometric0F1Regularized(2-a,z)))),
     Variables(z, a, C, D),
     Assumptions(And(Element(a, CC), Element(z, CC), Element(C, CC), Element(D, CC),
-        Or(Equal(D, 0), NotEqual(z, 0), Element(1-a, ZZGreaterEqual(0))))))
+        Or(NotEqual(z, 0), Element(1-a, ZZGreaterEqual(0))))))
 
 make_entry(ID("c8fcc7"),
     Formula(Equal(HypergeometricUStar(a,b,z), z**a * HypergeometricU(a,b,z))),
@@ -166,7 +166,7 @@ make_entry(ID("18ef23"),
 make_entry(ID("2df3e3"),
     Formula(Equal(Hypergeometric0F1(a,z), Exp(-(2*Sqrt(z))) * Hypergeometric1F1(a-Div(1,2), 2*a-1, 4*Sqrt(z)))),
     Variables(a, z),
-    Assumptions(And(Element(a, CC), Element(z, CC), NotElement(a, ZZLessEqual(0)))))
+    Assumptions(And(Element(a, CC), Element(z, CC), NotElement(2*a, ZZLessEqual(1)))))
 
 make_entry(ID("325a0e"),
     Formula(Equal(Hypergeometric0F1Regularized(a,z), (-z)**((1-a)/2) * BesselJ(a-1, 2*Sqrt(-z)))),

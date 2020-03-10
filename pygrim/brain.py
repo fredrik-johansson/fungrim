@@ -99,6 +99,47 @@ def custom_cartesian(*lists):
                         d = N - i - j - k
                         if 0 <= a < A and 0 <= b < B and 0 <= c < C and 0 <= d < D:
                             yield lists[0][a], lists[1][b], lists[2][c], lists[3][d]
+    elif len(lists) == 5:
+        N = 0
+        A = len(lists[0])
+        B = len(lists[1])
+        C = len(lists[2])
+        D = len(lists[3])
+        E = len(lists[4])
+        for N in range(max(A,B,C,D,E)):
+            for i in range(N+1):
+                for j in range(N+1):
+                    for k in range(N+1):
+                        for l in range(N+1):
+                            a = i
+                            b = N - i
+                            c = N - i - j
+                            d = N - i - j - k
+                            e = N - i - j - k - l
+                            if 0 <= a < A and 0 <= b < B and 0 <= c < C and 0 <= d < D and 0 <= e < E:
+                                yield lists[0][a], lists[1][b], lists[2][c], lists[3][d], lists[4][d]
+    elif len(lists) == 6:
+        N = 0
+        A = len(lists[0])
+        B = len(lists[1])
+        C = len(lists[2])
+        D = len(lists[3])
+        E = len(lists[4])
+        F = len(lists[4])
+        for N in range(max(A,B,C,D,E,F)):
+            for i in range(N+1):
+                for j in range(N+1):
+                    for k in range(N+1):
+                        for l in range(N+1):
+                            for m in range(N+1):
+                                a = i
+                                b = N - i
+                                c = N - i - j
+                                d = N - i - j - k
+                                e = N - i - j - k - l
+                                f = N - i - j - k - l - m
+                                if 0 <= a < A and 0 <= b < B and 0 <= c < C and 0 <= d < D and 0 <= e < E and 0 <= f < F:
+                                    yield lists[0][a], lists[1][b], lists[2][c], lists[3][d], lists[4][d], lists[5][d]
     else:
         for v in itertools.product(*lists):
             yield v
@@ -170,6 +211,8 @@ def infer_domain(inferences, x, dom):
         add(x, AlgebraicNumbers)
     elif dom == HH:
         add(x, CC)
+        inferences.add(Greater(Im(x), 0))
+        inferences.add(Less(0, Im(x)))
     elif dom == PP:
         add(x, ZZGreaterEqual(2))
         add(x, ClosedOpenInterval(2, Infinity))
@@ -186,6 +229,10 @@ def infer_domain(inferences, x, dom):
         add(x, RR)
         add(x, CC)
         add(x, AlgebraicNumbers)
+        if dom.head() == ZZGreaterEqual:
+            n, = dom.args()
+            if n.is_integer():
+                inferences.add(GreaterEqual(x, n))
     elif dom.head() == OpenInterval:
         add(x, RR)
         add(x, CC)
@@ -756,6 +803,10 @@ class Brain(object):
         if x.head() in (Pos, Neg, Add, Sub, Mul, Exp, Sin, Cos):
             if all(self.is_real(arg) for arg in x.args()):
                 return True
+        if x.head() in (Floor, Ceil, Re, Im, Abs):
+            z, = x.args()
+            if self.is_complex(z):
+                return True
         if x.head() == Div:
             p, q = x.args()
             if self.is_real(p) and self.is_real(q) and self.is_not_zero(q):
@@ -837,6 +888,13 @@ class Brain(object):
         if x.head() == Log:
             arg, = x.args()
             if self.is_complex(arg) and self.is_not_zero(arg):
+                return True
+        if x.head() == DedekindEta:
+            tau, = x.args()
+            # improve...
+            if Element(tau, HH) in self.inferences:
+                return True
+            if self.is_complex(tau) and self.is_positive(self.simple(Im(tau))):
                 return True
         if self.is_infinity(x) or x == Undefined:
             return False
@@ -1020,6 +1078,14 @@ class Brain(object):
             return None
         if S == AlgebraicNumbers:
             return self.is_algebraic(x)
+        if S == SL2Z:
+            if x.head() == Matrix2x2:
+                a, b, c, d = x.args()
+                if a.is_integer() and b.is_integer() and c.is_integer() and d.is_integer():
+                    if int(a) * int(d) - int(b) * int(c) == 1:
+                        return True
+                    return False
+            return None
         head = S.head()
         if head == ZZGreaterEqual:
             a, = S.args()
@@ -1325,6 +1391,8 @@ class Brain(object):
                     return False_
                 if b == Infinity and a == -Infinity:
                     return False_
+            if self.is_zero(b) and self.is_positive(a):
+                return True_
         return GreaterEqual(*args)
 
     def simple_Greater(self, *args):
@@ -1635,13 +1703,12 @@ class Brain(object):
                     return alg.sec_pi(v)
                 elif head == Csc:
                     return alg.csc_pi(v)
-        else:
-            raise NotImplementedError
+        raise NotImplementedError
 
     def evaluate_alg_or_None(self, expr):
         try:
             return self.evaluate_alg(expr)
-        except (ValueError, NotImplementedError):
+        except (ValueError, NotImplementedError, ZeroDivisionError):
             return None
 
     def alg_to_expression(self, x):
@@ -1906,9 +1973,13 @@ class Brain(object):
                 elif not self.is_complex(term):
                     return Add(*terms)
             if infinities:
+                if infinities == [UnsignedInfinity]:
+                    return UnsignedInfinity
                 signs = [Sign(x) for x in infinities]
                 same = [self.simple(Equal(s, signs[0])) for s in signs[1:]]
                 if all(s == True_ for s in same):
+                    if signs[0] == Undefined:
+                        return UnsignedInfinity
                     return self.simple(Mul(signs[0], Infinity))
                 if False_ in same:
                     return Undefined
@@ -1965,7 +2036,7 @@ class Brain(object):
                                     if abs(c) == 1:
                                         e %= 2
                                     if c.height_bits() * e < 10000:
-                                        return fac, c ** e
+                                        return fac ** b, c ** e
                             return x, self._fmpz(1)
                         # todo: robustly standardize sign content of Add, Sub, Neg, ... ?
                         if x.head() == Neg:
@@ -2058,8 +2129,10 @@ class Brain(object):
         """
         if len(factors) == 0:
             return Expr(1)
-        if len(factors) == 1:
-            return self.simple(factors[0])
+        #if len(factors) == 1:
+        #    return self.simple(factors[0])
+        #print("BEGIN MUL", factors)
+
         # todo: we want to avoid recursive Mul simplifies if possible...
         factors = [self.simple(x) for x in factors]
         if not all(self.is_complex(x) for x in factors):
@@ -2126,11 +2199,13 @@ class Brain(object):
                         yield b, e
                 else:
                     yield x, Expr(1)
+
+        # iterate over all factors; extract rational numbers
         for b, e in iter_base_exp(factors):
             if b.is_integer() and e.is_integer():
                 bb = int(b)
                 ee = int(e)
-                if -2 <= ee <= 2 or bb == -1:
+                if -10000 <= ee <= 10000 or bb == -1:
                     if bb == -1:
                         if ee % 2:
                             prefactor = -prefactor
@@ -2145,17 +2220,39 @@ class Brain(object):
                 base_exp[b] = e
         factors = []
         den_factors = []
+
+        # simplify individual powers
         for b, e in base_exp.items():
-            # todo: simple_Pow here?
+
             e = self.simple(e)
             if b == ConstE:
                 if e == Expr(0):
-                    pass
-                elif e == Expr(1):
+                    continue
+                if e == Expr(1):
                     factors.append(b)
-                else:
+                    continue
+                v = self.simple(e / (Pi * ConstI))
+                try:
+                    v = self.evaluate_fmpq(v)
+                except NotImplementedError:
                     factors.append(Exp(e))
+                    continue
+                v /= 2
+                p = v.p
+                q = v.q
+                factors.append(self.simple_Exp_two_pi_i_k_n(p, q))
                 continue
+            if b == ConstI:
+                if e.is_integer():
+                    n = int(e) % 4
+                    if n == 1:
+                        factors.append(ConstI)
+                    if n == 2:
+                        prefactor = -prefactor
+                    if n == 3:
+                        factors.append(ConstI)
+                        prefactor = -prefactor
+                    continue
             if e.is_integer():
                 e = int(e)
                 if e == 0:
@@ -2175,6 +2272,7 @@ class Brain(object):
                 factors.append(Sqrt(b))
             else:
                 factors.append(Pow(b, e))
+
         if isinstance(prefactor, self._fmpq):
             prefactor_den = Expr(int(prefactor.q))
             prefactor = Expr(int(prefactor.p))
@@ -2182,7 +2280,7 @@ class Brain(object):
             prefactor = Expr(int(prefactor))
             prefactor_den = Expr(1)
         factors = sorted(factors, key=lambda x: (not self.is_real(x), self.complexity(x), str(x)))
-        den_factors = sorted(den_factors, key=lambda x: (self.is_real(x), self.complexity(x), str(x)))
+        den_factors = sorted(den_factors, key=lambda x: (not self.is_real(x), self.complexity(x), str(x)))
         if prefactor != Expr(1):
             factors = [prefactor] + factors
         if prefactor_den != Expr(1):
@@ -2235,8 +2333,9 @@ class Brain(object):
     def simple_Pow(self, x, y):
         x = self.simple(x)
         y = self.simple(y)
-        # todo: want to combine this with power simplification in Mul...
+
         if self.is_complex(x) and self.is_complex(y):
+
             if x.is_integer() and y.is_integer():
                 a = int(x)
                 b = int(y)
@@ -2253,24 +2352,13 @@ class Brain(object):
                     return Expr(0)
                 if self.is_negative(y):
                     return UnsignedInfinity
-        if x == ConstE:
-            v = self.simple(y / (Pi * ConstI))
-            try:
-                v = self.evaluate_fmpq(v)
-            except NotImplementedError:
-                return Exp(y)
-            v /= 2
-            p = v.p
-            q = v.q
-            return self.simple_Exp_two_pi_i_k_n(p, q)
 
-            # todo: maybe don't want this much ... ?
-            #v = self.simple(y / (Pi * ConstI / 120))
-            #if v.is_integer():
-            #    a = self.simple(Cos(v * Pi / 120))
-            #    b = self.simple(Sin(v * Pi / 120))
-            #    return self.simple(a + b * ConstI)
+            if self.is_not_zero(x) or self.is_positive(Re(y)):
+                return self.simple_Mul(Pow(x, y))
+
+        if x == ConstE:
             return Exp(y)
+
         return Pow(x, y)
 
     def simple_Exp(self, x):
@@ -2602,18 +2690,19 @@ class Brain(object):
             q, p, n = args
             if q.is_integer() and p.is_integer() and n.is_integer():
                 q = int(q)
-                p = int(p)
-                n = int(n)
-                from flint import dirichlet_char
-                try:
-                    char = dirichlet_char(q, p)
-                except (AssertionError, ValueError, OverflowError):
-                    return DirichletCharacter(*args)
-                a = char.chi_exponent(n)
-                if a is None:
-                    return Expr(0)
-                b = char.group().exponent()
-                return self.simple_Exp_two_pi_i_k_n(a, b)
+                if q <= 10**12:   # arb limitation
+                    p = int(p)
+                    n = int(n)
+                    from flint import dirichlet_char
+                    try:
+                        char = dirichlet_char(q, p)
+                    except (AssertionError, ValueError, OverflowError):
+                        return DirichletCharacter(*args)
+                    a = char.chi_exponent(n)
+                    if a is None:
+                        return Expr(0)
+                    b = char.group().exponent()
+                    return self.simple_Exp_two_pi_i_k_n(a, b)
         return DirichletCharacter(*args)
 
     def simple_Zeros(self, *args):
@@ -2669,7 +2758,60 @@ class Brain(object):
 
         return Zeros(*args)
 
+    def simple_BarnesG(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            z, = args
+            if z.is_integer():
+                n = int(z)
+                if n <= 0:
+                    return Expr(0)
+                if n <= 100:
+                    p = f = self._fmpz(1)
+                    for k in range(2, n-1):
+                        f *= k
+                        p *= f
+                    return Expr(p)
+            if self.is_complex(z):
+                try:
+                    v = self.evaluate_fmpq(z)
+                except NotImplementedError:
+                    v = None
+                if v is not None:
+                    if v.q in (2, 4) and abs(v) <= 20:
+                        n = v.floor()
+                        x = v - n
+                        if x == self._fmpq(1,2):
+                            g = 2**Div(1,24) * Exp(Div(1,8)) / (Pi**Div(1,4) * ConstGlaisher**Div(3,2))
+                        elif x == self._fmpq(1,4):
+                            g = Exp(Div(3,32) - ConstCatalan/(4*Pi)) / (ConstGlaisher**Div(9,8) * Gamma(Div(1,4))**Div(3,4))
+                        else:
+                            g = Exp(Div(3,32) + ConstCatalan/(4*Pi)) * Gamma(Div(1,4))**Div(1,4) / (2**Div(1,8) * Pi**Div(1,4) * ConstGlaisher**Div(9,8))
+                        if n >= 0:
+                            t = 1
+                            for k in range(1, n+1):
+                                t *= (x + k - 1)**(n-k)
+                            g = t * Gamma(x)**n * g
+                            return self.simple(g)
+                        else:
+                            t = 1
+                            n = -n
+                            for k in range(1, n+1):
+                                t *= (x - n + k - 1)**(n-k)
+                            g = g / (t * Gamma(x - n)**n)
+                            return self.simple(g)
+
+        return BarnesG(*args)
+
     def simple_Det(self, A):
+        if A.head() == IdentityMatrix:
+            n, = A.args()
+            if self.is_integer(n) and self.is_nonnegative(n):
+                return Expr(1)
+        if A.head() == HilbertMatrix:
+            n, = A.args()
+            if self.is_integer(n) and self.is_nonnegative(n):
+                return self.simple(BarnesG(n+1)**4 / BarnesG(2*n+1))
         try:
             mat = self.evaluate_fmpq_mat(A)
             return Expr(mat.det())
@@ -2728,7 +2870,27 @@ class Brain(object):
             if (nv - rv) % mv == 0:
                 return True_
             return False_
-
+        if n.head() == Matrix2x2 and r.head() == Matrix2x2 and m.is_integer():
+            mv = int(m)
+            if mv == 0:
+                return False_
+            xx = n.args()
+            yy = r.args()
+            if all(x.is_integer() for x in xx) and all(y.is_integer() for y in yy):
+                if all((int(xx[i]) - int(yy[i])) % mv == 0 for i in range(3)):
+                    return True_
+                return False_
+        if n.head() in (Tuple, List) and r.head() in (Tuple, List) and m.is_integer():
+            mv = int(m)
+            if mv == 0:
+                return False_
+            xx = n.args()
+            yy = r.args()
+            if len(xx) == len(yy):
+                if all(x.is_integer() for x in xx) and all(y.is_integer() for y in yy):
+                    if all((int(xx[i]) - int(yy[i])) % mv == 0 for i in range(len(xx))):
+                        return True_
+                    return False_
         return CongruentMod(n, r, m)
 
     def simple_Sum(self, *args):
@@ -2781,6 +2943,57 @@ class Brain(object):
                     args = [expr, For(var, a, b), cond]
         return Sum(*args)
 
+    # todo: unify with Sum?
+    def simple_Product(self, *args):
+        args = list(args)
+        if len(args) == 2 or len(args) == 3:
+            if len(args) == 2:
+                expr, forargs = args
+                cond = True_
+            else:
+                expr, forargs, cond = args
+            # Product(f(n), For(n, a, b)) or Product(f(n), For(n, a, b), P(n))
+            if forargs.head() == For and len(forargs.args()) == 3:
+                var, a, b = forargs.args()
+                a = self.simple(a)
+                b = self.simple(b)
+                cond = self.simple(cond)
+                # Product must be empty if the condition is always false
+                if cond == False_:
+                    return Expr(1)
+                # Todo: when do we want to pre-simplify?
+                # with self.assuming(cond):
+                #     expr = self.simple(expr)
+                if a.is_integer() and b.is_integer():
+                    a = int(a)
+                    b = int(b)
+                    if b - a <= 100:
+                        if cond == True_:
+                            terms = [expr.replace({var:i}, semantic=True) for i in range(a,b+1)]
+                        else:
+                            terms = []
+                            for i in range(a,b+1):
+                                include = self.simple(cond.replace({var:i}, semantic=True))
+                                if include == True_:
+                                    term = expr.replace({var:i}, semantic=True)
+                                    terms.append(expr.replace({var:i}, semantic=True))
+                                elif include == False_:
+                                    continue
+                                else:
+                                    # todo: break if a large number of unknowns? (ugly)
+                                    term = expr.replace({var:i}, semantic=True)
+                                    notinclude = self.simple(Not(include))
+                                    terms.append(Cases(Tuple(term, include), Tuple(0, notinclude)))
+                        return self.simple(Mul(*terms))
+                # Possibly simplified if symbolic output
+                with self.assuming(cond):
+                    expr = self.simple(expr)
+                if cond == True_:
+                    args = [expr, For(var, a, b)]
+                else:
+                    args = [expr, For(var, a, b), cond]
+        return Product(*args)
+
     def simple_Where(self, *args):
         expr = args[0]
         defs = list(args[1:])
@@ -2803,7 +3016,10 @@ class Brain(object):
             for i in range(len(defs)):
                 definition = defs[i]
                 assert definition.head() in (Def, Equal)
-                var, value = definition.args()
+                try:
+                    var, value = definition.args()
+                except ValueError:
+                    raise NotImplementedError
                 value = self.simple(value)
                 # normal assignment
                 if var.is_symbol():
@@ -3039,7 +3255,7 @@ class Brain(object):
                             (Expr(3), Div(1,4)) : 28*RiemannZeta(3) + Pi**3,
                             (Expr(3), Div(3,4)) : 28*RiemannZeta(3) - Pi**3,
                             (Expr(3), Div(1,6)) : 91*RiemannZeta(3) + 2*Sqrt(3)*Pi**3,
-                            (Expr(3), Div(5,6)) : 28*RiemannZeta(3) - 2*Sqrt(3)*Pi**3}
+                            (Expr(3), Div(5,6)) : 91*RiemannZeta(3) - 2*Sqrt(3)*Pi**3}
                     for sval, aval in bval:
                         if s == sval:
                             v = self.simple(a - aval)
@@ -3801,6 +4017,94 @@ class Brain(object):
                     return val
         return ModularJ(*args)
 
+    def simple_KroneckerDelta(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            x, y = args
+            v = self.equal(x, y)
+            if x == True:
+                return Expr(1)
+            if x == False:
+                return Expr(0)
+        return KroneckerDelta(*args)
+
+    def simple_Totient(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            n, = args
+            if n.is_integer():
+                n = abs(int(n))
+                # todo: factor limit
+                if n < 2**128:
+                    return Expr(self._fmpz(n).euler_phi())
+        return Totient(*args)
+
+    def simple_DivisorSigma(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            k, n = args
+            if n.is_integer() and n.is_integer():
+                n = abs(int(n))
+                k = int(k)
+                # todo: factor limit
+                if n < 2**128 and 0 <= abs(k) <= 100:
+                    return Expr(self._fmpz(n).divisor_sigma(k))
+        return DivisorSigma(*args)
+
+    def simple_Divides(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            d, n = args
+            if d.is_integer() and n.is_integer():
+                d = int(d)
+                n = int(n)
+                if d == 0:
+                    return False_
+                if n % d == 0:
+                    return True_
+                else:
+                    return False_
+        return Divides(*args)
+
+    def simple_GCD(self, *args):
+        args = [self.simple(arg) for arg in args]
+        # todo: symbolic simplficiations, early abort
+        v = self._fmpz(0)
+        try:
+            for arg in args:
+                if arg.is_integer():
+                    v = v.gcd(int(arg))
+                else:
+                    raise NotImplementedError
+            return Expr(v)
+        except NotImplementedError:
+            pass
+        return GCD(*args)
+
+    def simple_LCM(self, *args):
+        args = [self.simple(arg) for arg in args]
+        # todo: symbolic simplficiations, early abort
+        v = self._fmpz(1)
+        try:
+            for arg in args:
+                if arg.is_integer():
+                    v = v.lcm(int(arg))
+                else:
+                    raise NotImplementedError
+            return Expr(v)
+        except NotImplementedError:
+            pass
+        return LCM(*args)
+
+    def simple_DedekindSum(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            n, k = args
+            if n.is_integer() and k.is_integer():
+                v = self._fmpq.dedekind_sum(int(n), int(k))
+                return Expr(v)
+        return DedekindSum(*args)
+
     def simple_DedekindEtaEpsilon(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 4:
@@ -3851,7 +4155,7 @@ class Brain(object):
             try:
                 v = self.evaluate_alg(tau)
                 v, transform = v.reduce_sl2z(v)
-            except ValueError:
+            except (ValueError, NotImplementedError):
                 v = None
             if v is not None and v.degree() == 2:
                 a, b, c = v.as_quadratic()
@@ -3894,7 +4198,7 @@ class Brain(object):
             try:
                 v = self.evaluate_alg(tau)
                 v, transform = v.reduce_sl2z(v)
-            except ValueError:
+            except (ValueError, NotImplementedError):
                 v = None
             if v is not None and v.degree() == 2:
                 a, b, c = v.as_quadratic()
@@ -4064,7 +4368,7 @@ class Brain(object):
                 from .algebraic import alg
                 # todo: should set the arb precision here
                 v = alg.guess(v, deg=1)
-                if v is not None and v.degree() == 1:
+                if v is not None and v.degree() == 1 and abs(2*v) < 1:
                     v = v.fmpq()
                     if v.q <= 120:
                         x_alg = self.evaluate_alg(x)
@@ -4205,6 +4509,27 @@ class Brain(object):
                     return Matrix(List(*(row for j in range(n))))
         return ZeroMatrix(*args)
 
+    def simple_LambertWPuiseuxCoefficient(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            n, = args
+            if n.is_integer():
+                n = int(n)
+                if 0 <= n <= 10:
+                    v = [(-1,1),
+                    (1,1),
+                    (-1,3),
+                    (11,72),
+                    (-43,540),
+                    (769,17280),
+                    (-221,8505),
+                    (680863,43545600),
+                    (-1963,204120),
+                    (226287557,37623398400),
+                    (-5776369, 1515591000)][n]
+                    return Expr(self._fmpq(*v))
+        return LambertWPuiseuxCoefficient(*args)
+
     def some_values(self, variables, assumptions, num=10, as_dict=False, max_candidates=100000):
         """
         Attempt to generate values satisfying given assumptions (constraints).
@@ -4272,6 +4597,14 @@ class Brain(object):
                             base_sets[var] = some_integers
                         elif S.head() in (ClosedInterval, OpenInterval, OpenClosedInterval, ClosedOpenInterval):
                             base_sets[var] = some_extended_reals
+        # structural domain statements (todo)
+        for asm in assumptions:
+            if asm.head() == Element:
+                x, S = asm.args()
+                if S == SL2Z and x.head() == Matrix2x2:
+                    for ak in x.args():
+                        if ak in variables:
+                            base_sets[ak] = some_integers
         base_sets = [base_sets[var] for var in variables]
         found = 0
         count = 0

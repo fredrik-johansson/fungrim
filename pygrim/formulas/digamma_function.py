@@ -783,17 +783,17 @@ make_entry(ID("1e47db"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("458a97"),
-    Formula(Equal(Sum(DigammaFunction(k) * Exp(2*Pi*r*k*ConstI/n), For(k, 1, n)), n*Log(1-Exp(2*Pi*r*ConstI/n)))),
+    Formula(Equal(Sum(DigammaFunction(k/n) * Exp(2*Pi*r*k*ConstI/n), For(k, 1, n)), n*Log(1-Exp(2*Pi*r*ConstI/n)))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("739819"),
-    Formula(Equal(Sum(DigammaFunction(k) * Cos(2*Pi*r*k/n), For(k, 1, n)), n*Log(2*Sin(Pi*r/n)))),
+    Formula(Equal(Sum(DigammaFunction(k/n) * Cos(2*Pi*r*k/n), For(k, 1, n)), n*Log(2*Sin(Pi*r/n)))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 
 make_entry(ID("bb9eb6"),
-    Formula(Equal(Sum(DigammaFunction(k) * Sin(2*Pi*r*k/n), For(k, 1, n)), Pi*(r-n/2))),
+    Formula(Equal(Sum(DigammaFunction(k/n) * Sin(2*Pi*r*k/n), For(k, 1, n)), Pi*(r-n/2))),
     Variables(r, n),
     Assumptions(And(Element(n, ZZGreaterEqual(2)), Element(r, Range(1, n-1)))))
 

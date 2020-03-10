@@ -324,20 +324,20 @@ class ArbNumericalEvaluation(object):
             raise ArbFiniteError
 
         if head in (BesselJ, BesselI, BesselY, BesselK):
-            assert len(args) == 2
-            a, z = [self.eval(arg, **kwargs) for arg in args]
-            z = acb(z)
-            if head == BesselJ:
-                v = z.bessel_j(a)
-            elif head == BesselI:
-                v = z.bessel_i(a)
-            elif head == BesselY:
-                v = z.bessel_y(a)
-            else:
-                v = z.bessel_k(a)
-            if v.is_finite():
-                return v
-            raise ArbFiniteError
+            if len(args) == 2:
+                a, z = [self.eval(arg, **kwargs) for arg in args]
+                z = acb(z)
+                if head == BesselJ:
+                    v = z.bessel_j(a)
+                elif head == BesselI:
+                    v = z.bessel_i(a)
+                elif head == BesselY:
+                    v = z.bessel_y(a)
+                else:
+                    v = z.bessel_k(a)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
 
         if head in (Hypergeometric0F1, Hypergeometric0F1Regularized):
             assert len(args) == 2
@@ -499,11 +499,12 @@ class ArbNumericalEvaluation(object):
                     q = q._integer
                     l = l._integer
                     n = n._integer
-                    try:
-                        chi = self.flint.dirichlet_char(q, l)
-                        return chi(n)
-                    except (AssertionError, ValueError):
-                        pass
+                    if q <= 10**12:   # arb limitation
+                        try:
+                            chi = self.flint.dirichlet_char(q, l)
+                            return chi(n)
+                        except (AssertionError, ValueError):
+                            pass
 
         if head == DirichletL:
             if len(args) == 2:

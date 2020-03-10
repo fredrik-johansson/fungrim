@@ -1000,10 +1000,12 @@ class Expr(object):
         count_true = 0
         count_false = 0
         count_unknown = 0
+        import sys
         for assignment in b.some_values(variables, assumptions, num=num, as_dict=True):
-            v = self.replace(assignment)
+            v = self.replace(assignment, semantic=True)
             if verbose:
                 print(assignment, "   ...  ", end="")
+                sys.stdout.flush()
             v = v.simple()
             count += 1
             if v == False_:

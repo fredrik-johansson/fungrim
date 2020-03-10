@@ -518,10 +518,7 @@ make_entry(ID("afbd22"),
 make_entry(ID("86bc7d"),
     Formula(Equal(BesselI(nu, z), z**nu * (ConstI*z)**(-nu) * BesselJ(nu, ConstI*z))),
     Variables(nu, z),
-    Assumptions(
-        And(Element(nu, ZZGreaterEqual(0)), Element(z, CC)),
-        And(Element(nu, CC), Element(z, SetMinus(CC, Set(0))))
-    ))
+    Assumptions(And(Element(nu, CC), Element(z, CC), Or(NotEqual(z, 0), Equal(nu, 0)))))
 
 make_entry(ID("15bbb1"),
     Formula(Equal(BesselI(n, z), ConstI**(-n) * BesselJ(n, ConstI*z))),

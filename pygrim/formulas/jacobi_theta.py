@@ -1394,7 +1394,7 @@ make_entry(ID("a222ed"),
 make_entry(ID("37e644"),
     Formula(Equal(ComplexDerivative(JacobiTheta(j,z,tau,s), For(tau, tau, r)), (1/(4*Pi*ConstI)**r) * (JacobiTheta(j,z,tau,2*r+s)))),
     Variables(j, z, tau, r, s),
-    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0), Element(s, ZZGreaterEqual(0))))))
+    Assumptions(And(Element(j, Set(1, 2, 3, 4)), Element(z, CC), Element(tau, HH), Element(r, ZZGreaterEqual(0)), Element(s, ZZGreaterEqual(0)))))
 
 # Heat equation
 

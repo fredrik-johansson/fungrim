@@ -338,12 +338,13 @@ make_entry(ID("0983d1"),
         Tuple(15, Div(103663334225097487,234281684403486720000), Decimal("0.000442473061814620909930207608585")),
     )))
 
-# todo: semantic definition of alpha_?
 make_entry(ID("d37d0f"),
     Formula(Where(Equal(LambertWPuiseuxCoefficient(k),
-        ((k-1)/(k+1))*(LambertWPuiseuxCoefficient(k-2)/2 + Subscript(alpha, k-2)/4) - Subscript(alpha,k)/2 - LambertWPuiseuxCoefficient(k-1)/(k+1)),
-        Def(alpha_(0), 2), Def(alpha_(1), -1),
-        Equal(alpha_(k), Sum(LambertWPuiseuxCoefficient(j)*LambertWPuiseuxCoefficient(k+1-j), For(j, 2, k-1))))),
+        ((k-1)/(k+1))*(LambertWPuiseuxCoefficient(k-2)/2 + alpha_(k-2)/4) - alpha_(k)/2 - LambertWPuiseuxCoefficient(k-1)/(k+1)),
+        Def(alpha_(k), 
+            Cases(Tuple(2, Equal(k, 0)),
+                  Tuple(-1, Equal(k, 1)),
+                  Tuple(Sum(LambertWPuiseuxCoefficient(j)*LambertWPuiseuxCoefficient(k+1-j), For(j, 2, k-1)), Otherwise))))),
     Variables(k),
     Assumptions(Element(k, ZZGreaterEqual(2))))
 

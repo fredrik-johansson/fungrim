@@ -192,8 +192,8 @@ make_entry(ID("9ee8bc"),
     Formula(Equal(RiemannZeta(s), 2 * (2*Pi)**(s-1) * Sin(Pi*s/2) * Gamma(1-s) * RiemannZeta(1-s))),
     Variables(s),
     Assumptions(
-        And(Element(s, CC), NotElement(s, ZZGreaterEqual(1))),
-        And(Element(s, PowerSeries(CC, SerX)), NotElement(s, ZZGreaterEqual(1))),
+        And(Element(s, CC), NotElement(s, ZZGreaterEqual(0))),
+        And(Element(s, PowerSeries(CC, SerX)), NotElement(s, ZZGreaterEqual(0))),
     ))
 
 make_entry(ID("7cb17f"),
