@@ -2364,6 +2364,17 @@ class Brain(object):
     def simple_Exp(self, x):
         return self.simple_Pow(ConstE, x)
 
+
+    def simple_Log(self, x):
+        x = self.simple(x)
+        if self.is_zero(x):
+            return -Infinity
+        if self.equal(x, Expr(1)):
+            return Expr(0)
+        if self.equal(x, ConstE):
+            return Expr(1)
+        return Log(x)
+
     def simple_Sin(self, x):
         x = self.simple(x)
         if x == Expr(0):
@@ -3892,9 +3903,16 @@ class Brain(object):
             if val_zero != Expr(1):
                 zero_cond = True
 
+        if rc - ra - rb == 0:
+            true_val_one = self.simple(Sign(Gamma(rc)) / (Sign(Gamma(ra)) * Sign(Gamma(rb))) * Infinity)
+        elif rc - ra - rb < 0:
+            true_val_one = UnsignedInfinity
+        else:
+            true_val_one = Undefined
+
         if not_one != True_:
             val_one = v.replace({x:Expr(1)}).simple()
-            if not self.is_complex(val_one):
+            if not self.equal(val_one, true_val_one):
                 one_cond = True
 
         v = v.replace({x:z})
@@ -3902,13 +3920,13 @@ class Brain(object):
         if zero_cond and one_cond:
             v = Cases(Tuple(v, NotElement(z, Set(0, 1))),
                       Tuple(1, Equal(z, 0)),
-                      Tuple(Hypergeometric2F1(a, b, c, 1), Equal(z, 1)))
+                      Tuple(true_val_one, Equal(z, 1)))
         elif zero_cond:
             v = Cases(Tuple(v, NotEqual(z, 0)),
                       Tuple(1, Equal(z, 0)))
         elif one_cond:
             v = Cases(Tuple(v, NotEqual(z, 1)),
-                      Tuple(Hypergeometric2F1(a, b, c, 1), Equal(z, 1)))
+                      Tuple(true_val_one, Equal(z, 1)))
 
         if regularized:
             v /= Gamma(c)
@@ -4160,13 +4178,16 @@ class Brain(object):
             if v is not None and v.degree() == 2:
                 a, b, c = v.as_quadratic()
                 h = self._fmpq(1,2)
+                h3 = self._fmpq(1,3)
                 # http://mathworld.wolfram.com/EllipticLambdaFunction.html
+                # -163: jjj's fxtbook
                 # Todo: fill in more values
+                x11 = (17+3*Sqrt(33))**Div(1,3)
+                T163 = (1+557403*Sqrt(489))**Div(1,3)
                 modlamtab = {
                     (0, 1, -1) : Expr(1)/2,
-                    (-h, h, -3) : -self.simple_Exp_two_pi_i_k_n(1, 3),
-                    (0, 2, -1) : 17 - 12*Sqrt(2),
                     (0, 1, -2) : (Sqrt(2) - 1)**2,
+                    (0, 2, -1) : 17 - 12*Sqrt(2),
                     (0, 1, -3) : ((Sqrt(3)-1)**2/8),
                     (0, 1, -5) : (Div(1,2)-Sqrt(Sqrt(5)-2)),
                     (0, 1, -6) : (2-Sqrt(3))**2*(Sqrt(3)-Sqrt(2))**2,
@@ -4174,20 +4195,39 @@ class Brain(object):
                     (0, 2, -2) : ((1+Sqrt(2)-Sqrt(2*Sqrt(2)+2))**4),
                     (0, 3, -1) : ((Sqrt(2)-3**Div(1,4))**2*(Sqrt(3)-1)**2/4),
                     (0, 1, -10) : ((Sqrt(10)-3)**2*(Sqrt(2)-1)**4),
-                    (0, 2, -3) : (Sqrt(3)-Sqrt(2))**4 * (Sqrt(2)-1)**4,
-                    (0, h, -6) : 1 - (2-Sqrt(3))**2*(Sqrt(2)+Sqrt(3))**2,
+                    (0, 2, -3)  : (Sqrt(3)-Sqrt(2))**4 * (Sqrt(2)-1)**4,
+                    (0, 2, -3)  : (Sqrt(3)-Sqrt(2))**4 * (Sqrt(2)-1)**4,
+                    (0, 1, -13) : (Sqrt(5*Sqrt(13)-17) - Sqrt(19-5*Sqrt(13)))**2 / 4,
+                    (0, 1, -14) : (-11-8*Sqrt(2)-2*(Sqrt(2)+2)*Sqrt(5+4*Sqrt(2))+Sqrt(11+8*Sqrt(2))*(2+2*Sqrt(2)+Sqrt(2)*Sqrt(5+4*Sqrt(2))))**2,
+                    (0, 1, -15) : (3-Sqrt(5))**2*(Sqrt(5)-Sqrt(3))**2*(2-Sqrt(3))**2/128,
+                    (0, 4, -1)  : (33+24*Sqrt(2)-4*Sqrt(140+99*Sqrt(2)))**2,
+                    (0, 1, -18) : (Sqrt(2)-1)**6 * (2-Sqrt(3))**6,
+                    (0, 1, -22) : (3*Sqrt(11)-7*Sqrt(2))**2 * (10-3*Sqrt(11))**2,
+                    (0, 1, -30) : (Sqrt(3)-Sqrt(2))**4 * (2-Sqrt(3))**2 * (Sqrt(6)-Sqrt(5))**2 * (4-Sqrt(15))**2,
+                    (0, 1, -34) : (Sqrt(2)-1)**4 * (3*Sqrt(2)-Sqrt(17))**2 * (Sqrt(297+72*Sqrt(17))-Sqrt(296+72*Sqrt(17)))**2,
+                    (0, 1, -42) : (Sqrt(2)-1)**4 * (2-Sqrt(3))**4 * (Sqrt(7)-Sqrt(6))**2 * (8-3*Sqrt(7))**2,
+                    (0, 1, -58) : (13*Sqrt(58)-99)**2 * (Sqrt(2)-1)**12,
+                    (0, 1, -163) : (2 - Sqrt(3 + 80040*T163 - 2*80040**2/(3*T163)))/4,
+                    (0, 1, -210) : (Sqrt(2)-1)**4*(2-Sqrt(3))**2*(Sqrt(7)-Sqrt(6))**4*(8-3*Sqrt(7))**2*(Sqrt(10)-3)**4*(4-Sqrt(15))**4*(Sqrt(15)-Sqrt(14))**2*(6-Sqrt(35))**2,
+                    (-h, h, -3) : -self.simple_Exp_two_pi_i_k_n(1, 3),
+                    (0, h, -6)  : 1 - (2-Sqrt(3))**2*(Sqrt(2)+Sqrt(3))**2,
                     (0, h, -10) : 1 - (1+Sqrt(2))**4*(Sqrt(10)-3)**2,
+                    (0, h, -58) : 1 - (13*Sqrt(58)-99)**2 * (Sqrt(2)+1)**12,
+                    (0, 2*h3, -3) : (833 + 588*Sqrt(2) - 480*Sqrt(3) - 340*Sqrt(6)),
+                    # (0, 1, -11) : (Sqrt(1+2*x11-4/x11) - Sqrt(11+2*x11-4/x11))**2 / 24,  todo: incorrect in mathworld?
+                    # (0, h3, -15) : (8 + Sqrt(3*(23-7*Sqrt(5))/2))/16,   todo: incorrect in mathworld?
                 }
                 val = modlamtab.get((a, b, c))
-                if val is not None:
-                    transform = [n%2 for n in transform]
-                    if transform == [1, 0, 0, 1]: val = val
-                    if transform == [0, 1, 1, 0]: val = 1-val
-                    if transform == [1, 0, 1, 1]: val = 1/val
-                    if transform == [0, 1, 1, 1]: val = 1/(1-val)
-                    if transform == [1, 1, 1, 0]: val = 1-1/val
-                    if transform == [1, 1, 0, 1]: val = val/(val-1)
-                    return self.simple(val)
+                if val is None:
+                    val = ModularLambda(self.simple(a + b*Sqrt(c)))
+                transform = [n%2 for n in transform]
+                if transform == [1, 0, 0, 1]: val = val
+                if transform == [0, 1, 1, 0]: val = 1-val
+                if transform == [1, 0, 1, 1]: val = 1/val
+                if transform == [0, 1, 1, 1]: val = 1/(1-val)
+                if transform == [1, 1, 1, 0]: val = 1-1/val
+                if transform == [1, 1, 0, 1]: val = val/(val-1)
+                return self.simple(val)
 
         return ModularLambda(*args)
 

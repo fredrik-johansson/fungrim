@@ -77,6 +77,7 @@ def_Topic(
     Entries(
         "7af83f",
         "23961e",
+        "c2e919",
     ),
     Section("Related topics"),
     SeeTopics("Partition function"),
@@ -289,4 +290,8 @@ make_entry(ID("23961e"),
     Variables(n,k),
     Assumptions(And(Element(n, ZZ), Element(k, ZZ), Greater(k, 0), Equal(GCD(n, k), 1))))
 
+make_entry(ID("c2e919"),
+    Formula(Equal(DedekindSum(n,k), Where(Sum(Q(r/k)*Q(n*r/k), For(r, 1, k-1)), Def(Q(x), Cases(Tuple(x-Floor(x)-Div(1,2), NotElement(x, ZZ)), Tuple(0, Element(x, ZZ))))))),
+    Variables(n,k),
+    Assumptions(And(Element(n, ZZ), Element(k, ZZ))))
 

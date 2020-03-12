@@ -928,7 +928,7 @@ class Expr(object):
             >>> Expr(1 + x + 1).simple()
             Add(Add(1, x), 1)
 
-        Providing assmptions permits simplification:
+        Providing assumptions permits simplification:
 
             >>> Expr(1 + x + 1).simple(Element(x, CC))
             Add(2, x)
@@ -947,7 +947,18 @@ class Expr(object):
     def eval(self, *args, **kwargs):
         return self.simple(*args, **kwargs)
 
-    def test(self, variables, assumptions=None, num=100, verbose=True):
+    def rewrite_fungrim(self, entry_id, assumptions=None, variables=None, recursive=True):
+        # todo: combine with other code?
+        from .brain import Brain
+        assert (assumptions is None or isinstance(assumptions, Expr))
+        if variables is None:
+            variables = self.free_variables()
+            if assumptions is not None:
+                variables = variables.union(assumptions.free_variables())
+        b = Brain(variables=variables, assumptions=assumptions)
+        return b.rewrite_fungrim(self, entry_id, recursive=recursive)
+
+    def test(self, variables, assumptions=None, num=100, verbose=True, raising=True):
         """
         Test that this formula holds for variables satisfying the given
         assumptions, by assigning random values to the listed
@@ -970,59 +981,62 @@ class Expr(object):
 
         Valid assumptions:
         
-            >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, RR), GreaterEqual(x, 0)))
+            >>> _ = Equal(Sqrt(x**2), x).test([x], And(Element(x, RR), GreaterEqual(x, 0)))
             {x: Div(1, 2)}    ...  True
             ...
             Passed 69 instances (68 True, 1 Unknown, 0 False)
 
-            >>> Equal(Sqrt(x**2), x).test([x], And(Element(x, CC), Or(Greater(Re(x), 0), And(Equal(Re(x), 0), Greater(Im(x), 0)))))
+            >>> _ = Equal(Sqrt(x**2), x).test([x], And(Element(x, CC), Or(Greater(Re(x), 0), And(Equal(Re(x), 0), Greater(Im(x), 0)))))
             {x: Div(1, 2)}    ...  True
             ...
             Passed 91 instances (85 True, 6 Unknown, 0 False)
 
         """
+        info = {"True": 0, "Unknown": 0, "False": 0}
         if len(variables) == 0:
             v = self.simple()
             if v == False_:
                 if verbose:
                     print("False")
-                raise ValueError
+                if raising:
+                    raise ValueError
+                info["False"] += 1
             elif v == True_:
                 if verbose:
                     print("True")
+                info["True"] += 1
             else:
                 if verbose:
                     print("Unknown")
-            return
-        from .brain import Brain
-        b = Brain()
-        count = 0
-        count_true = 0
-        count_false = 0
-        count_unknown = 0
-        import sys
-        for assignment in b.some_values(variables, assumptions, num=num, as_dict=True):
-            v = self.replace(assignment, semantic=True)
-            if verbose:
-                print(assignment, "   ...  ", end="")
-                sys.stdout.flush()
-            v = v.simple()
-            count += 1
-            if v == False_:
+                info["Unknown"] += 1
+        else:
+            from .brain import Brain
+            b = Brain()
+            import sys
+            for assignment in b.some_values(variables, assumptions, num=num, as_dict=True):
+                v = self.replace(assignment, semantic=True)
                 if verbose:
-                    print("False")
-                count_false += 1
-                raise ValueError
-            elif v == True_:
-                if verbose:
-                    print("True")
-                count_true += 1
-            else:
-                if verbose:
-                    print("Unknown")
-                count_unknown += 1
+                    print(assignment, "   ...  ", end="")
+                    sys.stdout.flush()
+                v = v.simple()
+                if v == False_:
+                    if verbose:
+                        print("False")
+                    info["False"] += 1
+                    if raising:
+                        raise ValueError
+                elif v == True_:
+                    if verbose:
+                        print("True")
+                    info["True"] += 1
+                else:
+                    if verbose:
+                        print("Unknown")
+                    info["Unknown"] += 1
+        info["Total"] = info["True"] + info["False"] + info["Unknown"]
         if verbose:
-            print("Passed", count, "instances (%i True, %i Unknown, %i False)" % (count_true, count_unknown, count_false))
+            print("Passed", info["True"] + info["False"], "instances (%i True, %i Unknown, %i False)" % (info["True"], info["Unknown"], info["False"]))
+        return info
 
 all_builtins = []
 all_builtins_set = set()

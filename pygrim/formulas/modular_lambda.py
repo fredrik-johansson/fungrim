@@ -12,6 +12,7 @@ def_Topic(
     Section("Illustrations"),
     Entries(
         "f0981b",
+        "fc6cf6",
     ),
     Section("Domain"),
     Entries(
@@ -116,6 +117,11 @@ make_entry(ID("6c6204"),
 make_entry(ID("f0981b"),
     Image(Description("X-ray of", ModularLambda(tau), "on", Element(tau, ClosedInterval(-Div(3,2),Div(3,2)) + ClosedInterval(0,2)*ConstI), "with", ModularLambdaFundamentalDomain, "highlighted"),
         ImageSource("xray_modular_lambda")),
+    description_xray)
+
+make_entry(ID("fc6cf6"),
+    Image(Description("Plot of", ModularLambda(ConstI*x), "on", Element(x, ClosedInterval(0,4))),
+        ImageSource("plot_modular_lambda")),
     description_xray)
 
 # Domain

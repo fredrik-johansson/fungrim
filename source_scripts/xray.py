@@ -286,6 +286,8 @@ def plots(outdir):
 
     directory[0] = outdir
 
+    curveplot([lambda x: acb(x*1j).modular_lambda().real], (0,4), yayb=(-0.1,1.1), N=400, filename="modular_lambda", xout=0.1, yout=0.1, ytks=([0,0.5,1],), xtks=([0,2,4],))
+
     curveplot([lambda x: fp.exp(x)], (-4,4), yayb=(-1,7), N=400, filename="exp", xout=0.1, yout=0.1, ytks=([0,2,4,6],), xtks=([-4,-2,0,2,4],))
 
     curveplot([lambda x: fp.gamma(x)], (-4,4), yayb=(-6,6), N=400, filename="gamma", xout=0.1, yout=0.1, singularities=[-4,-3,-2,-1,0],

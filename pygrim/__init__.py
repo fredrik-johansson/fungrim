@@ -33,19 +33,30 @@ def test_fungrim_entry(id, num=100):
         assumptions = assumptions.args()[0]
     print("Variables: ", variables)
     print("Assumptions: ", assumptions)
-    formula.test(variables, assumptions, num=num)
+    return formula.test(variables, assumptions, num=num)
 
-def test_fungrim(nstart=0, filter=None):
+def test_fungrim(nstart=0, nend=10**9, num=100, filter=None):
     from .formulas import entries_dict
+    effective = 0
+    ineffective = 0
+    truly_effective = 0
     for n, eid in enumerate(sorted(entries_dict)):
-        if n >= nstart:
+        if n >= nstart and n <= nend:
             entry = entries_dict[eid]
             if filter is not None:
                 if set(entry.symbols()).isdisjoint(set(filter)):
                     continue
             print("-------------------------------------------------------------------")
             print(eid, n, len(entries_dict))
-            test_fungrim_entry(eid)
+            info = test_fungrim_entry(eid, num)
+            if info is not None:
+                if info["Total"] > 0:
+                    effective += 1
+                else:
+                    ineffective += 1
+                if info["True"] > 0:
+                    truly_effective += 1
+    print("Tested", effective, "formulas and", truly_effective, "truly effective; unable to satisfy assumptions for", ineffective, "formulas")
 
 def test():
     import doctest
