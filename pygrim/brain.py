@@ -493,6 +493,11 @@ class Brain(object):
         if self.is_infinity(x):
             return False
         # todo: try normal form here?
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1 == 0
         return None
 
     def is_not_zero(self, x):
@@ -566,6 +571,11 @@ class Brain(object):
                 return True
             if imag != 0 or real < 0:
                 return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1 >= 0
         return None
 
     def is_positive(self, x):
@@ -609,6 +619,11 @@ class Brain(object):
                 return True
             if imag != 0 or real <= 0:
                 return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1 > 0
         return None
 
     def is_negative(self, x):
@@ -633,6 +648,11 @@ class Brain(object):
                 return True
             if imag != 0 or real >= 0:
                 return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1 < 0
         return None
 
     def is_nonpositive(self, x):
@@ -657,6 +677,11 @@ class Brain(object):
                 return True
             if imag != 0 or real > 0:
                 return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1 <= 0
         return None
 
     def is_integer(self, x):
@@ -689,6 +714,11 @@ class Brain(object):
                 return False
         if self.is_infinity(x) or x == Undefined:
             return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1.is_integer()
         return None
 
     # todo: irrational + rational, irrational * rational, irrational / rational, rational / irrational
@@ -729,6 +759,11 @@ class Brain(object):
                     return v in [0,1,4,9,16,25,36,49,64,81,100]
         if self.is_infinity(x) or x == Undefined:
             return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1.is_rational()
         return None
 
     def is_algebraic(self, x):
@@ -836,6 +871,11 @@ class Brain(object):
                 return False
         if self.is_infinity(x) or x == Undefined:
             return False
+        # try exact computation
+        vals = self.evaluate_all_alg([x])
+        if vals is not None:
+            val1, = vals
+            return val1.is_real()
         return None
 
     def is_real(self, x):
@@ -922,7 +962,33 @@ class Brain(object):
             self.simple_cache[t] = t
         return v
 
+    def evaluate_all_alg(self, L):
+        # try exact computation
+        from .algebraic import alg_get_degree_limit, alg_set_degree_limit
+        from .algebraic import alg_get_bits_limit, alg_set_bits_limit
+        
+        orig_degree = alg_get_degree_limit()
+        orig_bits = alg_get_bits_limit()
+
+        try:
+            alg_set_degree_limit(200)
+            alg_set_bits_limit(100000)
+
+            R = []
+            for val in L:
+                val1 = self.evaluate_alg_or_None(val)
+                if val1 is None:
+                    return None
+                R.append(val1)
+            return R
+
+        finally:
+            alg_set_degree_limit(orig_degree)
+            alg_set_bits_limit(orig_bits)
+
+
     # todo: identify different types; bools, tuples, sets, matrices, ...
+    # todo: recursively!
     def equal(self, a, b):
         """
         Check if a and b are equal (represent exactly the same mathematical
@@ -956,24 +1022,10 @@ class Brain(object):
                     return False
 
         # try exact computation
-        from .algebraic import alg_get_degree_limit, alg_set_degree_limit
-        from .algebraic import alg_get_bits_limit, alg_set_bits_limit
-        
-        orig_degree = alg_get_degree_limit()
-        orig_bits = alg_get_bits_limit()
-        try:
-            alg_set_degree_limit(200)
-            alg_set_bits_limit(100000)
-
-            val1 = self.evaluate_alg_or_None(a)
-            if val1 is not None:
-                val2 = self.evaluate_alg_or_None(b)
-                if val2 is not None:
-                    return val1 == val2
-
-        finally:
-            alg_set_degree_limit(orig_degree)
-            alg_set_bits_limit(orig_bits)
+        vals = self.evaluate_all_alg([a, b])
+        if vals is not None:
+            val1, val2 = vals
+            return val1 == val2
 
         # try domain exclusions
         aq = self.is_rational(a)
@@ -1000,6 +1052,7 @@ class Brain(object):
         bq = self.is_infinity(b)
         if aq is not None and bq is not None and aq != bq:
             return False
+
         return None
 
     def greater(self, a, b):
@@ -1329,6 +1382,10 @@ class Brain(object):
                     return False_
                 if a == Infinity and b == -Infinity:
                     return False_
+        # todo: generalize, improve
+        if len(args) == 3:
+            a, b, c = args
+            return self.simple(And(LessEqual(a, b), LessEqual(b, c)))
         return LessEqual(*args)
 
     def simple_Less(self, *args):
@@ -1683,10 +1740,11 @@ class Brain(object):
             return abs(self.evaluate_alg(x))
         elif head in (Exp, Cos, Sin, Tan, Cot, Sec, Csc):
             x, = expr.args()
-            v = self.simple(x / Pi)
-            v = self.evaluate_alg(v)
             if head == Exp:
-                v = v.imag
+                v = self.simple(x / (Pi * ConstI))
+            else:
+                v = self.simple(x / Pi)
+            v = self.evaluate_alg(v)
             if v.is_rational():
                 v = v.fmpq()
                 if head == Exp:
@@ -4324,21 +4382,31 @@ class Brain(object):
                 if self.is_zero(c):
                     return Expr(0)
                 if self.is_not_zero(c) and self.is_not_zero(a) and self.is_not_zero(b):
-                    if self.is_negative(a / b) == False:
+                    t = self.simple(a / b)
+                    neg = self.is_negative(a / b)
+                    if neg == False:
                         v = ((a-b)/c)**2
                         v = self.simple(EllipticK(v))    #  todo: more robust detection of singular values here
                         if v.head() != EllipticK:
                             return self.simple(Pi * (a + b) / (4 * v))
-
-                if self.is_positive(a) and self.is_positive(b):
-                    if a == Expr(1):
-                        return AGM(a, b)
-                    if b == Expr(1):
-                        return AGM(b, a)
-                    if self.greater(b, a):
-                        return a * AGM(Expr(1), self.simple(b / a))
-                    else:
-                        return b * AGM(Expr(1), self.simple(a / b))
+                    if neg == True:
+                        # canonically reduce opposite signs to a numerically well-posed AGM
+                        x = (a+b)/2
+                        y = Sqrt(a*b)
+                        u = self.simple(Re(x / y))
+                        if self.is_nonnegative(u):
+                            return self.simple(AGM(x, y))
+                        if self.is_negative(u):
+                            return self.simple(AGM(x, -y))
+                    if self.is_positive(a) and self.is_positive(b):
+                        if a == Expr(1):
+                            return AGM(a, b)
+                        if b == Expr(1):
+                            return AGM(b, a)
+                        if self.greater(b, a):
+                            return a * AGM(Expr(1), self.simple(b / a))
+                        else:
+                            return b * AGM(Expr(1), self.simple(a / b))
 
         return AGM(*args)
 

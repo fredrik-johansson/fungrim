@@ -18,6 +18,7 @@ from .sqrt import *
 from .sine import *
 from .sinc import *
 from .atan import *
+from .agm import *
 from .lambertw import *
 from .gcd import *
 from .factorials import *

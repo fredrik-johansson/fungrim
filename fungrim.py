@@ -846,6 +846,10 @@ writetopic("Eisenstein series", highlight=True)
 writetopic("Weierstrass elliptic functions")
 frontpage.fp.write("""</ul></li>""")
 
+frontpage.fp.write("""<li>Elliptic integrals<ul>""")
+writetopic("Arithmetic-geometric mean")
+frontpage.fp.write("""</ul></li>""")
+
 frontpage.fp.write("""<li>Tables of sums, products, integrals...<ul>""")
 writetopic("Definite integrals")
 frontpage.fp.write("""</ul></li>""")

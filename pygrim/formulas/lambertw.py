@@ -367,8 +367,11 @@ make_entry(ID("99ff4c"),
 
 # Logarithmic series
 
-L1 = Subscript(L, 1)
-L2 = Subscript(L, 2)
+#L1 = L_(1)
+#L2 = L_(2)
+L1 = Expr(symbol_name="L_1")
+L2 = Expr(symbol_name="L_2")
+
 asympdefs = Equal(L1, Log(z) + 2*Pi*ConstI*k), Equal(L2, Log(L1)), Equal(sigma, 1/L1), Equal(tau, L2/L1)
 asympser = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, Infinity)), For(n, 0, Infinity))
 asympsertrunc = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, M-1)), For(n, 0, N-1))

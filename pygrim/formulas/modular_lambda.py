@@ -121,8 +121,7 @@ make_entry(ID("f0981b"),
 
 make_entry(ID("fc6cf6"),
     Image(Description("Plot of", ModularLambda(ConstI*x), "on", Element(x, ClosedInterval(0,4))),
-        ImageSource("plot_modular_lambda")),
-    description_xray)
+        ImageSource("plot_modular_lambda")))
 
 # Domain
 

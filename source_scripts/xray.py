@@ -81,13 +81,18 @@ def curveplot(funcs, xaxb, yayb=None, N=400, filename=None, aspectx=1.0, aspecty
     xs = linspace(xa-xout, xb+xout, N)
     for v in singularities:
         i = searchsorted(xs, v)
-        xs = insert(xs, i, v)
+        xs = insert(xs, i, [v-1e-4,v-1e-6,v,v+1e-6,v+1e-4])
     ys = []
     for func in funcs:
         ysf = []
         for x in xs:
             if x in singularities:
-                ysf.append(nan)
+                try:
+                    v = func(x)
+                    assert abs(v) < 1e9
+                except:
+                    v = nan
+                ysf.append(v)
             else:
                 ysf.append(func(x))
         ys.append(ysf)
@@ -285,6 +290,17 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    _agm = lambda x: complex(acb(x).agm())
+
+    def agm_decor():
+        branchcutline(0, -1, offset=0.07)
+        branchcutline(-1, -4, offset=0.07)
+
+    curveplot([lambda x: fp.re(_agm(x)), lambda x: fp.im(_agm(x))], (-2,2), yayb=(-0.6,2.1), N=400, filename="agm", xout=0.1, yout=0.1, ytks=([0,1,2],), xtks=([-2,-1,0,1,2],),
+        singularities=[-1,0])
+
+    xrayplot(lambda z: complex(acb(z).agm()), (-4,4), (-4,4), 400, "agm", xout=0.1, yout=0.1, decorations=agm_decor)
 
     curveplot([lambda x: acb(x*1j).modular_lambda().real], (0,4), yayb=(-0.1,1.1), N=400, filename="modular_lambda", xout=0.1, yout=0.1, ytks=([0,0.5,1],), xtks=([0,2,4],))
 

@@ -1035,7 +1035,7 @@ class Expr(object):
                     info["Unknown"] += 1
         info["Total"] = info["True"] + info["False"] + info["Unknown"]
         if verbose:
-            print("Passed", info["True"] + info["False"], "instances (%i True, %i Unknown, %i False)" % (info["True"], info["Unknown"], info["False"]))
+            print("Passed", info["True"] + info["Unknown"], "instances (%i True, %i Unknown, %i False)" % (info["True"], info["Unknown"], info["False"]))
         return info
 
 all_builtins = []

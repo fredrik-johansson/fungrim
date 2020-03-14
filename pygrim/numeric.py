@@ -762,11 +762,6 @@ class ArbNumericalEvaluation(object):
                 a, b = args
                 a = self.eval(a, **kwargs)
                 b = self.eval(b, **kwargs)
-                # hack workaround!
-                if b == 0:
-                    if a == 0:
-                        return acb(0)
-                    a, b = b, a
                 v = acb(a).agm(b)
                 if v.is_finite():
                     return v
