@@ -177,7 +177,7 @@ make_entry(ID("f178f2"),
     Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1, 2)), -Div(1, 8))))
 
 make_entry(ID("447541"),
-    Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1, n)), (Factorial(n) / 8**n) * SloaneA("060691", n))),
+    Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1, n)), ((-1)**n * Factorial(n) / 8**n) * SloaneA("060691", n))),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
