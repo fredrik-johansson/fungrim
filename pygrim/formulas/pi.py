@@ -45,14 +45,14 @@ def_Topic(
         "04cd99",
         "dae4a7",
         "81f500",
+        "bd3faa",
         "9a3503",
         "8107d6",
-        "bd3faa",
         "5033c7",
-        "d8cb3e",
-        "e00d9e",
         "6ed553",
         "859856",
+        "d8cb3e",
+        "e00d9e",
     ),
     Section("Series representations"),
     Entries(
@@ -266,17 +266,17 @@ make_entry(ID("8107d6"),
 make_entry(ID("5033c7"),
     Formula(Equal(Pi, 2 * ConstE * Integral(Cos(x) / (x**2+1), For(x, 0, Infinity)))))
 
-make_entry(ID("d8cb3e"),
-    Formula(Equal(Pi, Integral(JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)))))
-
-make_entry(ID("e00d9e"),
-    Formula(Equal(Pi, 3 * Integral(Parentheses(JacobiTheta(3,0,ConstI*t)-1), For(t, 0, Infinity)))))
-
 make_entry(ID("6ed553"),
     Formula(Equal(Pi, 8 * Integral(Sin(x**2), For(x, 0, Infinity))**2)))
 
 make_entry(ID("859856"),
     Formula(Equal(Pi, 8 * Integral(Cos(x**2), For(x, 0, Infinity))**2)))
+
+make_entry(ID("d8cb3e"),
+    Formula(Equal(Pi, Integral(JacobiTheta(2,0,ConstI*t), For(t, 0, Infinity)))))
+
+make_entry(ID("e00d9e"),
+    Formula(Equal(Pi, 3 * Integral(Parentheses(JacobiTheta(3,0,ConstI*t)-1), For(t, 0, Infinity)))))
 
 
 # Series representations

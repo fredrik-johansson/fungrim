@@ -37,6 +37,10 @@ def_Topic(
         "69d0a3",
         "5174ea",
         "7b362f",
+        "eb0661",
+        "3da9b7",
+        "f178f2",
+        "447541",
     ),
     Section("Functional equations"),
     Entries(
@@ -45,11 +49,39 @@ def_Topic(
         "7189d6",
         "ce2395",
         "ea1d58",
+        "d60119",
+        "c7f885",
+        "fa6ff7",
+        "46c021",
+        "9d84d8",
     ),
-#    Section("Representation by other functions"),
-#    Section("Representation of other functions"),
-#    Section("Differential equations"),
-#    Section("Bounds and inequalities"),
+    Section("Representation by other functions"),
+    Entries(
+        "d6d836",
+        "71a0ff",
+    ),
+    Section("Representation of other functions"),
+    Entries(
+        "e15f43",
+    ),
+    Section("Derivatives and differential equations"),
+    Entries(
+        "20828c",
+        "a4cc5a",
+    ),
+    Section("Series expansions"),
+    Entries(
+        "cfefa9",
+    ),
+    Section("Integral representations"),
+    Entries(
+        "417619",
+    ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "162ecf",
+        "23ee29",
+    ),
 )
 
 make_entry(ID("b0d256"),
@@ -135,6 +167,21 @@ make_entry(ID("5174ea"),
 make_entry(ID("7b362f"),
     Formula(Equal(AGM(1, Sqrt(2)), (1/JacobiTheta(4, 0, ConstI)**2))))
 
+make_entry(ID("eb0661"),
+    Formula(Equal(AGM(1, 1), 1)))
+
+make_entry(ID("3da9b7"),
+    Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1)), Div(1, 2))))
+
+make_entry(ID("f178f2"),
+    Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1, 2)), -Div(1, 8))))
+
+make_entry(ID("447541"),
+    Formula(Equal(ComplexDerivative(AGM(1, x), For(x, 1, n)), (Factorial(n) / 8**n) * SloaneA("060691", n))),
+    Variables(n),
+    Assumptions(Element(n, ZZGreaterEqual(0))))
+
+
 # Functional equations
 
 make_entry(ID("59fab1"),
@@ -162,5 +209,93 @@ make_entry(ID("ea1d58"),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC), NotEqual(b, 0), NotElement(a / b, OpenClosedInterval(-Infinity, 0)))))
 
+make_entry(ID("d60119"),
+    Formula(Equal(AGM(c*a, c*b), c*AGM(a, b))),
+    Variables(a, b, c),
+    Assumptions(And(Element(a, CC), Element(b, CC), Element(c, CC), Or(Equal(a, 0), Equal(b, 0), Equal(c, 0), NotElement(b / a, OpenClosedInterval(-Infinity, 0))))))
 
+make_entry(ID("c7f885"),
+    Formula(Equal(AGM(a, b), AGM((a+b)/2, Sqrt(a*b)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC), Or(Equal(a, 0), Equal(b, 0), And(Greater(Re(a), 0), Greater(Re(b), 0)), Less(Abs(Arg(a)) + Abs(Arg(b)), Pi)))))
+
+make_entry(ID("fa6ff7"),
+    Formula(Equal(AGM(a, b), Where(AGM(x, s*y),
+    Def(x, (a+b)/2), Def(y, Sqrt(a*b)),
+        Def(s, Cases(Tuple(Pos(1), Or(Equal(y, 0), GreaterEqual(Re(x / y), 0))),
+                     Tuple(Neg(1), Otherwise)))))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("46c021"),
+    Formula(Equal(AGM(1, b), (b+1)/2 * AGM(1, 2*Sqrt(b)/(b+1)))),
+    Variables(b),
+    Assumptions(Element(b, CC)))
+
+make_entry(ID("9d84d8"),
+    Formula(Equal(AGM(1+b, 1-b), AGM(1, Sqrt(1-b**2)))),
+    Variables(b),
+    Assumptions(Element(b, CC)))
+
+# Representation by other functions
+
+make_entry(ID("d6d836"),
+    Formula(Equal(AGM(a, b), (a+b)/(2*Hypergeometric2F1(Div(1,2), Div(1,2), 1, ((a-b)/(a+b))**2)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC), NotEqual(b, 0), NotElement(a / b, OpenClosedInterval(-Infinity, 0)))))
+
+make_entry(ID("71a0ff"),
+    Formula(Equal(AGM(a, b), (Pi/4) * ((a+b)/EllipticK(((a-b)/(a+b))**2)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC), NotEqual(b, 0), NotElement(a / b, OpenClosedInterval(-Infinity, 0)))))
+
+# Representation of other functions
+
+make_entry(ID("e15f43"),
+    Formula(Equal(EllipticK(m), Pi / (2*AGM(1, Sqrt(1-m))))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+# Derivatives and differential equations
+
+make_entry(ID("20828c"),
+    Formula(Equal(ComplexDerivative(AGM(a, b), For(a, a)), AGM(a, b)/(Pi*a*(a-b)) * (Pi*a - 2*AGM(a, b) * EllipticE(((a-b)/(a+b))**2)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC), NotEqual(b, 0), NotEqual(a, b), NotElement(a / b, OpenClosedInterval(-Infinity, 0)))),
+    References("http://functions.wolfram.com/09.54.20.0001.01"))
+
+make_entry(ID("a4cc5a"),
+    Formula(Where(Equal(2*a*(b**2-a**2) * ComplexDerivative(f(a), For(a, a))**2 - a*f(a)**2 + ((3*a**2-b**2)*ComplexDerivative(f(a), For(a, a))
+        + a*(a**2-b**2) * ComplexDerivative(f(a), For(a, a, 2))) * f(a), 0), Def(f(a), AGM(a, b)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC), NotEqual(b, 0), NotElement(a / b, OpenClosedInterval(-Infinity, 0)))),
+    References("http://functions.wolfram.com/09.54.13.0001.01"))
+
+# todo: d-finite equation and series expansion for 1/AGM(1,z)
+
+# Series expansions
+
+make_entry(ID("cfefa9"),
+    Formula(Equal(AGM(1, 1+x), Sum(SloaneA("060691", n) / 8**n * (-x)**n, For(n, 0, Infinity)))),
+    Variables(x),
+    Assumptions(And(Element(x, CC), Less(Abs(x), 1))))
+
+# Integral representations
+
+make_entry(ID("417619"),
+    Formula(Equal(AGM(a, b), Where(Pi/(2*I), Def(I, Integral(1/Sqrt(a**2*Cos(x)**2 + b**2*Sin(x)**2), For(x, 0, Pi/2)))))),
+    Variables(a, b),
+    Assumptions(And(Element(a, OpenInterval(0, Infinity)), Element(b, OpenInterval(0, Infinity)))))
+
+# Bounds and inequalities
+
+make_entry(ID("162ecf"),
+    Formula(LessEqual(Sqrt(a*b), AGM(a, b), (a+b)/2)),
+    Variables(a),
+    Assumptions(And(Element(a, ClosedOpenInterval(0, Infinity)), Element(b, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("23ee29"),
+    Formula(LessEqual(AGM(a, b), Abs(AGM(Abs(a), Abs(b))))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
 
