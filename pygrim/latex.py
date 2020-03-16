@@ -218,6 +218,7 @@ subscript_call_latex_table = {
     SpecialLinearGroup: "\\operatorname{SL}",
     Cyclotomic: "\\Phi",
     SymmetricPolynomial: "e",
+    AGMSequence: "\\operatorname{agm}",
 }
 
 symbol_latex_table = {
@@ -604,7 +605,7 @@ def tex_Pow(head, args, **kwargs):
         assert len(base.args()) == 2
         return "{%s}_{%s}^{%s}" % (base.args()[0].latex(in_small=in_small), base.args()[1].latex(in_small=True), expo.latex(in_small=True))
     # todo: generalized to subscript functions?
-    if not base.is_atom() and base.head() == JacobiTheta and len(base.args()) == 3:
+    if not base.is_atom() and base.head() in (JacobiTheta, JacobiThetaQ) and len(base.args()) == 3:
         return "\\theta" + "_{%s}^{%s}\\!\\left(%s, %s\\right)" % \
             (base.args()[0].latex(), expo.latex(in_small=True), base.args()[1].latex(), base.args()[2].latex())
     if not base.is_atom() and base.head() in subscript_call_latex_table and len(base.args()) == 2:
@@ -635,7 +636,7 @@ def tex_Matrix2x1(head, args, **kwargs):
     argstr = tuple(arg.latex(**kwargs) for arg in args)
     return r"\begin{pmatrix} %s \\ %s \end{pmatrix}" % argstr
 
-@deftex
+@deftex_heads([JacobiTheta,JacobiThetaQ])
 def tex_JacobiTheta(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
     #midsep = "\\,\\middle|\\,"

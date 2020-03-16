@@ -1143,7 +1143,7 @@ LegendrePolynomial LegendrePolynomialZero GaussLegendreWeight
 HermitePolynomial
 ChebyshevT ChebyshevU
 DedekindEta EulerQSeries DedekindEtaEpsilon DedekindSum
-JacobiTheta JacobiThetaEpsilon JacobiThetaPermutation
+JacobiTheta JacobiThetaEpsilon JacobiThetaPermutation JacobiThetaQ
 Divides
 GCD LCM XGCD DivisorSigma MoebiusMu Totient SquaresR LiouvilleLambda
 LegendreSymbol JacobiSymbol KroneckerSymbol
@@ -1173,7 +1173,7 @@ GeneralizedRiemannHypothesis
 DirichletLambda GaussSum JacobiSum
 MultiZetaValue
 EisensteinG EisensteinE
-AGM EllipticK EllipticE EllipticPi IncompleteEllipticF IncompleteEllipticE IncompleteEllipticPi
+AGM AGMSequence EllipticK EllipticE EllipticPi IncompleteEllipticF IncompleteEllipticE IncompleteEllipticPi
 CarlsonRF CarlsonRG CarlsonRJ CarlsonRD CarlsonRC
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized

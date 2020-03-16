@@ -7,6 +7,7 @@ def_Topic(
     Section("Definitions"),
     Entries(
         "b0d256",
+        "eda1e3",
     ),
     Section("Illustrations"),
     Entries(
@@ -42,6 +43,24 @@ def_Topic(
         "f178f2",
         "447541",
     ),
+    Section("AGM iteration"),
+    Subsection("Recurrence and limit"),
+    Entries(
+        "95fb3e",
+        "84b888",
+        "08b69d",
+        "41f67b",
+    ),
+    Subsection("Correct square root for complex variables"),
+    Entries(
+        "a2b0f9",
+    ),
+    Section("Brent-Salamin algorithm for pi"),
+    Entries(
+        "6d9ceb",
+        "13c539",
+        "042551",
+    ),
     Section("Functional equations"),
     Entries(
         "59fab1",
@@ -52,6 +71,7 @@ def_Topic(
         "d60119",
         "c7f885",
         "fa6ff7",
+        "8e80c6",
         "46c021",
         "9d84d8",
     ),
@@ -63,6 +83,7 @@ def_Topic(
     Section("Representation of other functions"),
     Entries(
         "e15f43",
+        "26fd1b",
     ),
     Section("Derivatives and differential equations"),
     Entries(
@@ -81,12 +102,18 @@ def_Topic(
     Entries(
         "162ecf",
         "23ee29",
+        "75e692",
     ),
 )
 
 make_entry(ID("b0d256"),
     SymbolDefinition(AGM, AGM(a,b), "Arithmetic-geometric mean"),
     Description("This function can be called with one or two arguments, with", Equal(AGM(z), AGM(1,z)), "."))
+
+make_entry(ID("eda1e3"),
+    SymbolDefinition(AGMSequence, AGMSequence(n,a,b), "Convergents in AGM iteration"),
+    Description("Represents the tuple", Tuple(a_(n), b_(n)), "giving the", n, "-th values in the arithmetic-geometric mean iteration with initial values",
+        Equal(Tuple(a_(0), b_(0)), Tuple(a, b)), "."))
 
 # Illustrations
 
@@ -181,6 +208,69 @@ make_entry(ID("447541"),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(0))))
 
+# Limit representations
+
+make_entry(ID("95fb3e"),
+    Formula(Where(Equal(AGM(a, b), SequenceLimit(a_(n), For(n, Infinity)), SequenceLimit(b_(n), For(n, Infinity))),
+        Def(Tuple(a_(n), b_(n)), AGMSequence(n, a, b)))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("84b888"),
+    Formula(Equal(AGMSequence(0, a, b), Tuple(a, b))),
+    Variables(a, b),
+    Assumptions(And(Element(a, CC), Element(b, CC))))
+
+# todo: the destructuring function assignment is not semantic yet
+
+make_entry(ID("08b69d"),
+    Formula(Where(Equal(Tuple(a_(n+1), b_(n+1)),
+            Tuple((a_(n)+b_(n))/2, Sqrt(a_(n)*b_(n)))),
+            Def(Tuple(a_(k), b_(k)), AGMSequence(k, a, b)))),
+    Variables(n, a, b),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Element(b, CC), Or(Equal(a, 0), Equal(b, 0), And(Greater(Re(a), 0), Greater(Re(b), 0)), Less(Abs(Arg(a)) + Abs(Arg(b)), Pi)))))
+
+make_entry(ID("41f67b"),
+    Formula(Where(And(Equal(2 * a_(n+1), a_(n) + b_(n)), Equal(b_(n+1)**2, a_(n) * b_(n))),
+        Def(Tuple(a_(k), b_(k)), AGMSequence(k, a, b)))),
+    Variables(n, a, b),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Element(b, CC))))
+
+make_entry(ID("a2b0f9"),
+    Formula(Where(Equal(Tuple(a_(n+1), b_(n+1)),
+            Where(Tuple(x, s*y),
+                Def(x, (a_(n)+b_(n))/2), Def(y, Sqrt(a_(n)*b_(n))),
+                    Def(s, Cases(Tuple(Pos(1), Or(Equal(y, 0), GreaterEqual(Re(x / y), 0))),
+                                 Tuple(Neg(1), Otherwise))))),
+            Def(Tuple(a_(k), b_(k)), AGMSequence(k, a, b)))),
+    Variables(n, a, b),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(a, CC), Element(b, CC))))
+
+# Brent-Salamin algorithm
+
+# Note: the algorithm here is slightly different than in Salamin's paper: we 
+# include one additional term in the summation for c_(j), which adds a few
+# digits of accuracy. The error bound is therefore not tight;
+# it would be nice to have an updated bound here.
+
+make_entry(ID("6d9ceb"),
+    Formula(Where(Equal(Pi, 4 * AGM(1, 1/Sqrt(2))**2 / (1 - Sum(2**j * c_(j)**2, For(j, 0, Infinity))),
+        SequenceLimit(
+            ((a_(n)+b_(n))**2)/((1-Sum(2**j * c_(j)**2, For(j, 0, n)))), For(n, Infinity))
+        ),
+        Def(Tuple(a_(n), b_(n)), AGMSequence(n, 1, 1/Sqrt(2))), Def(c_(n), (a_(n)-b_(n))))))
+
+make_entry(ID("13c539"),
+    Formula(Where(LessEqual(Abs(Pi -
+            ((a_(n)+b_(n))**2)/((1-Sum(2**j * c_(j)**2, For(j, 0, n))))),
+            2**(n+8) * Exp(-(Pi * 2**(n+1)))),
+        Def(Tuple(a_(n), b_(n)), AGMSequence(n, 1, 1/Sqrt(2))), Def(c_(n), (a_(n)-b_(n))))),
+    References("https://doi.org/10.2307/2005327"))
+
+make_entry(ID("042551"),
+    Formula(Equal(Exp(Pi), Where(32 * Product((a_(n+1) / a_(n))**(2**(1-n)), For(n, 0, Infinity)),
+        Def(Tuple(a_(n), b_(n)), AGMSequence(n, 1, 1/Sqrt(2)))))),
+    References("https://doi.org/10.2307/2005327"))
 
 # Functional equations
 
@@ -227,6 +317,11 @@ make_entry(ID("fa6ff7"),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
+make_entry(ID("8e80c6"),
+    Formula(Equal(AGM(1, b), b * AGM(1, 1 / b))),
+    Variables(b),
+    Assumptions(And(Element(b, CC), NotElement(b, OpenClosedInterval(-Infinity, 0)))))
+
 make_entry(ID("46c021"),
     Formula(Equal(AGM(1, b), (b+1)/2 * AGM(1, 2*Sqrt(b)/(b+1)))),
     Variables(b),
@@ -255,6 +350,11 @@ make_entry(ID("e15f43"),
     Formula(Equal(EllipticK(m), Pi / (2*AGM(1, Sqrt(1-m))))),
     Variables(m),
     Assumptions(Element(m, CC)))
+
+make_entry(ID("26fd1b"),
+    Formula(Equal(Log(1/q), Pi / (AGM(JacobiThetaQ(2,0,q)**2, JacobiThetaQ(3,0,q)**2)))),
+    Variables(q),
+    Assumptions(Element(q, OpenInterval(0, 1))))
 
 # Derivatives and differential equations
 
@@ -298,4 +398,10 @@ make_entry(ID("23ee29"),
     Formula(LessEqual(AGM(a, b), Abs(AGM(Abs(a), Abs(b))))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
+
+make_entry(ID("75e692"),
+    Formula(Where(LessEqual(Abs(AGM(1, z) - a_(n)), Abs(a_(n) - b_(n))), Def(Tuple(a_(n), b_(n)), AGMSequence(n, 1, z)))),
+    Variables(z),
+    Assumptions(And(Element(z, CC), GreaterEqual(Re(z), 0))))
+
 

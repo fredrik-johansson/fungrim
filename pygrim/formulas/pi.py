@@ -87,6 +87,7 @@ def_Topic(
         "e1e106",
         "420007",
         "220e8d",
+        "6d9ceb",    # from agm
     ),
     Section("Special function representations"),
     Entries(
@@ -119,8 +120,10 @@ def_Topic(
         "1e3a25",
         "fdc3a3",
         "4c0698",
+        "13c539",  # from agm
     ),
 )
+
 
 make_entry(ID("b5d706"),
     SymbolDefinition(Pi, Pi, "The constant pi (3.14...)"),
