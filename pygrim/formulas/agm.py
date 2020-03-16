@@ -395,7 +395,7 @@ make_entry(ID("162ecf"),
     Assumptions(And(Element(a, ClosedOpenInterval(0, Infinity)), Element(b, ClosedOpenInterval(0, Infinity)))))
 
 make_entry(ID("23ee29"),
-    Formula(LessEqual(AGM(a, b), Abs(AGM(Abs(a), Abs(b))))),
+    Formula(LessEqual(Abs(AGM(a, b)), Abs(AGM(Abs(a), Abs(b))))),
     Variables(a, b),
     Assumptions(And(Element(a, CC), Element(b, CC))))
 
