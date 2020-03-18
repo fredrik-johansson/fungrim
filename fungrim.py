@@ -848,6 +848,7 @@ frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Elliptic integrals<ul>""")
 writetopic("Arithmetic-geometric mean")
+writetopic("Legendre elliptic integrals")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Tables of sums, products, integrals...<ul>""")

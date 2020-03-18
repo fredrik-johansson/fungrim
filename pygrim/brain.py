@@ -1055,6 +1055,12 @@ class Brain(object):
 
         return None
 
+    def is_one(self, x):
+        return self.equal(x, Expr(1))
+
+    def is_neg_one(self, x):
+        return self.equal(x, Expr(-1))
+
     def greater(self, a, b):
         v = self.simple(Greater(a, b))
         if v == True_:
@@ -4367,6 +4373,23 @@ class Brain(object):
             # todo: implement evaluation at singular values
         return EllipticE(*args)
 
+    def simple_EllipticPi(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            n, m = args
+            if self.is_complex(n) and self.is_complex(m):
+                if self.is_one(n):
+                    return UnsignedInfinity
+                if self.is_one(m) and (self.is_one(n) == False):
+                    return self.simple(Infinity / (1 - n))
+                if self.is_zero(m):
+                    return self.simple(Pi / (2 * Sqrt(1 - n)))
+                if self.equal(m, n):
+                    return self.simple(EllipticE(n) / (1 - n))
+                if self.is_zero(n):
+                    return self.simple(EllipticK(m))
+        return EllipticPi(*args)
+
     def simple_AGM(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 1:
@@ -4577,6 +4600,17 @@ class Brain(object):
                     return Undefined
                 return self.simple(Csgn(s) * (Pi / 2) * ConstI)
         return Atanh(*args)
+
+    def simple_CarlsonRC(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            x, y = args
+            if self.equal(x, Expr(0)) and self.equal(y, Expr(1)):
+                return Pi / 2
+            if self.equal(y, Expr(0)) and self.element(x, OpenInterval(0, Infinity)):
+                return Infinity
+            # equal, nonzero -> x^(-1/2) ... ?
+        return CarlsonRC(*args)
 
     def simple_IdentityMatrix(self, *args):
         args = [self.simple(arg) for arg in args]

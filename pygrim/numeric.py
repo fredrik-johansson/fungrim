@@ -68,12 +68,12 @@ function_acb_method_table = {
     LogBarnesG: "log_barnes_g",
     EllipticK: "elliptic_k",
     EllipticE: "elliptic_e",
-    EllipticPi: "elliptic_pi",
 }
 
 """
 with the right call order...
 
+    EllipticPi: "elliptic_pi",
     IncompleteEllipticF: "elliptic_f",
     IncompleteEllipticE: "elliptic_e_inc",
     IncompleteEllipticPi: "elliptic_pi_inc",
@@ -487,6 +487,46 @@ class ArbNumericalEvaluation(object):
                 return v
             raise ArbFiniteError
 
+        if head == CarlsonRF:
+            assert len(args) == 3
+            x, y, z = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_rf(x, y, z)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CarlsonRG:
+            assert len(args) == 3
+            x, y, z = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_rg(x, y, z)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CarlsonRD:
+            assert len(args) == 3
+            x, y, z = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_rd(x, y, z)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CarlsonRJ:
+            assert len(args) == 4
+            x, y, z, p = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_rj(x, y, z, p)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == CarlsonRC:
+            assert len(args) == 2
+            x, y = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_rc(x, y)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
         if head == Decimal:
             assert len(args) == 1
             x = arb(args[0]._text)
@@ -505,6 +545,38 @@ class ArbNumericalEvaluation(object):
                             return chi(n)
                         except (AssertionError, ValueError):
                             pass
+
+        if head == EllipticPi:
+            assert len(args) == 2
+            x, y = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_pi(x, y)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == IncompleteEllipticF:
+            assert len(args) == 2
+            phi, m = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_f(phi, m)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == IncompleteEllipticE:
+            assert len(args) == 2
+            phi, m = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_e_inc(phi, m)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
+
+        if head == IncompleteEllipticPi:
+            assert len(args) == 3
+            n, phi, m = [self.eval(arg, **kwargs) for arg in args]
+            v = acb.elliptic_pi_inc(n, phi, m)
+            if v.is_finite():
+                return v
+            raise ArbFiniteError
 
         if head == DirichletL:
             if len(args) == 2:

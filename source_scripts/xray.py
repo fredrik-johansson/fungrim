@@ -291,6 +291,12 @@ def plots(outdir):
 
     directory[0] = outdir
 
+    curveplot([lambda x: fp.re(mp.ellipk(x)), lambda x: fp.im(mp.ellipk(x))], (-2,2), yayb=(-2,4), N=400, filename="elliptic_k", xout=0.1, yout=0.1, xtks=([-2,0,1,2],),
+        singularities=[1])
+
+    curveplot([lambda x: fp.re(mp.ellipe(x)), lambda x: fp.im(mp.ellipe(x))], (-2,2), yayb=(-2,4), N=400, filename="elliptic_e", xout=0.1, yout=0.1, xtks=([-2,0,1,2],),
+        singularities=[1])
+
     _agm = lambda x: complex(acb(x).agm())
 
     def agm_decor():
