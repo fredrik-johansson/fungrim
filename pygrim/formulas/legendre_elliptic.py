@@ -74,6 +74,25 @@ def_Topic(
         "dd67fb",
         "9227bf",
     ),
+    Subsection("Incomplete elliptic integrals"),
+    Entries(
+        "ba1965",
+        "4268fc",
+        "d2adb6",
+        "0b8fd6",
+        "81f7db",
+        "afabeb",
+        "16612f",
+        "04c829",
+        "c584c3",
+        "f5d489",
+        "a91f8d",
+        "b7cfb3",
+        "8b4be6",
+        "aac129",
+        "087a7c",
+        "a6c07e",
+    ),
     Section("Functional equations"),
     Subsection("Quasi-periodicity"),
     Entries(
@@ -211,6 +230,8 @@ make_entry(ID("06223c"),
 
 # Specific values
 
+## Complete integrals
+
 make_entry(ID("bb4501"),
     Formula(Equal(EllipticK(0), Pi / 2)))
 
@@ -290,6 +311,74 @@ make_entry(ID("9227bf"),
     Variables(m),
     Assumptions(Element(m, CC)))
 
+## Incomplete integrals
+
+make_entry(ID("ba1965"),
+    Formula(Equal(IncompleteEllipticF(0, 0), 0)))
+
+make_entry(ID("4268fc"),
+    Formula(Equal(IncompleteEllipticF(0, m), 0)),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("d2adb6"),
+    Formula(Equal(IncompleteEllipticF(phi, 0), phi)),
+    Variables(phi),
+    Assumptions(Element(phi, CC)))
+
+make_entry(ID("0b8fd6"),
+    Formula(Equal(IncompleteEllipticF(Pi / 2, m), EllipticK(m))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("81f7db"),
+    Formula(Equal(IncompleteEllipticF(-Pi / 2, m), -EllipticK(m))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("afabeb"),
+    Formula(Equal(IncompleteEllipticF(Pi * k / 2, m), k * EllipticK(m))),
+    Variables(m, k),
+    Assumptions(And(Element(m, CC), Element(k, ZZ), Or(NotEqual(k, 0), NotEqual(m, 1)))))
+
+make_entry(ID("16612f"),
+    Formula(Equal(IncompleteEllipticF(Pi / 2, 1), Infinity)))
+
+make_entry(ID("04c829"),
+    Formula(Equal(IncompleteEllipticF(-Pi / 2, 1), -Infinity)))
+
+make_entry(ID("c584c3"),
+    Formula(Equal(IncompleteEllipticF(Pi / 3, 1), Log(2+Sqrt(3)))))
+
+make_entry(ID("f5d489"),
+    Formula(Equal(IncompleteEllipticF(Pi / 4, 1), Log(1+Sqrt(2)))))
+
+make_entry(ID("a91f8d"),
+    Formula(Equal(IncompleteEllipticF(Pi / 6, 1), Log(3)/2)))
+
+make_entry(ID("8b4be6"),
+    Formula(Equal(IncompleteEllipticF(Pi / 4, 2), Div(Mul(Sqrt(2), Pow(Gamma(Div(1, 4)), 2)), Mul(8, Sqrt(Pi))))))
+
+make_entry(ID("aac129"),
+    Formula(Equal(IncompleteEllipticF(Pi / 6, 4), (EllipticK(Div(1,4)) / 2))))
+
+make_entry(ID("b7cfb3"),
+    Formula(Equal(IncompleteEllipticF(phi, 1), Log((1 + Sin(phi))/Cos(phi)))),
+    Variables(phi),
+    Assumptions(And(Element(phi, CC), LessEqual(-Pi/2, Re(phi), Pi/2), NotEqual(phi, -Pi/2), NotEqual(phi, Pi/2))))
+
+make_entry(ID("087a7c"),
+    Formula(Equal(IncompleteEllipticF(Asin(1/Sqrt(m)), m), EllipticK(1/m) / Sqrt(m))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, Set(0)))))
+
+make_entry(ID("a6c07e"),
+    Formula(Equal(IncompleteEllipticF(Asin(1/Sqrt(m)) + Pi * k, m), EllipticK(1/m) / Sqrt(m) + 2 * k * EllipticK(m))),
+    Variables(m, k),
+    Assumptions(And(Element(m, SetMinus(CC, Set(0))), Element(k, ZZ), Or(NotEqual(k, 0), NotEqual(m, 1)))))
+
+
+
 # Functional equations
 
 make_entry(ID("685126"),
@@ -310,7 +399,7 @@ make_entry(ID("5f84d9"),
 
 # Representation by other functions
 
-# Hypergeometric functions
+## Hypergeometric functions
 
 make_entry(ID("b760d1"),
     Formula(Equal(EllipticK(m), (Pi/2) * Hypergeometric2F1(Div(1,2), Div(1,2), 1, m))),
@@ -327,10 +416,9 @@ make_entry(ID("752619"),
     Variables(m),
     Assumptions(Element(m, CC)))
 
+## AGM (see AGM ...)
 
-# AGM (see AGM ...)
-
-# Carlson integrals
+## Carlson integrals
 
 # todo: check singularities in the following
 make_entry(ID("e2445d"),
@@ -347,28 +435,4 @@ make_entry(ID("8f4e31"),
     Formula(Equal(IncompleteEllipticPi(n, phi, m), Sin(phi) * CarlsonRF(Cos(phi)**2, 1 - m*Sin(phi)**2, 1) + Div(1,3)*n*Sin(phi)**3*CarlsonRJ(Cos(phi)**2, 1-m*Sin(phi)**2, 1, 1-n*Sin(phi)**2))),
     Variables(n, phi, m),
     Assumptions(And(Element(n, ClosedInterval(-1, 1)), Element(phi, CC), Element(m, CC), LessEqual(-Pi/2, Re(phi), Pi/2))))
-
-
-"""
-91b9ef
-ba06d6
-750493
-657078
-f411ff
-ba1965
-4268fc
-d2adb6
-0b8fd6
-81f7db
-afabeb
-44c69c
-8b4be6
-aac129
-b7cfb3
-087a7c
-a6c07e
-878a3c
-471a87
-298a42
-"""
 
