@@ -21,9 +21,32 @@ def_Topic(
 #    Section("Domain"),
 #    Entries(
 #    ),
-#    Section("Integral representations"),
-#    Entries(
-#    ),
+    Section("Integral representations"),
+    Subsection("Trigonometric forms of the complete integrals"),
+    Entries(
+        "0455b3",
+        "190843",
+        "83a535",
+    ),
+    Subsection("Algebraic forms of the complete integrals"),
+    Entries(
+        "47dead",
+        "fa8666",
+        "c10014",
+        "7cd257",
+    ),
+    Subsection("Trigonometric forms of the incomplete integrals"),
+    Entries(
+        "81fb10",
+        "2ff7e7",
+        "60f858",
+    ),
+    Subsection("Algebraic forms of the incomplete integrals"),
+    Entries(
+        "33ee4a",
+        "5e869b",
+        "06223c",
+    ),
     Section("Specific values"),
     Subsection("Complete elliptic integrals"),
     Entries(
@@ -116,6 +139,75 @@ make_entry(ID("89d93c"),
 make_entry(ID("210213"),
     Image(Description("Plot of", EllipticE(m), "on", Element(m, ClosedInterval(-2,2))),
         ImageSource("plot_elliptic_e")))
+
+# Integral representations
+
+make_entry(ID("0455b3"),
+    Formula(Equal(EllipticK(m), Integral(1/Sqrt(1-m*Sin(x)**2), For(x, 0, Pi / 2)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, ClosedOpenInterval(1, Infinity)))))
+
+make_entry(ID("190843"),
+    Formula(Equal(EllipticE(m), Integral(Sqrt(1-m*Sin(x)**2), For(x, 0, Pi / 2)))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("83a535"),
+    Formula(Equal(EllipticPi(n, m), Integral(1/((1-n*Sin(x)**2) * Sqrt(1 - m*Sin(x)**2)), For(x, 0, Pi / 2)))),
+    Variables(n, m),
+    Assumptions(And(Element(n, OpenInterval(-Infinity, 1)), Element(m, OpenInterval(-Infinity, 1)))))
+
+make_entry(ID("47dead"),
+    Formula(Equal(EllipticK(m), Integral(1/(Sqrt(1-x**2) * Sqrt(1 - m*x**2)), For(x, 0, 1)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, ClosedOpenInterval(1, Infinity)))))
+    
+make_entry(ID("fa8666"),
+    Formula(Equal(EllipticE(m), Integral(Sqrt(1-m*x**2) / Sqrt(1-x**2), For(x, 0, 1)))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("c10014"),
+    Formula(Equal(EllipticPi(n, m), Integral(1/((1-n*x**2)*Sqrt(1-x**2)*Sqrt(1-m*x**2)), For(x, 0, 1)))),
+    Variables(n, m),
+    Assumptions(And(Element(n, OpenInterval(-Infinity, 1)), Element(m, OpenInterval(-Infinity, 1)))))
+
+make_entry(ID("7cd257"),
+    Formula(Equal(EllipticK(m), Integral(1/(Sqrt(x**2-1) * Sqrt(x**2-m)), For(x, 1, Infinity)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, ClosedOpenInterval(1, Infinity)))))
+
+make_entry(ID("81fb10"),
+    Formula(Equal(IncompleteEllipticF(phi, m), Integral(1/Sqrt(1-m*Sin(x)**2), For(x, 0, phi)))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(m, SetMinus(CC, ClosedOpenInterval(1, Infinity))))))
+
+make_entry(ID("2ff7e7"),
+    Formula(Equal(IncompleteEllipticE(phi, m), Integral(Sqrt(1-m*Sin(x)**2), For(x, 0, phi)))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(m, CC))))
+
+make_entry(ID("60f858"),
+    Formula(Equal(IncompleteEllipticPi(n, phi, m), Integral(1/((1-n*Sin(x)**2) * Sqrt(1 - m*Sin(x)**2)), For(x, 0, phi)))),
+    Variables(n, phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(n, OpenInterval(-Infinity, 1)), Element(m, OpenInterval(-Infinity, 1)))))
+
+make_entry(ID("33ee4a"),
+    Formula(Equal(IncompleteEllipticF(phi, m), Integral(1/(Sqrt(1-x**2) * Sqrt(1 - m*x**2)), For(x, 0, Sin(phi))))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(m, SetMinus(CC, ClosedOpenInterval(1, Infinity))))))
+
+make_entry(ID("5e869b"),
+    Formula(Equal(IncompleteEllipticE(phi, m), Integral(Sqrt(1-m*x**2)/Sqrt(1-x**2), For(x, 0, Sin(phi))))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(m, CC))))
+
+make_entry(ID("06223c"),
+    Formula(Equal(IncompleteEllipticPi(n, phi, m), Integral(1/((1-n*x**2) * Sqrt(1-x**2) * Sqrt(1 - m*x**2)), For(x, 0, Sin(phi))))),
+    Variables(n, phi, m),
+    Assumptions(And(Element(phi, ClosedInterval(-Pi/2, Pi/2)), Element(n, OpenInterval(-Infinity, 1)), Element(m, OpenInterval(-Infinity, 1)))))
+
+
 
 # Specific values
 
@@ -213,7 +305,7 @@ make_entry(ID("c28288"),
 make_entry(ID("5f84d9"),
     Formula(Equal(IncompleteEllipticPi(n, phi + k*Pi, m), IncompleteEllipticPi(n, phi, m) + 2 * k * EllipticPi(n, m))),
     Variables(n, phi, m, k),
-    Assumptions(And(Element(n, ClosedInterval(-1, 1)), Element(phi, CC), Element(m, CC), Element(k, ZZ), NotEqual(m, 1), NotEqual(n, 1))))
+    Assumptions(And(Element(n, OpenInterval(-1, 1)), Element(phi, CC), Element(m, CC), Element(k, ZZ), NotEqual(m, 1))))
 
 
 # Representation by other functions
