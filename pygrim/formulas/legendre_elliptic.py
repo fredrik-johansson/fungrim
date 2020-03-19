@@ -74,7 +74,7 @@ def_Topic(
         "dd67fb",
         "9227bf",
     ),
-    Subsection("Incomplete elliptic integrals"),
+    Subsection("Incomplete integral of the first kind"),
     Entries(
         "ba1965",
         "4268fc",
@@ -93,9 +93,34 @@ def_Topic(
         "8b4be6",
         "aac129",
         "087a7c",
+    ),
+    Subsection("Incomplete integral of the second kind"),
+    Entries(
         "a6c07e",
+        "be3e09",
+        "efc7a4",
+        "1b881e",
+        "2ef763",
+        "a14442",
+        "75e141",
+        "f35a37",
+        "51a946",
+        "2573ba",
+        "b62aae",
+        "dec0d2",
+        "2245df",
+        "3aed02",
+        "d88dd1",
+        "4dabda",
+        "eba27c",
+        "f0bcb5",
     ),
     Section("Functional equations"),
+    Subsection("Conjugate symmetry"),
+    Entries(
+        "713966",
+        "8e5c81",
+    ),
     Subsection("Odd symmetry"),
     Entries(
         "b0eb37",
@@ -237,6 +262,8 @@ make_entry(ID("06223c"),
 
 
 # Specific values
+
+# todo: singular values http://functions.wolfram.com/EllipticIntegrals/EllipticK/03/ShowAll.html -- also for modular lambda function
 
 ## Complete integrals
 
@@ -388,14 +415,90 @@ make_entry(ID("087a7c"),
     Variables(m),
     Assumptions(Element(m, SetMinus(CC, Set(0)))))
 
-make_entry(ID("a6c07e"),
-    Formula(Equal(IncompleteEllipticF(Asin(1/Sqrt(m)) + Pi * k, m), EllipticK(1/m) / Sqrt(m) + 2 * k * EllipticK(m))),
-    Variables(m, k),
-    Assumptions(And(Element(m, SetMinus(CC, Set(0, 1))), Element(k, ZZ))))
 
+make_entry(ID("a6c07e"),
+    Formula(Equal(IncompleteEllipticE(0, 0), 0)))
+
+make_entry(ID("be3e09"),
+    Formula(Equal(IncompleteEllipticE(0, m), 0)))
+
+make_entry(ID("efc7a4"),
+    Formula(Equal(IncompleteEllipticE(phi, 0), phi)),
+    Variables(phi),
+    Assumptions(Element(phi, CC)))
+
+make_entry(ID("1b881e"),
+    Formula(Equal(IncompleteEllipticE(Pi/2, m), EllipticE(m))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("2ef763"),
+    Formula(Equal(IncompleteEllipticE(-Pi/2, m), -EllipticE(m))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("a14442"),
+    Formula(Equal(IncompleteEllipticE(Pi*k/2, m), k*EllipticE(m))),
+    Variables(m, k),
+    Assumptions(And(Element(m, CC), Element(k, ZZ))))
+
+make_entry(ID("75e141"),
+    Formula(Equal(IncompleteEllipticE(phi, 1), Sin(phi))),
+    Variables(phi),
+    Assumptions(And(Element(phi, CC), LessEqual(-Pi/2, Re(phi), Pi/2))))
+
+make_entry(ID("f35a37"),
+    Formula(Equal(IncompleteEllipticE(phi, 1), (-1)**Floor(Re(phi)/Pi+Div(1,2)) * Sin(phi) + 2*Floor(Re(phi)/Pi+Div(1,2)))),
+    Variables(phi),
+    Assumptions(Element(phi, CC)))
+
+make_entry(ID("51a946"),
+    Formula(Equal(IncompleteEllipticE(Pi / 2, 0), Pi / 2)))
+
+make_entry(ID("2573ba"),
+    Formula(Equal(IncompleteEllipticE(Pi / 2, -1), Mul(Sqrt(2), Add(Div(Pow(Gamma(Div(1, 4)), 2), Mul(8, Sqrt(Pi))), Div(Pow(Pi, Div(3, 2)), Pow(Gamma(Div(1, 4)), 2)))))))
+
+make_entry(ID("b62aae"),
+    Formula(Equal(IncompleteEllipticF(Pi / 2, 1), 1)))
+
+make_entry(ID("dec0d2"),
+    Formula(Equal(IncompleteEllipticF(-Pi / 2, 1), -1)))
+
+make_entry(ID("2245df"),
+    Formula(Equal(IncompleteEllipticE(Pi*k/2, 1), k)),
+    Variables(k),
+    Assumptions(Element(k, ZZ)))
+
+make_entry(ID("3aed02"),
+    Formula(Equal(IncompleteEllipticE(Pi/3, 1), Sqrt(3) / 2)))
+
+make_entry(ID("d88dd1"),
+    Formula(Equal(IncompleteEllipticE(Pi/6, 1), Div(1, 2))))
+
+make_entry(ID("4dabda"),
+    Formula(Equal(IncompleteEllipticE(Pi/4, 2), Div(Mul(Sqrt(2), Pow(Pi, Div(3, 2))), Pow(Gamma(Div(1, 4)), 2)))))
+
+make_entry(ID("eba27c"),
+    Formula(Equal(IncompleteEllipticE(Pi/6, 4), 2*EllipticE(Div(1, 4)) - Div(3,2)*EllipticK(Div(1, 4)))))
+
+make_entry(ID("f0bcb5"),
+    Formula(Equal(IncompleteEllipticE(Asin(1/Sqrt(m)), m), Sqrt(m) * (EllipticE(1/m) - (1 - 1/m)*EllipticK(1/m)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, Set(0, 1)))))
 
 
 # Functional equations
+
+make_entry(ID("713966"),
+    Formula(Equal(EllipticK(Conjugate(m)), Conjugate(EllipticK(m)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, OpenInterval(1, Infinity)))))
+
+make_entry(ID("8e5c81"),
+    Formula(Equal(EllipticE(Conjugate(m)), Conjugate(EllipticE(m)))),
+    Variables(m),
+    Assumptions(Element(m, SetMinus(CC, OpenInterval(1, Infinity)))))
+
 
 make_entry(ID("b0eb37"),
     Formula(Equal(IncompleteEllipticF(-phi, m), -IncompleteEllipticF(phi, m))),

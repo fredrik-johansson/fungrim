@@ -4461,6 +4461,37 @@ class Brain(object):
                         return self.simple(IncompleteEllipticF(phi - k * Pi, m) + 2 * k * EllipticK(m))
         return IncompleteEllipticF(*args)
 
+    def simple_IncompleteEllipticE(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            phi, m = args
+            if self.is_complex(phi) and self.is_complex(m):
+                if self.is_zero(phi):
+                    return Expr(0)
+                if self.is_zero(m):
+                    return phi
+                r = self.simple(phi * 2 / Pi)
+                if self.is_integer(r):
+                    return self.simple(r * EllipticE(m))
+                # todo: make simple unnecessary
+                v = self.simple(Csgn(phi))
+                if self.is_neg_one(v):
+                    return self.simple(-IncompleteEllipticE(-phi, m))
+                if self.is_one(m):
+                    res = (-1)**Floor(Re(phi)/Pi+Div(1,2))*Sin(phi) + 2*Floor(Re(phi)/Pi + Div(1,2))
+                    return self.simple(res)
+                if self.is_not_zero(m) and self.is_zero(m) == False:
+                    v = Asin(1/Sqrt(m))
+                    v = self.simple(v)  # todo: unnecessary?
+                    if self.equal(phi, v):
+                        return self.simple(Sqrt(m) * (EllipticE(1/m) - (1-1/m)*EllipticK(1/m)))
+                if True:
+                    v = self.simple(Re(phi) / Pi)
+                    if self.less_equal(v, -Div(1, 2)) or self.greater(v, Div(1, 2)):
+                        k = self.simple(Ceil(v - Div(1, 2)))
+                        return self.simple(IncompleteEllipticE(phi - k * Pi, m) + 2 * k * EllipticE(m))
+        return IncompleteEllipticE(*args)
+
     def simple_AGM(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 1:

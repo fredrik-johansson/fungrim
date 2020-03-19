@@ -1174,6 +1174,7 @@ DirichletLambda GaussSum JacobiSum
 MultiZetaValue
 EisensteinG EisensteinE
 AGM AGMSequence EllipticK EllipticE EllipticPi IncompleteEllipticF IncompleteEllipticE IncompleteEllipticPi
+EllipticSingularValue
 CarlsonRF CarlsonRG CarlsonRJ CarlsonRD CarlsonRC
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
