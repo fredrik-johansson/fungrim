@@ -511,7 +511,7 @@ make_entry(ID("aa1b8e"),
     Assumptions(And(Element(phi, CC), Element(m, CC))))
 
 make_entry(ID("255d81"),
-    Formula(Equal(IncompleteEllipticPi(n, -phi, m), -IncompleteEllipticPi(phi, m))),
+    Formula(Equal(IncompleteEllipticPi(n, -phi, m), -IncompleteEllipticPi(n, phi, m))),
     Variables(n, phi, m),
     Assumptions(And(Element(n, CC), Element(phi, CC), Element(m, CC))))
 
