@@ -82,6 +82,8 @@ def_Topic(
         "0b8fd6",
         "81f7db",
         "afabeb",
+        "c0ad12",
+        "ace837",
         "16612f",
         "04c829",
         "c584c3",
@@ -94,6 +96,12 @@ def_Topic(
         "a6c07e",
     ),
     Section("Functional equations"),
+    Subsection("Odd symmetry"),
+    Entries(
+        "b0eb37",
+        "aa1b8e",
+        "255d81",
+    ),
     Subsection("Quasi-periodicity"),
     Entries(
         "685126",
@@ -341,6 +349,12 @@ make_entry(ID("afabeb"),
     Variables(m, k),
     Assumptions(And(Element(m, CC), Element(k, ZZ), Or(NotEqual(k, 0), NotEqual(m, 1)))))
 
+make_entry(ID("c0ad12"),
+    Formula(Equal(IncompleteEllipticF(Pi / 2, 0), Pi / 2)))
+
+make_entry(ID("ace837"),
+    Formula(Equal(IncompleteEllipticF(Pi / 2, -1), Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)))))
+
 make_entry(ID("16612f"),
     Formula(Equal(IncompleteEllipticF(Pi / 2, 1), Infinity)))
 
@@ -363,9 +377,11 @@ make_entry(ID("aac129"),
     Formula(Equal(IncompleteEllipticF(Pi / 6, 4), (EllipticK(Div(1,4)) / 2))))
 
 make_entry(ID("b7cfb3"),
-    Formula(Equal(IncompleteEllipticF(phi, 1), Log((1 + Sin(phi))/Cos(phi)))),
+    Formula(Equal(IncompleteEllipticF(phi, 1), Cases(Tuple(Log((1 + Sin(phi))/Cos(phi)), And(LessEqual(-Pi/2, Re(phi), Pi/2), NotElement(phi, Set(-Pi/2, Pi/2)))),
+        Tuple(Sign(phi) * Infinity, Element(phi, Set(-Pi/2, Pi/2))),
+        Tuple(UnsignedInfinity, Otherwise)))),
     Variables(phi),
-    Assumptions(And(Element(phi, CC), LessEqual(-Pi/2, Re(phi), Pi/2), NotEqual(phi, -Pi/2), NotEqual(phi, Pi/2))))
+    Assumptions(Element(phi, CC)))
 
 make_entry(ID("087a7c"),
     Formula(Equal(IncompleteEllipticF(Asin(1/Sqrt(m)), m), EllipticK(1/m) / Sqrt(m))),
@@ -375,11 +391,27 @@ make_entry(ID("087a7c"),
 make_entry(ID("a6c07e"),
     Formula(Equal(IncompleteEllipticF(Asin(1/Sqrt(m)) + Pi * k, m), EllipticK(1/m) / Sqrt(m) + 2 * k * EllipticK(m))),
     Variables(m, k),
-    Assumptions(And(Element(m, SetMinus(CC, Set(0))), Element(k, ZZ), Or(NotEqual(k, 0), NotEqual(m, 1)))))
+    Assumptions(And(Element(m, SetMinus(CC, Set(0, 1))), Element(k, ZZ))))
 
 
 
 # Functional equations
+
+make_entry(ID("b0eb37"),
+    Formula(Equal(IncompleteEllipticF(-phi, m), -IncompleteEllipticF(phi, m))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, CC), Element(m, CC))))
+
+make_entry(ID("aa1b8e"),
+    Formula(Equal(IncompleteEllipticE(-phi, m), -IncompleteEllipticE(phi, m))),
+    Variables(phi, m),
+    Assumptions(And(Element(phi, CC), Element(m, CC))))
+
+make_entry(ID("255d81"),
+    Formula(Equal(IncompleteEllipticPi(n, -phi, m), -IncompleteEllipticPi(phi, m))),
+    Variables(n, phi, m),
+    Assumptions(And(Element(n, CC), Element(phi, CC), Element(m, CC))))
+
 
 make_entry(ID("685126"),
     Formula(Equal(IncompleteEllipticF(phi + k*Pi, m), IncompleteEllipticF(phi, m) + 2 * k * EllipticK(m))),

@@ -988,7 +988,7 @@ class Brain(object):
 
 
     # todo: identify different types; bools, tuples, sets, matrices, ...
-    # todo: recursively!
+    # todo: fall back to simplifying
     def equal(self, a, b):
         """
         Check if a and b are equal (represent exactly the same mathematical
@@ -1052,6 +1052,16 @@ class Brain(object):
         bq = self.is_infinity(b)
         if aq is not None and bq is not None and aq != bq:
             return False
+
+        ahead = a.head()
+        bhead = b.head()
+        if ahead is not None and bhead is not None:
+            if self.equal(ahead, bhead):
+                aargs = a.args()
+                bargs = b.args()
+                if len(aargs) == len(bargs):
+                    if all(self.equal(x, y) for (x, y) in zip(aargs, bargs)):
+                        return True
 
         return None
 
@@ -3609,6 +3619,34 @@ class Brain(object):
 
         return RisingFactorial(*args)
 
+    def simple_Binomial(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            n, k = args
+            if n.is_integer() and k.is_integer():
+                nv = int(n)
+                kv = int(k)
+                fmpz = self._fmpz
+                if kv >= 0 and nv >= 0 and nv <= 1000 and kv <= 1000:
+                    return Expr(fmpz.bin_uiui(nv, kv))
+            if k.is_integer():
+                kv = int(k)
+                if kv >= 0 and kv <= 30:
+                    return self.simple(RisingFactorial(z, k) / Factorial(k))
+        return Binomial(n, k)
+
+    def simple_BellNumber(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            fmpz = self._fmpz
+            z, = args
+            if z.is_integer():
+                n = int(z)
+                if n < 0:
+                    return Expr(0)
+                if n <= 1000:
+                    return Expr(fmpz.bell_number(n))
+        return BellNumber(*args)
 
     def simple_hypergeometric(self, As, Bs, z, regularized=False):
         """
@@ -4389,6 +4427,39 @@ class Brain(object):
                 if self.is_zero(n):
                     return self.simple(EllipticK(m))
         return EllipticPi(*args)
+
+    def simple_IncompleteEllipticF(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            phi, m = args
+            if self.is_complex(phi) and self.is_complex(m):
+                if self.is_zero(phi):
+                    return Expr(0)
+                if self.is_zero(m):
+                    return phi
+                r = self.simple(phi * 2 / Pi)
+                if self.is_integer(r) and (self.is_not_zero(r) or self.is_one(m) == False):
+                    return self.simple(r * EllipticK(m))
+                # todo: make simple unnecessary
+                v = self.simple(Csgn(phi))
+                if self.is_neg_one(v):
+                    return self.simple(-IncompleteEllipticF(-phi, m))
+                if self.is_one(m):
+                    res = Cases(Tuple(Log((1 + Sin(phi))/Cos(phi)), And(LessEqual(-Pi/2, Re(phi), Pi/2), NotElement(phi, Set(-Pi/2, Pi/2)))),
+                                Tuple(Sign(phi) * Infinity, Element(phi, Set(-Pi/2, Pi/2))),
+                                Tuple(UnsignedInfinity, Otherwise))
+                    return self.simple(res)
+                if self.is_not_zero(m):
+                    v = Asin(1/Sqrt(m))
+                    v = self.simple(v)  # todo: unnecessary?
+                    if self.equal(phi, v):
+                        return self.simple(EllipticK(1/m) / Sqrt(m))
+                if self.is_one(m) == False:
+                    v = self.simple(Re(phi) / Pi)
+                    if self.less_equal(v, -Div(1, 2)) or self.greater(v, Div(1, 2)):
+                        k = self.simple(Ceil(v - Div(1, 2)))
+                        return self.simple(IncompleteEllipticF(phi - k * Pi, m) + 2 * k * EllipticK(m))
+        return IncompleteEllipticF(*args)
 
     def simple_AGM(self, *args):
         args = [self.simple(arg) for arg in args]
