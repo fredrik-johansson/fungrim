@@ -291,6 +291,18 @@ def plots(outdir):
 
     directory[0] = outdir
 
+    curveplot([lambda x: ellipf(x, 0.5), lambda x: ellipf(x, 0.8), lambda x: ellipf(x, 0.99)],
+        (-2*pi,2*pi), yayb=(-10,10), N=400, filename="incomplete_elliptic_f", xout=0.1, yout=0.1,
+            legends=["$F(\\phi,0.5)$", "$F(\\phi,0.8)$", "$F(\\phi,0.99)$"],
+            legend_loc='lower right',
+            xtks=([-2*pi,-pi,0,pi,2*pi],), ytks=([-2*pi,-0,2*pi],))
+
+    curveplot([lambda x: ellipe(x, 0.5), lambda x: ellipe(x, 0.8), lambda x: ellipe(x, 0.99)],
+        (-2*pi,2*pi), yayb=(-10,10), N=400, filename="incomplete_elliptic_e", xout=0.1, yout=0.1,
+            legends=["$E(\\phi,0.5)$", "$E(\\phi,0.8)$", "$E(\\phi,0.99)$"],
+            legend_loc='lower right',
+            xtks=([-2*pi,-pi,0,pi,2*pi],), ytks=([-2*pi,-0,2*pi],))
+
     curveplot([lambda x: fp.re(mp.ellipk(x)), lambda x: fp.im(mp.ellipk(x))], (-2,2), yayb=(-2,4), N=400, filename="elliptic_k", xout=0.1, yout=0.1, xtks=([-2,0,1,2],),
         singularities=[1])
 

@@ -17,6 +17,8 @@ def_Topic(
     Entries(
         "89d93c",
         "210213",
+        "4704f9",
+        "20d72c",
     ),
 #    Section("Domain"),
 #    Entries(
@@ -191,6 +193,14 @@ make_entry(ID("89d93c"),
 make_entry(ID("210213"),
     Image(Description("Plot of", EllipticE(m), "on", Element(m, ClosedInterval(-2,2))),
         ImageSource("plot_elliptic_e")))
+
+make_entry(ID("4704f9"),
+    Image(Description("Plot of", IncompleteEllipticF(phi, m), "on", Element(phi, ClosedInterval(-(2*Pi),2*Pi))),
+        ImageSource("plot_incomplete_elliptic_f")))
+
+make_entry(ID("20d72c"),
+    Image(Description("Plot of", IncompleteEllipticE(phi, m), "on", Element(phi, ClosedInterval(-(2*Pi),2*Pi))),
+        ImageSource("plot_incomplete_elliptic_e")))
 
 # Integral representations
 
