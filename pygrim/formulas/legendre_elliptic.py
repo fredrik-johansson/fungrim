@@ -539,7 +539,7 @@ make_entry(ID("c28288"),
 make_entry(ID("5f84d9"),
     Formula(Equal(IncompleteEllipticPi(n, phi + k*Pi, m), IncompleteEllipticPi(n, phi, m) + 2 * k * EllipticPi(n, m))),
     Variables(n, phi, m, k),
-    Assumptions(And(Element(n, OpenInterval(-1, 1)), Element(phi, CC), Element(m, CC), Element(k, ZZ), NotEqual(m, 1))))
+    Assumptions(And(Element(n, CC), Element(phi, CC), Element(m, CC), Element(k, ZZ), NotEqual(n, 1), NotEqual(m, 1))))
 
 
 # Representation by other functions
@@ -579,5 +579,5 @@ make_entry(ID("f48f54"),
 make_entry(ID("8f4e31"),
     Formula(Equal(IncompleteEllipticPi(n, phi, m), Sin(phi) * CarlsonRF(Cos(phi)**2, 1 - m*Sin(phi)**2, 1) + Div(1,3)*n*Sin(phi)**3*CarlsonRJ(Cos(phi)**2, 1-m*Sin(phi)**2, 1, 1-n*Sin(phi)**2))),
     Variables(n, phi, m),
-    Assumptions(And(Element(n, ClosedInterval(-1, 1)), Element(phi, CC), Element(m, CC), LessEqual(-Pi/2, Re(phi), Pi/2))))
+    Assumptions(And(Element(n, CC), Element(phi, CC), Element(m, CC), LessEqual(-Pi/2, Re(phi), Pi/2))))
 
