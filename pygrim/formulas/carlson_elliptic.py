@@ -9,8 +9,13 @@ def_Topic(
         "5cd377",
         "8f7c2a",
         "bac745",
-        "663d75",
+    ),
+    Subsection("Specialized versions"),
+    Entries(
         "132ec5",
+        "61f98d",
+        "663d75",
+        "409873",
     ),
     Section("Integral representations"),
     Subsection("Defining algebraic integrals"),
@@ -30,6 +35,21 @@ def_Topic(
         "8f0a91",
         "0d8639",
     ),
+    Section("Symmetry"),
+    Entries(
+        "f29729",
+        "b478a1",
+        "655a2b",
+        "1e8061",
+    ),
+    Section("Scale invariance"),
+    Entries(
+        "7a168a",
+        "f9ca94",
+        "4e21c7",
+        "197a91",
+        "a839d5",
+    ),
     Section("Domain"),
     Subsection("Complex variables"),
     Entries(
@@ -48,6 +68,7 @@ def_Topic(
         "da33ce",
     ),
     Section("Representation of other functions"),
+    SeeTopics("Legendre elliptic integrals"),
     Subsection("Legendre complete elliptic integrals"),
     Entries(
         "0cc11f",
@@ -63,24 +84,61 @@ def_Topic(
         "f48f54",
         "8f4e31",
     ),
+    Section("Derivatives and differential equations"),
+    Entries(
+        "5f0adb",
+        "638fa6",
+        "ce327b",
+        "3e1435",
+        "644d75",
+        "de8485",
+        "741859",
+    ),
     Section("Series representations"),
-    Subsection("Definitions"),
+    SeeTopics("Series representations of Carlson symmetric elliptic integrals"),
+    Entries(
+        "b576e6",
+        "8f71cb",
+        "fda084",
+        "b2cd79",
+        "8d304b",
+        "7ded8f",
+    ),
+    Section("Bounds and inequalities"),
+    Entries(
+        "c03f78",
+        "1d2811",
+        "07584a",
+        "edcf6c",
+        "a4e47f",
+        "d3b39c",
+        "230a49",
+        "34e932",
+        "688efb",
+        "978287",
+    ),
+)
+
+def_Topic(
+    Title("Series representations of Carlson symmetric elliptic integrals"),
+    SeeTopics("Carlson symmetric elliptic integrals"),
+    Section("Definitions"),
     Entries(
         "b576e6",
         "a82bd6",
     ),
-    Subsection("Incomplete integrals"),
+    Section("Incomplete integrals"),
     Entries(
         "8f71cb",
         "fda084",
         "b2cd79",
         "e93f43",
-        "7ded8f",
-        "42c7f1",
         "8d304b",
         "e1a3fb",
+        "7ded8f",
+        "42c7f1",
     ),
-    Subsection("Complete integrals"),
+    Section("Complete integrals"),
     Entries(
         "cbcad9",
         "d0c9ff",
@@ -90,13 +148,13 @@ def_Topic(
         "7314c4",
         "b4a735",
     ),
-    Subsection("General formulas for the series"),
+    Section("General formulas for the series"),
     Entries(
         "da47f6",
         "4cb707",
         "2443de",
     ),
-    Subsection("Symmetric formulas"),
+    Section("Symmetric formulas"),
     Entries(
         "13f252",
         "a21395",
@@ -104,7 +162,7 @@ def_Topic(
         "2c1df7",
         "b81ca0",
     ),
-    Subsection("Integral representations"),
+    Section("Integral representations"),
     Entries(
         "a1f7ea",
         "c5d388",
@@ -129,6 +187,18 @@ make_entry(ID("663d75"),
 
 make_entry(ID("132ec5"),
     SymbolDefinition(CarlsonRC, CarlsonRC(x, y), "Carlson elementary elliptic integral"))
+
+# Specializations
+
+make_entry(ID("61f98d"),
+    Formula(Equal(CarlsonRC(x, y), CarlsonRF(x, y, y))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("409873"),
+    Formula(Equal(CarlsonRD(x, y, z), CarlsonRJ(x, y, z, z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
 
 # Domain
 
@@ -159,7 +229,7 @@ make_entry(ID("9c9173"),
     Formula(Implies(And(Element(x, ClosedOpenInterval(0, Infinity)),
                     Element(y, ClosedOpenInterval(0, Infinity)),
                     Element(z, ClosedOpenInterval(0, Infinity))),
-        Element(CarlsonRG(x, y, z), OpenInterval(0, Infinity)))),
+        Element(CarlsonRG(x, y, z), ClosedOpenInterval(0, Infinity)))),
     Variables(x, y, z))
 
 make_entry(ID("8bac89"),
@@ -220,9 +290,58 @@ make_entry(ID("8236ff"),
 
 # Symmetry
 
-# Interrepresentations
+make_entry(ID("f29729"),
+    Formula(Equal(CarlsonRF(x, y, z), CarlsonRF(x, z, y),
+            CarlsonRF(y, x, z), CarlsonRF(y, z, x),
+            CarlsonRF(z, x, y), CarlsonRF(z, y, x))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
 
-# Scaling
+make_entry(ID("b478a1"),
+    Formula(Equal(CarlsonRG(x, y, z), CarlsonRG(x, z, y),
+            CarlsonRG(y, x, z), CarlsonRG(y, z, x),
+            CarlsonRG(z, x, y), CarlsonRG(z, y, x))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
+
+make_entry(ID("655a2b"),
+    Formula(Equal(CarlsonRJ(x, y, z, w), CarlsonRJ(x, z, y, w),
+            CarlsonRJ(y, x, z, w), CarlsonRJ(y, z, x, w),
+            CarlsonRJ(z, x, y, w), CarlsonRJ(z, y, x, w))),
+    Variables(x, y, z, w),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(w, CC))))
+
+make_entry(ID("1e8061"),
+    Formula(Equal(CarlsonRD(x, y, z), CarlsonRD(y, x, z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
+
+# Scale invariance
+
+make_entry(ID("7a168a"),
+    Formula(Equal(CarlsonRF(lamda * x, lamda * y, lamda * z), lamda**(-Div(1,2)) * CarlsonRF(x, y, z))),
+    Variables(x, y, z, lamda),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(lamda, OpenInterval(0, Infinity)))))
+
+make_entry(ID("f9ca94"),
+    Formula(Equal(CarlsonRG(lamda * x, lamda * y, lamda * z), lamda**(Div(1,2)) * CarlsonRG(x, y, z))),
+    Variables(x, y, z, lamda),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(lamda, OpenInterval(0, Infinity)))))
+
+make_entry(ID("4e21c7"),
+    Formula(Equal(CarlsonRJ(lamda * x, lamda * y, lamda * z, lamda * w), lamda**(-Div(3,2)) * CarlsonRJ(x, y, z, w))),
+    Variables(x, y, z, w, lamda),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(w, CC), Element(lamda, OpenInterval(0, Infinity)))))
+
+make_entry(ID("197a91"),
+    Formula(Equal(CarlsonRD(lamda * x, lamda * y, lamda * z), lamda**(-Div(3,2)) * CarlsonRD(x, y, z))),
+    Variables(x, y, z, lamda),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(lamda, OpenInterval(0, Infinity)))))
+
+make_entry(ID("a839d5"),
+    Formula(Equal(CarlsonRC(lamda * x, lamda * y), lamda**(-Div(1,2)) * CarlsonRC(x, y))),
+    Variables(x, y, lamda),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(lamda, OpenInterval(0, Infinity)))))
 
 # Branch cuts?
 
@@ -348,10 +467,90 @@ make_entry(ID("0d8639"),
         GreaterEqual(Re(z), 0),
     )))
 
-# Functional equations
+# Specific values
 
+'''
+TODO: (+more elementary cases...)
+
+make_entry(ID(""),
+    Formula(Equal(CarlsonRG(x, y, y), (y * CarlsonRC(x, y) + Sqrt(x)) / 2)))
+
+make_entry(ID(""),
+    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))
+
+'''
 
 # TODO: both lemniscate constants (check symbolic evaluation)
+
+
+
+# Derivatives and differential equations
+
+make_entry(ID("5f0adb"),
+    Equal(ComplexDerivative(CarlsonRF(x, y, z), For(x, x)), -(Div(1,6) * CarlsonRD(y, z, x))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("638fa6"),
+    Equal(ComplexDerivative(CarlsonRG(x+t, y+t, z+t), For(t, t)), Div(1,2) * CarlsonRF(x + t, y + t, z + t)),
+    Variables(x, y, z, t),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(z, CC),
+        Element(t, CC),
+        NotElement(x + t, OpenClosedInterval(-Infinity, 0)),
+        NotElement(y + t, OpenClosedInterval(-Infinity, 0)),
+        NotElement(z + t, OpenClosedInterval(-Infinity, 0)))))
+
+make_entry(ID("ce327b"),
+    Equal(ComplexDerivative(CarlsonRF(x, y, z), For(x, x)) + ComplexDerivative(CarlsonRF(x, y, z), For(y, y)) + ComplexDerivative(CarlsonRF(x, y, z), For(z, z)),
+        -Div(1, Sqrt(x)*Sqrt(y)*Sqrt(z))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("3e1435"),
+    Equal(ComplexDerivative(CarlsonRG(x, y, z), For(x, x)) + ComplexDerivative(CarlsonRG(x, y, z), For(y, y)) + ComplexDerivative(CarlsonRG(x, y, z), For(z, z)),
+        Div(1,2) * CarlsonRF(x, y, z)),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("644d75"),
+    Equal(x * ComplexDerivative(CarlsonRF(x, y, z), For(x, x)) + y * ComplexDerivative(CarlsonRF(x, y, z), For(y, y)) + z * ComplexDerivative(CarlsonRF(x, y, z), For(z, z)),
+        -(Div(1,2) * CarlsonRF(x, y, z))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("de8485"),
+    Equal(ComplexDerivative(CarlsonRC(x, y), For(x, x)), Cases(
+        Tuple(1/(2*(y-x)) * (CarlsonRC(x,y) - 1/(Sqrt(x))), NotEqual(x, y)),
+        Tuple(-(Div(1,6) * x**(-Div(3,2))), Equal(x, y)))),
+    Variables(x, y),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("741859"),
+    Equal(ComplexDerivative(CarlsonRC(x, y), For(y, y)), Cases(
+        Tuple(1/(2*(x-y)) * (CarlsonRC(x,y) - Sqrt(x)/y), NotEqual(x, y)),
+        Tuple(-(Div(1,3) * x**(-Div(3,2))), Equal(x, y)))),
+    Variables(x, y),
+    Assumptions(And(
+        Element(x, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        Element(y, SetMinus(CC, OpenClosedInterval(-Infinity, 0))),
+        NotEqual(x, y))))
 
 # Series representations
 
@@ -619,4 +818,93 @@ make_entry(ID("b81ca0"),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
         Greater(Sum(b_(k), For(k, 1, n)), a, 0)),
         Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))))
+
+# TODO: recurrence (3.9) for the terms in https://doi.org/10.6028/jres.107.034
+# TODO: generic bounds
+
+# Bounds and inequalities
+
+make_entry(ID("c03f78"),
+    Formula(LessEqual(CarlsonRF(x, y, z), 1/(x*y*z)**Div(1,6))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)),
+        Element(y, OpenInterval(0, Infinity)),
+        Element(z, OpenInterval(0, Infinity)))),
+    References("https://dlmf.nist.gov/19.24"))
+
+make_entry(ID("1d2811"),
+    Formula(GreaterEqual(CarlsonRF(x, y, z), 3/(Sqrt(x)+Sqrt(y)+Sqrt(z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, ClosedOpenInterval(0, Infinity)),
+        Element(z, ClosedOpenInterval(0, Infinity))),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0)))))
+
+make_entry(ID("07584a"),
+    Formula(LessEqual(CarlsonRG(x, y, z), Min(Sqrt((x+y+z)/3), (x**2+y**2+z**2)/(3*Sqrt(x*y*z))))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, ClosedOpenInterval(0, Infinity)),
+        Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("edcf6c"),
+    Formula(GreaterEqual(CarlsonRG(x, y, z), (Sqrt(x)+Sqrt(y)+Sqrt(z))/3)),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, ClosedOpenInterval(0, Infinity)),
+        Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("a4e47f"),
+    Formula(LessEqual(CarlsonRJ(x, y, z, w), (x*y*z*w**2)**(-Div(3,10)))),
+    Variables(x, y, z, w),
+    Assumptions(And(
+        Element(x, OpenInterval(0, Infinity)),
+        Element(y, OpenInterval(0, Infinity)),
+        Element(z, OpenInterval(0, Infinity)),
+        Element(w, OpenInterval(0, Infinity)))))
+
+make_entry(ID("d3b39c"),
+    Formula(GreaterEqual(CarlsonRJ(x, y, z, w), (5/(Sqrt(x)+Sqrt(y)+Sqrt(z)+2*Sqrt(w)))**3)),
+    Variables(x, y, z, w),
+    Assumptions(And(
+        Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, ClosedOpenInterval(0, Infinity)),
+        Element(z, ClosedOpenInterval(0, Infinity)),
+        Element(w, OpenInterval(0, Infinity)),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))))))
+
+make_entry(ID("230a49"),
+    Formula(LessEqual(CarlsonRD(x, y, z), (x*y*z**3)**(-Div(3,10)))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, OpenInterval(0, Infinity)),
+        Element(y, OpenInterval(0, Infinity)),
+        Element(z, OpenInterval(0, Infinity)))))
+
+make_entry(ID("34e932"),
+    Formula(GreaterEqual(CarlsonRD(x, y, z), (5/(Sqrt(x)+Sqrt(y)+3*Sqrt(z)))**3)),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, ClosedOpenInterval(0, Infinity)),
+        Element(z, OpenInterval(0, Infinity)))))
+
+make_entry(ID("688efb"),
+    Formula(LessEqual(CarlsonRC(x, y), 1/(x*y**2)**Div(1,6))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)),
+        Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("978287"),
+    Formula(GreaterEqual(CarlsonRC(x, y), 3/(Sqrt(x)+2*Sqrt(y)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)),
+        Element(y, OpenInterval(0, Infinity)))))
+
 
