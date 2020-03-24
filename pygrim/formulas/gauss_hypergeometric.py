@@ -152,28 +152,28 @@ make_entry(ID("90ac58"),
         ((-z)**(-a) / (Gamma(b) * Gamma(c-a))) * Hypergeometric2F1Regularized(a, a-c+1, a-b+1, 1/z) - 
         ((-z)**(-b) / (Gamma(a) * Gamma(c-b))) * Hypergeometric2F1Regularized(b, b-c+1, b-a+1, 1/z))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, ClosedInterval(0, 1)))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, ClosedOpenInterval(0, Infinity)))))
 
 make_entry(ID("27bc34"),
     Formula(Equal((Sin(Pi * (b-a)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),
         ((1-z)**(-a) / (Gamma(b) * Gamma(c-a))) * Hypergeometric2F1Regularized(a, c-b, a-b+1, 1/(1-z)) - 
         ((1-z)**(-b) / (Gamma(a) * Gamma(c-b))) * Hypergeometric2F1Regularized(b, c-a, b-a+1, 1/(1-z)))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, ClosedOpenInterval(0, Infinity)))))
 
 make_entry(ID("db3eb9"),
     Formula(Equal((Sin(Pi * (c-a-b)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),
         (1 / (Gamma(c-a) * Gamma(c-b))) * Hypergeometric2F1Regularized(a, b, a+b-c+1, 1-z) - 
         ((1-z)**(c-a-b) / (Gamma(a) * Gamma(b))) * Hypergeometric2F1Regularized(c-a, c-b, c-a-b+1, 1-z))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), NotElement(z, ClosedOpenInterval(1, Infinity)))))
 
 make_entry(ID("ca9123"),
     Formula(Equal((Sin(Pi * (c-a-b)) / Pi) * Hypergeometric2F1Regularized(a,b,c,z),
         (z**(-a) / (Gamma(c-a) * Gamma(c-b))) * Hypergeometric2F1Regularized(a, a-c+1, a+b-c+1, 1-1/z) - 
         ((z**(a-c) * (1-z)**(c-a-b)) / (Gamma(a) * Gamma(b))) * Hypergeometric2F1Regularized(c-a, 1-a, c-a-b+1, 1-1/z))),
     Variables(a,b,c,z),
-    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, Set(0, 1)))))
+    Assumptions(And(Element(a,CC), Element(b, CC), Element(c, CC), Element(z,CC), NotElement(z, OpenClosedInterval(-Infinity, 0)), NotElement(z, ClosedOpenInterval(1, Infinity)))))
 
 # Bounds and inequalities
 

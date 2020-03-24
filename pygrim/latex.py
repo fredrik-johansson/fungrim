@@ -219,6 +219,8 @@ subscript_call_latex_table = {
     Cyclotomic: "\\Phi",
     SymmetricPolynomial: "e",
     AGMSequence: "\\operatorname{agm}",
+    CarlsonHypergeometricR: "R",
+    CarlsonHypergeometricT: "T",
 }
 
 symbol_latex_table = {
@@ -689,7 +691,7 @@ def tex_And(head, args, **kwargs):
             return latex_infix(head, args, opsymbol=" \\land ")
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
-        if (not args[i].is_atom()) and args[i].head() in (And, Or):
+        if args[i].head() in (And, Or, All, Exists):
             argstr[i] = "\\left(%s\\right)" % argstr[i]
     in_small = kwargs.get("in_small", False)
     if in_small:
@@ -710,7 +712,7 @@ def tex_Or(head, args, **kwargs):
             return latex_infix(head, args, opsymbol=" \\lor ")
     argstr = [arg.latex(**kwargs) for arg in args]
     for i in range(len(args)):
-        if (not args[i].is_atom()) and args[i].head() in (And, Or, Not):
+        if args[i].head() in (And, Or, Not):
             argstr[i] = "\\left(%s\\right)" % argstr[i]
     if kwargs.get("in_logic"):
         return " \\,\\lor\\, ".join(argstr)

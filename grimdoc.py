@@ -3513,8 +3513,8 @@ documentify(CarlsonRD,
 
 documentify(CarlsonRC,
     examples=[
-    ("CarlsonRC(x)",
-        "Special case of the Carlson symmetric elliptic integral of the third kind."),
+    ("CarlsonRC(x, y)",
+        "Special case of the Carlson symmetric elliptic integral of the first kind."),
     ])
 
 documentify(AGM,

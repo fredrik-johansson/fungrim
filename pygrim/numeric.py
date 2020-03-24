@@ -70,15 +70,6 @@ function_acb_method_table = {
     EllipticE: "elliptic_e",
 }
 
-"""
-with the right call order...
-
-    EllipticPi: "elliptic_pi",
-    IncompleteEllipticF: "elliptic_f",
-    IncompleteEllipticE: "elliptic_e_inc",
-    IncompleteEllipticPi: "elliptic_pi_inc",
-"""
-
 class ArbFiniteError(ValueError):
     pass
 
@@ -476,6 +467,8 @@ class ArbNumericalEvaluation(object):
                 if not (r.is_integer() and r._integer >= 0):
                     raise ValueError
                 r = r._integer
+                if r > 1000:
+                    raise NotImplementedError
             if not (j.is_integer() and j._integer in (1,2,3,4)):
                 raise ValueError
             j = j._integer
@@ -513,11 +506,12 @@ class ArbNumericalEvaluation(object):
 
         if head == CarlsonRJ:
             assert len(args) == 4
-            x, y, z, p = [self.eval(arg, **kwargs) for arg in args]
-            v = acb.elliptic_rj(x, y, z, p)
-            if v.is_finite():
-                return v
-            raise ArbFiniteError
+            if flint.ctx.prec < 500:  # can be slow
+                x, y, z, p = [self.eval(arg, **kwargs) for arg in args]
+                v = acb.elliptic_rj(x, y, z, p)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
 
         if head == CarlsonRC:
             assert len(args) == 2
@@ -548,11 +542,12 @@ class ArbNumericalEvaluation(object):
 
         if head == EllipticPi:
             assert len(args) == 2
-            x, y = [self.eval(arg, **kwargs) for arg in args]
-            v = acb.elliptic_pi(x, y)
-            if v.is_finite():
-                return v
-            raise ArbFiniteError
+            if flint.ctx.prec < 350:  # can be slow
+                x, y = [self.eval(arg, **kwargs) for arg in args]
+                v = acb.elliptic_pi(x, y)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
 
         if head == IncompleteEllipticF:
             assert len(args) == 2
@@ -572,11 +567,12 @@ class ArbNumericalEvaluation(object):
 
         if head == IncompleteEllipticPi:
             assert len(args) == 3
-            n, phi, m = [self.eval(arg, **kwargs) for arg in args]
-            v = acb.elliptic_pi_inc(n, phi, m)
-            if v.is_finite():
-                return v
-            raise ArbFiniteError
+            if flint.ctx.prec < 350:  # can be slow
+                n, phi, m = [self.eval(arg, **kwargs) for arg in args]
+                v = acb.elliptic_pi_inc(n, phi, m)
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
 
         if head == DirichletL:
             if len(args) == 2:
@@ -662,14 +658,15 @@ class ArbNumericalEvaluation(object):
 
         if head == HurwitzZeta:
             if len(args) == 2:
-                s, a = args
-                s = self.eval(s, **kwargs)
-                a = self.eval(a, **kwargs)
-                s = acb(s)
-                v = s.zeta(a)
-                if v.is_finite():
-                    return v
-                raise ArbFiniteError
+                if flint.ctx.prec < 1000:  # can be slow
+                    s, a = args
+                    s = self.eval(s, **kwargs)
+                    a = self.eval(a, **kwargs)
+                    s = acb(s)
+                    v = s.zeta(a)
+                    if v.is_finite():
+                        return v
+                    raise ArbFiniteError
 
         if head == DigammaFunction:
             if len(args) == 1:
@@ -681,9 +678,10 @@ class ArbNumericalEvaluation(object):
                     return v
                 raise ArbFiniteError
             if len(args) == 2:
-                z, n = args
-                if n.is_integer() and int(n) >= 0:
-                    return self.eval(PolyGamma(n, z), **kwargs)
+                if flint.ctx.prec < 1000:  # can be slow
+                    z, n = args
+                    if n.is_integer() and int(n) >= 0:
+                        return self.eval(PolyGamma(n, z), **kwargs)
 
         if head in (PolyGamma, PolyLog):
             if len(args) == 2:
@@ -700,19 +698,20 @@ class ArbNumericalEvaluation(object):
                 raise ArbFiniteError
 
         if head == StieltjesGamma:
-            if len(args) == 1:
-                n = args[0]
-                if n.is_integer() and int(n) >= 0:
-                    v = acb.stieltjes(int(n))
-                    if v.is_finite():
-                        return v
-            if len(args) == 2:
-                n, a = args
-                a = self.eval(a, **kwargs)
-                if n.is_integer() and int(n) >= 0:
-                    v = acb.stieltjes(int(n), a)
-                    if v.is_finite():
-                        return v
+            if flint.ctx.prec < 1000:  # can be slow
+                if len(args) == 1:
+                    n = args[0]
+                    if n.is_integer() and int(n) >= 0:
+                        v = acb.stieltjes(int(n))
+                        if v.is_finite():
+                            return v
+                if len(args) == 2:
+                    n, a = args
+                    a = self.eval(a, **kwargs)
+                    if n.is_integer() and int(n) >= 0:
+                        v = acb.stieltjes(int(n), a)
+                        if v.is_finite():
+                            return v
 
         if head == Where:
             symbol_stack = kwargs.get("symbol_stack", [])[:]
@@ -794,7 +793,7 @@ class ArbNumericalEvaluation(object):
                 n = n.simple()  # XXX
                 if n.is_integer():
                     n = int(n)
-                    if 0 < abs(n) <= 10**15:    # XXX
+                    if 0 < abs(n) <= 10**8 or (flint.ctx.prec < 200 and 0 < abs(n) <= 10**12):    # XXX -- better with timeout?
                         v = acb.zeta_zero(abs(n))
                         if n < 0:
                             v = v.conjugate()

@@ -775,6 +775,7 @@ class alg(object):
     @staticmethod
     def exp_two_pi_i(x):
         x = fmpq(x)
+        check_degree_limit(10 * x.q)
         poly = fmpz_poly.cyclotomic(x.q)
         prec = ctx.prec
         ctx.prec = 64
@@ -798,6 +799,7 @@ class alg(object):
     @staticmethod
     def cos_pi(x, monic=False):
         x = fmpq(x)
+        check_degree_limit(10 * x.q)
         x2 = x / 2
         poly = fmpz_poly.cos_minpoly(x2.q)
         prec = ctx.prec
@@ -879,8 +881,8 @@ class alg(object):
             c0 = self._minpoly[0]
             c1 = self._minpoly[1]
             if abs(n) > 2:
-                check_bits_limit(c0.height_bits() * n)
-                check_bits_limit(c1.height_bits() * n)
+                check_bits_limit(c0.height_bits() * abs(n))
+                check_bits_limit(c1.height_bits() * abs(n))
             if n >= 0:
                 return alg(fmpq(c0**n) / (-c1)**n)
             else:

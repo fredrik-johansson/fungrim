@@ -148,6 +148,12 @@ def_Topic(
     ),
     Subsection("Carlson symmetric elliptic integrals"),
     Entries(
+        "0cc11f",
+        "6520e7",
+        "9ccaef",
+        "41cf8e",
+        "94f646",
+        "55d23d",
         "e2445d",
         "f48f54",
         "8f4e31",
@@ -358,7 +364,7 @@ make_entry(ID("9227bf"),
 
 ## Incomplete integrals
 
-make_entry(ID("ba1965"),
+make_entry(ID("ba1965") ,
     Formula(Equal(IncompleteEllipticF(0, 0), 0)))
 
 make_entry(ID("4268fc"),
@@ -455,7 +461,7 @@ make_entry(ID("a14442"),
 make_entry(ID("75e141"),
     Formula(Equal(IncompleteEllipticE(phi, 1), Sin(phi))),
     Variables(phi),
-    Assumptions(And(Element(phi, CC), LessEqual(-Pi/2, Re(phi), Pi/2))))
+    Assumptions(And(Element(phi, CC), Or(Element(Re(phi), ClosedOpenInterval(-Pi/2, Pi/2)), Equal(phi, Pi/2)))))
 
 make_entry(ID("f35a37"),
     Formula(Equal(IncompleteEllipticE(phi, 1), (-1)**Floor(Re(phi)/Pi+Div(1,2)) * Sin(phi) + 2*Floor(Re(phi)/Pi+Div(1,2)))),
@@ -469,10 +475,10 @@ make_entry(ID("2573ba"),
     Formula(Equal(IncompleteEllipticE(Pi / 2, -1), Mul(Sqrt(2), Add(Div(Pow(Gamma(Div(1, 4)), 2), Mul(8, Sqrt(Pi))), Div(Pow(Pi, Div(3, 2)), Pow(Gamma(Div(1, 4)), 2)))))))
 
 make_entry(ID("b62aae"),
-    Formula(Equal(IncompleteEllipticF(Pi / 2, 1), 1)))
+    Formula(Equal(IncompleteEllipticE(Pi / 2, 1), 1)))
 
 make_entry(ID("dec0d2"),
-    Formula(Equal(IncompleteEllipticF(-Pi / 2, 1), -1)))
+    Formula(Equal(IncompleteEllipticE(-Pi / 2, 1), -1)))
 
 make_entry(ID("2245df"),
     Formula(Equal(IncompleteEllipticE(Pi*k/2, 1), k)),
@@ -564,8 +570,38 @@ make_entry(ID("752619"),
 ## AGM (see AGM ...)
 
 ## Carlson integrals
-
 # todo: check singularities in the following
+
+make_entry(ID("0cc11f"),
+    Formula(Equal(EllipticK(m), CarlsonRF(0, 1-m, 1))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("6520e7"),
+    Formula(Equal(EllipticE(m), 2 * CarlsonRG(0, 1-m, 1))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("9ccaef"),
+    Formula(Equal(EllipticPi(n, m), CarlsonRF(0, 1-m, 1) + (n/3) * CarlsonRJ(0, 1-m, 1, 1-n))),
+    Variables(n, m),
+    Assumptions(And(Element(n, CC), Element(m, CC), NotEqual(m, 1))))
+
+make_entry(ID("41cf8e"),
+    Formula(Equal(EllipticE(m), ((1-m)/3) * (CarlsonRD(0, 1-m, 1) + CarlsonRD(0, 1, 1-m)))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("94f646"),
+    Formula(Equal(EllipticK(m) - EllipticE(m), (m / 3) * CarlsonRD(0, 1-m, 1))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
+make_entry(ID("55d23d"),
+    Formula(Equal(EllipticE(m) - (1-m) * EllipticK(m), ((m*(1-m)) / 3) * CarlsonRD(0, 1, 1-m))),
+    Variables(m),
+    Assumptions(Element(m, CC)))
+
 make_entry(ID("e2445d"),
     Formula(Equal(IncompleteEllipticF(phi, m), Sin(phi) * CarlsonRF(Cos(phi)**2, 1 - m*Sin(phi)**2, 1))),
     Variables(phi, m),

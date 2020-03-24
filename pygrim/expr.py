@@ -1175,7 +1175,7 @@ MultiZetaValue
 EisensteinG EisensteinE
 AGM AGMSequence EllipticK EllipticE EllipticPi IncompleteEllipticF IncompleteEllipticE IncompleteEllipticPi
 EllipticSingularValue
-CarlsonRF CarlsonRG CarlsonRJ CarlsonRD CarlsonRC
+CarlsonRF CarlsonRG CarlsonRJ CarlsonRD CarlsonRC CarlsonHypergeometricR CarlsonHypergeometricT
 QSeriesCoefficient EqualQSeriesEllipsis
 BetaFunction IncompleteBeta IncompleteBetaRegularized
 BarnesG LogBarnesG LogBarnesGRemainder

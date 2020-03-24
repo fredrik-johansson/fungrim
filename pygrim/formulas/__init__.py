@@ -20,6 +20,7 @@ from .sinc import *
 from .atan import *
 from .agm import *
 from .legendre_elliptic import *
+from .carlson_elliptic import *
 from .lambertw import *
 from .gcd import *
 from .factorials import *

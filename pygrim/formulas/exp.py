@@ -146,22 +146,19 @@ make_entry(ID("424db5"),
     Variables(z))
 
 make_entry(ID("a807a7"),
-    Formula(Implies(And(Element(z, PowerSeries(QQ, x)), Equal(SeriesCoefficient(z, x, 0), 0)),
-        And(Element(Exp(z), PowerSeries(QQ, x)), Equal(SeriesCoefficient(Exp(z), x, 0), 1)))),
-    Variables(x, z),
-    Assumptions(Equal(x, XXSeries())))
+    Formula(Implies(And(Element(z, PowerSeries(QQ, SerX)), Equal(Coefficient(z, SerX, 0), 0)),
+        And(Element(Exp(z), PowerSeries(QQ, SerX)), Equal(Coefficient(Exp(z), SerX, 0), 1)))),
+    Variables(z))
 
 make_entry(ID("0d82d4"),
-    Formula(Implies(Element(z, PowerSeries(RR, x)),
-        And(Element(Exp(z), PowerSeries(RR, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0)))),
-    Variables(x, z),
-    Assumptions(Equal(x, XXSeries())))
+    Formula(Implies(Element(z, PowerSeries(RR, SerX)),
+        And(Element(Exp(z), PowerSeries(RR, SerX)), NotEqual(Coefficient(Exp(z), SerX, 0), 0)))),
+    Variables(z))
 
 make_entry(ID("148f96"),
-    Formula(Implies(Element(z, PowerSeries(CC, x)),
-            And(Element(Exp(z), PowerSeries(CC, x)), NotEqual(SeriesCoefficient(Exp(z), x, 0), 0)))),
-    Variables(x, z),
-    Assumptions(Equal(x, XXSeries())))
+    Formula(Implies(Element(z, PowerSeries(CC, SerX)),
+            And(Element(Exp(z), PowerSeries(CC, SerX)), NotEqual(Coefficient(Exp(z), SerX, 0), 0)))),
+    Variables(z))
 
 make_entry(ID("9e388b"),
 #    Formula(All(Element(Exp(A), GeneralLinearGroup(n, RR)), ForElement(A, Matrices(RR, n, n)))),

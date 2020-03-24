@@ -35,7 +35,10 @@ some_complex_algebraics = [ConstI, -ConstI, 2*ConstI, -2*ConstI, ConstI/2, -Cons
     Exp(Pi*ConstI/3), Exp(2*Pi*ConstI/3), Exp(Pi*ConstI/6), Exp(5*Pi*ConstI/6),
     Exp(Pi*ConstI/4), Exp(-Pi*ConstI/4), Exp(3*Pi*ConstI/4), Exp(-3*Pi*ConstI/4)]
 
-some_complex_transcendentals = [Pi*ConstI, 2*Pi*ConstI, -Pi*ConstI, Div(1,2)+Pi*ConstI, Div(1,2)-Pi*ConstI, Pi+ConstE*ConstI]
+some_complex_transcendentals = [Pi*ConstI, 2*Pi*ConstI, -Pi*ConstI, Div(1,2)+Pi*ConstI, Div(1,2)-Pi*ConstI, Pi+Sqrt(5)*ConstI,
+    Pi+ConstI, Pi-ConstI, -Pi+ConstI, -Pi-ConstI, Pi/2+ConstI, Pi/2-ConstI,
+    -Pi/2+ConstI, -Pi/2-ConstI, 3*Pi/2+ConstI, 3*Pi/2-ConstI, -3*Pi/2+ConstI, -3*Pi/2-ConstI, 2*Pi+ConstI, 2*Pi-ConstI, -2*Pi+ConstI, -2*Pi-ConstI,
+    5*Pi/2+ConstI, 5*Pi/2-ConstI]
 
 some_rationals = interleave_longest(some_integers, some_fractions)
 some_algebraics = interleave_longest(some_integers, some_fractions, some_algebraic_irrationals, some_complex_algebraics)
@@ -54,6 +57,29 @@ def And_terms(expr):
                 yield t
     else:
         yield expr
+
+def randomized_cartesian(*lists):
+    from random import randrange
+    def grand(N):
+        B = 2**randrange(N.bit_length()+1)
+        B = min(N, B)
+        return randrange(B)
+    seen = set()
+    Ns = [len(L) for L in lists]
+    num = 1
+    for N in Ns:
+        num *= N
+    while 1:
+        #print(len(seen), num)
+        if len(seen) == num:
+            break
+        idx = tuple(grand(N) for N in Ns)
+        if idx in seen:
+            continue
+        val = tuple(lists[i][j] for (i, j) in enumerate(idx))
+        yield val
+        seen.add(idx)
+
 
 # todo: design a real algorithm
 def custom_cartesian(*lists):
@@ -330,6 +356,7 @@ class Brain(object):
 
         """
         self.simple_cache = {}
+        self.arb_cache = {}
         self.penalty = penalty
 
         # Init computational types
@@ -379,10 +406,12 @@ class Brain(object):
             old_inferences = self.inferences
             old_variables = self.variables
             old_cache = self.simple_cache
+            old_arb_cache = self.arb_cache
             try:
                 self.inferences = old_inferences.copy()
                 self.variables = old_variables.union(variables)
                 self.simple_cache = {}
+                self.arb_cache = {}
                 assumptions = frozenset(assumptions.head_args_flattened(And))
                 for asm in assumptions:
                     self.infer(asm)
@@ -391,6 +420,7 @@ class Brain(object):
                 self.inferences = old_inferences
                 self.variables = old_variables
                 self.simple_cache = old_cache
+                self.simple_arb_cache = old_arb_cache
 
     def __repr__(self):
         s = ""
@@ -400,19 +430,26 @@ class Brain(object):
             s += "  " + str(thm) + "\n"
         return s
 
+    # todo: cache is duplicated here and in numeric; also doesn't apply to subexpressions...Z
+
     def real_enclosure(self, x):
         """
         Performs numerical evaluation and returns an enclosure of x as an arb.
         Success proves that x is a real number.
         Returns None on failure.
         """
+        res = None
         try:
-            val = x.n(as_arb=True)
+            if x in self.arb_cache:
+                val = self.arb_cache[x]
+            else:
+                val = x.n(as_arb=True)
+                self.arb_cache[x] = val
             if type(val) == self._arb:
-                return val
+                res = val
         except (NotImplementedError, ValueError, ImportError):
-            pass
-        return None
+            self.arb_cache[x] = None
+        return res
 
     def complex_enclosure(self, x):
         """
@@ -420,16 +457,21 @@ class Brain(object):
         Success proves that x is a complex number.
         Returns None on failure.
         """
+        res = None
         try:
-            val = x.n(as_arb=True)
-            assert val.is_finite()
+            if x in self.arb_cache:
+                val = self.arb_cache[x]
+            else:
+                val = x.n(as_arb=True)
+                self.arb_cache[x] = val
+            assert val is None or val.is_finite()
             if type(val) == self._acb:
-                return val
-            if type(val) == self._arb:
-                return self._acb(val)
+                res = val
+            elif type(val) == self._arb:
+                res = self._acb(val)
         except (NotImplementedError, ValueError, ImportError):
-            pass
-        return None
+            self.arb_cache[x] = None
+        return res
 
     def simple(self, expr):
         """
@@ -963,53 +1005,17 @@ class Brain(object):
         return v
 
     def evaluate_all_alg(self, L):
-        # try exact computation
-        from .algebraic import alg_get_degree_limit, alg_set_degree_limit
-        from .algebraic import alg_get_bits_limit, alg_set_bits_limit
-        
-        orig_degree = alg_get_degree_limit()
-        orig_bits = alg_get_bits_limit()
-
-        try:
-            alg_set_degree_limit(200)
-            alg_set_bits_limit(100000)
-
-            R = []
-            for val in L:
-                val1 = self.evaluate_alg_or_None(val)
-                if val1 is None:
-                    return None
-                R.append(val1)
-            return R
-
-        finally:
-            alg_set_degree_limit(orig_degree)
-            alg_set_bits_limit(orig_bits)
-
+        R = []
+        for val in L:
+            val1 = self.evaluate_alg_or_None(val)
+            if val1 is None:
+                return None
+            R.append(val1)
+        return R
 
     # todo: identify different types; bools, tuples, sets, matrices, ...
     # todo: fall back to simplifying
-    def equal(self, a, b):
-        """
-        Check if a and b are equal (represent exactly the same mathematical
-        object). Returns True, False, or None for unknown.
-        """
-        assert isinstance(a, Expr)
-        assert isinstance(b, Expr)
-        if a == b:
-            return True
-        if a.is_integer() and b.is_integer():
-            return False
-
-        if Equal(a, b) in self.inferences:
-            return True
-        if Equal(b, a) in self.inferences:
-            return True
-        if NotEqual(a, b) in self.inferences:
-            return False
-        if NotEqual(b, a) in self.inferences:
-            return False
-
+    def _equal(self, a, b):
         # try numerical exclusion test
         val1 = self.complex_enclosure(a)
         if val1 is not None:
@@ -1018,8 +1024,9 @@ class Brain(object):
                 if not val1.overlaps(val2):
                     return False
                 val3 = self.complex_enclosure(a - b)
-                if not val3.contains(0):
-                    return False
+                if val3 is not None:
+                    if not val3.contains(0):
+                        return False
 
         # try exact computation
         vals = self.evaluate_all_alg([a, b])
@@ -1064,6 +1071,46 @@ class Brain(object):
                         return True
 
         return None
+
+    def equal(self, a, b):
+        """
+        Check if a and b are equal (represent exactly the same mathematical
+        object). Returns True, False, or None for unknown.
+        """
+        assert isinstance(a, Expr)
+        assert isinstance(b, Expr)
+        if a == b:
+            return True
+        if a.is_integer() and b.is_integer():
+            return False
+
+        # todo: combine inferences / cache ?
+
+        if Equal(a, b) in self.inferences:
+            return True
+        if Equal(b, a) in self.inferences:
+            return True
+        if NotEqual(a, b) in self.inferences:
+            return False
+        if NotEqual(b, a) in self.inferences:
+            return False
+
+        val = self._equal(a, b)
+        if val is True:
+            eqv = True_
+            self.inferences.add(Equal(a, b))
+            self.inferences.add(Equal(b, a))
+        elif val is False:
+            self.inferences.add(NotEqual(a, b))
+            self.inferences.add(NotEqual(b, a))
+            eqv = False_
+        else:
+            eqv = Equal(a, b)
+
+        self.simple_cache[Equal(a, b)] = eqv
+        self.simple_cache[Equal(b, a)] = eqv
+
+        return val
 
     def is_one(self, x):
         return self.equal(x, Expr(1))
@@ -1701,7 +1748,7 @@ class Brain(object):
                 return fmpq_mat.hilbert(n, n)
         raise NotImplementedError
 
-    def evaluate_alg(self, expr):
+    def _evaluate_alg(self, expr):
         from .algebraic import alg
         if expr.is_atom():
             if expr.is_integer():
@@ -1714,53 +1761,53 @@ class Brain(object):
         head = expr.head()
         if head == Pos:
             x, = expr.args()
-            return self.evaluate_alg(x)
+            return self._evaluate_alg(x)
         elif head == Neg:
             x, = expr.args()
-            return -self.evaluate_alg(x)
+            return -self._evaluate_alg(x)
         elif head == Sub:
             x, y = expr.args()
-            return self.evaluate_alg(x) - self.evaluate_alg(y)
+            return self._evaluate_alg(x) - self._evaluate_alg(y)
         elif head == Add:
             s = alg(0)
             for x in expr.args():
-                s += self.evaluate_alg(x)
+                s += self._evaluate_alg(x)
             return s
         elif head == Mul:
             s = alg(1)
             for x in expr.args():
-                s *= self.evaluate_alg(x)
+                s *= self._evaluate_alg(x)
             return s
         elif head == Div:
             x, y = expr.args()
-            return self.evaluate_alg(x) / self.evaluate_alg(y)
+            return self._evaluate_alg(x) / self._evaluate_alg(y)
         elif head == Sqrt:
             x, = expr.args()
-            return self.evaluate_alg(x).sqrt()
+            return self._evaluate_alg(x).sqrt()
         elif head == Pow:
             x, y = expr.args()
-            x = self.evaluate_alg(x)
-            y = self.evaluate_alg(y)
+            x = self._evaluate_alg(x)
+            y = self._evaluate_alg(y)
             return x ** y
         elif head == Sign:
             x, = expr.args()
-            return self.evaluate_alg(x).sgn()
+            return self._evaluate_alg(x).sgn()
         elif head == Re:
             x, = expr.args()
-            return self.evaluate_alg(x).real
+            return self._evaluate_alg(x).real
         elif head == Im:
             x, = expr.args()
-            return self.evaluate_alg(x).imag
+            return self._evaluate_alg(x).imag
         elif head == Abs:
             x, = expr.args()
-            return abs(self.evaluate_alg(x))
+            return abs(self._evaluate_alg(x))
         elif head in (Exp, Cos, Sin, Tan, Cot, Sec, Csc):
             x, = expr.args()
             if head == Exp:
                 v = self.simple(x / (Pi * ConstI))
             else:
                 v = self.simple(x / Pi)
-            v = self.evaluate_alg(v)
+            v = self._evaluate_alg(v)
             if v.is_rational():
                 v = v.fmpq()
                 if head == Exp:
@@ -1778,6 +1825,23 @@ class Brain(object):
                 elif head == Csc:
                     return alg.csc_pi(v)
         raise NotImplementedError
+
+    def evaluate_alg(self, expr):
+        # try exact computation
+        from .algebraic import alg_get_degree_limit, alg_set_degree_limit
+        from .algebraic import alg_get_bits_limit, alg_set_bits_limit
+        
+        orig_degree = alg_get_degree_limit()
+        orig_bits = alg_get_bits_limit()
+
+        try:
+            alg_set_degree_limit(120)
+            alg_set_bits_limit(100000)
+            return self._evaluate_alg(expr)
+
+        finally:
+            alg_set_degree_limit(orig_degree)
+            alg_set_bits_limit(orig_bits)
 
     def evaluate_alg_or_None(self, expr):
         try:
@@ -2209,6 +2273,7 @@ class Brain(object):
 
         # todo: we want to avoid recursive Mul simplifies if possible...
         factors = [self.simple(x) for x in factors]
+
         if not all(self.is_complex(x) for x in factors):
             # todo: simplifications for this case
             infinities = []
@@ -2235,6 +2300,7 @@ class Brain(object):
             if infinities and all(self.is_zero(x) for x in others):
                 return Undefined
             return Mul(*factors)
+
         for x in factors:
             if x == Expr(0):
                 return Expr(0)
@@ -2612,6 +2678,35 @@ class Brain(object):
         if self.is_negative(x):
             return Expr(-1)
         return Csgn(x)
+
+    # todo: optimizations; delay symbolic evaluation; definition for nonreals...
+    def simple_Max(self, *args):
+        args = [self.simple(x) for x in args]
+        if len(args) == 0:
+            return -Infinity
+        if len(args) == 1:
+            return args[0]
+        if len(args) == 2:
+            x, y = args
+            if self.greater_equal(x, y):
+                return x
+            if self.greater_equal(y, x):
+                return y
+        return Max(*args)
+
+    def simple_Min(self, *args):
+        args = [self.simple(x) for x in args]
+        if len(args) == 0:
+            return Infinity
+        if len(args) == 1:
+            return args[0]
+        if len(args) == 2:
+            x, y = args
+            if self.less_equal(x, y):
+                return x
+            if self.less_equal(y, x):
+                return y
+        return Max(*args)
 
     def simple_Abs(self, x):
         """
@@ -3647,6 +3742,20 @@ class Brain(object):
                 if n <= 1000:
                     return Expr(fmpz.bell_number(n))
         return BellNumber(*args)
+
+    def simple_HarmonicNumber(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 1:
+            fmpq = self._fmpq
+            z, = args
+            if z.is_integer():
+                n = int(z)
+                if n < 0:
+                    return UnsignedInfinity
+                if n <= 1000:
+                    return Expr(fmpq.harmonic(n))
+        return HarmonicNumber(*args)
+
 
     def simple_hypergeometric(self, As, Bs, z, regularized=False):
         """
@@ -4705,14 +4814,100 @@ class Brain(object):
 
     def simple_CarlsonRC(self, *args):
         args = [self.simple(arg) for arg in args]
-        if len(args) == 1:
+        if len(args) == 2:
             x, y = args
-            if self.equal(x, Expr(0)) and self.equal(y, Expr(1)):
-                return Pi / 2
-            if self.equal(y, Expr(0)) and self.element(x, OpenInterval(0, Infinity)):
-                return Infinity
-            # equal, nonzero -> x^(-1/2) ... ?
+            if self.is_complex(x) and self.is_complex(y):
+                if self.is_zero(x) and self.is_one(y):
+                    return Pi / 2
+                # todo: cases-answer...
+                if self.is_zero(x) and self.is_zero(y):
+                    return UnsignedInfinity
+                if self.is_zero(y) and self.is_not_zero(x):
+                    return self.simple(Sign(1/Sqrt(x)) * Infinity)
+                if self.greater(x, 0) and self.greater(y, 0):
+                    res = Cases((Atan(Sqrt(y/x-1)) / Sqrt(y-x), Less(x, y)),
+                                (1/Sqrt(x), Equal(x, y)),
+                                (Atanh(Sqrt(1-y/x)) / Sqrt(x-y), Greater(x, y)))
+                    return self.simple(res)
+                if self.equal(x, y):
+                    return self.simple(1/Sqrt(x))
+                if self.is_zero(x) and self.is_not_zero(y):
+                    return self.simple((Pi / 2) / Sqrt(y))
+                # todo: RC(1,x) = atan(sqrt(x))/sqrt(x)
+                # todo: cplot(lambda y: acb.elliptic_rc(2,y) - atan(sqrt(y/2-1))/sqrt(y-2))
         return CarlsonRC(*args)
+
+    def simple_CarlsonRF(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 3:
+            x, y, z = args
+            if self.is_complex(x) and self.is_complex(y) and self.is_complex(z):
+                xzero = self.is_zero(x)
+                yzero = self.is_zero(y)
+                zzero = self.is_zero(z)
+                # Move zeros up front
+                [(x, xzero), (y, yzero), (z, zero)] = sorted([(x, xzero), (y, yzero), (z, zzero)], key=lambda a: a[1] == False)
+                args = [x, y, z]
+                if xzero:
+                    if yzero and zzero:
+                        return UnsignedInfinity
+                    if self.equal(y, z):
+                        return self.simple(Pi / (2 * Sqrt(y)))
+                    if yzero:
+                        # F(0,0,z) = Sign(1/Sqrt(z)) * Infinity
+                        # F(0,0,0) = UnsignedInfinity
+                        res = Cases((Sign(1/Sqrt(z)) * Infinity, NotEqual(z, 0)), (UnsignedInfinity, Equal(z, 0)))
+                        return self.simple(res)
+                    # todo: generalize to complex cases, with correct branches
+                    # F(0,y,z) = EllipticK(1 - z/y) / Sqrt(y); y > 0
+                    # F(0,y,z) = EllipticK(1 - y/z) / Sqrt(z); z > 0
+                    if self.greater(y, 0):
+                        return self.simple(EllipticK(1 - z / y) / Sqrt(y))
+                    if self.greater(z, 0):
+                        return self.simple(EllipticK(1 - y / z) / Sqrt(z))
+                if self.equal(x, y):
+                    if self.equal(x, z):
+                        return self.simple(1/Sqrt(x))
+                    return self.simple(CarlsonRC(z, x))
+                if self.equal(x, z):
+                    return self.simple(CarlsonRC(y, x))
+                if self.equal(y, z):
+                    return self.simple(CarlsonRC(x, y))
+        return CarlsonRF(*args)
+
+    def simple_CarlsonRJ(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 4:
+            x, y, z, w = args
+            if self.is_complex(x) and self.is_complex(y) and self.is_complex(z) and self.is_complex(w):
+                xzero = self.is_zero(x)
+                yzero = self.is_zero(y)
+                zzero = self.is_zero(z)
+                wzero = self.is_zero(w)
+                # Move zeros up front
+                [(x, xzero), (y, yzero), (z, zero)] = sorted([(x, xzero), (y, yzero), (z, zzero)], key=lambda a: a[1] == False)
+                args = [x, y, z, w]
+                if wzero and xzero == False and yzero == False and zzero == False:
+                    return Infinity
+                if xzero:
+                    if yzero:
+                        # J(0,0,z,w) = Sign(1/(Sqrt(z)*w)) * Infinity
+                        # J(0,0,z,0) = UnsignedInfinity
+                        res = Cases((Sign(1/(Sqrt(z)*w)) * Infinity, And(NotEqual(z, 0), NotEqual(w, 0))), (UnsignedInfinity, Otherwise))
+                        return self.simple(res)
+                    # J(0,y,z,w)
+                    # todo: equivalent to EllipticPi
+                    #if self.greater(y, 0):
+                    #    return ...
+                    #if self.greater(z, 0):
+                    #    return ...
+                if self.equal(x, y) and self.equal(x, z) and self.equal(x, w):
+                    return self.simple(Pow(x, -Div(3, 2)))
+                # todo: homogeneous reduction?
+                # todo: special case for RD
+                # todo: RJ(x, x, x, w) = RD(w, w, x) ?
+                # todo: x = y or x = z or y = z ... reduces to ...
+        return CarlsonRJ(*args)
 
     def simple_IdentityMatrix(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -4792,7 +4987,7 @@ class Brain(object):
         Examples:
 
             >>> b = Brain()
-            >>> for v in b.some_values([x, y], And(Element(x, ZZ), Element(y, QQ)), as_dict=True):
+            >>> for v in b.some_values([x, y], And(Element(x, ZZ), Element(y, QQ)), as_dict=True):   # doctest: +SKIP
             ...     print(v)
             ... 
             {x: 0, y: 0}
@@ -4852,7 +5047,10 @@ class Brain(object):
         base_sets = [base_sets[var] for var in variables]
         found = 0
         count = 0
-        for values in custom_cartesian(*base_sets):
+        cartesian_iterator = randomized_cartesian
+        # cartesian_iterator = custom_cartesian
+
+        for values in cartesian_iterator(*base_sets):
             assignment = {var:val for (var,val) in zip(variables, values)}
             # todo: when the assumptions for the variables are pure domain statements with simple domains, we could skip the checks
             ok = all(self.simple(a.replace(assignment, semantic=True)) == True_ for a in assumptions)
