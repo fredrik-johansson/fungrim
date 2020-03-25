@@ -2692,6 +2692,19 @@ class Brain(object):
                 return x
             if self.greater_equal(y, x):
                 return y
+        if len(args) == 3:
+            x, y, z = args
+            v = self.simple(Max(x, y))
+            if v.head() != Max:
+                return self.simple(Max(v, z))
+        if len(args) >= 4:
+            x = args[0]
+            for i in range(1, len(args)):
+                y = args[i]
+                x = self.simple(Max(x, y))
+                if x.head() == Max:
+                    return Max(*args)
+            return x
         return Max(*args)
 
     def simple_Min(self, *args):
@@ -2706,7 +2719,20 @@ class Brain(object):
                 return x
             if self.less_equal(y, x):
                 return y
-        return Max(*args)
+        if len(args) == 3:
+            x, y, z = args
+            v = self.simple(Min(x, y))
+            if v.head() != Min:
+                return self.simple(Min(v, z))
+        if len(args) >= 4:
+            x = args[0]
+            for i in range(1, len(args)):
+                y = args[i]
+                x = self.simple(Min(x, y))
+                if x.head() == Min:
+                    return Min(*args)
+            return x
+        return Min(*args)
 
     def simple_Abs(self, x):
         """
@@ -4812,6 +4838,7 @@ class Brain(object):
                 return self.simple(Csgn(s) * (Pi / 2) * ConstI)
         return Atanh(*args)
 
+    # todo: improve symbolic simplification so that CarlsonRC(9/4., 2) -> Log(2)
     def simple_CarlsonRC(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 2:
@@ -4829,12 +4856,27 @@ class Brain(object):
                                 (1/Sqrt(x), Equal(x, y)),
                                 (Atanh(Sqrt(1-y/x)) / Sqrt(x-y), Greater(x, y)))
                     return self.simple(res)
+                if self.less(x, 0) and self.less(y, 0):
+                    return self.simple(-ConstI * CarlsonRC(-x, -y))
+                if self.less(x, 0) and self.greater(y, 0):
+                    return self.simple((Pi/2 - Atanh(Sqrt((-x)/((-x)+y)))*ConstI) / Sqrt((-x)+y))
+                if self.greater(x, 0) and self.less(y, 0):
+                    return self.simple((Atanh(Sqrt(x/(x+(-y)))) - Pi*ConstI/2) / Sqrt(x+(-y)))
                 if self.equal(x, y):
                     return self.simple(1/Sqrt(x))
                 if self.is_zero(x) and self.is_not_zero(y):
                     return self.simple((Pi / 2) / Sqrt(y))
-                # todo: RC(1,x) = atan(sqrt(x))/sqrt(x)
-                # todo: cplot(lambda y: acb.elliptic_rc(2,y) - atan(sqrt(y/2-1))/sqrt(y-2))
+                if self.greater(x, 0) or (self.greater(y, 0) and (self.element(x, OpenInterval(-Infinity, 0)) == False)):
+                    res = Cases((Atan(Sqrt(y/x-1)) / Sqrt(y-x), NotEqual(x, y)),
+                                (1/Sqrt(x), Equal(x, y)))
+                    return self.simple(res)
+                if self.is_not_zero(x) and self.is_not_zero(y):
+                    c = self.simple(y / x)
+                    if self.greater(c, 0):
+                        res = Cases((Atan(Sqrt(c-1)) / Sqrt(y-x), Greater(c, 1)),
+                                    (1/Sqrt(x), Equal(c, 1)),
+                                    (Atanh(Sqrt(1-c)) / Sqrt(x-y), Less(c, 1)))
+                        return self.simple(res)
         return CarlsonRC(*args)
 
     def simple_CarlsonRF(self, *args):

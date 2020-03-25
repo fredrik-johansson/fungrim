@@ -10,7 +10,7 @@ def_Topic(
         "8f7c2a",
         "bac745",
     ),
-    Subsection("Specialized versions"),
+    Subsection("Degenerate cases"),
     Entries(
         "132ec5",
         "61f98d",
@@ -84,6 +84,11 @@ def_Topic(
         "f48f54",
         "8f4e31",
     ),
+    Section("Specific values"),
+    SeeTopics("Specific values of Carlson symmetric elliptic integrals"),
+    Entries(
+        "5ada5f",
+    ),
     Section("Derivatives and differential equations"),
     Entries(
         "5f0adb",
@@ -96,6 +101,7 @@ def_Topic(
     ),
     Section("Series representations"),
     SeeTopics("Series representations of Carlson symmetric elliptic integrals"),
+    Subsection("Multivariate hypergeometric series representations"),
     Entries(
         "b576e6",
         "8f71cb",
@@ -103,6 +109,11 @@ def_Topic(
         "b2cd79",
         "8d304b",
         "7ded8f",
+    ),
+    Subsection("Explicit truncated series approximations"),
+    Entries(
+        "799894",
+        "618a9f",
     ),
     Section("Bounds and inequalities"),
     Entries(
@@ -116,6 +127,49 @@ def_Topic(
         "34e932",
         "688efb",
         "978287",
+    ),
+)
+
+def_Topic(
+    Title("Specific values of Carlson symmetric elliptic integrals"),
+    SeeTopics("Carlson symmetric elliptic integrals"),
+    Section("The elementary integral RC"),
+    Subsection("Particular constant values"),
+    Entries(
+        "5c2b08",
+        "1acb07",
+        "e464ec",
+        "d38c27",
+        "eac389",
+        "a15c03",
+        "35cb93",
+        "56d1bc",
+        "25435b",
+        "7ea1ad",
+    ),
+    Subsection("Specialized values"),
+    Entries(
+        "7cbe17",
+        "ff58cf",
+        "ad96f4",
+        "09a494",
+        "b136bd",
+        "8c9ba1",
+    ),
+    Subsection("General formulas for real variables"),
+    Entries(
+        "5ada5f",
+        "de0638",
+        "00cdb7",
+        "bc2f88",
+        "4becdd",
+    ),
+    Subsection("General formulas for one or more complex variables"),
+    Entries(
+        "7b5755",
+        "0cf60d",
+        "eb1d4f",
+        "157ebb",
     ),
 )
 
@@ -162,6 +216,12 @@ def_Topic(
         "2c1df7",
         "b81ca0",
     ),
+    Section("Approximations by truncated series"),
+    Entries(
+        "926b36",
+        "799894",
+        "618a9f",
+    ),
     Section("Integral representations"),
     Entries(
         "a1f7ea",
@@ -183,7 +243,7 @@ make_entry(ID("bac745"),
 
 # name? it is also an "integral of the second kind" (but not completely symmetric like RG)
 make_entry(ID("663d75"),
-    SymbolDefinition(CarlsonRD, CarlsonRD(x, y, z), "Special case of Carlson symmetric elliptic integral of the third kind"))
+    SymbolDefinition(CarlsonRD, CarlsonRD(x, y, z), "Degenerate case of Carlson symmetric elliptic integral of the third kind"))
 
 make_entry(ID("132ec5"),
     SymbolDefinition(CarlsonRC, CarlsonRC(x, y), "Carlson elementary elliptic integral"))
@@ -343,12 +403,6 @@ make_entry(ID("a839d5"),
     Variables(x, y, lamda),
     Assumptions(And(Element(x, CC), Element(y, CC), Element(lamda, OpenInterval(0, Infinity)))))
 
-# Branch cuts?
-
-# Special values -- including infinities
-
-# Elementary cases
-
 # Integral representations
 
 make_entry(ID("9357b9"),
@@ -467,22 +521,6 @@ make_entry(ID("0d8639"),
         GreaterEqual(Re(z), 0),
     )))
 
-# Specific values
-
-'''
-TODO: (+more elementary cases...)
-
-make_entry(ID(""),
-    Formula(Equal(CarlsonRG(x, y, y), (y * CarlsonRC(x, y) + Sqrt(x)) / 2)))
-
-make_entry(ID(""),
-    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))
-
-'''
-
-# TODO: both lemniscate constants (check symbolic evaluation)
-
-
 
 # Derivatives and differential equations
 
@@ -554,6 +592,18 @@ make_entry(ID("741859"),
 
 # Series representations
 
+# NOTE:
+# Without strong assumptions, the following formulas are mutually incompatible when some parameters are in the left half-plane:
+# 1) integral representations for CarlsonHypergeometricR
+# 2) representations of the individual CarlsonRX functions in terms of CarlsonHypergeometricR
+# 3) series representation of CarlsonHypergeometricR
+
+# Two possible solutions:
+# * Define CarlsonHypergeometricR universally in terms of its series representation, and add assumptions for 1) and 2)
+# * Define CarlsonHypergeometricR consistently with the integral representations and other functions, and add assumptions for 3)
+
+# For now, we use the second solution as it requires less work...
+
 make_entry(ID("b576e6"),
     SymbolDefinition(CarlsonHypergeometricR, CarlsonHypergeometricR(-a, b, z), "Carlson multivariate hypergeometric function"),
     References("https://dlmf.nist.gov/19.19",
@@ -567,33 +617,39 @@ make_entry(ID("13f252"),
     Formula(Where(Equal(CarlsonHypergeometricR(-a, List(Repeat(beta, n)), List(z_(k), For(k, 1, n))),
         A**(-a) * CarlsonHypergeometricR(-a, List(Repeat(beta, n)), List(z_(k) / A, For(k, 1, n)))),
         Def(A, (1/n) * Sum(z_(k), For(k, 1, n))))),
-    Variables(a, beta, z, n),
+    Variables(a, beta, z_, n),
     Assumptions(And(Element(a, RR),
         Element(beta, OpenInterval(0, Infinity)),
         Element(n, ZZGreaterEqual(1)),
-        All(And(Element(z_(k), CC), Less(Abs(1 - n * z_(k) / Sum(z_(j), For(j, 1, n))), 1)), ForElement(k, Range(1, n))))))
+        All(And(Element(z_(k), CC), Less(Abs(1 - n * z_(k) / Sum(z_(j), For(j, 1, n))), 1)), ForElement(k, Range(1, n))),
+        All(Greater(Re(z_(k)), 0), ForElement(k, Range(1, n))),  # Condition for consistency -- see NOTE (could probably be relaxed, e.g. look at all |arg(z_i)-arg(z_j)|)
+    )))
 
 make_entry(ID("4cb707"),
     Formula(Where(Equal(CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)), List(z_(k), For(k, 1, n))),
         Sum(RisingFactorial(a, N) / RisingFactorial(c, N) * CarlsonHypergeometricT(N, List(b_(k), For(k, 1, n)), List(1 - z_(k), For(k, 1, n))),
             For(N, 0, Infinity))), Def(c, Sum(b_(k), For(k, 1, n))))),
-    Variables(a, b, z, n),
+    Variables(a, b_, z_, n),
     Assumptions(And(Element(a, RR), Element(n, ZZGreaterEqual(1)),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
         All(And(Element(z_(k), CC), Less(Abs(1 - z_(k)), 1)), ForElement(k, Range(1, n))),
-        Greater(Sum(b_(k), For(k, 1, n)), 0))))
+        Greater(Sum(b_(k), For(k, 1, n)), 0),
+        All(Greater(Re(z_(k)), 0), ForElement(k, Range(1, n))),  # Condition for consistency -- see NOTE (could probably be relaxed, e.g. look at all |arg(z_i)-arg(z_j)|)
+    )))
 
 make_entry(ID("2443de"),
     Formula(Where(Equal(CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)), List(z_(k), For(k, 1, n))),
         z_(n)**(-a) * 
         Sum(RisingFactorial(a, N) / RisingFactorial(c, N) * CarlsonHypergeometricT(N, List(b_(k), For(k, 1, n - 1)), List(1 - z_(k) / z_(n), For(k, 1, n - 1))),
             For(N, 0, Infinity))), Def(c, Sum(b_(k), For(k, 1, n))))),
-    Variables(a, b, z, n),
+    Variables(a, b_, z_, n),
     Assumptions(And(Element(a, RR), Element(n, ZZGreaterEqual(1)),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
         Element(z_(n), SetMinus(CC, Set(0))),
         All(And(Element(z_(k), CC), Less(Abs(1 - z_(k) / z_(n)), 1)), ForElement(k, Range(1, n - 1))),
-        Greater(Sum(b_(k), For(k, 1, n)), 0))))
+        Greater(Sum(b_(k), For(k, 1, n)), 0),
+        All(Greater(Re(z_(k)), 0), ForElement(k, Range(1, n))),  # Condition for consistency -- see NOTE (could probably be relaxed, e.g. look at all |arg(z_i)-arg(z_j)|)
+    )))
 
 make_entry(ID("a21395"),
     Formula(Where(Equal(CarlsonHypergeometricR(-a, List(Repeat(beta, n)), List(z_(k), For(k, 1, n))),
@@ -601,17 +657,19 @@ make_entry(ID("a21395"),
         Sum(RisingFactorial(a, N) / RisingFactorial(n*beta, N) * CarlsonHypergeometricT(N, List(Repeat(beta, n)), List(1 - z_(k) / A, For(k, 1, n))),
             For(N, 0, Infinity))),
         Def(A, (1/n) * Sum(z_(k), For(k, 1, n))))),
-    Variables(a, beta, z, n),
+    Variables(a, beta, z_, n),
     Assumptions(And(Element(a, RR),
         Element(beta, OpenInterval(0, Infinity)),
         Element(n, ZZGreaterEqual(1)),
-        All(And(Element(z_(k), CC), Less(Abs(1 - n * z_(k) / Sum(z_(j), For(j, 1, n))), 1)), ForElement(k, Range(1, n))))))
+        All(And(Element(z_(k), CC), Less(Abs(1 - n * z_(k) / Sum(z_(j), For(j, 1, n))), 1)), ForElement(k, Range(1, n))),
+        All(Greater(Re(z_(k)), 0), ForElement(k, Range(1, n))),  # Condition for consistency -- see NOTE (could probably be relaxed, e.g. look at all |arg(z_i)-arg(z_j)|)
+    )))
 
 make_entry(ID("da47f6"),
     Formula(Equal(CarlsonHypergeometricT(N, List(b_(k), For(k, 1, n)), List(z_(k), For(k, 1, n))),
         Sum(Product(RisingFactorial(b_(k), m_(k)) / Factorial(m_(k)) * z_(k)**m_(k), For(k, 1, n)),
             ForElement(Tuple(m_(k), For(k, 1, n)), CartesianPower(Parentheses(ZZGreaterEqual(0)), n)), Equal(Sum(m_(k), For(k, 1, n)), N)))),
-    Variables(n, N, b, z),
+    Variables(n, N, b_, z_),
     Assumptions(And(Element(n, ZZGreaterEqual(1)),
         Element(N, ZZGreaterEqual(0)),
         All(Element(b_(k), CC), ForElement(k, Range(1, n))),
@@ -622,12 +680,11 @@ make_entry(ID("0a7f30"),
         Sum(Where((-1)**(M+N) * RisingFactorial(beta, M) * Product(SymmetricPolynomial(k, List(z_(k), For(k, 1, n)))**m_(k) / Factorial(m_(k)), For(k, 1, n)),
                 Def(M, Sum(m_(k), For(k, 1, n)))),
             ForElement(Tuple(m_(k), For(k, 1, n)), CartesianPower(Parentheses(ZZGreaterEqual(0)), n)), Equal(Sum(k * m_(k), For(k, 1, n)), N)))),
-    Variables(n, beta, N, z),
+    Variables(n, beta, N, z_),
     Assumptions(And(Element(n, ZZGreaterEqual(1)),
         Element(beta, OpenInterval(0, Infinity)),
         Element(N, ZZGreaterEqual(0)),
         All(Element(z_(k), CC), ForElement(k, Range(1, n))))))
-
 
 make_entry(ID("8f71cb"),
     Formula(Equal(CarlsonRF(x, y, z), CarlsonHypergeometricR(-Div(1,2), [Div(1,2), Div(1,2), Div(1,2)], [x, y, z]))),
@@ -712,7 +769,7 @@ make_entry(ID("e1a3fb"),
         Or(NotEqual(x, 0), NotEqual(y, 0))
     )))
 
-# todo: correct conditions?
+# todo: sufficient conditions?
 make_entry(ID("cbcad9"),
     Formula(Equal(CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)),
         List(0, Step(z_(k), For(k, 2, n)))),
@@ -721,7 +778,7 @@ make_entry(ID("cbcad9"),
             CarlsonHypergeometricR(-a, List(b_(k), For(k, 2, n)),
                 List(z_(k), For(k, 2, n)))),
             Def(c, -a + Sum(b_(k), For(k, 1, n))))),
-    Variables(a, b, z, n),
+    Variables(a, b_, z_, n),
     Assumptions(And(
         Element(a, RR),
         Element(n, ZZGreaterEqual(1)),
@@ -780,7 +837,7 @@ make_entry(ID("a1f7ea"),
         Where(
             (1/BetaFunction(a,c)) * Integral(t**(c-1) * Product((t + z_(k))**(-b_(k)), For(k, 1, n)), For(t, 0, Infinity)),
         Def(c, -a+Sum(b_(j), For(j, 1, n)))))),
-    Variables(a, b, z, n),
+    Variables(a, b_, z_, n),
     Assumptions(And(Element(a, RR),
         Element(n, ZZGreaterEqual(1)),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
@@ -792,7 +849,7 @@ make_entry(ID("c5d388"),
         Where(
             (1/BetaFunction(a,c)) * Integral(t**(a-1) * Product((1 + t * z_(k))**(-b_(k)), For(k, 1, n)), For(t, 0, Infinity)),
         Def(c, -a+Sum(b_(j), For(j, 1, n)))))),
-    Variables(a, b, z, n),
+    Variables(a, b_, z_, n),
     Assumptions(And(Element(a, RR),
         Element(n, ZZGreaterEqual(1)),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
@@ -802,25 +859,105 @@ make_entry(ID("c5d388"),
 make_entry(ID("2c1df7"),
     Formula(Equal(CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)), List(lamda * z_(k), For(k, 1, n))),
         lamda**(-a) * CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)), List(z_(k), For(k, 1, n))))),
-    Variables(a, b, z, n, lamda),
+    Variables(a, b_, z_, n, lamda),
     Assumptions(And(Element(a, RR),
         Element(n, ZZGreaterEqual(1)),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
         All(Element(z_(k), SetMinus(CC, OpenClosedInterval(-Infinity, 0))), ForElement(k, Range(1, n))),
-        Greater(Sum(b_(k), For(k, 1, n)), a, 0)),
-        Element(lamda, OpenInterval(0, Infinity))))
+        Greater(Sum(b_(k), For(k, 1, n)), a, 0),
+        Element(lamda, OpenInterval(0, Infinity)))))
 
 make_entry(ID("b81ca0"),
     Formula(Equal(CarlsonHypergeometricR(-a, List(b_(k), For(k, 1, n)), List(Repeat(z, n))),
         z**(-a))),
-    Variables(a, b, n, z),
+    Variables(a, b_, n, z),
     Assumptions(And(Element(a, RR),
         All(Element(b_(k), RR), ForElement(k, Range(1, n))),
-        Greater(Sum(b_(k), For(k, 1, n)), a, 0)),
-        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))))
+        Greater(Sum(b_(k), For(k, 1, n)), a, 0),
+        Element(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 # TODO: recurrence (3.9) for the terms in https://doi.org/10.6028/jres.107.034
-# TODO: generic bounds
+
+make_entry(ID("926b36"),
+    Formula(Where(LessEqual(Abs(CarlsonHypergeometricR(-a, List(Repeat(beta, n)), List(z_(k), For(k, 1, n))) -
+        A**(-a) * Sum(RisingFactorial(a, N) / RisingFactorial(n * beta, N) * CarlsonHypergeometricT(N, List(Repeat(beta, n)), List(z_(k), For(k, 1, n))),
+            For(N, 0, K - 1))),
+                Abs(A**(-a)) * RisingFactorial(Abs(a), K) * M**K / (Factorial(K) * (1 - M)**Max(Abs(a), 1))),
+        Def(A, (1/n) * Sum(z_(k), For(k, 1, n))),
+        Def(Z_(k), 1 - z_(k) / A),
+        Def(M, Max(Step(Abs(Z_(k)), For(k, 1, n)))))),
+    Variables(a, beta, z_, n, K),
+    Assumptions(And(Element(a, RR),
+        Element(beta, OpenInterval(0, Infinity)),
+        Element(n, ZZGreaterEqual(1)),
+        Element(K, ZZGreaterEqual(1)),
+        All(And(Element(z_(k), CC), Less(Abs(1 - n * z_(k) / Sum(z_(j), For(j, 1, n))), 1)), ForElement(k, Range(1, n))),
+        All(Greater(Re(z_(k)), 0), ForElement(k, Range(1, n))),  # Condition for consistency -- see NOTE (could probably be relaxed, e.g. look at all |arg(z_i)-arg(z_j)|)
+    )),
+    References("https://doi.org/10.6028/jres.107.034"))
+
+# Note: Carlson does not give the argument condition, but numerical
+# testing finds counterexamples; e.g. x, y, z = (-1.2377 + 0.79846j), (-3.6404 - 3.0689j), (-3.1749 - 0.16069j).
+# Alternatively, a sufficient condition (confirmed by extensive numerical testing)
+# is apparently to perform one duplication step before using the series expansion
+make_entry(ID("799894"),
+    Formula(Where(LessEqual(Abs(CarlsonRF(x, y, z) -
+         A**(-Div(1,2)) * (1 - E/10 + F/14 + E**2/24 - 3*E*F/44 - 5*E**3/208 + 3*F**2/104 + E**2*F/16)),
+            Decimal("0.2") * Abs(A**(-Div(1,2))) * M**8 / (1 - M)),
+        Def(A, (x+y+z)/3),
+        Def(X, 1-x/A),
+        Def(Y, 1-y/A),
+        Def(Z, 1-z/A),
+        Def(E, X*Y + X*Z + Y*Z),
+        Def(F, X*Y*Z),
+        Def(M, Max(Abs(X), Abs(Y), Abs(Z))))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(z, CC),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))),
+        Less(Max(Abs(Arg(x)-Arg(y)), Abs(Arg(x)-Arg(z)), Abs(Arg(y)-Arg(z))), Pi),
+        Less(Abs(1-3*x/(x+y+z)), 1),
+        Less(Abs(1-3*y/(x+y+z)), 1),
+        Less(Abs(1-3*z/(x+y+z)), 1))),
+    References("https://doi.org/10.6028/jres.107.034"))
+
+make_entry(ID("618a9f"),
+    Formula(Where(LessEqual(Abs(CarlsonRJ(x, y, z, w) -
+         A**(-Div(3,2)) * (1 - 3*E/14 + F/6 + 9*E**2/88 - 3*G/22 - 9*E*F/52 + 3*H/26 - E**3/16 + 3*F**2/40 + 3*E*G/20 + 45*E**2*F/272 - 9*F*G/68 - 9*E*H/68)),
+            Decimal("3.4") * Abs(A**(-Div(3,2))) * M**8 / (1 - M)**Div(3,2)),
+        Def(A, (x+y+z+2*w)/5),
+        Def(X, 1-x/A),
+        Def(Y, 1-y/A),
+        Def(Z, 1-z/A),
+        Def(W, Parentheses(-X-Y-Z)/2),   # fixme: printing bug
+        Def(E, X*Y + X*Z + Y*Z - 3*W**2),
+        Def(F, X*Y*Z + 2*E*W + 4*W**3),
+        Def(G, (2*X*Y*Z + E*W + 3*W**3)*W),
+        Def(H, X*Y*Z*W**2),
+        Def(M, Max(Abs(X), Abs(Y), Abs(Z), Abs(W))))),
+    Variables(x, y, z, w),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(z, CC),
+        Element(w, CC),
+        GreaterEqual(Re(x), 0),
+        GreaterEqual(Re(y), 0),
+        GreaterEqual(Re(z), 0),
+        Greater(Re(w), 0),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))),
+        Less(Abs(1-5*x/(x+y+z+2*w)), 1),
+        Less(Abs(1-5*y/(x+y+z+2*w)), 1),
+        Less(Abs(1-5*z/(x+y+z+2*w)), 1),
+        Less(Abs(1-5*z/(x+y+z+2*w)), 1))),
+    References("https://doi.org/10.6028/jres.107.034"))
+
 
 # Bounds and inequalities
 
@@ -907,4 +1044,144 @@ make_entry(ID("978287"),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)),
         Element(y, OpenInterval(0, Infinity)))))
 
+
+# Special values -- including infinities?
+# Elementary cases
+
+
+
+make_entry(ID("5c2b08"),
+    Formula(Equal(CarlsonRC(0, 0), UnsignedInfinity)))
+
+make_entry(ID("1acb07"),
+    Formula(Equal(CarlsonRC(1, 0), Infinity)))
+
+make_entry(ID("e464ec"),
+    Formula(Equal(CarlsonRC(0, 1), Pi / 2)))
+
+make_entry(ID("d38c27"),
+    Formula(Equal(CarlsonRC(1, 1), 1)))
+
+make_entry(ID("eac389"),
+    Formula(Equal(CarlsonRC(1, 2), Pi / 4)))
+
+make_entry(ID("a15c03"),
+    Formula(Equal(CarlsonRC(2, 1), Log(1 + Sqrt(2)))))
+
+make_entry(ID("35cb93"),
+    Formula(Equal(CarlsonRC(0, -1), -((Pi * ConstI) / 2))))
+
+make_entry(ID("56d1bc"),
+    Formula(Equal(CarlsonRC(-1, 0), -(ConstI * Infinity))))
+
+make_entry(ID("25435b"),
+    Formula(Equal(CarlsonRC(1, -1), ((Sqrt(2) * Log(1+Sqrt(2)))/2 - (Pi*Sqrt(2)/4)*ConstI))))
+
+make_entry(ID("7ea1ad"),
+    Formula(Equal(CarlsonRC(-1, 1), (Pi*Sqrt(2)/4 - ((Sqrt(2) * Log(1+Sqrt(2))) / 2) * ConstI))))
+
+make_entry(ID("7cbe17"),
+    Formula(Equal(CarlsonRC(x, 0), Cases(
+        Tuple(Sign(1/Sqrt(x)) * Infinity, NotEqual(x, 0)),
+        Tuple(UnsignedInfinity, Equal(x, 0))))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("ff58cf"),
+    Formula(Equal(CarlsonRC(0, y), Cases(
+        Tuple(Pi / (2 * Sqrt(y)), NotEqual(y, 0)),
+        Tuple(UnsignedInfinity, Equal(y, 0))))),
+    Variables(y),
+    Assumptions(Element(y, CC)))
+
+make_entry(ID("ad96f4"),
+    Formula(Equal(CarlsonRC(x, x), 1/Sqrt(x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("09a494"),
+    Formula(Equal(CarlsonRC(x, 2*x), Pi/(4*Sqrt(x)))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("b136bd"),
+    Formula(Equal(CarlsonRC(2*x, x), Log(1+Sqrt(2))/Sqrt(x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("8c9ba1"),
+    Formula(Equal(CarlsonRC(x, c*x), Cases(
+        (Atan(Sqrt(c-1)) / Sqrt((c-1)*x), Greater(c, 1)),
+        (1/Sqrt(x), Equal(c, 1)),
+        (Atanh(Sqrt(1-c)) / Sqrt((1-c)*x), Less(c, 1))))),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, OpenInterval(0, Infinity)))))
+
+make_entry(ID("5ada5f"),
+    Formula(Equal(CarlsonRC(x, y),
+        Cases((Atan(Sqrt(y/x-1)) / Sqrt(y-x), Less(x, y)),
+            (1/Sqrt(x), Equal(x, y)),
+            (Atanh(Sqrt(1-y/x)) / Sqrt(x-y), Greater(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("de0638"),
+    Formula(Equal(CarlsonRC(-x, -y), -(ConstI * CarlsonRC(x, y)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("00cdb7"),
+    Formula(Equal(CarlsonRC(x, -y), 1/Sqrt(x+y) * (Atanh(Sqrt(x/(x+y))) - Pi*ConstI/2))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("bc2f88"),
+    Formula(Equal(CarlsonRC(-x, y), (1/Sqrt(x+y)) * (Pi/2 - Atanh(Sqrt(x/(x+y))) * ConstI))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("4becdd"),
+    Formula(Equal(CarlsonRC(-x, y), Conjugate(ConstI * CarlsonRC(x, -y)))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+# todo: figure out more general conditions of validity
+make_entry(ID("7b5755"),
+    Formula(Equal(CarlsonRC(x, y), Cases(
+        (Atan(Sqrt(y/x-1)) / Sqrt(y-x), NotEqual(x, y)),
+        (1/Sqrt(x), Equal(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(Element(y, OpenInterval(0, Infinity)), NotElement(x, OpenInterval(-Infinity, 0)))))))
+
+# todo: figure out more general conditions of validity
+make_entry(ID("0cf60d"),
+    Formula(Equal(CarlsonRC(x, y), Cases(
+        (Atanh(Sqrt(1-y/x)) / Sqrt(x-y), NotEqual(x, y)),
+        (1/Sqrt(x), Equal(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(Element(y, OpenInterval(0, Infinity)), NotElement(x, OpenInterval(-Infinity, 0)))))))
+
+make_entry(ID("eb1d4f"),
+    Formula(Equal(CarlsonRC(1, 1+y), Cases(
+        (Atan(Sqrt(y)) / Sqrt(y), NotEqual(y, 0)),
+        (1, Equal(y, 0))))),
+    Variables(y),
+    Assumptions(Element(y, CC)))
+
+make_entry(ID("157ebb"),
+    Formula(Equal(CarlsonRC(1, 1+y), Hypergeometric2F1(1, Div(1,2), Div(3,2), -y))),
+    Variables(y),
+    Assumptions(Element(y, CC)))
+
+
+
+# Specific values
+
+#make_entry(ID(""),
+#    Formula(Equal(CarlsonRG(x, y, y), (y * CarlsonRC(x, y) + Sqrt(x)) / 2)))
+
+#make_entry(ID(""),
+#    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))
+
+# TODO: both lemniscate constants (check symbolic evaluation)
 
