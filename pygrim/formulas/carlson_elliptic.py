@@ -84,6 +84,16 @@ def_Topic(
         "f48f54",
         "8f4e31",
     ),
+    Subsection("Elementary functions"),
+    Entries(
+        "398bb7",
+        "7a9dad",
+        "2cdd2f",
+        "584a61",
+        "423b36",
+        "33e034",
+        "d9765b",
+    ),
     Section("Specific values"),
     SeeTopics("Specific values of Carlson symmetric elliptic integrals"),
     Entries(
@@ -134,6 +144,10 @@ def_Topic(
     Title("Specific values of Carlson symmetric elliptic integrals"),
     SeeTopics("Carlson symmetric elliptic integrals"),
     Section("The elementary integral RC"),
+    Subsection("Scale invariance"),
+    Entries(
+        "a839d5",
+    ),
     Subsection("Particular constant values"),
     Entries(
         "5c2b08",
@@ -170,6 +184,30 @@ def_Topic(
         "0cf60d",
         "eb1d4f",
         "157ebb",
+    ),
+    Section("The integral of the first kind RF"),
+    Subsection("Symmetry and scale invariance"),
+    Entries(
+        "f29729",
+        "7a168a",
+    ),
+    Subsection("Particular constant values"),
+    Entries(
+        "e39456",
+        "9a95a5",
+        "8bb972",
+        "c166ca",
+        "4cd504",
+        "0bf328",
+        "28237a",
+        "f1dd8a",
+        "4c1988",
+        "6c4567",
+        "90af98",
+        "3a84d6",
+        "6674bb",
+        "5c178f",
+        "e30d7e",
     ),
 )
 
@@ -1044,11 +1082,47 @@ make_entry(ID("978287"),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)),
         Element(y, OpenInterval(0, Infinity)))))
 
+# Representation of elementary functions
+# todo: complex assumptions
 
-# Special values -- including infinities?
-# Elementary cases
+make_entry(ID("398bb7"),
+    Formula(Equal(Log(x / y), (x-y)*CarlsonRC((x+y)**2/4, x*y))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, OpenInterval(0, Infinity)))))
+
+make_entry(ID("7a9dad"),
+    Formula(Equal(Atan(x / y), x * CarlsonRC(y**2, y**2+x**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, RR))))
+
+make_entry(ID("2cdd2f"),
+    Formula(Equal(Atanh(x / y), x * CarlsonRC(y**2, y**2 - x**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, OpenInterval(-y, y)))))
+
+make_entry(ID("584a61"),
+    Formula(Equal(Asin(x / y), x * CarlsonRC(y**2 - x**2, y**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, ClosedInterval(-y, y)))))
+
+make_entry(ID("423b36"),
+    Formula(Equal(Asinh(x / y), x * CarlsonRC(y**2 + x**2, y**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, RR))))
+
+make_entry(ID("33e034"),
+    Formula(Equal(Acos(x / y), Sqrt(y**2-x**2) * CarlsonRC(x**2, y**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, ClosedInterval(0, y)))))
+
+make_entry(ID("d9765b"),
+    Formula(Equal(Acosh(x / y), Sqrt(x**2-y**2) * CarlsonRC(x**2, y**2))),
+    Variables(x, y),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, ClosedOpenInterval(y, Infinity)))))
 
 
+
+# Specific values
 
 make_entry(ID("5c2b08"),
     Formula(Equal(CarlsonRC(0, 0), UnsignedInfinity)))
@@ -1172,6 +1246,66 @@ make_entry(ID("157ebb"),
     Formula(Equal(CarlsonRC(1, 1+y), Hypergeometric2F1(1, Div(1,2), Div(3,2), -y))),
     Variables(y),
     Assumptions(Element(y, CC)))
+
+make_entry(ID("e39456"),
+    Formula(Equal(CarlsonRF(0, 0, 0), UnsignedInfinity)))
+
+make_entry(ID("9a95a5"),
+    Formula(Equal(CarlsonRF(0, 0, 1), Infinity)))
+
+make_entry(ID("8bb972"),
+    Formula(Equal(CarlsonRF(0, 1, 1), Pi / 2)))
+
+make_entry(ID("c166ca"),
+    Formula(Equal(CarlsonRF(1, 1, 1), 1)))
+
+make_entry(ID("4cd504"),
+    Formula(Equal(CarlsonRF(1, 1, 2), Log(1 + Sqrt(2)))))
+
+make_entry(ID("0bf328"),
+    Formula(Equal(CarlsonRF(1, 2, 2), Pi / 4)))
+
+make_entry(ID("28237a"),
+    Formula(Equal(CarlsonRF(0, 1, 2), Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)))))
+
+make_entry(ID("f1dd8a"),
+    Formula(Equal(CarlsonRF(0, 1, -1), (Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)) * (1 - ConstI)))))
+
+make_entry(ID("4c1988"),
+    Formula(Equal(CarlsonRF(0, 2, 4), (Gamma(Div(1,4))**2 / (8*Sqrt(Pi))))))
+
+make_entry(ID("6c4567"),
+    Formula(Equal(CarlsonRF(0, Div(1, 2), 1), (Gamma(Div(1,4))**2 / (4*Sqrt(Pi))))))
+
+make_entry(ID("90af98"),
+    Formula(Equal(CarlsonRF(0, 0, -1), -(ConstI * Infinity))))
+
+make_entry(ID("3a84d6"),
+    Formula(Equal(CarlsonRF(0, -1, -1), -(Pi * ConstI) / 2)))
+
+make_entry(ID("6674bb"),
+    Formula(Equal(CarlsonRF(-1, -1, -1), -ConstI)))
+
+make_entry(ID("5c178f"),
+    Formula(Equal(CarlsonRF(0, -1, -2), -((Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi)))*ConstI))))
+
+make_entry(ID("e30d7e"),
+    Formula(Equal(CarlsonRF(0, 1, 12*Sqrt(2)-16), (2+Sqrt(2)) * Gamma(Div(1,4))**2 / (16 * Sqrt(Pi)))))
+
+
+
+# todo: parametric results ...
+
+"""
+
+CarlsonRF(0, 0, x) = ...
+CarlsonRF(0, x, y) = ...
+CarlsonRF(0, 1, x) = ...
+CarlsonRF(x, y, y) = ...
+CarlsonRF(x, x, x) = ...
+CarlsonRF(-x, -y, -z) = ...
+
+"""
 
 
 
