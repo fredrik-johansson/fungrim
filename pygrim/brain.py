@@ -4877,6 +4877,11 @@ class Brain(object):
                                     (1/Sqrt(x), Equal(c, 1)),
                                     (Atanh(Sqrt(1-c)) / Sqrt(x-y), Less(c, 1)))
                         return self.simple(res)
+                    if self.less(c, 0):
+                        c = -c
+                        res = Cases((Atanh(Sqrt(c+1)), Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))),
+                                    (Atanh(Sqrt(c+1)) + Pi*ConstI, Otherwise)) / Sqrt((c+1)*x)
+                        return self.simple(res)
         return CarlsonRC(*args)
 
     def simple_CarlsonRF(self, *args):

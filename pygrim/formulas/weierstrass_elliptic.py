@@ -40,6 +40,10 @@ def_Topic(
         "0207dc",
         "b96c9d",
     ),
+    Section("Inverse functions"),
+    Entries(
+        "124339",   # in carlson_elliptic -- todo: standardized inverse function
+    ),
     Section("Symmetries"),
     Entries(
         "12a9e8",

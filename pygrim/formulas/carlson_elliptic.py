@@ -94,6 +94,11 @@ def_Topic(
         "33e034",
         "d9765b",
     ),
+    Subsection("Inverse Weierstrass elliptic function"),
+    SeeTopics("Weierstrass elliptic functions"),
+    Entries(
+        "124339",
+    ),
     Section("Specific values"),
     SeeTopics("Specific values of Carlson symmetric elliptic integrals"),
     Entries(
@@ -168,11 +173,11 @@ def_Topic(
         "ad96f4",
         "09a494",
         "b136bd",
-        "8c9ba1",
     ),
     Subsection("General formulas for real variables"),
     Entries(
         "5ada5f",
+        "718f3a",
         "de0638",
         "00cdb7",
         "bc2f88",
@@ -182,6 +187,8 @@ def_Topic(
     Entries(
         "7b5755",
         "0cf60d",
+        "8c9ba1",
+        "7348e3",
         "eb1d4f",
         "157ebb",
     ),
@@ -208,6 +215,55 @@ def_Topic(
         "6674bb",
         "5c178f",
         "e30d7e",
+        "cf5caa",
+        "67e015",
+        "8519dd",
+    ),
+    Subsection("Specialized values"),
+    Entries(
+        "13a092",
+        "53d869",
+        "415ff0",
+        "0ed5e2",
+        "e54e61",
+        "538c8c",
+        "271b73",
+        "63d11e",
+        "ebaa1a",
+        "649dc0",
+        "9b0388",
+        "5ab6bf",
+        "23e0a7",
+    ),
+    Section("The integral of the second kind RG"),
+    Subsection("Symmetry and scale invariance"),
+    Entries(
+        "b478a1",
+        "f9ca94",
+    ),
+    Subsection("Particular constant values"),
+    Entries(
+        "bcc121",
+        "d5ff09",
+        "cd55cf",
+        "84f403",
+        "9e30e7",
+        "c5a9cf",
+    ),
+    Subsection("Specialized values"),
+    Entries(
+        "d829be",
+        "3f6d40",
+        "7cddc6",
+        "3f1547",
+        "7c50d1",
+        "a2e9dd",
+        "48333c",
+        "5d0c95",
+        "120284",
+        "990145",
+        "092716",
+        "4091ad",
     ),
 )
 
@@ -1120,6 +1176,12 @@ make_entry(ID("d9765b"),
     Variables(x, y),
     Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(x, ClosedOpenInterval(y, Infinity)))))
 
+# Inverse of Weierstrass -- todo: define inverse function with normalized argument
+make_entry(ID("124339"),
+    Formula(Where(Equal(WeierstrassP(f(z), tau), z), Def(f(z), CarlsonRF(z - EllipticRootE(1, tau), z - EllipticRootE(2, tau), z - EllipticRootE(3, tau))))),
+    Variables(z, tau),
+    Assumptions(And(Element(z, CC), Element(tau, HH))))
+
 
 
 # Specific values
@@ -1191,11 +1253,26 @@ make_entry(ID("8c9ba1"),
     Variables(x, c),
     Assumptions(And(Element(x, CC), Element(c, OpenInterval(0, Infinity)))))
 
+make_entry(ID("7348e3"),
+    Formula(Equal(CarlsonRC(x, -(c*x)), 1/Sqrt((c+1)*x) * Cases(
+        (Atanh(Sqrt(c+1)), Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))),
+        (Atanh(Sqrt(c+1)) + Pi * ConstI, Otherwise)))),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, OpenInterval(0, Infinity)))))
+
 make_entry(ID("5ada5f"),
     Formula(Equal(CarlsonRC(x, y),
         Cases((Atan(Sqrt(y/x-1)) / Sqrt(y-x), Less(x, y)),
             (1/Sqrt(x), Equal(x, y)),
             (Atanh(Sqrt(1-y/x)) / Sqrt(x-y), Greater(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
+
+make_entry(ID("718f3a"),
+    Formula(Equal(CarlsonRC(x, y),
+        Cases((Acos(Sqrt(x/y)) / Sqrt(y-x), Less(x, y)),
+            (1/Sqrt(x), Equal(x, y)),
+            (Acosh(Sqrt(x/y)) / Sqrt(x-y), Greater(x, y))))),
     Variables(x, y),
     Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
 
@@ -1292,27 +1369,167 @@ make_entry(ID("5c178f"),
 make_entry(ID("e30d7e"),
     Formula(Equal(CarlsonRF(0, 1, 12*Sqrt(2)-16), (2+Sqrt(2)) * Gamma(Div(1,4))**2 / (16 * Sqrt(Pi)))))
 
+make_entry(ID("67e015"),
+    Formula(Equal(CarlsonRF(0, Gamma(Div(1,4))**4/(16*Pi), Gamma(Div(1,4))**4/(32*Pi)), 1)))
+
+make_entry(ID("8519dd"),
+    Formula(Equal(CarlsonRF(0, Gamma(Div(1,4))**4/(32*Pi), -Gamma(Div(1,4))**4/(32*Pi)), 1-ConstI)))
+
+make_entry(ID("cf5caa"),
+    Formula(Equal(CarlsonRF(0, ConstI, -ConstI), Gamma(Div(1, 4))**2 / (4 * Sqrt(Pi)))))
+
+# parametric values
+
+make_entry(ID("13a092"),
+    Formula(Equal(CarlsonRF(0, 0, x), Cases(
+        (Infinity, NotEqual(x, 0)),
+        (UnsignedInfinity, Equal(x, 0))))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("53d869"),
+    Formula(Equal(CarlsonRF(0, 1, x), EllipticK(1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("415ff0"),
+    Formula(Equal(CarlsonRF(0, x, y), EllipticK(1-y/x) / Sqrt(x))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(NotElement(x, OpenInterval(-Infinity, 0)), Element(y, OpenInterval(0, Infinity)))))))
+
+make_entry(ID("0ed5e2"),
+    Formula(Equal(CarlsonRF(0, x, 2*x), (1/Sqrt(x)) * (Gamma(Div(1,4))**2 / (4 * Sqrt(2 * Pi))))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("e54e61"),
+    Formula(Equal(CarlsonRF(0, x, -x), 1/Sqrt(x)) * (Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi))) * Cases((1-ConstI, Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), (1+ConstI, Otherwise))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("538c8c"),
+    Formula(Equal(CarlsonRF(0, x, c*x), EllipticK(1-c) / Sqrt(x))),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("271b73"),
+    Formula(Equal(CarlsonRF(0, x, -(c*x)), (1/Sqrt(x)) * Cases((EllipticK(1+c), Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), ((EllipticK(1+c) + 2 * ConstI * EllipticK(-c)), Otherwise)))),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("63d11e"),
+    Formula(Equal(CarlsonRF(x, y, y), CarlsonRC(x, y))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("ebaa1a"),
+    Formula(Equal(CarlsonRF(x, x, y), CarlsonRC(y, x))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+# todo: figure out more general conditions of validity
+make_entry(ID("649dc0"),
+    Formula(Equal(CarlsonRF(x, x, y), Cases(
+        (Atan(Sqrt(x/y-1)) / Sqrt(x-y), NotEqual(x, y)),
+        (1/Sqrt(x), Equal(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(y, OpenInterval(0, Infinity)), And(Element(x, OpenInterval(0, Infinity)), NotElement(y, OpenInterval(-Infinity, 0)))))))
+
+make_entry(ID("9b0388"),
+    Formula(Equal(CarlsonRF(x, x, x), 1/Sqrt(x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("5ab6bf"),
+    Formula(Equal(CarlsonRF(-x, -y, -z), -(ConstI * CarlsonRF(x, y, z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("23e0a7"),
+    Formula(Equal(CarlsonRF(-x, -y, z), Conjugate(ConstI * CarlsonRF(x, y, -z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
 
 
-# todo: parametric results ...
+make_entry(ID("bcc121"),
+    Formula(Equal(CarlsonRG(0, 0, 0), 0)))
 
-"""
+make_entry(ID("d5ff09"),
+    Formula(Equal(CarlsonRG(0, 0, 1), Div(1, 2))))
 
-CarlsonRF(0, 0, x) = ...
-CarlsonRF(0, x, y) = ...
-CarlsonRF(0, 1, x) = ...
-CarlsonRF(x, y, y) = ...
-CarlsonRF(x, x, x) = ...
-CarlsonRF(-x, -y, -z) = ...
+make_entry(ID("cd55cf"),
+    Formula(Equal(CarlsonRG(0, 1, 1), Pi / 4)))
 
-"""
+make_entry(ID("84f403"),
+    Formula(Equal(CarlsonRG(0, 1, 2), Gamma(Div(1,4))**2/(8*Sqrt(2*Pi)) + Pi**Div(3,2) / (Sqrt(2)*Gamma(Div(1,4))**2))))
 
+make_entry(ID("9e30e7"),
+    Formula(Equal(CarlsonRG(0, 1, -1), Sqrt(2)*Pi**Div(3,2)/(2*Gamma(Div(1,4))**2) * (1+ConstI))))
 
+make_entry(ID("c5a9cf"),
+    Formula(Equal(CarlsonRG(0, 16, 16), Pi)))
+
+make_entry(ID("d829be"),
+    Formula(Equal(CarlsonRG(0, 0, x), Sqrt(x) / 2)),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("3f6d40"),
+    Formula(Equal(CarlsonRG(0, 1, x), EllipticE(1-x)/2)),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("7cddc6"),
+    Formula(Equal(CarlsonRG(0, x, y), Sqrt(x) * EllipticE(1-y/x) / 2)),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(NotElement(x, OpenInterval(-Infinity, 0)), Element(y, OpenInterval(0, Infinity)))))))
+
+make_entry(ID("3f1547"),
+    Formula(Equal(CarlsonRG(0, x, 2*x), Sqrt(x) * Mul(Add(Div(Pow(Gamma(Div(1, 4)), 2), Mul(8, Sqrt(2*Pi))), Div(Pow(Pi, Div(3, 2)), (Sqrt(2) * Pow(Gamma(Div(1, 4)), 2))))))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("7c50d1"),
+    Formula(Equal(CarlsonRG(0, x, -x), Sqrt(x) * Div(Mul(Sqrt(2), Pow(Pi, Div(3, 2))), 2 * Pow(Gamma(Div(1, 4)), 2)) * Cases((1+ConstI, Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), (1-ConstI, Otherwise)))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("a2e9dd"),
+    Formula(Equal(CarlsonRG(0, x, c*x), Sqrt(x) * EllipticE(1-c) / 2)),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("48333c"),
+    Formula(Equal(CarlsonRG(0, x, -(c*x)), Sqrt(x) / 2 * Cases((EllipticE(1+c), Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), (EllipticE(1+c) + 2*ConstI*(EllipticK(-c) - EllipticE(-c)), Otherwise)))),
+    Variables(x, c),
+    Assumptions(And(Element(x, CC), Element(c, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("5d0c95"),
+    Formula(Equal(CarlsonRG(x, y, y), Div(1,2) * Cases((y * CarlsonRC(x, y) + Sqrt(x), NotEqual(y, 0)), (Sqrt(x), Equal(y, 0))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("120284"),
+    Formula(Equal(CarlsonRG(x, x, y), Div(1,2) * Cases((x * CarlsonRC(y, x) + Sqrt(y), NotEqual(x, 0)), (Sqrt(y), Equal(x, 0))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("990145"),
+    Formula(Equal(CarlsonRG(x, x, x), Sqrt(x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("092716"),
+    Formula(Equal(CarlsonRG(-x, -y, -z), ConstI * CarlsonRG(x, y, z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("4091ad"),
+    Formula(Equal(CarlsonRG(-x, -y, z), -Conjugate(ConstI * CarlsonRG(x, y, -z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
 
 # Specific values
-
-#make_entry(ID(""),
-#    Formula(Equal(CarlsonRG(x, y, y), (y * CarlsonRC(x, y) + Sqrt(x)) / 2)))
 
 #make_entry(ID(""),
 #    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))

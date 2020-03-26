@@ -221,6 +221,8 @@ subscript_call_latex_table = {
     AGMSequence: "\\operatorname{agm}",
     CarlsonHypergeometricR: "R",
     CarlsonHypergeometricT: "T",
+    EllipticInvariantG: "g",
+    EllipticRootE: "e",
 }
 
 symbol_latex_table = {
