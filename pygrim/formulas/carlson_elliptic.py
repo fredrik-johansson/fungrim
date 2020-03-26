@@ -246,6 +246,7 @@ def_Topic(
         "bcc121",
         "d5ff09",
         "cd55cf",
+        "250ff1",
         "84f403",
         "9e30e7",
         "c5a9cf",
@@ -264,6 +265,40 @@ def_Topic(
         "990145",
         "092716",
         "4091ad",
+    ),
+    Section("The integral of the third kind RJ"),
+    Subsection("Symmetry and scale invariance"),
+    Entries(
+        "655a2b",
+        "4e21c7",
+    ),
+    Subsection("Particular constant values"),
+    Entries(
+        "55cd70",
+        "f1fd51",
+        "b891d1",
+        "64a808",
+        "e9d5a9",
+        "522f54",
+        "b1c84e",
+        "6e9544",
+        "a1414f",
+        "9f2b18",
+        "7f8a58",
+        "44d300",
+        "1b6362",
+        "fd3017",
+        "3567c5",
+        "62b0c4",
+        "b468f3",
+        "78131f",
+        "cdee01",
+        "e04867",
+        "534335",
+        "303827",
+        "a091d1",
+        "4c1db8",
+        "1eaaed",
     ),
 )
 
@@ -1460,6 +1495,9 @@ make_entry(ID("d5ff09"),
 make_entry(ID("cd55cf"),
     Formula(Equal(CarlsonRG(0, 1, 1), Pi / 4)))
 
+make_entry(ID("250ff1"),
+    Formula(Equal(CarlsonRG(1, 1, 1), 1)))
+
 make_entry(ID("84f403"),
     Formula(Equal(CarlsonRG(0, 1, 2), Gamma(Div(1,4))**2/(8*Sqrt(2*Pi)) + Pi**Div(3,2) / (Sqrt(2)*Gamma(Div(1,4))**2))))
 
@@ -1530,6 +1568,85 @@ make_entry(ID("4091ad"),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)), Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
 
 # Specific values
+
+make_entry(ID("55cd70"),
+    Formula(Equal(CarlsonRJ(0, 0, 0, 0), UnsignedInfinity)))
+
+make_entry(ID("f1fd51"),
+    Formula(Equal(CarlsonRJ(0, 0, 0, 1), UnsignedInfinity)))
+
+make_entry(ID("b891d1"),
+    Formula(Equal(CarlsonRJ(0, 0, 1, 1), Infinity)))
+
+make_entry(ID("64a808"),
+    Formula(Equal(CarlsonRJ(0, 1, 1, 1), 3*Pi/4)))
+
+make_entry(ID("e9d5a9"),
+    Formula(Equal(CarlsonRJ(1, 1, 1, 1), 1)))
+
+make_entry(ID("522f54"),
+    Formula(Equal(CarlsonRJ(0, 1, 1, 2), ((3*Pi)/((4+2*Sqrt(2)))))))
+
+make_entry(ID("b1c84e"),
+    Formula(Equal(CarlsonRJ(1, 1, 1, 2), (3-3*Pi/4))))
+
+make_entry(ID("6e9544"),
+    Formula(Equal(CarlsonRJ(1, 1, 2, 4), (Log(1+Sqrt(2)) - Sqrt(2)*Pi/8))))
+
+make_entry(ID("a1414f"),
+    Formula(Equal(CarlsonRJ(1, 2, 2, 1), (3-3*Pi/4))))
+
+make_entry(ID("9f2b18"),
+    Formula(Equal(CarlsonRJ(0, 1, 2, 1), ((3 * Sqrt(2) * Pi**Div(3,2)) / Gamma(Div(1,4))**2))))
+
+make_entry(ID("7f8a58"),
+    Formula(Equal(CarlsonRJ(0, 1, 2, Sqrt(2)), Div(Mul(3, Pow(Gamma(Div(1, 4)), 2)), Mul(16, Sqrt(Pi))))))
+
+make_entry(ID("44d300"),
+    Formula(Equal(CarlsonRJ(1, 2, 2, 4), (((9-4*Sqrt(3))*Pi)/24))))
+
+# todo: CarlsonRJ(0, -1, -1, 1).n() doesn't work!
+
+make_entry(ID("1b6362"),
+    Formula(Equal(CarlsonRJ(0, 0, 1, -1), -Infinity)))
+
+make_entry(ID("fd3017"),
+    Formula(Equal(CarlsonRJ(0, 0, -1, 1), -(ConstI*Infinity))))
+
+make_entry(ID("3567c5"),
+    Formula(Equal(CarlsonRJ(0, 0, -1, -1), ConstI*Infinity)))
+
+make_entry(ID("62b0c4"),
+    Formula(Equal(CarlsonRJ(0, -1, 1, 1),
+        (3*Gamma(Div(1,4))**2) / (8 * Sqrt(2*Pi)) * (1-ConstI) - 3*Sqrt(2)*Pi**Div(3,2) / (2*Gamma(Div(1,4))**2) * (1+ConstI))))
+
+make_entry(ID("b468f3"),
+    Formula(Equal(CarlsonRJ(0, 1, 1, -1), -(3*Pi/4 * (1+ConstI)))))
+
+make_entry(ID("78131f"),
+    Formula(Equal(CarlsonRJ(0, -1, -1, 1), -(3*Pi/4 * (1+ConstI)))))
+
+make_entry(ID("cdee01"),
+    Formula(Equal(CarlsonRJ(0, -1, -1, -1), (3*Pi/4 * ConstI))))
+
+make_entry(ID("e04867"),
+    Formula(Equal(CarlsonRJ(1, 1, 1, -1), 3*Sqrt(2)*Log(1+Sqrt(2))/4 - Div(3,2) - 3*Sqrt(2)*Pi*ConstI/8)))
+
+make_entry(ID("534335"),
+    Formula(Equal(CarlsonRJ(1, 1, -1, -1), -(3*Sqrt(2)*Pi/8) + (3*Sqrt(2)*Log(1+Sqrt(2))/4 - Div(3,2))*ConstI)))
+
+make_entry(ID("303827"),
+    Formula(Equal(CarlsonRJ(1, -1, -1, -1), -Div(3,4)-3*Sqrt(2)*Log(1+Sqrt(2))/8 + 3*Sqrt(2)*Pi*ConstI/16)))
+
+make_entry(ID("a091d1"),
+    Formula(Equal(CarlsonRJ(-1, -1, -1, -1), ConstI)))
+
+make_entry(ID("4c1db8"),
+    Formula(Equal(CarlsonRJ(1, -1, -1, 1), 3*Sqrt(2)*Log(1+Sqrt(2))/4 - Div(3,2) - 3*Sqrt(2)*Pi*ConstI/8)))
+
+make_entry(ID("1eaaed"),
+    Formula(Equal(CarlsonRJ(0, ConstI, -ConstI, 1), 3*Gamma(Div(1,4))**2/(8*Sqrt(Pi)))))
+
 
 #make_entry(ID(""),
 #    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))

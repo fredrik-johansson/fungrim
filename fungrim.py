@@ -224,6 +224,7 @@ tr:nth-child(odd) { background-color: #fafafa; }
 .katex { font-size: 1.1em; color: black; }
 .katex-display { margin-top:0.0em; margin-bottom:0.0em; padding-top:0.5em; padding-bottom:0.4em; }
 
+
 @media only screen and (max-width: 500px) {
     .katex { font-size: 1.0em; }
 }
@@ -232,6 +233,16 @@ tr:nth-child(odd) { background-color: #fafafa; }
    overflow-x: visible;
    overflow-y: hidden;
 }
+
+.katex > .katex-html {
+	white-space: normal;
+}
+
+.katex .base {
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
 
 button {
   cursor:pointer;
