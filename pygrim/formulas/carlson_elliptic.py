@@ -67,6 +67,14 @@ def_Topic(
         "8236ff",
         "da33ce",
     ),
+    Section("Continuity on branch cuts"),
+    Entries(
+        "0d3186",
+        "f9b773",
+        "b8ca70",
+        "9673f7",
+        "6923d5",
+    ),    
     Section("Representation of other functions"),
     SeeTopics("Legendre elliptic integrals"),
     Subsection("Legendre complete elliptic integrals"),
@@ -598,6 +606,46 @@ make_entry(ID("8236ff"),
         Or(NotEqual(x, 0), NotEqual(y, 0))),
         Element(CarlsonRD(x, y, z), OpenInterval(0, Infinity)))),
     Variables(x, y, z))
+
+# Continuity on branch cuts
+
+make_entry(ID("0d3186"),
+    Formula(Equal(CarlsonRF(x, y, z), RightLimit(CarlsonRF(x + epsilon*ConstI, y + epsilon*ConstI, z + epsilon*ConstI), For(epsilon, 0)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))))))
+
+make_entry(ID("f9b773"),
+    Formula(Equal(CarlsonRG(x, y, z), RightLimit(CarlsonRG(x + epsilon*ConstI, y + epsilon*ConstI, z + epsilon*ConstI), For(epsilon, 0)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
+
+make_entry(ID("b8ca70"),
+    Formula(Equal(CarlsonRJ(x, y, z, w), RightLimit(CarlsonRJ(x + epsilon*ConstI, y + epsilon*ConstI, z + epsilon*ConstI, w + epsilon*ConstI), For(epsilon, 0)))),
+    Variables(x, y, z, w),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(w, SetMinus(CC, Set(0))),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))))))
+
+make_entry(ID("9673f7"),
+    Formula(Equal(CarlsonRD(x, y, z), RightLimit(CarlsonRD(x + epsilon*ConstI, y + epsilon*ConstI, z + epsilon*ConstI), For(epsilon, 0)))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(z, SetMinus(CC, Set(0))),
+        Or(NotEqual(x, 0), NotEqual(y, 0)))))
+
+make_entry(ID("6923d5"),
+    Formula(Equal(CarlsonRC(x, y), RightLimit(CarlsonRC(x + epsilon*ConstI, y + epsilon*ConstI), For(epsilon, 0)))),
+    Variables(x, y),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, SetMinus(CC, Set(0))))))
+
 
 # Symmetry
 
