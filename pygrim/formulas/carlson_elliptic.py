@@ -67,7 +67,15 @@ def_Topic(
         "8236ff",
         "da33ce",
     ),
-    Section("Continuity on branch cuts"),
+    Subsection("Holomorphicity and branch cuts"),
+    Entries(
+        "0ba30f",
+        "c56825",
+        "583c27",
+        "114f9e",
+        "73cf98",
+    ),
+    Subsection("Continuity on branch cuts"),
     Entries(
         "0d3186",
         "f9b773",
@@ -607,7 +615,49 @@ make_entry(ID("8236ff"),
         Element(CarlsonRD(x, y, z), OpenInterval(0, Infinity)))),
     Variables(x, y, z))
 
-# Continuity on branch cuts
+# Holomorphicity and branch cuts
+
+make_entry(ID("0ba30f"),
+    Formula(All(IsHolomorphic(f(alpha), ForElement(alpha, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+        ForElement(f, Set(Fun(alpha, CarlsonRF(alpha, y, z)), Fun(alpha, CarlsonRF(x, alpha, z)), Fun(alpha, CarlsonRF(x, y, alpha)))))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))))))
+
+make_entry(ID("c56825"),
+    Formula(All(IsHolomorphic(f(alpha), ForElement(alpha, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+        ForElement(f, Set(Fun(alpha, CarlsonRG(alpha, y, z)), Fun(alpha, CarlsonRG(x, alpha, z)), Fun(alpha, CarlsonRG(x, y, alpha)))))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
+
+make_entry(ID("583c27"),
+    Formula(All(IsHolomorphic(f(alpha), ForElement(alpha, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+        ForElement(f, Set(Fun(alpha, CarlsonRJ(alpha, y, z, w)), Fun(alpha, CarlsonRJ(x, alpha, z, w)), Fun(alpha, CarlsonRJ(x, y, alpha, w)), Fun(alpha, CarlsonRJ(x, y, w, alpha)))))),
+    Variables(x, y, z, w),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Element(w, SetMinus(CC, Set(0))),
+        Or(And(NotEqual(x, 0), NotEqual(y, 0)),
+           And(NotEqual(x, 0), NotEqual(z, 0)),
+           And(NotEqual(y, 0), NotEqual(z, 0))))))
+
+make_entry(ID("114f9e"),
+    Formula(All(IsHolomorphic(f(alpha), ForElement(alpha, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+        ForElement(f, Set(Fun(alpha, CarlsonRD(alpha, y, z)), Fun(alpha, CarlsonRD(x, alpha, z)), Fun(alpha, CarlsonRD(x, y, alpha)))))),
+    Variables(x, y, z),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, CC),
+        Element(z, SetMinus(CC, Set(0))),
+        Or(NotEqual(x, 0), NotEqual(y, 0)))))
+
+make_entry(ID("73cf98"),
+    Formula(All(IsHolomorphic(f(alpha), ForElement(alpha, SetMinus(CC, OpenClosedInterval(-Infinity, 0)))),
+        ForElement(f, Set(Fun(alpha, CarlsonRC(alpha, y)), Fun(alpha, CarlsonRC(x, alpha)))))),
+    Variables(x, y),
+    Assumptions(And(
+        Element(x, CC),
+        Element(y, SetMinus(CC, Set(0))))))
 
 make_entry(ID("0d3186"),
     Formula(Equal(CarlsonRF(x, y, z), RightLimit(CarlsonRF(x + epsilon*ConstI, y + epsilon*ConstI, z + epsilon*ConstI), For(epsilon, 0)))),
