@@ -5001,6 +5001,9 @@ class Brain(object):
                         cond = Or(NotElement(y, OpenInterval(-Infinity, 0)), GreaterEqual(Im(w), 0))
                         if self.simple(cond) == True_:
                             return self.simple(3*Pi/(2*(y*Sqrt(w) + w*Sqrt(y))))
+                    if self.equal(w, Sqrt(y)*Sqrt(z)):
+                        return self.simple(3/(2*(Sqrt(y)*Sqrt(z))) * CarlsonRF(0, y, z))
+                    # todo: DLMF 19.20.13 ?
                 if self.equal(x, y) and self.equal(x, z):
                     return self.simple(CarlsonRD(w, w, x))
                 if self.equal(x, w):
@@ -5009,6 +5012,17 @@ class Brain(object):
                     return self.simple(CarlsonRD(x, z, w))
                 if self.equal(z, w):
                     return self.simple(CarlsonRD(x, y, w))
+                if self.equal(x, y):
+                    x, y, z = z, x, y
+                elif self.equal(x, z):
+                    x, y, z = y, x, z
+                if self.equal(y, z):
+                    res = Cases(
+                        (3/(w-y) * (CarlsonRC(x,y) - CarlsonRC(x,w)), NotEqual(y, w)),
+                        (3/(2*(y-x)) * (CarlsonRC(x, y) - Sqrt(x)/y), And(Equal(y, w), NotEqual(x, y))),
+                        (x**(-Div(3,2)), Equal(x, y, w)))
+                    return self.simple(res)
+
         return CarlsonRJ(*args)
 
     def simple_IdentityMatrix(self, *args):
