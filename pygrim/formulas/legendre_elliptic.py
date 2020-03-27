@@ -590,7 +590,7 @@ make_entry(ID("9ccaef"),
 make_entry(ID("41cf8e"),
     Formula(Equal(EllipticE(m), ((1-m)/3) * (CarlsonRD(0, 1-m, 1) + CarlsonRD(0, 1, 1-m)))),
     Variables(m),
-    Assumptions(Element(m, CC)))
+    Assumptions(And(Element(m, CC), NotEqual(m, 1))))
 
 make_entry(ID("94f646"),
     Formula(Equal(EllipticK(m) - EllipticE(m), (m / 3) * CarlsonRD(0, 1-m, 1))),

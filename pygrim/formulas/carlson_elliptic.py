@@ -101,8 +101,65 @@ def_Topic(
     ),
     Section("Specific values"),
     SeeTopics("Specific values of Carlson symmetric elliptic integrals"),
+    Subsection("The degenerate integral of the first kind"),
     Entries(
+        "e464ec",
+        "d38c27",
+        "eac389",
+        "a15c03",
+        "ad96f4",
         "5ada5f",
+    ),
+    Subsection("The integral of the first kind"),
+    Entries(
+        "8bb972",
+        "c166ca",
+        "4cd504",
+        "0bf328",
+        "28237a",
+        "e30d7e",
+        "67e015",
+        "9b0388",
+        "63d11e",
+        "649dc0",
+        "415ff0",
+    ),
+    Subsection("The integral of the second kind"),
+    Entries(
+        "bcc121",
+        "d5ff09",
+        "cd55cf",
+        "250ff1",
+        "4d7098",
+        "d51efc",
+        "84f403",
+        "990145",
+        "d829be",
+        "5d0c95",
+        "120284",
+        "7cddc6",
+    ),
+    Subsection("The degenerate integral of the third kind"),
+    Entries(
+        "1c0fee",
+        "84ea08",
+        "63644d",
+        "f47947",
+        "ccb4d1",
+        "8d0629",
+        "c85c2f",
+        "771801",
+    ),
+    Subsection("The integral of the third kind"),
+    Entries(
+        "e9d5a9",
+        "6e9544",
+        "1eaaed",
+        "7f8a58",
+        "4c882a",
+        "f6b4a2",
+        "3dd30a",
+        "5c6f10",
     ),
     Section("Derivatives and differential equations"),
     Entries(
@@ -219,7 +276,7 @@ def_Topic(
         "67e015",
         "8519dd",
     ),
-    Subsection("Specialized values"),
+    Subsection("Special parametric cases"),
     Entries(
         "13a092",
         "53d869",
@@ -247,11 +304,13 @@ def_Topic(
         "d5ff09",
         "cd55cf",
         "250ff1",
+        "4d7098",
+        "d51efc",
         "84f403",
         "9e30e7",
         "c5a9cf",
     ),
-    Subsection("Specialized values"),
+    Subsection("Special parametric cases"),
     Entries(
         "d829be",
         "3f6d40",
@@ -266,6 +325,43 @@ def_Topic(
         "092716",
         "4091ad",
     ),
+    Section("The degenerate integral of the third kind RD"),
+    Subsection("Symmetry and scale invariance"),
+    Entries(
+        "1e8061",
+        "197a91",
+    ),
+    Subsection("Particular constant values"),
+    Entries(
+        "980014",
+        "dbe634",
+        "748131",
+        "84ea08",
+        "1c0fee",
+        "f47947",
+        "4d2c10",
+        "eda57d",
+        "060366",
+        "63644d",
+        "14a365",
+        "2dcf0c",
+        "d52bda",
+        "545e8b",
+        "3047b1",
+        "4a2403",
+    ),
+    Subsection("Special parametric cases"),
+    Entries(
+        "3e05c6",
+        "61c002",
+        "4e4380",
+        "8d0629",
+        "c85c2f",
+        "771801",
+        "ccb4d1",
+        "f68409",
+        "12b1d0",
+    ),
     Section("The integral of the third kind RJ"),
     Subsection("Symmetry and scale invariance"),
     Entries(
@@ -279,11 +375,16 @@ def_Topic(
         "b891d1",
         "64a808",
         "e9d5a9",
+        "b07652",
+        "e60205",
         "522f54",
         "b1c84e",
+        "a9f190",
+        "397051",
         "6e9544",
         "a1414f",
         "9f2b18",
+        "c05ed8",
         "7f8a58",
         "44d300",
         "1b6362",
@@ -299,6 +400,17 @@ def_Topic(
         "a091d1",
         "4c1db8",
         "1eaaed",
+    ),
+    Subsection("Special parametric cases"),
+    Entries(
+        "3dd30a",
+        "5c6f10",
+        "1faf7a",
+        "0aa9ac",
+        "f6b4a2",
+        "4c882a",
+        "64d87a",
+        "849751",
     ),
 )
 
@@ -547,7 +659,7 @@ make_entry(ID("9357b9"),
     )))
 
 make_entry(ID("dab889"),
-    Formula(Equal(CarlsonRG(x, y, z), Div(1,4) * Integral(1/(Sqrt(t+x)*Sqrt(t+y)*Sqrt(t+z)) * (x/(t+x)+y/(t+y)+z/(t+z)), For(t, 0, Infinity)))),
+    Formula(Equal(CarlsonRG(x, y, z), Div(1,4) * Integral(t/(Sqrt(t+x)*Sqrt(t+y)*Sqrt(t+z)) * (x/(t+x)+y/(t+y)+z/(t+z)), For(t, 0, Infinity)))),
     Variables(x, y, z),
     Assumptions(And(
         Element(x, SetMinus(CC, OpenInterval(-Infinity, 0))),
@@ -1430,7 +1542,7 @@ make_entry(ID("53d869"),
 make_entry(ID("415ff0"),
     Formula(Equal(CarlsonRF(0, x, y), EllipticK(1-y/x) / Sqrt(x))),
     Variables(x, y),
-    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(NotElement(x, OpenInterval(-Infinity, 0)), Element(y, OpenInterval(0, Infinity)))))))
+    Assumptions(And(Element(x, CC), Element(y, CC), Less(Abs(Arg(x)-Arg(y)), Pi))))
 
 make_entry(ID("0ed5e2"),
     Formula(Equal(CarlsonRF(0, x, 2*x), (1/Sqrt(x)) * (Gamma(Div(1,4))**2 / (4 * Sqrt(2 * Pi))))),
@@ -1498,6 +1610,12 @@ make_entry(ID("cd55cf"),
 make_entry(ID("250ff1"),
     Formula(Equal(CarlsonRG(1, 1, 1), 1)))
 
+make_entry(ID("4d7098"),
+    Formula(Equal(CarlsonRG(1, 1, 2), Sqrt(2)/2 + Log(1+Sqrt(2))/2)))
+
+make_entry(ID("d51efc"),
+    Formula(Equal(CarlsonRG(1, 2, 2), (Pi/4+1/2))))
+
 make_entry(ID("84f403"),
     Formula(Equal(CarlsonRG(0, 1, 2), Gamma(Div(1,4))**2/(8*Sqrt(2*Pi)) + Pi**Div(3,2) / (Sqrt(2)*Gamma(Div(1,4))**2))))
 
@@ -1520,7 +1638,7 @@ make_entry(ID("3f6d40"),
 make_entry(ID("7cddc6"),
     Formula(Equal(CarlsonRG(0, x, y), Sqrt(x) * EllipticE(1-y/x) / 2)),
     Variables(x, y),
-    Assumptions(And(Element(x, CC), Element(y, CC), Or(Element(x, OpenInterval(0, Infinity)), And(NotElement(x, OpenInterval(-Infinity, 0)), Element(y, OpenInterval(0, Infinity)))))))
+    Assumptions(And(Element(x, CC), Element(y, CC), Less(Abs(Arg(x)-Arg(y)), Pi))))
 
 make_entry(ID("3f1547"),
     Formula(Equal(CarlsonRG(0, x, 2*x), Sqrt(x) * Mul(Add(Div(Pow(Gamma(Div(1, 4)), 2), Mul(8, Sqrt(2*Pi))), Div(Pow(Pi, Div(3, 2)), (Sqrt(2) * Pow(Gamma(Div(1, 4)), 2))))))),
@@ -1584,11 +1702,23 @@ make_entry(ID("64a808"),
 make_entry(ID("e9d5a9"),
     Formula(Equal(CarlsonRJ(1, 1, 1, 1), 1)))
 
+make_entry(ID("b07652"),
+    Formula(Equal(CarlsonRJ(1, 1, 1, 0), Infinity)))
+
+make_entry(ID("e60205"),
+    Formula(Equal(CarlsonRJ(0, 1, 1, 0), UnsignedInfinity)))
+
 make_entry(ID("522f54"),
     Formula(Equal(CarlsonRJ(0, 1, 1, 2), ((3*Pi)/((4+2*Sqrt(2)))))))
 
 make_entry(ID("b1c84e"),
     Formula(Equal(CarlsonRJ(1, 1, 1, 2), (3-3*Pi/4))))
+
+make_entry(ID("a9f190"),
+    Formula(Equal(CarlsonRJ(1, 1, 2, 2), 3*Log(1+Sqrt(2)) - 3*Sqrt(2)/2)))
+
+make_entry(ID("397051"),
+    Formula(Equal(CarlsonRJ(1, 2, 2, 2), 3*Pi/8 - Div(3,4))))
 
 make_entry(ID("6e9544"),
     Formula(Equal(CarlsonRJ(1, 1, 2, 4), (Log(1+Sqrt(2)) - Sqrt(2)*Pi/8))))
@@ -1598,6 +1728,9 @@ make_entry(ID("a1414f"),
 
 make_entry(ID("9f2b18"),
     Formula(Equal(CarlsonRJ(0, 1, 2, 1), ((3 * Sqrt(2) * Pi**Div(3,2)) / Gamma(Div(1,4))**2))))
+
+make_entry(ID("c05ed8"),
+    Formula(Equal(CarlsonRJ(0, 1, 2, 2), 3*Sqrt(2)*Gamma(Div(1,4))**2/(16*Sqrt(Pi))  - 3*Sqrt(2)*Pi**Div(3,2)/(2*Gamma(Div(1,4))**2))))
 
 make_entry(ID("7f8a58"),
     Formula(Equal(CarlsonRJ(0, 1, 2, Sqrt(2)), Div(Mul(3, Pow(Gamma(Div(1, 4)), 2)), Mul(16, Sqrt(Pi))))))
@@ -1647,9 +1780,140 @@ make_entry(ID("4c1db8"),
 make_entry(ID("1eaaed"),
     Formula(Equal(CarlsonRJ(0, ConstI, -ConstI, 1), 3*Gamma(Div(1,4))**2/(8*Sqrt(Pi)))))
 
+make_entry(ID("3dd30a"),
+    Formula(Equal(CarlsonRJ(x, y, z, z), CarlsonRD(x, y, z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC))))
 
-#make_entry(ID(""),
-#    Formula(Equal(CarlsonRD(x, x, z), (3 / (z-x)) * (CarlsonRC(z, x) - 1 / Sqrt(x)))))
+make_entry(ID("5c6f10"),
+    Formula(Equal(CarlsonRJ(x, x, x, w), CarlsonRD(w, w, x))),
+    Variables(x, w),
+    Assumptions(And(Element(x, CC), Element(w, CC))))
 
-# TODO: both lemniscate constants (check symbolic evaluation)
+make_entry(ID("1faf7a"),
+    Formula(Equal(CarlsonRJ(x, x, x, w), Cases((3/(x-w) * (CarlsonRC(x,w) - 1/Sqrt(x)), NotEqual(x, w)), (w**(-Div(3,2)), Equal(x, w))))),
+    Variables(x, w),
+    Assumptions(And(Element(x, CC), Element(w, CC))))
+
+make_entry(ID("0aa9ac"),
+    Formula(Equal(CarlsonRJ(x, w, w, w), Cases((3/(2*(w-x)) * (CarlsonRC(x,w) - Sqrt(x)/w), NotEqual(x, w)), (x**(-Div(3,2)), Equal(x, w))))),
+    Variables(x, w),
+    Assumptions(And(Element(x, CC), Element(w, CC))))
+
+make_entry(ID("4c882a"),
+    Formula(Equal(CarlsonRJ(x, x, x, x), x**(-Div(3,2)))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("f6b4a2"),
+    Formula(Equal(CarlsonRJ(0, x, x, w), 3*Pi/(2*(x*Sqrt(w) + w*Sqrt(x))))),
+    Variables(x, w),
+    Assumptions(And(Element(x, CC), Element(w, CC), Or(NotElement(x, OpenInterval(-Infinity, 0)), GreaterEqual(Im(w), 0)))))
+
+make_entry(ID("64d87a"),
+    Formula(Equal(CarlsonRJ(-x, -y, -z, -w), ConstI * CarlsonRJ(x, y, z, w))),
+    Variables(x, y, z, w),
+    Assumptions(And(Element(x, OpenClosedInterval(0, Infinity)), Element(y, OpenClosedInterval(0, Infinity)), Element(z, OpenClosedInterval(0, Infinity)), Element(w, OpenClosedInterval(0, Infinity)))))
+
+make_entry(ID("849751"),
+    Formula(Equal(CarlsonRJ(-x, -y, -z, w), -Conjugate(ConstI * CarlsonRJ(x, y, z, -w)))),
+    Variables(x, y, z, w),
+    Assumptions(And(Element(x, OpenClosedInterval(0, Infinity)), Element(y, OpenClosedInterval(0, Infinity)), Element(z, OpenClosedInterval(0, Infinity)), Element(w, OpenClosedInterval(0, Infinity)))))
+
+
+# Specific values
+
+make_entry(ID("980014"),
+    Formula(Equal(CarlsonRD(0, 0, 0), UnsignedInfinity)))
+
+make_entry(ID("dbe634"),
+    Formula(Equal(CarlsonRD(0, 1, 0), UnsignedInfinity)))
+
+make_entry(ID("748131"),
+    Formula(Equal(CarlsonRD(0, 0, 1), Infinity)))
+
+make_entry(ID("84ea08"),
+    Formula(Equal(CarlsonRD(0, 1, 1), 3*Pi/4)))
+
+make_entry(ID("1c0fee"),
+    Formula(Equal(CarlsonRD(1, 1, 1), 1)))
+
+make_entry(ID("f47947"),
+    Formula(Equal(CarlsonRD(1, 1, 2), 3*Log(1+Sqrt(2)) - 3*Sqrt(2)/2)))
+
+make_entry(ID("4d2c10"),
+    Formula(Equal(CarlsonRD(1, 2, 2), 3*Pi/8 - Div(3,4))))
+
+make_entry(ID("eda57d"),
+    Formula(Equal(CarlsonRD(2, 2, 1), (3-3*Pi/4))))
+
+make_entry(ID("060366"),
+    Formula(Equal(CarlsonRD(0, 1, 2), 3*Sqrt(2)*Gamma(Div(1,4))**2/(16*Sqrt(Pi))  - 3*Sqrt(2)*Pi**Div(3,2)/(2*Gamma(Div(1,4))**2))))
+
+make_entry(ID("63644d"),
+    Formula(Equal(CarlsonRD(0, 2, 1), ((3 * Sqrt(2) * Pi**Div(3,2)) / Gamma(Div(1,4))**2))))
+
+make_entry(ID("14a365"),
+    Formula(Equal(CarlsonRD(0, 0, -1), ConstI*Infinity)))
+
+make_entry(ID("2dcf0c"),
+    Formula(Equal(CarlsonRD(0, -1, 1),
+        (3*Gamma(Div(1,4))**2) / (8 * Sqrt(2*Pi)) * (1-ConstI) - 3*Sqrt(2)*Pi**Div(3,2) / (2*Gamma(Div(1,4))**2) * (1+ConstI))))
+
+make_entry(ID("d52bda"),
+    Formula(Equal(CarlsonRD(0, -1, -1), (3*Pi/4 * ConstI))))
+
+make_entry(ID("545e8b"),
+    Formula(Equal(CarlsonRD(1, 1, -1), -(3*Sqrt(2)*Pi/8) + (3*Sqrt(2)*Log(1+Sqrt(2))/4 - Div(3,2))*ConstI)))
+
+make_entry(ID("3047b1"),
+    Formula(Equal(CarlsonRD(1, -1, -1), -Div(3,4)-3*Sqrt(2)*Log(1+Sqrt(2))/8 + 3*Sqrt(2)*Pi*ConstI/16)))
+
+make_entry(ID("4a2403"),
+    Formula(Equal(CarlsonRD(-1, -1, -1), ConstI)))
+
+make_entry(ID("3e05c6"),
+    Formula(Equal(CarlsonRD(0, y, 1), Cases((3*(EllipticK(1-y) - EllipticE(1-y))/(1-y), NotEqual(y, 1)), (3*Pi/4, Equal(y, 1))))),
+    Variables(y),
+    Assumptions(Element(y, CC)))
+
+make_entry(ID("61c002"),
+    Formula(Equal(CarlsonRD(0, 1, z), Cases((3 * (EllipticE(1-z) - z*EllipticK(1-z)) / (z*(1-z)), And(NotEqual(z, 0), NotEqual(z, 1))), (3*Pi/4, Equal(z, 1)), (UnsignedInfinity, Equal(z, 0))))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
+
+make_entry(ID("4e4380"),
+    Formula(Equal(CarlsonRD(0, y, z), y**(-Div(3,2)) * Cases((3 * (EllipticE(1-z/y) - (z/y)*EllipticK(1-z/y)) / ((z/y)*(1-z/y)), And(NotEqual(z, 0), NotEqual(z, y))), (3*Pi/4, Equal(z, y)), (UnsignedInfinity, Equal(z, 0))))),
+    Variables(y, z),
+    Assumptions(And(Element(y, SetMinus(CC, Set(0))), Element(z, CC), Less(Abs(Arg(y)-Arg(z)), Pi))))
+
+make_entry(ID("8d0629"),
+    Formula(Equal(CarlsonRD(0, y, z), z**(-Div(3,2)) * Cases((3*(EllipticK(1-y/z) - EllipticE(1-y/z))/(1-y/z), NotEqual(y, z)), (3*Pi/4, Equal(y, z))))),
+    Variables(y, z),
+    Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(y, CC), Less(Abs(Arg(y)-Arg(z)), Pi))))
+
+make_entry(ID("c85c2f"),
+    Formula(Equal(CarlsonRD(x, y, y), Cases((3/(2*(y-x)) * (CarlsonRC(x,y) - Sqrt(x)/y), NotEqual(x, y)), (x**(-Div(3,2)), Equal(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("771801"),
+    Formula(Equal(CarlsonRD(x, x, y), Cases((3/(y-x) * (CarlsonRC(y,x) - 1/Sqrt(y)), NotEqual(x, y)), (x**(-Div(3,2)), Equal(x, y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+make_entry(ID("ccb4d1"),
+    Formula(Equal(CarlsonRD(x, x, x), x**(-Div(3,2)))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("f68409"),
+    Formula(Equal(CarlsonRD(-x, -y, -z), ConstI * CarlsonRD(x, y, z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, OpenClosedInterval(0, Infinity)), Element(y, OpenClosedInterval(0, Infinity)), Element(z, OpenClosedInterval(0, Infinity)))))
+
+make_entry(ID("12b1d0"),
+    Formula(Equal(CarlsonRD(-x, -y, z), -Conjugate(ConstI * CarlsonRD(x, y, -z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, OpenClosedInterval(0, Infinity)), Element(y, OpenClosedInterval(0, Infinity)), Element(z, OpenClosedInterval(0, Infinity)))))
 

@@ -4905,13 +4905,15 @@ class Brain(object):
                         # F(0,0,0) = UnsignedInfinity
                         res = Cases((Sign(1/Sqrt(z)) * Infinity, NotEqual(z, 0)), (UnsignedInfinity, Equal(z, 0)))
                         return self.simple(res)
-                    # todo: generalize to complex cases, with correct branches
                     # F(0,y,z) = EllipticK(1 - z/y) / Sqrt(y); y > 0
                     # F(0,y,z) = EllipticK(1 - y/z) / Sqrt(z); z > 0
                     if self.greater(y, 0):
                         return self.simple(EllipticK(1 - z / y) / Sqrt(y))
                     if self.greater(z, 0):
                         return self.simple(EllipticK(1 - y / z) / Sqrt(z))
+                    cond = self.less(Abs(Arg(y)-Arg(z)), Pi)
+                    if cond:
+                        return self.simple(EllipticK(1 - z / y) / Sqrt(y))
                 if self.equal(x, y):
                     if self.equal(x, z):
                         return self.simple(1/Sqrt(x))
@@ -4921,6 +4923,59 @@ class Brain(object):
                 if self.equal(y, z):
                     return self.simple(CarlsonRC(x, y))
         return CarlsonRF(*args)
+
+    def simple_CarlsonRD(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 3:
+            x, y, z = args
+            if self.is_complex(x) and self.is_complex(y) and self.is_complex(z):
+                xzero = self.is_zero(x)
+                yzero = self.is_zero(y)
+                zzero = self.is_zero(z)
+                if zzero:
+                    return UnsignedInfinity
+                # Move zero first
+                if yzero:
+                    x, xzero, y, yzero = y, yzero, x, xzero
+                    args = [x, y, z]
+                if xzero and yzero:
+                    # RD(x, y, 0) = UnsignedInfinity
+                    # RD(0, 0, z) = Sign(z^(-3/2)) * Infinity
+                    res = Cases((UnsignedInfinity, Equal(z, 0)),
+                                (Sign(z**(-Div(3,2))) * Infinity, NotEqual(z, 0)))
+                    return self.simple(res)
+
+                if xzero:
+                    if self.equal(y, z):
+                        return self.simple(3*Pi/(4*y**Div(3,2)))
+
+                    if self.is_one(z):
+                        res = Cases((3*(EllipticK(1-y) - EllipticE(1-y))/(1-y), NotEqual(y, 1)), (3*Pi/4, Equal(y, 1)))
+                        return self.simple(res)
+
+                    if self.is_one(y):
+                        res = Cases((3 * (EllipticE(1-z) - z*EllipticK(1-z)) / (z*(1-z)), And(NotEqual(z, 0), NotEqual(z, 1))), (3*Pi/4, Equal(z, 1)), (UnsignedInfinity, Equal(z, 0)))
+                        return self.simple(res)
+
+                    cond = self.less(Abs(Arg(y)-Arg(z)), Pi)
+                    if cond:
+                        if self.is_not_zero(z):
+                            res = z**(-Div(3,2)) * Cases((3*(EllipticK(1-y/z) - EllipticE(1-y/z))/(1-y/z), NotEqual(y, z)), (3*Pi/4, Equal(y, z)))
+                            return self.simple(res)
+                        if self.is_not_zero(y):
+                            res = y**(-Div(3,2)) * Cases((3 * (EllipticE(1-z/y) - (z/y)*EllipticK(1-z/y)) / ((z/y)*(1-z/y)), And(NotEqual(z, 0), NotEqual(z, y))),
+                                    (3*Pi/4, Equal(z, y)), (UnsignedInfinity, Equal(z, 0)))
+                            return self.simple(res)
+
+                if self.equal(y, z):
+                    res = Cases((3/(2*(y-x)) * (CarlsonRC(x,y) - Sqrt(x)/y), NotEqual(x, y)), (x**(-Div(3,2)), Equal(x, y)))
+                    return self.simple(res)
+
+                if self.equal(x, y):
+                    res = Cases((3/(z-x) * (CarlsonRC(z,x) - 1/Sqrt(z)), NotEqual(x, z)), (x**(-Div(3,2)), Equal(x, z)))
+                    return self.simple(res)
+
+        return CarlsonRD(*args)
 
     def simple_CarlsonRJ(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -4942,18 +4997,18 @@ class Brain(object):
                         # J(0,0,z,0) = UnsignedInfinity
                         res = Cases((Sign(1/(Sqrt(z)*w)) * Infinity, And(NotEqual(z, 0), NotEqual(w, 0))), (UnsignedInfinity, Otherwise))
                         return self.simple(res)
-                    # J(0,y,z,w)
-                    # todo: equivalent to EllipticPi
-                    #if self.greater(y, 0):
-                    #    return ...
-                    #if self.greater(z, 0):
-                    #    return ...
-                if self.equal(x, y) and self.equal(x, z) and self.equal(x, w):
-                    return self.simple(Pow(x, -Div(3, 2)))
-                # todo: homogeneous reduction?
-                # todo: special case for RD
-                # todo: RJ(x, x, x, w) = RD(w, w, x) ?
-                # todo: x = y or x = z or y = z ... reduces to ...
+                    if self.equal(y, z):
+                        cond = Or(NotElement(y, OpenInterval(-Infinity, 0)), GreaterEqual(Im(w), 0))
+                        if self.simple(cond) == True_:
+                            return self.simple(3*Pi/(2*(y*Sqrt(w) + w*Sqrt(y))))
+                if self.equal(x, y) and self.equal(x, z):
+                    return self.simple(CarlsonRD(w, w, x))
+                if self.equal(x, w):
+                    return self.simple(CarlsonRD(y, z, w))
+                if self.equal(y, w):
+                    return self.simple(CarlsonRD(x, z, w))
+                if self.equal(z, w):
+                    return self.simple(CarlsonRD(x, y, w))
         return CarlsonRJ(*args)
 
     def simple_IdentityMatrix(self, *args):
