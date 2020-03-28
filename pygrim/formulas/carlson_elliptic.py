@@ -12,6 +12,12 @@ def_Topic(
         "663d75",
         "132ec5",
     ),
+    Section("Illustrations"),
+    Entries(
+        "b0921b",
+        "6ae152",
+        "cc234c",
+    ),
     Section("Integral representations"),
     Subsection("Defining algebraic integrals"),
     Entries(
@@ -556,6 +562,24 @@ make_entry(ID("132ec5"),
 # name? it is also an "integral of the second kind" (but not completely symmetric like RG)
 make_entry(ID("663d75"),
     SymbolDefinition(CarlsonRD, CarlsonRD(x, y, z), "Degenerate Carlson symmetric elliptic integral of the third kind"))
+
+# Illustrations
+
+make_entry(ID("b0921b"),
+    Image(Description("Plot of", CarlsonRF(x, y, 1), "on", Element(x, ClosedInterval(0,4)), "for", Element(y, Set(Decimal("0.1"), 1, 10))),
+        ImageSource("plot_carlson_rf")),
+    )
+
+make_entry(ID("6ae152"),
+    Image(Description("Plot of", CarlsonRG(x, y, 1), "on", Element(x, ClosedInterval(0,4)), "for", Element(y, Set(10, 1, Decimal("0.1")))),
+        ImageSource("plot_carlson_rg")),
+    )
+
+make_entry(ID("cc234c"),
+    Image(Description("X-ray of", CarlsonRF(z, 1, 2), "on", Element(z, ClosedInterval(-4,4) + ClosedInterval(-4,4)*ConstI)),
+        ImageSource("xray_carlson_rf")),
+    description_xray,
+    )
 
 # Specializations
 

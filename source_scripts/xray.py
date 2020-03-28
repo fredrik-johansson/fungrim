@@ -42,6 +42,7 @@ use_colors()
 spinecolor = (0.0,0.0,0.0)
 
 colorcycle = [(0.1,0.2,0.8), (1.0,0.5,0.1), (0.9,0.8,0.2)]
+colorcycle = colorcycle + colorcycle
 #del colorcycle[1]
 
 directory = [""]
@@ -290,6 +291,23 @@ def branchcutline(za,zb,offset=0.05):
 def plots(outdir):
 
     directory[0] = outdir
+
+    def elliprf_decor():
+        branchcutline(0, -1, offset=0.07)
+        branchcutline(-1, -4, offset=0.07)
+
+    xrayplot(lambda z: complex(acb.elliptic_rf(z, 1, 2)), (-4,4), (-4,4), 400, "carlson_rf", xout=0.1, yout=0.1, decorations=elliprf_decor)
+
+    rcParams["legend.borderaxespad"] = 1.2
+    curveplot([lambda x: elliprg(x, 10, 1).real, lambda x: elliprg(x, 1.0, 1.0).real, lambda x: elliprg(x, 0.1, 1.0).real],
+        (0, 4), N=400, filename="carlson_rg", xout=0.1, yout=0.1,
+        legend_loc='lower right',
+        legends=["$R_G(x,10,1)$", "$R_G(x,1,1)$", "$R_G(x,0.1,1)$", " "])
+    rcParams["legend.borderaxespad"] = 0.5
+
+    curveplot([lambda x: elliprf(x, 0.1, 1).real, lambda x: elliprf(x, 1.0, 1.0).real, lambda x: elliprf(x, 10, 1.0).real],
+        (0, 4), N=400, filename="carlson_rf", xout=0.1, yout=0.1,
+        legends=["$R_F(x,0.1,1)$", "$R_F(x,1,1)$", "$R_F(x,10,1)$"])
 
     curveplot([lambda x: ellipf(x, 0.5), lambda x: ellipf(x, 0.8), lambda x: ellipf(x, 0.99)],
         (-2*pi,2*pi), yayb=(-10,10), N=400, filename="incomplete_elliptic_f", xout=0.1, yout=0.1,

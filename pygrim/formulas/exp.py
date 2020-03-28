@@ -114,7 +114,6 @@ make_entry(ID("f758c6"),
 make_entry(ID("e74de0"),
     Image(Description("Plot of", Exp(x), "on", Element(x, ClosedInterval(-4,4))),
         ImageSource("plot_exp")),
-    description_xray,
     )
 
 make_entry(ID("6ef3d1"),
