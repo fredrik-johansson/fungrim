@@ -65,6 +65,7 @@ def_Topic(
     Section("Functional equation"),
     Entries(
         "9ee8bc",  # functional equation
+        "1a63af",
     ),
     Section("Bounds and inequalities"),
     Entries(
@@ -194,6 +195,14 @@ make_entry(ID("9ee8bc"),
     Assumptions(
         And(Element(s, CC), NotElement(s, ZZGreaterEqual(0))),
         And(Element(s, PowerSeries(CC, SerX)), NotElement(s, ZZGreaterEqual(0))),
+    ))
+
+make_entry(ID("1a63af"),
+    Formula(Equal(RiemannZeta(1-s), (2 * Cos(Div(1,2)*Pi*s)) / (2*Pi)**(s) * Gamma(s) * RiemannZeta(s))),
+    Variables(s),
+    Assumptions(
+        And(Element(s, CC), NotElement(s, ZZLessEqual(1))),
+        And(Element(s, PowerSeries(CC, SerX)), NotElement(s, ZZLessEqual(1))),
     ))
 
 make_entry(ID("7cb17f"),

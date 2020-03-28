@@ -63,8 +63,7 @@ from .bell_numbers import *
 from .barnes_g import *
 from .halphen_constant import *
 
-describe(EllipticK, EllipticK(m), [], None, "Complete elliptic integral of the first kind")
-describe(EllipticE, EllipticE(m), [], None, "Complete elliptic integral of the second kind")
+describe(Cos, Cos(z), None, None, "Cosine")
 
 describe(SquaresR, SquaresR(k, n), [Element(k, ZZGreaterEqual(0)), Element(n, ZZ)], ZZ, "Sum of squares function")
 describe(LiouvilleLambda, LiouvilleLambda(n), [Element(n, ZZGreaterEqual(0))], ZZ, "Liouville function")
