@@ -9,13 +9,8 @@ def_Topic(
         "5cd377",
         "8f7c2a",
         "bac745",
-    ),
-    Subsection("Degenerate cases"),
-    Entries(
-        "132ec5",
         "663d75",
-        "61f98d",
-        "409873",
+        "132ec5",
     ),
     Section("Integral representations"),
     Subsection("Defining algebraic integrals"),
@@ -34,6 +29,16 @@ def_Topic(
         "9a0bc8",
         "8f0a91",
         "0d8639",
+    ),
+    Section("Connection formulas"),
+    Subsection("Degenerate cases"),
+    Entries(
+        "61f98d",
+        "409873",
+    ),
+    Subsection("Connection formula for RF, RG and RD"),
+    Entries(
+        "7609c8",
     ),
     Section("Symmetry"),
     Entries(
@@ -133,7 +138,7 @@ def_Topic(
         "0bf328",
         "28237a",
         "9b0388",
-        "63d11e",
+        "ebaa1a",
         "649dc0",
         "415ff0",
     ),
@@ -173,7 +178,7 @@ def_Topic(
         "3dd30a",
         "5c6f10",
     ),
-    Section("Functional equations and connection formulas"),
+    Section("Functional equations"),
     Subsection("Duplication theorems"),
     Entries(
         "2499cd",
@@ -181,6 +186,14 @@ def_Topic(
         "47cf5d",
         "31a3ba",
         "791c44",
+        "8f5d76",
+    ),
+    Subsection("Addition theorems"),
+    Entries(
+        "6dda7a",
+        "38fa65",
+        "4eac3f",
+        "a203e9",
     ),
     Section("Derivatives and differential equations"),
     Entries(
@@ -194,19 +207,22 @@ def_Topic(
     ),
     Section("Series representations"),
     SeeTopics("Series representations of Carlson symmetric elliptic integrals"),
+    Subsection("Cases reducible to the Gauss hypergeometric function"),
+    Entries(
+        "72b5bd",
+        "b2fdfe",
+        "e98dd0",
+    ),
     Subsection("Multivariate hypergeometric series representations"),
     Entries(
         "b576e6",
         "8f71cb",
         "fda084",
         "b2cd79",
-        "8d304b",
-        "7ded8f",
     ),
     Subsection("Explicit truncated series approximations"),
     Entries(
         "799894",
-        "618a9f",
     ),
     Section("Bounds and inequalities"),
     Subsection("Real variables"),
@@ -221,6 +237,17 @@ def_Topic(
         "34e932",
         "688efb",
         "978287",
+    ),
+    Subsection("Real variables, complete integrals"),
+    Entries(
+        "0e209c",
+        "2e40b8",
+        "62eade",
+        "36ae10",
+        "add3ea",
+        "60541a",
+        "d70b12",
+        "255142",
     ),
 )
 
@@ -302,6 +329,7 @@ def_Topic(
     Entries(
         "13a092",
         "53d869",
+        "ab5af3",
         "415ff0",
         "0ed5e2",
         "e54e61",
@@ -336,6 +364,7 @@ def_Topic(
     Entries(
         "d829be",
         "3f6d40",
+        "cdb587",
         "7cddc6",
         "3f1547",
         "7c50d1",
@@ -448,6 +477,15 @@ def_Topic(
         "b576e6",
         "a82bd6",
     ),
+    Section("Cases reducible to the Gauss hypergeometric function"),
+    SeeTopics("Gauss hypergeometric function"),
+    Entries(
+        "72b5bd",
+        "b2fdfe",
+        "e98dd0",
+        "9bfd88",
+        "bbf003",
+    ),
     Section("Incomplete integrals"),
     Entries(
         "8f71cb",
@@ -494,6 +532,10 @@ def_Topic(
         "a1f7ea",
         "c5d388",
     ),
+    Section("Gauss hypergeometric series"),
+    Entries(
+        "157ebb",
+    ),
 )
 
 
@@ -508,12 +550,12 @@ make_entry(ID("8f7c2a"),
 make_entry(ID("bac745"),
     SymbolDefinition(CarlsonRJ, CarlsonRJ(x, y, z, w), "Carlson symmetric elliptic integral of the third kind"))
 
+make_entry(ID("132ec5"),
+    SymbolDefinition(CarlsonRC, CarlsonRC(x, y), "Degenerate Carlson symmetric elliptic integral of the first kind"))
+
 # name? it is also an "integral of the second kind" (but not completely symmetric like RG)
 make_entry(ID("663d75"),
-    SymbolDefinition(CarlsonRD, CarlsonRD(x, y, z), "Degenerate case of Carlson symmetric elliptic integral of the third kind"))
-
-make_entry(ID("132ec5"),
-    SymbolDefinition(CarlsonRC, CarlsonRC(x, y), "Carlson elementary elliptic integral"))
+    SymbolDefinition(CarlsonRD, CarlsonRD(x, y, z), "Degenerate Carlson symmetric elliptic integral of the third kind"))
 
 # Specializations
 
@@ -807,6 +849,55 @@ make_entry(ID("791c44"),
         Greater(Re(w), 0),
         Or(And(NotEqual(x, 0), NotEqual(y, 0)), And(NotEqual(x, 0), NotEqual(z, 0)), And(NotEqual(y, 0), NotEqual(z, 0))))))
 
+make_entry(ID("8f5d76"),
+    Formula(Equal(CarlsonRC(x, y), Where(2 * CarlsonRC(x+lamda, y+lamda), Def(lamda, y + 2*Sqrt(x)*Sqrt(y))))),
+    Variables(x, y),
+    Assumptions(And(Element(x, CC), Element(y, CC))))
+
+# Addition theorems and connection formulas
+
+make_entry(ID("7609c8"),
+    Formula(Equal(2*CarlsonRG(x, y, z), z*CarlsonRF(x,y,z) - ((x-z)*(y-z))/3 * CarlsonRD(x, y, z) + (Sqrt(x)*Sqrt(y)) / Sqrt(z))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), Or(NotEqual(x, 0), NotEqual(y, 0)), NotEqual(z, 0))))
+
+make_entry(ID("6dda7a"),
+    Formula(Equal(CarlsonRD(x,y,z) + CarlsonRD(y,z,x) + CarlsonRD(z,x,y), 3/(Sqrt(x)*Sqrt(y)*Sqrt(z)))),
+    Variables(x, y, z),
+    Assumptions(And(Element(x, CC), Element(y, CC), Element(z, CC), NotEqual(x, 0), NotEqual(y, 0)), NotEqual(z, 0)))
+
+make_entry(ID("38fa65"),
+    Formula(Where(Equal(CarlsonRF(x+lamda, y+lamda, lamda) + CarlsonRF(x+mu, y+mu, mu), CarlsonRF(x, y, 0)),
+        Def(mu, (x*y)/lamda))),
+    Variables(x, y, lamda),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)),
+        Element(lamda, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+make_entry(ID("4eac3f"),
+    Formula(Where(Equal(CarlsonRJ(x+lamda, y+lamda, lamda, w+lamda) + CarlsonRJ(x+mu, y+mu, mu, w+mu), CarlsonRJ(x, y, 0, w)
+            - 3*CarlsonRC(w**2*(lamda+mu+x+y), w*(w+lamda)*(w+mu))),
+        Def(mu, (x*y)/lamda))),
+    Variables(x, y, w, lamda),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)), Element(w, OpenInterval(0, Infinity)),
+        Element(lamda, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+
+"""
+not correct?
+make_entry(ID("cb9748"),
+    Formula(Where(Equal(2*CarlsonRG(x+lamda, y+lamda, z+lamda) + 2*CarlsonRG(x+mu, y+mu, z+mu),
+            2*CarlsonRG(x,y,z) + lamda*CarlsonRF(x+lamda, y+lamda, z+lamda) + mu*CarlsonRF(x+mu, y+mu, z+mu) + Sqrt(lamda+mu+x+y+z)),
+        Def(mu, (x*y)/lamda))),
+    Variables(x, y, z, lamda),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)),
+        Element(lamda, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
+"""
+
+make_entry(ID("a203e9"),
+    Formula(Where(Equal(CarlsonRD(lamda, x+lamda, y+lamda) + CarlsonRD(mu, x+mu, y+mu), CarlsonRD(0, x, y) - 3/(y*Sqrt(x+y+lamda+mu))),
+        Def(mu, (x*y)/lamda))),
+    Variables(x, y, lamda),
+    Assumptions(And(Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)),
+        Element(lamda, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))))
 
 # Integral representations
 
@@ -1017,6 +1108,33 @@ make_entry(ID("b576e6"),
 
 make_entry(ID("a82bd6"),
     SymbolDefinition(CarlsonHypergeometricT, CarlsonHypergeometricT(N, b, z), "Term in expansion of Carlson multivariate hypergeometric function"))
+
+# todo: bivariate formulas?
+
+make_entry(ID("72b5bd"),
+    Formula(Equal(CarlsonRC(1, x), Hypergeometric2F1(1, Div(1,2), Div(3,2), 1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("b2fdfe"),
+    Formula(Equal(CarlsonRF(0, x, 1), (Pi/2) * Hypergeometric2F1(Div(1,2), Div(1,2), 1, 1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("e98dd0"),
+    Formula(Equal(CarlsonRG(0, x, 1), (Pi/4) * Hypergeometric2F1(-Div(1,2), Div(1,2), 1, 1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("9bfd88"),
+    Formula(Equal(CarlsonRD(0, x, 1), (3*Pi/4) * Hypergeometric2F1(Div(1,2), Div(3,2), 2, 1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("bbf003"),
+    Formula(Equal(CarlsonRD(0, 1, x), (3*Pi/(4*x)) * Hypergeometric2F1(Div(1,2), Div(1,2), 2, 1-x))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
 
 make_entry(ID("13f252"),
     Formula(Where(Equal(CarlsonHypergeometricR(-a, List(Repeat(beta, n)), List(z_(k), For(k, 1, n))),
@@ -1449,6 +1567,48 @@ make_entry(ID("978287"),
     Assumptions(And(Element(x, ClosedOpenInterval(0, Infinity)),
         Element(y, OpenInterval(0, Infinity)))))
 
+
+make_entry(ID("0e209c"),
+    Formula(LessEqual(CarlsonRF(0, y, z), Div(1, 2 * Sqrt(Max(y, z))) * (Pi + Abs(Log(y/z))))),
+    Variables(y, z),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)))))
+
+make_entry(ID("2e40b8"),
+    Formula(GreaterEqual(CarlsonRF(0, y, z), (2*Log(2))/Sqrt(Max(y, z)))),
+    Variables(y, z),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)))))
+
+make_entry(ID("62eade"),
+    Formula(LessEqual(CarlsonRG(0, y, z), Pi*Sqrt(Max(y, z))/4)),
+    Variables(y, z),
+    Assumptions(And(Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("36ae10"),
+    Formula(GreaterEqual(CarlsonRG(0, y, z), Sqrt(Max(y, z))/2)),
+    Variables(y, z),
+    Assumptions(And(Element(y, ClosedOpenInterval(0, Infinity)), Element(z, ClosedOpenInterval(0, Infinity)))))
+
+make_entry(ID("add3ea"),
+    Formula(LessEqual(CarlsonRJ(0, y, z, w), (3*Pi/4) * (y*z*w**2)**(-Div(3,8)))),
+    Variables(y, z, w),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)), Element(w, OpenInterval(0, Infinity)))))
+
+make_entry(ID("60541a"),
+    Formula(GreaterEqual(CarlsonRJ(0, y, z, w), (3*Pi)/(2*Sqrt(w*(2*y*z+y*w+z*w))))),
+    Variables(y, z, w),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)), Element(w, OpenInterval(0, Infinity)))))
+
+make_entry(ID("d70b12"),
+    Formula(LessEqual(CarlsonRD(0, y, z), (3*Pi/4) * (y*z**3)**(-Div(3,8)))),
+    Variables(y, z),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)))))
+
+make_entry(ID("255142"),
+    Formula(GreaterEqual(CarlsonRD(0, y, z), (3*Pi)/(2*z*Sqrt((3*y+y+z))))),
+    Variables(y, z),
+    Assumptions(And(Element(y, OpenInterval(0, Infinity)), Element(z, OpenInterval(0, Infinity)))))
+
+
 # Representation of elementary functions
 # todo: complex assumptions
 
@@ -1703,6 +1863,11 @@ make_entry(ID("53d869"),
     Variables(x),
     Assumptions(Element(x, CC)))
 
+make_entry(ID("ab5af3"),
+    Formula(Equal(CarlsonRF(0, x, x), Pi / (2*Sqrt(x)))),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
 make_entry(ID("415ff0"),
     Formula(Equal(CarlsonRF(0, x, y), EllipticK(1-y/x) / Sqrt(x))),
     Variables(x, y),
@@ -1796,6 +1961,11 @@ make_entry(ID("d829be"),
 
 make_entry(ID("3f6d40"),
     Formula(Equal(CarlsonRG(0, 1, x), EllipticE(1-x)/2)),
+    Variables(x),
+    Assumptions(Element(x, CC)))
+
+make_entry(ID("cdb587"),
+    Formula(Equal(CarlsonRG(0, x, x), Pi * Sqrt(x) / 4)),
     Variables(x),
     Assumptions(Element(x, CC)))
 

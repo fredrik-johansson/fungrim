@@ -4893,7 +4893,7 @@ class Brain(object):
                 yzero = self.is_zero(y)
                 zzero = self.is_zero(z)
                 # Move zeros up front
-                [(x, xzero), (y, yzero), (z, zero)] = sorted([(x, xzero), (y, yzero), (z, zzero)], key=lambda a: a[1] == False)
+                [(x, xzero), (y, yzero), (z, zzero)] = sorted([(x, xzero), (y, yzero), (z, zzero)], key=lambda a: a[1] == False)
                 args = [x, y, z]
                 if xzero:
                     if yzero and zzero:
@@ -4913,7 +4913,10 @@ class Brain(object):
                         return self.simple(EllipticK(1 - y / z) / Sqrt(z))
                     cond = self.less(Abs(Arg(y)-Arg(z)), Pi)
                     if cond:
-                        return self.simple(EllipticK(1 - z / y) / Sqrt(y))
+                        if yzero == False:
+                            return self.simple(EllipticK(1 - z / y) / Sqrt(y))
+                        if zzero == False:
+                            return self.simple(EllipticK(1 - y / z) / Sqrt(z))
                 if self.equal(x, y):
                     if self.equal(x, z):
                         return self.simple(1/Sqrt(x))
@@ -4923,6 +4926,44 @@ class Brain(object):
                 if self.equal(y, z):
                     return self.simple(CarlsonRC(x, y))
         return CarlsonRF(*args)
+
+    def simple_CarlsonRG(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 3:
+            x, y, z = args
+            if self.is_complex(x) and self.is_complex(y) and self.is_complex(z):
+                xzero = self.is_zero(x)
+                yzero = self.is_zero(y)
+                zzero = self.is_zero(z)
+                # Move zeros up front
+                [(x, xzero), (y, yzero), (z, zzero)] = sorted([(x, xzero), (y, yzero), (z, zzero)], key=lambda a: a[1] == False)
+                args = [x, y, z]
+                if xzero:
+                    if yzero and zzero:
+                        return Expr(0)
+                    if yzero:
+                        return self.simple(Sqrt(z) / 2)
+                    if self.equal(y, z):
+                        return self.simple(Pi*Sqrt(y) / 4)
+                    cond = self.less(Abs(Arg(y)-Arg(z)), Pi)
+                    if cond:
+                        if yzero == False:
+                            return self.simple(Sqrt(y) * EllipticE(1 - z / y) / 2)
+                        if zzero == False:
+                            return self.simple(Sqrt(z) * EllipticE(1 - y / z) / 2)
+
+                # RG(a,b,b)
+                elem = Div(1,2) * Cases(Tuple(b * CarlsonRC(a, b) + Sqrt(a), NotEqual(b, 0)), Tuple(Sqrt(a), NotEqual(b, 0)))
+                if self.equal(x, y):
+                    if self.equal(x, z):
+                        return self.simple(Sqrt(x))
+                    return self.simple(elem.replace({a:z, b:x}))
+                if self.equal(x, z):
+                    return self.simple(elem.replace({a:y, b:x}))
+                if self.equal(y, z):
+                    return self.simple(elem.replace({a:x, b:y}))
+
+        return CarlsonRG(*args)
 
     def simple_CarlsonRD(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -4966,6 +5007,10 @@ class Brain(object):
                             res = y**(-Div(3,2)) * Cases((3 * (EllipticE(1-z/y) - (z/y)*EllipticK(1-z/y)) / ((z/y)*(1-z/y)), And(NotEqual(z, 0), NotEqual(z, y))),
                                     (3*Pi/4, Equal(z, y)), (UnsignedInfinity, Equal(z, 0)))
                             return self.simple(res)
+
+                if self.equal(x, z):
+                    res = Cases((3/(2*(x-y)) * (CarlsonRC(y,x) - Sqrt(y)/x), NotEqual(x, y)), (x**(-Div(3,2)), Equal(x, y)))
+                    return self.simple(res)
 
                 if self.equal(y, z):
                     res = Cases((3/(2*(y-x)) * (CarlsonRC(x,y) - Sqrt(x)/y), NotEqual(x, y)), (x**(-Div(3,2)), Equal(x, y)))
@@ -5022,7 +5067,6 @@ class Brain(object):
                         (3/(2*(y-x)) * (CarlsonRC(x, y) - Sqrt(x)/y), And(Equal(y, w), NotEqual(x, y))),
                         (x**(-Div(3,2)), Equal(x, y, w)))
                     return self.simple(res)
-
         return CarlsonRJ(*args)
 
     def simple_IdentityMatrix(self, *args):
