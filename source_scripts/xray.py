@@ -299,10 +299,10 @@ def plots(outdir):
     xrayplot(lambda z: complex(acb.elliptic_rf(z, 1, 2)), (-4,4), (-4,4), 400, "carlson_rf", xout=0.1, yout=0.1, decorations=elliprf_decor)
 
     rcParams["legend.borderaxespad"] = 1.2
-    curveplot([lambda x: elliprg(x, 10, 1).real, lambda x: elliprg(x, 1.0, 1.0).real, lambda x: elliprg(x, 0.1, 1.0).real],
+    curveplot([lambda x: elliprg(x, 0.1, 1).real, lambda x: elliprg(x, 1.0, 1.0).real, lambda x: elliprg(x, 10, 1.0).real],
         (0, 4), N=400, filename="carlson_rg", xout=0.1, yout=0.1,
         legend_loc='lower right',
-        legends=["$R_G(x,10,1)$", "$R_G(x,1,1)$", "$R_G(x,0.1,1)$", " "])
+        legends=["$R_G(x,0.1,1)$", "$R_G(x,1,1)$", "$R_G(x,10,1)$", " "])
     rcParams["legend.borderaxespad"] = 0.5
 
     curveplot([lambda x: elliprf(x, 0.1, 1).real, lambda x: elliprf(x, 1.0, 1.0).real, lambda x: elliprf(x, 10, 1.0).real],

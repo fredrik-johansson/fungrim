@@ -571,7 +571,7 @@ make_entry(ID("b0921b"),
     )
 
 make_entry(ID("6ae152"),
-    Image(Description("Plot of", CarlsonRG(x, y, 1), "on", Element(x, ClosedInterval(0,4)), "for", Element(y, Set(10, 1, Decimal("0.1")))),
+    Image(Description("Plot of", CarlsonRG(x, y, 1), "on", Element(x, ClosedInterval(0,4)), "for", Element(y, Set(Decimal("0.1"), 1, 10))),
         ImageSource("plot_carlson_rg")),
     )
 
