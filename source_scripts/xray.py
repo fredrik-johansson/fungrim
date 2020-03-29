@@ -293,8 +293,7 @@ def plots(outdir):
     directory[0] = outdir
 
     def elliprf_decor():
-        branchcutline(0, -1, offset=0.07)
-        branchcutline(-1, -4, offset=0.07)
+        branchcutline(0, -4, offset=0.07)
 
     xrayplot(lambda z: complex(acb.elliptic_rf(z, 1, 2)), (-4,4), (-4,4), 400, "carlson_rf", xout=0.1, yout=0.1, decorations=elliprf_decor)
 
