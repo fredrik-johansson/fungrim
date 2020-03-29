@@ -64,6 +64,11 @@ def_Topic(
         "5d2c01",
         "2991b5",
         "4b040d",
+        "0abbe1",
+        "175b7a",
+        "5c88da",
+        "b95ffa",
+        "40a376",
         "618a54",
         "18e226",
         "061c49",
@@ -318,6 +323,21 @@ make_entry(ID("2991b5"),
 
 make_entry(ID("4b040d"),
     Formula(Equal(EllipticK((4-3*Sqrt(2))/8), Div(Pow(Gamma(Div(1, 4)), 2), Mul(Mul(4, Pow(2, Div(1, 4))), Sqrt(Pi))))))
+
+make_entry(ID("0abbe1"),
+    Formula(Equal(EllipticK((1+Sqrt(3)*ConstI)/2), Exp(ConstI * Pi / 12) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
+
+make_entry(ID("175b7a"),
+    Formula(Equal(EllipticK((1-Sqrt(3)*ConstI)/2), Exp(-(ConstI * Pi / 12)) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
+
+make_entry(ID("5c88da"),
+    Formula(Equal(EllipticK((1-Sqrt(3)*ConstI)/2), Exp(-(ConstI * Pi / 12)) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
+
+make_entry(ID("b95ffa"),
+    Formula(Equal(EllipticK(4*Sqrt(3)-7), (Sqrt(3 + 2*Sqrt(3)) * Gamma(Div(1,3))**3 / (2**Div(10,3) * Pi)))))
+
+make_entry(ID("40a376"),
+    Formula(Equal(EllipticK(Div(1,2) - Sqrt(3)/4), (3**Div(1,4) * Gamma(Div(1,3))**3) / (4 * 2**Div(1,3) * Pi))))
 
 make_entry(ID("618a54"),
     Formula(Equal(EllipticPi(0, 0), Pi / 2)))

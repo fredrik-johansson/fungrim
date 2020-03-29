@@ -1251,6 +1251,8 @@ class Brain(object):
             else:
                 v = self.less(x, b)
                 return v
+        if head == Lattice:
+            return self.is_element_Lattice(x, S)
         # todo: check for comprehensions
         if head == Set:
             check = [self.equal(x, y) for y in S.args()]
@@ -4350,6 +4352,39 @@ class Brain(object):
         except NotImplementedError:
             pass
         return LCM(*args)
+
+    def is_element_Lattice(self, z, L):
+        w1, w2 = L.args()
+        if self.is_complex(z) and self.is_complex(w1) and self.is_complex(w2):
+            if self.is_zero(z):
+                return True
+            w1zero = self.is_zero(w1)
+            w2zero = self.is_zero(w2)
+            if w1zero and w2zero:
+                return self.is_zero(z)
+            if w1zero and (w2zero == False):
+                return self.is_integer(z / w2)
+            if w2zero and (w1zero == False):
+                return self.is_integer(z / w1)
+            if w1zero == False and w2zero == False:
+                # check if z/w1 = m + n*w2/w1
+                zred = z / w1
+                wred = w2 / w1
+                # todo: handle wred with zero imaginary part?
+                if self.is_zero(Im(wred)) != False:
+                    return None
+                n = self.simple(Floor(Im(zred) / Im(wred) + Div(1, 2)))
+                eq = self.equal(n, Im(zred) / Im(wred))
+                if eq == False:
+                    return False
+                if eq == True:
+                    m = self.simple(zred - n * wred)
+                    eq2 = self.is_integer(m)
+                    if eq2 == False:
+                        return False
+                    if eq2 == True:
+                        return True
+        return None
 
     def simple_DedekindSum(self, *args):
         args = [self.simple(arg) for arg in args]
