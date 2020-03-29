@@ -66,7 +66,6 @@ def_Topic(
         "4b040d",
         "0abbe1",
         "175b7a",
-        "5c88da",
         "b95ffa",
         "40a376",
         "618a54",
@@ -328,9 +327,6 @@ make_entry(ID("0abbe1"),
     Formula(Equal(EllipticK((1+Sqrt(3)*ConstI)/2), Exp(ConstI * Pi / 12) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
 
 make_entry(ID("175b7a"),
-    Formula(Equal(EllipticK((1-Sqrt(3)*ConstI)/2), Exp(-(ConstI * Pi / 12)) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
-
-make_entry(ID("5c88da"),
     Formula(Equal(EllipticK((1-Sqrt(3)*ConstI)/2), Exp(-(ConstI * Pi / 12)) * 3**Div(1,4) * Gamma(Div(1,3))**3 / (2**Div(7,3) * Pi))))
 
 make_entry(ID("b95ffa"),
