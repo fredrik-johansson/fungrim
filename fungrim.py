@@ -783,7 +783,7 @@ writetopic("Complex plane")
 frontpage.fp.write("""</ul></li>""")
 
 frontpage.fp.write("""<li>Constants<ul>""")
-writetopic("Pi")
+writetopic("Pi", highlight=True)
 writetopic("Imaginary unit")
 writetopic("Euler's constant")
 writetopic("Golden ratio")

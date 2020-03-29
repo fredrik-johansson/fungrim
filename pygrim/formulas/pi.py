@@ -27,6 +27,7 @@ def_Topic(
         "722241",
         "b89166",
         "590136",
+        "030560",
     ),
     Subsection("Machin-type formulas"),
     Entries(
@@ -80,6 +81,7 @@ def_Topic(
         "69fe63",
         "490cf4",
         "a91200",
+        "6fce07",
     ),
     Section("Limit representations"),
     Entries(
@@ -110,7 +112,9 @@ def_Topic(
         "488a30",
         "826257",
         "3d276b",
+        "2806fd",
         "68b73d",
+        "42d727",
         "8ee7c9",
         "f56273",
     ),
@@ -214,6 +218,10 @@ make_entry(ID("b89166"),
 
 make_entry(ID("590136"),
     Formula(Equal(Pi, -(ConstI * Log(-1)))))
+
+make_entry(ID("030560"),
+    Formula(Equal(Pi, 10*Asin(1/(2*GoldenRatio)))))
+
 
 make_entry(ID("f8d280"),
     Formula(Equal(Pi, 16*Atan(Div(1,5)) - 4*Atan(Div(1,239)))))
@@ -355,6 +363,9 @@ make_entry(ID("490cf4"),
 make_entry(ID("a91200"),
     Formula(Equal(Pi**2/6, PrimeProduct((1-1/p**2)**(-1), For(p)))))
 
+# todo: semantic representation of recurrence
+make_entry(ID("6fce07"),
+    Formula(Equal(2 / Pi, Where(Product(a_(n) / 2, For(n, 1, Infinity)), Def(a_(1), Sqrt(2)), Def(a_(n), Sqrt(2 + a_(n-1)))))))
 
 # Limit representations
 
@@ -429,8 +440,15 @@ make_entry(ID("826257"),
 make_entry(ID("3d276b"),
     Formula(Equal(Pi, 12 * Hypergeometric2F1(-Div(1,2),-Div(1,2),Div(1,2),Div(1,4)) - 6*Sqrt(3))))
 
+make_entry(ID("2806fd"),
+    Formula(Equal(Pi, (9/(2*Sqrt(3)) *Hypergeometric2F1(1, 1, Div(3,2), 1/4)))))
+
 make_entry(ID("68b73d"),
     Formula(Equal(1/Pi, (2*Sqrt(3))/9 * Hypergeometric2F1(-Div(1,3),Div(1,3),1,1))))
+
+make_entry(ID("42d727"),
+    Formula(Equal(Pi, (5 * Sqrt(GoldenRatio + 2)) / (2 * GoldenRatio) * Hypergeometric2F1(1, 1, Div(3,2), 1/(2*GoldenRatio)**2))))
+
 
 make_entry(ID("8ee7c9"),
     Formula(Equal(Pi, Sqrt(DigammaFunction(Div(1,4), 1) - 8*ConstCatalan))))
