@@ -325,11 +325,6 @@ class alg(object):
             >>> x = alg(3 * (10**10+1)**3 * (10**15+1)**2).sqrt()
             >>> a, b, c = x.as_quadratic()
             >>> (a, b, c)
-            (0, 39340116598834051, 1938429316132524961593868203)
-            >>> x == a + b*alg(c).sqrt()
-            True
-            >>> a, b, c = x.as_quadratic(factor_limit=10**50)
-            >>> (a, b, c)
             (0, 10000000001000010000000001, 30000000003)
             >>> x == a + b*alg(c).sqrt()
             True
@@ -354,30 +349,11 @@ class alg(object):
             if abs(c) < factor_limit:
                 fac = c.factor()
             else:
-                fac = c.factor(trial_limit=1000)
-                # todo: the partial factoring in flint is wonky;
-                # it should at least do a perfect power test or single-word
-                # factorisation of the last factor
-                if 1:
-                    rem, reme = fac[-1]
-                    if rem < factor_limit:
-                        fac = fac[:-1] + [(pp, ee*reme) for (pp, ee) in rem.factor()]
-                    elif rem.is_perfect_power():
-                        for e in range(64,1,-1):
-                            p = rem.root(e)
-                            if p**e == rem:
-                                if p < factor_limit:
-                                    fac2 = rem.factor()
-                                    fac = fac[:-1]
-                                    for (p, f) in fac2:
-                                        fac.append((p, e*f*reme))
-                                else:
-                                    fac = fac[:-1] + [(p, e*reme)]
-                                break
+                fac = c.factor_smooth(bits=15, proved=-1)
                 check = 1
                 for p, e in fac:
                     check *= p**e
-                # assert check == abs(c)
+                assert check == abs(c)
             square = fmpz(1)
             squarefree = fmpz(1)
             for p, e in fac:
@@ -1276,6 +1252,201 @@ class alg(object):
             c = -c
             d = -d
         return tau, (a, b, c, d)
+
+
+from flint import *
+
+class gaussian_integer:
+    def __new__(cls, a, b=0):
+        if type(a) is gaussian_integer:
+            assert b == 0
+            return a
+        else:
+            self = object.__new__(cls)
+            self.a = fmpz(a)
+            self.b = fmpz(b)
+            return self
+
+    def __bool__(self):
+        return bool(self.a or self.b)
+
+    def __hash__(self):
+        if not self.b:
+            return hash(self.a)
+        return hash((self.a, self.b))
+
+    def __eq__(self, other):
+        self = gaussian_integer(self)
+        other = gaussian_integer(self)
+        return self.a == other.a and self.b == other.b
+
+    def __ne__(self, other):
+        self = gaussian_integer(self)
+        other = gaussian_integer(self)
+        return self.a != other.a or self.b != other.b
+
+    def __repr__(self):
+        if self.b == 0:
+            return str(self.a)
+        if self.a == 0:
+            return str(self.b) + "*I"
+        if self.b < 0:
+            return "(%s - %s*I)" % (self.a, -self.b)
+        else:
+            return "(%s + %s*I)" % (self.a, self.b)
+
+    def conjugate(self):
+        return gaussian_integer(self.a, -self.b)
+
+    def __neg__(self):
+        return gaussian_integer(-self.a, -self.b)
+
+    def __add__(self, other):
+        other = gaussian_integer(other)
+        return gaussian_integer(self.a + other.a, self.b + other.b)
+
+    def __radd__(self, other):
+        other = gaussian_integer(other)
+        return gaussian_integer(self.a + other.a, self.b + other.b)
+
+    def __sub__(self, other):
+        other = gaussian_integer(other)
+        return gaussian_integer(self.a - other.a, self.b - other.b)
+
+    def __rsub__(self, other):
+        other = gaussian_integer(other)
+        return gaussian_integer(other.a - self.a, other.b + self.b)
+
+    def __mul__(self, other):
+        other = gaussian_integer(other)
+        a, b = self.a, self.b
+        c, d = other.a, other.b
+        return gaussian_integer(a * c - b * d, a * d + b * c)
+
+    def __rmul__(self, other):
+        other = gaussian_integer(other)
+        a, b = self.a, self.b
+        c, d = other.a, other.b
+        return gaussian_integer(a * c - b * d, a * d + b * c)
+
+    def __pow__(self, other):
+        e = int(other)
+        if e == 0:
+            return gaussian_integer(1)
+        if e == 1:
+            return self
+        if e == 2:
+            a, b = self.a, self.b
+            return gaussian_integer(a**2 - b**2, 2*a*b)
+        v = self ** (e // 2)
+        v = v * v
+        if e % 2:
+            v *= self
+        return v
+
+    def div(self, other):
+        other = gaussian_integer(other)
+        a, b = self.a, self.b
+        c, d = other.a, other.b
+        t = a*c + b*d
+        u = b*c - a*d
+        v = c**2 + d**2
+        w = 2*v
+        return gaussian_integer((2*t+v)//w, (2*u+v)//w)
+
+    def rem(self, other):
+        other = gaussian_integer(other)
+        t = self.div(other)
+        return self - t * other
+
+    def divrem(self, other):
+        other = gaussian_integer(other)
+        t = self.div(other)
+        return (t, self - t * other)
+
+    def divides(self, other):
+        other = gaussian_integer(other)
+        a, b = self.a, self.b
+        c, d = other.a, other.b
+        v = c**2 + d**2
+        t = a*c + b*d
+        if t % v:
+            return False
+        u = b*c - a*d
+        return u % v
+
+    def gcd(self, other):
+        other = gaussian_integer(other)
+        x, y = self, other
+        while y:
+            x, y = y, x.rem(y)
+        return x
+
+    def norm(self):
+        return self.a**2 + self.b**2
+
+    def rotate_first_quadrant(self):
+        a = self.a
+        b = self.b
+        if not a and not b:
+            return self
+        if a >= 0 and b > 0:
+            return self
+        if a >= 0 and b <= 0:
+            return gaussian_integer(-b, a)
+        if a < 0 and b < 0:
+            return gaussian_integer(-a, -b)
+        return gaussian_integer(b, -a)
+
+    def factor(self, smooth=True):
+        norm = self.norm()
+        factors = {}
+        if smooth:
+            norm_factors = norm.factor_smooth()
+        else:
+            norm_factors = norm.factor()
+        for p, e in norm_factors:
+            if p == 2:
+                c = gaussian_integer(1, 1)
+                self, r = self.divrem(c**e)
+                assert not r
+                factors[c] = e
+                continue
+            if p % 4 == 3:
+                assert e % 2 == 0
+                c = gaussian_integer(p)
+                self, r = self.divrem(c ** (e // 2))
+                assert not r
+                factors[c] = e // 2
+            if p % 4 == 1:
+                try:
+                    k = int(fmpz(-1).sqrtmod(p))
+                    v = gaussian_integer(p)
+                    while e >= 1:
+                        u = v.gcd(gaussian_integer(k, 1))
+                        u = u.rotate_first_quadrant()
+                        q, r = self.divrem(u)
+                        if not r:
+                            factors[u] = factors.get(u, 0) + 1
+                            self = q
+                        else:
+                            u = u.conjugate()
+                            u = u.rotate_first_quadrant()
+                            q, r = self.divrem(u)
+                            if not r:
+                                factors[u] = factors.get(u, 0) + 1
+                                self = q
+                        e -= 1
+                except (ValueError, ZeroDivisionError):
+                    # in case of partial factorisation
+                    assert smooth
+        # in case of partial factorisation
+        if self.norm() != 1:
+            u = self.rotate_first_quadrant()
+            factors[u] = 1
+            self = self.div(u)
+        return self, factors
+
 
 class TestAlgebraic:
 

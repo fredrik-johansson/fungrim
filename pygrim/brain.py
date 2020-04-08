@@ -880,7 +880,7 @@ class Brain(object):
         if x.head() in (Pos, Neg, Add, Sub, Mul, Exp, Sin, Cos):
             if all(self.is_real(arg) for arg in x.args()):
                 return True
-        if x.head() in (Floor, Ceil, Re, Im, Abs):
+        if x.head() in (Floor, Ceil, Re, Im, Abs, Arg):
             z, = x.args()
             if self.is_complex(z):
                 return True
@@ -905,6 +905,10 @@ class Brain(object):
                     return True
                 if self.is_integer(exp) and self.is_nonnegative(exp):
                     return True
+        if x.head() == Atan2:
+            t, u = x.args()
+            if self.is_real(t) and self.is_real(u):
+                return True
         v = self.complex_enclosure(x)
         if v is not None:
             if v.imag == 0:
@@ -970,6 +974,10 @@ class Brain(object):
         if x.head() == Log:
             arg, = x.args()
             if self.is_complex(arg) and self.is_not_zero(arg):
+                return True
+        if x.head() == Atan2:
+            t, u = x.args()
+            if self.is_real(t) and self.is_real(u):
                 return True
         if x.head() == DedekindEta:
             tau, = x.args()
@@ -1054,6 +1062,12 @@ class Brain(object):
             bq = self.is_real(b)
             if aq is not None and bq is not None and aq != bq:
                 return False
+            try:
+                normal = self.expand_multivariate(a - b)
+                if normal == Expr(0):
+                    return True
+            except NotImplementedError:
+                pass
 
         aq = self.is_infinity(a)
         bq = self.is_infinity(b)
@@ -1560,21 +1574,6 @@ class Brain(object):
     def simple_Braces(self, x):
         return self.simple(x)
 
-    def simple_Neg(self, x):
-        x = self.simple(x)
-        if x.head() == Neg:
-            v, = x.args()
-            return v
-        if x.head() == Sub:
-            a, b = x.args()
-            return Sub(b, a)
-        if x.is_integer():
-            v = int(x)
-            return Expr(-v)
-        if x == UnsignedInfinity or x == Undefined:
-            return x
-        return Neg(x)
-
     def complexity(self, expr):
         if expr in self.penalty:
             return self.penalty[expr]
@@ -1598,6 +1597,343 @@ class Brain(object):
         a = self.complexity(head)
         b = sum(self.complexity(arg) for arg in args)
         return a + 2*b + 1
+
+    def sort_expressions(self, terms):
+        return sorted(terms, key=lambda x: (not self.is_real(x), self.complexity(x), str(x)))
+
+    def polish_arithmetic(self, expr):
+        """
+        Polishes an arithmetic expression superficially, with strong
+        assumptions about all terms (commutativity, associativity,
+        characteristic 0, ...). This is an unsafe operation which does not
+        check these assumptions. Simplifications are not applied recursively
+        to non-arithmetic expressions.
+        """
+        if expr.is_atom():
+            return expr
+        head = expr.head()
+        args = expr.args()
+        if head == Pos:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            x, = args
+            return x
+        if head == Neg:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            x, = args
+            if x.head() == Neg:
+                y, = x.args()
+                return y
+            return Neg(x)
+        if head == Add:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            args = [arg for arg in args if arg != Expr(0)]
+            if len(args) == 0:
+                return Expr(0)
+            if len(args) == 1:
+                return args[0]
+            return Add(*args)
+        if head == Mul:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            args = [arg for arg in args if arg != Expr(1)]
+            if len(args) == 0:
+                return Expr(1)
+            if len(args) == 1:
+                return args[0]
+            return Mul(*args)
+        if head == Div:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            p, q = args
+            if q == Expr(1):
+                return p
+        if head == Pow:
+            args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            x, y = args
+            if y == Expr(0):
+                return Expr(1)
+            if y == Expr(1):
+                return x
+            if y == Expr(-1):
+                return 1 / x
+        return head(*args)
+
+    def expand_multivariate(self, expr):
+        blobs = set()
+        explicit_algebraic_blobs = {}
+        from .algebraic import alg
+
+        # todo: Re(Gamma(Div(7,4)) * DedekindEta(5+4*ConstI)).eval() -- improvify!
+
+        verbose = False
+        # verbose = True
+
+        def preprocess(expr):
+            if verbose:
+                print("visiting", expr)
+            if expr.is_integer():
+               return expr
+
+            v = self.evaluate_alg_or_None(expr)
+            if v is not None:
+                if verbose:
+                    print("it's an alg", v)
+                if v.degree() == 1:
+                    return Expr(v.fmpq())
+                if v.degree() == 2:
+                    a, b, c = v.as_quadratic()
+                    if c > 0:
+                        quad = Sqrt(c)
+                    elif c == -1:
+                        quad = ConstI
+                    else:
+                        quad = Sqrt(-c) * ConstI
+                    blobs.add(quad)
+                    explicit_algebraic_blobs[quad] = alg(c).sqrt().minpoly()
+                    return Add(a, Mul(b, quad))
+
+                # todo: other algebraics?
+
+            if expr.is_atom():
+                if self.is_complex(expr):
+                    blobs.add(expr)
+                    return expr
+                raise NotImplementedError
+
+            head = expr.head()
+            args = expr.args()
+            if head in (Neg, Pos, Sub, Add, Mul):
+                args = [preprocess(arg) for arg in args]
+                return head(*args)
+            if head == Div:
+                x, y = args
+                x = preprocess(x)
+                y = preprocess(y)
+                if self.is_zero(y) is not False:
+                    raise NotImplementedError
+                return Div(x, y)
+            if head == Pow:
+                x, y = args
+                y = self.simple(y)
+                if y.is_integer() and self.is_complex(x) and self.is_complex(Pow(x, y)):
+                    x = preprocess(x)
+                    return Pow(x, y)
+                if self.is_complex(x) and self.is_complex(y) and self.is_complex(Pow(x, y)):
+                    try:
+                        expo = self.evaluate_fmpq(y)
+                        if expo.q == 2:
+                            blobs.add(Sqrt(x))
+                            return Pow(Sqrt(x), expo.p)
+                    except NotImplementedError:
+                        pass
+
+                    blobs.add(Pow(x, y))
+                    return Pow(x, y)
+                raise NotImplementedError
+
+            expr = self.simple(expr)  # XXX
+            if expr.is_atom() or expr.head() in (Neg, Pos, Add, Sub, Mul, Pow):
+                return preprocess(expr)
+
+            if not self.is_complex(expr):
+                raise NotImplementedError
+
+            blobs.add(expr)
+            return expr
+
+        expr = preprocess(expr)
+
+        if verbose:
+            print("processed:", expr)
+            print("indeterminates:", blobs)
+
+        # eliminate trivial algebraic relations between blobs
+        # example: Pi, Sqrt(Pi), Pi**(-Div(1,2)) ---
+        # currently restricted to square roots of identical expressions...
+        # todo: handle exponential functions, ...?
+        replace_blobs = {}
+        for blob in blobs:
+            if blob.head() in (Pow, Sqrt):
+                if blob.head() == Sqrt:
+                    expo = Div(1, 2)
+                    base = blob.args()[0]
+                if blob.head() == Pow:
+                    expo = blob.args()[1]
+                    base = blob.args()[0]
+                if base.is_integer() or base in explicit_algebraic_blobs: # xxx
+                    continue
+                try:
+                    expo = self.evaluate_fmpq(expo)
+                except NotImplementedError:
+                    continue
+                if expo.q == 2:
+                    if base in blobs:
+                        replace_blobs[base] = (Sqrt(base), 2)
+                        replace_blobs[blob] = (Sqrt(base), expo.p)
+
+        if replace_blobs:
+            if verbose:
+                print("replacements:", replace_blobs)
+            def preprocess2(expr):
+                if expr in blobs:
+                    return expr
+                if expr in replace_blobs:
+                    newblob, expo = replace_blobs[expr]
+                    return Pow(newblob, expo)
+                if expr.is_atom():
+                    return expr
+                head = expr.head()
+                args = expr.args()
+                if (Neg, Pos, Sub, Add, Mul):
+                    args = [preprocess2(arg) for arg in args]
+                    return head(*args)
+                if head == Div:
+                    x, y = args
+                    x = preprocess2(x)
+                    y = preprocess2(y)
+                    return Div(x, y)
+                if head == Pow:
+                    x, y = args
+                    # y = self.simple(y)
+                    if y.is_integer():
+                        x = preprocess2(x)
+                        return Pow(x, y)
+                return expr
+
+            for killed_blob, (new_blob, new_blob_exp) in replace_blobs.items():
+                blobs.remove(killed_blob)
+                blobs.add(new_blob)
+
+            expr = preprocess2(expr)
+
+        nvars = len(blobs)
+        if nvars > 20:
+            raise NotImplementedError
+
+        if verbose:
+            print()
+            print("processed 2:", expr)
+            print("indeterminates 2:", blobs)
+
+        from .multivariate import fmpz_mpoly_q
+        from flint import fmpz_mpoly
+
+        gens = fmpz_mpoly.gens(nvars)
+        qgens = [fmpz_mpoly_q(x) for x in gens]
+
+        blobs_list = list(blobs)   # todo: useful to sort?
+        blobs_list = sorted(blobs_list, key=lambda x: (not self.is_real(x), self.complexity(x), str(x)))
+
+        blobs = {blob : qgens[blobs_list.index(blob)] for blob in blobs}
+
+        ideal = []
+
+        if explicit_algebraic_blobs:
+            for blob in explicit_algebraic_blobs:
+                x = gens[blobs_list.index(blob)]
+                minpoly = explicit_algebraic_blobs[blob]
+                # todo: fast conversion
+                minpoly_x = sum(minpoly[i] * x**i for i in range(len(minpoly)))
+                ideal.append(minpoly_x)
+
+        if verbose:
+            print("blobs", blobs)
+            print("ideal", ideal)
+
+        def idealize(f):
+            # print("in ", len(f.p), len(f.q))
+            if not ideal:
+                return f
+            p = pold = f.p
+            q = qold = f.q
+            for pol in ideal:
+                p = p % pol
+                q = q % pol
+            if p != pold or q != qold:
+                f = fmpz_mpoly_q(p, q)    # for gcd
+            # print("out", len(f.p), len(f.q))
+            return f
+
+        def process(expr):
+            if verbose:
+                print("PROCESS", expr)
+
+            if expr.is_integer():
+                #return self._fmpq(int(expr))
+                return fmpz_mpoly_q(int(expr))
+            if expr in blobs:
+                return blobs[expr]
+            head = expr.head()
+            args = expr.args()
+            if head == Neg:
+                x, = args
+                return -process(x)
+            if head == Pos:
+                x, = args
+                return process(x)
+            if head == Sub:
+                x, y = args
+                return idealize(process(x) - process(y))
+            if head == Add:
+                if not args:
+                    return process(Expr(0))
+                if len(args) == 1:
+                    return process(args[0])
+                s = process(args[0])
+                for x in args[1:]:
+                    s = idealize(s + process(x))
+                return s
+            if head == Mul:
+                if not args:
+                    return process(Expr(1))
+                if len(args) == 1:
+                    return process(args[0])
+                s = process(args[0])
+                for x in args[1:]:
+                    s = idealize(s * process(x))
+                return s
+            if head == Div:
+                x, y = args
+                return idealize(process(x) / process(y))
+            if head == Pow:
+                x, y = args
+                if y.is_integer():
+                    n = int(y)
+                    if abs(n) <= 20:
+                        return idealize(process(x) ** n) # XXX!
+            if verbose:
+                print("PROBLEM", expr)
+            raise NotImplementedError
+
+        poly_q = process(expr)
+
+        if verbose:
+            print(poly_q)
+
+        def poly_as_expr(pol):
+            if not pol:
+                return Expr(0)
+            terms = []
+            for i in range(len(pol)):
+                c = pol.coefficient(i)
+                expo = pol.exponent_tuple(i)
+                fac = [c]
+                for j, e in enumerate(expo):
+                    if e == 0:
+                        continue
+                    elif e == 1:
+                        fac.append(blobs_list[j])
+                    else:
+                        fac.append(Pow(blobs_list[j], e))
+                term = Mul(*fac)
+                terms.append(term)
+            return Add(*terms)
+
+        if poly_q.p == 0:
+            return Expr(0)
+
+        if poly_q.q == 1:
+            return self.polish_arithmetic(poly_as_expr(poly_q.p))
+
+        return self.polish_arithmetic(poly_as_expr(poly_q.p) / poly_as_expr(poly_q.q))
 
     def evaluate_fmpq(self, expr):
         if expr.is_integer():
@@ -1829,6 +2165,11 @@ class Brain(object):
         raise NotImplementedError
 
     def evaluate_alg(self, expr):
+        if ("evaluate_alg", expr) in self.simple_cache:
+            val = self.simple_cache[("evaluate_alg", expr)]
+            if val is None:
+                raise NotImplementedError
+
         # try exact computation
         from .algebraic import alg_get_degree_limit, alg_set_degree_limit
         from .algebraic import alg_get_bits_limit, alg_set_bits_limit
@@ -1836,14 +2177,18 @@ class Brain(object):
         orig_degree = alg_get_degree_limit()
         orig_bits = alg_get_bits_limit()
 
+        val = None
         try:
-            alg_set_degree_limit(120)
+            alg_set_degree_limit(60)
             alg_set_bits_limit(100000)
-            return self._evaluate_alg(expr)
+            val = self._evaluate_alg(expr)
 
         finally:
             alg_set_degree_limit(orig_degree)
             alg_set_bits_limit(orig_bits)
+            self.simple_cache[("evaluate_alg", expr)] = val
+
+        return val
 
     def evaluate_alg_or_None(self, expr):
         try:
@@ -2093,7 +2438,87 @@ class Brain(object):
         else:
             return Exp(p*Pi*ConstI/q)
 
-    def simple_Add(self, *terms):
+    def simple_arithmetic(self, expr):
+        try:
+            expanded = None
+            expanded = self.expand_multivariate(expr)
+            if expanded.is_atom():
+                return expanded
+        except NotImplementedError:
+            expanded = None
+
+        head = expr.head()
+        args = expr.args()
+        if head == Add:
+            res = self._simple_Add(*args)
+        elif head == Sub:
+            res = self._simple_Sub(*args)
+        elif head == Neg:
+            res = self._simple_Neg(*args)
+        elif head == Mul:
+            res = self._simple_Mul(*args)
+        elif head == Div:
+            res = self._simple_Div(*args)
+        elif head == Pow:
+            res = self._simple_Pow(*args)
+        else:
+            raise ValueError
+
+        if expanded is not None:
+            if 0:
+                try:
+                    r1 = self.complex_enclosure(expanded)
+                    r2 = self.complex_enclosure(res)
+                    if not r1.overlaps(r2):
+                        print("UGH!")
+                        print(expr)
+                        print(expanded)
+                        print(res)
+                        print(r1)
+                        print(r2)
+                        raise ValueError
+                except NotImplementedError:
+                    pass
+
+            if self.complexity(expanded) < self.complexity(res):
+                res = expanded
+
+        return res
+
+    def simple_Add(self, *args):
+        return self.simple_arithmetic(Add(*args))
+
+    def simple_Sub(self, *args):
+        return self.simple_arithmetic(Sub(*args))
+
+    def simple_Neg(self, *args):
+        return self.simple_arithmetic(Neg(*args))
+
+    def simple_Mul(self, *args):
+        return self.simple_arithmetic(Mul(*args))
+
+    def simple_Div(self, *args):
+        return self.simple_arithmetic(Div(*args))
+
+    def simple_Pow(self, *args):
+        return self.simple_arithmetic(Pow(*args))
+
+    def _simple_Neg(self, x):
+        x = self.simple(x)
+        if x.head() == Neg:
+            v, = x.args()
+            return v
+        if x.head() == Sub:
+            a, b = x.args()
+            return Sub(b, a)
+        if x.is_integer():
+            v = int(x)
+            return Expr(-v)
+        if x == UnsignedInfinity or x == Undefined:
+            return x
+        return Neg(x)
+
+    def _simple_Add(self, *terms):
         """
         
         """
@@ -2236,7 +2661,7 @@ class Brain(object):
             return Sub(terms[0], x)
         return Add(*terms)
 
-    def simple_Sub(self, x, y):
+    def _simple_Sub(self, x, y):
         if (self.is_complex(x) or self.is_infinity(x)) and (self.is_complex(y) or self.is_infinity(y)):
             return self.simple_Add(x, Neg(y))
         x = self.simple(x)
@@ -2245,25 +2670,7 @@ class Brain(object):
             return Undefined
         return Sub(x, y)
 
-    '''
-    def simple_Mul(self, *factors):
-        u = Mul(*factors)
-        v = self.simple_Mul2(*factors)
-        try:
-            a = u.n(as_arb=True)
-            b = v.n(as_arb=True)
-            if not a.overlaps(b):
-                print(u)
-                print(a)
-                print(v)
-                print(b)
-                assert 0
-        except (NotImplementedError, ValueError):
-            pass
-        return v
-    '''
-
-    def simple_Mul(self, *factors):
+    def _simple_Mul(self, *factors):
         """
         Simple product.
         """
@@ -2444,7 +2851,7 @@ class Brain(object):
         else:
             return Div(num, den)
 
-    def simple_Div(self, x, y):
+    def _simple_Div(self, x, y):
         if self.is_complex(x) and self.is_complex(y) and self.is_not_zero(y):
             return self.simple_Mul(x, Pow(y, -1))
         x = self.simple(x)
@@ -2472,7 +2879,7 @@ class Brain(object):
             return Undefined
         return Div(x, y)
 
-    def simple_Pow(self, x, y):
+    def _simple_Pow(self, x, y):
         x = self.simple(x)
         y = self.simple(y)
 
@@ -2499,22 +2906,107 @@ class Brain(object):
                 return self.simple_Mul(Pow(x, y))
 
         if x == ConstE:
-            return Exp(y)
+            return self.simple(Exp(y))
 
         return Pow(x, y)
 
     def simple_Exp(self, x):
-        return self.simple_Pow(ConstE, x)
+        x = self.simple(x)
+        if self.is_complex(x):
+            if self.is_zero(x):
+                return Expr(1)
+            if self.is_one(x):
+                return ConstE
+        return Exp(x)
 
 
     def simple_Log(self, x):
         x = self.simple(x)
-        if self.is_zero(x):
-            return -Infinity
-        if self.equal(x, Expr(1)):
-            return Expr(0)
-        if self.equal(x, ConstE):
-            return Expr(1)
+        if self.is_complex(x):
+            if self.is_zero(x):
+                return -Infinity
+            if self.equal(x, Expr(1)):
+                return Expr(0)
+            if self.equal(x, ConstE):
+                return Expr(1)
+            if x.is_integer():
+                n = self._fmpz(int(x))
+                fac = n.factor_smooth()
+                terms = []
+                for (p, e) in fac:
+                    if e == 1:
+                        terms.append(Log(p))
+                    else:
+                        terms.append(e * Log(p))
+                if n < 0:
+                    terms.append(Pi * ConstI)
+                if len(terms) == 1:
+                    return terms[0]
+                else:
+                    return Add(*terms)                
+            v = self.evaluate_alg_or_None(x)
+            if v is not None:
+                if v.degree() == 1:
+                    r = v.fmpq()
+                    return self.simple(Log(r.p) - Log(r.q))
+                if v.degree() == 2:
+                    '''
+                    simplified_sqrt = 0
+                        v2 = v ** 2
+                        while v2.degree() == 2 and v2.height() < v.height():
+                            simplified_sqrt += 1
+                            if simplified_sqrt > 100:
+                                break
+                            v = v2
+                            v2 = v.sqrt()
+
+                    if simplified_sqrt == 0:
+                        v2 = v.sqrt()
+                        while v2.degree() == 2 and v2.height() < v.height():
+                            simplified_sqrt += 1
+                            if simplified_sqrt > 100:
+                                break
+                            v = v2
+                            v2 = v.sqrt()
+                    '''
+                    # write as a + b*sqrt(c)
+                    a, b, c = v.as_quadratic()
+                    if a == 0:
+                        if b < 0 and c < 0:
+                            return self.simple(Log(-b) + Log(-c) / 2 - Pi * ConstI / 2)
+                        else:
+                            return self.simple(Log(-b) + Log(c) / 2)
+                    if not v.is_real():
+                        re = v.real
+                        im = v.imag
+                        mag = re**2 + im**2
+                        return self.simple(Log((re**2 + im**2).expr()) / 2 + Atan2(im.expr(), re.expr()) * ConstI)
+                    den = (a.q).lcm(b.q)
+                    a = (a * den).p
+                    b = (b * den).p
+                    content = a.gcd(b)
+                    a //= content
+                    b //= content
+                    if v > 0:
+                        y = a + b * Sqrt(c)
+                        tail = Expr(0)
+                    else:
+                        y = -a + (-b) * Sqrt(c)
+                        tail = Pi * ConstI
+                    y = self.simple(y)
+                    tail += Log(content)
+                    tail -= Log(den)
+                    tail = self.simple(tail)
+                    if tail == Expr(0):
+                        return Log(y)
+                    return self.simple(Log(y) + tail)
+
+                #re = v.real()
+                #im = v.imag()
+                #if re.degree() <= 2 or im.degree() <= 2:
+                #    t = re**2 + im**2
+                #    u = im / re
+                #    return Log(re) + ...
         return Log(x)
 
     def simple_Sin(self, x):
@@ -2864,6 +3356,9 @@ class Brain(object):
             return Pi / 2
         if self.is_negative(x / ConstI):
             return self.simple(-Pi / 2)
+        # todo: only for constants?
+        # return self.simple(Atan2(Im(x), Re(x)))
+        # ...
         return Arg(x)
 
     # todo: real part?
@@ -3746,16 +4241,31 @@ class Brain(object):
         args = [self.simple(arg) for arg in args]
         if len(args) == 2:
             n, k = args
-            if n.is_integer() and k.is_integer():
-                nv = int(n)
-                kv = int(k)
-                fmpz = self._fmpz
-                if kv >= 0 and nv >= 0 and nv <= 1000 and kv <= 1000:
-                    return Expr(fmpz.bin_uiui(nv, kv))
-            if k.is_integer():
-                kv = int(k)
-                if kv >= 0 and kv <= 30:
-                    return self.simple(RisingFactorial(z, k) / Factorial(k))
+            if self.is_complex(n) and self.is_complex(k):
+                if n.is_integer() and k.is_integer():
+                    nv = int(n)
+                    kv = int(k)
+                    fmpz = self._fmpz
+                    if kv >= 0 and nv >= 0 and nv <= 1000 and kv <= 1000:
+                        return Expr(fmpz.bin_uiui(nv, kv))
+                    if nv >= 0 and (kv < 0 or kv > nv):
+                        return Expr(0)
+                    if nv >= 0 and (kv == 0 or kv == nv):
+                        return Expr(1)
+                    if nv < 0 and kv >= 0:
+                        return self.simple((-1)**kv * Binomial(-nv+kv-1, kv))
+                    if nv < 0 and kv <= nv:
+                        return self.simple((-1)**(nv-kv) * Binomial(-kv-1, nv-kv))
+                    if nv < 0 or kv < 0:
+                        return Expr(0)
+                if k.is_integer():
+                    kv = int(k)
+                    if kv >= 0 and kv <= 30:
+                        return self.simple(RisingFactorial(n-(kv-1), k) / Factorial(k))
+                if self.is_integer(n) and self.is_negative(n) and (self.is_integer(k) == False):
+                    return UnsignedInfinity
+                if (self.is_integer(n) == False) or (self.is_nonnegative(n)):
+                    return self.simple(Gamma(n+1) / (Gamma(k+1) * Gamma(n-k+1)))
         return Binomial(n, k)
 
     def simple_BellNumber(self, *args):
@@ -3784,6 +4294,18 @@ class Brain(object):
                     return Expr(fmpq.harmonic(n))
         return HarmonicNumber(*args)
 
+    def simple_ChebyshevT(self, *args):
+        args = [self.simple(arg) for arg in args]
+        if len(args) == 2:
+            n, x = args
+            if n.is_integer() and self.is_complex(x):
+                m = int(n)
+                if 0 <= m <= 20:
+                    from flint import fmpz_poly
+                    coeffs = list(fmpz_poly.chebyshev_t(m))
+                    res = Add(*(coeffs[i] * x**i for i in range(m+1)))
+                    return self.simple(res)
+        return ChebyshevT(*args)
 
     def simple_hypergeometric(self, As, Bs, z, regularized=False):
         """
@@ -4811,6 +5333,47 @@ class Brain(object):
                     return self.simple(Asinh(x / ConstI) * ConstI)
         return Asin(*args)
 
+    def _simple_Atan_rational(self, p, q):
+        if p == 0:
+            return Expr(0)
+        from .algebraic import gaussian_integer
+        fmpq = self._fmpq
+        a, b = q, p
+        # try to express atan(p/q) in terms of "atomic" angles
+        # atan(p/q) = arg(a+bi), possibly modulo a multiple of pi...
+        # factor in Z[i] -- could generalise to other number fields?
+        unit, primes_exps = gaussian_integer(a, b).factor(smooth=True)
+        true_arg = Arg(a + b*ConstI)
+        wrong_arg = Add(*(exp * Arg(prime.a + prime.b*ConstI) for (prime, exp) in primes_exps.items()))
+        # and here we fix the issues with pi
+        correction = Floor((true_arg - wrong_arg) / (Pi / 4) + Div(1, 2))
+        correction = self.simple(correction)
+        pi_factor = self.evaluate_fmpq(correction) / 4
+        terms = []
+        for prime, exp in primes_exps.items():
+            c, d = prime.a, prime.b
+            assert c >= 0 and d >= 0
+            if not d:
+                continue
+            if c == d:
+                pi_factor += fmpq(exp, 4)
+            elif c > d:
+                terms.append((exp, Atan(Div(d, c))))
+            else:
+                pi_factor += fmpq(exp, 2)
+                terms.append((-exp, Atan(Div(c, d))))
+        if len(terms) == 1 and pi_factor == 0:
+            coeff, val = terms[0]
+            if coeff == 1:
+                return val
+            if coeff == -1:
+                return -val
+            return Mul(coeff, val)
+        terms = [Mul(coeff, val) for (coeff, val) in terms]
+        if pi_factor:
+            terms = [self.simple(pi_factor * Pi)] + terms
+        return self.simple(Add(*terms))
+
     def simple_Atan(self, *args):
         args = [self.simple(arg) for arg in args]
         if len(args) == 1:
@@ -4827,6 +5390,14 @@ class Brain(object):
                     return ConstI * Infinity
                 if self.equal(x, -ConstI):
                     return -(ConstI * Infinity)
+                v = None
+                try:
+                    v = self.evaluate_fmpq(x)
+                except NotImplementedError:
+                    pass
+                if v is not None:
+                    res = self._simple_Atan_rational(v.p, v.q)
+                    return res
                 try:
                     v = self.complex_as_tangent(x)
                     res = Pi * (v/Pi - Floor(Re(v)/Pi + Div(1,2)))
@@ -4838,7 +5409,7 @@ class Brain(object):
                     pass
                 v = self.simple(x / ConstI)
                 if self.is_real(v):
-                    return Atanh(v) * ConstI
+                    return self.simple(Atanh(v) * ConstI)
             if x == Undefined:
                 return x
             if self.is_infinity(x):
@@ -4847,6 +5418,18 @@ class Brain(object):
                     return Undefined
                 return self.simple(Csgn(s) * (Pi / 2))
         return Atan(*args)
+
+    def simple_Atan2(self, y, x):
+        y = self.simple(y)
+        x = self.simple(x)
+        if self.is_real(y) and self.is_real(x):
+            res = Cases((Atan(y / x), Greater(x, 0)),
+                        (Pi / 2 - Atan(x / y), Greater(y, 0)),
+                        (-(Pi / 2) - Atan(x / y), Less(y, 0)),
+                        (Pi, And(Less(x, 0), Equal(y, 0))),
+                        (0, Equal(x, y, 0)))
+            return self.simple(res)
+        return Atan2(y, x)
 
     def simple_Atanh(self, *args):
         args = [self.simple(arg) for arg in args]
@@ -4863,7 +5446,15 @@ class Brain(object):
                     return Pi/4 * ConstI
                 if self.equal(x, ConstI):
                     return -(Pi/4) * ConstI
-                return self.simple(Atan(x / ConstI) * ConstI)
+                if self.is_real(x) == False:
+                    return self.simple(Atan(x / ConstI) * ConstI)
+                # now x is real -- express using logarithm
+                if self.less(Abs(x), Expr(1)):
+                    return self.simple(Log((1+x)/(1-x)) / 2)
+                if self.greater(x, Expr(1)):
+                    return self.simple(Log((1+x)/(x-1)) / 2 - Pi*ConstI/2)
+                if self.less(x, Expr(-1)):
+                    return self.simple(Log(((-x)-1)/((-x)+1)) / 2 + Pi*ConstI/2)
             if x == Undefined:
                 return x
             if self.is_infinity(x):
@@ -5397,6 +5988,7 @@ class FungrimBrain(Brain):
         Given a symbolic expression expr, return an equivalent expression,
         hopefully simplified.
         """
+
         if expr in self.inferences:
             return True_
 

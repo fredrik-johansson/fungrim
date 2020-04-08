@@ -7,7 +7,7 @@ from .brain import *
 # useful for development
 try:
     from flint import *
-    from .algebraic import alg
+    from .algebraic import alg, gaussian_integer
 except ImportError:
     pass
 
