@@ -49,6 +49,7 @@ def_Topic(
     Entries(
         "2c26a1",
         "473c36",
+        "3d77ab",
     ),
     Section("Differential equations"),
     Entries(
@@ -146,6 +147,11 @@ def_Topic(
     Entries(
         "b0c84b",
         "2ada0f",
+    ),
+    Subsection("Inequalities for real x not in the interval [-1, 1]"),
+    Entries(
+        "54be3e",
+        "f61927",
     ),
 )
 
@@ -335,6 +341,11 @@ make_entry(ID("473c36"),
     Formula(Equal(Integral((ChebyshevU(n,x)*ChebyshevU(m,x)) * Sqrt(1-x**2), For(x,-1,1)), Cases(Tuple(0, NotEqual(n, m)), Tuple(Pi/2, Equal(n, m))))),
     Variables(n, m),
     Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, ZZGreaterEqual(0)))))
+
+make_entry(ID("3d77ab"),
+    Formula(Equal(Integral((ChebyshevT(n,x)*x**m) * (1/Sqrt(1-x**2)), For(x,-1,1)), 0)),
+    Variables(n, m),
+    Assumptions(And(Element(n, ZZGreaterEqual(0)), Element(m, Range(0, n-1)))))
 
 # Differential equations
 
@@ -675,4 +686,18 @@ make_entry(ID("2ada0f"),
     Formula(Greater(Parentheses(ChebyshevT(n, x))**2 - ChebyshevT(n-1, x) * ChebyshevT(n+1, x), 0)),
     Variables(n, x),
     Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, OpenInterval(-1, 1)))))
+
+make_entry(ID("54be3e"),
+    Formula(LessEqual(Abs(ComplexDerivative(ChebyshevT(n-1, x), For(x, x, r))), Abs(ComplexDerivative(ChebyshevT(n, x), For(x, x, r))))),
+    Variables(n, r, x),
+    Assumptions(And(Element(n, ZZGreaterEqual(1)), Element(x, RR), GreaterEqual(Abs(x), 1))),
+    References("V. V. Prasolov, Polynomials, Springer, 2004, ISBN 978-3-642-03980-5. Theorem 3.14.10."))
+
+make_entry(ID("f61927"),
+    Formula(LessEqual(ChebyshevT(n, x*y), ChebyshevT(n, x)*ChebyshevT(n, y))),
+    Variables(n, x, y),
+    Assumptions(And(Element(n, ZZ), Element(x, ClosedOpenInterval(1, Infinity)), Element(y, ClosedOpenInterval(1, Infinity)))),
+    References(
+        "V. V. Prasolov, Polynomials, Springer, 2004, ISBN 978-3-642-03980-5. Theorem 3.14.11.",
+        "R. Askey, An inequality for Tchebycheff polynomials and extensions, Journal of Approximation Theory, 1975, Volume 14, pp 1-11"))
 
