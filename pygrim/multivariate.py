@@ -81,10 +81,9 @@ class fmpz_mpoly_q:
         aq = self.q
         bp = other.p
         bq = other.q
+        if aq == bq:
+            return ap == bp
         return ap*bq - bp*bq == 0
-
-    def __ne__(self, other):
-        return False
 
     def __neg__(self):
         return fmpz_mpoly_q(-self.p, self.q, canonicalise=False)

@@ -455,7 +455,7 @@ def tex_Div(head, args, **kwargs):
     else:
         numstr = num.latex()
         denstr = den.latex()
-        if numstr.startswith("-"):  # hack
+        if (num.is_integer() or num.head() == Mul) and numstr.startswith("-"):  # hack
             return "-\\frac{" + numstr[1:] + "}{" + denstr + "}"
         else:
             return "\\frac{" + numstr + "}{" + denstr + "}"

@@ -8,8 +8,13 @@ from .brain import *
 try:
     from flint import *
     from .algebraic import alg, gaussian_integer
+    from .values import *
 except ImportError:
     pass
+
+def fungrim_entry(id):
+    from .formulas import entries_dict
+    return entries_dict[id]
 
 def test_fungrim_entry(id, num=100):
     from .formulas import entries_dict

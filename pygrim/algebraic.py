@@ -1448,6 +1448,7 @@ class gaussian_integer:
         return self, factors
 
 
+
 class TestAlgebraic:
 
     def run(self):

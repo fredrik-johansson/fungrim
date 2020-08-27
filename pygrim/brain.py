@@ -1634,6 +1634,9 @@ class Brain(object):
             return Add(*args)
         if head == Mul:
             args = [self.polish_arithmetic(arg) for arg in expr.args()]
+            for arg in args:
+                if arg == Expr(0):
+                    return arg
             args = [arg for arg in args if arg != Expr(1)]
             if len(args) == 0:
                 return Expr(1)
@@ -1656,7 +1659,7 @@ class Brain(object):
                 return 1 / x
         return head(*args)
 
-    def expand_multivariate(self, expr):
+    def expand_multivariate(self, expr, evaluate_blobs=True):
         blobs = set()
         explicit_algebraic_blobs = {}
         from .algebraic import alg
@@ -1678,7 +1681,7 @@ class Brain(object):
                     print("it's an alg", v)
                 if v.degree() == 1:
                     return Expr(v.fmpq())
-                if v.degree() == 2:
+                if v.degree() == 2 and evaluate_blobs:
                     a, b, c = v.as_quadratic()
                     if c > 0:
                         quad = Sqrt(c)
@@ -1729,9 +1732,10 @@ class Brain(object):
                     return Pow(x, y)
                 raise NotImplementedError
 
-            expr = self.simple(expr)  # XXX
-            if expr.is_atom() or expr.head() in (Neg, Pos, Add, Sub, Mul, Pow):
-                return preprocess(expr)
+            if evaluate_blobs:
+                expr = self.simple(expr)
+                if expr.is_atom() or expr.head() in (Neg, Pos, Add, Sub, Mul, Pow):
+                    return preprocess(expr)
 
             if not self.is_complex(expr):
                 raise NotImplementedError
@@ -2383,6 +2387,11 @@ class Brain(object):
                 else:
                     resroots3.append(Sqrt(self.alg_to_expression(r)))
 
+            # todo: when one term has degree <= 2, consider subtracting
+            # it and obtaining a simpler expression for the sum
+            # of the other terms
+            # example: Sqrt(5) + Sqrt(22 + 2*Sqrt(5))
+
             a, b, c = resroots3
             xs = [a+b+c, a+b-c, a-b+c, a-b-c, -a+b+c, -a+b-c, -a-b+c, -a-b-c]
             for xn in xs:
@@ -2975,7 +2984,7 @@ class Brain(object):
                         if b < 0 and c < 0:
                             return self.simple(Log(-b) + Log(-c) / 2 - Pi * ConstI / 2)
                         else:
-                            return self.simple(Log(-b) + Log(c) / 2)
+                            return self.simple(Log(b) + Log(c) / 2)
                     if not v.is_real():
                         re = v.real
                         im = v.imag
