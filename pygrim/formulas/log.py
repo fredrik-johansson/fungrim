@@ -24,6 +24,7 @@ def_Topic(
     Entries(
         "d87f6e",
         "4c1e1e",
+        "a3a253",
         "c43533",
         "f67fa2",
     ),
@@ -245,6 +246,11 @@ make_entry(ID("4c1e1e"),
     Formula(Equal(Log(Exp(z)), z)),
     Variables(z),
     Assumptions(And(Element(z, CC), Element(Im(z), OpenClosedInterval(-Pi, Pi)))))
+
+make_entry(ID("a3a253"),
+    Formula(Equal(Log(Exp(z)), z - 2*Pi*ConstI*Ceil(Im(z)/(2*Pi)-Div(1,2)))),
+    Variables(z),
+    Assumptions(Element(z, CC)))
 
 make_entry(ID("c43533"),
     Formula(Equal(Log(z), Log(Abs(z)) + Arg(z)*ConstI)),
