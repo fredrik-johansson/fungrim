@@ -120,25 +120,27 @@ def_Topic(
 )
 
 make_entry(ID("6da738"),
-    SymbolDefinition(LambertW, LambertW(k,z), "Lambert W-function"),
-    Description("Called with two arguments", SourceForm(LambertW(k,z)), "(rendered", LambertW(k,z), ") represents the", k, "-th branch",
+    SymbolDefinition(LambertW, LambertW(z), "Lambert W-function"),
+    Description("Called with one argument", SourceForm(LambertW(z)), "(rendered", LambertW(z), ") represents the principal branch",
         "of the Lambert W-function."),
-    Description("Called with three arguments", SourceForm(LambertW(k,z,r)), "(rendered", LambertW(k,z,r), ") represents the",
+    Description("Called with two arguments", SourceForm(LambertW(z,k)), "(rendered", LambertW(z,k), ") represents the", k, "-th branch",
+        "of the Lambert W-function."),
+    Description("Called with three arguments", SourceForm(LambertW(z,k,r)), "(rendered", LambertW(z,k,r), ") represents the",
             r, "-th derivative of the", k, "-th branch of the Lambert W-function, with inherited branch cuts."),
-    Description(SourceForm(LambertW(k,z)), "is equivalent to", SourceForm(LambertW(k,z,0)), "."),
-    Description("The following table lists conditions such that", SourceForm(LambertW(k,z,r)), "is defined in Fungrim."),
+    Description(SourceForm(LambertW(z,k)), "is equivalent to", SourceForm(LambertW(z,k,0)), "."),
+    Description("The following table lists conditions such that", SourceForm(LambertW(z,k,r)), "is defined in Fungrim."),
     Table(TableRelation(Tuple(P, Q), Implies(P, Q)),
       TableHeadings(Description("Domain"), Description("Codomain")),
       List(
         TableSection("Numbers"),
-        Tuple(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0)))), Element(LambertW(k,z), CC)),
-        Tuple(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0, -Exp(-1)))), Element(r, ZZGreaterEqual(0))), Element(LambertW(k,z,r), CC)),
+        Tuple(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0)))), Element(LambertW(z,k), CC)),
+        Tuple(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0, -Exp(-1)))), Element(r, ZZGreaterEqual(0))), Element(LambertW(z,k,r), CC)),
         Tuple(Element(r, ZZGreaterEqual(0)), Element(LambertW(0,0,r), QQ)),
       )),
     )
 
 make_entry(ID("cb0a9b"),
-    Image(Description("X-ray of", LambertW(0,z), "on", Element(z, ClosedInterval(-3,3) + ClosedInterval(-3,3)*ConstI)),
+    Image(Description("X-ray of", LambertW(z), "on", Element(z, ClosedInterval(-3,3) + ClosedInterval(-3,3)*ConstI)),
         ImageSource("xray_lambertw")),
     description_xray,
     )
@@ -146,65 +148,65 @@ make_entry(ID("cb0a9b"),
 # Transcendental equations
 
 make_entry(ID("88168b"),
-    Formula(Equal(LambertW(k,z) * Exp(LambertW(k,z)), z)),
+    Formula(Equal(LambertW(z,k) * Exp(LambertW(z,k)), z)),
     Variables(k, z),
     Assumptions(Or(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0)))),
         And(Equal(k, 0), Equal(z, 0)))))
 
 make_entry(ID("d7136f"),
     Formula(Equal(Solutions(Brackets(Equal(w * Exp(w), z)), ForElement(w, CC)),
-        Set(LambertW(k,z), For(k), And(Element(k, ZZ), Or(NotEqual(z, 0), Equal(k, 0)))))),
+        Set(LambertW(z,k), For(k), And(Element(k, ZZ), Or(NotEqual(z, 0), Equal(k, 0)))))),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("314807"),
     Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), ForElement(w, ClosedOpenInterval(-1, Infinity))),
-        LambertW(0,x))),
+        LambertW(x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(-(1/ConstE), Infinity))))
 
 make_entry(ID("636929"),
     Formula(Equal(UniqueSolution(Brackets(Equal(w * Exp(w), x)), ForElement(w, OpenClosedInterval(-Infinity, -1))),
-        LambertW(-1,x))),
+        LambertW(x,-1))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(-(1/ConstE), 0))))
 
 make_entry(ID("8654a3"),
-    Formula(Equal(LambertW(0,x*Exp(x)), x)),
+    Formula(Equal(LambertW(x*Exp(x)), x)),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(-1, Infinity))))
 
 make_entry(ID("ed7dac"),
-    Formula(Equal(LambertW(-1,x*Exp(x)), x)),
+    Formula(Equal(LambertW(x*Exp(x),-1), x)),
     Variables(x),
     Assumptions(Element(x, OpenClosedInterval(-Infinity, -1))))
 
 make_entry(ID("30bd5b"),
-    Formula(Equal(LambertW(0,x*Log(x)), Log(x))),
+    Formula(Equal(LambertW(x*Log(x)), Log(x))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(1/ConstE, Infinity))))
 
 make_entry(ID("a172c7"),
-    Formula(Equal(LambertW(-1,x*Log(x)), Log(x))),
+    Formula(Equal(LambertW(x*Log(x),-1), Log(x))),
     Variables(x),
     Assumptions(Element(x, OpenClosedInterval(0, -(1/ConstE)))))
 
 # Specific values
 
 make_entry(ID("0be17d"),
-    Formula(Equal(LambertW(0,0), 0)))
+    Formula(Equal(LambertW(0), 0)))
 
 make_entry(ID("c95c4f"),
-    Formula(Equal(LambertW(0,ConstE), 1)))
+    Formula(Equal(LambertW(ConstE), 1)))
 
 make_entry(ID("b93d09"),
-    Formula(Equal(LambertW(0,-(1/ConstE)), -1)))
+    Formula(Equal(LambertW(-(1/ConstE)), -1)))
 
 make_entry(ID("d09380"),
-    Formula(Equal(LambertW(-1,-(1/ConstE)), -1)))
+    Formula(Equal(LambertW(-(1/ConstE),-1), -1)))
 
 make_entry(ID("5d4cce"),
-    Formula(Element(LambertW(0,1), RealBall(Decimal("0.56714329040978387299996866221035554975381578718651"), Decimal("2.51e-51")))))
+    Formula(Element(LambertW(1), RealBall(Decimal("0.56714329040978387299996866221035554975381578718651"), Decimal("2.51e-51")))))
 
 make_entry(ID("c87ff4"),
     Formula(Equal(LambertW(0,0,1), 1)))
@@ -215,18 +217,18 @@ make_entry(ID("8e8a59"),
     Assumptions(Element(r, ZZGreaterEqual(1))))
 
 make_entry(ID("f372e9"),
-    Formula(Equal(LambertW(k,0), -Infinity)),
+    Formula(Equal(LambertW(0,k), -Infinity)),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 
 make_entry(ID("e1dd64"),
-    Formula(Equal(LambertW(0,-(Pi/2)), ConstI*Pi/2)))
+    Formula(Equal(LambertW(-(Pi/2)), ConstI*Pi/2)))
 
 
 # Symmetry
 
 make_entry(ID("6d936e"),
-    Formula(Equal(LambertW(k,Conjugate(z)), Conjugate(LambertW(-k,z)))),
+    Formula(Equal(LambertW(Conjugate(z),k), Conjugate(LambertW(z,-k)))),
     Variables(k, z),
     Assumptions(And(Element(k, ZZ), Element(z, CC),
         Or(And(Equal(k, 0), NotElement(z, OpenInterval(-Infinity, -Exp(-1)))),
@@ -235,56 +237,56 @@ make_entry(ID("6d936e"),
 # Analytic properties
 
 make_entry(ID("0d3b91"),
-    Formula(IsHolomorphic(LambertW(0,z), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, -Exp(-1)))))))
+    Formula(IsHolomorphic(LambertW(z), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, -Exp(-1)))))))
 
 make_entry(ID("2caf78"),
-    Formula(IsHolomorphic(LambertW(k,z), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))),
+    Formula(IsHolomorphic(LambertW(z,k), ForElement(z, SetMinus(CC, OpenClosedInterval(-Infinity, 0))))),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 
 make_entry(ID("aca420"),
-    Formula(Equal(Poles(LambertW(k,z), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())),
+    Formula(Equal(Poles(LambertW(z,k), ForElement(z, Union(CC, Set(UnsignedInfinity)))), Set())),
     Variables(k),
     Assumptions(Element(k, ZZ)))
 
 make_entry(ID("41ece5"),
-    Formula(Equal(BranchPoints(LambertW(0,z), z, Union(CC, Set(UnsignedInfinity))), Set(-Exp(-1), UnsignedInfinity))))
+    Formula(Equal(BranchPoints(LambertW(z,0), z, Union(CC, Set(UnsignedInfinity))), Set(-Exp(-1), UnsignedInfinity))))
 
 make_entry(ID("17eaad"),
-    Formula(Equal(BranchPoints(LambertW(k,z), z, Union(CC, Set(UnsignedInfinity))), Set(0, -Exp(-1), UnsignedInfinity))),
+    Formula(Equal(BranchPoints(LambertW(z,k), z, Union(CC, Set(UnsignedInfinity))), Set(0, -Exp(-1), UnsignedInfinity))),
     Variables(k),
     Assumptions(Element(k, Set(-1,1))))
 
 make_entry(ID("e6e7a2"),
-    Formula(Equal(BranchPoints(LambertW(k,z), z, Union(CC, Set(UnsignedInfinity))), Set(0, UnsignedInfinity))),
+    Formula(Equal(BranchPoints(LambertW(z,k), z, Union(CC, Set(UnsignedInfinity))), Set(0, UnsignedInfinity))),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(-1,0,1)))))
 
 make_entry(ID("fdfb16"),
-    Formula(Equal(BranchCuts(LambertW(0,z), z, CC), Set(OpenClosedInterval(-Infinity, -Exp(-1))))))
+    Formula(Equal(BranchCuts(LambertW(z,0), z, CC), Set(OpenClosedInterval(-Infinity, -Exp(-1))))))
 
 make_entry(ID("276d78"),
-    Formula(Equal(BranchCuts(LambertW(k,z), z, CC), Set(OpenClosedInterval(-Infinity, -Exp(-1)), ClosedInterval(-Exp(-1), 0), OpenClosedInterval(-Infinity, 0)))),
+    Formula(Equal(BranchCuts(LambertW(z,k), z, CC), Set(OpenClosedInterval(-Infinity, -Exp(-1)), ClosedInterval(-Exp(-1), 0), OpenClosedInterval(-Infinity, 0)))),
     Variables(k),
     Assumptions(Element(k, Set(-1,1))))
 
 make_entry(ID("6191cd"),
-    Formula(Equal(BranchCuts(LambertW(k,z), z, CC), Set(OpenClosedInterval(-Infinity, 0)))),
+    Formula(Equal(BranchCuts(LambertW(z,k), z, CC), Set(OpenClosedInterval(-Infinity, 0)))),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(-1,0,1)))))
 
 make_entry(ID("f0f17c"),
-    Formula(Equal(Zeros(LambertW(0,z), ForElement(z, CC)), Set(0))))
+    Formula(Equal(Zeros(LambertW(z,0), ForElement(z, CC)), Set(0))))
 
 make_entry(ID("766302"),
-    Formula(Equal(Zeros(LambertW(k,z), ForElement(z, CC)), Set())),
+    Formula(Equal(Zeros(LambertW(z,k), ForElement(z, CC)), Set())),
     Variables(k),
     Assumptions(Element(k, SetMinus(ZZ, Set(0)))))
 
 # Derivatives and integrals
 
 make_entry(ID("8d486c"),
-    Formula(Equal(LambertW(k,z,1), 1/((1+LambertW(k,z,0))*Exp(LambertW(k,z,0))))),
+    Formula(Equal(LambertW(z,k,1), 1/((1+LambertW(z,k,0))*Exp(LambertW(z,k,0))))),
     Variables(k,z),
     Assumptions(Or(
         And(Equal(k,0), Element(z, SetMinus(CC, Set(-Exp(-1))))),
@@ -292,7 +294,7 @@ make_entry(ID("8d486c"),
         And(Element(k, SetMinus(ZZ, Set(0,1))), Element(z, SetMinus(CC, Set(0)))))))
 
 make_entry(ID("72b6ca"),
-    Formula(Equal(LambertW(k,z,1), LambertW(k,z)/(z*(1+LambertW(k,z,0))))),
+    Formula(Equal(LambertW(z,k,1), LambertW(z,k)/(z*(1+LambertW(z,k,0))))),
     Variables(k,z),
     Assumptions(Or(
         And(Element(k,Set(0,1)), Element(z, SetMinus(CC, Set(0,-Exp(-1))))),
@@ -306,7 +308,7 @@ make_entry(ID("72b6ca"),
 # Taylor series
 
 make_entry(ID("58c19a"),
-    Formula(Equal(LambertW(0,z), Sum((-n)**(n-1) / Factorial(n) * z**n, For(n, 1, Infinity)))),
+    Formula(Equal(LambertW(z), Sum((-n)**(n-1) / Factorial(n) * z**n, For(n, 1, Infinity)))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(z), 1/ConstE))))
 
@@ -354,13 +356,13 @@ make_entry(ID("adf83a"),
     Assumptions(Element(k, ZZGreaterEqual(0))))
 
 make_entry(ID("e50532"),
-    Formula(Where(Equal(LambertW(0,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
+    Formula(Where(Equal(LambertW(z), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
         Equal(v, Sqrt(2*(ConstE*z+1))))),
     Variables(z),
     Assumptions(And(Element(z, CC), Less(Abs(ConstE*z+1), 1))))
 
 make_entry(ID("99ff4c"),
-    Formula(Where(Equal(LambertW(k,z), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
+    Formula(Where(Equal(LambertW(z,k), Sum(LambertWPuiseuxCoefficient(n) * v**n, For(n, 0, Infinity))),
         Equal(v, -Sqrt(2*(ConstE*z+1))))),
     Variables(k, z),
     Assumptions(And(Element(z, CC), Less(Abs(ConstE*z+1), 1), Or(And(Equal(k, -1), GreaterEqual(Im(z), 0)), And(Equal(k, 1), Less(Im(z), 0))))))
@@ -377,7 +379,7 @@ asympser = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * 
 asympsertrunc = L1 - L2 + Sum(Sum((-1)**n / Factorial(m) * StirlingCycle(n+m, n+1) * sigma**n * tau**m, For(m, 1, M-1)), For(n, 0, N-1))
 
 make_entry(ID("1fc63b"),
-    Formula(Equal(LambertW(k,z),
+    Formula(Equal(LambertW(z,k),
         Where(asympser, *asympdefs))),
     Variables(k, z),
     Assumptions(Where(And(Element(k, ZZ), Element(z, SetMinus(CC, Set(0))),
@@ -385,7 +387,7 @@ make_entry(ID("1fc63b"),
             *asympdefs)))
 
 make_entry(ID("da0f15"),
-    Formula(Where(LessEqual(Abs(LambertW(k,z) - Parentheses(asympsertrunc)), (4*Abs(tau)*(4*Abs(sigma))**N + (4*Abs(tau))**M)/((1-4*Abs(sigma))*(1-4*Abs(tau)))),
+    Formula(Where(LessEqual(Abs(LambertW(z,k) - Parentheses(asympsertrunc)), (4*Abs(tau)*(4*Abs(sigma))**N + (4*Abs(tau))**M)/((1-4*Abs(sigma))*(1-4*Abs(tau)))),
         *asympdefs)),
     Variables(k, z, N, M),
     Assumptions(Where(And(Element(N, ZZGreaterEqual(0)), Element(M, ZZGreaterEqual(0)), Element(k, ZZ), Element(z, SetMinus(CC, Set(0))),
@@ -395,7 +397,7 @@ make_entry(ID("da0f15"),
 # Range
 
 make_entry(ID("c0ae5b"),
-    Formula(Equal(Set(LambertW(k,z), For(Tuple(k,z)), And(Element(k, ZZ), Element(z, CC), Or(NotEqual(z, 0), Equal(k, 0)))), CC)))
+    Formula(Equal(Set(LambertW(z,k), For(Tuple(k,z)), And(Element(k, ZZ), Element(z, CC), Or(NotEqual(z, 0), Equal(k, 0)))), CC)))
 
 k1 = Subscript(k,1)
 k2 = Subscript(k,2)
@@ -403,37 +405,37 @@ z1 = Subscript(z,1)
 z2 = Subscript(z,2)
 
 make_entry(ID("6e05c9"),
-    Formula(NotEqual(LambertW(k1,z1), LambertW(k2,z2))),
+    Formula(NotEqual(LambertW(z1,k1), LambertW(z2,k2))),
     Variables(k1,z1,k2,z2),
     Assumptions(And(Element(k1,ZZ),Element(k2,ZZ),Element(z1,CC),Element(z2,CC),Or(NotEqual(k1,k2),NotEqual(z1,z2)),
-        NotElement(LambertW(k1,z1), Set(-1,-Infinity)))))
+        NotElement(LambertW(z1,k1), Set(-1,-Infinity)))))
 
 # Image of the principal branch
 
 make_entry(ID("ee86fb"),
-    Formula(Equal(Set(LambertW(0,x), ForElement(x, OpenInterval(-Exp(-1), Infinity))), OpenInterval(-1, Infinity))))
+    Formula(Equal(Set(LambertW(x), ForElement(x, OpenInterval(-Exp(-1), Infinity))), OpenInterval(-1, Infinity))))
 
 make_entry(ID("55498b"),
-    Formula(Equal(Set(LambertW(0,x), ForElement(x, Set(-Exp(-1)))), Set(-1))))
+    Formula(Equal(Set(LambertW(x), ForElement(x, Set(-Exp(-1)))), Set(-1))))
 
 make_entry(ID("44ad09"),
-    Formula(Equal(Set(LambertW(0,x), ForElement(x, OpenInterval(-Infinity, -Exp(-1)))),
+    Formula(Equal(Set(LambertW(x), ForElement(x, OpenInterval(-Infinity, -Exp(-1)))),
         Set(-y*Cot(y) + y*ConstI, ForElement(y, OpenInterval(0, Pi))))))
 
 make_entry(ID("2d3356"),
-    Formula(Equal(Set(LambertW(0,z), ForElement(z, SetMinus(CC, RR))),
+    Formula(Equal(Set(LambertW(z), ForElement(z, SetMinus(CC, RR))),
         Set(x+y*ConstI, For(Tuple(x, y)), And(Element(y, SetMinus(OpenInterval(-Pi, Pi), Set(0))), Element(x, OpenInterval(-y*Cot(y), Infinity)))))))
 
 # Image of the non-principal branches
 
 make_entry(ID("21d9a0"),
-    Formula(Equal(Set(LambertW(-1,z), ForElement(z, SetMinus(CC, Set(0)))),
+    Formula(Equal(Set(LambertW(z,-1), ForElement(z, SetMinus(CC, Set(0)))),
         Union(OpenClosedInterval(-Infinity, -1), Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(0, u, 2), LessEqual(t, v)), Parentheses(LessEqual(1, u, 2)), And(Less(1, u, 3), Greater(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/Pi))))))))
 
 make_entry(ID("d5917b"),
-    Formula(Equal(Set(LambertW(k,z), ForElement(z, SetMinus(CC, Set(0)))),
+    Formula(Equal(Set(LambertW(z,k), ForElement(z, SetMinus(CC, Set(0)))),
         Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), Less(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), GreaterEqual(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, y/Pi))))),
@@ -441,7 +443,7 @@ make_entry(ID("d5917b"),
     Assumptions(Element(k, ZZGreaterEqual(1))))
 
 make_entry(ID("bf3e29"),
-    Formula(Equal(Set(LambertW(-k,z), ForElement(z, SetMinus(CC, Set(0)))),
+    Formula(Equal(Set(LambertW(z,-k), ForElement(z, SetMinus(CC, Set(0)))),
         Set(x+y*ConstI, For(Tuple(x, y)),
             Where(And(Element(x, RR), Element(y, RR), Or(And(Less(2*k-2, u, 2*k), LessEqual(t, v)), Parentheses(LessEqual(2*k-1, u, 2*k)), And(Less(2*k-1, u, 2*k+1), Greater(t, v)))),
                 Equal(t, x*Sinc(y)), Equal(v, -Cos(y)), Equal(u, -(y/Pi)))))),
@@ -451,70 +453,70 @@ make_entry(ID("bf3e29"),
 # Bounds
 
 make_entry(ID("4257f4"),
-    Formula(Less(Abs(Im(LambertW(0,z))), Pi)),
+    Formula(Less(Abs(Im(LambertW(z))), Pi)),
     Variables(z),
     Assumptions(Element(z, CC)))
 
 make_entry(ID("82926c"),
-    Formula(Element(Im(LambertW(1,z)), OpenInterval(0, 3*Pi))),
+    Formula(Element(Im(LambertW(z,1)), OpenInterval(0, 3*Pi))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 make_entry(ID("e5bba3"),
-    Formula(Element(Im(LambertW(-1,z)), OpenClosedInterval(-(3*Pi), 0))),
+    Formula(Element(Im(LambertW(z,-1)), OpenClosedInterval(-(3*Pi), 0))),
     Variables(z),
     Assumptions(Element(z, SetMinus(CC, Set(0)))))
 
 # todo: move sign to RHS; make sure test code works with set * constant
 make_entry(ID("a68e0e"),
-    Formula(Element(Sign(k) * Im(LambertW(k,z)), OpenInterval((2*Abs(k)-2)*Pi, (2*Abs(k)+1)*Pi))),
+    Formula(Element(Sign(k) * Im(LambertW(z,k)), OpenInterval((2*Abs(k)-2)*Pi, (2*Abs(k)+1)*Pi))),
     Variables(z, k),
     Assumptions(And(Element(z, SetMinus(CC, Set(0))), Element(k, SetMinus(ZZ, Set(-1, 0, 1))))))
 
 # Derivative bounds
 
 make_entry(ID("f171a6"),
-    Formula(LessEqual(LambertW(0,x,1), 1/(x+1))),
+    Formula(LessEqual(LambertW(x,0,1), 1/(x+1))),
     Variables(x),
     Assumptions(Element(x, ClosedOpenInterval(0, Infinity))))
 
 make_entry(ID("a34260"),
-    Formula(Less(LambertW(0,x,1), 2/Sqrt(1+ConstE*x))),
+    Formula(Less(LambertW(x,0,1), 2/Sqrt(1+ConstE*x))),
     Variables(x),
     Assumptions(Element(x, OpenInterval(-Exp(-1), Infinity))))
 
 make_entry(ID("9be916"),
-    Formula(Less(Abs(LambertW(-1,x,1)), 2/Sqrt(1+ConstE*x) + 2/Abs(x))),
+    Formula(Less(Abs(LambertW(x,-1,1)), 2/Sqrt(1+ConstE*x) + 2/Abs(x))),
     Variables(x),
     Assumptions(Element(x, OpenInterval(-Exp(-1), 0))))
 
 make_entry(ID("b3d435"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), Abs(Decimal("1.2")/z))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), Abs(Decimal("1.2")/z))),
     Variables(k,z),
     Assumptions(And(Element(k, SetMinus(ZZ, Set(-1,0,1))), Element(z, CC))))
 
 make_entry(ID("8e06be"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), Abs(Decimal("1.5")/z))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), Abs(Decimal("1.5")/z))),
     Variables(k,z),
     Assumptions(And(Element(z, CC), Or(And(Equal(k,1), GreaterEqual(Im(z), 0)), And(Equal(k,-1), Less(Im(z), 0))))))
 
 make_entry(ID("72712c"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), 1/Abs(z))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), 1/Abs(z))),
     Variables(k,z),
     Assumptions(Or(And(Equal(k,0), GreaterEqual(Abs(z), 1)), And(Element(k, ZZ), Element(z, CC), GreaterEqual(Abs(z), 4*(Abs(k)+1))))))
 
 make_entry(ID("9136b9"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), Abs(1/z) * Max(3, Abs(Decimal("1.5") / Sqrt(Abs(ConstE*z+1)))))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), Abs(1/z) * Max(3, Abs(Decimal("1.5") / Sqrt(Abs(ConstE*z+1)))))),
     Variables(k,z),
     Assumptions(And(Element(k, ZZ), Element(z, CC))))
 
 make_entry(ID("0eb699"),
-    Formula(Where(LessEqual(Abs(LambertW(0,z,1)), Abs(Decimal("2.25") / Sqrt(t * (1 + t)))), Equal(t, Abs(ConstE*z+1)))),
+    Formula(Where(LessEqual(Abs(LambertW(z,0,1)), Abs(Decimal("2.25") / Sqrt(t * (1 + t)))), Equal(t, Abs(ConstE*z+1)))),
     Variables(z),
     Assumptions(And(Element(z, CC), LessEqual(Abs(z), 64))))
 
 make_entry(ID("214b1c"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), Abs(1/Abs(z) * (1 + 1/(4 + Abs(z)**2))))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), Abs(1/Abs(z) * (1 + 1/(4 + Abs(z)**2))))),
     Variables(k,z),
     Assumptions(And(Element(z, CC),
         Or(
@@ -523,7 +525,7 @@ make_entry(ID("214b1c"),
             And(Equal(k, 1), GreaterEqual(Im(z), 0))))))
 
 make_entry(ID("a1e634"),
-    Formula(LessEqual(Abs(LambertW(k,z,1)), Abs(1/Abs(z) * (1 + Div(23,32) * (1/Sqrt(Abs(ConstE*z+1))))))),
+    Formula(LessEqual(Abs(LambertW(z,k,1)), Abs(1/Abs(z) * (1 + Div(23,32) * (1/Sqrt(Abs(ConstE*z+1))))))),
     Variables(k,z),
     Assumptions(And(Element(z, CC), Element(k, Set(-1, 1)))))
 

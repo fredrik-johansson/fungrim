@@ -284,17 +284,17 @@ make_entry(ID("90b419"),
         Set(ModularLambda(tau), ForElement(tau, ModularLambdaFundamentalDomain)), SetMinus(CC, Set(0, 1)))))
 
 make_entry(ID("4b20ab"),
-    Formula(Equal(Set(ModularLambda(tau), For(tau), And(Element(tau, HH), Equal(Re(tau), -1))), OpenInterval(-Infinity, 0))),
+    Formula(Equal(Set(ModularLambda(tau), ForElement(tau, HH), Equal(Re(tau), -1)), OpenInterval(-Infinity, 0))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
 
 make_entry(ID("e4315f"),
-    Formula(Equal(Set(ModularLambda(tau), For(tau), And(Element(tau, HH), Equal(Abs(tau+Div(1,2)), Div(1,2)))), OpenInterval(1, Infinity))),
+    Formula(Equal(Set(ModularLambda(tau), ForElement(tau, HH), Equal(Abs(tau+Div(1,2)), Div(1,2))), OpenInterval(1, Infinity))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))
 
 make_entry(ID("830dd4"),
-    Formula(Equal(Set(ModularLambda(tau), For(tau), Element(tau, Interior(ModularLambdaFundamentalDomain))),
+    Formula(Equal(Set(ModularLambda(tau), ForElement(tau, Interior(ModularLambdaFundamentalDomain))),
         SetMinus(CC, Parentheses(Union(OpenClosedInterval(-Infinity, 0), ClosedOpenInterval(1, Infinity)))))),
     Description("This mapping is one-to-one."),
     References("J. M. Borwein and P. B. Borwein. Pi and the AGM. Wiley, New York, 1987. p. 118."))

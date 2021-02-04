@@ -1465,15 +1465,19 @@ def tex_StirlingS2(head, args, **kwargs):
 
 @deftex
 def tex_LambertW(head, args, **kwargs):
-    assert len(args) in (2,3)
+    assert len(args) in (1,2,3)
     in_small = kwargs.get("in_small", False)
-    if len(args) == 2:
-        n, z = args
+    if len(args) == 1:
+        z, = args
+        zstr = z.latex(in_small=in_small)
+        return "W" + "\!\\left(" + zstr + "\\right)"
+    elif len(args) == 2:
+        z, n = args
         nstr = n.latex(in_small=True)
         zstr = z.latex(in_small=in_small)
         return "W_{" + nstr + "}" + "\!\\left(" + zstr + "\\right)"
     else:
-        n, z, r = args
+        z, n, r = args
         nstr = n.latex(in_small=True)
         zstr = z.latex(in_small=in_small)
         rstr = r.latex(in_small=in_small)
@@ -1592,7 +1596,7 @@ def tex_DirichletCharacter(head, args, **kwargs):
 @deftex
 def tex_PrimitiveDirichletCharacters(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
-    return "G_{%s}^{\\text{primitive}}" % argstr[0]
+    return "G^{\\text{Primitive}}_{%s}" % argstr[0]
 
 @deftex
 def tex_GaussSum(head, args, **kwargs):

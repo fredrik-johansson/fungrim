@@ -590,8 +590,16 @@ class ArbNumericalEvaluation(object):
                             raise ArbFiniteError
 
         if head == LambertW:
+            if len(args) == 1:
+                x, = args
+                x = self.eval(x, **kwargs)
+                x = acb(x) 
+                v = x.lambertw()
+                if v.is_finite():
+                    return v
+                raise ArbFiniteError
             if len(args) == 2:
-                k, x = args
+                x, k = args
                 if k.is_integer():
                     k = k._integer
                     x = self.eval(x, **kwargs)

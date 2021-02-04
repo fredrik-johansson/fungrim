@@ -283,7 +283,7 @@ make_entry(ID("343946"),
     Formula(AsymptoticTo(Log(BellNumber(n))/n, Log(n) - Log(Log(n)) - 1 + Log(Log(n))/Log(n) + 1/Log(n) + Div(1,2) * (Log(Log(n))/Log(n))**2, n, Infinity)))
 
 make_entry(ID("589758"),
-    Formula(AsymptoticTo(BellNumber(n), n**(-Div(1,2)) * (n/LambertW(0,n))**(n+Div(1,2)) * Exp(n/LambertW(0,n)-n-1), n, Infinity)))
+    Formula(AsymptoticTo(BellNumber(n), n**(-Div(1,2)) * (n/LambertW(n))**(n+Div(1,2)) * Exp(n/LambertW(n)-n-1), n, Infinity)))
 
 # Bounds and inequalities
 

@@ -595,8 +595,8 @@ make_entry(ID("cae067"),
             Element(n, ZZ))))))
 
 make_entry(ID("f33f09"),
-    Formula(Equal(Zeros(EisensteinE(2, tau), For(tau), And(Element(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
-        Where(Set(Parentheses(UniqueZero(EisensteinE(2, z), For(z), Element(z, D(c,d)))),
+    Formula(Equal(Zeros(EisensteinE(2, tau), ForElement(tau, HH), Element(Re(tau), ClosedOpenInterval(-Div(1,2), Div(1,2)))),
+        Where(Set(Parentheses(UniqueZero(EisensteinE(2, z), ForElement(z, D(c,d)))),
             For(Tuple(c, d)), And(Element(c, ZZ), Element(d, ZZ), Equal(GCD(c,d),1), Element(-(d/c), ClosedOpenInterval(-Div(1,2), Div(1,2))))),
             Equal(D(c,d), ClosedDisk(-(d/c) + (ConstI*Pi)/(6*c**2), (Decimal("0.000283")*Pi**2)/(36*c**2)))))),
     References("R. Wood and M. P. Young, Zeros of the weight two Eisenstein series, Journal of Number Theory Volume 143, October 2014, Pages 320-333. https://doi.org/10.1016/j.jnt.2014.04.007"))

@@ -811,10 +811,10 @@ make_entry(ID("214a91"),
     References("""D. J. Platt (2013), Numerical computations concerning the GRH. https://arxiv.org/pdf/1305.3087.pdf"""))
 
 make_entry(ID("9ba78a"),
-    Formula(Equal(Zeros(DirichletL(s, chi), For(s), And(Element(s, CC), LessEqual(Re(s), 0))),
-        Cases(Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(1))), Equal(q, 1)),
-              Tuple(Set(-(2*n), For(n), Element(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), NotEqual(q, 1))),
-              Tuple(Set(-(2*n)-1, For(n), Element(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
+    Formula(Equal(Zeros(DirichletL(s, chi), ForElement(s, CC), LessEqual(Re(s), 0)),
+        Cases(Tuple(Set(-(2*n), ForElement(n, ZZGreaterEqual(1))), Equal(q, 1)),
+              Tuple(Set(-(2*n), ForElement(n, ZZGreaterEqual(0))), And(Equal(chi(-1), 1), NotEqual(q, 1))),
+              Tuple(Set(-(2*n)-1, ForElement(n, ZZGreaterEqual(0))), Equal(chi(-1), -1))))),
     Variables(q, chi),
     Assumptions(And(Element(q, ZZGreaterEqual(1)), Element(chi, PrimitiveDirichletCharacters(q)))))
 
