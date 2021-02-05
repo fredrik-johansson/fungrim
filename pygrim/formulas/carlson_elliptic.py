@@ -1323,8 +1323,8 @@ make_entry(ID("cbcad9"),
         Where(
             BetaFunction(a, c - b_(1)) / BetaFunction(a, c) *
             CarlsonHypergeometricR(-a, List(b_(k), For(k, 2, n)),
-                List(z_(k), For(k, 2, n)))),
-            Def(c, -a + Sum(b_(k), For(k, 1, n))))),
+                List(z_(k), For(k, 2, n))),
+            Def(c, -a + Sum(b_(k), For(k, 1, n)))))),
     Variables(a, b_, z_, n),
     Assumptions(And(
         Element(a, RR),

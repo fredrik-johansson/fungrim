@@ -288,7 +288,7 @@ make_entry(ID("ff190c"),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 
 make_entry(ID("c33e2b"),
-    Formula(Element(Parentheses(BernoulliB(2*n) * Product(1/p, For(p), Divides(Parentheses(p-1), 2*n))), ZZ)),
+    Formula(Element(Parentheses(BernoulliB(2*n) * PrimeProduct(1/p, For(p), Divides(Parentheses(p-1), 2*n))), ZZ)),
     Variables(n),
     Assumptions(Element(n, ZZGreaterEqual(1))))
 

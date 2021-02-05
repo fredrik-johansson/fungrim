@@ -156,6 +156,7 @@ infix_latex_table = {
     NotEqual: "\\ne",
     Subset: "\\subset",
     SubsetEqual: "\\subseteq",
+    Same: "=",
     Divides: "\\mid",
     Path: "\\rightsquigarrow",
 }
@@ -1524,9 +1525,19 @@ def tex_Not(head, args, **kwargs):
 @deftex
 def tex_Implies(head, args, **kwargs):
     argstr = [arg.latex(**kwargs) for arg in args]
-    if len(argstr) == 2 and args[0].head() == args[1].head() == Element:
-        return " \\;\\implies\\; ".join("%s" % s for s in argstr)
-    return " \\implies ".join("\\left(%s\\right)" % s for s in argstr)
+    if len(argstr) == 2:
+        s = ""
+        if args[0].head() == Element:
+            s += argstr[0]
+        else:
+            s += "\\left(%s\\right)" % argstr[0]
+        s += " \\;\\implies\\; "
+        if args[1].head() == Element:
+            s += argstr[1]
+        else:
+            s += "\\left(%s\\right)" % argstr[1]
+        return s
+    return " \\;\\implies\\; ".join("\\left(%s\\right)" % s for s in argstr)
 
 @deftex
 def tex_Equivalent(head, args, **kwargs):

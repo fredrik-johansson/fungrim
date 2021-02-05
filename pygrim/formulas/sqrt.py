@@ -194,10 +194,9 @@ make_entry(ID("9d5b81"),
     Tuple(49, Decimal("7")),
     Tuple(50, Decimal("7.0710678118654752440084436210484903928483593768847")))))
 
-# todo: chain-ops to write EqualEqualElement?
 make_entry(ID("61480c"),
     Formula(Where(Element(x, RealBall(Decimal("0.707106781186547524400844362105"), Decimal("1.51e-31"))),
-        Equal(x, Sqrt(Div(1,2)), 1/Sqrt(2), Sqrt(2)/2))))
+        Def(x, Same(Sqrt(Div(1,2)), 1/Sqrt(2), Sqrt(2)/2)))))
 
 make_entry(ID("2eb54a"),
     Formula(Equal(Sqrt(-1), ConstI)))

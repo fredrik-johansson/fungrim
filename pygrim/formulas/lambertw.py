@@ -286,7 +286,7 @@ make_entry(ID("766302"),
 # Derivatives and integrals
 
 make_entry(ID("8d486c"),
-    Formula(Equal(LambertW(z,k,1), 1/((1+LambertW(z,k,0))*Exp(LambertW(z,k,0))))),
+    Formula(Equal(LambertW(z,k,1), 1/((1+LambertW(z,k))*Exp(LambertW(z,k))))),
     Variables(k,z),
     Assumptions(Or(
         And(Equal(k,0), Element(z, SetMinus(CC, Set(-Exp(-1))))),
@@ -294,7 +294,7 @@ make_entry(ID("8d486c"),
         And(Element(k, SetMinus(ZZ, Set(0,1))), Element(z, SetMinus(CC, Set(0)))))))
 
 make_entry(ID("72b6ca"),
-    Formula(Equal(LambertW(z,k,1), LambertW(z,k)/(z*(1+LambertW(z,k,0))))),
+    Formula(Equal(LambertW(z,k,1), LambertW(z,k)/(z*(1+LambertW(z,k))))),
     Variables(k,z),
     Assumptions(Or(
         And(Element(k,Set(0,1)), Element(z, SetMinus(CC, Set(0,-Exp(-1))))),

@@ -1077,6 +1077,7 @@ PowerSet
 Union Intersection SetMinus Not And Or Equivalent Implies
 Cardinality
 Element Elements DistinctElements NotElement Subset SubsetEqual
+Same
 EqualAndElement
 Concatenation
 Length Item

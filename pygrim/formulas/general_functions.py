@@ -30,7 +30,7 @@ make_entry(ID("1b1ec5"),
 
 make_entry(ID("b6582a"),
     Formula(Where(LessEqual(Abs(ComplexDerivative(f(z), For(z, z, k)) / Factorial(k)), C / R**k),
-        Equal(C, Supremum(Abs(f(t)), For(t), And(Element(t, CC), Equal(Abs(t-z), R)))))),
+        Equal(C, Supremum(Abs(f(t)), ForElement(t, CC), Equal(Abs(t-z), R))))),
     Variables(f, z, k, R),
     Assumptions(And(Element(z, CC), Element(k, ZZGreaterEqual(0)),
         Element(R, RR), Greater(R, 0),
