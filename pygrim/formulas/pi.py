@@ -296,7 +296,7 @@ make_entry(ID("f617c0"),
     Formula(Equal(Pi, 4*Sum((-1)**n / (2*n+1), For(n, 0, Infinity)))))
 
 make_entry(ID("93831d"),
-    Formula(Equal(Pi, Sum((2**n * Factorial(n)**2) / Factorial(2*n+1), For(n, 0, Infinity)))))
+    Formula(Equal(Pi, Sum((2**(n+1) * Factorial(n)**2) / Factorial(2*n+1), For(n, 0, Infinity)))))
 
 make_entry(ID("419b45"),
     Formula(Equal(Pi, Sum(Factorial(n) / DoubleFactorial(2*n+1), For(n, 0, Infinity)))))
