@@ -67,7 +67,7 @@ make_entry(ID("a249f6"),
         And(Element(z, R), Element(R, Rings)))
 
 make_entry(ID("6c2b31"),
-    Formula(Equal(Pow(z, n + 1), Pow(z, n)) * z),
+    Formula(Equal(Pow(z, n + 1), Pow(z, n) * z)),
     Variables(z, n),
     Assumptions(And(Element(z, CC), Element(n, ZZGreaterEqual(0))),
         And(Element(z, R), Element(R, Rings), Element(n, ZZGreaterEqual(0)))))
