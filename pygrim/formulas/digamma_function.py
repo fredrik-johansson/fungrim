@@ -890,8 +890,8 @@ make_entry(ID("6cabb7"),
 
 make_entry(ID("b16177"),
     Formula(Cases(
-        Tuple(Greater(DigammaFunction(x + y, m), DigammaFunction(x)), Even(m)),
-        Tuple(Less(DigammaFunction(x + y, m), DigammaFunction(x)), Odd(m)))),
+        Tuple(Greater(DigammaFunction(x + y, m), DigammaFunction(x, m)), Even(m)),
+        Tuple(Less(DigammaFunction(x + y, m), DigammaFunction(x, m)), Odd(m)))),
     Variables(x, y, m),
     Assumptions(And(Element(m, ZZGreaterEqual(0)), Element(x, OpenInterval(0, Infinity)), Element(y, OpenInterval(0, Infinity)))))
 
