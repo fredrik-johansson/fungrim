@@ -1,0 +1,25 @@
+{
+ "kind": "property",
+ "record": {
+  "id": "718a9b",
+  "property": "Zeros",
+  "operator": "Arctan",
+  "expr": [
+   "Arctan",
+   "z"
+  ],
+  "var": "z",
+  "domain": "ComplexNumbers",
+  "point": null,
+  "path": null,
+  "condition": null,
+  "value": [
+   "Set",
+   0
+  ],
+  "assumptions": null,
+  "topics": [
+   "atan"
+  ]
+ }
+}

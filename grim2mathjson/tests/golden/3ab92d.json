@@ -1,0 +1,70 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "3ab92d",
+  "formula": [
+   "Equal",
+   [
+    "Sum",
+    [
+     "chi",
+     "n"
+    ],
+    [
+     "Element",
+     "chi",
+     [
+      "DirichletGroup",
+      "q"
+     ]
+    ]
+   ],
+   [
+    "Which",
+    [
+     "CongruentMod",
+     "n",
+     1,
+     "q"
+    ],
+    [
+     "Totient",
+     "q"
+    ],
+    "True",
+    0
+   ]
+  ],
+  "variables": [
+   "n",
+   "q"
+  ],
+  "assumptions": [
+   "And",
+   [
+    "Element",
+    "q",
+    "PositiveIntegers"
+   ],
+   [
+    "Element",
+    "n",
+    "Integers"
+   ]
+  ],
+  "class": "representation",
+  "subclass": "series",
+  "heads": [
+   "CongruentMod",
+   "DirichletGroup",
+   "Sum",
+   "Totient"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "dirichlet"
+  ]
+ }
+}

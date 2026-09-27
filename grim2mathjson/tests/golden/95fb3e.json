@@ -1,0 +1,12 @@
+{
+ "kind": "skip",
+ "record": {
+  "id": "95fb3e",
+  "topic": "agm",
+  "reason": "where-def-tuple",
+  "heads": [
+   "Where"
+  ],
+  "source": "Where(Equal(AGM(a, b), SequenceLimit(a_(n), For(n, Infinity)), SequenceLimit(b_(n), For(n, Infinity))), Def(Tuple(a_(n), b_(n)), AGMSequence(n, a, b)))"
+ }
+}

@@ -189,7 +189,7 @@ make_entry(ID("30bd5b"),
 make_entry(ID("a172c7"),
     Formula(Equal(LambertW(x*Log(x),-1), Log(x))),
     Variables(x),
-    Assumptions(Element(x, OpenClosedInterval(0, -(1/ConstE)))))
+    Assumptions(Element(x, OpenClosedInterval(0, 1/ConstE))))
 
 # Specific values
 

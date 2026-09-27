@@ -1,0 +1,59 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "987e3c",
+  "formula": [
+   "Implies",
+   [
+    "Element",
+    [
+     "Imaginary",
+     "z"
+    ],
+    [
+     "Interval",
+     [
+      "Open",
+      [
+       "Negate",
+       "Pi"
+      ]
+     ],
+     "Pi"
+    ]
+   ],
+   [
+    "Equal",
+    [
+     "Ln",
+     [
+      "Exp",
+      "z"
+     ]
+    ],
+    "z"
+   ]
+  ],
+  "variables": [
+   "z"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   "ComplexNumbers"
+  ],
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "Exp",
+   "Imaginary",
+   "Ln"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "exp"
+  ]
+ }
+}

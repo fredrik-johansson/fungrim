@@ -438,7 +438,7 @@ make_entry(ID("82288c"),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
 make_entry(ID("5f09f4"),
-    Formula(Equal(ChebyshevU(2*n,x), ChebyshevT(n,2*x**2-1) + ChebyshevU(n-1,2*x**2-1))),
+    Formula(Equal(ChebyshevU(2*n,x), ChebyshevU(n,2*x**2-1) + ChebyshevU(n-1,2*x**2-1))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
@@ -465,7 +465,7 @@ make_entry(ID("f4b3fa"),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
 make_entry(ID("4c7aeb"),
-    Formula(Equal(ChebyshevU(n,Cos(x))*Sin(x), Sin(n*x))),
+    Formula(Equal(ChebyshevU(n-1,Cos(x))*Sin(x), Sin(n*x))),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
@@ -492,7 +492,7 @@ make_entry(ID("fdf80d"),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 
 make_entry(ID("42eb01"),
-    Formula(Equal(ChebyshevT(n,x)**2 + (x**2-1)*ChebyshevU(n-1,x)**2, 1)),
+    Formula(Equal(ChebyshevT(n,x)**2 - (x**2-1)*ChebyshevU(n-1,x)**2, 1)),
     Variables(n, x),
     Assumptions(And(Element(n, ZZ), Element(x, CC))))
 

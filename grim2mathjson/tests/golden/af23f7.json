@@ -1,0 +1,38 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "af23f7",
+  "formula": [
+   "Equal",
+   [
+    "HurwitzZeta",
+    "s",
+    1
+   ],
+   [
+    "Zeta",
+    "s"
+   ]
+  ],
+  "variables": [
+   "s"
+  ],
+  "assumptions": [
+   "Element",
+   "s",
+   "ComplexNumbers"
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "HurwitzZeta",
+   "Zeta"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

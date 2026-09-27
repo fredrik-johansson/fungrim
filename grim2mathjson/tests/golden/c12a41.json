@@ -1,0 +1,67 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "c12a41",
+  "formula": [
+   "Equal",
+   [
+    "Power",
+    "ImaginaryUnit",
+    "n"
+   ],
+   [
+    "Which",
+    [
+     "CongruentMod",
+     "n",
+     0,
+     4
+    ],
+    1,
+    [
+     "CongruentMod",
+     "n",
+     1,
+     4
+    ],
+    "ImaginaryUnit",
+    [
+     "CongruentMod",
+     "n",
+     2,
+     4
+    ],
+    -1,
+    [
+     "CongruentMod",
+     "n",
+     3,
+     4
+    ],
+    [
+     "Negate",
+     "ImaginaryUnit"
+    ]
+   ]
+  ],
+  "variables": [
+   "n"
+  ],
+  "assumptions": [
+   "Element",
+   "n",
+   "Integers"
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "CongruentMod"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "imaginary_unit"
+  ]
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "4644c0",
+  "formula": [
+   "Equal",
+   "EulerGamma",
+   [
+    "Limit",
+    [
+     "Function",
+     [
+      "Subtract",
+      [
+       "Sum",
+       [
+        "Divide",
+        1,
+        "k"
+       ],
+       [
+        "Limits",
+        "k",
+        1,
+        "n"
+       ]
+      ],
+      [
+       "Ln",
+       "n"
+      ]
+     ],
+     "n"
+    ],
+    "PositiveInfinity"
+   ]
+  ],
+  "variables": [],
+  "assumptions": null,
+  "class": "representation",
+  "subclass": "limit",
+  "heads": [
+   "Limit",
+   "Ln",
+   "Sum"
+  ],
+  "guardLevel": "none",
+  "flavor": "sequence",
+  "references": null,
+  "topics": [
+   "const_gamma"
+  ]
+ }
+}

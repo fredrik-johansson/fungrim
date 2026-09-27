@@ -1,0 +1,12 @@
+{
+ "kind": "skip",
+ "record": {
+  "id": "b10ca7",
+  "topic": "weierstrass_elliptic",
+  "reason": "tuple-indexing-set",
+  "heads": [
+   "ForElement"
+  ],
+  "source": "Equal(WeierstrassZeta(z, tau), Add(Div(1, z), Sum(Add(Add(Div(1, Sub(Sub(z, m), Mul(n, tau))), Div(1, Add(m, Mul(n, tau)))), Div(z, Pow(Add(m, Mul(n, tau)), 2))), ForElement(Tuple(m, n), SetMinus(Pow(ZZ, 2), Set(Tuple(0, 0)))))))"
+ }
+}

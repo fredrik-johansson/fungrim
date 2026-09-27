@@ -1,0 +1,64 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "e7224b",
+  "formula": [
+   "Implies",
+   [
+    "And",
+    [
+     "Element",
+     "s",
+     [
+      "SetMinus",
+      "RealNumbers",
+      [
+       "Set",
+       1
+      ]
+     ]
+    ],
+    [
+     "Element",
+     "a",
+     [
+      "Interval",
+      [
+       "Open",
+       0
+      ],
+      [
+       "Open",
+       "PositiveInfinity"
+      ]
+     ]
+    ]
+   ],
+   [
+    "Element",
+    [
+     "HurwitzZeta",
+     "s",
+     "a"
+    ],
+    "RealNumbers"
+   ]
+  ],
+  "variables": [
+   "a",
+   "s"
+  ],
+  "assumptions": null,
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "HurwitzZeta"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

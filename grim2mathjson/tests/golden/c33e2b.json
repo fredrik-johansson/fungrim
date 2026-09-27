@@ -1,0 +1,69 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "c33e2b",
+  "formula": [
+   "Element",
+   [
+    "Multiply",
+    [
+     "BernoulliB",
+     [
+      "Multiply",
+      2,
+      "n"
+     ]
+    ],
+    [
+     "Product",
+     [
+      "Divide",
+      1,
+      "p"
+     ],
+     [
+      "Element",
+      "p",
+      "Primes",
+      [
+       "Divides",
+       [
+        "Subtract",
+        "p",
+        1
+       ],
+       [
+        "Multiply",
+        2,
+        "n"
+       ]
+      ]
+     ]
+    ]
+   ],
+   "Integers"
+  ],
+  "variables": [
+   "n"
+  ],
+  "assumptions": [
+   "Element",
+   "n",
+   "PositiveIntegers"
+  ],
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "BernoulliB",
+   "Divides",
+   "Primes",
+   "Product"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "bernoulli_numbers"
+  ]
+ }
+}

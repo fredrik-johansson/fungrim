@@ -1,0 +1,58 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "0888b3",
+  "formula": [
+   "Equal",
+   "EulerGamma",
+   [
+    "Limit",
+    [
+     "Function",
+     [
+      "Subtract",
+      [
+       "Multiply",
+       [
+        "Divide",
+        "Pi",
+        2
+       ],
+       [
+        "BesselY",
+        0,
+        "x"
+       ]
+      ],
+      [
+       "Ln",
+       [
+        "Divide",
+        "x",
+        2
+       ]
+      ]
+     ],
+     "x"
+    ],
+    0,
+    1
+   ]
+  ],
+  "variables": [],
+  "assumptions": null,
+  "class": "representation",
+  "subclass": "limit",
+  "heads": [
+   "BesselY",
+   "Limit",
+   "Ln"
+  ],
+  "guardLevel": "none",
+  "flavor": "right",
+  "references": null,
+  "topics": [
+   "const_gamma"
+  ]
+ }
+}

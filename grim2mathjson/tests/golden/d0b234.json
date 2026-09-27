@@ -1,0 +1,57 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "d0b234",
+  "formula": [
+   "Implies",
+   [
+    "And",
+    [
+     "Element",
+     "s",
+     [
+      "Set",
+      1
+     ]
+    ],
+    [
+     "Element",
+     "a",
+     [
+      "SetMinus",
+      "ComplexNumbers",
+      "NonPositiveIntegers"
+     ]
+    ]
+   ],
+   [
+    "Element",
+    [
+     "HurwitzZeta",
+     "s",
+     "a"
+    ],
+    [
+     "Set",
+     "ComplexInfinity"
+    ]
+   ]
+  ],
+  "variables": [
+   "a",
+   "s"
+  ],
+  "assumptions": null,
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "HurwitzZeta"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

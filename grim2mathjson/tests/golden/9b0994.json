@@ -1,0 +1,38 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "9b0994",
+  "formula": [
+   "Equal",
+   [
+    "Arctan",
+    [
+     "Negate",
+     "ImaginaryUnit"
+    ]
+   ],
+   [
+    "Multiply",
+    [
+     "Negate",
+     "ImaginaryUnit"
+    ],
+    "PositiveInfinity"
+   ]
+  ],
+  "variables": [],
+  "assumptions": null,
+  "class": "specific-value",
+  "subclass": null,
+  "heads": [
+   "Arctan"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "atan"
+  ],
+  "directedInfinity": true
+ }
+}

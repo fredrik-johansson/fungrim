@@ -1,0 +1,62 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "622772",
+  "formula": [
+   "Equal",
+   [
+    "Erfi",
+    "z"
+   ],
+   [
+    "Multiply",
+    [
+     "Divide",
+     2,
+     [
+      "Sqrt",
+      "Pi"
+     ]
+    ],
+    [
+     "Integrate",
+     [
+      "Exp",
+      [
+       "Power",
+       "t",
+       2
+      ]
+     ],
+     [
+      "Limits",
+      "t",
+      0,
+      "z"
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "z"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   "ComplexNumbers"
+  ],
+  "class": "representation",
+  "subclass": "integral",
+  "heads": [
+   "Erfi",
+   "Exp",
+   "Integrate"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "error_functions"
+  ]
+ }
+}

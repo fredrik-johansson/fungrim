@@ -1,0 +1,80 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "d0d03b",
+  "formula": [
+   "Equal",
+   [
+    "Apply",
+    [
+     "Derivative",
+     [
+      "Function",
+      [
+       "HurwitzZeta",
+       "s",
+       "a"
+      ],
+      "s"
+     ],
+     "r"
+    ],
+    "s"
+   ],
+   [
+    "HurwitzZeta",
+    "s",
+    "a",
+    "r"
+   ]
+  ],
+  "variables": [
+   "a",
+   "r",
+   "s"
+  ],
+  "assumptions": [
+   "And",
+   [
+    "Element",
+    "s",
+    "ComplexNumbers"
+   ],
+   [
+    "NotEqual",
+    "s",
+    1
+   ],
+   [
+    "Element",
+    "a",
+    "ComplexNumbers"
+   ],
+   [
+    "Greater",
+    [
+     "Real",
+     "a"
+    ],
+    0
+   ],
+   [
+    "Element",
+    "r",
+    "NonNegativeIntegers"
+   ]
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "Derivative",
+   "HurwitzZeta"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "18d335",
+  "formula": [
+   "Equal",
+   [
+    "Sign",
+    "x"
+   ],
+   [
+    "Which",
+    [
+     "Greater",
+     "x",
+     0
+    ],
+    1,
+    [
+     "Less",
+     "x",
+     0
+    ],
+    -1,
+    [
+     "Equal",
+     "x",
+     0
+    ],
+    0
+   ]
+  ],
+  "variables": [
+   "x"
+  ],
+  "assumptions": [
+   "Element",
+   "x",
+   "RealNumbers"
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "Sign"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "complex_parts"
+  ]
+ }
+}

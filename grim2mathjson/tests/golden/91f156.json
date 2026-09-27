@@ -1,0 +1,58 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "91f156",
+  "formula": [
+   "Equal",
+   [
+    "Totient",
+    "n"
+   ],
+   [
+    "Sum",
+    [
+     "Which",
+     [
+      "Equal",
+      [
+       "GCD",
+       "n",
+       "k"
+      ],
+      1
+     ],
+     1,
+     "True",
+     0
+    ],
+    [
+     "Limits",
+     "k",
+     1,
+     "n"
+    ]
+   ]
+  ],
+  "variables": [
+   "n"
+  ],
+  "assumptions": [
+   "Element",
+   "n",
+   "NonNegativeIntegers"
+  ],
+  "class": "representation",
+  "subclass": "series",
+  "heads": [
+   "GCD",
+   "Sum",
+   "Totient"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "totient"
+  ]
+ }
+}

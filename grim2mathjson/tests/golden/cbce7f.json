@@ -1,0 +1,60 @@
+{
+ "kind": "property",
+ "record": {
+  "id": "cbce7f",
+  "property": "Solutions",
+  "operator": null,
+  "expr": [
+   "Equal",
+   [
+    "Tan",
+    "w"
+   ],
+   "z"
+  ],
+  "var": "w",
+  "domain": "ComplexNumbers",
+  "point": null,
+  "path": null,
+  "condition": null,
+  "value": [
+   "Map",
+   [
+    "Function",
+    [
+     "Add",
+     [
+      "Arctan",
+      "z"
+     ],
+     [
+      "Multiply",
+      "Pi",
+      "n"
+     ]
+    ],
+    "n"
+   ],
+   "Integers"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   [
+    "SetMinus",
+    "ComplexNumbers",
+    [
+     "Set",
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ],
+     "ImaginaryUnit"
+    ]
+   ]
+  ],
+  "topics": [
+   "atan"
+  ]
+ }
+}

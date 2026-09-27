@@ -1903,7 +1903,7 @@ make_entry(ID("0ed5e2"),
     Assumptions(Element(x, CC)))
 
 make_entry(ID("e54e61"),
-    Formula(Equal(CarlsonRF(0, x, -x), 1/Sqrt(x)) * (Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi))) * Cases((1-ConstI, Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), (1+ConstI, Otherwise))),
+    Formula(Equal(CarlsonRF(0, x, -x), (1/Sqrt(x)) * (Gamma(Div(1,4))**2 / (4*Sqrt(2*Pi))) * Cases((1-ConstI, Or(Less(Im(x), 0), And(Equal(Im(x), 0), GreaterEqual(Re(x), 0)))), (1+ConstI, Otherwise)))),
     Variables(x),
     Assumptions(Element(x, CC)))
 

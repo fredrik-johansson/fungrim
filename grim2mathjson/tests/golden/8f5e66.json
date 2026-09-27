@@ -1,0 +1,70 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "8f5e66",
+  "formula": [
+   "Equal",
+   [
+    "Zeta",
+    "s"
+   ],
+   [
+    "Product",
+    [
+     "Divide",
+     1,
+     [
+      "Subtract",
+      1,
+      [
+       "Divide",
+       1,
+       [
+        "Power",
+        "p",
+        "s"
+       ]
+      ]
+     ]
+    ],
+    [
+     "Element",
+     "p",
+     "Primes"
+    ]
+   ]
+  ],
+  "variables": [
+   "s"
+  ],
+  "assumptions": [
+   "And",
+   [
+    "Element",
+    "s",
+    "ComplexNumbers"
+   ],
+   [
+    "Greater",
+    [
+     "Real",
+     "s"
+    ],
+    1
+   ]
+  ],
+  "class": "representation",
+  "subclass": "product",
+  "heads": [
+   "Primes",
+   "Product",
+   "Zeta"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "riemann_zeta"
+  ]
+ }
+}

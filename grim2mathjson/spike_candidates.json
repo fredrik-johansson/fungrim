@@ -1,0 +1,1755 @@
+{
+ "shells": {
+  "JacobiTheta": "(integer, complex, complex, integer?) -> complex",
+  "HurwitzZeta": "(complex, complex, integer?) -> complex",
+  "Erfi": "(complex) -> complex",
+  "RiemannZetaZero": "(integer) -> complex",
+  "DirichletGroup": "(integer) -> collection",
+  "BernoulliB": "(integer) -> rational",
+  "KeiperLiLambda": "(integer) -> real",
+  "SloaneA": "(integer, integer) -> any",
+  "Spectrum": "(matrix) -> set<complex>",
+  "Divides": "(integer, integer) -> boolean",
+  "CongruentMod": "(integer, integer, integer) -> boolean",
+  "Primes": "collection<integer>",
+  "Divisors": "(integer) -> collection<integer>",
+  "SL2Z": "collection",
+  "HH": "collection<complex>"
+ },
+ "candidates": [
+  {
+   "item": 1,
+   "entry": "2ae142",
+   "label": "Where plain Defs q,w substituted (JacobiTheta r-deriv series)",
+   "json": [
+    "Equal",
+    [
+     "JacobiTheta",
+     1,
+     "z",
+     "tau",
+     "r"
+    ],
+    [
+     "Multiply",
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ],
+     [
+      "Power",
+      [
+       "Multiply",
+       "Pi",
+       "ImaginaryUnit"
+      ],
+      "r"
+     ],
+     [
+      "Exp",
+      [
+       "Divide",
+       [
+        "Multiply",
+        "Pi",
+        "ImaginaryUnit",
+        "tau"
+       ],
+       4
+      ]
+     ],
+     [
+      "Sum",
+      [
+       "Multiply",
+       [
+        "Power",
+        -1,
+        "n"
+       ],
+       [
+        "Power",
+        [
+         "Add",
+         [
+          "Multiply",
+          2,
+          "n"
+         ],
+         1
+        ],
+        "r"
+       ],
+       [
+        "Power",
+        [
+         "Exp",
+         [
+          "Multiply",
+          "Pi",
+          "ImaginaryUnit",
+          "tau"
+         ]
+        ],
+        [
+         "Multiply",
+         "n",
+         [
+          "Add",
+          "n",
+          1
+         ]
+        ]
+       ],
+       [
+        "Power",
+        [
+         "Exp",
+         [
+          "Multiply",
+          "Pi",
+          "ImaginaryUnit",
+          "z"
+         ]
+        ],
+        [
+         "Add",
+         [
+          "Multiply",
+          2,
+          "n"
+         ],
+         1
+        ]
+       ]
+      ],
+      [
+       "Limits",
+       "n",
+       "NegativeInfinity",
+       "PositiveInfinity"
+      ]
+     ]
+    ]
+   ],
+   "declare": {
+    "r": "integer"
+   },
+   "source": "Equal(JacobiTheta(1, z, tau, r), Where(Mul(Mul(Mul(Neg(ConstI), Pow(Mul(Pi, ConstI), r)), Exp(Div(Mul(Mul(Pi, ConstI), tau), 4))), Sum(Mul(Mul(Mul(Pow(-1, n), Pow(Add(Mul(2, n), 1), r)), Pow(q, Mul(n, Add(n, 1)))), Pow(w, Add(Mul(2, n), 1))), For(n, Neg(Infinity), Infinity))), Equal(q, Exp(Mul(Mul(Pi, ConstI), tau))), Equal(w, Exp(Mul(Mul(Pi, ConstI), z)))))"
+  },
+  {
+   "item": 1,
+   "entry": "ff5e82",
+   "label": "Where function-def beta-reduced (a_(n) := D^n Sinc / n!)",
+   "json": [
+    "Equal",
+    [
+     "Add",
+     [
+      "Multiply",
+      "z",
+      [
+       "Add",
+       [
+        "Power",
+        "n",
+        2
+       ],
+       [
+        "Multiply",
+        5,
+        "n"
+       ],
+       6
+      ],
+      [
+       "Divide",
+       [
+        "Apply",
+        [
+         "Derivative",
+         [
+          "Function",
+          [
+           "Sinc",
+           "z"
+          ],
+          "z"
+         ],
+         [
+          "Add",
+          "n",
+          3
+         ]
+        ],
+        "z"
+       ],
+       [
+        "Factorial",
+        [
+         "Add",
+         "n",
+         3
+        ]
+       ]
+      ]
+     ],
+     [
+      "Multiply",
+      [
+       "Add",
+       [
+        "Power",
+        "n",
+        2
+       ],
+       [
+        "Multiply",
+        5,
+        "n"
+       ],
+       6
+      ],
+      [
+       "Divide",
+       [
+        "Apply",
+        [
+         "Derivative",
+         [
+          "Function",
+          [
+           "Sinc",
+           "z"
+          ],
+          "z"
+         ],
+         [
+          "Add",
+          "n",
+          2
+         ]
+        ],
+        "z"
+       ],
+       [
+        "Factorial",
+        [
+         "Add",
+         "n",
+         2
+        ]
+       ]
+      ]
+     ],
+     [
+      "Multiply",
+      "z",
+      [
+       "Divide",
+       [
+        "Apply",
+        [
+         "Derivative",
+         [
+          "Function",
+          [
+           "Sinc",
+           "z"
+          ],
+          "z"
+         ],
+         [
+          "Add",
+          "n",
+          1
+         ]
+        ],
+        "z"
+       ],
+       [
+        "Factorial",
+        [
+         "Add",
+         "n",
+         1
+        ]
+       ]
+      ]
+     ],
+     [
+      "Divide",
+      [
+       "Apply",
+       [
+        "Derivative",
+        [
+         "Function",
+         [
+          "Sinc",
+          "z"
+         ],
+         "z"
+        ],
+        "n"
+       ],
+       "z"
+      ],
+      [
+       "Factorial",
+       "n"
+      ]
+     ]
+    ],
+    0
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Where(Equal(Add(Add(Add(Mul(Mul(z, Add(Add(Pow(n, 2), Mul(5, n)), 6)), a_(Add(n, 3))), Mul(Add(Add(Pow(n, 2), Mul(5, n)), 6), a_(Add(n, 2)))), Mul(z, a_(Add(n, 1)))), a_(n)), 0), Equal(a_(n), Div(ComplexDerivative(Sinc(z), For(z, z, n)), Factorial(n))))"
+  },
+  {
+   "item": 1,
+   "entry": "(policy)",
+   "label": "Apply(Function literal, arg) fallback for unreduced defs",
+   "json": [
+    "Apply",
+    [
+     "Function",
+     [
+      "Add",
+      "z",
+      "a"
+     ],
+     "z"
+    ],
+    "w"
+   ]
+  },
+  {
+   "item": 2,
+   "entry": "3ba544",
+   "label": "ComplexDerivative(HurwitzZeta, For(s,s)) order 1",
+   "json": [
+    "Equal",
+    [
+     "Apply",
+     [
+      "Derivative",
+      [
+       "Function",
+       [
+        "HurwitzZeta",
+        "s",
+        "a"
+       ],
+       "s"
+      ],
+      1
+     ],
+     "s"
+    ],
+    [
+     "HurwitzZeta",
+     "s",
+     "a",
+     1
+    ]
+   ],
+   "source": "Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s)), HurwitzZeta(s, a, 1))"
+  },
+  {
+   "item": 2,
+   "entry": "d0d03b",
+   "label": "ComplexDerivative order r (symbolic, typed)",
+   "json": [
+    "Equal",
+    [
+     "Apply",
+     [
+      "Derivative",
+      [
+       "Function",
+       [
+        "HurwitzZeta",
+        "s",
+        "a"
+       ],
+       "s"
+      ],
+      "r"
+     ],
+     "s"
+    ],
+    [
+     "HurwitzZeta",
+     "s",
+     "a",
+     "r"
+    ]
+   ],
+   "declare": {
+    "r": "integer"
+   },
+   "source": "Equal(ComplexDerivative(HurwitzZeta(s, a), For(s, s, r)), HurwitzZeta(s, a, r))"
+  },
+  {
+   "item": 2,
+   "entry": "83065e",
+   "label": "ComplexDerivative wrt 2nd argument",
+   "json": [
+    "Equal",
+    [
+     "Apply",
+     [
+      "Derivative",
+      [
+       "Function",
+       [
+        "HurwitzZeta",
+        "s",
+        "a"
+       ],
+       "a"
+      ],
+      1
+     ],
+     "a"
+    ],
+    [
+     "Negate",
+     [
+      "Multiply",
+      "s",
+      [
+       "HurwitzZeta",
+       [
+        "Add",
+        "s",
+        1
+       ],
+       "a"
+      ]
+     ]
+    ]
+   ],
+   "source": "Equal(ComplexDerivative(HurwitzZeta(s, a), For(a, a)), Neg(Mul(s, HurwitzZeta(Add(s, 1), a))))"
+  },
+  {
+   "item": 3,
+   "entry": "8f5e66",
+   "label": "PrimeProduct(f, For(p)) Euler product",
+   "json": [
+    "Equal",
+    [
+     "Zeta",
+     "s"
+    ],
+    [
+     "Product",
+     [
+      "Divide",
+      1,
+      [
+       "Subtract",
+       1,
+       [
+        "Divide",
+        1,
+        [
+         "Power",
+         "p",
+         "s"
+        ]
+       ]
+      ]
+     ],
+     [
+      "Element",
+      "p",
+      "Primes"
+     ]
+    ]
+   ],
+   "source": "Equal(RiemannZeta(s), PrimeProduct(Div(1, Sub(1, Div(1, Pow(p, s)))), For(p)))"
+  },
+  {
+   "item": 3,
+   "entry": "c33e2b",
+   "label": "PrimeProduct with Divides condition (EL-3)",
+   "json": [
+    "Element",
+    [
+     "Multiply",
+     [
+      "BernoulliB",
+      [
+       "Multiply",
+       2,
+       "n"
+      ]
+     ],
+     [
+      "Product",
+      [
+       "Divide",
+       1,
+       "p"
+      ],
+      [
+       "Element",
+       "p",
+       "Primes",
+       [
+        "Divides",
+        [
+         "Subtract",
+         "p",
+         1
+        ],
+        [
+         "Multiply",
+         2,
+         "n"
+        ]
+       ]
+      ]
+     ]
+    ],
+    "Integers"
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Element(Parentheses(Mul(BernoulliB(Mul(2, n)), PrimeProduct(Div(1, p), For(p), Divides(Parentheses(Sub(p, 1)), Mul(2, n))))), ZZ)"
+  },
+  {
+   "item": 3,
+   "entry": "08ff0b",
+   "label": "DivisorSum with Less condition (EL-3)",
+   "json": [
+    "Equal",
+    [
+     "Totient",
+     "n"
+    ],
+    [
+     "Subtract",
+     "n",
+     [
+      "Sum",
+      [
+       "Totient",
+       "d"
+      ],
+      [
+       "Element",
+       "d",
+       [
+        "Divisors",
+        "n"
+       ],
+       [
+        "Less",
+        "d",
+        "n"
+       ]
+      ]
+     ]
+    ]
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Equal(Totient(n), Sub(n, DivisorSum(Totient(d), For(d, n), Less(d, n))))"
+  },
+  {
+   "item": 3,
+   "entry": "(semantics)",
+   "label": "EL-3 evaluation semantics: Sum(d, d in 1..6, d<4) = 6",
+   "json": [
+    "Sum",
+    "d",
+    [
+     "Element",
+     "d",
+     [
+      "Range",
+      1,
+      6
+     ],
+     [
+      "Less",
+      "d",
+      4
+     ]
+    ]
+   ]
+  },
+  {
+   "item": 4,
+   "entry": "cce75b",
+   "label": "Sum ForElement(k, ZZ) + NotEqual condition",
+   "json": [
+    "Equal",
+    [
+     "KeiperLiLambda",
+     "n"
+    ],
+    [
+     "Multiply",
+     [
+      "Divide",
+      1,
+      "n"
+     ],
+     [
+      "Sum",
+      [
+       "Subtract",
+       1,
+       [
+        "Power",
+        [
+         "Divide",
+         [
+          "RiemannZetaZero",
+          "k"
+         ],
+         [
+          "Subtract",
+          [
+           "RiemannZetaZero",
+           "k"
+          ],
+          1
+         ]
+        ],
+        "n"
+       ]
+      ],
+      [
+       "Element",
+       "k",
+       "Integers",
+       [
+        "NotEqual",
+        "k",
+        0
+       ]
+      ]
+     ]
+    ]
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Equal(KeiperLiLambda(n), Mul(Div(1, n), Sum(Parentheses(Sub(1, Pow(Div(RiemannZetaZero(k), Sub(RiemannZetaZero(k), 1)), n))), ForElement(k, ZZ), NotEqual(k, 0))))"
+  },
+  {
+   "item": 4,
+   "entry": "3ab92d",
+   "label": "Sum ForElement over symbolic non-enumerable set",
+   "json": [
+    "Sum",
+    [
+     "chi",
+     "n"
+    ],
+    [
+     "Element",
+     "chi",
+     [
+      "DirichletGroup",
+      "q"
+     ]
+    ]
+   ],
+   "source": "Equal(Sum(chi(n), ForElement(chi, DirichletGroup(q))), Cases(Tuple(Totient(q), CongruentMod(n, 1, q)), Tuple(0, Otherwise)))"
+  },
+  {
+   "item": 5,
+   "entry": "9b0994",
+   "label": "directed infinity passthrough: Atan(-i) = -i*oo",
+   "json": [
+    "Equal",
+    [
+     "Arctan",
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ]
+    ],
+    [
+     "Multiply",
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ],
+     "PositiveInfinity"
+    ]
+   ],
+   "note": "boxes OK; evaluates to NaN -> entries flagged directedInfinity",
+   "source": "Equal(Atan(Neg(ConstI)), Mul(Neg(ConstI), Infinity))"
+  },
+  {
+   "item": 5,
+   "entry": "d0b234",
+   "label": "UnsignedInfinity -> ComplexInfinity in value set",
+   "json": [
+    "Implies",
+    [
+     "And",
+     [
+      "Element",
+      "s",
+      [
+       "Set",
+       1
+      ]
+     ],
+     [
+      "Element",
+      "a",
+      [
+       "SetMinus",
+       "ComplexNumbers",
+       "NonPositiveIntegers"
+      ]
+     ]
+    ],
+    [
+     "Element",
+     [
+      "HurwitzZeta",
+      "s",
+      "a"
+     ],
+     [
+      "Set",
+      "ComplexInfinity"
+     ]
+    ]
+   ],
+   "source": "Implies(And(Element(s, Set(1)), Element(a, SetMinus(CC, ZZLessEqual(0)))), Element(HurwitzZeta(s, a), Set(UnsignedInfinity)))"
+  },
+  {
+   "item": 5,
+   "entry": "963387",
+   "label": "Undefined -> NaN in value set",
+   "json": [
+    "Implies",
+    [
+     "And",
+     [
+      "Element",
+      "X",
+      [
+       "Range",
+       1,
+       "PositiveInfinity"
+      ]
+     ],
+     [
+      "Element",
+      "n",
+      "Integers"
+     ]
+    ],
+    [
+     "Element",
+     [
+      "SloaneA",
+      "X",
+      "n"
+     ],
+     [
+      "Union",
+      "Integers",
+      [
+       "Set",
+       "NaN"
+      ]
+     ]
+    ]
+   ],
+   "source": "Implies(And(Element(X, ZZGreaterEqual(1)), Element(n, ZZ)), Element(SloaneA(X, n), Union(ZZ, Set(Undefined))))"
+  },
+  {
+   "item": 6,
+   "entry": "18d335",
+   "label": "partial Cases (no Otherwise): Sign",
+   "json": [
+    "Equal",
+    [
+     "Sign",
+     "x"
+    ],
+    [
+     "Which",
+     [
+      "Greater",
+      "x",
+      0
+     ],
+     1,
+     [
+      "Less",
+      "x",
+      0
+     ],
+     -1,
+     [
+      "Equal",
+      "x",
+      0
+     ],
+     0
+    ]
+   ],
+   "source": "Equal(Sign(x), Cases(Tuple(1, Greater(x, 0)), Tuple(-1, Less(x, 0)), Tuple(0, Equal(x, 0))))"
+  },
+  {
+   "item": 6,
+   "entry": "91f156",
+   "label": "Cases with Otherwise inside Sum",
+   "json": [
+    "Equal",
+    [
+     "Totient",
+     "n"
+    ],
+    [
+     "Sum",
+     [
+      "Which",
+      [
+       "Equal",
+       [
+        "GCD",
+        "n",
+        "k"
+       ],
+       1
+      ],
+      1,
+      "True",
+      0
+     ],
+     [
+      "Limits",
+      "k",
+      1,
+      "n"
+     ]
+    ]
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Equal(Totient(n), Sum(Cases(Tuple(1, Equal(GCD(n, k), 1)), Tuple(0, Otherwise)), For(k, 1, n)))"
+  },
+  {
+   "item": 6,
+   "entry": "c12a41",
+   "label": "partial Cases with CongruentMod conditions",
+   "json": [
+    "Equal",
+    [
+     "Power",
+     "ImaginaryUnit",
+     "n"
+    ],
+    [
+     "Which",
+     [
+      "CongruentMod",
+      "n",
+      0,
+      4
+     ],
+     1,
+     [
+      "CongruentMod",
+      "n",
+      1,
+      4
+     ],
+     "ImaginaryUnit",
+     [
+      "CongruentMod",
+      "n",
+      2,
+      4
+     ],
+     -1,
+     [
+      "CongruentMod",
+      "n",
+      3,
+      4
+     ],
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ]
+    ]
+   ],
+   "declare": {
+    "n": "integer"
+   },
+   "source": "Equal(Pow(ConstI, n), Cases(Tuple(1, CongruentMod(n, 0, 4)), Tuple(ConstI, CongruentMod(n, 1, 4)), Tuple(-1, CongruentMod(n, 2, 4)), Tuple(Neg(ConstI), CongruentMod(n, 3, 4))))"
+  },
+  {
+   "item": 7,
+   "entry": "13f252",
+   "label": "family call z_(k) keeps call form (binding preserved)",
+   "json": [
+    "Sum",
+    [
+     "z_",
+     "k"
+    ],
+    [
+     "Limits",
+     "k",
+     1,
+     "n"
+    ]
+   ],
+   "source": "Where(Equal(CarlsonHypergeometricR(Neg(a), List(Repeat(beta, n)), List(z_(k), For(k, 1, n))), Mul(Pow(A, Neg(a)), CarlsonHypergeometricR(Neg(a), List(Repeat(beta, n)), List(Div(z_(k), A), For(k, 1, n))))), Def(A, Mul(Div(1, n), Sum(z_(k), For(k, 1, n)))))"
+  },
+  {
+   "item": 7,
+   "entry": "2a8ec9",
+   "label": "Subscript(a,k) symbolic index -> call form a_(k)",
+   "json": [
+    "Sum",
+    [
+     "a_",
+     "k"
+    ],
+    [
+     "Limits",
+     "k",
+     0,
+     "N"
+    ]
+   ],
+   "note": "emitting [Subscript,a,k] canonicalizes to fused symbol a_k and LOSES the binding",
+   "source": "Implies(Cases(Tuple(Less(Sum(Subscript(a, k), For(k, 0, N)), Mul(2, Pi)), Equal(N, 0)), Tuple(LessEqual(Sum(Subscript(a, k), For(k, 0, N)), Mul(2, Pi)), GreaterEqual(N, 1))), Equal(Sum(Product(Sinc(Mul(Subscript(a, k), n)), For(k, 0, N)), For(n, Neg(Infinity), Infinity)), Integral(Product(Sinc(Mul(Subscript(a, k), x)), For(k, 0, N)), For(x, Neg(Infinity), Infinity))))"
+  },
+  {
+   "item": 7,
+   "entry": "(literal)",
+   "label": "Subscript with literal index -> fused symbol",
+   "json": [
+    "Subscript",
+    "a",
+    1
+   ]
+  },
+  {
+   "item": 8,
+   "entry": "d8cb3e",
+   "label": "JacobiTheta 3-arg",
+   "json": [
+    "JacobiTheta",
+    3,
+    "z",
+    "tau"
+   ],
+   "source": "Equal(Pi, Integral(JacobiTheta(2, 0, Mul(ConstI, t)), For(t, 0, Infinity)))"
+  },
+  {
+   "item": 8,
+   "entry": "2ae142",
+   "label": "JacobiTheta 4-arg (derivative order)",
+   "json": [
+    "JacobiTheta",
+    1,
+    "z",
+    "tau",
+    "r"
+   ],
+   "declare": {
+    "r": "integer"
+   },
+   "source": "Equal(JacobiTheta(1, z, tau, r), Where(Mul(Mul(Mul(Neg(ConstI), Pow(Mul(Pi, ConstI), r)), Exp(Div(Mul(Mul(Pi, ConstI), tau), 4))), Sum(Mul(Mul(Mul(Pow(-1, n), Pow(Add(Mul(2, n), 1), r)), Pow(q, Mul(n, Add(n, 1)))), Pow(w, Add(Mul(2, n), 1))), For(n, Neg(Infinity), Infinity))), Equal(q, Exp(Mul(Mul(Pi, ConstI), tau))), Equal(w, Exp(Mul(Mul(Pi, ConstI), z)))))"
+  },
+  {
+   "item": 9,
+   "entry": "925e5b",
+   "label": "4-term Equal chain passthrough",
+   "json": [
+    "Equal",
+    [
+     "Sin",
+     "z"
+    ],
+    [
+     "Cos",
+     [
+      "Subtract",
+      [
+       "Divide",
+       "Pi",
+       2
+      ],
+      "z"
+     ]
+    ],
+    [
+     "Cos",
+     [
+      "Subtract",
+      "z",
+      [
+       "Divide",
+       "Pi",
+       2
+      ]
+     ]
+    ],
+    [
+     "Negate",
+     [
+      "Cos",
+      [
+       "Add",
+       "z",
+       [
+        "Divide",
+        "Pi",
+        2
+       ]
+      ]
+     ]
+    ]
+   ],
+   "source": "Equal(Sin(z), Cos(Sub(Div(Pi, 2), z)), Cos(Sub(z, Div(Pi, 2))), Neg(Cos(Add(z, Div(Pi, 2)))))"
+  },
+  {
+   "item": 9,
+   "entry": "(semantics)",
+   "label": "chain semantics: Equal(2,2,3) is False",
+   "json": [
+    "Equal",
+    2,
+    2,
+    3
+   ]
+  },
+  {
+   "item": 9,
+   "entry": "(semantics)",
+   "label": "chain semantics: Less(1,2,3) is True",
+   "json": [
+    "Less",
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "item": 10,
+   "entry": "987e3c",
+   "label": "OpenClosedInterval(-pi, pi]",
+   "json": [
+    "Implies",
+    [
+     "Element",
+     [
+      "Imaginary",
+      "z"
+     ],
+     [
+      "Interval",
+      [
+       "Open",
+       [
+        "Negate",
+        "Pi"
+       ]
+      ],
+      "Pi"
+     ]
+    ],
+    [
+     "Equal",
+     [
+      "Ln",
+      [
+       "Exp",
+       "z"
+      ]
+     ],
+     "z"
+    ]
+   ],
+   "source": "Implies(Element(Im(z), OpenClosedInterval(Neg(Pi), Pi)), Equal(Log(Exp(z)), z))"
+  },
+  {
+   "item": 10,
+   "entry": "e7224b",
+   "label": "OpenInterval(0, oo)",
+   "json": [
+    "Implies",
+    [
+     "And",
+     [
+      "Element",
+      "s",
+      [
+       "SetMinus",
+       "RealNumbers",
+       [
+        "Set",
+        1
+       ]
+      ]
+     ],
+     [
+      "Element",
+      "a",
+      [
+       "Interval",
+       [
+        "Open",
+        0
+       ],
+       [
+        "Open",
+        "PositiveInfinity"
+       ]
+      ]
+     ]
+    ],
+    [
+     "Element",
+     [
+      "HurwitzZeta",
+      "s",
+      "a"
+     ],
+     "RealNumbers"
+    ]
+   ],
+   "source": "Implies(And(Element(s, SetMinus(RR, Set(1))), Element(a, OpenInterval(0, Infinity))), Element(HurwitzZeta(s, a), RR))"
+  },
+  {
+   "item": 10,
+   "entry": "(variant)",
+   "label": "ClosedInterval / ClosedOpenInterval",
+   "json": [
+    "And",
+    [
+     "Element",
+     "x",
+     [
+      "Interval",
+      3,
+      4
+     ]
+    ],
+    [
+     "Element",
+     "y",
+     [
+      "Interval",
+      1,
+      [
+       "Open",
+       "PositiveInfinity"
+      ]
+     ]
+    ]
+   ]
+  },
+  {
+   "item": 11,
+   "entry": "c5d844",
+   "label": "ZZGreaterEqual(2) -> Range(2, oo); ZZLessEqual(0) -> NonPositiveIntegers",
+   "json": [
+    "Implies",
+    [
+     "And",
+     [
+      "Element",
+      "s",
+      [
+       "Range",
+       2,
+       "PositiveInfinity"
+      ]
+     ],
+     [
+      "Element",
+      "a",
+      "NonPositiveIntegers"
+     ]
+    ],
+    [
+     "Element",
+     [
+      "HurwitzZeta",
+      "s",
+      "a"
+     ],
+     [
+      "Set",
+      "ComplexInfinity"
+     ]
+    ]
+   ],
+   "source": "Implies(And(Element(s, ZZGreaterEqual(2)), Element(a, ZZLessEqual(0))), Element(HurwitzZeta(s, a), Set(UnsignedInfinity)))"
+  },
+  {
+   "item": 11,
+   "entry": "(semantics)",
+   "label": "literal membership: Element(5, Range(1, oo))",
+   "json": [
+    "Element",
+    5,
+    [
+     "Range",
+     1,
+     "PositiveInfinity"
+    ]
+   ]
+  },
+  {
+   "item": 11,
+   "entry": "8c7cdb",
+   "label": "ZZGreaterEqual(0)/(1) -> NonNegative/PositiveIntegers",
+   "json": [
+    "And",
+    [
+     "Element",
+     "n",
+     "NonNegativeIntegers"
+    ],
+    [
+     "Element",
+     "m",
+     "PositiveIntegers"
+    ]
+   ],
+   "source": "Implies(Element(s, ZZGreaterEqual(2)), IsHolomorphic(HurwitzZeta(s, a), ForElement(a, SetMinus(CC, ZZLessEqual(0)))))"
+  },
+  {
+   "item": 12,
+   "entry": "718a9b",
+   "label": "Zeros value set",
+   "json": [
+    "Set",
+    0
+   ],
+   "source": "Equal(Zeros(Atan(z), ForElement(z, CC)), Set(0))"
+  },
+  {
+   "item": 12,
+   "entry": "cbce7f",
+   "label": "Solutions value: set-builder",
+   "json": [
+    "Set",
+    [
+     "Add",
+     [
+      "Arctan",
+      "z"
+     ],
+     [
+      "Multiply",
+      "Pi",
+      "n"
+     ]
+    ],
+    [
+     "Element",
+     "n",
+     "Integers"
+    ]
+   ],
+   "source": "Equal(Solutions(Brackets(Equal(Tan(w), z)), ForElement(w, CC)), Set(Add(Atan(z), Mul(Pi, n)), ForElement(n, ZZ)))"
+  },
+  {
+   "item": 12,
+   "entry": "26c47c",
+   "label": "BranchPoints value with ComplexInfinity",
+   "json": [
+    "Set",
+    [
+     "Negate",
+     "ImaginaryUnit"
+    ],
+    "ImaginaryUnit",
+    "ComplexInfinity"
+   ],
+   "source": "Equal(BranchPoints(Atan(z), z, Union(CC, Set(UnsignedInfinity))), Set(Neg(ConstI), ConstI, UnsignedInfinity))"
+  },
+  {
+   "item": 12,
+   "entry": "3b11d3",
+   "label": "BranchCuts value: interval scaled by i",
+   "json": [
+    "Set",
+    [
+     "Multiply",
+     [
+      "Interval",
+      [
+       "Open",
+       "NegativeInfinity"
+      ],
+      -1
+     ],
+     "ImaginaryUnit"
+    ],
+    [
+     "Multiply",
+     [
+      "Interval",
+      1,
+      [
+       "Open",
+       "PositiveInfinity"
+      ]
+     ],
+     "ImaginaryUnit"
+    ]
+   ],
+   "note": "scalar-multiple-of-set; boxes as Multiply(Interval, i) - representational only",
+   "source": "Equal(BranchCuts(Atan(z), z, CC), Set(Mul(OpenClosedInterval(Neg(Infinity), -1), ConstI), Mul(ClosedOpenInterval(1, Infinity), ConstI)))"
+  },
+  {
+   "item": 13,
+   "entry": "4644c0",
+   "label": "SequenceLimit -> Limit at +oo (flavor: sequence)",
+   "json": [
+    "Equal",
+    "EulerGamma",
+    [
+     "Limit",
+     [
+      "Function",
+      [
+       "Subtract",
+       [
+        "Sum",
+        [
+         "Divide",
+         1,
+         "k"
+        ],
+        [
+         "Limits",
+         "k",
+         1,
+         "n"
+        ]
+       ],
+       [
+        "Ln",
+        "n"
+       ]
+      ],
+      "n"
+     ],
+     "PositiveInfinity"
+    ]
+   ],
+   "source": "Equal(ConstGamma, SequenceLimit(Brackets(Sub(Parentheses(Sum(Div(1, k), For(k, 1, n))), Log(n))), For(n, Infinity)))"
+  },
+  {
+   "item": 13,
+   "entry": "0888b3",
+   "label": "RightLimit -> Limit direction +1 (flavor: right)",
+   "json": [
+    "Equal",
+    "EulerGamma",
+    [
+     "Limit",
+     [
+      "Function",
+      [
+       "Subtract",
+       [
+        "Multiply",
+        [
+         "Divide",
+         "Pi",
+         2
+        ],
+        [
+         "BesselY",
+         0,
+         "x"
+        ]
+       ],
+       [
+        "Ln",
+        [
+         "Divide",
+         "x",
+         2
+        ]
+       ]
+      ],
+      "x"
+     ],
+     0,
+     1
+    ]
+   ],
+   "source": "Equal(ConstGamma, RightLimit(Brackets(Sub(Mul(Div(Pi, 2), BesselY(0, x)), Log(Div(x, 2)))), For(x, 0)))"
+  },
+  {
+   "item": 13,
+   "entry": "693e0e",
+   "label": "ComplexLimit -> Limit (flavor: complex)",
+   "json": [
+    "Equal",
+    [
+     "Digamma",
+     "z"
+    ],
+    [
+     "Limit",
+     [
+      "Function",
+      [
+       "Subtract",
+       [
+        "Divide",
+        1,
+        [
+         "Subtract",
+         "s",
+         1
+        ]
+       ],
+       [
+        "HurwitzZeta",
+        "s",
+        "z"
+       ]
+      ],
+      "s"
+     ],
+     1
+    ]
+   ],
+   "source": "Equal(DigammaFunction(z), ComplexLimit(Brackets(Sub(Div(1, Sub(s, 1)), HurwitzZeta(s, z))), For(s, 1)))"
+  },
+  {
+   "item": 13,
+   "entry": "5e0c58",
+   "label": "RealLimit inside an Equal chain (flavor: real)",
+   "json": [
+    "Equal",
+    [
+     "Sinc",
+     "PositiveInfinity"
+    ],
+    [
+     "Limit",
+     [
+      "Function",
+      [
+       "Sinc",
+       "x"
+      ],
+      "x"
+     ],
+     "PositiveInfinity"
+    ],
+    0
+   ],
+   "source": "Equal(Sinc(Infinity), RealLimit(Sinc(x), For(x, Infinity)), 0)"
+  },
+  {
+   "item": 14,
+   "entry": "ebfcd8",
+   "label": "Matrix2x2 -> Matrix; Spectrum shell",
+   "json": [
+    "Equal",
+    [
+     "Spectrum",
+     [
+      "Matrix",
+      [
+       "List",
+       [
+        "List",
+        1,
+        1
+       ],
+       [
+        "List",
+        1,
+        0
+       ]
+      ]
+     ]
+    ],
+    [
+     "Set",
+     "GoldenRatio",
+     [
+      "Subtract",
+      1,
+      "GoldenRatio"
+     ]
+    ]
+   ],
+   "source": "Equal(Spectrum(Matrix2x2(1, 1, 1, 0)), Set(GoldenRatio, Sub(1, GoldenRatio)))"
+  },
+  {
+   "item": 14,
+   "entry": "(assumption)",
+   "label": "Element(Matrix2x2(a,b,c,d), SL2Z) assumption shape",
+   "json": [
+    "Element",
+    [
+     "Matrix",
+     [
+      "List",
+      [
+       "List",
+       "a",
+       "b"
+      ],
+      [
+       "List",
+       "c",
+       "d"
+      ]
+     ]
+    ],
+    "SL2Z"
+   ]
+  },
+  {
+   "item": 14,
+   "entry": "(check)",
+   "label": "Determinant of translated Matrix2x2",
+   "json": [
+    "Determinant",
+    [
+     "Matrix",
+     [
+      "List",
+      [
+       "List",
+       "a",
+       "b"
+      ],
+      [
+       "List",
+       "c",
+       "d"
+      ]
+     ]
+    ]
+   ]
+  },
+  {
+   "item": 15,
+   "entry": "af23f7",
+   "label": "RiemannZeta -> Zeta (1-arg only in corpus)",
+   "json": [
+    "Equal",
+    [
+     "HurwitzZeta",
+     "s",
+     1
+    ],
+    [
+     "Zeta",
+     "s"
+    ]
+   ],
+   "source": "Equal(HurwitzZeta(s, 1), RiemannZeta(s))"
+  },
+  {
+   "item": 15,
+   "entry": "591d64",
+   "label": "BetaFunction -> Beta",
+   "json": [
+    "Equal",
+    "Pi",
+    [
+     "Beta",
+     [
+      "Divide",
+      1,
+      2
+     ],
+     [
+      "Divide",
+      1,
+      2
+     ]
+    ]
+   ],
+   "source": "Equal(Pi, BetaFunction(Div(1, 2), Div(1, 2)))"
+  },
+  {
+   "item": 15,
+   "entry": "78fca3",
+   "label": "Erf -> Erf",
+   "json": [
+    "Equal",
+    [
+     "Integrate",
+     [
+      "Multiply",
+      [
+       "Exp",
+       [
+        "Negate",
+        [
+         "Multiply",
+         "a",
+         [
+          "Power",
+          "x",
+          2
+         ]
+        ]
+       ]
+      ],
+      [
+       "Sinc",
+       "x"
+      ]
+     ],
+     [
+      "Limits",
+      "x",
+      0,
+      "PositiveInfinity"
+     ]
+    ],
+    [
+     "Multiply",
+     [
+      "Divide",
+      "Pi",
+      2
+     ],
+     [
+      "Erf",
+      [
+       "Divide",
+       1,
+       [
+        "Multiply",
+        2,
+        [
+         "Sqrt",
+         "a"
+        ]
+       ]
+      ]
+     ]
+    ]
+   ],
+   "source": "Equal(Integral(Mul(Exp(Neg(Mul(a, Pow(x, 2)))), Sinc(x)), For(x, 0, Infinity)), Mul(Div(Pi, 2), Erf(Div(1, Mul(2, Sqrt(a))))))"
+  },
+  {
+   "item": 15,
+   "entry": "622772",
+   "label": "Erfi (no CE def) -> verbatim + shell",
+   "json": [
+    "Equal",
+    [
+     "Erfi",
+     "z"
+    ],
+    [
+     "Multiply",
+     [
+      "Divide",
+      2,
+      [
+       "Sqrt",
+       "Pi"
+      ]
+     ],
+     [
+      "Integrate",
+      [
+       "Exp",
+       [
+        "Power",
+        "t",
+        2
+       ]
+      ],
+      [
+       "Limits",
+       "t",
+       0,
+       "z"
+      ]
+     ]
+    ]
+   ],
+   "source": "Equal(Erfi(z), Mul(Div(2, Sqrt(Pi)), Integral(Exp(Pow(t, 2)), For(t, 0, z))))"
+  }
+ ],
+ "numericChecks": [
+  {
+   "label": "Zeta(2) == pi^2/6",
+   "json": [
+    "Zeta",
+    2
+   ],
+   "expect": 1.6449340668482264
+  },
+  {
+   "label": "Beta(2,3) == 1/12",
+   "json": [
+    "Beta",
+    2,
+    3
+   ],
+   "expect": 0.08333333333333333
+  },
+  {
+   "label": "Beta(1/2,1/2) == pi (591d64)",
+   "json": [
+    "Beta",
+    [
+     "Divide",
+     1,
+     2
+    ],
+    [
+     "Divide",
+     1,
+     2
+    ]
+   ],
+   "expect": 3.141592653589793
+  },
+  {
+   "label": "Erf(1)",
+   "json": [
+    "Erf",
+    1
+   ],
+   "expect": 0.8427007929497149
+  },
+  {
+   "label": "Erfc(1)",
+   "json": [
+    "Erfc",
+    1
+   ],
+   "expect": 0.15729920705028513
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "kind": "skip",
+ "record": {
+  "id": "6fce07",
+  "topic": "pi",
+  "reason": "where-recursive-def",
+  "heads": [
+   "Where"
+  ],
+  "source": "Equal(Div(2, Pi), Where(Product(Div(a_(n), 2), For(n, 1, Infinity)), Def(a_(1), Sqrt(2)), Def(a_(n), Sqrt(Add(2, a_(Sub(n, 1)))))))"
+ }
+}

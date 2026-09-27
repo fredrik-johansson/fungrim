@@ -1,0 +1,36 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "591d64",
+  "formula": [
+   "Equal",
+   "Pi",
+   [
+    "Beta",
+    [
+     "Divide",
+     1,
+     2
+    ],
+    [
+     "Divide",
+     1,
+     2
+    ]
+   ]
+  ],
+  "variables": [],
+  "assumptions": null,
+  "class": "specific-value",
+  "subclass": null,
+  "heads": [
+   "Beta"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "pi"
+  ]
+ }
+}

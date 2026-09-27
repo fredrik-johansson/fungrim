@@ -1,0 +1,63 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "693e0e",
+  "formula": [
+   "Equal",
+   [
+    "Digamma",
+    "z"
+   ],
+   [
+    "Limit",
+    [
+     "Function",
+     [
+      "Subtract",
+      [
+       "Divide",
+       1,
+       [
+        "Subtract",
+        "s",
+        1
+       ]
+      ],
+      [
+       "HurwitzZeta",
+       "s",
+       "z"
+      ]
+     ],
+     "s"
+    ],
+    1
+   ]
+  ],
+  "variables": [
+   "z"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   [
+    "SetMinus",
+    "ComplexNumbers",
+    "NonPositiveIntegers"
+   ]
+  ],
+  "class": "representation",
+  "subclass": "limit",
+  "heads": [
+   "Digamma",
+   "HurwitzZeta",
+   "Limit"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": "complex",
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

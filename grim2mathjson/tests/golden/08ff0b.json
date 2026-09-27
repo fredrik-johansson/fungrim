@@ -1,0 +1,58 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "08ff0b",
+  "formula": [
+   "Equal",
+   [
+    "Totient",
+    "n"
+   ],
+   [
+    "Subtract",
+    "n",
+    [
+     "Sum",
+     [
+      "Totient",
+      "d"
+     ],
+     [
+      "Element",
+      "d",
+      [
+       "Divisors",
+       "n"
+      ],
+      [
+       "Less",
+       "d",
+       "n"
+      ]
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "n"
+  ],
+  "assumptions": [
+   "Element",
+   "n",
+   "NonNegativeIntegers"
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "Divisors",
+   "Sum",
+   "Totient"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "totient"
+  ]
+ }
+}

@@ -1,0 +1,174 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "2a8ec9",
+  "formula": [
+   "Implies",
+   [
+    "Which",
+    [
+     "Equal",
+     "N_var",
+     0
+    ],
+    [
+     "Less",
+     [
+      "Sum",
+      [
+       "a_",
+       "k"
+      ],
+      [
+       "Limits",
+       "k",
+       0,
+       "N_var"
+      ]
+     ],
+     [
+      "Multiply",
+      2,
+      "Pi"
+     ]
+    ],
+    [
+     "GreaterEqual",
+     "N_var",
+     1
+    ],
+    [
+     "LessEqual",
+     [
+      "Sum",
+      [
+       "a_",
+       "k"
+      ],
+      [
+       "Limits",
+       "k",
+       0,
+       "N_var"
+      ]
+     ],
+     [
+      "Multiply",
+      2,
+      "Pi"
+     ]
+    ]
+   ],
+   [
+    "Equal",
+    [
+     "Sum",
+     [
+      "Product",
+      [
+       "Sinc",
+       [
+        "Multiply",
+        [
+         "a_",
+         "k"
+        ],
+        "n"
+       ]
+      ],
+      [
+       "Limits",
+       "k",
+       0,
+       "N_var"
+      ]
+     ],
+     [
+      "Limits",
+      "n",
+      "NegativeInfinity",
+      "PositiveInfinity"
+     ]
+    ],
+    [
+     "Integrate",
+     [
+      "Product",
+      [
+       "Sinc",
+       [
+        "Multiply",
+        [
+         "a_",
+         "k"
+        ],
+        "x"
+       ]
+      ],
+      [
+       "Limits",
+       "k",
+       0,
+       "N_var"
+      ]
+     ],
+     [
+      "Limits",
+      "x",
+      "NegativeInfinity",
+      "PositiveInfinity"
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "N_var",
+   "a"
+  ],
+  "assumptions": [
+   "And",
+   [
+    "Element",
+    "N_var",
+    "NonNegativeIntegers"
+   ],
+   [
+    "Element",
+    [
+     "a_",
+     "k"
+    ],
+    [
+     "Interval",
+     [
+      "Open",
+      0
+     ],
+     [
+      "Open",
+      "PositiveInfinity"
+     ]
+    ]
+   ]
+  ],
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "Integrate",
+   "Product",
+   "Sinc",
+   "Sum"
+  ],
+  "guardLevel": "undischargeable",
+  "flavor": null,
+  "references": [
+   "https://www.carma.newcastle.edu.au/resources/jon/sinc-sums.pdf"
+  ],
+  "topics": [
+   "sinc"
+  ],
+  "indexedFamilies": [
+   "a_"
+  ]
+ }
+}

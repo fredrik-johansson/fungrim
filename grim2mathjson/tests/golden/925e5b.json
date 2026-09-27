@@ -1,0 +1,72 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "925e5b",
+  "formula": [
+   "Equal",
+   [
+    "Sin",
+    "z"
+   ],
+   [
+    "Cos",
+    [
+     "Subtract",
+     [
+      "Divide",
+      "Pi",
+      2
+     ],
+     "z"
+    ]
+   ],
+   [
+    "Cos",
+    [
+     "Subtract",
+     "z",
+     [
+      "Divide",
+      "Pi",
+      2
+     ]
+    ]
+   ],
+   [
+    "Negate",
+    [
+     "Cos",
+     [
+      "Add",
+      "z",
+      [
+       "Divide",
+       "Pi",
+       2
+      ]
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "z"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   "ComplexNumbers"
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "Cos",
+   "Sin"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "sine"
+  ]
+ }
+}

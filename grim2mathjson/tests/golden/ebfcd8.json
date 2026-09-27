@@ -1,0 +1,50 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "ebfcd8",
+  "formula": [
+   "Equal",
+   [
+    "Spectrum",
+    [
+     "Matrix",
+     [
+      "List",
+      [
+       "List",
+       1,
+       1
+      ],
+      [
+       "List",
+       1,
+       0
+      ]
+     ]
+    ]
+   ],
+   [
+    "Set",
+    "GoldenRatio",
+    [
+     "Subtract",
+     1,
+     "GoldenRatio"
+    ]
+   ]
+  ],
+  "variables": [],
+  "assumptions": null,
+  "class": "specific-value",
+  "subclass": null,
+  "heads": [
+   "Spectrum"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "golden_ratio"
+  ]
+ }
+}

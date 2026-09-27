@@ -1,0 +1,51 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "8c7cdb",
+  "formula": [
+   "Implies",
+   [
+    "Element",
+    "s",
+    [
+     "Range",
+     2,
+     "PositiveInfinity"
+    ]
+   ],
+   [
+    "IsHolomorphic",
+    [
+     "Function",
+     [
+      "HurwitzZeta",
+      "s",
+      "a"
+     ],
+     "a"
+    ],
+    [
+     "SetMinus",
+     "ComplexNumbers",
+     "NonPositiveIntegers"
+    ]
+   ]
+  ],
+  "variables": [
+   "s"
+  ],
+  "assumptions": null,
+  "class": "logical",
+  "subclass": null,
+  "heads": [
+   "HurwitzZeta",
+   "IsHolomorphic"
+  ],
+  "guardLevel": "none",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "hurwitz_zeta"
+  ]
+ }
+}

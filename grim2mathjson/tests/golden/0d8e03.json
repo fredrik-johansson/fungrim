@@ -1,0 +1,142 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "0d8e03",
+  "formula": [
+   "Equal",
+   [
+    "Sqrt",
+    [
+     "Divide",
+     "a",
+     "b"
+    ]
+   ],
+   [
+    "Divide",
+    [
+     "Sqrt",
+     "a"
+    ],
+    [
+     "Sqrt",
+     "b"
+    ]
+   ]
+  ],
+  "variables": [
+   "a",
+   "b"
+  ],
+  "assumptions": [
+   "And",
+   [
+    "Element",
+    "a",
+    "ComplexNumbers"
+   ],
+   [
+    "Element",
+    "b",
+    [
+     "Interval",
+     [
+      "Open",
+      0
+     ],
+     [
+      "Open",
+      "PositiveInfinity"
+     ]
+    ]
+   ]
+  ],
+  "assumptionAlternatives": [
+   [
+    "And",
+    [
+     "Element",
+     "a",
+     [
+      "Interval",
+      0,
+      [
+       "Open",
+       "PositiveInfinity"
+      ]
+     ]
+    ],
+    [
+     "Element",
+     "b",
+     [
+      "SetMinus",
+      "ComplexNumbers",
+      [
+       "Interval",
+       [
+        "Open",
+        "NegativeInfinity"
+       ],
+       0
+      ]
+     ]
+    ]
+   ],
+   [
+    "And",
+    [
+     "Element",
+     "a",
+     "ComplexNumbers"
+    ],
+    [
+     "Element",
+     "b",
+     [
+      "SetMinus",
+      "ComplexNumbers",
+      [
+       "Set",
+       0
+      ]
+     ]
+    ],
+    [
+     "Element",
+     [
+      "Subtract",
+      [
+       "Argument",
+       "a"
+      ],
+      [
+       "Argument",
+       "b"
+      ]
+     ],
+     [
+      "Interval",
+      [
+       "Open",
+       [
+        "Negate",
+        "Pi"
+       ]
+      ],
+      "Pi"
+     ]
+    ]
+   ]
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "sqrt"
+  ]
+ }
+}

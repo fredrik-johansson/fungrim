@@ -1,0 +1,63 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "d4b0b6",
+  "formula": [
+   "Equal",
+   [
+    "Sin",
+    [
+     "Arctan",
+     "z"
+    ]
+   ],
+   [
+    "Divide",
+    "z",
+    [
+     "Sqrt",
+     [
+      "Add",
+      1,
+      [
+       "Power",
+       "z",
+       2
+      ]
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "z"
+  ],
+  "assumptions": [
+   "Element",
+   "z",
+   [
+    "SetMinus",
+    "ComplexNumbers",
+    [
+     "Set",
+     [
+      "Negate",
+      "ImaginaryUnit"
+     ],
+     "ImaginaryUnit"
+    ]
+   ]
+  ],
+  "class": "identity",
+  "subclass": null,
+  "heads": [
+   "Arctan",
+   "Sin"
+  ],
+  "guardLevel": "complex-domain",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "atan"
+  ]
+ }
+}

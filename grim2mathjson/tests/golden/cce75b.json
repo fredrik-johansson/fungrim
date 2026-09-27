@@ -1,0 +1,78 @@
+{
+ "kind": "corpus",
+ "record": {
+  "id": "cce75b",
+  "formula": [
+   "Equal",
+   [
+    "KeiperLiLambda",
+    "n"
+   ],
+   [
+    "Multiply",
+    [
+     "Divide",
+     1,
+     "n"
+    ],
+    [
+     "Sum",
+     [
+      "Subtract",
+      1,
+      [
+       "Power",
+       [
+        "Divide",
+        [
+         "RiemannZetaZero",
+         "k"
+        ],
+        [
+         "Subtract",
+         [
+          "RiemannZetaZero",
+          "k"
+         ],
+         1
+        ]
+       ],
+       "n"
+      ]
+     ],
+     [
+      "Element",
+      "k",
+      "Integers",
+      [
+       "NotEqual",
+       "k",
+       0
+      ]
+     ]
+    ]
+   ]
+  ],
+  "variables": [
+   "n"
+  ],
+  "assumptions": [
+   "Element",
+   "n",
+   "PositiveIntegers"
+  ],
+  "class": "representation",
+  "subclass": "series",
+  "heads": [
+   "KeiperLiLambda",
+   "RiemannZetaZero",
+   "Sum"
+  ],
+  "guardLevel": "real-simple",
+  "flavor": null,
+  "references": null,
+  "topics": [
+   "riemann_zeta"
+  ]
+ }
+}
